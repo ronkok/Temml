@@ -1,0 +1,40 @@
+@font-face {
+  font-family: 'KaTeX_Script';
+  src: url('KaTeX_Script-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+temml {
+  font-family: serif;
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  font-size-adjust: none;
+  text-indent: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  direction: ltr;
+  border-color: currentColor;
+}
+
+temml .script {
+  font-family: "KaTeX_Script", serif;
+}
+
+temml .oldstylenums {
+  font-family: Cambria, "Times New Roman", serif;
+  font-variant-numeric: oldstyle-nums;
+  font-feature-settings: 'onum';
+}
+
+/* AMS environment auto-numbering via CSS counter. */
+.tml-eqn::before {
+  counter-increment: tmlEqnNo;
+  content: "(" counter(tmlEqnNo) ")";
+}
+
+body {
+  counter-reset: tmlEqnNo;
+}

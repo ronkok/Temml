@@ -1,0 +1,11 @@
+.katex .eqn-num::before {
+  counter-increment: katexEqnNo;
+  content: "(" counter(katexEqnNo) ")";
+}
+.katex .mml-eqn-num::before {
+  counter-increment: mmlEqnNo;
+  content: "(" counter(mmlEqnNo) ")";
+}
+body {
+  counter-reset: katexEqnNo mmlEqnNo tmlEqnNo;
+}
