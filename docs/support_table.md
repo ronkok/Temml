@@ -84,7 +84,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\AA|$\text{\AA}$|`\text{\AA}`|||
 |\aa|$\text{\aa}$|`\text{\aa}`|||
 |\above|${a \above{2pt} b+1}$|`{a \above{2pt} b+1}`||
-|\abovewithdelims|<span style="color:firebrick;">Not supported</span>|||
+|\abovewithdelims|<span class="no-sup">Not supported</span>|||
 |\abs|$\abs{x}$|`\abs{x}`| physics extension |
 |\absolutevalue|$\absolutevalue{x}$|`\absolutevalue{x}`| physics extension |
 |\acomm|$\acomm{A}{B}$|`\acomm{A}{B}`| physics extension |
@@ -105,8 +105,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\alpha|$\alpha$|||
 |\amalg|$\amalg$|||
 |\And|$\And$|||
-|\and|<span style="color:firebrick;">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
-|\ang|<span style="color:firebrick;">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
+|\and|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
+|\ang|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\angl|$a_{\angl n}$|`a_{\angl n}` | actuarialangle |
 |\angln|$a_\angln$|`a_\angln` | actuarialangle |
 |\angle|$\angle$|||
@@ -123,14 +123,14 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\argmax|$\argmax$|| statmath |
 |\argmin|$\argmin$|| statmath |
 |{array}|$\begin{array}{cc}a&b\\c&d\end{array}$ | `\begin{array}{cc}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{array}`| LaTeX2ε |
-|\array|<span style="color:firebrick;">Not supported</span>|See `{array}`||
+|\array|<span class="no-sup">Not supported</span>|See `{array}`||
 |\arraystretch|$\def\arraystretch{1.5}\begin{array}{cc}a&b\\c&d\end{array}$|`\def\arraystretch{1.5}`<br>`\begin{array}{cc}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{array}`||
-|\Arrowvert|<span style="color:firebrick;">Not supported</span>|see `\Vert`||
-|\arrowvert|<span style="color:firebrick;">Not supported</span>|see `\vert`||
+|\Arrowvert|<span class="no-sup">Not supported</span>|see `\Vert`||
+|\arrowvert|<span class="no-sup">Not supported</span>|see `\vert`||
 |\ast|$\ast$|||
 |\asymp|$\asymp$|||
 |\atop|${a \atop b}$|`{a \atop b}`||
-|\atopwithdelims|<span style="color:firebrick;">Not supported</span>|||
+|\atopwithdelims|<span class="no-sup">Not supported</span>|||
 
 ## B
 
@@ -145,7 +145,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\barwedge|$\barwedge$|| ams |
 |\Bbb|$\Bbb{ABC}$|`\Bbb{ABC}`||
 |\Bbbk|$\Bbbk$|||
-|\bbox|<span style="color:firebrick;">Not supported</span>|||
+|\bbox|<span class="no-sup">Not supported</span>|||
 |\bcancel|$\bcancel{5}$|`\bcancel{5}`| cancel |
 |\because|$\because$|| ams |
 |\begin|$\begin{matrix} a & b\\ c & d\end{matrix}$|`\begin{matrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{matrix}`| ams |
@@ -155,7 +155,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\beth|$\beth$|| ams |
 |\between|$\between$|| ams |
 |\bf|${\bf AaBb12}$|`{\bf AaBb12}`||
-|\bfseries|<span style="color:firebrick;">Not supported</span>|||
+|\bfseries|<span class="no-sup">Not supported</span>|||
 |\big|$\big(\big)$|`\big(\big)`||
 |\Big|$\Big(\Big)$|`\Big(\Big)`||
 |\bigcap|$\bigcap$|||
@@ -174,9 +174,9 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\bigm|$\bigm\vert$|`\bigm\vert`||
 |\Bigm|$\Bigm\vert$|`\Bigm\vert`||
 |\bigodot|$\bigodot$|||
-|\bigominus|<span style="color:firebrick;">Not supported</span>|||
+|\bigominus|<span class="no-sup">Not supported</span>|||
 |\bigoplus|$\bigoplus$|||
-|\bigoslash|<span style="color:firebrick;">Not supported</span>|||
+|\bigoslash|<span class="no-sup">Not supported</span>|||
 |\bigotimes|$\bigotimes$|||
 |\bigr|$\bigr)$|`\bigr)`||
 |\Bigr|$\Bigr)$|`\Bigr)`||
@@ -217,10 +217,10 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\bra|$\mathinner{\langle{\psi}\|}$|`\bra{\psi}`| braket |
 |\braket|$\mathinner{\langle{\phi\|\psi}\rangle}$|`\braket{\phi\|\psi}`| braket |
 |\brace|${n\brace k}$|`{n\brace k}`||
-|\bracevert|<span style="color:firebrick;">Not supported</span>|||
+|\bracevert|<span class="no-sup">Not supported</span>|||
 |\brack|${n\brack k}$|`{n\brack k}`||
 |\breve|$\breve{eu}$|`\breve{eu}`||
-|\buildrel|<span style="color:firebrick;">Not supported</span>|||
+|\buildrel|<span class="no-sup">Not supported</span>|||
 |\bull|$\bull$|| texvc extension |
 |\bullet|$\bullet$|||
 |\Bumpeq|$\Bumpeq$|| ams |
@@ -230,22 +230,22 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment|  Package
 |:---------------|:------------|:-----------------|-----------|
-|\C|<span style="color:firebrick;">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
+|\C|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\cal|${\cal AaBb}$|`{\cal AaBb}`||
 |\cancel|$\cancel{5}$|`\cancel{5}`| cancel |
 |\cancelto|$\cancelto{0}{x+1}$|`\cancelto{0}{x+1}`| cancel |
 |\Cap|$\Cap$|| ams |
 |\cap|$\cap$|||
 |{cases}|$\begin{cases}a&\text{if }b\\c&\text{if }d\end{cases}$|`\begin{cases}`<br>&nbsp;&nbsp;&nbsp;`a &\text{if } b  \\`<br>&nbsp;&nbsp;&nbsp;`c &\text{if } d`<br>`\end{cases}`| ams |
-|\cases|<span style="color:firebrick;">Not supported</span>|see `{cases}`||
+|\cases|<span class="no-sup">Not supported</span>|see `{cases}`||
 |{CD}|$$\begin{CD}A @>a>> B \\@VbVV @AAcA\\C @= D\end{CD}$$|`\begin{CD}`<br>&nbsp;&nbsp;&nbsp;`A  @>a>>  B  \\`<br>`@VbVV    @AAcA \\`<br>&nbsp;&nbsp;&nbsp;`C  @=     D`<br>`\end{CD}`| ams |
 |\cdot|$\cdot$|||
 |\cdotp|$\cdotp$|||
 |\cdots|$\cdots$|||
 |\ce |${\mathrm{C}{\vphantom{X}}_{\smash[t]{6}}\mathrm{H}{\vphantom{X}}_{\smash[t]{5}}{-}\mathrm{CHO}}$|`\ce{C6H5-CHO}` | mhchem extension |
-|\cee|<span style="color:firebrick;">Not supported</span>|Deprecated<br>Use `\ce` instead. | mhchem |
+|\cee|<span class="no-sup">Not supported</span>|Deprecated<br>Use `\ce` instead. | mhchem |
 |\centerdot|$a\centerdot b$|`a\centerdot b`| ams |
-|\cf|<span style="color:firebrick;">Not supported</span>|Deprecated<br>Use `\ce` instead.| mhchem |
+|\cf|<span class="no-sup">Not supported</span>|Deprecated<br>Use `\ce` instead.| mhchem |
 |\cfrac|$\cfrac{2}{1+\cfrac{2}{1}}$|`\cfrac{2}{1+\cfrac{2}{1}}`| ams |
 |\check|$\check{oe}$|`\check{oe}`||
 |\ch|$\ch$|||
@@ -262,8 +262,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\circleddash|$\circleddash$|| ams |
 |\circledR|$\circledR$|| ams |
 |\circledS|$\circledS$|| ams |
-|\class|<span style="color:firebrick;">Not supported</span>|||
-|\cline|<span style="color:firebrick;">Not supported</span>|||
+|\class|<span class="no-sup">Not supported</span>|||
+|\cline|<span class="no-sup">Not supported</span>|||
 |\clubs|$\clubs$|| texvc extension |
 |\clubsuit|$\clubsuit$|||
 |\cnums|$\cnums$|| texvc extension |
@@ -304,7 +304,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\cross|$\cross$|| physics extension |
 |\crossproduct|$\crossproduct$|| physics extension |
 |\csc|$\csc$|||
-|\cssId|<span style="color:firebrick;">Not supported</span>|See `\id`.|
+|\cssId|<span class="no-sup">Not supported</span>|See `\id`.|
 |\ctg|$\ctg$|||
 |\cth|$\cth$|||
 |\Cup|$\Cup$|| ams |
@@ -342,9 +342,9 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\dddot|$\dddot x$|`\dddot x`| ams |
 |\ddot|$\ddot x$|`\ddot x`||
 |\ddots|$\ddots$|||
-|\DeclareMathOperator|<span style="color:firebrick;">Not supported</span>|||
+|\DeclareMathOperator|<span class="no-sup">Not supported</span>|||
 |\def|$\def\foo{x^2} \foo + \foo$|`\def\foo{x^2} \foo + \foo`||
-|\definecolor|<span style="color:firebrick;">Not supported</span>|||
+|\definecolor|<span class="no-sup">Not supported</span>|||
 |\deg|$\deg$|||
 |\degree|$\degree$|||
 |\delta|$\delta$|||
@@ -354,16 +354,16 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\dfrac|$\dfrac{a-1}{b-1}$|`\dfrac{a-1}{b-1}`| ams |
 |\differential|$\differential$|`\differential`| physics extension |
 |\diagdown|$\diagdown$|| ams |
-|\diagonalmatrix|<span style="color:firebrick;">Not supported</span>|| physics |
+|\diagonalmatrix|<span class="no-sup">Not supported</span>|| physics |
 |\diagup|$\diagup$|| ams |
 |\Diamond|$\Diamond$|||
 |\diamond|$\diamond$|||
 |\diamonds|$\diamonds$|| texvc extension |
 |\diamondsuit|$\diamondsuit$|||
-|\Digamma|<span style="color:firebrick;">Not supported</span>|||
+|\Digamma|<span class="no-sup">Not supported</span>|||
 |\digamma|$\digamma$|| ams |
 |\dim|$\dim$|||
-|\displaylines|<span style="color:firebrick;">Not supported</span>|||
+|\displaylines|<span class="no-sup">Not supported</span>|||
 |\displaystyle|$\displaystyle\sum_0^n$|`\displaystyle\sum_0^n`||
 |\div|$\div$|||
 |\divergence|$\divergence$|`\divergence`| physics extension |
@@ -399,19 +399,19 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |:---------------|:------------|:------------------|-----------|
 |\edef|$\def\foo{a}\edef\bar{\foo}\def\foo{}\bar$|`\def\foo{a}\edef\bar{\foo}\def\foo{}\bar`||
 |\ell|$\ell$|||
-|\else|<span style="color:firebrick;">Not supported</span>|||
-|\em|<span style="color:firebrick;">Not supported</span>|||
-|\emph|<span style="color:firebrick;">Not supported</span>|||
+|\else|<span class="no-sup">Not supported</span>|||
+|\em|<span class="no-sup">Not supported</span>|||
+|\emph|<span class="no-sup">Not supported</span>|||
 |\empty|$\empty$|| texvc extension |
 |\emptyset|$\emptyset$|||
-|\enclose|<span style="color:firebrick;">Not supported</span>|Non standard.<br>See `\boxed`, `\cancel`, `\bcancel`,<br>`\xcancel`, `\sout`, `\longdiv`, `\angl`||
+|\enclose|<span class="no-sup">Not supported</span>|Non standard.<br>See `\boxed`, `\cancel`, `\bcancel`,<br>`\xcancel`, `\sout`, `\longdiv`, `\angl`||
 |\end|$\begin{matrix} a & b\\ c & d\end{matrix}$|`\begin{matrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{matrix}`||
 |\endgroup|$\begingroup a\endgroup$|`\begingroup a\endgroup`||
 |\enspace|$a\enspace b$|`a\enspace b`||
 |\Epsilon|$\Epsilon$|||
 |\epsilon|$\epsilon$|||
-|\eqalign|<span style="color:firebrick;">Not supported</span>|See {align*}||
-|\eqalignno|<span style="color:firebrick;">Not supported</span>|See {align}||
+|\eqalign|<span class="no-sup">Not supported</span>|See {align*}||
+|\eqalignno|<span class="no-sup">Not supported</span>|See {align}||
 |\eqcirc|$\eqcirc$|| ams |
 |\Eqcolon|$\Eqcolon$|| mathtools |
 |\eqcolon|$\eqcolon$|| mathtools |
@@ -419,7 +419,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\equalscoloncolon|$\equalscoloncolon$|| colonequals |
 |{equation}|$$\begin{equation}a = b + c\end{equation}$$|`\begin{equation}`<br>&nbsp;&nbsp;&nbsp;`a = b + c`<br>`\end{equation}`| ams |
 |{equation*}|$$\begin{equation*}a = b + c\end{equation*}$$|`\begin{equation*}`<br>&nbsp;&nbsp;&nbsp;`a = b + c`<br>`\end{equation*}`| ams |
-|{eqnarray}|<span style="color:firebrick;">Not supported</span>|||
+|{eqnarray}|<span class="no-sup">Not supported</span>|||
 |\Eqqcolon|$\Eqqcolon$|| mathtools |
 |\eqqcolon|$\eqqcolon$|| mathtools |
 |\eqdef|$\eqdef$|| stix |
@@ -451,7 +451,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\fbox|$\fbox{Hi there!}$|`\fbox{Hi there!}`||
 |\fcolorbox|$\fcolorbox{red}{aqua}{A}$|`\fcolorbox{red}{aqua}{A}`| color |
 |\fdv|$\fdv{x}{y}$|`\fdv{x}{y}`| physics extension |
-|\fi|<span style="color:firebrick;">Not supported</span>|||
+|\fi|<span class="no-sup">Not supported</span>|||
 |\Finv|$\Finv$|| ams |
 |\flat|$\flat$|||
 |\footnotesize|$\footnotesize footnotesize$|`\footnotesize footnotesize`||
@@ -477,9 +477,9 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\gcd|$\gcd$|||
 |\gdef|$\gdef\bar#1{#1^2}$ $\bar{y} + \bar{y}$|`\gdef\bar#1{#1^2} \bar{y} + \bar{y}`||
 |\ge|$\ge$|||
-|\geneuro|<span style="color:firebrick;">Not supported</span>|See `\euro`||
-|\geneuronarrow|<span style="color:firebrick;">Not supported</span>|See `\euro`||
-|\geneurowide|<span style="color:firebrick;">Not supported</span>|See `\euro`||
+|\geneuro|<span class="no-sup">Not supported</span>|See `\euro`||
+|\geneuronarrow|<span class="no-sup">Not supported</span>|See `\euro`||
+|\geneurowide|<span class="no-sup">Not supported</span>|See `\euro`||
 |\genfrac|$\genfrac ( ] {2pt}{0}a{a+1}$|`\genfrac ( ] {2pt}{0}a{a+1}`| ams |
 |\geq|$\geq$|||
 |\geqq|$\geqq$|| ams |
@@ -517,12 +517,12 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\hat|$\hat{\theta}$|`\hat{\theta}`||
 |\hbar|$\hbar$|||
 |\hbox|$\hbox{$x^2$}$|`\hbox{$x^2$}`||
-|\hbox to <dimen>| <span style="color:firebrick;">Not supported</span> |||
+|\hbox to <dimen>| <span class="no-sup">Not supported</span> |||
 |\hdashline|$\begin{matrix}a&b\\ \hdashline c &d\end{matrix}$|`\begin{matrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`\hdashline`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{matrix}`| arydshln |
 |\hearts|$\hearts$|| texvc extension |
 |\heartsuit|$\heartsuit$|||
-|\hfil|<span style="color:firebrick;">Not supported</span>|||
-|\hfill|<span style="color:firebrick;">Not supported</span>|||
+|\hfil|<span class="no-sup">Not supported</span>|||
+|\hfill|<span class="no-sup">Not supported</span>|||
 |\hline|$\begin{matrix}a&b\\ \hline c &d\end{matrix}$|`\begin{matrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\ \hline`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{matrix}`||
 |\hom|$\hom$|||
 |\hookleftarrow|$\hookleftarrow$|||
@@ -546,10 +546,10 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\i|$\text{\i}$|`\text{\i}`||
 |\idotsint|$\int\idotsint\int$|`\int\idotsint\int`| ams |
 |\iddots|$\iddots$|||
-|\if|<span style="color:firebrick;">Not supported</span>|||
+|\if|<span class="no-sup">Not supported</span>|||
 |\iff|$A\iff B$|`A\iff B`||
-|\ifmode|<span style="color:firebrick;">Not supported</span>|||
-|\ifx|<span style="color:firebrick;">Not supported</span>|||
+|\ifmode|<span class="no-sup">Not supported</span>|||
+|\ifx|<span class="no-sup">Not supported</span>|||
 |\iiiint|$\iiiint$|| ams |
 |\iiint|$\iiint$|| ams |
 |\iint|$\iint$|| ams |
@@ -580,7 +580,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\iota|$\iota$|||
 |\isin|$\isin$|| texvc extension |
 |\it|${\it AaBb}$|`{\it AaBb}`||
-|\itshape|<span style="color:firebrick;">Not supported</span>|||
+|\itshape|<span class="no-sup">Not supported</span>|||
 
 ## JK
 
@@ -603,8 +603,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
-|\L|<span style="color:firebrick;">Not supported</span>|||
-|\l|<span style="color:firebrick;">Not supported</span>|||
+|\L|<span class="no-sup">Not supported</span>|||
+|\l|<span class="no-sup">Not supported</span>|||
 |\Lambda|$\Lambda$|||
 |\lambda|$\lambda$|||
 |\label||`\label{idName}`<br>Creates an HTML id.<br>Characters limited to: `A-Za-z0-9_-`||
@@ -630,7 +630,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\left|$\left\lbrace \dfrac ab \right.$|`\left\lbrace \dfrac ab \right.`||
 |\leftarrow|$\leftarrow$|||
 |\Leftarrow|$\Leftarrow$|||
-|\LeftArrow|<span style="color:firebrick;">Not supported</span>|Non standard||
+|\LeftArrow|<span class="no-sup">Not supported</span>|Non standard||
 |\leftarrowtail|$\leftarrowtail$|| ams |
 |\leftharpoondown|$\leftharpoondown$|||
 |\leftharpoonup|$\leftharpoonup$|||
@@ -640,10 +640,10 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\leftrightarrows|$\leftrightarrows$|| ams |
 |\leftrightharpoons|$\leftrightharpoons$|| ams |
 |\leftrightsquigarrow|$\leftrightsquigarrow$|| ams |
-|\leftroot|<span style="color:firebrick;">Not supported</span>|||
+|\leftroot|<span class="no-sup">Not supported</span>|||
 |\leftthreetimes|$\leftthreetimes$|| ams |
 |\leq|$\leq$|||
-|\leqalignno|<span style="color:firebrick;">Not supported</span>|||
+|\leqalignno|<span class="no-sup">Not supported</span>|||
 |\leqq|$\leqq$|| ams |
 |\leqslant|$\leqslant$|| ams |
 |\lessapprox|$\lessapprox$|| ams |
@@ -735,18 +735,18 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\mathsf|$\mathsf{AaBb123}$|`\mathsf{AaBb123}`||
 |\mathsterling|$\mathsterling$|||
 |\mathstrut|$\sqrt{\mathstrut a}$|`\sqrt{\mathstrut a}`||
-|\mathtip|<span style="color:firebrick;">Not supported</span>|See `\texttip`||
+|\mathtip|<span class="no-sup">Not supported</span>|See `\texttip`||
 |\mathtt|$\mathtt{AaBb123}$|`\mathtt{AaBb123}`||
-|\matrix|<span style="color:firebrick;">Not supported</span>|See `{matrix}`||
+|\matrix|<span class="no-sup">Not supported</span>|See `{matrix}`||
 |{matrix}|$\begin{matrix}a&b\\c&d\end{matrix}$|`\begin{matrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{matrix}`| ams |
 |{matrix*}|$\begin{matrix*}[r] -1 & 3\\ 2 & -4 \end{matrix*}$|`\begin{matrix*}[r]`<br>&nbsp;&nbsp;&nbsp;`-1 & 3 \\`<br>&nbsp;&nbsp;&nbsp;`2 & -4`<br>`\end{matrix*}`| mathtools |
 |\matrixel|$\matrixel{n}{A}{m}$|`\matrixel{n}{A}{m}`| physics extension |
 |\matrixelement|$\matrixelement{n}{A}{m}$|`\matrixelement{n}{A}{m}`| physics extension |
 |\mel|$\mel{n}{A}{m}$|`\mel{n}{A}{m}`| physics extension |
 |\max|$\max$|||
-|\mbox|<span style="color:firebrick;">Not supported</span>|||
-|\md|<span style="color:firebrick;">Not supported</span>|||
-|\mdseries|<span style="color:firebrick;">Not supported</span>|||
+|\mbox|<span class="no-sup">Not supported</span>|||
+|\md|<span class="no-sup">Not supported</span>|||
+|\mdseries|<span class="no-sup">Not supported</span>|||
 |\measeq|$\measeq$|| stix |
 |\measuredangle|$\measuredangle$|| ams |
 |\medspace|$a\medspace b$|`a\medspace b`| ams |
@@ -756,20 +756,20 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\min|$\min$|||
 |\minuscolon|$\minuscolon$|| colonequals |
 |\minuscoloncolon|$\minuscoloncolon$|| colonequals |
-|\minuso|<span style="color:firebrick;">Not supported</span>| See `\standardstate`||
-|\mit|<span style="color:firebrick;">Not supported</span>|See `\mathit`||
+|\minuso|<span class="no-sup">Not supported</span>| See `\standardstate`||
+|\mit|<span class="no-sup">Not supported</span>|See `\mathit`||
 |\mkern|$a\mkern18mu b$|`a\mkern18mu b`||
-|\mmlToken|<span style="color:firebrick;">Not supported</span>|||
+|\mmlToken|<span class="no-sup">Not supported</span>|||
 |\mod|$3\equiv 5 \mod 2$|`3\equiv 5 \mod 2`| ams |
 |\models|$\models$|||
-|\moveleft|<span style="color:firebrick;">Not supported</span>|||
-|\moveright|<span style="color:firebrick;">Not supported</span>|||
+|\moveleft|<span class="no-sup">Not supported</span>|||
+|\moveright|<span class="no-sup">Not supported</span>|||
 |\mp|$\mp$|||
 |\mskip|$a\mskip{10mu}b$|`a\mskip{10mu}b`||
-|\mspace|<span style="color:firebrick;">Not supported</span>|||
+|\mspace|<span class="no-sup">Not supported</span>|||
 |\Mu|$\Mu$|||
 |\mu|$\mu$|||
-|\multicolumn|<span style="color:firebrick;">Not supported</span>|||
+|\multicolumn|<span class="no-sup">Not supported</span>|||
 |\multimap|$\multimap$|| ams |
 |{multline}|$$\begin{multline}\rm uno \\ \rm dos \\ \rm tres\end{multline}$$|`\begin{multline}`<br>&nbsp;&nbsp;`\rm uno \\`<br>&nbsp;&nbsp;`\rm dos \\`<br>&nbsp;&nbsp;`\rm tres`<br>`\end{multline}`| ams |
 |{multline*}|$$\begin{multline*}\rm uno \\ \rm dos \\ \rm tres\end{multline*}$$|`\begin{multline*}`<br>&nbsp;&nbsp;`\rm uno \\`<br>&nbsp;&nbsp;`\rm dos \\`<br>&nbsp;&nbsp;`\rm tres`<br>`\end{multline*}`| ams |
@@ -793,7 +793,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\negthinspace|$a\negthinspace b$|`a\negthinspace b`| ams |
 |\neq|$\neq$|||
 |\newcommand|$\newcommand\chk{\checkmark} \chk$|`\newcommand\chk{\checkmark} \chk`| newcommand |
-|\newenvironment|<span style="color:firebrick;">Not supported</span>|||
+|\newenvironment|<span class="no-sup">Not supported</span>|||
 |\newextarrow|$\newextarrow{\xArrOpen}{10,10}{0x21fe} \xArrOpen{Hello}$|`\newextarrow{\xArrOpen}{10,10}{0x21fe}`<br>`\xArrOpen{Hello}`| extpfeil |
 |\newline|$a\newline b$|`a\newline b`||
 |\nexists|$\nexists$|| ams |
@@ -816,7 +816,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\noexpand||||
 |\nolimits|$\lim\nolimits_x$|`\lim\nolimits_x`||
 |\norm|$\norm{x}$|\norm{x}| physics extension |
-|\normalfont|<span style="color:firebrick;">Not supported</span>|||
+|\normalfont|<span class="no-sup">Not supported</span>|||
 |\normalsize|$\normalsize normalsize$|`\normalsize normalsize`||
 |\not|$\not =$|`\not =`||
 |\notag|$$\begin{align} a&=b \\ \notag d+e&=f \end{align}$$|`\begin{align}`<br>&nbsp;&nbsp;`a&=b \\`<br>&nbsp;&nbsp;`\notag d+e&=f`<br>`\end{align}`| ams |
@@ -857,11 +857,11 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\odot|$\odot$|||
 |\OE|$\text{\OE}$|`\text{\OE}`||
 |\oe|$\text{\oe}$|`\text{\oe}`||
-|\officialeuro|<span style="color:firebrick;">Not supported</span>|See `\euro`||
+|\officialeuro|<span class="no-sup">Not supported</span>|See `\euro`||
 |\oiiint|$\oiiint$|||
 |\oiint|$\oiint$|||
 |\oint|$\oint$|||
-|\oldstyle|<span style="color:firebrick;">Not supported</span>| See `\oldstylenums`||
+|\oldstyle|<span class="no-sup">Not supported</span>| See `\oldstylenums`||
 |\oldstylenums|$\oldstylenums{123}$|`\oldstylenums{123}`| LaTeX2ε |
 |\omega|$\omega$|||
 |\Omega|$\Omega$|||
@@ -872,7 +872,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\operatorname|$\operatorname{asin} x$|\operatorname{asin} x| ams |
 |\operatorname\*|$\operatorname*{asin}\limits_y x$|`\operatorname*{asin}\limits_y x`| ams |
 |\oplus|$\oplus$|||
-|\or|<span style="color:firebrick;">Not supported</span>|||
+|\or|<span class="no-sup">Not supported</span>|||
 |\order|$\order{x^2}$|`\order{x^2}`| physics extension |
 |\origof|$\origof$|||
 |\oslash|$\oslash$|||
@@ -880,19 +880,19 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\outerproduct|$\outerproduct{a}{b}$|`\outerproduct{a}{b}`| physics extension |
 |\over|${a+1 \over b+2}+c$|`{a+1 \over b+2}+c`||
 |\overbrace|$\overbrace{x+⋯+x}^{n\text{ times}}$|`\overbrace{x+⋯+x}^{n\text{ times}}`||
-|\overbracket|<span style="color:firebrick;">Not supported</span>|||
+|\overbracket|<span class="no-sup">Not supported</span>|||
 |\overgroup|$\overgroup{AB}$|`\overgroup{AB}`| MnSymbol |
 |\overleftarrow|$\overleftarrow{AB}$|`\overleftarrow{AB}`| ams |
 |\overleftharpoon|$\overleftharpoon{AB}$|`\overleftharpoon{AB}`| MnSymbol |
 |\overleftrightarrow|$\overleftrightarrow{AB}$|`\overleftrightarrow{AB}`| ams |
 |\overline|$\overline{\text{a long argument}}$|`\overline{\text{a long argument}}`||
-|\overlinesegment|<span style="color:firebrick;">Not supported</span>|||
+|\overlinesegment|<span class="no-sup">Not supported</span>|||
 |\overparen|$\overparen{abc}$|`\overparen{abc}`||
 |\Overrightarrow|$\Overrightarrow{AB}$|`\Overrightarrow{AB}`| overrightarrow |
 |\overrightarrow|$\overrightarrow{AB}$|`\overrightarrow{AB}`| ams |
 |\overrightharpoon|$\overrightharpoon{ac}$|`\overrightharpoon{ac}`||
 |\overset|$\overset{!}{=}$|`\overset{!}{=}`| ams |
-|\overwithdelims|<span style="color:firebrick;">Not supported</span>|||
+|\overwithdelims|<span class="no-sup">Not supported</span>|||
 |\owns|$\owns$|||
 
 ## P
@@ -900,9 +900,9 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
 |\P|$\text{\P}$|`\text{\P}`||
-|\pagecolor|<span style="color:firebrick;">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
+|\pagecolor|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\parallel|$\parallel$|||
-|\part|<span style="color:firebrick;">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
+|\part|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\partial|$\partial$|||
 |\partialderivative|$\partialderivative{x}{y}$|`\partialderivative{x}{y}`| physics extension |
 |\pb|$\pb{x}{y}$|`\pb{x}{y}`| physics extension |
@@ -914,12 +914,12 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\phi|$\phi$|||
 |\Pi|$\Pi$|||
 |\pi|$\pi$|||
-|{picture}|<span style="color:firebrick;">Not supported</span>|||
+|{picture}|<span class="no-sup">Not supported</span>|||
 |\pitchfork|$\pitchfork$|| ams |
 |\plim|$\plim$|| statmath |
 |\plusmn|$\plusmn$|| texvc extension |
 |\pm|$\pm$|||
-|\pmatrix|<span style="color:firebrick;">Not supported</span>| See `{pmatrix}` ||
+|\pmatrix|<span class="no-sup">Not supported</span>| See `{pmatrix}` ||
 |{pmatrix}|$\begin{pmatrix}a&b\\c&d\end{pmatrix}$|`\begin{pmatrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{pmatrix}`| ams |
 |{pmatrix*}|$\begin{pmatrix*}[r] -1 & 3\\ 2 & -4 \end{pmatrix*}$|`\begin{pmatrix*}[r]`<br>&nbsp;&nbsp;&nbsp;`-1 & 3 \\`<br>&nbsp;&nbsp;&nbsp;`2 & -4`<br>`\end{pmatrix*}`| mathtools |
 |\pmb|$\pmb{\mu}$|`\pmb{\mu}`| ams |
@@ -955,7 +955,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
-|\Q|<span style="color:firebrick;">Not supported</span>|See `\Bbb{Q}`||
+|\Q|<span class="no-sup">Not supported</span>|See `\Bbb{Q}`||
 |\qall|$\qall$|| physics extension |
 |\qand|$\qand$|| physics extension |
 |\qas|$\qas$|| physics extension |
@@ -1013,8 +1013,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\ref|$\ref{tag1}$|`\ref{tag1}`<br>Some sites do not support `\ref`.||
 |\relax||||
 |\renewcommand|$\def\hail{Hi!}\renewcommand\hail{\text{Ahoy!}} \hail$|`\def\hail{Hi!}`<br>`\renewcommand\hail{\text{Ahoy!}}`<br>`\hail`| newcommand |
-|\renewenvironment|<span style="color:firebrick;">Not supported</span>|| newcommand |
-|\require|<span style="color:firebrick;">Not supported</span>|||
+|\renewenvironment|<span class="no-sup">Not supported</span>|| newcommand |
+|\require|<span class="no-sup">Not supported</span>|||
 |\Res|$\Res[f(z)]$|`\Res[f(z)]`| physics extension |
 |\restriction|$\restriction$|| ams |
 |\rfloor|$\rfloor$|||
@@ -1037,8 +1037,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\rlap|$\rlap{\,/}{=}$|`\rlap{\,/}{=}`||
 |\rm|${\rm AaBb12}$|`{\rm AaBb12}`||
 |\rmoustache|$\rmoustache$|||
-|\root|<span style="color:firebrick;">Not supported</span>|||
-|\rotatebox|<span style="color:firebrick;">Not supported</span>|||
+|\root|<span class="no-sup">Not supported</span>|||
+|\rotatebox|<span class="no-sup">Not supported</span>|||
 |\rparen|$\rparen$|| mathtools |
 |\rppolint|$\rppolint$|||
 |\rq|$\rq$|||
@@ -1046,7 +1046,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\Rrightarrow|$\Rrightarrow$|| ams |
 |\Rsh|$\Rsh$|| ams |
 |\rtimes|$\rtimes$|| ams |
-|\Rule|<span style="color:firebrick;">Not supported</span>|see `\rule`||
+|\Rule|<span class="no-sup">Not supported</span>|see `\rule`||
 |\rule|$x\rule[6pt]{2ex}{1ex}x$|`x\rule[6pt]{2ex}{1ex}x`||
 |\rVert|$\rVert$|| ams |
 |\rvert|$\rvert$|| ams |
@@ -1060,10 +1060,10 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\S|$\text{\S}$|`\text{\S}`||
 |\Sampi|$\Sampi$|||
 |\sampi|$\sampi$|||
-|\sc|<span style="color:firebrick;">Not supported</span>|See `\textsc`||
-|\scalebox|<span style="color:firebrick;">Not supported</span>|||
+|\sc|<span class="no-sup">Not supported</span>|See `\textsc`||
+|\scalebox|<span class="no-sup">Not supported</span>|||
 |\scpolint|$\scpolint$|||
-|\scr|<span style="color:firebrick;">Not supported</span>|See `\mathscr`||
+|\scr|<span class="no-sup">Not supported</span>|See `\mathscr`||
 |\scriptscriptstyle|$\scriptscriptstyle \frac cd$|`\scriptscriptstyle \frac cd`||
 |\scriptsize|$\scriptsize scriptsize$|`\scriptsize scriptsize`||
 |\scriptstyle|$A{\scriptstyle  B}$|`A{\scriptstyle B}`||
@@ -1071,14 +1071,14 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\searrow|$\searrow$|||
 |\sec|$\sec$|||
 |\sect|$\text{\sect}$|`\text{\sect}`| texvc extension |
-|\setlength|<span style="color:firebrick;">Not supported</span>|||
+|\setlength|<span class="no-sup">Not supported</span>|||
 |\setminus|$\setminus$|||
 |\sf|${\sf AaBb123}$|`{\sf AaBb123}`||
 |\sharp|$\sharp$|||
 |\shortmid|$\shortmid$|| ams |
 |\shortparallel|$\shortparallel$|| ams |
-|\shoveleft|<span style="color:firebrick;">Not supported</span>|| ams |
-|\shoveright|<span style="color:firebrick;">Not supported</span>|| ams |
+|\shoveleft|<span class="no-sup">Not supported</span>|| ams |
+|\shoveright|<span class="no-sup">Not supported</span>|| ams |
 |\sideset|$\sideset{_a^b}{_c^d}\sum$|`\sideset{_a^b}{_c^d}\sum`| ams |
 |\Sigma|$\Sigma$|||
 |\sigma|$\sigma$|||
@@ -1088,9 +1088,9 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\sinh|$\sinh$|||
 |\sixptsize|$\sixptsize sixptsize$|`\sixptsize sixptsize`||
 |\sh|$\sh$|||
-|\skew|<span style="color:firebrick;">Not supported</span>|||
-|\skip|<span style="color:firebrick;">Not supported</span>|||
-|\sl|<span style="color:firebrick;">Not supported</span>|||
+|\skew|<span class="no-sup">Not supported</span>|||
+|\skip|<span class="no-sup">Not supported</span>|||
+|\sl|<span class="no-sup">Not supported</span>|||
 |\small|$\small small$|`\small small`||
 |\smallfrown|$\smallfrown$|| ams |
 |\smallint|$\smallint$|||
@@ -1101,7 +1101,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\smile|$\smile$|||
 |\smiley|$\smiley$|| wasysym |
 |\sout|$\sout{abc}$|`\sout{abc}`| ulem |
-|\Space|<span style="color:firebrick;">Not supported</span>|see `\space`||
+|\Space|<span class="no-sup">Not supported</span>|see `\space`||
 |\space|$a\space b$|`a\space b`||
 |\spades|$\spades$|| texvc extension |
 |\spadesuit|$\spadesuit$|||
@@ -1123,8 +1123,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\stareq|$\stareq$|| stix |
 |\Stigma|$\Stigma$|||
 |\stigma|$\stigma$|||
-|\strut|<span style="color:firebrick;">Not supported</span>|||
-|\style|<span style="color:firebrick;">Not supported</span>|Non standard||
+|\strut|<span class="no-sup">Not supported</span>|||
+|\style|<span class="no-sup">Not supported</span>|Non standard||
 |\sub|$\sub$|| texvc extension |
 |{subarray}|$$\sum_{\begin{subarray}{l} i\in\Lambda\\ 0<j<n\end{subarray}}P(i,j)$$|`\sum_{\begin{subarray}{l}`<br>&nbsp;`i\in\Lambda\\`<br>&nbsp;&nbsp;`0<j<n`<br>`\end{subarray}}P(i,j)`| ams |
 |\sube|$\sube$|| texvc extension |
@@ -1179,7 +1179,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\textbraceleft|$\text{\textbraceleft}$|`\text{\textbraceleft}`||
 |\textbraceright|$\text{\textbraceright}$|`\text{\textbraceright}`||
 |\textbullet|$\text{\textbullet}$|`\text{\textbullet}`||
-|\textcircled|<span style="color:firebrick;">Not supported</span>|||
+|\textcircled|<span class="no-sup">Not supported</span>|||
 |\textcolor|$\textcolor{blue}{F=ma}$|`\textcolor{blue}{F=ma}`| color |
 |\textdagger|$\text{\textdagger}$|`\text{\textdagger}`||
 |\textdaggerdbl|$\text{\textdaggerdbl}$|`\text{\textdaggerdbl}`||
@@ -1202,7 +1202,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\textrm|$\textrm{AaBb123}$|`\textrm{AaBb123}`||
 |\textsc|$\textsc{hey}$|`\textsc{hey}`||
 |\textsf|$\textsf{AaBb123}$|`\textsf{AaBb123}`||
-|\textsl|<span style="color:firebrick;">Not supported</span>|||
+|\textsl|<span class="no-sup">Not supported</span>|||
 |\textsterling|$\text{\textsterling}$|`\text{\textsterling}`||
 |\textstyle|$\textstyle\sum_0^n$|`\textstyle\sum_0^n`||
 |\texttip|$\texttip{\text{hover here}}{This is a tooltip.}$|`\texttip{\text{hover here}}`<br>`{This is a tooltip.}`|MathJax|
@@ -1252,20 +1252,20 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\ulcorner|$\ulcorner$|| ams |
 |\underbar|$\underbar{X}$|`\underbar{X}`||
 |\underbrace|$\underbrace{x+⋯+x}_{n\text{ times}}$|`\underbrace{x+⋯+x}_{n\text{ times}}`||
-|\underbracket|<span style="color:firebrick;">Not supported</span>|||
+|\underbracket|<span class="no-sup">Not supported</span>|||
 |\undergroup|$\undergroup{AB}$|`\undergroup{AB}`| MnSymbol |
 |\underleftarrow|$\underleftarrow{AB}$|`\underleftarrow{AB}`| ams |
 |\underleftrightarrow|$\underleftrightarrow{AB}$|`\underleftrightarrow{AB}`| ams |
 |\underrightarrow|$\underrightarrow{AB}$|`\underrightarrow{AB}`| ams |
 |\underline|$\underline{\text{a long argument}}$|`\underline{\text{a long argument}}`||
-|\underlinesegment|<span style="color:firebrick;">Not supported</span>|||
+|\underlinesegment|<span class="no-sup">Not supported</span>|||
 |\underparen|$\underparen{abc}$|`\underparen{abc}`||
 |\underrightarrow|$\underrightarrow{AB}$|`\underrightarrow{AB}`||
 |\underset|$\underset{!}{=}$|`\underset{!}{=}`|AMS  |
-|\unicode|<span style="color:firebrick;">Not supported</span>|See `\char`||
+|\unicode|<span class="no-sup">Not supported</span>|See `\char`||
 |\unlhd|$\unlhd$|| ams |
 |\unrhd|$\unrhd$|| ams |
-|\up|<span style="color:firebrick;">Not supported</span>|||
+|\up|<span class="no-sup">Not supported</span>|||
 |\upalpha|$\upalpha$|| upgreek |
 |\Uparrow|$\Uparrow$|||
 |\uparrow|$\uparrow$|||
@@ -1291,8 +1291,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\uppi|$\uppi$|| upgreek |
 |\uppsi|$\uppsi$|| upgreek |
 |\uprho|$\uprho$|| upgreek |
-|\uproot|<span style="color:firebrick;">Not supported</span>|||
-|\upshape|<span style="color:firebrick;">Not supported</span>|||
+|\uproot|<span class="no-sup">Not supported</span>|||
+|\upshape|<span class="no-sup">Not supported</span>|||
 |\upsigma|$\upsigma$|| upgreek |
 |\Upsilon|$\Upsilon$|||
 |\upsilon|$\upsilon$|||
@@ -1340,7 +1340,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\varSigma|$\varSigma$|| ams |
 |\varsigma|$\varsigma$|||
 |\varspadesuit|$\varspadesuit$|| txfonts |
-|\varstigma|<span style="color:firebrick;">Not supported</span>|||
+|\varstigma|<span class="no-sup">Not supported</span>|||
 |\varsubsetneq|$\varsubsetneq$|| ams |
 |\varsubsetneqq|$\varsubsetneqq$|| ams |
 |\varsupsetneq|$\varsupsetneq$|| ams |
@@ -1370,9 +1370,9 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\verb|$\verb!\frac a b!$|`\verb!\frac a b!`||
 |\Vert|$\Vert$|||
 |\vert|$\vert$|||
-|\vfil|<span style="color:firebrick;">Not supported</span>|||
-|\vfill|<span style="color:firebrick;">Not supported</span>|||
-|\vline|<span style="color:firebrick;">Not supported</span>|||
+|\vfil|<span class="no-sup">Not supported</span>|||
+|\vfill|<span class="no-sup">Not supported</span>|||
+|\vline|<span class="no-sup">Not supported</span>|||
 |{Vmatrix}|$\begin{Vmatrix}a&b\\c&d\end{Vmatrix}$|`\begin{Vmatrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{Vmatrix}`| ams |
 |{Vmatrix*}|$\begin{Vmatrix*}[r] -1 & 3\\ 2 & -4 \end{Vmatrix*}$|`\begin{Vmatrix*}[r]`<br>&nbsp;&nbsp;&nbsp;`-1 & 3 \\`<br>&nbsp;&nbsp;&nbsp;`2 & -4`<br>`\end{Vmatrix*}`| mathtools |
 |{vmatrix}|$\begin{vmatrix}a&b\\c&d\end{vmatrix}$|`\begin{vmatrix}`<br>&nbsp;&nbsp;&nbsp;`a & b \\`<br>&nbsp;&nbsp;&nbsp;`c & d`<br>`\end{vmatrix}`| ams |

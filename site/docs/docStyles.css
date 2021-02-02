@@ -225,6 +225,10 @@ td code {
   background-color: transparent;
 }
 
+.no-sup {
+  color: dimgray;
+}
+
 #input-container {
   font-size: 0.9em;
   width: 100%;
