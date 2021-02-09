@@ -14,7 +14,7 @@
 }
 
 .temml {
-  font-family: serif;
+  font-family: "Cambria Math", "Times New Roman", serif;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -25,6 +25,11 @@
   word-wrap: normal;
   direction: ltr;
   border-color: currentColor;
+}
+
+/* Browser hack to mitigate a Firefox bug */
+@supports (-moz-appearance:meterbar) {
+  .temml { font-family: serif; }
 }
 
 .latin-modern .temml {
