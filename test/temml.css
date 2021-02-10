@@ -24,10 +24,6 @@ temml {
   .temml { font-family: serif; }
 }
 
-@supports (-webkit-appearance:none) {
-  .temml { font-family: "Cambria Math", "Times New Roman", serif; }
-}
-
 temml .script {
   font-family: "KaTeX_Script", serif;
 }
