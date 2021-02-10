@@ -32,6 +32,10 @@
   .temml { font-family: serif; }
 }
 
+@supports (-webkit-appearance:none) {
+  .temml { font-family: "Cambria Math", "Times New Roman", serif; }
+}
+
 .latin-modern .temml {
   font-family: "Latin Modern Math";
 }
