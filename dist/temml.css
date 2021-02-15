@@ -20,7 +20,7 @@ temml {
 }
 
 /* Browser hack to mitigate a Firefox bug */
-@supports (-moz-appearance:meterbar) {
+@-moz-document url-prefix() {
   .temml { font-family: serif; }
 }
 
