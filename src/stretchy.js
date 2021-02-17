@@ -59,7 +59,7 @@ const stretchyCodePoint = {
 
 // For stretchy elements for which no font glyph exists.
 const svgData = {
-  overlinesegment:       { minWidth: 0.888, height: 0.522 },
+  overlinesegment:       { minWidth: 0.888, height: 0.522, },
   underlinesegment:      { minWidth: 0.888, height: 0.522 },
   longRightleftharpoons: { minWidth: 1.75,  height: 0.716 },
   longLeftrightharpoons: { minWidth: 1.75,  height: 0.716 }
@@ -71,12 +71,12 @@ const svgPaths = {
   M399950 240 V94 h50 V428 h-50 V290 H0 v-50z`
 }
 
-const setSvgAttributes = (svg, key) => {
+const setSvgAttributes = (svg, key, aspect) => {
   svg.setAttribute("xmlns", "http://www.w3.org/2000/svg")
   svg.setAttribute("width", "400em")
   svg.setAttribute("height", svgData[key].height + "em")
   svg.setAttribute("viewBox", `0 0 400000 ${1000 * svgData[key].height}`)
-  svg.setAttribute("preserveAspectRatio", "xMinYMin slice")
+  svg.setAttribute("preserveAspectRatio", aspect)
   svg.setAttribute("fill", "currentColor")
   svg.setAttribute("fill-rule", "non-zero")
   svg.setAttribute("fill-opacity", "1")
@@ -103,11 +103,11 @@ const stretchySVG = (key, macros) => {
   rightPath.setAttribute("d", rightPathGeometry)
 
   let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], true)
-  leftSVG = setSvgAttributes(leftSVG, key)
+  leftSVG = setSvgAttributes(leftSVG, key, "xMinYMin slice")
   leftSVG.setAttribute("style", "position: absolute; left:0;")
 
   let rightSVG = new mathMLTree.MathNode("svg", [rightPath], [], true)
-  rightSVG = setSvgAttributes(rightSVG, key)
+  rightSVG = setSvgAttributes(rightSVG, key, "xMaxYMin slice")
   rightSVG.setAttribute("style", "position: absolute; right:0")
 
   const height = svgData[key].height

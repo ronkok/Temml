@@ -27,11 +27,6 @@
   border-color: currentColor;
 }
 
-/* Browser hack to mitigate a Firefox bug */
-@-moz-document url-prefix() {
-  .temml { font-family: serif; }
-}
-
 .latin-modern .temml {
   font-family: "Latin Modern Math";
 }

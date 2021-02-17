@@ -14,7 +14,7 @@
 </head>
 
 <body>
-<main id="main">
+<main id="main" class="latin-modern">
 
 # Supported Functions
 
@@ -1072,7 +1072,7 @@ To determine the Temml version number, open the console (Ctrl-Shift-I) and type 
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.0
+$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.1
 
 <h3><a href="#top">Contents</a></h3>
 
@@ -1123,8 +1123,8 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.0
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
-    <option value="Local">Local font</option>
     <option value="LatinModern">Latin Modern</option>
+    <option value="Local">Local font</option>
 </select>
 <script>
   function updateMathFont() {

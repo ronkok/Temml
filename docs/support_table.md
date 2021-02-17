@@ -17,7 +17,7 @@
 </head>
 
 <body>
-<main id="main" class = "sptable">
+<main id="main" class = "latin-modern sptable">
 
 # Support Table
 
@@ -1445,7 +1445,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 <nav>
 <div id="sidebar" class="narrow">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.0
+$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.1
 
 <div style="height:0.5em;"></div>
 

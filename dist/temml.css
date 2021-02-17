@@ -19,11 +19,6 @@ temml {
   border-color: currentColor;
 }
 
-/* Browser hack to mitigate a Firefox bug */
-@-moz-document url-prefix() {
-  .temml { font-family: serif; }
-}
-
 temml .script {
   font-family: "KaTeX_Script", serif;
 }

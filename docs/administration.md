@@ -8,7 +8,7 @@
 </head>
 
 <body>
-<main id="main">
+<main id="main" class="latin-modern">
 
 # Temml Administration
 
@@ -314,7 +314,7 @@ For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.c
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.0
+$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.1
 
 <h3><a href="#top">Contents</a></h3>
 
