@@ -64,8 +64,7 @@ defineFunction({
     "\\overleftrightarrow",
     "\\overgroup",
     "\\overleftharpoon",
-    "\\overrightharpoon",
-    "\\overlinesegment"
+    "\\overrightharpoon"
   ],
   props: {
     numArgs: 1

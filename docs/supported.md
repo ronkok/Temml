@@ -38,10 +38,9 @@ There is a similar [Support Table](./support_table.html), sorted alphabetically,
 | $\dot{a}$ `\dot{a}` | $\overleftharpoon{ac}$ `\overleftharpoon{ac}` | $\overrightharpoon{ac}$ `\overrightharpoon{ac}` |
 | $\ddot{a}$ `\ddot{a}` | $\overgroup{AB}$ `\overgroup{AB}` | $\wideparen{AB}$ `\wideparen{AB}` |
 | $\dddot{a}$ `\dddot{a}` | $\undergroup{AB}$ `\undergroup{AB}` | $\overparen{AB}$ `\overparen{AB}` |
-| $\ddddot{a}$ `\ddddot{a}` | $\overlinesegment{AB}$ `\overlinesegment{AB}` | $\underparen{AB}$ `\underparen{AB}` |
-| $\grave{a}$ `\grave{a}` | $\underlinesegment{AB}$ `\underlinesegment{AB}` | $\overbrace{AB}$ `\overbrace{AB}` |
+| $\ddddot{a}$ `\ddddot{a}` | $\underbar{X}$ `\underbar{X}` | $\underparen{AB}$ `\underparen{AB}` |
+| $\grave{a}$ `\grave{a}` | $\mathring{g}$ `\mathring{g}` | $\overbrace{AB}$ `\overbrace{AB}` |
 | $\hat{\theta}$ `\hat{\theta}` | $\widehat{ac}$ `\widehat{ac}` | $\underbrace{AB}$ `\underbrace{AB}` |
-| $\mathring{g}$ `\mathring{g}` | $\underbar{X}$ `\underbar{X}`| |
 
 ***Accent functions inside \\text{…}***
 

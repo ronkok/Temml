@@ -692,8 +692,7 @@ var temml = (function () {
    * This file provides support for building horizontal stretchy elements.
    */
 
-  const keysWithoutUnicodePoints = ["overlinesegment", "underlinesegment",
-    "longRightleftharpoons", "longLeftrightharpoons"];
+  const keysWithoutUnicodePoints = ["longRightleftharpoons", "longLeftrightharpoons"];
 
   const stretchyCodePoint = {
     widehat: "^",
@@ -745,16 +744,8 @@ var temml = (function () {
 
   // For stretchy elements for which no font glyph exists.
   const svgData = {
-    overlinesegment:       { minWidth: 0.888, height: 0.522, },
-    underlinesegment:      { minWidth: 0.888, height: 0.522 },
     longRightleftharpoons: { minWidth: 1.75,  height: 0.716 },
     longLeftrightharpoons: { minWidth: 1.75,  height: 0.716 }
-  };
-  const svgPaths = {
-    linesegmentLeft: `M50 290 V428 H0 V94 H50 V240 H400000 v50z
-  M50 290 V428 H0 V94 H50 V240 H400000 v50z`,
-    linesegmentRight: `M399950 240 V94 h50 V428 h-50 V290 H0 v-50z
-  M399950 240 V94 h50 V428 h-50 V290 H0 v-50z`
   };
 
   const setSvgAttributes = (svg, key, aspect) => {
@@ -776,16 +767,12 @@ var temml = (function () {
     // Two SVGs, one for each end of the arrow. The SVGs are very long (400em).
     const leftPath = new mathMLTree.MathNode("path", [], [], true);
     leftPath.setAttribute("stroke", "none");
-    const leftPathGeometry = key === "overlinesegment" || key === "underlinesegment"
-      ? svgPaths["linesegmentLeft"]
-      : macros.get(key + "Left");
+    const leftPathGeometry = macros.get(key + "Left");
     leftPath.setAttribute("d", leftPathGeometry);
 
     const rightPath = new mathMLTree.MathNode("path", [], [], true);
     rightPath.setAttribute("stroke", "none");
-    const rightPathGeometry = key === "overlinesegment" || key === "underlinesegment"
-      ? svgPaths["linesegmentRight"]
-      : macros.get(key + "Right");
+    const rightPathGeometry = macros.get(key + "Right");
     rightPath.setAttribute("d", rightPathGeometry);
 
     let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], true);
@@ -812,7 +799,7 @@ var temml = (function () {
       `position: absolute; right: 0; width: 50.2%; height: ${height}em; overflow: hidden;`
     );
 
-    const wrapper = new Span([], [leftSpan, rightSpan]);
+    const wrapper = new Span(["stretchy"], [leftSpan, rightSpan]);
     wrapper.setAttribute(
       "style",
       `display: block; position: relative; width: 100%; height: ${height}em;
@@ -2085,8 +2072,7 @@ min-width: ${svgData[key].minWidth}em;`
       "\\overleftrightarrow",
       "\\overgroup",
       "\\overleftharpoon",
-      "\\overrightharpoon",
-      "\\overlinesegment"
+      "\\overrightharpoon"
     ],
     props: {
       numArgs: 1
@@ -2146,8 +2132,7 @@ min-width: ${svgData[key].minWidth}em;`
       "\\underleftrightarrow",
       "\\undergroup",
       "\\underparen",
-      "\\utilde",
-      "\\underlinesegment"
+      "\\utilde"
     ],
     props: {
       numArgs: 1
