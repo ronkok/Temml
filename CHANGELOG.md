@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.1.2] - 2021-02-18
+
+### Fixed
+
+- Workaround for Firefox arrow minlength bug.
+
+### Removed
+
+- \overlinesegment & \underlinesegment
+
 ## [0.1.1] - 2021-02-17
 
 ### Fixed
