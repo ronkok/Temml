@@ -2173,9 +2173,9 @@ min-width: ${svgData[key].minWidth}em;`
   });
 
   // Helper function
-  const paddedNode$1 = (group) => {
+  const paddedNode$1 = (group, width = "+0.6em") => {
     const node = new mathMLTree.MathNode("mpadded", group ? [group] : []);
-    node.setAttribute("width", "+0.6em");
+    node.setAttribute("width", width);
     node.setAttribute("lspace", "0.3em");
     return node;
   };
@@ -2230,31 +2230,21 @@ min-width: ${svgData[key].minWidth}em;`
     },
     mathmlBuilder(group, style) {
       const arrowNode = stretchy.mathMLnode(group.label, group.macros);
-      const minWidth = group.label.charAt(0) === "x" ? "1.75em" : "3.0em";
+      const minWidth = group.label.charAt(1) === "x" ? "1.75em" : "3.0em";
       arrowNode.setAttribute("minsize", minWidth);
       // minsize attribute doesn't work in Firefox.
       // https://bugzilla.mozilla.org/show_bug.cgi?id=320303
-      // I tried adding a CSS min-width. That didn't work either.
-      let node;
       const labelOptions = style.incrementLevel();
 
-      if (group.body) {
-        const upperNode = paddedNode$1(buildGroup(group.body, labelOptions));
-        if (group.below) {
-          const lowerNode = paddedNode$1(buildGroup(group.below, labelOptions));
-          node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
-        } else {
-          node = new mathMLTree.MathNode("mover", [arrowNode, upperNode]);
-        }
-      } else if (group.below) {
-        const lowerNode = paddedNode$1(buildGroup(group.below, labelOptions));
-        node = new mathMLTree.MathNode("munder", [arrowNode, lowerNode]);
-      } else {
-        // This should never happen.
-        // Parser.js throws an error if there is no argument.
-        node = paddedNode$1();
-        node = new mathMLTree.MathNode("mover", [arrowNode, node]);
-      }
+      const upperNode = (group.body && group.body.body.length > 0)
+        ? paddedNode$1(buildGroup(group.body, labelOptions))
+          // Since Firefox does not recognize minsize set on the arrow,
+          // create an upper node w/correct width.
+        : paddedNode$1(null, minWidth);
+      const lowerNode = (group.below && group.below.body.length > 0)
+        ? paddedNode$1(buildGroup(group.below, labelOptions))
+        : paddedNode$1(null, minWidth);
+      const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
       return node;
     }
   });

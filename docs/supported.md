@@ -904,8 +904,6 @@ $\newextarrow{\xArrOpen}{5,5}{0x21fe} \xArrOpen{Hello}$ `\newextarrow{\xArrOpen}
 
 All extensible arrows except `\newextarrow` can take an optional argument in the same manner as `\xrightarrow[under]{over}`.
 
-Firefox [does not](vhttps://bugzilla.mozilla.org/show_bug.cgi?id=1494915) currently implement `minsize` on its extensible arrows. 
-
 ## Style, Color, Size, and Font
 
 **Class Assignment**
