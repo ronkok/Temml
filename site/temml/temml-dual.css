@@ -24,6 +24,9 @@
   letter-spacing: normal;
   word-wrap: normal;
   direction: ltr;
+}
+
+.temml * {
   border-color: currentColor;
 }
 
