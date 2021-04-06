@@ -16,7 +16,7 @@ import SourceLocation from "./SourceLocation";
 import { Token } from "./Token";
 
 /* The following tokenRegex
- * - matches typical whitespace (but not NBSP etc.) using its first group
+ * - matches typical whitespace (but not NBSP etc.) using its first two groups
  * - does not match any control character \x00-\x1f except whitespace
  * - does not match a bare backslash
  * - matches any ASCII character except those just mentioned
@@ -36,17 +36,19 @@ const controlWordRegexString = "\\\\[a-zA-Z@]+";
 const controlSymbolRegexString = "\\\\[^\uD800-\uDFFF]";
 const controlWordWhitespaceRegexString = `${controlWordRegexString}${spaceRegexString}*`;
 const controlWordWhitespaceRegex = new RegExp(`^(${controlWordRegexString})${spaceRegexString}*$`);
+const controlSpaceRegexString = "\\\\(\n|[ \r\t]+\n?)[ \r\t]*";
 const combiningDiacriticalMarkString = "[\u0300-\u036f]";
 export const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriticalMarkString}+$`);
 const tokenRegexString =
   `(${spaceRegexString}+)|` + // whitespace
+  `${controlSpaceRegexString}|` +  // \whitespace
   "(\\d[\\d.]*" +         // numbers (in non-strict mode)
   "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
   `${combiningDiacriticalMarkString}*` + // ...plus accents
   "|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
   `${combiningDiacriticalMarkString}*` + // ...plus accents
-  "|\\\\verb\\*([^]).*?\\3" + // \verb*
-  "|\\\\verb([^*a-zA-Z]).*?\\4" + // \verb unstarred
+  "|\\\\verb\\*([^]).*?\\4" + // \verb*
+  "|\\\\verb([^*a-zA-Z]).*?\\5" + // \verb unstarred
   "|\\\\operatorname\\*" + // \operatorname*
   `|${controlWordWhitespaceRegexString}` + // \macroName + spaces
   `|${controlSymbolRegexString})`; // \\, \', etc.
@@ -89,7 +91,7 @@ export default class Lexer {
         new Token(input[pos], new SourceLocation(this, pos, pos + 1))
       );
     }
-    let text = match[2] || " ";
+    let text = match[3] || (match[2] ? "\\ " : " ");
 
     if (this.catcodes[text] === 14) {
       // comment character
