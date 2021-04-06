@@ -899,7 +899,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
-|\P|$\text{\P}$|`\text{\P}`||
+|\P|$\text{\P}$|`\text{\P}` or `\P`||
 |\pagecolor|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\parallel|$\parallel$|||
 |\part|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
@@ -1057,7 +1057,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
-|\S|$\text{\S}$|`\text{\S}`||
+|\S|$\text{\S}$|`\text{\S}` or `\S`||
 |\Sampi|$\Sampi$|||
 |\sampi|$\sampi$|||
 |\sc|<span class="no-sup">Not supported</span>|See `\textsc`||

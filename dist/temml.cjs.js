@@ -964,8 +964,10 @@ defineSymbol(math, textord, "\u2665", "\\varheartsuit", true);
 defineSymbol(math, textord, "\u2111", "\\Im", true);
 defineSymbol(math, textord, "\u2660", "\\spadesuit", true);
 defineSymbol(math, textord, "\u2664", "\\varspadesuit", true);
-defineSymbol(text, textord, "\u00a7", "\\S", true);
-defineSymbol(text, textord, "\u00b6", "\\P", true);
+defineSymbol(text, mathord, "\u00a7", "\\S", true);
+defineSymbol(text, textord, "\u00a7", "\\S");
+defineSymbol(text, mathord, "\u00b6", "\\P", true);
+defineSymbol(text, textord, "\u00b6", "\\P");
 defineSymbol(text, textord, "\u263a", "\\smiley");
 defineSymbol(math, textord, "\u263a", "\\smiley", true);
 

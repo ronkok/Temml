@@ -1005,8 +1005,8 @@ Currently, neither Unicode not MathML distinguish between calligraphic and scrip
 | $\text{\textbraceright}$ `\text{\textbraceright}` | $\Diamond$ `\Diamond` | $\mho$ `\mho` |
 | $\text{\textbackslash}$ `\text{\textbackslash}` | $\lozenge$ `\lozenge` | $\diagdown$ `\diagdown` |
 | $\text{\textvisiblespace}$ `\text{\textvisiblespace}` | $\blacklozenge$ `\blacklozenge` | $\diagup$ `\diagup` |
-| $\text{\P}$ `\text{\P}` | $\star$ `\star` | $\flat$ `\flat` |
-| $\text{\S}$ `\text{\S}` | $\bigstar$ `\bigstar` | $\natural$ `\natural` |
+| $\text{\P}$ `\text{\P}` or `\P` | $\star$ `\star` | $\flat$ `\flat` |
+| $\text{\S}$ `\text{\S}` or `\S` | $\bigstar$ `\bigstar` | $\natural$ `\natural` |
 | $\copyright$ `\copyright` | $\maltese$ `\maltese` | $\sharp$ `\sharp` |
 | $\circledR$ `\circledR` | $\clubsuit$ `\clubsuit` | $\varclubsuit$ `\varclubsuit` |
 | $\circledS$ `\circledS` | $\diamondsuit$ `\diamondsuit` | $\vardiamondsuit$ `\vardiamondsuit` |
