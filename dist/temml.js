@@ -10198,7 +10198,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.1.2";
+  const version = "0.1.3";
 
   function postProcess(block) {
     const labelMap = {};

@@ -314,7 +314,7 @@ For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.c
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.2
+$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.1.3
 
 <h3><a href="#top">Contents</a></h3>
 
