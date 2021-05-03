@@ -25,8 +25,9 @@ import { Token } from "./Token";
  * - matches any BMP character except for those just described
  * - matches any valid Unicode surrogate pair
  * - mathches numerals
- * - matches a backslash followed by one or more letters
- * - matches a backslash followed by any BMP character, including newline
+ * - matches a backslash followed by one or more whitespace characters
+ * - matches a backslash followed by one or more letters then whitespace
+ * - matches a backslash followed by any BMP character
  * Just because the Lexer matches something doesn't mean it's valid input:
  * If there is no matching function or symbol definition, the Parser will
  * still reject the input.
@@ -34,14 +35,13 @@ import { Token } from "./Token";
 const spaceRegexString = "[ \r\n\t]";
 const controlWordRegexString = "\\\\[a-zA-Z@]+";
 const controlSymbolRegexString = "\\\\[^\uD800-\uDFFF]";
-const controlWordWhitespaceRegexString = `${controlWordRegexString}${spaceRegexString}*`;
-const controlWordWhitespaceRegex = new RegExp(`^(${controlWordRegexString})${spaceRegexString}*$`);
+const controlWordWhitespaceRegexString = `(${controlWordRegexString})${spaceRegexString}*`
 const controlSpaceRegexString = "\\\\(\n|[ \r\t]+\n?)[ \r\t]*";
 const combiningDiacriticalMarkString = "[\u0300-\u036f]";
 export const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriticalMarkString}+$`);
 const tokenRegexString =
   `(${spaceRegexString}+)|` + // whitespace
-  `${controlSpaceRegexString}|` +  // \whitespace
+  `${controlSpaceRegexString}|` +  // whitespace
   "(\\d[\\d.]*" +         // numbers (in non-strict mode)
   "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
   `${combiningDiacriticalMarkString}*` + // ...plus accents
@@ -91,7 +91,7 @@ export default class Lexer {
         new Token(input[pos], new SourceLocation(this, pos, pos + 1))
       );
     }
-    let text = match[3] || (match[2] ? "\\ " : " ");
+    const text = match[6] || match[3] || (match[2] ? "\\ " : " ")
 
     if (this.catcodes[text] === 14) {
       // comment character
@@ -107,12 +107,6 @@ export default class Lexer {
         this.tokenRegex.lastIndex = nlIndex + 1;
       }
       return this.lex();
-    }
-
-    // Trim any trailing whitespace from control word match
-    const controlMatch = text.match(controlWordWhitespaceRegex);
-    if (controlMatch) {
-      text = controlMatch[1];
     }
 
     return new Token(text, new SourceLocation(this, pos, this.tokenRegex.lastIndex));
