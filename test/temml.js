@@ -5649,7 +5649,7 @@ min-width: ${svgData[key].minWidth}em;`
       const prescripts = args[0].body.length > 0 ? args[0].body[0] : null;
       const postscripts = args[1].body.length > 0 ? args[1].body[0] : null;
 
-      if (!prescripts & !postscripts) {
+      if (!prescripts && !postscripts) {
         return base
       } else if (!prescripts) {
         // It's not a multi-script. Get a \textstyle supsub.
@@ -5669,6 +5669,7 @@ min-width: ${svgData[key].minWidth}em;`
         return {
           type: "multiscript",
           mode: parser.mode,
+          isSideset: funcName === "\\sideset",
           prescripts,
           postscripts,
           base
@@ -5679,13 +5680,16 @@ min-width: ${svgData[key].minWidth}em;`
       const base =  buildGroup(group.base, style);
 
       const prescriptsNode = new mathMLTree.MathNode("mprescripts");
-      const noneNode = new mathMLTree.MathNode("none"); // may or may not be used.
+      const noneNode = new mathMLTree.MathNode("none");
       let children = [];
 
       const preSub = buildGroup$1(group.prescripts.sub, style, noneNode);
       const preSup = buildGroup$1(group.prescripts.sup, style, noneNode);
-      preSub.setAttribute("style", "text-align: left;");
-      preSup.setAttribute("style", "text-align: left;");
+      if (group.isSideset) {
+        // This seems silly, but LaTeX does this. Firefox ignores it, which does not make me sad.
+        preSub.setAttribute("style", "text-align: left;");
+        preSup.setAttribute("style", "text-align: left;");
+      }
 
       if (group.postscripts) {
         const postSub = buildGroup$1(group.postscripts.sub, style, noneNode);
@@ -5804,6 +5808,8 @@ min-width: ${svgData[key].minWidth}em;`
       node = new MathNode("mo", [makeText(group.name, group.mode)]);
       if (utils.contains(noSuccessor, group.name)) {
         node.setAttribute("largeop", "false");
+      } else {
+        node.setAttribute("movablelimits", "false");
       }
     } else if (group.body) {
       // This is an operator with children. Add them.
@@ -6726,7 +6732,9 @@ min-width: ${svgData[key].minWidth}em;`
         }
       } else {
         const base = group.base;
-        if (base && base.type === "op" && base.limits && style.level === StyleLevel.DISPLAY) {
+        if (base && base.type === "op" && base.limits &&
+          (style.level === StyleLevel.DISPLAY || base.alwaysHandleSupSub)
+        ) {
           nodeType = "munderover";
         } else if (
           base &&
@@ -9388,9 +9396,10 @@ min-width: ${svgData[key].minWidth}em;`
             const limits = lex.text === "\\limits";
             base.limits = limits;
             base.alwaysHandleSupSub = true;
-          } else if (base && base.type === "operatorname" && base.alwaysHandleSupSub) {
-            const limits = lex.text === "\\limits";
-            base.limits = limits;
+          } else if (base && base.type === "operatorname") {
+            if (base.alwaysHandleSupSub) {
+              base.limits = lex.text === "\\limits";
+            }
           } else {
             throw new ParseError("Limit controls must follow a math operator", lex);
           }

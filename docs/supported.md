@@ -1022,7 +1022,7 @@ Symbols in the *texvc* extension
 | $\diamonds$ `\diamonds` | $\spades$ `\spades`           | $\infin$ `\infin`   |
 | $\bull$ `\bull`         | $\text{\sect}$ `\text{\sect}` | $\Dagger$ `\Dagger` |
 
-Direct Input: <span class="direct">£ ¥ ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ ✓ …  ⋮  ⋯  ⋱  ! ‼</span>
+Direct Input: <span class="direct">§ ¶ £ ¥ ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ ✓ …  ⋮  ⋯  ⋱  ! ‼</span>
 
 ## Units
 

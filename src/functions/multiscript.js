@@ -36,7 +36,7 @@ defineFunction({
     const prescripts = args[0].body.length > 0 ? args[0].body[0] : null
     const postscripts = args[1].body.length > 0 ? args[1].body[0] : null
 
-    if (!prescripts & !postscripts) {
+    if (!prescripts && !postscripts) {
       return base
     } else if (!prescripts) {
       // It's not a multi-script. Get a \textstyle supsub.
@@ -56,6 +56,7 @@ defineFunction({
       return {
         type: "multiscript",
         mode: parser.mode,
+        isSideset: funcName === "\\sideset",
         prescripts,
         postscripts,
         base
@@ -66,13 +67,16 @@ defineFunction({
     const base =  mml.buildGroup(group.base, style)
 
     const prescriptsNode = new mathMLTree.MathNode("mprescripts")
-    const noneNode = new mathMLTree.MathNode("none") // may or may not be used.
+    const noneNode = new mathMLTree.MathNode("none")
     let children = []
 
     const preSub = buildGroup(group.prescripts.sub, style, noneNode)
     const preSup = buildGroup(group.prescripts.sup, style, noneNode)
-    preSub.setAttribute("style", "text-align: left;")
-    preSup.setAttribute("style", "text-align: left;")
+    if (group.isSideset) {
+      // This seems silly, but LaTeX does this. Firefox ignores it, which does not make me sad.
+      preSub.setAttribute("style", "text-align: left;")
+      preSup.setAttribute("style", "text-align: left;")
+    }
 
     if (group.postscripts) {
       const postSub = buildGroup(group.postscripts.sub, style, noneNode)

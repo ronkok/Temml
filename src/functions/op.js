@@ -21,7 +21,9 @@ const mathmlBuilder = (group, style) => {
     // This is a symbol. Just add the symbol.
     node = new mathMLTree.MathNode("mo", [mml.makeText(group.name, group.mode)]);
     if (utils.contains(noSuccessor, group.name)) {
-      node.setAttribute("largeop", "false");
+      node.setAttribute("largeop", "false")
+    } else {
+      node.setAttribute("movablelimits", "false")
     }
   } else if (group.body) {
     // This is an operator with children. Add them.
