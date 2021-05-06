@@ -651,8 +651,10 @@ export default class Parser {
    */
   parseUrlGroup(optional) {
     this.gullet.lexer.setCatcode("%", 13); // active character
+    this.gullet.lexer.setCatcode("~", 12); // other character
     const res = this.parseStringGroup("url", optional);
     this.gullet.lexer.setCatcode("%", 14); // comment character
+    this.gullet.lexer.setCatcode("~", 13); // active character
     if (res == null) {
       return null;
     }

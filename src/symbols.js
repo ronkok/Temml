@@ -615,13 +615,11 @@ defineSymbol(math, rel, "\u2270", "\\nleq", true);
 defineSymbol(math, rel, "\u2270", "\\nleqq");
 defineSymbol(math, rel, "\u2270", "\\nleqslant");
 defineSymbol(math, spacing, "\u00a0", "\\ ");
-defineSymbol(math, spacing, "\u00a0", "~");
 defineSymbol(math, spacing, "\u00a0", "\\space");
 // Ref: LaTeX Source 2e: \DeclareRobustCommand{\nobreakspace}{%
 defineSymbol(math, spacing, "\u00a0", "\\nobreakspace");
 defineSymbol(text, spacing, "\u00a0", "\\ ");
 defineSymbol(text, spacing, "\u00a0", " ");
-defineSymbol(text, spacing, "\u00a0", "~");
 defineSymbol(text, spacing, "\u00a0", "\\space");
 defineSymbol(text, spacing, "\u00a0", "\\nobreakspace");
 defineSymbol(math, spacing, null, "\\nobreak");

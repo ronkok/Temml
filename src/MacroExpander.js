@@ -380,6 +380,14 @@ export default class MacroExpander {
       // mainly checking for undefined here
       return definition;
     }
+    // If a single character has an associated catcode other than 13
+    // (active character), then don't expand it.
+    if (name.length === 1) {
+      const catcode = this.lexer.catcodes[name]
+      if (catcode != null && catcode !== 13) {
+        return
+      }
+    }
     const expansion = typeof definition === "function" ? definition(this) : definition;
     if (typeof expansion === "string") {
       let numArgs = 0;

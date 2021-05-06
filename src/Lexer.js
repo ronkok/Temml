@@ -28,6 +28,13 @@ import { Token } from "./Token";
  * - matches a backslash followed by one or more whitespace characters
  * - matches a backslash followed by one or more letters then whitespace
  * - matches a backslash followed by any BMP character
+ * Capturing groups:
+ *   [1] regular whitespace
+ *   [2] backslash followed by whitespace
+ *   [3] anything else, which may include:
+ *     [4] left character of \verb*
+ *     [5] left character of \verb
+ *     [6] backslash followed by word, excluding any trailing whitespace
  * Just because the Lexer matches something doesn't mean it's valid input:
  * If there is no matching function or symbol definition, the Parser will
  * still reject the input.
@@ -65,9 +72,11 @@ export default class Lexer {
       tokenRegexString.replace("\\d[\\d.]*|", settings.strict ? "" : "\\d[\\d.]*|"),
       "g"
     );
-    // category codes, only supports comment characters (14) for now
+    // Category codes. The lexer only supports comment characters (14) for now.
+    // MacroExpander additionally distinguishes active (13).
     this.catcodes = {
-      "%": 14 // comment character
+      "%": 14, // comment character
+      "~": 13  // active character
     };
   }
 
