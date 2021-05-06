@@ -1438,13 +1438,11 @@ defineSymbol(math, rel, "\u2270", "\\nleq", true);
 defineSymbol(math, rel, "\u2270", "\\nleqq");
 defineSymbol(math, rel, "\u2270", "\\nleqslant");
 defineSymbol(math, spacing, "\u00a0", "\\ ");
-defineSymbol(math, spacing, "\u00a0", "~");
 defineSymbol(math, spacing, "\u00a0", "\\space");
 // Ref: LaTeX Source 2e: \DeclareRobustCommand{\nobreakspace}{%
 defineSymbol(math, spacing, "\u00a0", "\\nobreakspace");
 defineSymbol(text, spacing, "\u00a0", "\\ ");
 defineSymbol(text, spacing, "\u00a0", " ");
-defineSymbol(text, spacing, "\u00a0", "~");
 defineSymbol(text, spacing, "\u00a0", "\\space");
 defineSymbol(text, spacing, "\u00a0", "\\nobreakspace");
 defineSymbol(math, spacing, null, "\\nobreak");
@@ -3605,6 +3603,7 @@ function parseArray(
     colSeparationType, // "align" | "alignat" | "gather" | "small" | "CD" | "multline"
     addEqnNum, // boolean
     singleRow, // boolean
+    emptySingleRow, // boolean
     maxNumCols, // number
     leqno // boolean
   },
@@ -3691,9 +3690,10 @@ function parseArray(
       parser.consume();
     } else if (next === "\\end") {
       // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
-      // the last line is empty.
+      // the last line is empty.  However, AMS environments keep the
+      // empty row if it's the only one.
       // NOTE: Currently, `cell` is the last item added into `row`.
-      if (row.length === 1 && cell.body.length === 0) {
+      if (row.length === 1 && cell.body.length === 0 && (body.length > 1 || !emptySingleRow)) {
         body.pop();
       }
       if (hLinesBeforeRow.length < body.length + 1) {
@@ -3956,6 +3956,7 @@ const alignedHandler = function(context, args) {
       cols,
       addJot: true,
       addEqnNum: context.envName === "align" || context.envName === "alignat",
+      emptySingleRow: true,
       colSeparationType: context.envName,
       maxNumCols: context.envName === "split" ? 2 : undefined,
       leqno: context.parser.settings.leqno
@@ -4275,6 +4276,7 @@ defineEnvironment({
       addJot: true,
       colSeparationType: "gather",
       addEqnNum: context.envName === "gather",
+      emptySingleRow: true,
       leqno: context.parser.settings.leqno
     };
     return parseArray(context.parser, res, "display");
@@ -4305,6 +4307,7 @@ defineEnvironment({
     validateAmsEnvironmentContext(context);
     const res = {
       addEqnNum: context.envName === "equation",
+      emptySingleRow: true,
       singleRow: true,
       maxNumCols: 1,
       colSeparationType: "gather",
@@ -7385,6 +7388,13 @@ class Token {
  * - matches a backslash followed by one or more whitespace characters
  * - matches a backslash followed by one or more letters then whitespace
  * - matches a backslash followed by any BMP character
+ * Capturing groups:
+ *   [1] regular whitespace
+ *   [2] backslash followed by whitespace
+ *   [3] anything else, which may include:
+ *     [4] left character of \verb*
+ *     [5] left character of \verb
+ *     [6] backslash followed by word, excluding any trailing whitespace
  * Just because the Lexer matches something doesn't mean it's valid input:
  * If there is no matching function or symbol definition, the Parser will
  * still reject the input.
@@ -7422,9 +7432,11 @@ class Lexer {
       tokenRegexString.replace("\\d[\\d.]*|", settings.strict ? "" : "\\d[\\d.]*|"),
       "g"
     );
-    // category codes, only supports comment characters (14) for now
+    // Category codes. The lexer only supports comment characters (14) for now.
+    // MacroExpander additionally distinguishes active (13).
     this.catcodes = {
-      "%": 14 // comment character
+      "%": 14, // comment character
+      "~": 13  // active character
     };
   }
 
@@ -7777,10 +7789,12 @@ defineMacro("\\bgroup", "{");
 defineMacro("\\egroup", "}");
 
 // Symbols from latex.ltx:
+// \def~{\nobreakspace{}}
 // \def\lq{`}
 // \def\rq{'}
 // \def \aa {\r a}
 // \def \AA {\r A}
+defineMacro("~", "\\nobreakspace");
 defineMacro("\\lq", "`");
 defineMacro("\\rq", "'");
 defineMacro("\\aa", "\\r a");
@@ -10526,6 +10540,14 @@ class MacroExpander {
       // mainly checking for undefined here
       return definition;
     }
+    // If a single character has an associated catcode other than 13
+    // (active character), then don't expand it.
+    if (name.length === 1) {
+      const catcode = this.lexer.catcodes[name];
+      if (catcode != null && catcode !== 13) {
+        return
+      }
+    }
     const expansion = typeof definition === "function" ? definition(this) : definition;
     if (typeof expansion === "string") {
       let numArgs = 0;
@@ -11658,8 +11680,10 @@ class Parser {
    */
   parseUrlGroup(optional) {
     this.gullet.lexer.setCatcode("%", 13); // active character
+    this.gullet.lexer.setCatcode("~", 12); // other character
     const res = this.parseStringGroup("url", optional);
     this.gullet.lexer.setCatcode("%", 14); // comment character
+    this.gullet.lexer.setCatcode("~", 13); // active character
     if (res == null) {
       return null;
     }
