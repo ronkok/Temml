@@ -84,6 +84,7 @@ function parseArray(
     colSeparationType, // "align" | "alignat" | "gather" | "small" | "CD" | "multline"
     addEqnNum, // boolean
     singleRow, // boolean
+    emptySingleRow, // boolean
     maxNumCols, // number
     leqno // boolean
   },
@@ -170,9 +171,10 @@ function parseArray(
       parser.consume();
     } else if (next === "\\end") {
       // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
-      // the last line is empty.
+      // the last line is empty.  However, AMS environments keep the
+      // empty row if it's the only one.
       // NOTE: Currently, `cell` is the last item added into `row`.
-      if (row.length === 1 && cell.body.length === 0) {
+      if (row.length === 1 && cell.body.length === 0 && (body.length > 1 || !emptySingleRow)) {
         body.pop();
       }
       if (hLinesBeforeRow.length < body.length + 1) {
@@ -435,6 +437,7 @@ const alignedHandler = function(context, args) {
       cols,
       addJot: true,
       addEqnNum: context.envName === "align" || context.envName === "alignat",
+      emptySingleRow: true,
       colSeparationType: context.envName,
       maxNumCols: context.envName === "split" ? 2 : undefined,
       leqno: context.parser.settings.leqno
@@ -754,6 +757,7 @@ defineEnvironment({
       addJot: true,
       colSeparationType: "gather",
       addEqnNum: context.envName === "gather",
+      emptySingleRow: true,
       leqno: context.parser.settings.leqno
     };
     return parseArray(context.parser, res, "display");
@@ -784,6 +788,7 @@ defineEnvironment({
     validateAmsEnvironmentContext(context);
     const res = {
       addEqnNum: context.envName === "equation",
+      emptySingleRow: true,
       singleRow: true,
       maxNumCols: 1,
       colSeparationType: "gather",
