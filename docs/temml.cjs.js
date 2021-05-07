@@ -6197,7 +6197,7 @@ const mathmlBuilder$9 = (group, style) => {
 // amsopn.dtx: \mathop{#1\kern\z@\operator@font#3}\newmcodes@
 defineFunction({
   type: "operatorname",
-  names: ["\\operatorname", "\\operatorname*"],
+  names: ["\\operatorname@", "\\operatornamewithlimits"],
   props: {
     numArgs: 1
   },
@@ -6208,7 +6208,7 @@ defineFunction({
       type: "operatorname",
       mode: parser.mode,
       body: ordargument(body),
-      alwaysHandleSupSub: funcName === "\\operatorname*",
+      alwaysHandleSupSub: (funcName === "\\operatornamewithlimits"),
       limits: false,
       parentIsSupSub: false,
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)
@@ -7421,7 +7421,6 @@ const tokenRegexString =
   `${combiningDiacriticalMarkString}*` + // ...plus accents
   "|\\\\verb\\*([^]).*?\\4" + // \verb*
   "|\\\\verb([^*a-zA-Z]).*?\\5" + // \verb unstarred
-  "|\\\\operatorname\\*" + // \operatorname*
   `|${controlWordWhitespaceRegexString}` + // \macroName + spaces
   `|${controlSymbolRegexString})`; // \\, \', etc.
 
@@ -7831,6 +7830,8 @@ defineMacro("\u22ee", "\\vdots");
 //////////////////////////////////////////////////////////////////////
 // amsmath.sty
 // http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
+
+defineMacro("\\operatorname", "\\@ifstar\\operatornamewithlimits\\operatorname@");
 
 //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");

@@ -97,7 +97,7 @@ const mathmlBuilder = (group, style) => {
 // amsopn.dtx: \mathop{#1\kern\z@\operator@font#3}\newmcodes@
 defineFunction({
   type: "operatorname",
-  names: ["\\operatorname", "\\operatorname*"],
+  names: ["\\operatorname@", "\\operatornamewithlimits"],
   props: {
     numArgs: 1
   },
@@ -108,7 +108,7 @@ defineFunction({
       type: "operatorname",
       mode: parser.mode,
       body: ordargument(body),
-      alwaysHandleSupSub: funcName === "\\operatorname*",
+      alwaysHandleSupSub: (funcName === "\\operatornamewithlimits"),
       limits: false,
       parentIsSupSub: false,
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)

@@ -242,6 +242,8 @@ defineMacro("\u22ee", "\\vdots");
 // amsmath.sty
 // http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
 
+defineMacro("\\operatorname", "\\@ifstar\\operatornamewithlimits\\operatorname@")
+
 //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
 
