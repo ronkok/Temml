@@ -87,13 +87,23 @@ a {
   color: black;
 }
 
-.leftColumn,
-.rightColumn {
-    display: inline-block;
-    width: 45%;
+.demo {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
 }
 
-.leftColumn {
+.input,
+.output {
+    display: flex;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-direction: column;
+    width: 100%;
+}
+
+.input, output {
     margin-right: 40px;
 }
 
@@ -124,12 +134,6 @@ a {
 }
 
 @media (max-width: 720px){
-  .leftColumn,
-  .rightColumn {
-    display: block;
-    width: 100%;
-  }
-
   article, nav, #title {
     width: 100%;
   }
