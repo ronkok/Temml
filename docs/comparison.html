@@ -2578,7 +2578,7 @@
             <td><span class="no-sup">Not supported</span></td>
             <td>₭\begin{drcases}a&\text{if }b\\c&\text{if }d\end{drcases}₭</td>
             <td>₸\begin{drcases}a&\text{if }b\\c&\text{if }d\end{drcases}₸</td>
-            <td><code>\begin{drcases}a&\text{if }b\\c&\text{if }d\end{drcases}</code></td>
+            <td><code>\begin{drcases}</code><br>&nbsp;&nbsp;&nbsp;<code></code>a&\text{if }b\\</code><br>&nbsp;&nbsp;&nbsp;<code>c&\text{if }d</code><br><code>\end{drcases}</code></td>
           </tr>
         </tbody>
       </table>
@@ -2722,10 +2722,7 @@
             <td>\[\begin{equation}\begin{split}∇·𝐃&=ρ_v \\∇·𝐁&=0\end{split}\end{equation}\]</td>
             <td>₭₭\begin{equation}\begin{split}∇·𝐃&=ρ_v \\∇·𝐁&=0\end{split}\end{equation}₭₭</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><code>\begin{equation}\begin{split}
-∇·𝐃&=ρ_v \\
-∇·𝐁&=0
-\end{split}\end{equation}</code></td>
+            <td><code>\begin{equation}</code><br><code>\begin{split}</code><br>&nbsp;&nbsp;&nbsp;<code>∇·𝐃&=ρ_v \\</code><br>&nbsp;&nbsp;&nbsp;<code></code>∇·𝐁&=0</code><br><code>\end{split}</code><br><code>\end{equation}</code></td>
           </tr>
           <tr>
             <td>{equation*}</td>
@@ -3693,7 +3690,7 @@ y &=& (x-1)^2 \\
             <td>\(\begin{matrix}\injlim x \\ \injlim_y x \\\injlim\limits_y x\end{matrix}\)</td>
             <td>₭\begin{matrix}\injlim x \\ \injlim_y x \\\injlim\limits_y x\end{matrix}₭</td>
             <td data-tex="\injlim"><span class="no-sup">Not supported</span></td>
-            <td><code>\begin{matrix}\injlim x \\ \injlim_y x \\\injlim\limits_y x\end{matrix}</code></td>
+            <td><code>\injlim x</code><br><code>\injlim_y x</code><br><code>\injlim\limits_y x</code></td>
           </tr>
           <tr>
             <td>\int</td>
@@ -4453,7 +4450,7 @@ y &=& (x-1)^2 \\
             <td>\(\begin{matrix}\log x \\ \log_y x \\ \log\limits_y x\end{matrix}\)</td>
             <td>₭\begin{matrix}\log x \\ \log_y x \\ \log\limits_y x\end{matrix}₭</td>
             <td>₸\begin{matrix}\log x \\ \log_y x \\ \log\limits_y x\end{matrix}₸</td>
-            <td><code>\begin{matrix}</code><br><code>  \log x \\</code><br><code>  \log_y x \\</code><br><code>  \log\limits_y x</code><br><code>\end{matrix}</code></td>
+            <td><code>\log x</code><br><code>\log_y x</code><br><code>\log\limits_y x</code></td>
           </tr>
           <tr>
             <td>\Longleftarrow</td>
@@ -5261,7 +5258,7 @@ y &=& (x-1)^2 \\
             <td>\(\newenvironment{tinyit}{\tiny\it}{\normalsize\rm}\begin{tinyit}Really small.\end{tinyit}\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><code>\newenvironment{tinyit}{\tiny\it}{\normalsize\rm}\begin{tinyit}Really small.\end{tinyit}</code></td>
+            <td><code>\newenvironment{tinyit}{\tiny\it}{\normalsize\rm}</code><br><code>\begin{tinyit}Really small.\end{tinyit}</code></td>
           </tr>
           <tr>
             <td>\Newextarrow</td>
@@ -5269,7 +5266,7 @@ y &=& (x-1)^2 \\
             <td>\(\Newextarrow{\xrightharpoonup}{5,10}{0x21C0} A \xrightharpoonup{\text{note}} B\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><code>\Newextarrow{\xrightharpoonup}{5,10}{0x21C0} A \xrightharpoonup{\text{note}} B</code></td>
+            <td><code>\Newextarrow{\xrightharpoonup}{5,10}{0x21C0}</code><br><code>A \xrightharpoonup{\text{note}} B</code></td>
           </tr>
           <tr>
             <td>\newextarrow</td>
@@ -5277,7 +5274,7 @@ y &=& (x-1)^2 \\
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><code>\newextarrow{\xArrOpen}{5,5}{0x21fe} \xArrOpen{Hello}</code></td>
+            <td><code>\newextarrow{\xArrOpen}{5,5}{0x21fe}</code><br><code>\xArrOpen{Hello}</code></td>
           </tr>
           <tr>
             <td>\newline</td>
@@ -6485,7 +6482,7 @@ y &=& (x-1)^2 \\
             <td><span class="no-sup">Not supported</span></td>
             <td>₭\begin{rcases}a&\text{if }b\\c&\text{if }d\end{rcases}₭</td>
             <td>₸\begin{rcases}a&\text{if }b\\c&\text{if }d\end{rcases}₸</td>
-            <td><code>\begin{rcases}a&\text{if }b\\c&\text{if }d\end{rcases}</code></td>
+            <td><code>\begin{rcases}</code><br>&nbsp;&nbsp;&nbsp;<code>a&\text{if }b\\</code><br>&nbsp;&nbsp;&nbsp;<code>c&\text{if }d</code><br><code>\end{rcases}</code></td>
           </tr>
           <tr>
             <td>\rceil</td>
@@ -6741,7 +6738,7 @@ y &=& (x-1)^2 \\
             <td>\(\root 3 \of x\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td>₸\root{3}{x}₸</td>
-            <td>MathJax and TeXZilla differ in syntax: <code>\root 3 \of x</code> vs. <code>\root{3}{x}</code></td>
+            <td>MathJax and TeXZilla differ in syntax:<br><code>\root 3 \of x</code> vs. <code>\root{3}{x}</code></td>
           </tr>
           <tr>
             <td>\rotatebox</td>
@@ -7231,10 +7228,7 @@ y &=& (x-1)^2 \\
             <td>\[\begin{equation}\begin{split}∇·𝐃&=ρ_v \\∇·𝐁&=0\end{split}\end{equation}\]</td>
             <td>₭₭\begin{equation}\begin{split}∇·𝐃&=ρ_v \\∇·𝐁&=0\end{split}\end{equation}₭₭</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><code>\begin{equation}\begin{split}
-∇·𝐃&=ρ_v \\
-∇·𝐁&=0
-\end{split}\end{equation}</code></td>
+            <td><code>\begin{equation}</code><br><code>\begin{split}</code><br>&nbsp;&nbsp;&nbsp;<code>∇·𝐃&=ρ_v \\</code><br>&nbsp;&nbsp;&nbsp;<code>∇·𝐁&=0</code><br><code>\end{split}</code><br><code>\end{equation}</code></td>
           </tr>
           <tr>
             <td>\sqcap</td>
@@ -7370,7 +7364,7 @@ y &=& (x-1)^2 \\
             <td>\(\begin{subarray}{c} a \\ c \end{subarray}\)</td>
             <td>₭\begin{subarray}{c} a \\ c \end{subarray}₭</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><code>\sum_{\begin{subarray}{c} a \\ c \end{subarray}}</code></td>
+            <td><code>\sum_{\begin{subarray}</code><br>&nbsp;&nbsp;&nbsp;<code>{c} a \\</code><br>&nbsp;&nbsp;&nbsp;<code>c</code><br><code>\end{subarray}}</code></td>
           </tr>
           <tr>
             <td>\sube</td>
@@ -7434,7 +7428,7 @@ y &=& (x-1)^2 \\
             <td>\(\displaystyle\sum_{\substack{1\lt i\lt 3 \\ 1\le j\lt 5}}a_{ij}\)</td>
             <td>₭\displaystyle\sum_{\substack{1\lt i\lt 3 \\ 1\le j\lt 5}}a_{ij}₭</td>
             <td>₸\displaystyle\sum_{\substack{1\lt i\lt 3 \\ 1\le j\lt 5}}a_{ij}₸</td>
-            <td><code>\displaystyle\sum_{\substack{1\lt i\lt 3 \\</code><br><code>1\le j\lt 5}}a_{ij}</code></td>
+            <td><code>\sum_{\substack{1\lt i\lt 3 \\</code><br><code>1\le j\lt 5}}a_{ij}</code></td>
           </tr>
           <tr>
             <td>\succ</td>
