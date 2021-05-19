@@ -28,7 +28,7 @@ There is a similar [Support Table](./support_table.html), sorted alphabetically,
 
 ||||
 |:----------|:------------------------|:----------------------------------|
-| $a'$ `a'` | $\tilde{a}$ `\tilde{a}` | $\widetilde{ac}$ `\widetilde{ac}` |
+| $a'$ `a'` | $\tilde{a}$ `\tilde{a}` | $\widetilde{ac}$ `\widetilde{ac}`  |
 | $a''$ `a''` | $\vec{F}$ `\vec{F}` | $\utilde{AB}$ `\utilde{AB}` |
 | $a^{\prime}$ `a^{\prime}` | $\overleftarrow{AB}$ `\overleftarrow{AB}` | $\overrightarrow{AB}$ `\overrightarrow{AB}` |
 | $\acute{a}$ `\acute{a}` | $\underleftarrow{AB}$ `\underleftarrow{AB}` | $\underrightarrow{AB}$ `\underrightarrow{AB}` |
