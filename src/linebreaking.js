@@ -42,7 +42,7 @@ export default function setLineBreaks(expression, isDisplayMode) {
       continue
     }
     block.push(node);
-    if (node.type && node.type === "mo") {
+    if (node.type && node.type === "mo" && !isDisplayMode) {
       if (canBeBIN && !node.attributes.form) {
         // Check if the following node is a \nobreak text node, e.g. "~""
         const next = i < expression.length - 1 ? expression[i + 1] : null;

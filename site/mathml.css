@@ -77,12 +77,12 @@ munderover {
 /* roots */
 msqrt, mroot {
     display: inline-flex !important;
-    margin-left: .5em;
+    margin-left: .6em;
     vertical-align: middle;
     border-top: solid thin;
 }
 msqrt:before, mroot:before {
-    margin-left: -.5em;
+    margin-left: -.6em;
     content: "\221A";
 }
 mroot > *:nth-child(2) {
