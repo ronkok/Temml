@@ -97,6 +97,11 @@
   if (!hasMathML) {
     const notice = document.getElementById("notice");
     notice.textContent = "This browser does not support MathML. Try Firefox or Safari."
+    // Insert the mathml.css stylesheet.
+    link = document.createElement("link");
+    link.href = "./mathml.css";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
   }
 
   const input = document.getElementById("demoSource");
