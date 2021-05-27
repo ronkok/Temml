@@ -79,6 +79,7 @@ defineSymbol(math, rel, "\u27c2", "\\perp", true);
 defineSymbol(math, rel, "\u2aaf", "\\preceq", true);
 defineSymbol(math, rel, "\u2ab0", "\\succeq", true);
 defineSymbol(math, rel, "\u2243", "\\simeq", true);
+defineSymbol(math, rel, "\u224c", "\\backcong", true);
 defineSymbol(math, rel, "|", "\\mid", true);
 defineSymbol(math, rel, "\u226a", "\\ll", true);
 defineSymbol(math, rel, "\u226b", "\\gg", true);

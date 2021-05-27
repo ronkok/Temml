@@ -781,15 +781,18 @@ $\pu{1,2E3 kJ}$ `\pu{1,2E3 kJ}`
 $\stackrel{!}{=}\vphantom{\frac a b}$ `\stackrel{!}{=}`
 
 |||||
-|:--------|:-------------------------------------|:----------------------|:----------------------------|
-| $=$ `=` | $\eqcolon$ `\eqcolon` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\minuscolon` | $\lessgtr$ `\lessgtr` | $\sqsupseteq$ `\sqsupseteq` |
-| $<$ `<` | $\Eqcolon$ `\Eqcolon` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\minuscoloncolon` | $\lesssim$ `\lesssim` | $\stareq$ `\stareq` |
-| $>$ `>` | $\eqqcolon$ `\eqqcolon` | $\ll$ `\ll` | $\Subset$ `\Subset` |
-| $:$ `:` | $\Eqqcolon$ `\Eqqcolon` | $\lll$ `\lll` | $\subset$ `\subset` |
-| $\approx$ `\approx` | $\eqdef$ `\eqdef` | $\llless$ `\llless` | $\subseteq$ `\subseteq` |
-| $\approxeq$ `\approxeq` | $\eqsim$ `\eqsim` | $\lt$ `\lt` | $\subseteqq$ `\subseteqq` |
-| $\arceq$ `\arceq` | $\eqslantgtr$ `\eqslantgtr` | $\measeq$ `\measeq` | $\succ$ `\succ` |
-| $\asymp$ `\asymp` | $\eqslantless$ `\eqslantless` | $\mid$ `\mid` | $\succapprox$ `\succapprox` |
+|:--------|:--------------------|:----------------------------|:------------------------|
+| $=$ `=` | $\eqcirc$ `\eqcirc` | $\lesseqqgtr$ `\lesseqqgtr` | $\sqsupset$ `\sqsupset` |
+| $<$ `<` | $\eqcolon$ `\eqcolon` or\
+    `\minuscolon` | $\lessgtr$ `\lessgtr` | $\sqsupseteq$ `\sqsupseteq` |
+| $>$ `>` | $\Eqcolon$ `\Eqcolon` or\
+    `\minuscoloncolon` | $\lesssim$ `\lesssim` | $\stareq$ `\stareq` |
+| $:$ `:` | $\eqqcolon$ `\eqqcolon` | $\ll$ `\ll` | $\Subset$ `\Subset` |
+| $\approx$ `\approx` | $\Eqqcolon$ `\Eqqcolon` | $\lll$ `\lll` | $\subset$ `\subset` |
+| $\approxeq$ `\approxeq` | $\eqdef$ `\eqdef` | $\llless$ `\llless` | $\subseteq$ `\subseteq` |
+| $\arceq$ `\arceq` | $\eqsim$ `\eqsim` | $\lt$ `\lt` | $\subseteqq$ `\subseteqq` |
+| $\asymp$ `\asymp` | $\eqslantgtr$ `\eqslantgtr` | $\measeq$ `\measeq` | $\succ$ `\succ` |
+| $\backcong$ \\backcong | $\eqslantless$ `\eqslantless` | $\mid$ `\mid` | $\succapprox$ `\succapprox` |
 | $\backepsilon$ `\backepsilon` | $\equiv$ `\equiv` | $\models$ `\models` | $\succcurlyeq$ `\succcurlyeq` |
 | $\backsim$ `\backsim` | $\fallingdotseq$ `\fallingdotseq` | $\multimap$ `\multimap` | $\succeq$ `\succeq` |
 | $\backsimeq$ `\backsimeq` | $\frown$ `\frown` | $\owns$ `\owns` | $\succsim$ `\succsim` |
@@ -799,22 +802,29 @@ $\stackrel{!}{=}\vphantom{\frac a b}$ `\stackrel{!}{=}`
 | $\Bumpeq$ `\Bumpeq` | $\geqslant$ `\geqslant` | $\prec$ `\prec` | $\supseteqq$ `\supseteqq` |
 | $\circeq$ `\circeq` | $\gg$ `\gg` | $\precapprox$ `\precapprox` | $\thickapprox$ `\thickapprox` |
 | $\colonapprox$ `\colonapprox` | $\ggg$ `\ggg` | $\preccurlyeq$ `\preccurlyeq` | $\thicksim$ `\thicksim` |
-| $\Colonapprox$ `\Colonapprox` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\coloncolonapprox` | $\gggtr$ `\gggtr` | $\preceq$ `\preceq` | $\trianglelefteq$ `\trianglelefteq` |
-| $\coloneq$ `\coloneq` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\colonminus` | $\gt$ `\gt` | $\precsim$ `\precsim` | $\triangleq$ `\triangleq` |
-| $\Coloneq$ `\Coloneq` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\coloncolonminus` | $\gtrapprox$ `\gtrapprox` | $\propto$ `\propto` | $\trianglerighteq$ `\trianglerighteq` |
-| $\coloneqq$ `\coloneqq` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\colonequals` | $\gtreqless$ `\gtreqless` | $\questeq$ `\questeq` | $\varpropto$ `\varpropto` |
-| $\Coloneqq$ `\Coloneqq` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\coloncolonequals` | $\gtreqqless$ `\gtreqqless` | $\ratio$ `\ratio` or<br>&nbsp;&nbsp;&nbsp;`\vcentcolon` | $\vartriangle$ `\vartriangle` |
+| $\Colonapprox$ `\Colonapprox` or\
+    `\coloncolonapprox` | $\gggtr$ `\gggtr` | $\preceq$ `\preceq` | $\trianglelefteq$ `\trianglelefteq` |
+| $\coloneq$ `\coloneq` or\
+    `\colonminus` | $\gt$ `\gt` | $\precsim$ `\precsim` | $\triangleq$ `\triangleq` |
+| $\Coloneq$ `\Coloneq` or\
+    `\coloncolonminus` | $\gtrapprox$ `\gtrapprox` | $\propto$ `\propto` | $\trianglerighteq$ `\trianglerighteq` |
+| $\coloneqq$ `\coloneqq` or\
+    `\colonequals` | $\gtreqless$ `\gtreqless` | $\questeq$ `\questeq` | $\varpropto$ `\varpropto` |
+| $\Coloneqq$ `\Coloneqq` or\
+    `\coloncolonequals` | $\gtreqqless$ `\gtreqqless` | $\ratio$ `\ratio` or\
+   `\vcentcolon` | $\vartriangle$ `\vartriangle` |
 | $\colonsim$ `\colonsim` | $\gtrless$ `\gtrless` | $\risingdotseq$ `\risingdotseq` | $\vartriangleleft$ `\vartriangleleft` |
-| $\Colonsim$ `\Colonsim` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\coloncolonsim` | $\gtrsim$ `\gtrsim` | $\shortmid$ `\shortmid` | $\vartriangleright$ `\vartriangleright` |
+| $\Colonsim$ `\Colonsim` or\
+    `\coloncolonsim` | $\gtrsim$ `\gtrsim` | $\shortmid$ `\shortmid` | $\vartriangleright$ `\vartriangleright` |
 | $\cong$ `\cong` | $\in$ `\in` or `\isin` | $\shortparallel$ `\shortparallel` | $\vdash$ `\vdash` |
 | $\curlyeqprec$ `\curlyeqprec` | $\Join$ `\Join` | $\sim$ `\sim` | $\vDash$ `\vDash` |
 | $\curlyeqsucc$ `\curlyeqsucc` | $\le$ `\le` | $\simeq$ `\simeq` | $\Vdash$ `\Vdash` |
 | $\dashv$ `\dashv` | $\leq$ `\leq` | $\smallfrown$ `\smallfrown` | $\Vvdash$ `\Vvdash` |
-| $\dblcolon$ `\dblcolon` or<br>&nbsp;&nbsp;&nbsp;&nbsp;`\coloncolon` | $\leqq$ `\leqq` | $\smallsmile$ `\smallsmile` | $\veeeq$ `\veeeq` |
+| $\dblcolon$ `\dblcolon` or\
+    `\coloncolon` | $\leqq$ `\leqq` | $\smallsmile$ `\smallsmile` | $\veeeq$ `\veeeq` |
 | $\doteq$ `\doteq` | $\leqslant$ `\leqslant` | $\smile$ `\smile` | $\wedgeq$ `\wedgeq` |
 | $\Doteq$ `\Doteq` | $\lessapprox$ `\lessapprox` | $\sqsubset$ `\sqsubset` | |
 | $\doteqdot$ `\doteqdot` | $\lesseqgtr$ `\lesseqgtr` | $\sqsubseteq$ `\sqsubseteq` | |
-| $\eqcirc$ `\eqcirc` | $\lesseqqgtr$ `\lesseqqgtr` | $\sqsupset$ `\sqsupset` | |
 
 The *texvc* extension provides $\sub$ `\sub`, $\sube$ `\sube`, and $\supe$ `\supe`.
 

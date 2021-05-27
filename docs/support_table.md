@@ -136,6 +136,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment|  Package
 |:---------------|:------------|:-----------------|-----------|
+|\backcong|$\backcong$|| MnSymbol |
 |\backepsilon|$\backepsilon$|| ams |
 |\backprime|$\backprime$|| ams |
 |\backsim|$\backsim$|| ams |
