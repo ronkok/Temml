@@ -15,11 +15,11 @@ Temml’s coverage of LaTeX functions is as good as MathJax, slightly better tha
 
 Documentation can be found at:
 
-* [Installation](https://temml.org/site/docs/en/administration.html)
+* [Installation](https://temml.org/docs/en/administration.html)
 
-* LaTeX function support, [sorted into logical groups](https://temml.org/site/docs/en/supported.html).
+* LaTeX function support, [sorted into logical groups](https://temml.org/docs/en/supported.html).
 
-* LaTeX function support, [sorted alphabetically](https://temml.org/site/docs/en/support_table.html).
+* LaTeX function support, [sorted alphabetically](https://temml.org/docs/en/support_table.html).
 
 ### Acknowledgements
 
