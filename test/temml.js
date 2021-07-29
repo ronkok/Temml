@@ -1762,19 +1762,12 @@ min-width: ${svgData[key].minWidth}em;`
   /*
    * Neither Firefox nor Chrome support hard line breaks or soft line breaks.
    * (Despite https://www.w3.org/Math/draft-spec/mathml.html#chapter3_presm.lbattrs)
-   * So Temml has work-arounds for both hard and soft breaks.
-   * The work-arounds sadly do not work simultaneously. Any top-level hard
-   * break makes soft line breaks impossible.
+   * So Temml has a work-around for hard line breaks.
+   * They are simulated by creating a <mtable> and putting each line in its own <mtr>.
    *
-   * Hard breaks are simulated by creating a <mtable> and putting each line in its own <mtr>.
-   *
-   * To create soft line breaks, Temml avoids using the <semantics> and <annotation> tags.
-   * Then the top level of a <math> element can be occupied by <mrow> elements, and the browser
-   * will break after a <mrow> if the expression extends beyond the container limit.
-   *
-   * We want the expression to render with soft line breaks after each top-level binary or
-   * relational operator, per TeXbook p. 173. So we gather the expression into <mrow>s so that
-   * each <mrow> ends in a binary or relational operator.
+   * LaTeX also places soft line breaks at top-level relations and binary operators.
+   * I would like to emulate that behavior, but the Chromium version of MathML provides no
+   * way that I can do so.
    *
    * Hopefully browsers will someday do their own linebreaking and we will be able to delete
    * most of this module.
@@ -1784,7 +1777,6 @@ min-width: ${svgData[key].minWidth}em;`
     const mtrs = [];
     let mrows = [];
     let block = [];
-    let canBeBIN = false; // The first node cannot be an infix binary operator.
     for (let i = 0; i < expression.length; i++) {
       const node = expression[i];
       if (node.attributes && node.attributes.linebreak &&
@@ -1801,55 +1793,6 @@ min-width: ${svgData[key].minWidth}em;`
         continue
       }
       block.push(node);
-      if (node.type && node.type === "mo" && !isDisplayMode) {
-        if (canBeBIN && !node.attributes.form) {
-          // Check if the following node is a \nobreak text node, e.g. "~""
-          const next = i < expression.length - 1 ? expression[i + 1] : null;
-          let glueIsFreeOfNobreak = true;
-          if (
-            !(
-              next &&
-              next.type === "mtext" &&
-              next.attributes.linebreak &&
-              next.attributes.linebreak === "nobreak"
-            )
-          ) {
-            // We may need to start a new block.
-            // First, put any post-operator glue on same line as operator.
-            for (let j = i + 1; j < expression.length; j++) {
-              const nd = expression[j];
-              if (
-                nd.type &&
-                nd.type === "mspace" &&
-                !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
-              ) {
-                block.push(nd);
-                i += 1;
-                if (
-                  nd.attributes &&
-                  nd.attributes.linebreak &&
-                  nd.attributes.linebreak === "nobreak"
-                ) {
-                  glueIsFreeOfNobreak = false;
-                }
-              } else {
-                break;
-              }
-            }
-          }
-          if (glueIsFreeOfNobreak) {
-            // Start a new block. (Insert a soft linebreak.)
-            mrows.push(new mathMLTree.MathNode("mrow", block));
-            block = [];
-          }
-          canBeBIN = false;
-        }
-        const isOpenDelimiter = node.attributes.form && node.attributes.form === "prefix";
-        // Any operator that follows an open delimiter is unary.
-        canBeBIN = !(node.attributes.separator || isOpenDelimiter);
-      } else {
-        canBeBIN = true;
-      }
     }
     if (block.length > 0) {
       mrows.push(new mathMLTree.MathNode("mrow", block));
@@ -1996,8 +1939,8 @@ min-width: ${svgData[key].minWidth}em;`
 
     const expression = buildExpression(tree, style);
 
-    // If expression is not a single <mrow> or <mtable>, then set line breaks.
-    let topLevel =
+    // A MathML <semantics> element will recognize only one visual child.
+    let wrapper =
       expression.length === 1 && tag !== null &&
       expression[0] instanceof MathNode &&
       utils.contains(["mrow", "mtable"], expression[0].type)
@@ -2005,17 +1948,23 @@ min-width: ${svgData[key].minWidth}em;`
         : setLineBreaks(expression, settings.displayMode);
 
     if (tag) {
-      topLevel = taggedExpression(topLevel, tag, style, settings.leqno);
-    } else if (topLevel.children.length === 1 && settings.displayMode) {
-      topLevel.children[0].setAttribute("display", "block");
-      topLevel.children[0].setAttribute("style", "width: 100%;");
+      wrapper = taggedExpression(wrapper, tag, style, settings.leqno);
+    } else if (wrapper.children.length === 1 && settings.displayMode) {
+      wrapper.children[0].setAttribute("display", "block");
+      wrapper.children[0].setAttribute("style", "width: 100%;");
     }
 
-    const math = new mathMLTree.MathNode("math", [topLevel], ["temml"]);
-    math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
-    // Include the TeX source.
-    math.setAttribute("data-tex", texExpression);
+    // Build a TeX annotation of the source
+    const annotation = new mathMLTree.MathNode(
+      "annotation", [new mathMLTree.TextNode(texExpression)]);
 
+    annotation.setAttribute("encoding", "application/x-tex");
+
+    const semantics = new mathMLTree.MathNode(
+        "semantics", [wrapper, annotation]);
+
+    const math = new mathMLTree.MathNode("math", [semantics]);
+    math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
     if (settings.displayMode) {
       math.setAttribute("display", "block");
     }

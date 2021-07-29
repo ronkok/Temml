@@ -134,8 +134,8 @@ export default function buildMathML(tree, texExpression, style, settings) {
 
   const expression = buildExpression(tree, style);
 
-  // If expression is not a single <mrow> or <mtable>, then set line breaks.
-  let topLevel =
+  // A MathML <semantics> element will recognize only one visual child.
+  let wrapper =
     expression.length === 1 && tag !== null &&
     expression[0] instanceof MathNode &&
     utils.contains(["mrow", "mtable"], expression[0].type)
@@ -143,17 +143,23 @@ export default function buildMathML(tree, texExpression, style, settings) {
       : setLineBreaks(expression, settings.displayMode)
 
   if (tag) {
-    topLevel = taggedExpression(topLevel, tag, style, settings.leqno)
-  } else if (topLevel.children.length === 1 && settings.displayMode) {
-    topLevel.children[0].setAttribute("display", "block")
-    topLevel.children[0].setAttribute("style", "width: 100%;")
+    wrapper = taggedExpression(wrapper, tag, style, settings.leqno)
+  } else if (wrapper.children.length === 1 && settings.displayMode) {
+    wrapper.children[0].setAttribute("display", "block")
+    wrapper.children[0].setAttribute("style", "width: 100%;")
   }
 
-  const math = new mathMLTree.MathNode("math", [topLevel], ["temml"])
-  math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
-  // Include the TeX source.
-  math.setAttribute("data-tex", texExpression)
+  // Build a TeX annotation of the source
+  const annotation = new mathMLTree.MathNode(
+    "annotation", [new mathMLTree.TextNode(texExpression)]);
 
+  annotation.setAttribute("encoding", "application/x-tex");
+
+  const semantics = new mathMLTree.MathNode(
+      "semantics", [wrapper, annotation]);
+
+  const math = new mathMLTree.MathNode("math", [semantics]);
+  math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
   if (settings.displayMode) {
     math.setAttribute("display", "block");
   }
