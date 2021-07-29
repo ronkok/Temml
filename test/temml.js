@@ -1963,7 +1963,7 @@ min-width: ${svgData[key].minWidth}em;`
     const semantics = new mathMLTree.MathNode(
         "semantics", [wrapper, annotation]);
 
-    const math = new mathMLTree.MathNode("math", [semantics]);
+    const math = new mathMLTree.MathNode("math", [semantics], ["temml"]);
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
     if (settings.displayMode) {
       math.setAttribute("display", "block");
