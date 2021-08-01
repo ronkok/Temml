@@ -4572,18 +4572,14 @@ const mathmlBuilder$5 = (group, style) => {
   // If possible, consolidate adjacent <mi> elements into a single element.
   // First, check if it is possible. If not, return the <mrow>.
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \mathrm{}
-/*  if (mrow.type === "mi" && mrow.children.length === 1 &&
-    mrow.attributes.mathvariant && mrow.attributes.mathvariant === "normal") {
-  }*/
   let mi = mrow.children[0];
   if (mi.type !== "mi") {
     mi = mrow;
   } else {
-    const variant = mi.attributes.mathvariant || "";
     for (let i = 1; i < mrow.children.length; i++) {
       if (mrow.children[i].type !== "mi") { return mrow }
       const localVariant = mrow.children[i].attributes.mathvariant || "";
-      if (localVariant !== variant) { return mrow }
+      if (localVariant !== "normal") { return mrow }
     }
     // Consolidate the <mi> elements.
     for (let i = 1; i < mrow.children.length; i++) {
@@ -4619,6 +4615,7 @@ defineFunction({
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
+    "\\pmb",
 
     // families
     "\\mathbb",
@@ -6734,6 +6731,28 @@ defineFunctionBuilders({
   }
 });
 
+// Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
+
+defineFunctionBuilders({
+  type: "atom",
+  mathmlBuilder(group, style) {
+    const node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
+    if (group.family === "punct") {
+      node.setAttribute("separator", "true");
+    } else if (group.family === "open" || group.family === "close" || group.family === "rel") {
+      // Delims built here should not stretch vertically.
+      // See delimsizing.js for stretchy delims.
+      node.setAttribute("stretchy", "false");
+      if (group.family === "open") {
+        node.setAttribute("form", "prefix");
+      } else if (group.family === "close") {
+        node.setAttribute("form", "postfix");
+      }
+    }
+    return node;
+  }
+});
+
 /**
  * Maps TeX font commands to "mathvariant" attribute in buildMathML.js
  */
@@ -6760,36 +6779,37 @@ const fontMap = {
  */
 const getVariant = function(group, style) {
   // Handle font specifiers as best we can.
-  // MathML has a limited list of allowable mathvariant specifiers; see
-  // https://www.w3.org/TR/MathML3/chapter3.html#presm.commatt
+  // Chromium does not support the MathML mathvariant attribute.
+  // So we'll use Unicode replacement characters instead.
+  // But first, determine the math variant.
 
   // Deal with the \textit, \textbf, etc., functions.
   if (style.fontFamily === "texttt") {
-    return "monospace";
+    return "monospace"
   } else if (style.fontFamily === "textsc") {
     return "normal"; // handled via character substitution in symbolsOrd.js.
   } else if (style.fontFamily === "textsf") {
     if (style.fontShape === "textit" && style.fontWeight === "textbf") {
-      return "sans-serif-bold-italic";
+      return "sans-serif-bold-italic"
     } else if (style.fontShape === "textit") {
-      return "sans-serif-italic";
+      return "sans-serif-italic"
     } else if (style.fontWeight === "textbf") {
-      return "bold-sans-serif";
+      return "sans-serif-bold"
     } else {
-      return "sans-serif";
+      return "sans-serif"
     }
   } else if (style.fontShape === "textit" && style.fontWeight === "textbf") {
-    return "bold-italic";
+    return "bold-italic"
   } else if (style.fontShape === "textit") {
-    return "italic";
+    return "italic"
   } else if (style.fontWeight === "textbf") {
-    return "bold";
+    return "bold"
   }
 
   // Deal with the \mathit, mathbf, etc, functions.
   const font = style.font;
   if (!font || font === "mathnormal") {
-    return null;
+    return null
   }
 
   const mode = group.mode;
@@ -6798,15 +6818,16 @@ const getVariant = function(group, style) {
       return "italic"
     case "mathrm": {
       const codePoint = group.text.codePointAt(0);
-      return  (0x03ab < codePoint && codePoint < 0x03cf) ? "lowerCaseGreekItalic" : "normal"
+      // LaTeX \mathrm returns italic for Greek characters.
+      return  (0x03ab < codePoint && codePoint < 0x03cf) ? "italic" : "normal"
     }
     case "greekItalic":
-      return "greekItalic"
+      return "italic"
     case "up@greek":
       return "normal"
     case "boldsymbol":
     case "mathboldsymbol":
-      return (group.type === "textord" ? "bold" : "bold-italic")
+      return "bold-italic"
     case "mathbf":
       return "bold"
     case "mathbb":
@@ -6829,48 +6850,150 @@ const getVariant = function(group, style) {
     text = symbols[mode][text].replace;
   }
 
-  return Object.prototype.hasOwnProperty.call(fontMap, font) ? fontMap[font] : null;
+  return Object.prototype.hasOwnProperty.call(fontMap, font) ? fontMap[font] : null
 };
 
-// Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
+// Chromium does not support the MathML `mathvariant` attribute.
+// Instead, we replace ASCII characters with Unicode characters that
+// are defined in the font as bold, italic, double-struck, etc.
+// This module identifies those Unicode code points.
 
-defineFunctionBuilders({
-  type: "atom",
-  mathmlBuilder(group, style) {
-    const node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
-    if (group.family === "bin") {
-      const variant = getVariant(group, style);
-      if (variant === "bold-italic") {
-        node.setAttribute("mathvariant", variant);
-      }
-    } else if (group.family === "punct") {
-      node.setAttribute("separator", "true");
-    } else if (group.family === "open" || group.family === "close" || group.family === "rel") {
-      // Delims built here should not stretch vertically.
-      // See delimsizing.js for stretchy delims.
-      node.setAttribute("stretchy", "false");
-      if (group.family === "open") {
-        node.setAttribute("form", "prefix");
-      } else if (group.family === "close") {
-        node.setAttribute("form", "postfix");
-      }
-    }
-    return node;
+// First, a few helpers.
+const cal = Object.freeze({
+  B: 0x20EA, // Offset from ASCII B to Unicode script B
+  E: 0x20EB,
+  F: 0x20EB,
+  H: 0x20C3,
+  I: 0x20C7,
+  L: 0x20C6,
+  M: 0x20E6,
+  R: 0x20C9,
+  e: 0x20CA,
+  g: 0x20A3,
+  o: 0x20C5
+});
+
+const frak = Object.freeze({
+  C: 0x20EA,
+  H: 0x20C4,
+  I: 0x20C8,
+  R: 0x20CA,
+  Z: 0x20CE
+});
+
+const bbb = Object.freeze({
+  C: 0x20BF, // blackboard bold
+  H: 0x20C5,
+  N: 0x20C7,
+  P: 0x20C9,
+  Q: 0x20C9,
+  R: 0x20CB,
+  Z: 0x20CA
+});
+
+// Code point offsets below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
+const offset = Object.freeze({
+  upperCaseLatin: { // A-Z
+    "normal": ch =>                 { return 0 },
+    "bold": ch =>                   { return 0x1D3BF },
+    "italic": ch =>                 { return 0x1D3F3 },
+    "bold-italic": ch =>            { return 0x1D427 },
+    "script": ch =>                 { return cal[ch] || 0x1D45B },
+    "script-bold": ch =>            { return 0x1D48F },
+    "fraktur": ch =>                { return frak[ch] || 0x1D4C3 },
+    "fraktur-bold": ch =>           { return 0x1D52B },
+    "double-struck": ch =>          { return bbb[ch] || 0x1D4F7 },
+    "sans-serif": ch =>             { return 0x1D55F },
+    "sans-serif-bold": ch =>        { return 0x1D593 },
+    "sans-serif-italic": ch =>      { return 0x1D5C7 },
+    "sans-serif-bold-italic": ch => { return 0x1D63C },
+    "monospace": ch =>              { return 0x1D62F }
+  },
+  lowerCaseLatin: { // a-z
+    "normal": ch =>                 { return 0 },
+    "bold": ch =>                   { return 0x1D3B9 },
+    "italic": ch =>                 { return ch === "h" ? 0x20A6 : 0x1D3ED },
+    "bold-italic": ch =>            { return 0x1D421 },
+    "script": ch =>                 { return 0x1D455 },
+    "script-bold": ch =>            { return 0x1D489 },
+    "fraktur": ch =>                { return 0x1D4BD },
+    "fraktur-bold": ch =>           { return 0x1D525 },
+    "double-struck": ch =>          { return 0x1D4F1 },
+    "sans-serif": ch =>             { return 0x1D559 },
+    "sans-serif-bold": ch =>        { return 0x1D58D },
+    "sans-serif-italic": ch =>      { return 0x1D5C1 },
+    "sans-serif-bold-italic": ch => { return 0x1D5F5 },
+    "monospace": ch =>              { return 0x1D629 }
+  },
+  upperCaseGreek: { // A-Ω ∇
+    "normal": ch =>                 { return 0 },
+    "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
+    "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
+    "bold-italic": ch =>            { return ch === "∇" ? 0x1B52E : 0x1D38B },
+    "script": ch =>                 { return 0 },
+    "script-bold": ch =>            { return 0 },
+    "fraktur": ch =>                { return 0 },
+    "fraktur-bold": ch =>           { return 0 },
+    "double-struck": ch =>          { return 0 },
+    "sans-serif": ch =>             { return 0 },
+    "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
+    "sans-serif-italic": ch =>      { return 0 },
+    "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
+    "monospace": ch =>              { return 0 }
+  },
+  lowerCaseGreek: { // α-ω
+    "normal": ch =>                 { return 0 },
+    "bold": ch =>                   { return 0x1D311 },
+    "italic": ch =>                 { return 0x1D34B },
+    "bold-italic": ch =>            { return 0x1D385 },
+    "script": ch =>                 { return 0 },
+    "script-bold": ch =>            { return 0 },
+    "fraktur": ch =>                { return 0 },
+    "fraktur-bold": ch =>           { return 0 },
+    "double-struck": ch =>          { return 0 },
+    "sans-serif": ch =>             { return 0 },
+    "sans-serif-bold": ch =>        { return 0x1D3BF },
+    "sans-serif-italic": ch =>      { return 0 },
+    "sans-serif-bold-italic": ch => { return 0x1D3F9 },
+    "monospace": ch =>              { return 0 }
+  },
+  numeral: { // 0-9
+    "normal": ch =>                 { return 0 },
+    "bold": ch =>                   { return 0x1D79E },
+    "italic": ch =>                 { return 0 },
+    "bold-italic": ch =>            { return 0 },
+    "script": ch =>                 { return 0 },
+    "script-bold": ch =>            { return 0 },
+    "fraktur": ch =>                { return 0 },
+    "fraktur-bold": ch =>           { return 0 },
+    "double-struck": ch =>          { return 0x1D7A8 },
+    "sans-serif": ch =>             { return 0x1D7B2 },
+    "sans-serif-bold": ch =>        { return 0x1D7BC },
+    "sans-serif-italic": ch =>      { return 0 },
+    "sans-serif-bold-italic": ch => { return 0 },
+    "monospace": ch =>              { return 0x1D7C6 }
   }
 });
 
-// "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
-// src/symbols.js.
-
-const defaultVariant = {
-  mi: "italic",
-  mn: "normal",
-  mtext: "normal"
+const variantChar = (ch, variant) => {
+  const codePoint = ch.codePointAt(0);
+  const block = 0x40 < codePoint && codePoint < 0x5b
+    ? "upperCaseLatin"
+    : 0x60 < codePoint && codePoint < 0x7b
+    ? "lowerCaseLatin"
+    : (0x390  < codePoint && codePoint < 0x3A1) || ch === "∇"
+    ? "upperCaseGreek"
+    : 0x3B0 < codePoint && codePoint < 0x3CA
+    ? "lowerCaseGreek"
+    : 0x2F < codePoint && codePoint <  0x3A
+    ? "numeral"
+    : "other";
+  return block === "other"
+    ? ch
+    : String.fromCodePoint(codePoint + offset[block][variant](ch))
 };
 
-const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
-
-const smallCaps = {
+const smallCaps = Object.freeze({
   a: "ᴀ",
   b: "ʙ",
   c: "ᴄ",
@@ -6897,7 +7020,12 @@ const smallCaps = {
   x: "x",
   y: "ʏ",
   z: "ᴢ"
-};
+});
+
+// "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
+// src/symbols.js.
+
+const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
 
 defineFunctionBuilders({
   type: "mathord",
@@ -6908,11 +7036,12 @@ defineFunctionBuilders({
       const span = new Span(["script"], [text]);
       return new mathMLTree.MathNode("mi", [span])
     }
+    if (variant !== "italic") {
+      text.text = variantChar(text.text, variant);
+    }
     const node = new mathMLTree.MathNode("mi", [text]);
-    if (variant === "lowerCaseGreekItalic") {
-      node.setAttribute("mathvariant", "italic");
-    } else if (variant !== defaultVariant[node.type]) {
-      node.setAttribute("mathvariant", variant);
+    if (variant === "normal") {
+      node.setAttribute("mathvariant", "normal");
     }
     return node
   }
@@ -6934,21 +7063,38 @@ defineFunctionBuilders({
 
     let node;
     if (group.mode === "text") {
+      if (variant === "italic" || variant === "bold-italic") {
+        if (numberRegEx.test(group.text)) {
+          const span = new Span([`${variant}-number`], [text]);
+          return new mathMLTree.MathNode("mtext", [span])
+        }
+      }
+      if (variant !== "normal") {
+        text.text = variantChar(text.text, variant);
+      }
       node = new mathMLTree.MathNode("mtext", [text]);
     } else if (numberRegEx.test(group.text)) {
       if (variant === "oldstylenums") {
         const span = new Span(["oldstylenums"], [text]);
         node = new mathMLTree.MathNode("mn", [span]);
+      } else if (variant === "italic" || variant === "bold-italic") {
+        const span = new Span([`${variant}-number`], [text]);
+        node = new mathMLTree.MathNode("mn", [span]);
       } else {
+        if (variant !== "normal") { text.text = variantChar(text.text, variant); }
         node = new mathMLTree.MathNode("mn", [text]);
       }
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text]);
     } else {
+      const origText = text.text;
+      if (variant !== "italic") {
+        text.text = variantChar(text.text, variant);
+      }
       node = new mathMLTree.MathNode("mi", [text]);
-    }
-    if (variant !== defaultVariant[node.type]) {
-      node.setAttribute("mathvariant", variant);
+      if (text.text === origText ) {
+        node.setAttribute("mathvariant", "italic");
+      }
     }
     return node
   }

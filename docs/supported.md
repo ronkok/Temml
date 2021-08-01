@@ -403,7 +403,7 @@ Direct Input: <span class="direct">+ - / * ⋅ ± × ÷ ∓ ∔ ∧ ∨ ∩ ∪ 
 | $\arg$ `\arg`                           | $\csc$ `\csc`         | $\lg$ `\lg`           | $\tanh$ `\tanh`             |
 | $\ch$ `\ch`                             | $\ctg$ `\ctg`         | $\ln$ `\ln`           | $\tg$ `\tg`                 |
 | $\cos$ `\cos`                           | $\cth$ `\cth`         | $\log$ `\log`         | $\th$ `\th`                 |
-| $\operatorname*{f}$ `\operatorname*{f}` | $\inf$ `\inf`         | $\max$ `\max`         | $\sup$ `\sup`               |
+| $\operatorname*{f}$ `\operatorname*{f}` or <br> `\operatornamewithlimits` | $\inf$ `\inf`         | $\max$ `\max`         | $\sup$ `\sup`               |
 | $\argmax$ `\argmax`                     | $\injlim$ `\injlim`   | $\min$ `\min`         | $\varinjlim$ `\varinjlim`   |
 | $\argmin$ `\argmin`                     | $\lim$ `\lim`         | $\plim$ `\plim`       | $\varliminf$ `\varliminf`   |
 | $\det$ `\det`                           | $\liminf$ `\liminf`   | $\Pr$ `\Pr`           | $\varlimsup$ `\varlimsup`   |
@@ -926,21 +926,21 @@ For color definition, Temml color functions will accept the standard HTML [pred
 
 ||||
 |:--------------------------------|:--------------------------------|:-----
-|$\mathrm{Ab0θ}$ `\mathrm{Ab0θ}`  |$\mathbf{Ab0θ}$ `\mathbf{Ab0θ}`  |$\mathit{Ab0θ}$ `\mathit{Ab0θ}`
-|$\mathnormal{Ab0θ}$ `\mathnormal{Ab0θ}`|$\textbf{Ab0θ}$ `\textbf{Ab0θ}`|$\textit{Ab0θ}$ `\textit{Ab0θ}`
+|$\mathrm{Ab0}$ `\mathrm{Ab0}`  |$\mathbf{Ab0θ}$ `\mathbf{Ab0θ}`  |$\mathit{Ab0θ}$ `\mathit{Ab0θ}`
+|$\mathnormal{Ab0}$ `\mathnormal{Ab0}`|$\textbf{Ab0θ}$ `\textbf{Ab0θ}`|$\textit{Ab0θ}$ `\textit{Ab0θ}`
 |$\textrm{Ab0θ}$ `\textrm{Ab0θ}`  |${\bf Ab0θ}$ `{\bf Ab0θ}`        |${\it Ab0θ}$ `{\it Ab0θ}`
-|${\rm Ab0θ}$ `{\rm Ab0θ}`        |$\bold{Ab0θ}$ `\bold{Ab0θ}`      |$\textup{Ab0θ}$ `\textup{Ab0θ}`
-|$\textnormal{Ab0θ}$ `\textnormal{Ab0θ}`|${\boldsymbol Ab0θ}$ `{\boldsymbol Ab0θ}`|$\Bbb{Ab0}$ `\Bbb{Ab0}`
+|${\rm Ab0}$ `{\rm Ab0}`          |$\bold{Ab0θ}$ `\bold{Ab0θ}`      |$\textup{Ab0θ}$ `\textup{Ab0θ}`
+|$\textnormal{Ab0θ}$ `\textnormal{Ab0θ}`|$\boldsymbol{Ab0θ}$ `\boldsymbol{Ab0θ}`|$\Bbb{Ab0}$ `\Bbb{Ab0}`
 |$\text{Ab0θ}$ `\text{Ab0θ}`      |$\bm{Ab0θ}$ `\bm{Ab0θ}`          |$\mathbb{Ab0}$ `\mathbb{Ab0}`
-|$\mathsf{Ab0θ}$ `\mathsf{Ab0θ}`  |$\textmd{Ab0θ}$ `\textmd{Ab0θ}`  |$\frak{Ab}$ `\frak{Ab}`
-|$\textsf{Ab0θ}$ `\textsf{Ab0θ}`  |$\mathtt{Ab0θ}$ `\mathtt{Ab0θ}`  |$\mathfrak{Ab}$ `\mathfrak{Ab}`
-|${\sf Ab0θ}$ `{\sf Ab0θ}`        |$\texttt{Ab0θ}$ `\texttt{Ab0θ}`  |$\mathcal{Ab}$ `\mathcal{Ab}`
-|$\textsc{hey}$ `\textsc{hey}`    |${\tt Ab0θ}$ `{\tt Ab0}`         |${\cal Ab}$ `{\cal Ab}`
+|$\mathsf{Ab0}$ `\mathsf{Ab0}`    |$\textmd{Ab0θ}$ `\textmd{Ab0θ}`  |$\frak{Ab}$ `\frak{Ab}`
+|$\textsf{Ab0}$ `\textsf{Ab0}`    |$\mathtt{Ab0}$ `\mathtt{Ab0}`    |$\mathfrak{Ab}$ `\mathfrak{Ab}`
+|${\sf Ab0}$ `{\sf Ab0}`          |$\texttt{Ab0}$ `\texttt{Ab0}`    |$\mathcal{Ab}$ `\mathcal{Ab}`
+|$\textsc{hey}$ `\textsc{hey}`    |${\tt Ab0}$ `{\tt Ab0 }`          |${\cal Ab}$ `{\cal Ab}`
 |$\oldstylenums{123}$ `\oldstylenums{123}`|                         |$\mathscr{AB}$ `\mathscr{AB}`
 
 One can stack font family, font weight, and font shape by using the `\textXX` versions of the font functions. So `\textsf{\textbf{H}}` will produce $\textsf{\textbf{H}}$. The other versions do not stack, e.g., `\mathsf{\mathbf{H}}` will produce $\mathsf{\mathbf{H}}$.
 
-In cases where Temml fonts do not have a bold glyph, `\pmb` can simulate one. For example, `\pmb{\mu}` renders as : $\pmb{\mu}$
+In cases where Temml fonts do not have a bold glyph, `\pmb` can simulate one. For example, `\pmb{\vartheta}` renders as : $\pmb{\vartheta}$
 
 Currently, neither Unicode not MathML distinguish between calligraphic and script fonts.
 

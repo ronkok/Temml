@@ -32,6 +32,17 @@ temml .oldstylenums {
   font-feature-settings: 'onum';
 }
 
+.temml .italic-number {
+  font-family: Cambria, "Times New Roman", serif;
+  font-style: italic;
+}
+
+.temml .bold-italic-number {
+  font-family: Cambria, "Times New Roman", serif;
+  font-style: italic;
+  font-weight: bold;
+}
+
 /* AMS environment auto-numbering via CSS counter. */
 .tml-eqn::before {
   counter-increment: tmlEqnNo;

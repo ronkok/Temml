@@ -203,7 +203,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |{bmatrix*}|$\begin{bmatrix*}[r] -1 & 3\\ 2 & -4 \end{bmatrix*}$|`\begin{bmatrix*}[r]`<br>&nbsp;&nbsp;&nbsp;`-1 & 3 \\`<br>&nbsp;&nbsp;&nbsp;`2 & -4`<br>`\end{bmatrix*}`| mathtools |
 |\bmod|$a \bmod b$|`a \bmod b`||
 |\bold|$\bold{AaBb123}$|`\bold{AaBb123}`||
-|\boldsymbol|${\boldsymbol AaBb}$|`{\boldsymbol AaBb}`| ams |
+|\boldsymbol|$\boldsymbol{AaBb}$|`\boldsymbol{AaBb}`| ams |
 |\bot|$\bot$|||
 |\bowtie|$\bowtie$|||
 |\Box|$\Box$|| ams |
@@ -731,7 +731,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\mathrel|$a \mathrel{\#} b$|`a \mathrel{\#} b`||
 |\mathrlap|$\mathrlap{\,/}{=}$|`\mathrlap{\,/}{=}`| mathtools |
 |\mathring|$\mathring{a}$|`\mathring{a}`| ams |
-|\mathrm|$\mathrm{AaBb12θ}$|`\mathrm{AaBb12θ}`||
+|\mathrm|$\mathrm{AaBb12}$|`\mathrm{AaBb12}`||
 |\mathscr|$\mathscr{AB}$|`\mathscr{AaBb123}`||
 |\mathsf|$\mathsf{AaBb123}$|`\mathsf{AaBb123}`||
 |\mathsterling|$\mathsterling$|||
@@ -872,6 +872,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\op|$\op{a}{b}$|`\op{a}{b}`| physics extension |
 |\operatorname|$\operatorname{asin} x$|\operatorname{asin} x| ams |
 |\operatorname\*|$\operatorname*{asin}\limits_y x$|`\operatorname*{asin}\limits_y x`| ams |
+|\operatornamewithlimits|$\operatornamewithlimits{asin}\limits_y x$|`\operatornamewithlimits{asin}\limits_y x`| |
 |\oplus|$\oplus$|||
 |\or|<span class="no-sup">Not supported</span>|||
 |\order|$\order{x^2}$|`\order{x^2}`| physics extension |

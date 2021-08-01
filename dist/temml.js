@@ -903,6 +903,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, rel, "\u2aaf", "\\preceq", true);
   defineSymbol(math, rel, "\u2ab0", "\\succeq", true);
   defineSymbol(math, rel, "\u2243", "\\simeq", true);
+  defineSymbol(math, rel, "\u224c", "\\backcong", true);
   defineSymbol(math, rel, "|", "\\mid", true);
   defineSymbol(math, rel, "\u226a", "\\ll", true);
   defineSymbol(math, rel, "\u226b", "\\gg", true);
@@ -1295,6 +1296,30 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, textord, "\u221e", "\\infty", true);
   defineSymbol(math, textord, "\u2032", "\\prime");
   defineSymbol(math, textord, "\u25b3", "\\triangle");
+  defineSymbol(text, textord, "\u0391", "\\Alpha", true);
+  defineSymbol(text, textord, "\u0392", "\\Beta", true);
+  defineSymbol(text, textord, "\u0393", "\\Gamma", true);
+  defineSymbol(text, textord, "\u0394", "\\Delta", true);
+  defineSymbol(text, textord, "\u0395", "\\Epsilon", true);
+  defineSymbol(text, textord, "\u0396", "\\Zeta", true);
+  defineSymbol(text, textord, "\u0397", "\\Eta", true);
+  defineSymbol(text, textord, "\u0398", "\\Theta", true);
+  defineSymbol(text, textord, "\u0399", "\\Iota", true);
+  defineSymbol(text, textord, "\u039a", "\\Kappa", true);
+  defineSymbol(text, textord, "\u039b", "\\Lambda", true);
+  defineSymbol(text, textord, "\u039c", "\\Mu", true);
+  defineSymbol(text, textord, "\u039d", "\\Nu", true);
+  defineSymbol(text, textord, "\u039e", "\\Xi", true);
+  defineSymbol(text, textord, "\u039f", "\\Omicron", true);
+  defineSymbol(text, textord, "\u03a0", "\\Pi", true);
+  defineSymbol(text, textord, "\u03a1", "\\Rho", true);
+  defineSymbol(text, textord, "\u03a3", "\\Sigma", true);
+  defineSymbol(text, textord, "\u03a4", "\\Tau", true);
+  defineSymbol(text, textord, "\u03a5", "\\Upsilon", true);
+  defineSymbol(text, textord, "\u03a6", "\\Phi", true);
+  defineSymbol(text, textord, "\u03a7", "\\Chi", true);
+  defineSymbol(text, textord, "\u03a8", "\\Psi", true);
+  defineSymbol(text, textord, "\u03a9", "\\Omega", true);
   defineSymbol(math, textord, "\u0391", "\\Alpha", true);
   defineSymbol(math, textord, "\u0392", "\\Beta", true);
   defineSymbol(math, textord, "\u0393", "\\Gamma", true);
@@ -1319,19 +1344,6 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, textord, "\u03a7", "\\Chi", true);
   defineSymbol(math, textord, "\u03a8", "\\Psi", true);
   defineSymbol(math, textord, "\u03a9", "\\Omega", true);
-  defineSymbol(math, textord, "A", "\u0391");
-  defineSymbol(math, textord, "B", "\u0392");
-  defineSymbol(math, textord, "E", "\u0395");
-  defineSymbol(math, textord, "Z", "\u0396");
-  defineSymbol(math, textord, "H", "\u0397");
-  defineSymbol(math, textord, "I", "\u0399");
-  defineSymbol(math, textord, "K", "\u039A");
-  defineSymbol(math, textord, "M", "\u039C");
-  defineSymbol(math, textord, "N", "\u039D");
-  defineSymbol(math, textord, "O", "\u039F");
-  defineSymbol(math, textord, "P", "\u03A1");
-  defineSymbol(math, textord, "T", "\u03A4");
-  defineSymbol(math, textord, "X", "\u03A7");
   defineSymbol(math, textord, "\u00ac", "\\neg", true);
   defineSymbol(math, textord, "\u00ac", "\\lnot");
   defineSymbol(math, textord, "\u22a4", "\\top");
@@ -1439,13 +1451,11 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, rel, "\u2270", "\\nleqq");
   defineSymbol(math, rel, "\u2270", "\\nleqslant");
   defineSymbol(math, spacing, "\u00a0", "\\ ");
-  defineSymbol(math, spacing, "\u00a0", "~");
   defineSymbol(math, spacing, "\u00a0", "\\space");
   // Ref: LaTeX Source 2e: \DeclareRobustCommand{\nobreakspace}{%
   defineSymbol(math, spacing, "\u00a0", "\\nobreakspace");
   defineSymbol(text, spacing, "\u00a0", "\\ ");
   defineSymbol(text, spacing, "\u00a0", " ");
-  defineSymbol(text, spacing, "\u00a0", "~");
   defineSymbol(text, spacing, "\u00a0", "\\space");
   defineSymbol(text, spacing, "\u00a0", "\\nobreakspace");
   defineSymbol(math, spacing, null, "\\nobreak");
@@ -1752,19 +1762,12 @@ min-width: ${svgData[key].minWidth}em;`
   /*
    * Neither Firefox nor Chrome support hard line breaks or soft line breaks.
    * (Despite https://www.w3.org/Math/draft-spec/mathml.html#chapter3_presm.lbattrs)
-   * So Temml has work-arounds for both hard and soft breaks.
-   * The work-arounds sadly do not work simultaneously. Any top-level hard
-   * break makes soft line breaks impossible.
+   * So Temml has a work-around for hard line breaks.
+   * They are simulated by creating a <mtable> and putting each line in its own <mtr>.
    *
-   * Hard breaks are simulated by creating a <mtable> and putting each line in its own <mtr>.
-   *
-   * To create soft line breaks, Temml avoids using the <semantics> and <annotation> tags.
-   * Then the top level of a <math> element can be occupied by <mrow> elements, and the browser
-   * will break after a <mrow> if the expression extends beyond the container limit.
-   *
-   * We want the expression to render with soft line breaks after each top-level binary or
-   * relational operator, per TeXbook p. 173. So we gather the expression into <mrow>s so that
-   * each <mrow> ends in a binary or relational operator.
+   * LaTeX also places soft line breaks at top-level relations and binary operators.
+   * I would like to emulate that behavior, but the Chromium version of MathML provides no
+   * way that I can do so.
    *
    * Hopefully browsers will someday do their own linebreaking and we will be able to delete
    * most of this module.
@@ -1774,7 +1777,6 @@ min-width: ${svgData[key].minWidth}em;`
     const mtrs = [];
     let mrows = [];
     let block = [];
-    let canBeBIN = false; // The first node cannot be an infix binary operator.
     for (let i = 0; i < expression.length; i++) {
       const node = expression[i];
       if (node.attributes && node.attributes.linebreak &&
@@ -1791,55 +1793,6 @@ min-width: ${svgData[key].minWidth}em;`
         continue
       }
       block.push(node);
-      if (node.type && node.type === "mo") {
-        if (canBeBIN && !node.attributes.form) {
-          // Check if the following node is a \nobreak text node, e.g. "~""
-          const next = i < expression.length - 1 ? expression[i + 1] : null;
-          let glueIsFreeOfNobreak = true;
-          if (
-            !(
-              next &&
-              next.type === "mtext" &&
-              next.attributes.linebreak &&
-              next.attributes.linebreak === "nobreak"
-            )
-          ) {
-            // We may need to start a new block.
-            // First, put any post-operator glue on same line as operator.
-            for (let j = i + 1; j < expression.length; j++) {
-              const nd = expression[j];
-              if (
-                nd.type &&
-                nd.type === "mspace" &&
-                !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
-              ) {
-                block.push(nd);
-                i += 1;
-                if (
-                  nd.attributes &&
-                  nd.attributes.linebreak &&
-                  nd.attributes.linebreak === "nobreak"
-                ) {
-                  glueIsFreeOfNobreak = false;
-                }
-              } else {
-                break;
-              }
-            }
-          }
-          if (glueIsFreeOfNobreak) {
-            // Start a new block. (Insert a soft linebreak.)
-            mrows.push(new mathMLTree.MathNode("mrow", block));
-            block = [];
-          }
-          canBeBIN = false;
-        }
-        const isOpenDelimiter = node.attributes.form && node.attributes.form === "prefix";
-        // Any operator that follows an open delimiter is unary.
-        canBeBIN = !(node.attributes.separator || isOpenDelimiter);
-      } else {
-        canBeBIN = true;
-      }
     }
     if (block.length > 0) {
       mrows.push(new mathMLTree.MathNode("mrow", block));
@@ -1986,8 +1939,8 @@ min-width: ${svgData[key].minWidth}em;`
 
     const expression = buildExpression(tree, style);
 
-    // If expression is not a single <mrow> or <mtable>, then set line breaks.
-    let topLevel =
+    // A MathML <semantics> element will recognize only one visual child.
+    let wrapper =
       expression.length === 1 && tag !== null &&
       expression[0] instanceof MathNode &&
       utils.contains(["mrow", "mtable"], expression[0].type)
@@ -1995,17 +1948,23 @@ min-width: ${svgData[key].minWidth}em;`
         : setLineBreaks(expression, settings.displayMode);
 
     if (tag) {
-      topLevel = taggedExpression(topLevel, tag, style, settings.leqno);
-    } else if (topLevel.children.length === 1 && settings.displayMode) {
-      topLevel.children[0].setAttribute("display", "block");
-      topLevel.children[0].setAttribute("style", "width: 100%;");
+      wrapper = taggedExpression(wrapper, tag, style, settings.leqno);
+    } else if (wrapper.children.length === 1 && settings.displayMode) {
+      wrapper.children[0].setAttribute("display", "block");
+      wrapper.children[0].setAttribute("style", "width: 100%;");
     }
 
-    const math = new mathMLTree.MathNode("math", [topLevel], ["temml"]);
-    math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
-    // Include the TeX source.
-    math.setAttribute("data-tex", texExpression);
+    // Build a TeX annotation of the source
+    const annotation = new mathMLTree.MathNode(
+      "annotation", [new mathMLTree.TextNode(texExpression)]);
 
+    annotation.setAttribute("encoding", "application/x-tex");
+
+    const semantics = new mathMLTree.MathNode(
+        "semantics", [wrapper, annotation]);
+
+    const math = new mathMLTree.MathNode("math", [semantics], ["temml"]);
+    math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
     if (settings.displayMode) {
       math.setAttribute("display", "block");
     }
@@ -2017,6 +1976,11 @@ min-width: ${svgData[key].minWidth}em;`
     const accentNode = group.isStretchy
       ? stretchy.mathMLnode(group.label)
       : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
+
+    if (!group.isStretchy) {
+      // Make non-stretchiness explicit, to get proper behavior from Firefox.
+      accentNode.setAttribute("stretchy", "false");
+    }
 
     const node = new mathMLTree.MathNode("mover",
       [buildGroup(group.base, style), accentNode]
@@ -3606,6 +3570,7 @@ min-width: ${svgData[key].minWidth}em;`
       colSeparationType, // "align" | "alignat" | "gather" | "small" | "CD" | "multline"
       addEqnNum, // boolean
       singleRow, // boolean
+      emptySingleRow, // boolean
       maxNumCols, // number
       leqno // boolean
     },
@@ -3692,9 +3657,10 @@ min-width: ${svgData[key].minWidth}em;`
         parser.consume();
       } else if (next === "\\end") {
         // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
-        // the last line is empty.
+        // the last line is empty.  However, AMS environments keep the
+        // empty row if it's the only one.
         // NOTE: Currently, `cell` is the last item added into `row`.
-        if (row.length === 1 && cell.body.length === 0) {
+        if (row.length === 1 && cell.body.length === 0 && (body.length > 1 || !emptySingleRow)) {
           body.pop();
         }
         if (hLinesBeforeRow.length < body.length + 1) {
@@ -3957,6 +3923,7 @@ min-width: ${svgData[key].minWidth}em;`
         cols,
         addJot: true,
         addEqnNum: context.envName === "align" || context.envName === "alignat",
+        emptySingleRow: true,
         colSeparationType: context.envName,
         maxNumCols: context.envName === "split" ? 2 : undefined,
         leqno: context.parser.settings.leqno
@@ -4276,6 +4243,7 @@ min-width: ${svgData[key].minWidth}em;`
         addJot: true,
         colSeparationType: "gather",
         addEqnNum: context.envName === "gather",
+        emptySingleRow: true,
         leqno: context.parser.settings.leqno
       };
       return parseArray(context.parser, res, "display");
@@ -4306,6 +4274,7 @@ min-width: ${svgData[key].minWidth}em;`
       validateAmsEnvironmentContext(context);
       const res = {
         addEqnNum: context.envName === "equation",
+        emptySingleRow: true,
         singleRow: true,
         maxNumCols: 1,
         colSeparationType: "gather",
@@ -5649,7 +5618,7 @@ min-width: ${svgData[key].minWidth}em;`
       const prescripts = args[0].body.length > 0 ? args[0].body[0] : null;
       const postscripts = args[1].body.length > 0 ? args[1].body[0] : null;
 
-      if (!prescripts & !postscripts) {
+      if (!prescripts && !postscripts) {
         return base
       } else if (!prescripts) {
         // It's not a multi-script. Get a \textstyle supsub.
@@ -5669,6 +5638,7 @@ min-width: ${svgData[key].minWidth}em;`
         return {
           type: "multiscript",
           mode: parser.mode,
+          isSideset: funcName === "\\sideset",
           prescripts,
           postscripts,
           base
@@ -5679,13 +5649,16 @@ min-width: ${svgData[key].minWidth}em;`
       const base =  buildGroup(group.base, style);
 
       const prescriptsNode = new mathMLTree.MathNode("mprescripts");
-      const noneNode = new mathMLTree.MathNode("none"); // may or may not be used.
+      const noneNode = new mathMLTree.MathNode("none");
       let children = [];
 
       const preSub = buildGroup$1(group.prescripts.sub, style, noneNode);
       const preSup = buildGroup$1(group.prescripts.sup, style, noneNode);
-      preSub.setAttribute("style", "text-align: left;");
-      preSup.setAttribute("style", "text-align: left;");
+      if (group.isSideset) {
+        // This seems silly, but LaTeX does this. Firefox ignores it, which does not make me sad.
+        preSub.setAttribute("style", "text-align: left;");
+        preSup.setAttribute("style", "text-align: left;");
+      }
 
       if (group.postscripts) {
         const postSub = buildGroup$1(group.postscripts.sub, style, noneNode);
@@ -5804,6 +5777,8 @@ min-width: ${svgData[key].minWidth}em;`
       node = new MathNode("mo", [makeText(group.name, group.mode)]);
       if (utils.contains(noSuccessor, group.name)) {
         node.setAttribute("largeop", "false");
+      } else {
+        node.setAttribute("movablelimits", "false");
       }
     } else if (group.body) {
       // This is an operator with children. Add them.
@@ -6184,7 +6159,7 @@ min-width: ${svgData[key].minWidth}em;`
   // amsopn.dtx: \mathop{#1\kern\z@\operator@font#3}\newmcodes@
   defineFunction({
     type: "operatorname",
-    names: ["\\operatorname", "\\operatorname*"],
+    names: ["\\operatorname@", "\\operatornamewithlimits"],
     props: {
       numArgs: 1
     },
@@ -6195,7 +6170,7 @@ min-width: ${svgData[key].minWidth}em;`
         type: "operatorname",
         mode: parser.mode,
         body: ordargument(body),
-        alwaysHandleSupSub: funcName === "\\operatorname*",
+        alwaysHandleSupSub: (funcName === "\\operatornamewithlimits"),
         limits: false,
         parentIsSupSub: false,
         needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)
@@ -6726,7 +6701,9 @@ min-width: ${svgData[key].minWidth}em;`
         }
       } else {
         const base = group.base;
-        if (base && base.type === "op" && base.limits && style.level === StyleLevel.DISPLAY) {
+        if (base && base.type === "op" && base.limits &&
+          (style.level === StyleLevel.DISPLAY || base.alwaysHandleSupSub)
+        ) {
           nodeType = "munderover";
         } else if (
           base &&
@@ -6784,8 +6761,9 @@ min-width: ${svgData[key].minWidth}em;`
    */
   const getVariant = function(group, style) {
     // Handle font specifiers as best we can.
-    // MathML has a limited list of allowable mathvariant specifiers; see
-    // https://www.w3.org/TR/MathML3/chapter3.html#presm.commatt
+    // Chromium does not support the MathML mathvariant attribute.
+    // So we'll use Unicode replacement characters instead.
+    // But first, determine the math variant.
 
     // Deal with the \textit, \textbf, etc., functions.
     if (style.fontFamily === "texttt") {
@@ -6798,7 +6776,7 @@ min-width: ${svgData[key].minWidth}em;`
       } else if (style.fontShape === "textit") {
         return "sans-serif-italic";
       } else if (style.fontWeight === "textbf") {
-        return "bold-sans-serif";
+        return "sans-serif-bold";
       } else {
         return "sans-serif";
       }
@@ -6822,15 +6800,16 @@ min-width: ${svgData[key].minWidth}em;`
         return "italic"
       case "mathrm": {
         const codePoint = group.text.codePointAt(0);
-        return  (0x03ab < codePoint && codePoint < 0x03cf) ? "lowerCaseGreekItalic" : "normal"
+        // LaTeX \mathrm returns italic for Greek characters.
+        return  (0x03ab < codePoint && codePoint < 0x03cf) ? "italic" : "normal"
       }
       case "greekItalic":
-        return "greekItalic"
+        return "italic"
       case "up@greek":
         return "normal"
       case "boldsymbol":
       case "mathboldsymbol":
-        return (group.type === "textord" ? "bold" : "bold-italic")
+        return "bold-italic"
       case "mathbf":
         return "bold"
       case "mathbb":
@@ -6883,18 +6862,143 @@ min-width: ${svgData[key].minWidth}em;`
     }
   });
 
-  // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
-  // src/symbols.js.
-
-  const defaultVariant = {
-    mi: "italic",
-    mn: "normal",
-    mtext: "normal"
-  };
-
   const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
 
-  const smallCaps = {
+  const cal = Object.freeze({
+    B: 0x20EA, // Offset from ASCII B to Unicode script B
+    E: 0x20EB,
+    F: 0x20EB,
+    H: 0x20C3,
+    I: 0x20C7,
+    L: 0x20C6,
+    M: 0x20E6,
+    R: 0x20C9,
+    e: 0x20CA,
+    g: 0x20A3,
+    o: 0x20C5
+  });
+
+  const frak = Object.freeze({
+    C: 0x20EA,
+    H: 0x20C4,
+    I: 0x20C8,
+    R: 0x20CA,
+    Z: 0x20CE
+  });
+
+  const bbb = Object.freeze({
+    C: 0x20BF,
+    H: 0x20C5,
+    N: 0x20C7,
+    P: 0x20C9,
+    Q: 0x20C9,
+    R: 0x20CB,
+    Z: 0x20CA
+  });
+
+  // Code points below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
+  const variantDelta = Object.freeze({
+    upperCaseLatin: { // A-Z
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D3BF },
+      "italic": ch =>                 { return 0x1D3F3 },
+      "bold-italic": ch =>            { return 0x1D427 },
+      "script": ch =>                 { return cal[ch] || 0x1D45B },
+      "script-bold": ch =>            { return 0x1D48F },
+      "fraktur": ch =>                { return frak[ch] || 0x1D4C3 },
+      "fraktur-bold": ch =>           { return 0x1D52B },
+      "double-struck": ch =>          { return bbb[ch] || 0x1D4F7 },
+      "sans-serif": ch =>             { return 0x1D55F },
+      "sans-serif-bold": ch =>        { return 0x1D593 },
+      "sans-serif-italic": ch =>      { return 0x1D5C7 },
+      "sans-serif-bold-italic": ch => { return 0x1D63C },
+      "monospace": ch =>              { return 0x1D62F }
+    },
+    lowerCaseLatin: { // a-z
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D3B9 },
+      "italic": ch =>                 { return ch === "h" ? 0x20A6 : 0x1D3ED },
+      "bold-italic": ch =>            { return 0x1D421 },
+      "script": ch =>                 { return 0x1D455 },
+      "script-bold": ch =>            { return 0x1D489 },
+      "fraktur": ch =>                { return 0x1D4BD },
+      "fraktur-bold": ch =>           { return 0x1D525 },
+      "double-struck": ch =>          { return 0x1D4F1 },
+      "sans-serif": ch =>             { return 0x1D559 },
+      "sans-serif-bold": ch =>        { return 0x1D58D },
+      "sans-serif-italic": ch =>      { return 0x1D5C1 },
+      "sans-serif-bold-italic": ch => { return 0x1D5F5 },
+      "monospace": ch =>              { return 0x1D629 }
+    },
+    upperCaseGreek: { // A-Ω
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
+      "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
+      "bold-italic": ch =>            { return ch === "∇" ? 0x1B52E : 0x1D38B },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0 },
+      "sans-serif": ch =>             { return 0 },
+      "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
+      "monospace": ch =>              { return 0 }
+    },
+    lowerCaseGreek: { // α-ω
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D311 },
+      "italic": ch =>                 { return 0x1D34B },
+      "bold-italic": ch =>            { return 0x1D385 },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0 },
+      "sans-serif": ch =>             { return 0 },
+      "sans-serif-bold": ch =>        { return 0x1D3BF },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return 0x1D3F9 },
+      "monospace": ch =>              { return 0 }
+    },
+    numeral: { // 0-9
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D79E },
+      "italic": ch =>                 { return 0 },
+      "bold-italic": ch =>            { return 0 },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0x1D7A8 },
+      "sans-serif": ch =>             { return 0x1D7B2 },
+      "sans-serif-bold": ch =>        { return 0x1D7BC },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return 0 },
+      "monospace": ch =>              { return 0x1D7C6 }
+    }
+  });
+
+  const variantChar = (ch, variant) => {
+    const codePoint = ch.codePointAt(0);
+    const block = 0x40 < codePoint && codePoint < 0x5b
+      ? "upperCaseLatin"
+      : 0x60 < codePoint && codePoint < 0x7b
+      ? "lowerCaseLatin"
+      : (0x390  < codePoint && codePoint < 0x3A1) || ch === "∇"
+      ? "upperCaseGreek"
+      : 0x3B0 < codePoint && codePoint < 0x3CA
+      ? "lowerCaseGreek"
+      : 0x2F < codePoint && codePoint <  0x3A
+      ? "numeral"
+      : "other";
+    return block === "other"
+      ? ch
+      : String.fromCodePoint(codePoint + variantDelta[block][variant](ch))
+  };
+
+  const smallCaps = Object.freeze({
     a: "ᴀ",
     b: "ʙ",
     c: "ᴄ",
@@ -6921,7 +7025,7 @@ min-width: ${svgData[key].minWidth}em;`
     x: "x",
     y: "ʏ",
     z: "ᴢ"
-  };
+  });
 
   defineFunctionBuilders({
     type: "mathord",
@@ -6932,11 +7036,12 @@ min-width: ${svgData[key].minWidth}em;`
         const span = new Span(["script"], [text]);
         return new mathMLTree.MathNode("mi", [span])
       }
+      if (variant !== "italic") {
+        text.text = variantChar(text.text, variant);
+      }
       const node = new mathMLTree.MathNode("mi", [text]);
-      if (variant === "lowerCaseGreekItalic") {
-        node.setAttribute("mathvariant", "italic");
-      } else if (variant !== defaultVariant[node.type]) {
-        node.setAttribute("mathvariant", variant);
+      if (variant === "normal") {
+        node.setAttribute("mathvariant", "normal");
       }
       return node
     }
@@ -6958,21 +7063,47 @@ min-width: ${svgData[key].minWidth}em;`
 
       let node;
       if (group.mode === "text") {
+        const origText = text.text;
+        if (variant !== "normal") {
+          text.text = variantChar(text.text, variant);
+        }
         node = new mathMLTree.MathNode("mtext", [text]);
+        if (text.text === origText && variant === "italic") {
+          // Chromium's only mathvariant is italic
+          node.setAttribute("mathvariant", "italic");
+        }
       } else if (numberRegEx.test(group.text)) {
         if (variant === "oldstylenums") {
           const span = new Span(["oldstylenums"], [text]);
           node = new mathMLTree.MathNode("mn", [span]);
+        } else if (variant === "italic") {
+          const span = new Span(["italic-number"], [text]);
+          node = new mathMLTree.MathNode("mn", [span]);
+        } else if (variant === "bold-italic") {
+          const span = new Span(["bold-italic-number"], [text]);
+          node = new mathMLTree.MathNode("mn", [span]);
         } else {
+          const origText = text.text;
+          if (variant !== "normal") {
+            text.text = variantChar(text.text, variant);
+          }
           node = new mathMLTree.MathNode("mn", [text]);
+          if (text.text === origText && variant === "italic") {
+            // Chromium's only mathvariant is italic
+            node.setAttribute("mathvariant", "italic");
+          }
         }
       } else if (group.text === "\\prime") {
         node = new mathMLTree.MathNode("mo", [text]);
       } else {
+        const origText = text.text;
+        if (variant !== "italic") {
+          text.text = variantChar(text.text, variant);
+        }
         node = new mathMLTree.MathNode("mi", [text]);
-      }
-      if (variant !== defaultVariant[node.type]) {
-        node.setAttribute("mathvariant", variant);
+        if (text.text === origText ) {
+          node.setAttribute("mathvariant", "italic");
+        }
       }
       return node
     }
@@ -7375,8 +7506,16 @@ min-width: ${svgData[key].minWidth}em;`
    * - matches any BMP character except for those just described
    * - matches any valid Unicode surrogate pair
    * - mathches numerals
-   * - matches a backslash followed by one or more letters
-   * - matches a backslash followed by any BMP character, including newline
+   * - matches a backslash followed by one or more whitespace characters
+   * - matches a backslash followed by one or more letters then whitespace
+   * - matches a backslash followed by any BMP character
+   * Capturing groups:
+   *   [1] regular whitespace
+   *   [2] backslash followed by whitespace
+   *   [3] anything else, which may include:
+   *     [4] left character of \verb*
+   *     [5] left character of \verb
+   *     [6] backslash followed by word, excluding any trailing whitespace
    * Just because the Lexer matches something doesn't mean it's valid input:
    * If there is no matching function or symbol definition, the Parser will
    * still reject the input.
@@ -7384,14 +7523,13 @@ min-width: ${svgData[key].minWidth}em;`
   const spaceRegexString = "[ \r\n\t]";
   const controlWordRegexString = "\\\\[a-zA-Z@]+";
   const controlSymbolRegexString = "\\\\[^\uD800-\uDFFF]";
-  const controlWordWhitespaceRegexString = `${controlWordRegexString}${spaceRegexString}*`;
-  const controlWordWhitespaceRegex = new RegExp(`^(${controlWordRegexString})${spaceRegexString}*$`);
+  const controlWordWhitespaceRegexString = `(${controlWordRegexString})${spaceRegexString}*`;
   const controlSpaceRegexString = "\\\\(\n|[ \r\t]+\n?)[ \r\t]*";
   const combiningDiacriticalMarkString = "[\u0300-\u036f]";
   const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriticalMarkString}+$`);
   const tokenRegexString =
     `(${spaceRegexString}+)|` + // whitespace
-    `${controlSpaceRegexString}|` +  // \whitespace
+    `${controlSpaceRegexString}|` +  // whitespace
     "(\\d[\\d.]*" +         // numbers (in non-strict mode)
     "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
     `${combiningDiacriticalMarkString}*` + // ...plus accents
@@ -7399,7 +7537,6 @@ min-width: ${svgData[key].minWidth}em;`
     `${combiningDiacriticalMarkString}*` + // ...plus accents
     "|\\\\verb\\*([^]).*?\\4" + // \verb*
     "|\\\\verb([^*a-zA-Z]).*?\\5" + // \verb unstarred
-    "|\\\\operatorname\\*" + // \operatorname*
     `|${controlWordWhitespaceRegexString}` + // \macroName + spaces
     `|${controlSymbolRegexString})`; // \\, \', etc.
 
@@ -7415,9 +7552,11 @@ min-width: ${svgData[key].minWidth}em;`
         tokenRegexString.replace("\\d[\\d.]*|", settings.strict ? "" : "\\d[\\d.]*|"),
         "g"
       );
-      // category codes, only supports comment characters (14) for now
+      // Category codes. The lexer only supports comment characters (14) for now.
+      // MacroExpander additionally distinguishes active (13).
       this.catcodes = {
-        "%": 14 // comment character
+        "%": 14, // comment character
+        "~": 13  // active character
       };
     }
 
@@ -7441,7 +7580,7 @@ min-width: ${svgData[key].minWidth}em;`
           new Token(input[pos], new SourceLocation(this, pos, pos + 1))
         );
       }
-      let text = match[3] || (match[2] ? "\\ " : " ");
+      const text = match[6] || match[3] || (match[2] ? "\\ " : " ");
 
       if (this.catcodes[text] === 14) {
         // comment character
@@ -7457,12 +7596,6 @@ min-width: ${svgData[key].minWidth}em;`
           this.tokenRegex.lastIndex = nlIndex + 1;
         }
         return this.lex();
-      }
-
-      // Trim any trailing whitespace from control word match
-      const controlMatch = text.match(controlWordWhitespaceRegex);
-      if (controlMatch) {
-        text = controlMatch[1];
       }
 
       return new Token(text, new SourceLocation(this, pos, this.tokenRegex.lastIndex));
@@ -7776,10 +7909,12 @@ min-width: ${svgData[key].minWidth}em;`
   defineMacro("\\egroup", "}");
 
   // Symbols from latex.ltx:
+  // \def~{\nobreakspace{}}
   // \def\lq{`}
   // \def\rq{'}
   // \def \aa {\r a}
   // \def \AA {\r A}
+  defineMacro("~", "\\nobreakspace");
   defineMacro("\\lq", "`");
   defineMacro("\\rq", "'");
   defineMacro("\\aa", "\\r a");
@@ -7811,6 +7946,8 @@ min-width: ${svgData[key].minWidth}em;`
   //////////////////////////////////////////////////////////////////////
   // amsmath.sty
   // http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
+
+  defineMacro("\\operatorname", "\\@ifstar\\operatornamewithlimits\\operatorname@");
 
   //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
   defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
@@ -8604,6 +8741,14 @@ min-width: ${svgData[key].minWidth}em;`
         // mainly checking for undefined here
         return definition;
       }
+      // If a single character has an associated catcode other than 13
+      // (active character), then don't expand it.
+      if (name.length === 1) {
+        const catcode = this.lexer.catcodes[name];
+        if (catcode != null && catcode !== 13) {
+          return
+        }
+      }
       const expansion = typeof definition === "function" ? definition(this) : definition;
       if (typeof expansion === "string") {
         let numArgs = 0;
@@ -9388,9 +9533,10 @@ min-width: ${svgData[key].minWidth}em;`
             const limits = lex.text === "\\limits";
             base.limits = limits;
             base.alwaysHandleSupSub = true;
-          } else if (base && base.type === "operatorname" && base.alwaysHandleSupSub) {
-            const limits = lex.text === "\\limits";
-            base.limits = limits;
+          } else if (base && base.type === "operatorname") {
+            if (base.alwaysHandleSupSub) {
+              base.limits = lex.text === "\\limits";
+            }
           } else {
             throw new ParseError("Limit controls must follow a math operator", lex);
           }
@@ -9735,8 +9881,10 @@ min-width: ${svgData[key].minWidth}em;`
      */
     parseUrlGroup(optional) {
       this.gullet.lexer.setCatcode("%", 13); // active character
+      this.gullet.lexer.setCatcode("~", 12); // other character
       const res = this.parseStringGroup("url", optional);
       this.gullet.lexer.setCatcode("%", 14); // comment character
+      this.gullet.lexer.setCatcode("~", 13); // active character
       if (res == null) {
         return null;
       }

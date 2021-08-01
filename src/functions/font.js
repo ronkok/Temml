@@ -12,18 +12,14 @@ const mathmlBuilder = (group, style) => {
   // If possible, consolidate adjacent <mi> elements into a single element.
   // First, check if it is possible. If not, return the <mrow>.
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \mathrm{}
-/*  if (mrow.type === "mi" && mrow.children.length === 1 &&
-    mrow.attributes.mathvariant && mrow.attributes.mathvariant === "normal") {
-  }*/
   let mi = mrow.children[0]
   if (mi.type !== "mi") {
     mi = mrow
   } else {
-    const variant = mi.attributes.mathvariant || ""
     for (let i = 1; i < mrow.children.length; i++) {
       if (mrow.children[i].type !== "mi") { return mrow }
       const localVariant = mrow.children[i].attributes.mathvariant || ""
-      if (localVariant !== variant) { return mrow }
+      if (localVariant !== "normal") { return mrow }
     }
     // Consolidate the <mi> elements.
     for (let i = 1; i < mrow.children.length; i++) {
@@ -59,6 +55,7 @@ defineFunction({
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
+    "\\pmb",
 
     // families
     "\\mathbb",
