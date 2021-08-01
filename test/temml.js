@@ -4616,7 +4616,6 @@ min-width: ${svgData[key].minWidth}em;`
       "\\mathbf",
       "\\mathnormal",
       "\\up@greek",
-      "\\pmb",
 
       // families
       "\\mathbb",

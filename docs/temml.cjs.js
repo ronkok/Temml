@@ -4615,7 +4615,6 @@ defineFunction({
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
-    "\\pmb",
 
     // families
     "\\mathbb",
