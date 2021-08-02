@@ -491,12 +491,6 @@ defineMacro(
     "{\\rm mod}\\,\\,#1"
 );
 
-// \pmb    --   A simulation of bold.
-// The version in ambsy.sty works by typesetting three copies of the argument
-// with small offsets. We use two copies. We omit the vertical offset because
-// of rendering problems that makeVList encounters in Safari.
-defineMacro("\\pmb", "\\mathbf{#1}");
-
 //////////////////////////////////////////////////////////////////////
 // LaTeX source2e
 

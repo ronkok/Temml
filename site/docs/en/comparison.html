@@ -25,7 +25,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.1.3, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.2.0, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -1290,7 +1290,7 @@
           </tr>
           <tr>
             <td>\boldsymbol</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝑨</mi><mi>𝒂</mi><mi>𝑩</mi><mi>𝒃</mi><mn><span class="bold-italic-number">0</span></mn></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{AaBb0}</annotation></semantics></math></td>
+            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝑨</mi><mi>𝒂</mi><mi>𝑩</mi><mi>𝒃</mi><mn><span style="font-family: Cambria, &quot;Times New Roman&quot;, serif; font-style: italic; font-weight: bold;">0</span></mn></mrow></mrow><annotation encoding="application/x-tex">\boldsymbol{AaBb0}</annotation></semantics></math></td>
             <td>\(\boldsymbol{AaBb0}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi><mrow><mi mathvariant="bold-italic">A</mi><mi mathvariant="bold-italic">a</mi><mi mathvariant="bold-italic">B</mi><mi mathvariant="bold-italic">b</mi><mn mathvariant="bold">0</mn></mrow></mi></mrow><annotation encoding="application/x-tex">\boldsymbol{AaBb0}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝐀</mi><mi>𝐚</mi><mi>𝐁</mi><mi>𝐛</mi><mn>𝟎</mn></mrow><annotation encoding="TeX">\boldsymbol{AaBb0}</annotation></semantics></math></td>
@@ -4854,7 +4854,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathscr</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi><span class="script">A</span></mi><mi><span class="script">B</span></mi></mrow></mrow><annotation encoding="application/x-tex">\mathscr{AB}</annotation></semantics></math></td>
+            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi><span style="font-family: &quot;KaTeX_Script&quot;, serif;">A</span></mi><mi><span style="font-family: &quot;KaTeX_Script&quot;, serif;">B</span></mi></mrow></mrow><annotation encoding="application/x-tex">\mathscr{AB}</annotation></semantics></math></td>
             <td>\(\mathscr{AB}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">A</mi><mi mathvariant="script">B</mi></mrow><annotation encoding="application/x-tex">\mathscr{AB}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝒜</mi><mi>ℬ</mi></mrow><annotation encoding="TeX">\mathscr{AB}</annotation></semantics></math></td>
@@ -5766,7 +5766,8 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\oldstylenums</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mn><span class="oldstylenums">123</span></mn></mrow><annotation encoding="application/x-tex">\oldstylenums{123}</annotation></semantics></math></td>
+            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mn><span style="font-family: Cambria, &quot;Times New Roman&quot;, serif;
+            font-variant-numeric: oldstyle-nums; font-feature-settings: &#x27;onum&#x27;;">123</span></mn></mrow><annotation encoding="application/x-tex">\oldstylenums{123}</annotation></semantics></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -6166,7 +6167,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\pmb</td>
-            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>𝛍</mi></mrow><annotation encoding="application/x-tex">\pmb{\mu}</annotation></semantics></math></td>
+            <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mstyle style="text-shadow: 0.02em 0.01em 0.04px"><mi>μ</mi></mstyle></mrow><annotation encoding="application/x-tex">\pmb{\mu}</annotation></semantics></math></td>
             <td>\(\pmb{\mu}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">μ</mi></mrow><annotation encoding="application/x-tex">\pmb{\mu}</annotation></semantics></math></span></td>
             <td data-tex="\pmb{\mu}"><span class="no-sup">Not supported</span></td>

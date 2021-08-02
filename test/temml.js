@@ -4445,7 +4445,7 @@ min-width: ${svgData[key].minWidth}em;`
       if (group.isCharacterBox) {
         node = inner[0];
         node.type = "mo";
-        if (/[A-Za-z]/.test(group.body[0].text)) {
+        if (group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
           node.setAttribute("mathvariant", "italic");
         }
       } else {
@@ -4616,6 +4616,7 @@ min-width: ${svgData[key].minWidth}em;`
       "\\mathbf",
       "\\mathnormal",
       "\\up@greek",
+      "\\pmb",
 
       // families
       "\\mathbb",
@@ -6280,6 +6281,33 @@ min-width: ${svgData[key].minWidth}em;`
     }
   });
 
+  // \pmb is a simulation of bold font.
+  // The version of \pmb in ambsy.sty works by typesetting three copies of the argument
+  // with small offsets. We use CSS text-shadow.
+  // It's a hack. Not as good as a real bold font. Better than nothing.
+
+  defineFunction({
+    type: "pmb",
+    names: ["\\pmb"],
+    props: {
+      numArgs: 1,
+      allowedInText: true
+    },
+    handler({ parser }, args) {
+      return {
+        type: "pmb",
+        mode: parser.mode,
+        body: ordargument(args[0])
+      }
+    },
+    mathmlBuilder(group, style) {
+      const inner = buildExpression(group.body, style);
+      const node = new mathMLTree.MathNode("mstyle", inner);
+      node.setAttribute("style", "text-shadow: 0.02em 0.01em 0.04px");
+      return node
+    }
+  });
+
   const sign = num => num >= 0 ? "+" : "-";
 
   // \raise, \lower, and \raisebox
@@ -7027,15 +7055,26 @@ min-width: ${svgData[key].minWidth}em;`
 
   const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
 
+  const italicNumber = (text, variant) => {
+    const span = new Span([], [text]);
+    const numberStyle = variant === "italic"
+      ? `font-family: Cambria, "Times New Roman", serif; font-style: italic;`
+      : `font-family: Cambria, "Times New Roman", serif; font-style: italic; font-weight: bold;`;
+    span.setAttribute("style", numberStyle);
+    return new mathMLTree.MathNode("mn", [span])
+  };
+
   defineFunctionBuilders({
     type: "mathord",
     mathmlBuilder(group, style) {
-      const variant = getVariant(group, style) || "italic";
       const text = makeText(group.text, group.mode, style);
-      if (variant === "script" && style.font === "mathscr") {
-        const span = new Span(["script"], [text]);
-        return new mathMLTree.MathNode("mi", [span])
+      if (style.font === "mathscr") {
+        const span = new Span([], [text]);
+        span.setAttribute("style", `font-family: "KaTeX_Script", serif;`);
+        const node = new mathMLTree.MathNode("mi", [span]);
+        return node
       }
+      const variant = getVariant(group, style) || "italic";
       if (variant !== "italic") {
         text.text = variantChar(text.text, variant);
       }
@@ -7065,8 +7104,7 @@ min-width: ${svgData[key].minWidth}em;`
       if (group.mode === "text") {
         if (variant === "italic" || variant === "bold-italic") {
           if (numberRegEx.test(group.text)) {
-            const span = new Span([`${variant}-number`], [text]);
-            return new mathMLTree.MathNode("mtext", [span])
+            return italicNumber(text, variant)
           }
         }
         if (variant !== "normal") {
@@ -7075,11 +7113,12 @@ min-width: ${svgData[key].minWidth}em;`
         node = new mathMLTree.MathNode("mtext", [text]);
       } else if (numberRegEx.test(group.text)) {
         if (variant === "oldstylenums") {
-          const span = new Span(["oldstylenums"], [text]);
+          const span = new Span([], [text]);
+          span.setAttribute("style", `font-family: Cambria, "Times New Roman", serif;
+            font-variant-numeric: oldstyle-nums; font-feature-settings: 'onum';`);
           node = new mathMLTree.MathNode("mn", [span]);
         } else if (variant === "italic" || variant === "bold-italic") {
-          const span = new Span([`${variant}-number`], [text]);
-          node = new mathMLTree.MathNode("mn", [span]);
+          return italicNumber(text, variant)
         } else {
           if (variant !== "normal") { text.text = variantChar(text.text, variant); }
           node = new mathMLTree.MathNode("mn", [text]);
@@ -8186,12 +8225,6 @@ min-width: ${svgData[key].minWidth}em;`
       "\\mathchoice{\\mkern18mu}{\\mkern12mu}{\\mkern12mu}{\\mkern12mu}" +
       "{\\rm mod}\\,\\,#1"
   );
-
-  // \pmb    --   A simulation of bold.
-  // The version in ambsy.sty works by typesetting three copies of the argument
-  // with small offsets. We use two copies. We omit the vertical offset because
-  // of rendering problems that makeVList encounters in Safari.
-  defineMacro("\\pmb", "\\mathbf{#1}");
 
   //////////////////////////////////////////////////////////////////////
   // LaTeX source2e
@@ -10337,7 +10370,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.1.3";
+  const version = "0.2.0";
 
   function postProcess(block) {
     const labelMap = {};

@@ -21,7 +21,7 @@ function mathmlBuilder(group, style) {
     if (group.isCharacterBox) {
       node = inner[0];
       node.type = "mo";
-      if (/[A-Za-z]/.test(group.body[0].text)) {
+      if (group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
         node.setAttribute("mathvariant", "italic")
       }
     } else {

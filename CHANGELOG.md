@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.0] - 2021-08-02
+
+### Removed
+
+- Soft line breaks, since they will not work in Chromium.
+
+### Fixed
+
+- Improve handling of \limits
+- Improve handling of newline.
+- Respect catcode in macro expansion and set ~ correctly.
+- Improve \operatorname*.
+- Fix non-stretchy accents in Firefox.
+- Use correct Unicode for uppercase Greek.
+
+### Changed
+
+- Support font functions via substitution of Unicode characters instead of `mathvariant`. Font functions will now work in Chromium.
+- Change \pmb to use CSS text-shadow instead of `mathvariant = bold`.
+
+### Added
+
+- Support \backcong.
+
 ## [0.1.3] - 2021-05-21
 
 ### Fixed

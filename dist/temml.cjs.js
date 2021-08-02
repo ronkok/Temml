@@ -4444,7 +4444,7 @@ function mathmlBuilder$4(group, style) {
     if (group.isCharacterBox) {
       node = inner[0];
       node.type = "mo";
-      if (/[A-Za-z]/.test(group.body[0].text)) {
+      if (group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
         node.setAttribute("mathvariant", "italic");
       }
     } else {
@@ -4572,18 +4572,14 @@ const mathmlBuilder$5 = (group, style) => {
   // If possible, consolidate adjacent <mi> elements into a single element.
   // First, check if it is possible. If not, return the <mrow>.
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \mathrm{}
-/*  if (mrow.type === "mi" && mrow.children.length === 1 &&
-    mrow.attributes.mathvariant && mrow.attributes.mathvariant === "normal") {
-  }*/
   let mi = mrow.children[0];
   if (mi.type !== "mi") {
     mi = mrow;
   } else {
-    const variant = mi.attributes.mathvariant || "";
     for (let i = 1; i < mrow.children.length; i++) {
       if (mrow.children[i].type !== "mi") { return mrow }
       const localVariant = mrow.children[i].attributes.mathvariant || "";
-      if (localVariant !== variant) { return mrow }
+      if (localVariant !== "normal") { return mrow }
     }
     // Consolidate the <mi> elements.
     for (let i = 1; i < mrow.children.length; i++) {
@@ -4619,6 +4615,7 @@ defineFunction({
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
+    "\\pmb",
 
     // families
     "\\mathbb",
@@ -6283,6 +6280,33 @@ defineFunction({
   }
 });
 
+// \pmb is a simulation of bold font.
+// The version of \pmb in ambsy.sty works by typesetting three copies of the argument
+// with small offsets. We use CSS text-shadow.
+// It's a hack. Not as good as a real bold font. Better than nothing.
+
+defineFunction({
+  type: "pmb",
+  names: ["\\pmb"],
+  props: {
+    numArgs: 1,
+    allowedInText: true
+  },
+  handler({ parser }, args) {
+    return {
+      type: "pmb",
+      mode: parser.mode,
+      body: ordargument(args[0])
+    }
+  },
+  mathmlBuilder(group, style) {
+    const inner = buildExpression(group.body, style);
+    const node = new mathMLTree.MathNode("mstyle", inner);
+    node.setAttribute("style", "text-shadow: 0.02em 0.01em 0.04px");
+    return node
+  }
+});
+
 const sign = num => num >= 0 ? "+" : "-";
 
 // \raise, \lower, and \raisebox
@@ -6734,6 +6758,28 @@ defineFunctionBuilders({
   }
 });
 
+// Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
+
+defineFunctionBuilders({
+  type: "atom",
+  mathmlBuilder(group, style) {
+    const node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
+    if (group.family === "punct") {
+      node.setAttribute("separator", "true");
+    } else if (group.family === "open" || group.family === "close" || group.family === "rel") {
+      // Delims built here should not stretch vertically.
+      // See delimsizing.js for stretchy delims.
+      node.setAttribute("stretchy", "false");
+      if (group.family === "open") {
+        node.setAttribute("form", "prefix");
+      } else if (group.family === "close") {
+        node.setAttribute("form", "postfix");
+      }
+    }
+    return node;
+  }
+});
+
 /**
  * Maps TeX font commands to "mathvariant" attribute in buildMathML.js
  */
@@ -6766,31 +6812,31 @@ const getVariant = function(group, style) {
 
   // Deal with the \textit, \textbf, etc., functions.
   if (style.fontFamily === "texttt") {
-    return "monospace";
+    return "monospace"
   } else if (style.fontFamily === "textsc") {
     return "normal"; // handled via character substitution in symbolsOrd.js.
   } else if (style.fontFamily === "textsf") {
     if (style.fontShape === "textit" && style.fontWeight === "textbf") {
-      return "sans-serif-bold-italic";
+      return "sans-serif-bold-italic"
     } else if (style.fontShape === "textit") {
-      return "sans-serif-italic";
+      return "sans-serif-italic"
     } else if (style.fontWeight === "textbf") {
-      return "sans-serif-bold";
+      return "sans-serif-bold"
     } else {
-      return "sans-serif";
+      return "sans-serif"
     }
   } else if (style.fontShape === "textit" && style.fontWeight === "textbf") {
-    return "bold-italic";
+    return "bold-italic"
   } else if (style.fontShape === "textit") {
-    return "italic";
+    return "italic"
   } else if (style.fontWeight === "textbf") {
-    return "bold";
+    return "bold"
   }
 
   // Deal with the \mathit, mathbf, etc, functions.
   const font = style.font;
   if (!font || font === "mathnormal") {
-    return null;
+    return null
   }
 
   const mode = group.mode;
@@ -6831,38 +6877,15 @@ const getVariant = function(group, style) {
     text = symbols[mode][text].replace;
   }
 
-  return Object.prototype.hasOwnProperty.call(fontMap, font) ? fontMap[font] : null;
+  return Object.prototype.hasOwnProperty.call(fontMap, font) ? fontMap[font] : null
 };
 
-// Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
+// Chromium does not support the MathML `mathvariant` attribute.
+// Instead, we replace ASCII characters with Unicode characters that
+// are defined in the font as bold, italic, double-struck, etc.
+// This module identifies those Unicode code points.
 
-defineFunctionBuilders({
-  type: "atom",
-  mathmlBuilder(group, style) {
-    const node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
-    if (group.family === "bin") {
-      const variant = getVariant(group, style);
-      if (variant === "bold-italic") {
-        node.setAttribute("mathvariant", variant);
-      }
-    } else if (group.family === "punct") {
-      node.setAttribute("separator", "true");
-    } else if (group.family === "open" || group.family === "close" || group.family === "rel") {
-      // Delims built here should not stretch vertically.
-      // See delimsizing.js for stretchy delims.
-      node.setAttribute("stretchy", "false");
-      if (group.family === "open") {
-        node.setAttribute("form", "prefix");
-      } else if (group.family === "close") {
-        node.setAttribute("form", "postfix");
-      }
-    }
-    return node;
-  }
-});
-
-const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
-
+// First, a few helpers.
 const cal = Object.freeze({
   B: 0x20EA, // Offset from ASCII B to Unicode script B
   E: 0x20EB,
@@ -6886,7 +6909,7 @@ const frak = Object.freeze({
 });
 
 const bbb = Object.freeze({
-  C: 0x20BF,
+  C: 0x20BF, // blackboard bold
   H: 0x20C5,
   N: 0x20C7,
   P: 0x20C9,
@@ -6895,8 +6918,8 @@ const bbb = Object.freeze({
   Z: 0x20CA
 });
 
-// Code points below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
-const variantDelta = Object.freeze({
+// Code point offsets below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
+const offset = Object.freeze({
   upperCaseLatin: { // A-Z
     "normal": ch =>                 { return 0 },
     "bold": ch =>                   { return 0x1D3BF },
@@ -6929,7 +6952,7 @@ const variantDelta = Object.freeze({
     "sans-serif-bold-italic": ch => { return 0x1D5F5 },
     "monospace": ch =>              { return 0x1D629 }
   },
-  upperCaseGreek: { // A-Ω
+  upperCaseGreek: { // A-Ω ∇
     "normal": ch =>                 { return 0 },
     "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
     "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
@@ -6994,7 +7017,7 @@ const variantChar = (ch, variant) => {
     : "other";
   return block === "other"
     ? ch
-    : String.fromCodePoint(codePoint + variantDelta[block][variant](ch))
+    : String.fromCodePoint(codePoint + offset[block][variant](ch))
 };
 
 const smallCaps = Object.freeze({
@@ -7026,15 +7049,31 @@ const smallCaps = Object.freeze({
   z: "ᴢ"
 });
 
+// "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
+// src/symbols.js.
+
+const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
+
+const italicNumber = (text, variant) => {
+  const span = new Span([], [text]);
+  const numberStyle = variant === "italic"
+    ? `font-family: Cambria, "Times New Roman", serif; font-style: italic;`
+    : `font-family: Cambria, "Times New Roman", serif; font-style: italic; font-weight: bold;`;
+  span.setAttribute("style", numberStyle);
+  return new mathMLTree.MathNode("mn", [span])
+};
+
 defineFunctionBuilders({
   type: "mathord",
   mathmlBuilder(group, style) {
-    const variant = getVariant(group, style) || "italic";
     const text = makeText(group.text, group.mode, style);
-    if (variant === "script" && style.font === "mathscr") {
-      const span = new Span(["script"], [text]);
-      return new mathMLTree.MathNode("mi", [span])
+    if (style.font === "mathscr") {
+      const span = new Span([], [text]);
+      span.setAttribute("style", `font-family: "KaTeX_Script", serif;`);
+      const node = new mathMLTree.MathNode("mi", [span]);
+      return node
     }
+    const variant = getVariant(group, style) || "italic";
     if (variant !== "italic") {
       text.text = variantChar(text.text, variant);
     }
@@ -7062,35 +7101,26 @@ defineFunctionBuilders({
 
     let node;
     if (group.mode === "text") {
-      const origText = text.text;
+      if (variant === "italic" || variant === "bold-italic") {
+        if (numberRegEx.test(group.text)) {
+          return italicNumber(text, variant)
+        }
+      }
       if (variant !== "normal") {
         text.text = variantChar(text.text, variant);
       }
       node = new mathMLTree.MathNode("mtext", [text]);
-      if (text.text === origText && variant === "italic") {
-        // Chromium's only mathvariant is italic
-        node.setAttribute("mathvariant", "italic");
-      }
     } else if (numberRegEx.test(group.text)) {
       if (variant === "oldstylenums") {
-        const span = new Span(["oldstylenums"], [text]);
+        const span = new Span([], [text]);
+        span.setAttribute("style", `font-family: Cambria, "Times New Roman", serif;
+            font-variant-numeric: oldstyle-nums; font-feature-settings: 'onum';`);
         node = new mathMLTree.MathNode("mn", [span]);
-      } else if (variant === "italic") {
-        const span = new Span(["italic-number"], [text]);
-        node = new mathMLTree.MathNode("mn", [span]);
-      } else if (variant === "bold-italic") {
-        const span = new Span(["bold-italic-number"], [text]);
-        node = new mathMLTree.MathNode("mn", [span]);
+      } else if (variant === "italic" || variant === "bold-italic") {
+        return italicNumber(text, variant)
       } else {
-        const origText = text.text;
-        if (variant !== "normal") {
-          text.text = variantChar(text.text, variant);
-        }
+        if (variant !== "normal") { text.text = variantChar(text.text, variant); }
         node = new mathMLTree.MathNode("mn", [text]);
-        if (text.text === origText && variant === "italic") {
-          // Chromium's only mathvariant is italic
-          node.setAttribute("mathvariant", "italic");
-        }
       }
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text]);
@@ -8194,12 +8224,6 @@ defineMacro(
     "\\mathchoice{\\mkern18mu}{\\mkern12mu}{\\mkern12mu}{\\mkern12mu}" +
     "{\\rm mod}\\,\\,#1"
 );
-
-// \pmb    --   A simulation of bold.
-// The version in ambsy.sty works by typesetting three copies of the argument
-// with small offsets. We use two copies. We omit the vertical offset because
-// of rendering problems that makeVList encounters in Safari.
-defineMacro("\\pmb", "\\mathbf{#1}");
 
 //////////////////////////////////////////////////////////////////////
 // LaTeX source2e
@@ -12266,7 +12290,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.1.3";
+const version = "0.2.0";
 
 function postProcess(block) {
   const labelMap = {};

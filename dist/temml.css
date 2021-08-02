@@ -22,27 +22,6 @@ temml * {
   border-color: currentColor;
 }
 
-temml .script {
-  font-family: "KaTeX_Script", serif;
-}
-
-temml .oldstylenums {
-  font-family: Cambria, "Times New Roman", serif;
-  font-variant-numeric: oldstyle-nums;
-  font-feature-settings: 'onum';
-}
-
-.temml .italic-number {
-  font-family: Cambria, "Times New Roman", serif;
-  font-style: italic;
-}
-
-.temml .bold-italic-number {
-  font-family: Cambria, "Times New Roman", serif;
-  font-style: italic;
-  font-weight: bold;
-}
-
 /* AMS environment auto-numbering via CSS counter. */
 .tml-eqn::before {
   counter-increment: tmlEqnNo;
