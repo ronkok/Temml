@@ -29,5 +29,8 @@
     "build": "rollup --config ./rollupConfig.js && yarn minify && node docs/insertPlugins.js",
     "docs": "node docs/buildDocs.js",
     "dist": "yarn build && node copyfiles.js && terser contrib/auto-render/test/auto-render.js -o contrib/auto-render/dist/auto-render.min.js -c -m"
+  },
+  "dependencies": {
+    "xml-formatter": "^2.4.0"
   }
 }

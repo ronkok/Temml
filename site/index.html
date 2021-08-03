@@ -13,6 +13,7 @@
 <script src="./temml/mhchem.min.js"></script>
 <script src="./temml/physics.js"></script>
 <script src="./temml/texvc.js"></script>
+<script type="text/javascript" src="./xml-formatter.js"></script>
 </head>
 
 <body>
@@ -62,10 +63,14 @@
   </section>
   <div style="float: right;"><input type="checkbox" id="displayMode" name="displayMode" checked>
     <label for="displayMode">Display Mode</label>&nbsp;&nbsp;&nbsp;&nbsp;
-    Render with <select id="MathFont" onchange="updateMathFont()">
+    <select id="MathFont" onchange="updateMathFont()">
       <option value="LatinModern">Latin Modern</option>
       <option value="Local">Local font</option>
-</select>
+    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+    <select id="OutputType" onchange="reprocess()">
+      <option value="Math">Math</option>
+      <option value="MathML">MathML</option>
+    </select>
 </div>
 
 <div id="why">
@@ -115,8 +120,13 @@
   reprocess();
 
   function reprocess() {
+    if (document.getElementById("OutputType").value === "Math") {
       temml.render(input.value, math, {displayMode: mode.checked});
       temml.postProcess(math)
+    } else {
+      const format = require('xml-formatter');
+      math.innerText = format(temml.renderToString(input.value, math, {displayMode: mode.checked}));
+    }
   }
 
   function updateMathFont() {
