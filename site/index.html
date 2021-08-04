@@ -62,11 +62,11 @@
     </div>
   </section>
   <div style="float: right;"><input type="checkbox" id="displayMode" name="displayMode" checked>
-    <label for="displayMode">Display Mode</label>&nbsp;&nbsp;&nbsp;&nbsp;
+    <label for="displayMode">Display Mode</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Show:
     <select id="MathFont" onchange="updateMathFont()">
       <option value="LatinModern">Latin Modern</option>
       <option value="Local">Local font</option>
-    </select>&nbsp;&nbsp;&nbsp;&nbsp;
+    </select>&nbsp;&nbsp;
     <select id="OutputType" onchange="reprocess()">
       <option value="Math">Math</option>
       <option value="MathML">MathML</option>
@@ -124,8 +124,12 @@
       temml.render(input.value, math, {displayMode: mode.checked});
       temml.postProcess(math)
     } else {
+      math.innerHTML = ""
       const format = require('xml-formatter');
-      math.innerText = format(temml.renderToString(input.value, math, {displayMode: mode.checked}));
+      math.appendChild(document.createElement("pre"))
+      math.firstChild.innerText = format(
+        temml.renderToString(input.value, math, {displayMode: mode.checked}),
+        { indentation: '  ', lineSeparator: '\n' });
     }
   }
 
