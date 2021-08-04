@@ -221,11 +221,7 @@ Any character can be written with the `\char` function and the Unicode code in h
 
 ### Line Breaks
 
-Temml will insert automatic soft line breaks in inline math after top-level relations or binary operators such as “=” or “+”. These can be suppressed by `\nobreak` or by placing math inside a pair of braces, as in `{F=ma}`. `\allowbreak` will allow soft line breaks at locations other than relations or operators.
-
-Hard line breaks are `\\` and `\newline`. Temml math can contain a hard line break or an automatic soft line break, but not both.
-
-In display math, Temml does not insert automatic soft line breaks. 
+Hard line breaks are `\\` and `\newline`. No soft line break, sorry.
 
 ### Vertical Layout
 
