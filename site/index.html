@@ -129,7 +129,7 @@
       math.appendChild(document.createElement("pre"))
       math.firstChild.innerText = format(
         temml.renderToString(input.value, math, {displayMode: mode.checked}),
-        { indentation: '  ', lineSeparator: '\n' });
+        { indentation: '  ', collapseContent: true, lineSeparator: '\n' });
     }
   }
 
