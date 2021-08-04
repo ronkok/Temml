@@ -2889,6 +2889,24 @@ exponent. </p>
 <script>
   // Assign id's to auto-numbered equations and populate \ref's
   temml.postProcess(document.getElementById("main"))
+
+  let hasMathML = false;
+  if (document.createElement) {
+    var div = document.createElement("div");
+    div.style.position = "absolute"; div.style.top = div.style.left = 0;
+    div.style.visibility = "hidden"; div.style.width = div.style.height = "auto";
+    div.style.fontFamily = "serif"; div.style.lineheight = "normal";
+    div.innerHTML = "<math><mfrac><mi>xx</mi><mi>yy</mi></mfrac></math>";
+    document.body.appendChild(div);
+    hasMathML = (div.offsetHeight > div.offsetWidth);
+  }
+  if (!hasMathML) {
+    // Insert the mathml.css stylesheet.
+    link = document.createElement("link");
+    link.href = "../../mathml.css";
+    link.rel = "stylesheet";
+    document.head.appendChild(link);
+  }
 </script>
 
 </body>
