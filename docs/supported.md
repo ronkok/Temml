@@ -221,7 +221,7 @@ Any character can be written with the `\char` function and the Unicode code in h
 
 ### Line Breaks
 
-Hard line breaks are `\\` and `\newline`. No soft line break, sorry.
+Hard line breaks are `\\` and `\newline`. No soft line breaks, sorry. When browser develop further, I'll add soft line breaks.
 
 ### Vertical Layout
 
