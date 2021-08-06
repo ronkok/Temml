@@ -14,7 +14,7 @@
 }
 
 .temml {
-  font-family: "Cambria Math", "Times New Roman", serif;
+  font-family: "Cambria Math", "Times New Roman", math;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -31,7 +31,7 @@
 }
 
 .latin-modern .temml {
-  font-family: "Latin Modern Math";
+  font-family: "Latin Modern Math", "Times New Roman", math;
 }
 
 /* AMS environment auto-numbering via CSS counter. */
