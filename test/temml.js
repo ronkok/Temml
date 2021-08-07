@@ -7114,8 +7114,7 @@ min-width: ${svgData[key].minWidth}em;`
       } else if (numberRegEx.test(group.text)) {
         if (variant === "oldstylenums") {
           const span = new Span([], [text]);
-          span.setAttribute("style", `font-family: Cambria, "Times New Roman", serif;
-            font-variant-numeric: oldstyle-nums; font-feature-settings: 'onum';`);
+          span.setAttribute("style", `font-feature-settings: 'onum';`);
           node = new mathMLTree.MathNode("mn", [span]);
         } else if (variant === "italic" || variant === "bold-italic") {
           return italicNumber(text, variant)
