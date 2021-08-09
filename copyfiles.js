@@ -2,11 +2,23 @@ const fs = require('fs');
 
 // Populate the `dist` folder.
 
-fs.copyFile('site/temml/temml-dual.css', 'dist/temml-dual.css', (err) => {
+fs.copyFile('site/temml/Temml-Cambria-Math.css', 'dist/Temml-Cambria-Math.css', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('test/temml.css', 'dist/temml.css', (err) => {
+fs.copyFile('site/temml/Temml-Latin-Modern.css', 'dist/Temml-Latin-Modern.css', (err) => {
+  if (err) { throw err }
+})
+
+fs.copyFile('site/temml/Temml-Asana.css', 'dist/Temml-Asana.css', (err) => {
+  if (err) { throw err }
+})
+
+fs.copyFile('site/temml/Temml-STIX2.css', 'dist/Temml-STIX2.css', (err) => {
+  if (err) { throw err }
+})
+
+fs.copyFile('site/temml/Temml-XITS.css', 'dist/Temml-XITS.css', (err) => {
   if (err) { throw err }
 })
 

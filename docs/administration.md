@@ -20,8 +20,8 @@ Temml works in browsers that support MathML. This includes Firefox and Safari. I
 
 You can download Temml files from the [`dist` folder](https://github.com/ronkok/Temml/dist/) of the Temml repository and serve them from your own site. The minimum browser  installation needs the following files. The `css` file and font file must be in the same folder.
 
-* temml.css
 * temml.min.js
+* Temml-Cambria-Math.css
 * Temml-Script.woff2
 
 A server-side installation should include `temml.cjs.js` instead of `temml.min.js`.
@@ -155,31 +155,22 @@ Persistent macros can change the behavior of Temml (e.g. redefining standard com
 
 # Fonts
 
-In Temml, you can choose a math font from several different options. Each has different advantages.
+Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.
 
-**Local fonts** are the light-weight option. The fastest font is the one you don’t have to serve. `temml.css` is written to prefer these fonts:
+**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml-Script.woff2` in order to support `\mathscr{…}`. Cambria Math is in general a good choice. It's only drawback is that Firefox sometimes selects radicals and and integration symbols that are a little too tall.
 
-* **Cambria Math** comes pre-installed in Windows, Macs, and iOS. It lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml-Script.woff2` in order to support `\mathscr{…}`. The roundhand font file is a clone of a KaTeX font, which is a clone of a MathJax font, which is a clone of Computer Modern.
+**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in `dist` contains the Latin Modern fonts. This option also needs that additional 12kb `Temml-Script.woff2` file in order to support `\mathscr{…}`.
 
-* **Noto** is an Android font. I have not yet done much testing with it.
-
-* I don’t know what system fonts are common in \*nix.
-
-**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The woff2 version of Latin Modern is a 380 kb file. This option also needs that additional 12kb font file in order to support `\mathscr{…}`.
-
-**Asana**.woff2 is a 242 kb file and does not need a separate file for `\mathscr{…}`.
+**Asana**, **STIX2**, and **XITS** can all be served without the `Temml-Script.woff2` file. 
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts](https://fred-wang.github.io/MathFonts/ "Math fonts").
 
-The `temml.css` file is set up to use local fonts. 
-
-Another option is the `temml-dual.css` file. It also uses local fonts but it enables a toggle from local fonts to Latin-Modern. (The Temml home page uses `temml-dual.css`.) Use `temml.css` or `temml-dual.css` but not both.
-
-If you want a different math font size, you can edit the Temml CSS file or add a rule to your own page's CSS, like this example:
+If you want a different math font size, you can edit add a rule to your own page's CSS, like this example:
 
 ```css
-...
-.temml { font-size: 115%; }
+@namespace url('http://www.w3.org/1999/xhtml');
+@namespace m url('http://www.w3.org/1998/Math/MathML');
+m|math { font-size: 125%; }
 ```
 
 # Auto-numbering

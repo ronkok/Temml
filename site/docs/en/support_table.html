@@ -4,7 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Support Table</title>
-   <link rel="stylesheet" href="../../temml/temml-dual.css">
+   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../temml/temml.min.js"></script>
    <style>

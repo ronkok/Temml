@@ -4,7 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
-   <link rel="stylesheet" href="../../temml/temml-dual.css">
+   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../temml/temml.min.js"></script>
    <style>
@@ -716,12 +716,12 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <tr>
 <td>Monospace</td>
 <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝙰-𝚉 𝚊-𝚣 𝟶-𝟿</mtext></mrow><annotation encoding="application/x-tex">\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}</annotation></semantics></math></td>
-<td></td>
-<td></td>
+<td>Sans serif bold italic</td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝘼-𝙕 𝙖-𝙯</mtext></mrow><annotation encoding="application/x-tex">\text{𝘼-𝙕 𝙖-𝙯}</annotation></semantics></math></td>
 </tr>
 </tbody></table>
 <p>Any character can be written with the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">☺</mi></mrow><annotation encoding="application/x-tex">\char&quot;263a</annotation></semantics></math>.</p>
-<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future documents breaks, I advise that you avoid Unicde script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
+<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicde script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
 <h2 id="layout">Layout</h2>
 <h3 id="line-breaks">Line Breaks</h3>
 <p>Hard line breaks are <code>\\</code> and <code>\newline</code>. No soft line breaks, sorry. When browser develop further, I&#39;ll add soft line breaks.</p>
@@ -2843,17 +2843,26 @@ exponent. </p>
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
-    <option value="LatinModern">Latin Modern</option>
-    <option value="Local">Local font</option>
+  <option value="Cambria-Math">Local font</option>
+  <option value="Latin-Modern">Latin Modern</option>
+  <option value="Asana">Asana</option>
+  <option value="STIX2">STIX2</option>
+  <option value="XITS">XITS</option>
 </select>
 <script>
   function updateMathFont() {
-    const main = document.getElementById("main")
-    if (document.getElementById("MathFont").value === "LatinModern") {
-      main.setAttribute("class", "latin-modern")
-    } else {
-      main.removeAttribute("class")
-    }
+    // Change the CSS style sheet.
+    const temmlRegEx = /temml\/Temml-.+\.css$/
+    const links = [...document.head.getElementsByTagName('link')];
+    links.forEach(link => {
+      if (temmlRegEx.test(link.href)) {
+        link.remove()
+      }
+    })
+    const newLink = document.createElement("link");
+    newLink.href = `../../temml/Temml-${document.getElementById("MathFont").value}.css`;
+    newLink.rel = "stylesheet";
+    document.head.appendChild(newLink);
   }
 </script>
 </p>

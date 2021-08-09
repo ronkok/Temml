@@ -4,7 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
-   <link rel="stylesheet" href="../../temml/temml-dual.css">
+   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../temml/temml.min.js"></script>
    <style>
@@ -207,17 +207,17 @@ Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À
 
 **Unicode Mathematical Alphanumeric Symbols**
 
-| Item         |  Range                |  Item             |  Range  |
+| Item         |  Range                |  Item             |  Range        |
 |--------------|-----------------------|-------------------|---------------|
 | Bold         | $\text{𝐀-𝐙 𝐚-𝐳 𝟎-𝟗}$  | Double-struck     | $\text{𝔸-ℤ 𝕒-𝕫 𝟘-𝟡}$
 | Italic       | $\text{𝐴-𝑍 𝑎-𝑧}$      | Sans serif        | $\text{𝖠-𝖹 𝖺-𝗓 𝟢-𝟫}$
 | Bold Italic  | $\text{𝑨-𝒁 𝒂-𝒛}$      | Sans serif bold   | $\text{𝗔-𝗭 𝗮-𝘇 𝟬-𝟵}$
 | Fractur      | $\text{𝔄-ℨ}\text{𝔞-𝔷}$| Sans serif italic | $\text{𝘈-𝘡 𝘢-𝘻}$
-| Monospace    | $\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}$  |                   | 
+| Monospace    | $\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}$  | Sans serif bold italic | $\text{𝘼-𝙕 𝙖-𝙯}$
 
 Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$.
 
-Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future documents breaks, I advise that you avoid Unicde script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
+Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicde script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
 
 ## Layout
 
@@ -1116,17 +1116,26 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.0
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
-    <option value="LatinModern">Latin Modern</option>
-    <option value="Local">Local font</option>
+  <option value="Cambria-Math">Local font</option>
+  <option value="Latin-Modern">Latin Modern</option>
+  <option value="Asana">Asana</option>
+  <option value="STIX2">STIX2</option>
+  <option value="XITS">XITS</option>
 </select>
 <script>
   function updateMathFont() {
-    const main = document.getElementById("main")
-    if (document.getElementById("MathFont").value === "LatinModern") {
-      main.setAttribute("class", "latin-modern")
-    } else {
-      main.removeAttribute("class")
-    }
+    // Change the CSS style sheet.
+    const temmlRegEx = /temml\/Temml-.+\.css$/
+    const links = [...document.head.getElementsByTagName('link')];
+    links.forEach(link => {
+      if (temmlRegEx.test(link.href)) {
+        link.remove()
+      }
+    })
+    const newLink = document.createElement("link");
+    newLink.href = `../../temml/Temml-${document.getElementById("MathFont").value}.css`;
+    newLink.rel = "stylesheet";
+    document.head.appendChild(newLink);
   }
 </script>
 </p>

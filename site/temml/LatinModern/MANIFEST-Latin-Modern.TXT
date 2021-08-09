@@ -1,0 +1,1426 @@
+###########################################################################
+############          The Latin Modern Family of Fonts         ############
+###########################################################################
+
+Designer (Computer Modern Family of Fonts): Donald E. Knuth
+Authors: Bogus\l{}aw Jackowski and Janusz M. Nowacki
+Version: 2.004
+Date: 30 X 2009
+
+Copyright 2003--2009 by B. Jackowski and J.M. Nowacki
+(on behalf of TeX USERS GROUPS).
+This work is released under the GUST Font License.
+For the most recent version of this license see
+http://www.gust.org.pl/fonts/licenses/GUST-FONT-LICENSE.txt or
+http://tug.org/fonts/licenses/GUST-FONT-LICENSE.txt
+This work has the LPPL maintenance status "maintained".
+The Current Maintainer of this work is Bogus\l{}aw Jackowski
+and Janusz M. Nowacki.
+This work consists of the files listed in this file.
+
+Below, in three sections required by the GUST Font License,
+font names and file names specific for the Latin Modern
+Family of Fonts are listed.
+
+NOTE: the names of the directories are not subject to the renaming
+restrictions.
+
+1. Font names which should be changed in derived works as requested
+   by clause 1 of GUST-FONT-LICENSE.txt
+
+   1.1 PostScript names
+       1.1.1 PostScript family names (and PFM names)
+       1.1.1a Text fonts
+              LMMono8
+              LMMono9
+              LMMono10
+              LMMono12
+              LMMonoCaps10
+              LMMonoLt10
+              LMMonoLtCond10
+              LMMonoProp10
+              LMMonoPropLt10
+              LMMonoSlant10
+              LMRoman5
+              LMRoman6
+              LMRoman7
+              LMRoman8
+              LMRoman9
+              LMRoman10
+              LMRoman12
+              LMRoman17
+              LMRomanCaps10
+              LMRomanDemi10
+              LMRomanDunh10
+              LMRomanSlant8
+              LMRomanSlant9
+              LMRomanSlant10
+              LMRomanSlant12
+              LMRomanSlant17
+              LMRomanUnsl10
+              LMSans8
+              LMSans9
+              LMSans10
+              LMSans12
+              LMSans17
+              LMSansDemiCond10
+              LMSansQuot8
+
+       1.1.1b Math fonts
+              LMMathExtension10
+              LMMathItalic5
+              LMMathItalic6
+              LMMathItalic7
+              LMMathItalic8
+              LMMathItalic9
+              LMMathItalic10
+              LMMathItalic12
+              LMMathSymbols5
+              LMMathSymbols6
+              LMMathSymbols7
+              LMMathSymbols8
+              LMMathSymbols9
+              LMMathSymbols10
+
+       1.1.2 PostScript font and full names
+       1.1.2a Text fonts
+              LMMono8-Regular
+              LMMono9-Regular
+              LMMono10-Italic
+              LMMono10-Regular
+              LMMono12-Regular
+              LMMonoCaps10-Oblique
+              LMMonoCaps10-Regular
+              LMMonoLt10-Bold
+              LMMonoLt10-BoldOblique
+              LMMonoLt10-Oblique
+              LMMonoLt10-Regular
+              LMMonoLtCond10-Oblique
+              LMMonoLtCond10-Regular
+              LMMonoProp10-Oblique
+              LMMonoProp10-Regular
+              LMMonoPropLt10-Bold
+              LMMonoPropLt10-BoldOblique
+              LMMonoPropLt10-Oblique
+              LMMonoPropLt10-Regular
+              LMMonoSlant10-Regular
+              LMRoman5-Bold
+              LMRoman5-Regular
+              LMRoman6-Bold
+              LMRoman6-Regular
+              LMRoman7-Bold
+              LMRoman7-Italic
+              LMRoman7-Regular
+              LMRoman8-Bold
+              LMRoman8-Italic
+              LMRoman8-Regular
+              LMRoman9-Bold
+              LMRoman9-Italic
+              LMRoman9-Regular
+              LMRoman10-Bold
+              LMRoman10-BoldItalic
+              LMRoman10-Italic
+              LMRoman10-Regular
+              LMRoman12-Bold
+              LMRoman12-Italic
+              LMRoman12-Regular
+              LMRoman17-Regular
+              LMRomanCaps10-Oblique
+              LMRomanCaps10-Regular
+              LMRomanDemi10-Oblique
+              LMRomanDemi10-Regular
+              LMRomanDunh10-Oblique
+              LMRomanDunh10-Regular
+              LMRomanSlant8-Regular
+              LMRomanSlant9-Regular
+              LMRomanSlant10-Bold
+              LMRomanSlant10-Regular
+              LMRomanSlant12-Regular
+              LMRomanSlant17-Regular
+              LMRomanUnsl10-Regular
+              LMSans8-Oblique
+              LMSans8-Regular
+              LMSans9-Oblique
+              LMSans9-Regular
+              LMSans10-Bold
+              LMSans10-BoldOblique
+              LMSans10-Oblique
+              LMSans10-Regular
+              LMSans12-Oblique
+              LMSans12-Regular
+              LMSans17-Oblique
+              LMSans17-Regular
+              LMSansDemiCond10-Oblique
+              LMSansDemiCond10-Regular
+              LMSansQuot8-Bold
+              LMSansQuot8-BoldOblique
+              LMSansQuot8-Oblique
+              LMSansQuot8-Regular
+
+       1.1.2b Math fonts
+              LMMathExtension10-Regular
+              LMMathItalic5-Bold
+              LMMathItalic5-Regular
+              LMMathItalic6-Regular
+              LMMathItalic7-Bold
+              LMMathItalic7-Regular
+              LMMathItalic8-Regular
+              LMMathItalic9-Regular
+              LMMathItalic10-Bold
+              LMMathItalic10-Regular
+              LMMathItalic12-Regular
+              LMMathSymbols5-Bold
+              LMMathSymbols5-Regular
+              LMMathSymbols6-Regular
+              LMMathSymbols7-Bold
+              LMMathSymbols7-Regular
+              LMMathSymbols8-Regular
+              LMMathSymbols9-Regular
+              LMMathSymbols10-Bold
+              LMMathSymbols10-Regular
+
+   1.2 OTF names
+       1.2.1 OTF family names (used in the implementation of feature 'size')
+             Latin Modern Mono
+             Latin Modern Mono Caps
+             Latin Modern Mono Light
+             Latin Modern Mono Light Cond
+             Latin Modern Mono Prop
+             Latin Modern Mono Prop Light
+             Latin Modern Mono Slanted
+             Latin Modern Roman
+             Latin Modern Roman Caps
+             Latin Modern Roman Demi
+             Latin Modern Roman Dunhill
+             Latin Modern Roman Slanted
+             Latin Modern Roman Unslanted
+             Latin Modern Sans
+             Latin Modern Sans Demi Cond
+             Latin Modern Sans Quotation
+
+       1.2.2 OTF full menu names
+             Latin Modern Mono 8 Regular
+             Latin Modern Mono 9 Regular
+             Latin Modern Mono 10 Italic
+             Latin Modern Mono 10 Regular
+             Latin Modern Mono 12 Regular
+             Latin Modern Mono Caps 10 Oblique
+             Latin Modern Mono Caps 10 Regular
+             Latin Modern Mono Light 10 Bold
+             Latin Modern Mono Light 10 Bold Oblique
+             Latin Modern Mono Light 10 Oblique
+             Latin Modern Mono Light 10 Regular
+             Latin Modern Mono Light Cond 10 Oblique
+             Latin Modern Mono Light Cond 10 Regular
+             Latin Modern Mono Prop 10 Oblique
+             Latin Modern Mono Prop 10 Regular
+             Latin Modern Mono Prop Light 10 Bold
+             Latin Modern Mono Prop Light 10 BoldOblique
+             Latin Modern Mono Prop Light 10 Oblique
+             Latin Modern Mono Prop Light 10 Regular
+             Latin Modern Mono Slanted 10 Regular
+             Latin Modern Roman 5 Bold
+             Latin Modern Roman 5 Regular
+             Latin Modern Roman 6 Bold
+             Latin Modern Roman 6 Regular
+             Latin Modern Roman 7 Bold
+             Latin Modern Roman 7 Italic
+             Latin Modern Roman 7 Regular
+             Latin Modern Roman 8 Bold
+             Latin Modern Roman 8 Italic
+             Latin Modern Roman 8 Regular
+             Latin Modern Roman 9 Bold
+             Latin Modern Roman 9 Italic
+             Latin Modern Roman 9 Regular
+             Latin Modern Roman 10 Bold
+             Latin Modern Roman 10 Bold Italic
+             Latin Modern Roman 10 Italic
+             Latin Modern Roman 10 Regular
+             Latin Modern Roman 12 Bold
+             Latin Modern Roman 12 Italic
+             Latin Modern Roman 12 Regular
+             Latin Modern Roman 17 Regular
+             Latin Modern Roman Caps 10 Oblique
+             Latin Modern Roman Caps 10 Regular
+             Latin Modern Roman Demi 10 Oblique
+             Latin Modern Roman Demi 10 Regular
+             Latin Modern Roman Dunhill 10 Oblique
+             Latin Modern Roman Dunhill 10 Regular
+             Latin Modern Roman Slanted 8 Regular
+             Latin Modern Roman Slanted 9 Regular
+             Latin Modern Roman Slanted 10 Bold
+             Latin Modern Roman Slanted 10 Regular
+             Latin Modern Roman Slanted 12 Regular
+             Latin Modern Roman Slanted 17 Regular
+             Latin Modern Roman Unslanted 10 Regular
+             Latin Modern Sans 8 Oblique
+             Latin Modern Sans 8 Regular
+             Latin Modern Sans 9 Oblique
+             Latin Modern Sans 9 Regular
+             Latin Modern Sans 10 Bold
+             Latin Modern Sans 10 Bold Oblique
+             Latin Modern Sans 10 Oblique
+             Latin Modern Sans 10 Regular
+             Latin Modern Sans 12 Oblique
+             Latin Modern Sans 12 Regular
+             Latin Modern Sans 17 Oblique
+             Latin Modern Sans 17 Regular
+             Latin Modern Sans Demi Cond 10 Oblique
+             Latin Modern Sans Demi Cond 10 Regular
+             Latin Modern Sans Quotation 8 Bold
+             Latin Modern Sans Quotation 8 Bold Oblique
+             Latin Modern Sans Quotation 8 Oblique
+             Latin Modern Sans Quotation 8 Regular
+
+       1.2.3 OTF Macintosh menu names
+             LM Mono 8 Regular
+             LM Mono 9 Regular
+             LM Mono 10 Italic
+             LM Mono 10 Regular
+             LM Mono 12 Regular
+             LM Mono Caps 10 Oblique
+             LM Mono Caps 10 Regular
+             LM Mono Light 10 Bold
+             LM Mono Light 10 Bold Oblique
+             LM Mono Light 10 Oblique
+             LM Mono Light 10 Regular
+             LM Mono Light Cond 10 Oblique
+             LM Mono Light Cond 10 Regular
+             LM Mono Prop 10 Oblique
+             LM Mono Prop 10 Regular
+             LM Mono Prop Light 10 Bold
+             LM Mono Prop Light 10 BoldOblique
+             LM Mono Prop Light 10 Oblique
+             LM Mono Prop Light 10 Regular
+             LM Mono Slanted 10 Regular
+             LM Roman 5 Bold
+             LM Roman 5 Regular
+             LM Roman 6 Bold
+             LM Roman 6 Regular
+             LM Roman 7 Bold
+             LM Roman 7 Italic
+             LM Roman 7 Regular
+             LM Roman 8 Bold
+             LM Roman 8 Italic
+             LM Roman 8 Regular
+             LM Roman 9 Bold
+             LM Roman 9 Italic
+             LM Roman 9 Regular
+             LM Roman 10 Bold
+             LM Roman 10 Bold Italic
+             LM Roman 10 Italic
+             LM Roman 10 Regular
+             LM Roman 12 Bold
+             LM Roman 12 Italic
+             LM Roman 12 Regular
+             LM Roman 17 Regular
+             LM Roman Caps 10 Oblique
+             LM Roman Caps 10 Regular
+             LM Roman Demi 10 Oblique
+             LM Roman Demi 10 Regular
+             LM Roman Dunhill 10 Oblique
+             LM Roman Dunhill 10 Regular
+             LM Roman Slanted 8 Regular
+             LM Roman Slanted 9 Regular
+             LM Roman Slanted 10 Bold
+             LM Roman Slanted 10 Regular
+             LM Roman Slanted 12 Regular
+             LM Roman Slanted 17 Regular
+             LM Roman Unslanted 10 Regular
+             LM Sans 8 Oblique
+             LM Sans 8 Regular
+             LM Sans 9 Oblique
+             LM Sans 9 Regular
+             LM Sans 10 Bold
+             LM Sans 10 Bold Oblique
+             LM Sans 10 Oblique
+             LM Sans 10 Regular
+             LM Sans 12 Oblique
+             LM Sans 12 Regular
+             LM Sans 17 Oblique
+             LM Sans 17 Regular
+             LM Sans Demi Cond 10 Oblique
+             LM Sans Demi Cond 10 Regular
+             LM Sans Quot 8 Bold
+             LM Sans Quot 8 Bold Oblique
+             LM Sans Quot 8 Oblique
+             LM Sans Quot 8 Regular
+
+2. Files whose names should be changed in derived works as requested
+   by clause 1 of GUST-FONT-LICENSE.txt
+
+   doc/fonts/lm/MANIFEST-Latin-Modern.txt
+   doc/fonts/lm/README-Latin-Modern.txt
+   doc/fonts/lm/lm-hist.txt
+   doc/fonts/lm/lm-info.pdf
+   doc/fonts/lm/tstlmot1.tex
+   doc/fonts/lm/tstlmot1.pdf
+   doc/fonts/lm/tstlmot4.tex
+   doc/fonts/lm/tstlmot4.pdf
+   doc/fonts/lm/tstlmqx.tex
+   doc/fonts/lm/tstlmqx.pdf
+   doc/fonts/lm/tstlmt1.tex
+   doc/fonts/lm/tstlmt1.pdf
+   doc/fonts/lm/tstlmts1.tex
+   doc/fonts/lm/tstlmts1.pdf
+   fonts/afm/public/lm/lmb10.afm
+   fonts/afm/public/lm/lmbo10.afm
+   fonts/afm/public/lm/lmbsy10.afm
+   fonts/afm/public/lm/lmbsy10.aft
+   fonts/afm/public/lm/lmbsy5.afm
+   fonts/afm/public/lm/lmbsy5.aft
+   fonts/afm/public/lm/lmbsy7.afm
+   fonts/afm/public/lm/lmbsy7.aft
+   fonts/afm/public/lm/lmbx10.afm
+   fonts/afm/public/lm/lmbx12.afm
+   fonts/afm/public/lm/lmbx5.afm
+   fonts/afm/public/lm/lmbx6.afm
+   fonts/afm/public/lm/lmbx7.afm
+   fonts/afm/public/lm/lmbx8.afm
+   fonts/afm/public/lm/lmbx9.afm
+   fonts/afm/public/lm/lmbxi10.afm
+   fonts/afm/public/lm/lmbxo10.afm
+   fonts/afm/public/lm/lmcsc10.afm
+   fonts/afm/public/lm/lmcsco10.afm
+   fonts/afm/public/lm/lmdunh10.afm
+   fonts/afm/public/lm/lmduno10.afm
+   fonts/afm/public/lm/lmex10.afm
+   fonts/afm/public/lm/lmex10.aft
+   fonts/afm/public/lm/lmmi10.afm
+   fonts/afm/public/lm/lmmi10.aft
+   fonts/afm/public/lm/lmmi12.afm
+   fonts/afm/public/lm/lmmi12.aft
+   fonts/afm/public/lm/lmmi5.afm
+   fonts/afm/public/lm/lmmi5.aft
+   fonts/afm/public/lm/lmmi6.afm
+   fonts/afm/public/lm/lmmi6.aft
+   fonts/afm/public/lm/lmmi7.afm
+   fonts/afm/public/lm/lmmi7.aft
+   fonts/afm/public/lm/lmmi8.afm
+   fonts/afm/public/lm/lmmi8.aft
+   fonts/afm/public/lm/lmmi9.afm
+   fonts/afm/public/lm/lmmi9.aft
+   fonts/afm/public/lm/lmmib10.afm
+   fonts/afm/public/lm/lmmib10.aft
+   fonts/afm/public/lm/lmmib5.afm
+   fonts/afm/public/lm/lmmib5.aft
+   fonts/afm/public/lm/lmmib7.afm
+   fonts/afm/public/lm/lmmib7.aft
+   fonts/afm/public/lm/lmr10.afm
+   fonts/afm/public/lm/lmr12.afm
+   fonts/afm/public/lm/lmr17.afm
+   fonts/afm/public/lm/lmr5.afm
+   fonts/afm/public/lm/lmr6.afm
+   fonts/afm/public/lm/lmr7.afm
+   fonts/afm/public/lm/lmr8.afm
+   fonts/afm/public/lm/lmr9.afm
+   fonts/afm/public/lm/lmri10.afm
+   fonts/afm/public/lm/lmri12.afm
+   fonts/afm/public/lm/lmri7.afm
+   fonts/afm/public/lm/lmri8.afm
+   fonts/afm/public/lm/lmri9.afm
+   fonts/afm/public/lm/lmro10.afm
+   fonts/afm/public/lm/lmro12.afm
+   fonts/afm/public/lm/lmro17.afm
+   fonts/afm/public/lm/lmro8.afm
+   fonts/afm/public/lm/lmro9.afm
+   fonts/afm/public/lm/lmss10.afm
+   fonts/afm/public/lm/lmss12.afm
+   fonts/afm/public/lm/lmss17.afm
+   fonts/afm/public/lm/lmss8.afm
+   fonts/afm/public/lm/lmss9.afm
+   fonts/afm/public/lm/lmssbo10.afm
+   fonts/afm/public/lm/lmssbx10.afm
+   fonts/afm/public/lm/lmssdc10.afm
+   fonts/afm/public/lm/lmssdo10.afm
+   fonts/afm/public/lm/lmsso10.afm
+   fonts/afm/public/lm/lmsso12.afm
+   fonts/afm/public/lm/lmsso17.afm
+   fonts/afm/public/lm/lmsso8.afm
+   fonts/afm/public/lm/lmsso9.afm
+   fonts/afm/public/lm/lmssq8.afm
+   fonts/afm/public/lm/lmssqbo8.afm
+   fonts/afm/public/lm/lmssqbx8.afm
+   fonts/afm/public/lm/lmssqo8.afm
+   fonts/afm/public/lm/lmsy10.afm
+   fonts/afm/public/lm/lmsy10.aft
+   fonts/afm/public/lm/lmsy5.afm
+   fonts/afm/public/lm/lmsy5.aft
+   fonts/afm/public/lm/lmsy6.afm
+   fonts/afm/public/lm/lmsy6.aft
+   fonts/afm/public/lm/lmsy7.afm
+   fonts/afm/public/lm/lmsy7.aft
+   fonts/afm/public/lm/lmsy8.afm
+   fonts/afm/public/lm/lmsy8.aft
+   fonts/afm/public/lm/lmsy9.afm
+   fonts/afm/public/lm/lmsy9.aft
+   fonts/afm/public/lm/lmtcsc10.afm
+   fonts/afm/public/lm/lmtcso10.afm
+   fonts/afm/public/lm/lmtk10.afm
+   fonts/afm/public/lm/lmtko10.afm
+   fonts/afm/public/lm/lmtl10.afm
+   fonts/afm/public/lm/lmtlc10.afm
+   fonts/afm/public/lm/lmtlco10.afm
+   fonts/afm/public/lm/lmtlo10.afm
+   fonts/afm/public/lm/lmtt10.afm
+   fonts/afm/public/lm/lmtt12.afm
+   fonts/afm/public/lm/lmtt8.afm
+   fonts/afm/public/lm/lmtt9.afm
+   fonts/afm/public/lm/lmtti10.afm
+   fonts/afm/public/lm/lmtto10.afm
+   fonts/afm/public/lm/lmu10.afm
+   fonts/afm/public/lm/lmvtk10.afm
+   fonts/afm/public/lm/lmvtko10.afm
+   fonts/afm/public/lm/lmvtl10.afm
+   fonts/afm/public/lm/lmvtlo10.afm
+   fonts/afm/public/lm/lmvtt10.afm
+   fonts/afm/public/lm/lmvtto10.afm
+   fonts/enc/dvips/lm/lm-cs.enc
+   fonts/enc/dvips/lm/lm-cssc.enc
+   fonts/enc/dvips/lm/lm-cstt.enc
+   fonts/enc/dvips/lm/lm-ec.enc
+   fonts/enc/dvips/lm/lm-l7x.enc
+   fonts/enc/dvips/lm/lm-mathex.enc
+   fonts/enc/dvips/lm/lm-mathit.enc
+   fonts/enc/dvips/lm/lm-mathsy.enc
+   fonts/enc/dvips/lm/lm-qx.enc
+   fonts/enc/dvips/lm/lm-qxtt.enc
+   fonts/enc/dvips/lm/lm-rep-cstt.enc
+   fonts/enc/dvips/lm/lm-rep-t5psn.enc
+   fonts/enc/dvips/lm/lm-rep-cmin.enc
+   fonts/enc/dvips/lm/lm-rep-cmit.enc
+   fonts/enc/dvips/lm/lm-rep-cmitt.enc
+   fonts/enc/dvips/lm/lm-rep-cmrm.enc
+   fonts/enc/dvips/lm/lm-rep-cmsc.enc
+   fonts/enc/dvips/lm/lm-rep-cmtt.enc
+   fonts/enc/dvips/lm/lm-rep-csin.enc
+   fonts/enc/dvips/lm/lm-rep-csrm.enc
+   fonts/enc/dvips/lm/lm-rep-cssc.enc
+   fonts/enc/dvips/lm/lm-rep-plin.enc
+   fonts/enc/dvips/lm/lm-rep-plit.enc
+   fonts/enc/dvips/lm/lm-rep-plitt.enc
+   fonts/enc/dvips/lm/lm-rep-plrm.enc
+   fonts/enc/dvips/lm/lm-rep-plsc.enc
+   fonts/enc/dvips/lm/lm-rep-pltt.enc
+   fonts/enc/dvips/lm/lm-rm.enc
+   fonts/enc/dvips/lm/lm-t5.enc
+   fonts/enc/dvips/lm/lm-texnansi.enc
+   fonts/enc/dvips/lm/lm-ts1.enc
+   fonts/map/dvipdfm/lm/lm-ec.map
+   fonts/map/dvipdfm/lm/lm-math.map
+   fonts/map/dvipdfm/lm/lm-rm.map
+   fonts/map/dvipdfm/lm/lm-texnansi.map
+   fonts/map/dvips/lm/lm.map
+   fonts/map/dvips/lm/lm-cs.map
+   fonts/map/dvips/lm/lm-ec.map
+   fonts/map/dvips/lm/lm-l7x.map
+   fonts/map/dvips/lm/lm-math.map
+   fonts/map/dvips/lm/lm-qx.map
+   fonts/map/dvips/lm/lm-rep-cmtext.map
+   fonts/map/dvips/lm/lm-rep-cmtext-interpolated.map
+   fonts/map/dvips/lm/lm-rep-cstext.map
+   fonts/map/dvips/lm/lm-rep-pltext.map
+   fonts/map/dvips/lm/lm-rep-vntext.map
+   fonts/map/dvips/lm/lm-rep-cmother.map
+   fonts/map/dvips/lm/lm-rm.map
+   fonts/map/dvips/lm/lm-t5.map
+   fonts/map/dvips/lm/lm-texnansi.map
+   fonts/map/dvips/lm/lm-ts1.map
+   fonts/opentype/public/lm/lmmono10-italic.otf
+   fonts/opentype/public/lm/lmmono10-regular.otf
+   fonts/opentype/public/lm/lmmono12-regular.otf
+   fonts/opentype/public/lm/lmmono8-regular.otf
+   fonts/opentype/public/lm/lmmono9-regular.otf
+   fonts/opentype/public/lm/lmmonocaps10-oblique.otf
+   fonts/opentype/public/lm/lmmonocaps10-regular.otf
+   fonts/opentype/public/lm/lmmonolt10-bold.otf
+   fonts/opentype/public/lm/lmmonolt10-boldoblique.otf
+   fonts/opentype/public/lm/lmmonolt10-oblique.otf
+   fonts/opentype/public/lm/lmmonolt10-regular.otf
+   fonts/opentype/public/lm/lmmonoltcond10-oblique.otf
+   fonts/opentype/public/lm/lmmonoltcond10-regular.otf
+   fonts/opentype/public/lm/lmmonoprop10-oblique.otf
+   fonts/opentype/public/lm/lmmonoprop10-regular.otf
+   fonts/opentype/public/lm/lmmonoproplt10-bold.otf
+   fonts/opentype/public/lm/lmmonoproplt10-boldoblique.otf
+   fonts/opentype/public/lm/lmmonoproplt10-oblique.otf
+   fonts/opentype/public/lm/lmmonoproplt10-regular.otf
+   fonts/opentype/public/lm/lmmonoslant10-regular.otf
+   fonts/opentype/public/lm/lmroman10-bold.otf
+   fonts/opentype/public/lm/lmroman10-bolditalic.otf
+   fonts/opentype/public/lm/lmroman10-italic.otf
+   fonts/opentype/public/lm/lmroman10-regular.otf
+   fonts/opentype/public/lm/lmroman12-bold.otf
+   fonts/opentype/public/lm/lmroman12-italic.otf
+   fonts/opentype/public/lm/lmroman12-regular.otf
+   fonts/opentype/public/lm/lmroman17-regular.otf
+   fonts/opentype/public/lm/lmroman5-bold.otf
+   fonts/opentype/public/lm/lmroman5-regular.otf
+   fonts/opentype/public/lm/lmroman6-bold.otf
+   fonts/opentype/public/lm/lmroman6-regular.otf
+   fonts/opentype/public/lm/lmroman7-bold.otf
+   fonts/opentype/public/lm/lmroman7-italic.otf
+   fonts/opentype/public/lm/lmroman7-regular.otf
+   fonts/opentype/public/lm/lmroman8-bold.otf
+   fonts/opentype/public/lm/lmroman8-italic.otf
+   fonts/opentype/public/lm/lmroman8-regular.otf
+   fonts/opentype/public/lm/lmroman9-bold.otf
+   fonts/opentype/public/lm/lmroman9-italic.otf
+   fonts/opentype/public/lm/lmroman9-regular.otf
+   fonts/opentype/public/lm/lmromancaps10-oblique.otf
+   fonts/opentype/public/lm/lmromancaps10-regular.otf
+   fonts/opentype/public/lm/lmromandemi10-oblique.otf
+   fonts/opentype/public/lm/lmromandemi10-regular.otf
+   fonts/opentype/public/lm/lmromandunh10-oblique.otf
+   fonts/opentype/public/lm/lmromandunh10-regular.otf
+   fonts/opentype/public/lm/lmromanslant10-bold.otf
+   fonts/opentype/public/lm/lmromanslant10-regular.otf
+   fonts/opentype/public/lm/lmromanslant12-regular.otf
+   fonts/opentype/public/lm/lmromanslant17-regular.otf
+   fonts/opentype/public/lm/lmromanslant8-regular.otf
+   fonts/opentype/public/lm/lmromanslant9-regular.otf
+   fonts/opentype/public/lm/lmromanunsl10-regular.otf
+   fonts/opentype/public/lm/lmsans10-bold.otf
+   fonts/opentype/public/lm/lmsans10-boldoblique.otf
+   fonts/opentype/public/lm/lmsans10-oblique.otf
+   fonts/opentype/public/lm/lmsans10-regular.otf
+   fonts/opentype/public/lm/lmsans12-oblique.otf
+   fonts/opentype/public/lm/lmsans12-regular.otf
+   fonts/opentype/public/lm/lmsans17-oblique.otf
+   fonts/opentype/public/lm/lmsans17-regular.otf
+   fonts/opentype/public/lm/lmsans8-oblique.otf
+   fonts/opentype/public/lm/lmsans8-regular.otf
+   fonts/opentype/public/lm/lmsans9-oblique.otf
+   fonts/opentype/public/lm/lmsans9-regular.otf
+   fonts/opentype/public/lm/lmsansdemicond10-oblique.otf
+   fonts/opentype/public/lm/lmsansdemicond10-regular.otf
+   fonts/opentype/public/lm/lmsansquot8-bold.otf
+   fonts/opentype/public/lm/lmsansquot8-boldoblique.otf
+   fonts/opentype/public/lm/lmsansquot8-oblique.otf
+   fonts/opentype/public/lm/lmsansquot8-regular.otf
+   fonts/tfm/public/lm/cs-lmb10.tfm
+   fonts/tfm/public/lm/cs-lmbx5.tfm
+   fonts/tfm/public/lm/cs-lmbx6.tfm
+   fonts/tfm/public/lm/cs-lmbx7.tfm
+   fonts/tfm/public/lm/cs-lmbx8.tfm
+   fonts/tfm/public/lm/cs-lmbx9.tfm
+   fonts/tfm/public/lm/cs-lmbo10.tfm
+   fonts/tfm/public/lm/cs-lmbx10.tfm
+   fonts/tfm/public/lm/cs-lmbx12.tfm
+   fonts/tfm/public/lm/cs-lmbxi10.tfm
+   fonts/tfm/public/lm/cs-lmbxo10.tfm
+   fonts/tfm/public/lm/cs-lmcsc10.tfm
+   fonts/tfm/public/lm/cs-lmcsco10.tfm
+   fonts/tfm/public/lm/cs-lmdunh10.tfm
+   fonts/tfm/public/lm/cs-lmduno10.tfm
+   fonts/tfm/public/lm/cs-lmr10.tfm
+   fonts/tfm/public/lm/cs-lmr12.tfm
+   fonts/tfm/public/lm/cs-lmr17.tfm
+   fonts/tfm/public/lm/cs-lmr5.tfm
+   fonts/tfm/public/lm/cs-lmr6.tfm
+   fonts/tfm/public/lm/cs-lmr7.tfm
+   fonts/tfm/public/lm/cs-lmr8.tfm
+   fonts/tfm/public/lm/cs-lmr9.tfm
+   fonts/tfm/public/lm/cs-lmri7.tfm
+   fonts/tfm/public/lm/cs-lmri8.tfm
+   fonts/tfm/public/lm/cs-lmri9.tfm
+   fonts/tfm/public/lm/cs-lmro8.tfm
+   fonts/tfm/public/lm/cs-lmro9.tfm
+   fonts/tfm/public/lm/cs-lmri10.tfm
+   fonts/tfm/public/lm/cs-lmri12.tfm
+   fonts/tfm/public/lm/cs-lmro10.tfm
+   fonts/tfm/public/lm/cs-lmro12.tfm
+   fonts/tfm/public/lm/cs-lmro17.tfm
+   fonts/tfm/public/lm/cs-lmss8.tfm
+   fonts/tfm/public/lm/cs-lmss9.tfm
+   fonts/tfm/public/lm/cs-lmss10.tfm
+   fonts/tfm/public/lm/cs-lmss12.tfm
+   fonts/tfm/public/lm/cs-lmss17.tfm
+   fonts/tfm/public/lm/cs-lmssbo10.tfm
+   fonts/tfm/public/lm/cs-lmssbx10.tfm
+   fonts/tfm/public/lm/cs-lmssdc10.tfm
+   fonts/tfm/public/lm/cs-lmssdo10.tfm
+   fonts/tfm/public/lm/cs-lmsso10.tfm
+   fonts/tfm/public/lm/cs-lmsso12.tfm
+   fonts/tfm/public/lm/cs-lmtt8.tfm
+   fonts/tfm/public/lm/cs-lmtt9.tfm
+   fonts/tfm/public/lm/cs-lmtcsc10.tfm
+   fonts/tfm/public/lm/cs-lmtcso10.tfm
+   fonts/tfm/public/lm/cs-lmtl10.tfm
+   fonts/tfm/public/lm/cs-lmtlo10.tfm
+   fonts/tfm/public/lm/cs-lmtlc10.tfm
+   fonts/tfm/public/lm/cs-lmtlco10.tfm
+   fonts/tfm/public/lm/cs-lmtk10.tfm
+   fonts/tfm/public/lm/cs-lmtko10.tfm
+   fonts/tfm/public/lm/cs-lmtt10.tfm
+   fonts/tfm/public/lm/cs-lmu10.tfm
+   fonts/tfm/public/lm/cs-lmvtt10.tfm
+   fonts/tfm/public/lm/cs-lmvtto10.tfm
+   fonts/tfm/public/lm/cs-lmvtl10.tfm
+   fonts/tfm/public/lm/cs-lmvtlo10.tfm
+   fonts/tfm/public/lm/cs-lmvtk10.tfm
+   fonts/tfm/public/lm/cs-lmvtko10.tfm
+   fonts/tfm/public/lm/cs-lmsso17.tfm
+   fonts/tfm/public/lm/cs-lmsso8.tfm
+   fonts/tfm/public/lm/cs-lmsso9.tfm
+   fonts/tfm/public/lm/cs-lmssq8.tfm
+   fonts/tfm/public/lm/cs-lmssqbo8.tfm
+   fonts/tfm/public/lm/cs-lmssqbx8.tfm
+   fonts/tfm/public/lm/cs-lmssqo8.tfm
+   fonts/tfm/public/lm/cs-lmtt12.tfm
+   fonts/tfm/public/lm/cs-lmtti10.tfm
+   fonts/tfm/public/lm/cs-lmtto10.tfm
+   fonts/tfm/public/lm/ec-lmb10.tfm
+   fonts/tfm/public/lm/ec-lmbx5.tfm
+   fonts/tfm/public/lm/ec-lmbx6.tfm
+   fonts/tfm/public/lm/ec-lmbx7.tfm
+   fonts/tfm/public/lm/ec-lmbx8.tfm
+   fonts/tfm/public/lm/ec-lmbx9.tfm
+   fonts/tfm/public/lm/ec-lmbo10.tfm
+   fonts/tfm/public/lm/ec-lmbx10.tfm
+   fonts/tfm/public/lm/ec-lmbx12.tfm
+   fonts/tfm/public/lm/ec-lmbxi10.tfm
+   fonts/tfm/public/lm/ec-lmbxo10.tfm
+   fonts/tfm/public/lm/ec-lmcsc10.tfm
+   fonts/tfm/public/lm/ec-lmcsco10.tfm
+   fonts/tfm/public/lm/ec-lmdunh10.tfm
+   fonts/tfm/public/lm/ec-lmduno10.tfm
+   fonts/tfm/public/lm/ec-lmr10.tfm
+   fonts/tfm/public/lm/ec-lmr12.tfm
+   fonts/tfm/public/lm/ec-lmr17.tfm
+   fonts/tfm/public/lm/ec-lmr5.tfm
+   fonts/tfm/public/lm/ec-lmr6.tfm
+   fonts/tfm/public/lm/ec-lmr7.tfm
+   fonts/tfm/public/lm/ec-lmr8.tfm
+   fonts/tfm/public/lm/ec-lmr9.tfm
+   fonts/tfm/public/lm/ec-lmri7.tfm
+   fonts/tfm/public/lm/ec-lmri8.tfm
+   fonts/tfm/public/lm/ec-lmri9.tfm
+   fonts/tfm/public/lm/ec-lmro8.tfm
+   fonts/tfm/public/lm/ec-lmro9.tfm
+   fonts/tfm/public/lm/ec-lmri10.tfm
+   fonts/tfm/public/lm/ec-lmri12.tfm
+   fonts/tfm/public/lm/ec-lmro10.tfm
+   fonts/tfm/public/lm/ec-lmro12.tfm
+   fonts/tfm/public/lm/ec-lmro17.tfm
+   fonts/tfm/public/lm/ec-lmss8.tfm
+   fonts/tfm/public/lm/ec-lmss9.tfm
+   fonts/tfm/public/lm/ec-lmss10.tfm
+   fonts/tfm/public/lm/ec-lmss12.tfm
+   fonts/tfm/public/lm/ec-lmss17.tfm
+   fonts/tfm/public/lm/ec-lmssbo10.tfm
+   fonts/tfm/public/lm/ec-lmssbx10.tfm
+   fonts/tfm/public/lm/ec-lmssdc10.tfm
+   fonts/tfm/public/lm/ec-lmssdo10.tfm
+   fonts/tfm/public/lm/ec-lmsso10.tfm
+   fonts/tfm/public/lm/ec-lmsso12.tfm
+   fonts/tfm/public/lm/ec-lmtt8.tfm
+   fonts/tfm/public/lm/ec-lmtt9.tfm
+   fonts/tfm/public/lm/ec-lmtcsc10.tfm
+   fonts/tfm/public/lm/ec-lmtcso10.tfm
+   fonts/tfm/public/lm/ec-lmtl10.tfm
+   fonts/tfm/public/lm/ec-lmtlo10.tfm
+   fonts/tfm/public/lm/ec-lmtlc10.tfm
+   fonts/tfm/public/lm/ec-lmtlco10.tfm
+   fonts/tfm/public/lm/ec-lmtk10.tfm
+   fonts/tfm/public/lm/ec-lmtko10.tfm
+   fonts/tfm/public/lm/ec-lmtt10.tfm
+   fonts/tfm/public/lm/ec-lmu10.tfm
+   fonts/tfm/public/lm/ec-lmvtt10.tfm
+   fonts/tfm/public/lm/ec-lmvtto10.tfm
+   fonts/tfm/public/lm/ec-lmvtl10.tfm
+   fonts/tfm/public/lm/ec-lmvtlo10.tfm
+   fonts/tfm/public/lm/ec-lmvtk10.tfm
+   fonts/tfm/public/lm/ec-lmvtko10.tfm
+   fonts/tfm/public/lm/ec-lmsso17.tfm
+   fonts/tfm/public/lm/ec-lmsso8.tfm
+   fonts/tfm/public/lm/ec-lmsso9.tfm
+   fonts/tfm/public/lm/ec-lmssq8.tfm
+   fonts/tfm/public/lm/ec-lmssqbo8.tfm
+   fonts/tfm/public/lm/ec-lmssqbx8.tfm
+   fonts/tfm/public/lm/ec-lmssqo8.tfm
+   fonts/tfm/public/lm/ec-lmtt12.tfm
+   fonts/tfm/public/lm/ec-lmtti10.tfm
+   fonts/tfm/public/lm/ec-lmtto10.tfm
+   fonts/tfm/public/lm/l7x-lmr5.tfm
+   fonts/tfm/public/lm/l7x-lmr6.tfm
+   fonts/tfm/public/lm/l7x-lmr7.tfm
+   fonts/tfm/public/lm/l7x-lmr8.tfm
+   fonts/tfm/public/lm/l7x-lmr9.tfm
+   fonts/tfm/public/lm/l7x-lmb10.tfm
+   fonts/tfm/public/lm/l7x-lmbo10.tfm
+   fonts/tfm/public/lm/l7x-lmbx10.tfm
+   fonts/tfm/public/lm/l7x-lmbx12.tfm
+   fonts/tfm/public/lm/l7x-lmbx5.tfm
+   fonts/tfm/public/lm/l7x-lmbx6.tfm
+   fonts/tfm/public/lm/l7x-lmbx7.tfm
+   fonts/tfm/public/lm/l7x-lmbx8.tfm
+   fonts/tfm/public/lm/l7x-lmbx9.tfm
+   fonts/tfm/public/lm/l7x-lmbxi10.tfm
+   fonts/tfm/public/lm/l7x-lmbxo10.tfm
+   fonts/tfm/public/lm/l7x-lmcsc10.tfm
+   fonts/tfm/public/lm/l7x-lmcsco10.tfm
+   fonts/tfm/public/lm/l7x-lmdunh10.tfm
+   fonts/tfm/public/lm/l7x-lmduno10.tfm
+   fonts/tfm/public/lm/l7x-lmr10.tfm
+   fonts/tfm/public/lm/l7x-lmr12.tfm
+   fonts/tfm/public/lm/l7x-lmr17.tfm
+   fonts/tfm/public/lm/l7x-lmri10.tfm
+   fonts/tfm/public/lm/l7x-lmri12.tfm
+   fonts/tfm/public/lm/l7x-lmri7.tfm
+   fonts/tfm/public/lm/l7x-lmri8.tfm
+   fonts/tfm/public/lm/l7x-lmri9.tfm
+   fonts/tfm/public/lm/l7x-lmro10.tfm
+   fonts/tfm/public/lm/l7x-lmro12.tfm
+   fonts/tfm/public/lm/l7x-lmro17.tfm
+   fonts/tfm/public/lm/l7x-lmro8.tfm
+   fonts/tfm/public/lm/l7x-lmro9.tfm
+   fonts/tfm/public/lm/l7x-lmss10.tfm
+   fonts/tfm/public/lm/l7x-lmss12.tfm
+   fonts/tfm/public/lm/l7x-lmss17.tfm
+   fonts/tfm/public/lm/l7x-lmss8.tfm
+   fonts/tfm/public/lm/l7x-lmss9.tfm
+   fonts/tfm/public/lm/l7x-lmssbo10.tfm
+   fonts/tfm/public/lm/l7x-lmssbx10.tfm
+   fonts/tfm/public/lm/l7x-lmssdc10.tfm
+   fonts/tfm/public/lm/l7x-lmssdo10.tfm
+   fonts/tfm/public/lm/l7x-lmsso10.tfm
+   fonts/tfm/public/lm/l7x-lmsso12.tfm
+   fonts/tfm/public/lm/l7x-lmsso17.tfm
+   fonts/tfm/public/lm/l7x-lmsso8.tfm
+   fonts/tfm/public/lm/l7x-lmsso9.tfm
+   fonts/tfm/public/lm/l7x-lmssq8.tfm
+   fonts/tfm/public/lm/l7x-lmssqbo8.tfm
+   fonts/tfm/public/lm/l7x-lmssqbx8.tfm
+   fonts/tfm/public/lm/l7x-lmssqo8.tfm
+   fonts/tfm/public/lm/l7x-lmtcsc10.tfm
+   fonts/tfm/public/lm/l7x-lmtcso10.tfm
+   fonts/tfm/public/lm/l7x-lmtl10.tfm
+   fonts/tfm/public/lm/l7x-lmtlo10.tfm
+   fonts/tfm/public/lm/l7x-lmtlc10.tfm
+   fonts/tfm/public/lm/l7x-lmtlco10.tfm
+   fonts/tfm/public/lm/l7x-lmtk10.tfm
+   fonts/tfm/public/lm/l7x-lmtko10.tfm
+   fonts/tfm/public/lm/l7x-lmtt10.tfm
+   fonts/tfm/public/lm/l7x-lmtt12.tfm
+   fonts/tfm/public/lm/l7x-lmtt8.tfm
+   fonts/tfm/public/lm/l7x-lmtt9.tfm
+   fonts/tfm/public/lm/l7x-lmtti10.tfm
+   fonts/tfm/public/lm/l7x-lmtto10.tfm
+   fonts/tfm/public/lm/l7x-lmu10.tfm
+   fonts/tfm/public/lm/l7x-lmvtt10.tfm
+   fonts/tfm/public/lm/l7x-lmvtto10.tfm
+   fonts/tfm/public/lm/l7x-lmvtl10.tfm
+   fonts/tfm/public/lm/l7x-lmvtlo10.tfm
+   fonts/tfm/public/lm/l7x-lmvtk10.tfm
+   fonts/tfm/public/lm/l7x-lmvtko10.tfm
+   fonts/tfm/public/lm/lmbsy10.tfm
+   fonts/tfm/public/lm/lmbsy5.tfm
+   fonts/tfm/public/lm/lmbsy7.tfm
+   fonts/tfm/public/lm/lmex10.tfm
+   fonts/tfm/public/lm/lmmi10.tfm
+   fonts/tfm/public/lm/lmmi12.tfm
+   fonts/tfm/public/lm/lmmi5.tfm
+   fonts/tfm/public/lm/lmmi6.tfm
+   fonts/tfm/public/lm/lmmi7.tfm
+   fonts/tfm/public/lm/lmmi8.tfm
+   fonts/tfm/public/lm/lmmi9.tfm
+   fonts/tfm/public/lm/lmmib10.tfm
+   fonts/tfm/public/lm/lmmib5.tfm
+   fonts/tfm/public/lm/lmmib7.tfm
+   fonts/tfm/public/lm/lmsy10.tfm
+   fonts/tfm/public/lm/lmsy5.tfm
+   fonts/tfm/public/lm/lmsy6.tfm
+   fonts/tfm/public/lm/lmsy7.tfm
+   fonts/tfm/public/lm/lmsy8.tfm
+   fonts/tfm/public/lm/lmsy9.tfm
+   fonts/tfm/public/lm/qx-lmb10.tfm
+   fonts/tfm/public/lm/qx-lmbx5.tfm
+   fonts/tfm/public/lm/qx-lmbx6.tfm
+   fonts/tfm/public/lm/qx-lmbx7.tfm
+   fonts/tfm/public/lm/qx-lmbx8.tfm
+   fonts/tfm/public/lm/qx-lmbx9.tfm
+   fonts/tfm/public/lm/qx-lmbo10.tfm
+   fonts/tfm/public/lm/qx-lmbx10.tfm
+   fonts/tfm/public/lm/qx-lmbx12.tfm
+   fonts/tfm/public/lm/qx-lmbxi10.tfm
+   fonts/tfm/public/lm/qx-lmbxo10.tfm
+   fonts/tfm/public/lm/qx-lmcsc10.tfm
+   fonts/tfm/public/lm/qx-lmcsco10.tfm
+   fonts/tfm/public/lm/qx-lmdunh10.tfm
+   fonts/tfm/public/lm/qx-lmduno10.tfm
+   fonts/tfm/public/lm/qx-lmr10.tfm
+   fonts/tfm/public/lm/qx-lmr12.tfm
+   fonts/tfm/public/lm/qx-lmr17.tfm
+   fonts/tfm/public/lm/qx-lmr5.tfm
+   fonts/tfm/public/lm/qx-lmr6.tfm
+   fonts/tfm/public/lm/qx-lmr7.tfm
+   fonts/tfm/public/lm/qx-lmr8.tfm
+   fonts/tfm/public/lm/qx-lmr9.tfm
+   fonts/tfm/public/lm/qx-lmri7.tfm
+   fonts/tfm/public/lm/qx-lmri8.tfm
+   fonts/tfm/public/lm/qx-lmri9.tfm
+   fonts/tfm/public/lm/qx-lmro8.tfm
+   fonts/tfm/public/lm/qx-lmro9.tfm
+   fonts/tfm/public/lm/qx-lmri10.tfm
+   fonts/tfm/public/lm/qx-lmri12.tfm
+   fonts/tfm/public/lm/qx-lmro10.tfm
+   fonts/tfm/public/lm/qx-lmro12.tfm
+   fonts/tfm/public/lm/qx-lmro17.tfm
+   fonts/tfm/public/lm/qx-lmss8.tfm
+   fonts/tfm/public/lm/qx-lmss9.tfm
+   fonts/tfm/public/lm/qx-lmss10.tfm
+   fonts/tfm/public/lm/qx-lmss12.tfm
+   fonts/tfm/public/lm/qx-lmss17.tfm
+   fonts/tfm/public/lm/qx-lmssbo10.tfm
+   fonts/tfm/public/lm/qx-lmssbx10.tfm
+   fonts/tfm/public/lm/qx-lmssdc10.tfm
+   fonts/tfm/public/lm/qx-lmssdo10.tfm
+   fonts/tfm/public/lm/qx-lmsso10.tfm
+   fonts/tfm/public/lm/qx-lmsso12.tfm
+   fonts/tfm/public/lm/qx-lmtt8.tfm
+   fonts/tfm/public/lm/qx-lmtt9.tfm
+   fonts/tfm/public/lm/qx-lmtcsc10.tfm
+   fonts/tfm/public/lm/qx-lmtcso10.tfm
+   fonts/tfm/public/lm/qx-lmtl10.tfm
+   fonts/tfm/public/lm/qx-lmtlo10.tfm
+   fonts/tfm/public/lm/qx-lmtlc10.tfm
+   fonts/tfm/public/lm/qx-lmtlco10.tfm
+   fonts/tfm/public/lm/qx-lmtk10.tfm
+   fonts/tfm/public/lm/qx-lmtko10.tfm
+   fonts/tfm/public/lm/qx-lmtt10.tfm
+   fonts/tfm/public/lm/qx-lmu10.tfm
+   fonts/tfm/public/lm/qx-lmvtt10.tfm
+   fonts/tfm/public/lm/qx-lmvtto10.tfm
+   fonts/tfm/public/lm/qx-lmvtl10.tfm
+   fonts/tfm/public/lm/qx-lmvtlo10.tfm
+   fonts/tfm/public/lm/qx-lmvtk10.tfm
+   fonts/tfm/public/lm/qx-lmvtko10.tfm
+   fonts/tfm/public/lm/qx-lmsso17.tfm
+   fonts/tfm/public/lm/qx-lmsso8.tfm
+   fonts/tfm/public/lm/qx-lmsso9.tfm
+   fonts/tfm/public/lm/qx-lmssq8.tfm
+   fonts/tfm/public/lm/qx-lmssqbo8.tfm
+   fonts/tfm/public/lm/qx-lmssqbx8.tfm
+   fonts/tfm/public/lm/qx-lmssqo8.tfm
+   fonts/tfm/public/lm/qx-lmtt12.tfm
+   fonts/tfm/public/lm/qx-lmtti10.tfm
+   fonts/tfm/public/lm/qx-lmtto10.tfm
+   fonts/tfm/public/lm/rm-lmb10.tfm
+   fonts/tfm/public/lm/rm-lmbx5.tfm
+   fonts/tfm/public/lm/rm-lmbx6.tfm
+   fonts/tfm/public/lm/rm-lmbx7.tfm
+   fonts/tfm/public/lm/rm-lmbx8.tfm
+   fonts/tfm/public/lm/rm-lmbx9.tfm
+   fonts/tfm/public/lm/rm-lmbo10.tfm
+   fonts/tfm/public/lm/rm-lmbx10.tfm
+   fonts/tfm/public/lm/rm-lmbx12.tfm
+   fonts/tfm/public/lm/rm-lmbxi10.tfm
+   fonts/tfm/public/lm/rm-lmbxo10.tfm
+   fonts/tfm/public/lm/rm-lmcsc10.tfm
+   fonts/tfm/public/lm/rm-lmcsco10.tfm
+   fonts/tfm/public/lm/rm-lmdunh10.tfm
+   fonts/tfm/public/lm/rm-lmduno10.tfm
+   fonts/tfm/public/lm/rm-lmr10.tfm
+   fonts/tfm/public/lm/rm-lmr12.tfm
+   fonts/tfm/public/lm/rm-lmr17.tfm
+   fonts/tfm/public/lm/rm-lmr5.tfm
+   fonts/tfm/public/lm/rm-lmr6.tfm
+   fonts/tfm/public/lm/rm-lmr7.tfm
+   fonts/tfm/public/lm/rm-lmr8.tfm
+   fonts/tfm/public/lm/rm-lmr9.tfm
+   fonts/tfm/public/lm/rm-lmri7.tfm
+   fonts/tfm/public/lm/rm-lmri8.tfm
+   fonts/tfm/public/lm/rm-lmri9.tfm
+   fonts/tfm/public/lm/rm-lmro8.tfm
+   fonts/tfm/public/lm/rm-lmro9.tfm
+   fonts/tfm/public/lm/rm-lmri10.tfm
+   fonts/tfm/public/lm/rm-lmri12.tfm
+   fonts/tfm/public/lm/rm-lmro10.tfm
+   fonts/tfm/public/lm/rm-lmro12.tfm
+   fonts/tfm/public/lm/rm-lmro17.tfm
+   fonts/tfm/public/lm/rm-lmss8.tfm
+   fonts/tfm/public/lm/rm-lmss9.tfm
+   fonts/tfm/public/lm/rm-lmss10.tfm
+   fonts/tfm/public/lm/rm-lmss12.tfm
+   fonts/tfm/public/lm/rm-lmss17.tfm
+   fonts/tfm/public/lm/rm-lmssbo10.tfm
+   fonts/tfm/public/lm/rm-lmssbx10.tfm
+   fonts/tfm/public/lm/rm-lmssdc10.tfm
+   fonts/tfm/public/lm/rm-lmssdo10.tfm
+   fonts/tfm/public/lm/rm-lmsso10.tfm
+   fonts/tfm/public/lm/rm-lmsso12.tfm
+   fonts/tfm/public/lm/rm-lmtt8.tfm
+   fonts/tfm/public/lm/rm-lmtt9.tfm
+   fonts/tfm/public/lm/rm-lmtcsc10.tfm
+   fonts/tfm/public/lm/rm-lmtcso10.tfm
+   fonts/tfm/public/lm/rm-lmtl10.tfm
+   fonts/tfm/public/lm/rm-lmtlo10.tfm
+   fonts/tfm/public/lm/rm-lmtlc10.tfm
+   fonts/tfm/public/lm/rm-lmtlco10.tfm
+   fonts/tfm/public/lm/rm-lmtk10.tfm
+   fonts/tfm/public/lm/rm-lmtko10.tfm
+   fonts/tfm/public/lm/rm-lmtt10.tfm
+   fonts/tfm/public/lm/rm-lmu10.tfm
+   fonts/tfm/public/lm/rm-lmvtt10.tfm
+   fonts/tfm/public/lm/rm-lmvtto10.tfm
+   fonts/tfm/public/lm/rm-lmvtl10.tfm
+   fonts/tfm/public/lm/rm-lmvtlo10.tfm
+   fonts/tfm/public/lm/rm-lmvtk10.tfm
+   fonts/tfm/public/lm/rm-lmvtko10.tfm
+   fonts/tfm/public/lm/rm-lmsso17.tfm
+   fonts/tfm/public/lm/rm-lmsso8.tfm
+   fonts/tfm/public/lm/rm-lmsso9.tfm
+   fonts/tfm/public/lm/rm-lmssq8.tfm
+   fonts/tfm/public/lm/rm-lmssqbo8.tfm
+   fonts/tfm/public/lm/rm-lmssqbx8.tfm
+   fonts/tfm/public/lm/rm-lmssqo8.tfm
+   fonts/tfm/public/lm/rm-lmtt12.tfm
+   fonts/tfm/public/lm/rm-lmtti10.tfm
+   fonts/tfm/public/lm/rm-lmtto10.tfm
+   fonts/tfm/public/lm/t5-lmb10.tfm
+   fonts/tfm/public/lm/t5-lmbx5.tfm
+   fonts/tfm/public/lm/t5-lmbx6.tfm
+   fonts/tfm/public/lm/t5-lmbx7.tfm
+   fonts/tfm/public/lm/t5-lmbx8.tfm
+   fonts/tfm/public/lm/t5-lmbx9.tfm
+   fonts/tfm/public/lm/t5-lmbo10.tfm
+   fonts/tfm/public/lm/t5-lmbx10.tfm
+   fonts/tfm/public/lm/t5-lmbx12.tfm
+   fonts/tfm/public/lm/t5-lmbxi10.tfm
+   fonts/tfm/public/lm/t5-lmbxo10.tfm
+   fonts/tfm/public/lm/t5-lmcsc10.tfm
+   fonts/tfm/public/lm/t5-lmcsco10.tfm
+   fonts/tfm/public/lm/t5-lmdunh10.tfm
+   fonts/tfm/public/lm/t5-lmduno10.tfm
+   fonts/tfm/public/lm/t5-lmr10.tfm
+   fonts/tfm/public/lm/t5-lmr12.tfm
+   fonts/tfm/public/lm/t5-lmr17.tfm
+   fonts/tfm/public/lm/t5-lmr5.tfm
+   fonts/tfm/public/lm/t5-lmr6.tfm
+   fonts/tfm/public/lm/t5-lmr7.tfm
+   fonts/tfm/public/lm/t5-lmr8.tfm
+   fonts/tfm/public/lm/t5-lmr9.tfm
+   fonts/tfm/public/lm/t5-lmri7.tfm
+   fonts/tfm/public/lm/t5-lmri8.tfm
+   fonts/tfm/public/lm/t5-lmri9.tfm
+   fonts/tfm/public/lm/t5-lmro8.tfm
+   fonts/tfm/public/lm/t5-lmro9.tfm
+   fonts/tfm/public/lm/t5-lmri10.tfm
+   fonts/tfm/public/lm/t5-lmri12.tfm
+   fonts/tfm/public/lm/t5-lmro10.tfm
+   fonts/tfm/public/lm/t5-lmro12.tfm
+   fonts/tfm/public/lm/t5-lmro17.tfm
+   fonts/tfm/public/lm/t5-lmss8.tfm
+   fonts/tfm/public/lm/t5-lmss9.tfm
+   fonts/tfm/public/lm/t5-lmss10.tfm
+   fonts/tfm/public/lm/t5-lmss12.tfm
+   fonts/tfm/public/lm/t5-lmss17.tfm
+   fonts/tfm/public/lm/t5-lmssbo10.tfm
+   fonts/tfm/public/lm/t5-lmssbx10.tfm
+   fonts/tfm/public/lm/t5-lmssdc10.tfm
+   fonts/tfm/public/lm/t5-lmssdo10.tfm
+   fonts/tfm/public/lm/t5-lmsso10.tfm
+   fonts/tfm/public/lm/t5-lmsso12.tfm
+   fonts/tfm/public/lm/t5-lmtt8.tfm
+   fonts/tfm/public/lm/t5-lmtt9.tfm
+   fonts/tfm/public/lm/t5-lmtcsc10.tfm
+   fonts/tfm/public/lm/t5-lmtcso10.tfm
+   fonts/tfm/public/lm/t5-lmtl10.tfm
+   fonts/tfm/public/lm/t5-lmtlo10.tfm
+   fonts/tfm/public/lm/t5-lmtlc10.tfm
+   fonts/tfm/public/lm/t5-lmtlco10.tfm
+   fonts/tfm/public/lm/t5-lmtk10.tfm
+   fonts/tfm/public/lm/t5-lmtko10.tfm
+   fonts/tfm/public/lm/t5-lmtt10.tfm
+   fonts/tfm/public/lm/t5-lmu10.tfm
+   fonts/tfm/public/lm/t5-lmvtt10.tfm
+   fonts/tfm/public/lm/t5-lmvtto10.tfm
+   fonts/tfm/public/lm/t5-lmvtl10.tfm
+   fonts/tfm/public/lm/t5-lmvtlo10.tfm
+   fonts/tfm/public/lm/t5-lmvtk10.tfm
+   fonts/tfm/public/lm/t5-lmvtko10.tfm
+   fonts/tfm/public/lm/t5-lmsso17.tfm
+   fonts/tfm/public/lm/t5-lmsso8.tfm
+   fonts/tfm/public/lm/t5-lmsso9.tfm
+   fonts/tfm/public/lm/t5-lmssq8.tfm
+   fonts/tfm/public/lm/t5-lmssqbo8.tfm
+   fonts/tfm/public/lm/t5-lmssqbx8.tfm
+   fonts/tfm/public/lm/t5-lmssqo8.tfm
+   fonts/tfm/public/lm/t5-lmtt12.tfm
+   fonts/tfm/public/lm/t5-lmtti10.tfm
+   fonts/tfm/public/lm/t5-lmtto10.tfm
+   fonts/tfm/public/lm/texnansi-lmb10.tfm
+   fonts/tfm/public/lm/texnansi-lmbo10.tfm
+   fonts/tfm/public/lm/texnansi-lmbx10.tfm
+   fonts/tfm/public/lm/texnansi-lmbx12.tfm
+   fonts/tfm/public/lm/texnansi-lmbx5.tfm
+   fonts/tfm/public/lm/texnansi-lmbx6.tfm
+   fonts/tfm/public/lm/texnansi-lmbx7.tfm
+   fonts/tfm/public/lm/texnansi-lmbx8.tfm
+   fonts/tfm/public/lm/texnansi-lmbx9.tfm
+   fonts/tfm/public/lm/texnansi-lmbxi10.tfm
+   fonts/tfm/public/lm/texnansi-lmbxo10.tfm
+   fonts/tfm/public/lm/texnansi-lmcsc10.tfm
+   fonts/tfm/public/lm/texnansi-lmcsco10.tfm
+   fonts/tfm/public/lm/texnansi-lmdunh10.tfm
+   fonts/tfm/public/lm/texnansi-lmduno10.tfm
+   fonts/tfm/public/lm/texnansi-lmr10.tfm
+   fonts/tfm/public/lm/texnansi-lmr12.tfm
+   fonts/tfm/public/lm/texnansi-lmr17.tfm
+   fonts/tfm/public/lm/texnansi-lmr5.tfm
+   fonts/tfm/public/lm/texnansi-lmr6.tfm
+   fonts/tfm/public/lm/texnansi-lmr7.tfm
+   fonts/tfm/public/lm/texnansi-lmr8.tfm
+   fonts/tfm/public/lm/texnansi-lmr9.tfm
+   fonts/tfm/public/lm/texnansi-lmri10.tfm
+   fonts/tfm/public/lm/texnansi-lmri12.tfm
+   fonts/tfm/public/lm/texnansi-lmri7.tfm
+   fonts/tfm/public/lm/texnansi-lmri8.tfm
+   fonts/tfm/public/lm/texnansi-lmri9.tfm
+   fonts/tfm/public/lm/texnansi-lmro10.tfm
+   fonts/tfm/public/lm/texnansi-lmro12.tfm
+   fonts/tfm/public/lm/texnansi-lmro17.tfm
+   fonts/tfm/public/lm/texnansi-lmro8.tfm
+   fonts/tfm/public/lm/texnansi-lmro9.tfm
+   fonts/tfm/public/lm/texnansi-lmss10.tfm
+   fonts/tfm/public/lm/texnansi-lmss12.tfm
+   fonts/tfm/public/lm/texnansi-lmss17.tfm
+   fonts/tfm/public/lm/texnansi-lmss8.tfm
+   fonts/tfm/public/lm/texnansi-lmss9.tfm
+   fonts/tfm/public/lm/texnansi-lmssbo10.tfm
+   fonts/tfm/public/lm/texnansi-lmssbx10.tfm
+   fonts/tfm/public/lm/texnansi-lmssdc10.tfm
+   fonts/tfm/public/lm/texnansi-lmssdo10.tfm
+   fonts/tfm/public/lm/texnansi-lmsso10.tfm
+   fonts/tfm/public/lm/texnansi-lmsso12.tfm
+   fonts/tfm/public/lm/texnansi-lmsso17.tfm
+   fonts/tfm/public/lm/texnansi-lmsso8.tfm
+   fonts/tfm/public/lm/texnansi-lmsso9.tfm
+   fonts/tfm/public/lm/texnansi-lmssq8.tfm
+   fonts/tfm/public/lm/texnansi-lmssqbo8.tfm
+   fonts/tfm/public/lm/texnansi-lmssqbx8.tfm
+   fonts/tfm/public/lm/texnansi-lmssqo8.tfm
+   fonts/tfm/public/lm/texnansi-lmtcsc10.tfm
+   fonts/tfm/public/lm/texnansi-lmtcso10.tfm
+   fonts/tfm/public/lm/texnansi-lmtl10.tfm
+   fonts/tfm/public/lm/texnansi-lmtlo10.tfm
+   fonts/tfm/public/lm/texnansi-lmtlc10.tfm
+   fonts/tfm/public/lm/texnansi-lmtlco10.tfm
+   fonts/tfm/public/lm/texnansi-lmtk10.tfm
+   fonts/tfm/public/lm/texnansi-lmtko10.tfm
+   fonts/tfm/public/lm/texnansi-lmtt10.tfm
+   fonts/tfm/public/lm/texnansi-lmtt12.tfm
+   fonts/tfm/public/lm/texnansi-lmtt8.tfm
+   fonts/tfm/public/lm/texnansi-lmtt9.tfm
+   fonts/tfm/public/lm/texnansi-lmtti10.tfm
+   fonts/tfm/public/lm/texnansi-lmtto10.tfm
+   fonts/tfm/public/lm/texnansi-lmu10.tfm
+   fonts/tfm/public/lm/texnansi-lmvtt10.tfm
+   fonts/tfm/public/lm/texnansi-lmvtto10.tfm
+   fonts/tfm/public/lm/texnansi-lmvtl10.tfm
+   fonts/tfm/public/lm/texnansi-lmvtlo10.tfm
+   fonts/tfm/public/lm/texnansi-lmvtk10.tfm
+   fonts/tfm/public/lm/texnansi-lmvtko10.tfm
+   fonts/tfm/public/lm/ts1-lmr5.tfm
+   fonts/tfm/public/lm/ts1-lmr6.tfm
+   fonts/tfm/public/lm/ts1-lmr7.tfm
+   fonts/tfm/public/lm/ts1-lmr8.tfm
+   fonts/tfm/public/lm/ts1-lmr9.tfm
+   fonts/tfm/public/lm/ts1-lmb10.tfm
+   fonts/tfm/public/lm/ts1-lmbo10.tfm
+   fonts/tfm/public/lm/ts1-lmbx10.tfm
+   fonts/tfm/public/lm/ts1-lmbx12.tfm
+   fonts/tfm/public/lm/ts1-lmbx5.tfm
+   fonts/tfm/public/lm/ts1-lmbx6.tfm
+   fonts/tfm/public/lm/ts1-lmbx7.tfm
+   fonts/tfm/public/lm/ts1-lmbx8.tfm
+   fonts/tfm/public/lm/ts1-lmbx9.tfm
+   fonts/tfm/public/lm/ts1-lmbxi10.tfm
+   fonts/tfm/public/lm/ts1-lmbxo10.tfm
+   fonts/tfm/public/lm/ts1-lmcsc10.tfm
+   fonts/tfm/public/lm/ts1-lmcsco10.tfm
+   fonts/tfm/public/lm/ts1-lmdunh10.tfm
+   fonts/tfm/public/lm/ts1-lmduno10.tfm
+   fonts/tfm/public/lm/ts1-lmr10.tfm
+   fonts/tfm/public/lm/ts1-lmr12.tfm
+   fonts/tfm/public/lm/ts1-lmr17.tfm
+   fonts/tfm/public/lm/ts1-lmri10.tfm
+   fonts/tfm/public/lm/ts1-lmri12.tfm
+   fonts/tfm/public/lm/ts1-lmri7.tfm
+   fonts/tfm/public/lm/ts1-lmri8.tfm
+   fonts/tfm/public/lm/ts1-lmri9.tfm
+   fonts/tfm/public/lm/ts1-lmro10.tfm
+   fonts/tfm/public/lm/ts1-lmro12.tfm
+   fonts/tfm/public/lm/ts1-lmro17.tfm
+   fonts/tfm/public/lm/ts1-lmro8.tfm
+   fonts/tfm/public/lm/ts1-lmro9.tfm
+   fonts/tfm/public/lm/ts1-lmss10.tfm
+   fonts/tfm/public/lm/ts1-lmss12.tfm
+   fonts/tfm/public/lm/ts1-lmss17.tfm
+   fonts/tfm/public/lm/ts1-lmss8.tfm
+   fonts/tfm/public/lm/ts1-lmss9.tfm
+   fonts/tfm/public/lm/ts1-lmssbo10.tfm
+   fonts/tfm/public/lm/ts1-lmssbx10.tfm
+   fonts/tfm/public/lm/ts1-lmssdc10.tfm
+   fonts/tfm/public/lm/ts1-lmssdo10.tfm
+   fonts/tfm/public/lm/ts1-lmsso10.tfm
+   fonts/tfm/public/lm/ts1-lmsso12.tfm
+   fonts/tfm/public/lm/ts1-lmsso17.tfm
+   fonts/tfm/public/lm/ts1-lmsso8.tfm
+   fonts/tfm/public/lm/ts1-lmsso9.tfm
+   fonts/tfm/public/lm/ts1-lmssq8.tfm
+   fonts/tfm/public/lm/ts1-lmssqbo8.tfm
+   fonts/tfm/public/lm/ts1-lmssqbx8.tfm
+   fonts/tfm/public/lm/ts1-lmssqo8.tfm
+   fonts/tfm/public/lm/ts1-lmtcsc10.tfm
+   fonts/tfm/public/lm/ts1-lmtcso10.tfm
+   fonts/tfm/public/lm/ts1-lmtl10.tfm
+   fonts/tfm/public/lm/ts1-lmtlo10.tfm
+   fonts/tfm/public/lm/ts1-lmtlc10.tfm
+   fonts/tfm/public/lm/ts1-lmtlco10.tfm
+   fonts/tfm/public/lm/ts1-lmtk10.tfm
+   fonts/tfm/public/lm/ts1-lmtko10.tfm
+   fonts/tfm/public/lm/ts1-lmtt10.tfm
+   fonts/tfm/public/lm/ts1-lmtt12.tfm
+   fonts/tfm/public/lm/ts1-lmtt8.tfm
+   fonts/tfm/public/lm/ts1-lmtt9.tfm
+   fonts/tfm/public/lm/ts1-lmtti10.tfm
+   fonts/tfm/public/lm/ts1-lmtto10.tfm
+   fonts/tfm/public/lm/ts1-lmu10.tfm
+   fonts/tfm/public/lm/ts1-lmvtt10.tfm
+   fonts/tfm/public/lm/ts1-lmvtto10.tfm
+   fonts/tfm/public/lm/ts1-lmvtl10.tfm
+   fonts/tfm/public/lm/ts1-lmvtlo10.tfm
+   fonts/tfm/public/lm/ts1-lmvtk10.tfm
+   fonts/tfm/public/lm/ts1-lmvtko10.tfm
+   fonts/type1/public/lm/lmb10.pfb
+   fonts/type1/public/lm/lmb10.pfm
+   fonts/type1/public/lm/lmbo10.pfb
+   fonts/type1/public/lm/lmbo10.pfm
+   fonts/type1/public/lm/lmbsy10.pfb
+   fonts/type1/public/lm/lmbsy5.pfb
+   fonts/type1/public/lm/lmbsy7.pfb
+   fonts/type1/public/lm/lmbx10.pfb
+   fonts/type1/public/lm/lmbx10.pfm
+   fonts/type1/public/lm/lmbx12.pfb
+   fonts/type1/public/lm/lmbx12.pfm
+   fonts/type1/public/lm/lmbx5.pfb
+   fonts/type1/public/lm/lmbx5.pfm
+   fonts/type1/public/lm/lmbx6.pfb
+   fonts/type1/public/lm/lmbx6.pfm
+   fonts/type1/public/lm/lmbx7.pfb
+   fonts/type1/public/lm/lmbx7.pfm
+   fonts/type1/public/lm/lmbx8.pfb
+   fonts/type1/public/lm/lmbx8.pfm
+   fonts/type1/public/lm/lmbx9.pfb
+   fonts/type1/public/lm/lmbx9.pfm
+   fonts/type1/public/lm/lmbxi10.pfb
+   fonts/type1/public/lm/lmbxi10.pfm
+   fonts/type1/public/lm/lmbxo10.pfb
+   fonts/type1/public/lm/lmbxo10.pfm
+   fonts/type1/public/lm/lmcsc10.pfb
+   fonts/type1/public/lm/lmcsc10.pfm
+   fonts/type1/public/lm/lmcsco10.pfb
+   fonts/type1/public/lm/lmcsco10.pfm
+   fonts/type1/public/lm/lmdunh10.pfb
+   fonts/type1/public/lm/lmdunh10.pfm
+   fonts/type1/public/lm/lmduno10.pfb
+   fonts/type1/public/lm/lmduno10.pfm
+   fonts/type1/public/lm/lmex10.pfb
+   fonts/type1/public/lm/lmmi10.pfb
+   fonts/type1/public/lm/lmmi12.pfb
+   fonts/type1/public/lm/lmmi5.pfb
+   fonts/type1/public/lm/lmmi6.pfb
+   fonts/type1/public/lm/lmmi7.pfb
+   fonts/type1/public/lm/lmmi8.pfb
+   fonts/type1/public/lm/lmmi9.pfb
+   fonts/type1/public/lm/lmmib10.pfb
+   fonts/type1/public/lm/lmmib5.pfb
+   fonts/type1/public/lm/lmmib7.pfb
+   fonts/type1/public/lm/lmr10.pfb
+   fonts/type1/public/lm/lmr10.pfm
+   fonts/type1/public/lm/lmr12.pfb
+   fonts/type1/public/lm/lmr12.pfm
+   fonts/type1/public/lm/lmr17.pfb
+   fonts/type1/public/lm/lmr17.pfm
+   fonts/type1/public/lm/lmr5.pfb
+   fonts/type1/public/lm/lmr5.pfm
+   fonts/type1/public/lm/lmr6.pfb
+   fonts/type1/public/lm/lmr6.pfm
+   fonts/type1/public/lm/lmr7.pfb
+   fonts/type1/public/lm/lmr7.pfm
+   fonts/type1/public/lm/lmr8.pfb
+   fonts/type1/public/lm/lmr8.pfm
+   fonts/type1/public/lm/lmr9.pfb
+   fonts/type1/public/lm/lmr9.pfm
+   fonts/type1/public/lm/lmri10.pfb
+   fonts/type1/public/lm/lmri10.pfm
+   fonts/type1/public/lm/lmri12.pfb
+   fonts/type1/public/lm/lmri12.pfm
+   fonts/type1/public/lm/lmri7.pfb
+   fonts/type1/public/lm/lmri7.pfm
+   fonts/type1/public/lm/lmri8.pfb
+   fonts/type1/public/lm/lmri8.pfm
+   fonts/type1/public/lm/lmri9.pfb
+   fonts/type1/public/lm/lmri9.pfm
+   fonts/type1/public/lm/lmro10.pfb
+   fonts/type1/public/lm/lmro10.pfm
+   fonts/type1/public/lm/lmro12.pfb
+   fonts/type1/public/lm/lmro12.pfm
+   fonts/type1/public/lm/lmro17.pfb
+   fonts/type1/public/lm/lmro17.pfm
+   fonts/type1/public/lm/lmro8.pfb
+   fonts/type1/public/lm/lmro8.pfm
+   fonts/type1/public/lm/lmro9.pfb
+   fonts/type1/public/lm/lmro9.pfm
+   fonts/type1/public/lm/lmss10.pfb
+   fonts/type1/public/lm/lmss10.pfm
+   fonts/type1/public/lm/lmss12.pfb
+   fonts/type1/public/lm/lmss12.pfm
+   fonts/type1/public/lm/lmss17.pfb
+   fonts/type1/public/lm/lmss17.pfm
+   fonts/type1/public/lm/lmss8.pfb
+   fonts/type1/public/lm/lmss8.pfm
+   fonts/type1/public/lm/lmss9.pfb
+   fonts/type1/public/lm/lmss9.pfm
+   fonts/type1/public/lm/lmssbo10.pfb
+   fonts/type1/public/lm/lmssbo10.pfm
+   fonts/type1/public/lm/lmssbx10.pfb
+   fonts/type1/public/lm/lmssbx10.pfm
+   fonts/type1/public/lm/lmssdc10.pfb
+   fonts/type1/public/lm/lmssdc10.pfm
+   fonts/type1/public/lm/lmssdo10.pfb
+   fonts/type1/public/lm/lmssdo10.pfm
+   fonts/type1/public/lm/lmsso10.pfb
+   fonts/type1/public/lm/lmsso10.pfm
+   fonts/type1/public/lm/lmsso12.pfb
+   fonts/type1/public/lm/lmsso12.pfm
+   fonts/type1/public/lm/lmsso17.pfb
+   fonts/type1/public/lm/lmsso17.pfm
+   fonts/type1/public/lm/lmsso8.pfb
+   fonts/type1/public/lm/lmsso8.pfm
+   fonts/type1/public/lm/lmsso9.pfb
+   fonts/type1/public/lm/lmsso9.pfm
+   fonts/type1/public/lm/lmssq8.pfb
+   fonts/type1/public/lm/lmssq8.pfm
+   fonts/type1/public/lm/lmssqbo8.pfb
+   fonts/type1/public/lm/lmssqbo8.pfm
+   fonts/type1/public/lm/lmssqbx8.pfb
+   fonts/type1/public/lm/lmssqbx8.pfm
+   fonts/type1/public/lm/lmssqo8.pfb
+   fonts/type1/public/lm/lmssqo8.pfm
+   fonts/type1/public/lm/lmsy10.pfb
+   fonts/type1/public/lm/lmsy5.pfb
+   fonts/type1/public/lm/lmsy6.pfb
+   fonts/type1/public/lm/lmsy7.pfb
+   fonts/type1/public/lm/lmsy8.pfb
+   fonts/type1/public/lm/lmsy9.pfb
+   fonts/type1/public/lm/lmtcsc10.pfb
+   fonts/type1/public/lm/lmtcsc10.pfm
+   fonts/type1/public/lm/lmtcso10.pfb
+   fonts/type1/public/lm/lmtcso10.pfm
+   fonts/type1/public/lm/lmtk10.pfb
+   fonts/type1/public/lm/lmtk10.pfm
+   fonts/type1/public/lm/lmtko10.pfb
+   fonts/type1/public/lm/lmtko10.pfm
+   fonts/type1/public/lm/lmtl10.pfb
+   fonts/type1/public/lm/lmtl10.pfm
+   fonts/type1/public/lm/lmtlc10.pfb
+   fonts/type1/public/lm/lmtlc10.pfm
+   fonts/type1/public/lm/lmtlco10.pfb
+   fonts/type1/public/lm/lmtlco10.pfm
+   fonts/type1/public/lm/lmtlo10.pfb
+   fonts/type1/public/lm/lmtlo10.pfm
+   fonts/type1/public/lm/lmtt10.pfb
+   fonts/type1/public/lm/lmtt10.pfm
+   fonts/type1/public/lm/lmtt12.pfb
+   fonts/type1/public/lm/lmtt12.pfm
+   fonts/type1/public/lm/lmtt8.pfb
+   fonts/type1/public/lm/lmtt8.pfm
+   fonts/type1/public/lm/lmtt9.pfb
+   fonts/type1/public/lm/lmtt9.pfm
+   fonts/type1/public/lm/lmtti10.pfb
+   fonts/type1/public/lm/lmtti10.pfm
+   fonts/type1/public/lm/lmtto10.pfb
+   fonts/type1/public/lm/lmtto10.pfm
+   fonts/type1/public/lm/lmu10.pfb
+   fonts/type1/public/lm/lmu10.pfm
+   fonts/type1/public/lm/lmvtk10.pfb
+   fonts/type1/public/lm/lmvtk10.pfm
+   fonts/type1/public/lm/lmvtko10.pfb
+   fonts/type1/public/lm/lmvtko10.pfm
+   fonts/type1/public/lm/lmvtl10.pfb
+   fonts/type1/public/lm/lmvtl10.pfm
+   fonts/type1/public/lm/lmvtlo10.pfb
+   fonts/type1/public/lm/lmvtlo10.pfm
+   fonts/type1/public/lm/lmvtt10.pfb
+   fonts/type1/public/lm/lmvtt10.pfm
+   fonts/type1/public/lm/lmvtto10.pfb
+   fonts/type1/public/lm/lmvtto10.pfm
+   tex/latex/lm/il2lmdh.fd
+   tex/latex/lm/il2lmr.fd
+   tex/latex/lm/il2lmss.fd
+   tex/latex/lm/il2lmssq.fd
+   tex/latex/lm/il2lmtt.fd
+   tex/latex/lm/il2lmvtt.fd
+   tex/latex/lm/l7xlmdh.fd
+   tex/latex/lm/l7xlmr.fd
+   tex/latex/lm/l7xlmss.fd
+   tex/latex/lm/l7xlmssq.fd
+   tex/latex/lm/l7xlmtt.fd
+   tex/latex/lm/l7xlmvtt.fd
+   tex/latex/lm/lmodern.sty
+   tex/latex/lm/ly1lmdh.fd
+   tex/latex/lm/ly1lmr.fd
+   tex/latex/lm/ly1lmss.fd
+   tex/latex/lm/ly1lmssq.fd
+   tex/latex/lm/ly1lmtt.fd
+   tex/latex/lm/ly1lmvtt.fd
+   tex/latex/lm/omllmm.fd
+   tex/latex/lm/omllmr.fd
+   tex/latex/lm/omslmr.fd
+   tex/latex/lm/omslmsy.fd
+   tex/latex/lm/omxlmex.fd
+   tex/latex/lm/ot1lmdh.fd
+   tex/latex/lm/ot1lmr.fd
+   tex/latex/lm/ot1lmss.fd
+   tex/latex/lm/ot1lmssq.fd
+   tex/latex/lm/ot1lmtt.fd
+   tex/latex/lm/ot1lmvtt.fd
+   tex/latex/lm/ot4lmdh.fd
+   tex/latex/lm/ot4lmr.fd
+   tex/latex/lm/ot4lmss.fd
+   tex/latex/lm/ot4lmssq.fd
+   tex/latex/lm/ot4lmtt.fd
+   tex/latex/lm/ot4lmvtt.fd
+   tex/latex/lm/qxlmdh.fd
+   tex/latex/lm/qxlmr.fd
+   tex/latex/lm/qxlmss.fd
+   tex/latex/lm/qxlmssq.fd
+   tex/latex/lm/qxlmtt.fd
+   tex/latex/lm/qxlmvtt.fd
+   tex/latex/lm/t1lmdh.fd
+   tex/latex/lm/t1lmr.fd
+   tex/latex/lm/t1lmss.fd
+   tex/latex/lm/t1lmssq.fd
+   tex/latex/lm/t1lmtt.fd
+   tex/latex/lm/t1lmvtt.fd
+   tex/latex/lm/t5lmdh.fd
+   tex/latex/lm/t5lmr.fd
+   tex/latex/lm/t5lmss.fd
+   tex/latex/lm/t5lmssq.fd
+   tex/latex/lm/t5lmtt.fd
+   tex/latex/lm/t5lmvtt.fd
+   tex/latex/lm/ts1lmdh.fd
+   tex/latex/lm/ts1lmr.fd
+   tex/latex/lm/ts1lmss.fd
+   tex/latex/lm/ts1lmssq.fd
+   tex/latex/lm/ts1lmtt.fd
+   tex/latex/lm/ts1lmvtt.fd
+
+3. Files whose names need not be changed in derived works as requested
+   by clause 1 of GUST-FONT-LICENSE.txt
+
+   doc/fonts/lm/GUST-FONT-LICENSE.txt
+

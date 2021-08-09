@@ -7,7 +7,7 @@
 <title>Temml - Convert TeX to MathML</title>
 
 <link rel="stylesheet" href="./indexStyles.css">
-<link rel="stylesheet" href="./temml/temml-dual.css">
+<link rel="stylesheet" href="./temml/Temml-Latin-Modern.css">
 
 <script src="./temml/temml.min.js"></script>
 <script src="./temml/mhchem.min.js"></script>
@@ -52,10 +52,8 @@
       <br/>
   
       <div class="ioArea" id="demoRendering">
-        <div id="font-target" class="latin-modern">
-          <div id="math"></div>
-          <div id="notice"></div>
-        </div>
+        <div id="math"></div>
+        <div id="notice"></div>
       </div>
       
     </div>
@@ -64,8 +62,11 @@
   <div style="float: right;"><input type="checkbox" id="displayMode" name="displayMode" checked>
     <label for="displayMode">Display Mode</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <select id="MathFont" onchange="updateMathFont()">
-      <option value="LatinModern">Latin Modern</option>
-      <option value="Local">Local font</option>
+      <option value="Latin-Modern">Latin Modern</option>
+      <option value="Cambria-Math">Local font</option>
+      <option value="Asana">Asana</option>
+      <option value="STIX2">STIX2</option>
+      <option value="XITS">XITS</option>
     </select>&nbsp;&nbsp;
     <select id="OutputType" onchange="reprocess()">
       <option value="Math">Math</option>
@@ -135,12 +136,18 @@
   }
 
   function updateMathFont() {
-    const mathWrapper = document.getElementById("font-target")
-    if (document.getElementById("MathFont").value === "LatinModern") {
-      mathWrapper.setAttribute("class", "latin-modern")
-    } else {
-      mathWrapper.removeAttribute("class")
-    }
+    // Change the CSS style sheet.
+    const temmlRegEx = /temml\/Temml-.+\.css$/
+    const links = [...document.head.getElementsByTagName('link')];
+    links.forEach(link => {
+      if (temmlRegEx.test(link.href)) {
+        link.remove()
+      }
+    })
+    const newLink = document.createElement("link");
+    newLink.href = `./temml/Temml-${document.getElementById("MathFont").value}.css`;
+    newLink.rel = "stylesheet";
+    document.head.appendChild(newLink);
   }
 </script>
 
