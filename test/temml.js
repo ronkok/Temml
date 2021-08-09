@@ -6887,7 +6887,7 @@ min-width: ${svgData[key].minWidth}em;`
   // This module identifies those Unicode code points.
 
   // First, a few helpers.
-  const cal = Object.freeze({
+  const script = Object.freeze({
     B: 0x20EA, // Offset from ASCII B to Unicode script B
     E: 0x20EB,
     F: 0x20EB,
@@ -6926,7 +6926,7 @@ min-width: ${svgData[key].minWidth}em;`
       "bold": ch =>                   { return 0x1D3BF },
       "italic": ch =>                 { return 0x1D3F3 },
       "bold-italic": ch =>            { return 0x1D427 },
-      "script": ch =>                 { return cal[ch] || 0x1D45B },
+      "script": ch =>                 { return script[ch] || 0x1D45B },
       "script-bold": ch =>            { return 0x1D48F },
       "fraktur": ch =>                { return frak[ch] || 0x1D4C3 },
       "fraktur-bold": ch =>           { return 0x1D52B },
@@ -7068,14 +7068,11 @@ min-width: ${svgData[key].minWidth}em;`
     type: "mathord",
     mathmlBuilder(group, style) {
       const text = makeText(group.text, group.mode, style);
-      if (style.font === "mathscr") {
-        const span = new Span([], [text]);
-        span.setAttribute("style", `font-family: "KaTeX_Script", serif;`);
-        const node = new mathMLTree.MathNode("mi", [span]);
-        return node
-      }
       const variant = getVariant(group, style) || "italic";
-      if (variant !== "italic") {
+      if (variant === "script") {
+        text.text = variantChar(text.text, variant);
+        return new mathMLTree.MathNode("mi", [text], [style.font])
+      } else if (variant !== "italic") {
         text.text = variantChar(text.text, variant);
       }
       const node = new mathMLTree.MathNode("mi", [text]);

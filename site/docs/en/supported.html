@@ -708,19 +708,20 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝗔-𝗭 𝗮-𝘇 𝟬-𝟵</mtext></mrow><annotation encoding="application/x-tex">\text{𝗔-𝗭 𝗮-𝘇 𝟬-𝟵}</annotation></semantics></math></td>
 </tr>
 <tr>
-<td>Calligraphic</td>
-<td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝒜-𝒵 𝒶-𝓏</mtext></mrow><annotation encoding="application/x-tex">\text{𝒜-𝒵 𝒶-𝓏}</annotation></semantics></math></td>
+<td>Fractur</td>
+<td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝔄-ℨ</mtext><mtext>𝔞-𝔷</mtext></mrow><annotation encoding="application/x-tex">\text{𝔄-ℨ}\text{𝔞-𝔷}</annotation></semantics></math></td>
 <td>Sans serif italic</td>
 <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝘈-𝘡 𝘢-𝘻</mtext></mrow><annotation encoding="application/x-tex">\text{𝘈-𝘡 𝘢-𝘻}</annotation></semantics></math></td>
 </tr>
 <tr>
-<td>Fractur</td>
-<td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝔄-ℨ</mtext><mtext>𝔞-𝔷</mtext></mrow><annotation encoding="application/x-tex">\text{𝔄-ℨ}\text{𝔞-𝔷}</annotation></semantics></math></td>
 <td>Monospace</td>
 <td><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝙰-𝚉 𝚊-𝚣 𝟶-𝟿</mtext></mrow><annotation encoding="application/x-tex">\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}</annotation></semantics></math></td>
+<td></td>
+<td></td>
 </tr>
 </tbody></table>
 <p>Any character can be written with the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">☺</mi></mrow><annotation encoding="application/x-tex">\char&quot;263a</annotation></semantics></math>.</p>
+<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future documents breaks, I advise that you avoid Unicde script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
 <h2 id="layout">Layout</h2>
 <h3 id="line-breaks">Line Breaks</h3>
 <p>Hard line breaks are <code>\\</code> and <code>\newline</code>. No soft line breaks, sorry. When browser develop further, I&#39;ll add soft line breaks.</p>
@@ -1637,7 +1638,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mo lspace="0.22em" rspace="0.22em"><mo lspace="0.22em" rspace="0.22em">×</mo></mo></mrow><annotation encoding="application/x-tex">\cp</annotation></semantics></math> <code>\cp</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝒪</mi><mrow><mo fence="true" form="prefix">(</mo><msup><mi>x</mi><mn>2</mn></msup><mo fence="true" form="postfix">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\order{x^2}</annotation></semantics></math> <code>\order{x^2}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi class ="mathcal">𝒪</mi><mrow><mo fence="true" form="prefix">(</mo><msup><mi>x</mi><mn>2</mn></msup><mo fence="true" form="postfix">)</mo></mrow></mrow></mrow><annotation encoding="application/x-tex">\order{x^2}</annotation></semantics></math> <code>\order{x^2}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mspace width="1em"></mspace><mtext> text </mtext><mspace width="1em"></mspace></mrow></mrow><annotation encoding="application/x-tex">\qqtext{text}</annotation></semantics></math> <code>\qqtext{text}</code></td>
 </tr>
 <tr>
@@ -1672,12 +1673,12 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝜵</mi><mo lspace="0em" rspace="0em">⋅</mo></mrow></mrow><annotation encoding="application/x-tex">\divergence</annotation></semantics></math> <code>\divergence</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>𝒫</mi></mrow><annotation encoding="application/x-tex">\principalvalue</annotation></semantics></math> <code>\principalvalue</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi class ="mathcal">𝒫</mi></mrow><annotation encoding="application/x-tex">\principalvalue</annotation></semantics></math> <code>\principalvalue</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="normal">rank</mi><mo>⁡</mo><mi>M</mi></mrow><annotation encoding="application/x-tex">\rank M</annotation></semantics></math> <code>\rank M</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mo lspace="0.22em" rspace="0.22em"><mo lspace="0.22em" rspace="0.22em">⋅</mo></mo></mrow><annotation encoding="application/x-tex">\dotproduct</annotation></semantics></math> <code>\dotproduct</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>𝒫</mi></mrow><annotation encoding="application/x-tex">\pv</annotation></semantics></math> <code>\pv</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi class ="mathcal">𝒫</mi></mrow><annotation encoding="application/x-tex">\pv</annotation></semantics></math> <code>\pv</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="normal">Res</mi><mo>⁡</mo><mo stretchy="false" form="prefix">[</mo><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>z</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\Res[f(z)]</annotation></semantics></math> <code>\Res\[f(z)\]</code></td>
 </tr>
 <tr>
@@ -2368,17 +2369,17 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝖠</mi><mi>𝖻</mi><mn>𝟢</mn></mrow></mrow><annotation encoding="application/x-tex">{\sf Ab0}</annotation></semantics></math> <code>{\sf Ab0}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝙰𝚋𝟶</mtext></mrow><annotation encoding="application/x-tex">\texttt{Ab0}</annotation></semantics></math> <code>\texttt{Ab0}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝒜</mi><mi>𝒷</mi></mrow></mrow><annotation encoding="application/x-tex">\mathcal{Ab}</annotation></semantics></math> <code>\mathcal{Ab}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi class ="mathcal">𝒜</mi><mi class ="mathcal">𝒷</mi></mrow></mrow><annotation encoding="application/x-tex">\mathcal{Ab}</annotation></semantics></math> <code>\mathcal{Ab}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>ʜᴇʏ</mtext></mrow><annotation encoding="application/x-tex">\textsc{hey}</annotation></semantics></math> <code>\textsc{hey}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝙰</mi><mi>𝚋</mi><mn>𝟶</mn></mrow></mrow><annotation encoding="application/x-tex">{\tt Ab0}</annotation></semantics></math> <code>{\tt Ab0 }</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi>𝒜</mi><mi>𝒷</mi></mrow></mrow><annotation encoding="application/x-tex">{\cal Ab}</annotation></semantics></math> <code>{\cal Ab}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi class ="mathcal">𝒜</mi><mi class ="mathcal">𝒷</mi></mrow></mrow><annotation encoding="application/x-tex">{\cal Ab}</annotation></semantics></math> <code>{\cal Ab}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mn><span style="font-feature-settings: &#x27;onum&#x27;;">123</span></mn></mrow><annotation encoding="application/x-tex">\oldstylenums{123}</annotation></semantics></math> <code>\oldstylenums{123}</code></td>
 <td style="text-align: left;"></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi><span style="font-family: &quot;KaTeX_Script&quot;, serif;">A</span></mi><mi><span style="font-family: &quot;KaTeX_Script&quot;, serif;">B</span></mi></mrow></mrow><annotation encoding="application/x-tex">\mathscr{AB}</annotation></semantics></math> <code>\mathscr{AB}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mi class ="mathscr">𝒜</mi><mi class ="mathscr">ℬ</mi></mrow></mrow><annotation encoding="application/x-tex">\mathscr{AB}</annotation></semantics></math> <code>\mathscr{AB}</code></td>
 </tr>
 </tbody></table>
 <p>One can stack font family, font weight, and font shape by using the <code>\textXX</code> versions of the font functions. So <code>\textsf{\textbf{H}}</code> will produce <math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>𝗛</mtext></mrow><annotation encoding="application/x-tex">\textsf{\textbf{H}}</annotation></semantics></math>. The other versions do not stack, e.g., <code>\mathsf{\mathbf{H}}</code> will produce <math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>𝐇</mi></mrow><annotation encoding="application/x-tex">\mathsf{\mathbf{H}}</annotation></semantics></math>.</p>

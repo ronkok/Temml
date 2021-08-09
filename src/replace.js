@@ -4,7 +4,7 @@
 // This module identifies those Unicode code points.
 
 // First, a few helpers.
-const cal = Object.freeze({
+const script = Object.freeze({
   B: 0x20EA, // Offset from ASCII B to Unicode script B
   E: 0x20EB,
   F: 0x20EB,
@@ -43,7 +43,7 @@ const offset = Object.freeze({
     "bold": ch =>                   { return 0x1D3BF },
     "italic": ch =>                 { return 0x1D3F3 },
     "bold-italic": ch =>            { return 0x1D427 },
-    "script": ch =>                 { return cal[ch] || 0x1D45B },
+    "script": ch =>                 { return script[ch] || 0x1D45B },
     "script-bold": ch =>            { return 0x1D48F },
     "fraktur": ch =>                { return frak[ch] || 0x1D4C3 },
     "fraktur-bold": ch =>           { return 0x1D52B },

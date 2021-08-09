@@ -18,7 +18,7 @@
 <ul>
 <li>temml.css</li>
 <li>temml.min.js</li>
-<li>KaTeX_Script-Regular.woff2</li>
+<li>Temml-Script.woff2</li>
 </ul>
 <p>A server-side installation should include <code>temml.cjs.js</code> instead of <code>temml.min.js</code>.</p>
 <h4 id="starter-template">Starter template</h4>
@@ -119,7 +119,7 @@ for (let i = matches.length - 1; i &gt;= 0; i--) {
 <p>In Temml, you can choose a math font from several different options. Each has different advantages.</p>
 <p><strong>Local fonts</strong> are the light-weight option. The fastest font is the one you don’t have to serve. <code>temml.css</code> is written to prefer these fonts:</p>
 <ul>
-<li><p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS. It lacks roundhand glyphs, so you still have to serve a small (12 kb) font in order to support <code>\mathscr{…}</code>. The roundhand font file is a KaTeX font, which is a clone of a MathJax font, which is a clone of Computer Modern.</p>
+<li><p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS. It lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml-Script.woff2</code> in order to support <code>\mathscr{…}</code>. The roundhand font file is a clone of a KaTeX font, which is a clone of a MathJax font, which is a clone of Computer Modern.</p>
 </li>
 <li><p><strong>Noto</strong> is an Android font. I have not yet done much testing with it.</p>
 </li>

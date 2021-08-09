@@ -23,14 +23,11 @@ defineFunctionBuilders({
   type: "mathord",
   mathmlBuilder(group, style) {
     const text = mml.makeText(group.text, group.mode, style)
-    if (style.font === "mathscr") {
-      const span = new Span([], [text])
-      span.setAttribute("style", `font-family: "KaTeX_Script", serif;`)
-      const node = new mathMLTree.MathNode("mi", [span])
-      return node
-    }
     const variant = getVariant(group, style) || "italic"
-    if (variant !== "italic") {
+    if (variant === "script") {
+      text.text = variantChar(text.text, variant)
+      return new mathMLTree.MathNode("mi", [text], [style.font])
+    } else if (variant !== "italic") {
       text.text = variantChar(text.text, variant)
     }
     const node = new mathMLTree.MathNode("mi", [text])

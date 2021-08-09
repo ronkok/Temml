@@ -26,7 +26,7 @@ fs.copyFile('test/temmlPostProcess.js', 'dist/temmlPostProcess.js', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('site/temml/KaTeX_Script-Regular.woff2', 'dist/KaTeX_Script-Regular.woff2', (err) => {
+fs.copyFile('site/temml/Temml-Script.woff2', 'dist/Temml-Script.woff2', (err) => {
   if (err) { throw err }
 })
 

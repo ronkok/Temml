@@ -22,7 +22,7 @@ You can download Temml files from the [`dist` folder](https://github.com/ronkok/
 
 * temml.css
 * temml.min.js
-* KaTeX_Script-Regular.woff2
+* Temml-Script.woff2
 
 A server-side installation should include `temml.cjs.js` instead of `temml.min.js`.
 
@@ -159,7 +159,7 @@ In Temml, you can choose a math font from several different options. Each has di
 
 **Local fonts** are the light-weight option. The fastest font is the one you don’t have to serve. `temml.css` is written to prefer these fonts:
 
-* **Cambria Math** comes pre-installed in Windows, Macs, and iOS. It lacks roundhand glyphs, so you still have to serve a small (12 kb) font in order to support `\mathscr{…}`. The roundhand font file is a KaTeX font, which is a clone of a MathJax font, which is a clone of Computer Modern.
+* **Cambria Math** comes pre-installed in Windows, Macs, and iOS. It lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml-Script.woff2` in order to support `\mathscr{…}`. The roundhand font file is a clone of a KaTeX font, which is a clone of a MathJax font, which is a clone of Computer Modern.
 
 * **Noto** is an Android font. I have not yet done much testing with it.
 
