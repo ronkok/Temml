@@ -42,6 +42,10 @@ m|*.mathscr {
   font-family: "Temml-Script";
 }
 
+.oldstylenums {
+  font-feature-settings: 'onum';
+}
+
 /* AMS environment auto-numbering via CSS counter. */
 .tml-eqn::before {
   counter-increment: tmlEqnNo;

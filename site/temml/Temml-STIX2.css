@@ -69,6 +69,10 @@ m|*.mathscr {
   font-feature-settings: 'ss01';
 }
 
+.oldstylenums {
+  font-feature-settings: 'onum';
+}
+
 /* AMS environment auto-numbering via CSS counter. */
 .tml-eqn::before {
   counter-increment: tmlEqnNo;

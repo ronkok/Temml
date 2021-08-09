@@ -67,11 +67,16 @@ m|mtext {
 }
 
 m|math {
-  font-family: XITS Math;
+  font-family: XITS Math, math;
 }
 
 m|*.mathscr {
   font-feature-settings: 'ss01';
+}
+
+.oldstylenums {
+  font-family: "Cambria Math", math;
+  font-feature-settings: 'onum';
 }
 
 /* AMS environment auto-numbering via CSS counter. */

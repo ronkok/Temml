@@ -7109,8 +7109,7 @@ defineFunctionBuilders({
       node = new mathMLTree.MathNode("mtext", [text]);
     } else if (numberRegEx.test(group.text)) {
       if (variant === "oldstylenums") {
-        const span = new Span([], [text]);
-        span.setAttribute("style", `font-feature-settings: 'onum';`);
+        const span = new Span(["oldstylenums"], [text]);
         node = new mathMLTree.MathNode("mn", [span]);
       } else if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant)
