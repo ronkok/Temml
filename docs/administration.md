@@ -161,7 +161,7 @@ Temml has several different pre-written CSS files. You should use only one and b
 
 **Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in `dist` contains the Latin Modern fonts. This option also needs that additional 12kb `Temml-Script.woff2` file in order to support `\mathscr{…}`.
 
-**Asana**, **STIX2**, and **XITS** can all be served without the `Temml-Script.woff2` file. 
+**Asana** and **XITS** can be served without the `Temml-Script.woff2` file. 
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts](https://fred-wang.github.io/MathFonts/ "Math fonts").
 
