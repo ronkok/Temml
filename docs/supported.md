@@ -290,7 +290,7 @@ Temml also supports `\llap`, `\rlap`, and `\clap`, but they will take only text,
 | $\in$ `\in`           | $\mid$ `\mid`               | $\to$ `\to`               | $\impliedby$ `\impliedby` |
 | $\ni$ `\ni`           | $\land$ `\land`             | $\gets$ `\gets`           | $\iff$ `\iff` |
 | $\notin$ `\notin`     | $\lor$ `\lor`     | $\leftrightarrow$ `\leftrightarrow` | $\lightning$ `\lightning` |
-| $\notni$ `\notni`     | $\neg$ `\neg` or `\lnot`    | $\Set{ x \| x<\frac 1 2 }$<br>`\Set{ x \| x<\frac 1 2 }` ||
+| $\notni$ `\notni`     | $\neg$ `\neg` or `\lnot`    | $\Set{ x \| x<\frac 1 2 }$<br>`\Set{ x \| x<\frac 1 2 }`| $\set{x\|x<5 }$<br>`\set{x\|x<5}`|
 
 Equivalents in the *texvc* extension
 

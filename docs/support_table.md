@@ -1074,6 +1074,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\searrow|$\searrow$|||
 |\sec|$\sec$|||
 |\sect|$\text{\sect}$|`\text{\sect}`| texvc extension |
+|\set| $\Set{ x \| x<5 }$ |`\set{x\|x<5}`| braket
 |\Set| $\Set{ x \| x<\frac 1 2 }$ |`\Set{ x \| x<\frac 1 2 }`| braket
 |\setlength|<span class="no-sup">Not supported</span>|||
 |\setminus|$\setminus$|||

@@ -8356,6 +8356,10 @@ min-width: ${svgData[key].minWidth}em;`
     const argStr = recreateArgStr(context);
     return "\\left\\{" + argStr.replace(/\|/, "\\,\\middle\\vert\\,") + "\\right\\}"
   });
+  defineMacro("\\set",  function(context) {
+    const argStr = recreateArgStr(context);
+    return "\\{" + argStr.replace(/\|/, "\\mid ") + "\\}"
+  });
 
 
   //////////////////////////////////////////////////////////////////////
