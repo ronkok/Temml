@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.1] - 2021-08-10
+
+### Changed
+
+- Change CSS files. Each CSS file now is synchronized with a single math font.
+
+### Added
+
+- Support Asana and XITS fonts.
+- Support \Braket, \Set, and \set.
+
 ## [0.2.0] - 2021-08-02
 
 ### Removed

@@ -969,7 +969,7 @@ defineSymbol(math, textord, "\u00a7", "\\S", true);
 defineSymbol(text, textord, "\u00a7", "\\S");
 defineSymbol(math, textord, "\u00b6", "\\P", true);
 defineSymbol(text, textord, "\u00b6", "\\P");
-defineSymbol(text, textord, "\u263a", "\\smiley");
+defineSymbol(text, textord, "\u263a", "\\smiley", true);
 defineSymbol(math, textord, "\u263a", "\\smiley", true);
 
 // Math and Text
@@ -1627,8 +1627,8 @@ defineSymbol(text, textord, "\u00a3", "\\pounds");
 defineSymbol(text, textord, "\u00a3", "\\textsterling", true);
 defineSymbol(math, textord, "\u2720", "\\maltese");
 defineSymbol(text, textord, "\u2720", "\\maltese");
-defineSymbol(math, textord, "\u20ac", "\\euro");
-defineSymbol(text, textord, "\u20ac", "\\euro");
+defineSymbol(math, textord, "\u20ac", "\\euro", true);
+defineSymbol(text, textord, "\u20ac", "\\euro", true);
 defineSymbol(text, textord, "\u20ac", "\\texteuro");
 defineSymbol(math, textord, "\u00a9", "\\copyright", true);
 defineSymbol(text, textord, "\u00a9", "\\textcopyright");
@@ -7109,8 +7109,7 @@ defineFunctionBuilders({
       node = new mathMLTree.MathNode("mtext", [text]);
     } else if (numberRegEx.test(group.text)) {
       if (variant === "oldstylenums") {
-        const span = new Span([], [text]);
-        span.setAttribute("style", `font-feature-settings: 'onum';`);
+        const span = new Span(["oldstylenums"], [text]);
         node = new mathMLTree.MathNode("mn", [span]);
       } else if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant)
@@ -7752,6 +7751,24 @@ function defineMacro(name, body) {
   builtinMacros[name] = body;
 }
 
+// helper function
+const recreateArgStr = context => {
+  // Recreate the macro's original argument string from the array of parse tokens.
+  const tokens = context.consumeArgs(1)[0];
+  let str = "";
+  let expectedLoc = tokens[tokens.length - 1].loc.start;
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    if (tokens[i].loc.start > expectedLoc) {
+      // context.consumeArgs has eaten a space.
+      str += " ";
+      expectedLoc = tokens[i].loc.start;
+    }
+    str += tokens[i].text;
+    expectedLoc += tokens[i].text.length;
+  }
+  return str
+};
+
 //////////////////////////////////////////////////////////////////////
 // macro tools
 
@@ -8330,6 +8347,19 @@ defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
 defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
 defineMacro("\\Bra", "\\left\\langle#1\\right|");
 defineMacro("\\Ket", "\\left|#1\\right\\rangle");
+defineMacro("\\Braket",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\left\\langle" + argStr.replace(/\|/g, "\\,\\middle\\vert\\,") + "\\right\\rangle"
+});
+defineMacro("\\Set",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\left\\{" + argStr.replace(/\|/, "\\,\\middle\\vert\\,") + "\\right\\}"
+});
+defineMacro("\\set",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\{" + argStr.replace(/\|/, "\\mid ") + "\\}"
+});
+
 
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx
@@ -12286,7 +12316,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.2.0";
+const version = "0.2.1";
 
 function postProcess(block) {
   const labelMap = {};

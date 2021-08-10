@@ -1,0 +1,90 @@
+/*
+XITS is released under the SIL Open Font License. See the files in this
+directory for details. The font can be obtained from several TeX distributions
+or package managers.
+
+The WOFF fonts have been obtained from
+http://mirrors.ctan.org/fonts/
+*/
+
+@namespace url('http://www.w3.org/1999/xhtml');
+@namespace m url('http://www.w3.org/1998/Math/MathML');
+
+@font-face {
+  font-family: XITS;
+  src: local('XITS'),
+       url('./XITS/xits-regular.woff2');
+}
+@font-face {
+  font-family: XITS;
+  src: local('XITS Bold'), local('XITS-Bold'),
+       url('./XITS/xits-bold.woff2');
+  font-weight: bold;
+}
+@font-face {
+  font-family: XITS;
+  src: local('XITS Italic'), local('XITS-Italic'),
+       url('./XITS/xits-italic.woff2');
+  font-style: italic;
+}
+@font-face {
+  font-family: XITS;
+  src: local('XITS Bold Italic'), local('XITS-BoldItalic'),
+       url('./XITS/xits-bolditalic.woff2');
+  font-weight: bold;
+  font-style: italic;
+}
+@font-face {
+  font-family: XITS Math;
+  src: local('XITS Math'), local('XITSMath-Regular'),
+       url('./XITS/xits-math.woff2');
+}
+@font-face {
+  font-family: XITS Math;
+  src: local('XITS Math Bold'), local('XITSMath-Bold'),
+       url('./XITS/xits-mathbold.woff2');
+  font-weight: bold;
+}
+
+m|math {
+  font-style: normal;
+  font-weight: normal;
+  line-height: normal;
+  font-size-adjust: none;
+  text-indent: 0;
+  text-transform: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  direction: ltr;
+}
+
+.temml * {
+  border-color: currentColor;
+}
+
+m|mtext {
+  font-family: XITS;
+}
+
+m|math {
+  font-family: XITS Math, math;
+}
+
+m|*.mathcal {
+  font-feature-settings: 'ss01';
+}
+
+.oldstylenums {
+  font-family: "Cambria Math", math;
+  font-feature-settings: 'onum';
+}
+
+/* AMS environment auto-numbering via CSS counter. */
+.tml-eqn::before {
+  counter-increment: tmlEqnNo;
+  content: "(" counter(tmlEqnNo) ")";
+}
+
+body {
+  counter-reset: tmlEqnNo;
+}

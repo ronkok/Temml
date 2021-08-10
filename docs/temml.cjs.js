@@ -12316,7 +12316,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.2.0";
+const version = "0.2.1";
 
 function postProcess(block) {
   const labelMap = {};
