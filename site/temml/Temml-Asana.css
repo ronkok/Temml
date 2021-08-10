@@ -41,7 +41,7 @@ m|math {
   font-family: Asana Math;
 }
 
-m|*.mathscr {
+m|*.mathcal {
   font-feature-settings: 'salt';
 }
 

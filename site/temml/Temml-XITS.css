@@ -70,7 +70,7 @@ m|math {
   font-family: XITS Math, math;
 }
 
-m|*.mathscr {
+m|*.mathcal {
   font-feature-settings: 'ss01';
 }
 

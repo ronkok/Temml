@@ -932,8 +932,8 @@ For color definition, Temml color functions will accept the standard HTML [pred
 |$\text{Ab0θ}$ `\text{Ab0θ}`      |$\bm{Ab0θ}$ `\bm{Ab0θ}`          |$\mathbb{Ab0}$ `\mathbb{Ab0}`
 |$\mathsf{Ab0}$ `\mathsf{Ab0}`    |$\textmd{Ab0θ}$ `\textmd{Ab0θ}`  |$\frak{Ab}$ `\frak{Ab}`
 |$\textsf{Ab0}$ `\textsf{Ab0}`    |$\mathtt{Ab0}$ `\mathtt{Ab0}`    |$\mathfrak{Ab}$ `\mathfrak{Ab}`
-|${\sf Ab0}$ `{\sf Ab0}`          |$\texttt{Ab0}$ `\texttt{Ab0}`    |$\mathcal{Ab}$ `\mathcal{Ab}`
-|$\textsc{hey}$ `\textsc{hey}`    |${\tt Ab0}$ `{\tt Ab0 }`         |${\cal Ab}$ `{\cal Ab}`
+|${\sf Ab0}$ `{\sf Ab0}`          |$\texttt{Ab0}$ `\texttt{Ab0}`    |$\mathcal{AB}$ `\mathcal{AB}`
+|$\textsc{hey}$ `\textsc{hey}`    |${\tt Ab0}$ `{\tt Ab0 }`         |${\cal AB}$ `{\cal AB}`
 |$\oldstylenums{123}$ `\oldstylenums{123}`|                         |$\mathscr{AB}$ `\mathscr{AB}`
 
 One can stack font family, font weight, and font shape by using the `\textXX` versions of the font functions. So `\textsf{\textbf{H}}` will produce $\textsf{\textbf{H}}$. The other versions do not stack, e.g., `\mathsf{\mathbf{H}}` will produce $\mathsf{\mathbf{H}}$.
@@ -1119,7 +1119,6 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.0
   <option value="Cambria-Math">Local font</option>
   <option value="Latin-Modern">Latin Modern</option>
   <option value="Asana">Asana</option>
-  <option value="STIX2">STIX2</option>
   <option value="XITS">XITS</option>
 </select>
 <script>

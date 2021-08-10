@@ -14,10 +14,6 @@ fs.copyFile('site/temml/Temml-Asana.css', 'dist/Temml-Asana.css', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('site/temml/Temml-STIX2.css', 'dist/Temml-STIX2.css', (err) => {
-  if (err) { throw err }
-})
-
 fs.copyFile('site/temml/Temml-XITS.css', 'dist/Temml-XITS.css', (err) => {
   if (err) { throw err }
 })
