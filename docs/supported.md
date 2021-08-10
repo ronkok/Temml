@@ -217,13 +217,13 @@ Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À
 
 Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$.
 
-Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicde script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
+Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicode script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
 
 ## Layout
 
 ### Line Breaks
 
-Hard line breaks are `\\` and `\newline`. No soft line breaks, sorry. When browser develop further, I'll add soft line breaks.
+Hard line breaks are `\\` and `\newline`. No soft line breaks, sorry. When browsers support soft line breaks, I'll add them to Temml.
 
 ### Vertical Layout
 
@@ -238,7 +238,7 @@ Hard line breaks are `\\` and `\newline`. No soft line breaks, sorry. When br
 |:--------------|:----------------------------------------|
 |$$\sum_{\substack{0<i<m\\0<j<n}}$$ | `\sum_{\substack{0<i<m\\0<j<n}}` |
 
-The second argument of `\raisebox` is set to text mode, but it can contain math if the math is nested within `$…$` delimiters, as in `\raisebox{0.25em}{$\frac a b$}`
+LaTeX puts the second argument of `\raisebox` into text mode, but it can contain math if the math is nested within `$…$` delimiters, as in `\raisebox{0.25em}{$\frac a b$}`
 
 ### Overlap and Spacing
 
@@ -1018,7 +1018,7 @@ Symbols in the *texvc* extension
 | $\diamonds$ `\diamonds` | $\spades$ `\spades`           | $\infin$ `\infin`   |
 | $\bull$ `\bull`         | $\text{\sect}$ `\text{\sect}` | $\Dagger$ `\Dagger` |
 
-Direct Input: <span class="direct">§ ¶ £ ¥ ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ ✓ …  ⋮  ⋯  ⋱  ! ‼</span>
+Direct Input: <span class="direct">§ ¶ £ ¥ € ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ © ® ☺ ✓ ↯ …  ⋮  ⋯  ⋱  ! ‼</span>
 
 ## Units
 

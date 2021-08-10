@@ -721,10 +721,10 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 </tr>
 </tbody></table>
 <p>Any character can be written with the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">☺</mi></mrow><annotation encoding="application/x-tex">\char&quot;263a</annotation></semantics></math>.</p>
-<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicde script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
+<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicode script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
 <h2 id="layout">Layout</h2>
 <h3 id="line-breaks">Line Breaks</h3>
-<p>Hard line breaks are <code>\\</code> and <code>\newline</code>. No soft line breaks, sorry. When browser develop further, I&#39;ll add soft line breaks.</p>
+<p>Hard line breaks are <code>\\</code> and <code>\newline</code>. No soft line breaks, sorry. When browsers support soft line breaks, I&#39;ll add them to Temml.</p>
 <h3 id="vertical-layout">Vertical Layout</h3>
 <table>
 <thead>
@@ -767,7 +767,7 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <td style="text-align: left;"><code>\sum_{\substack{0&lt;i&lt;m\\0&lt;j&lt;n}}</code></td>
 </tr>
 </tbody></table>
-<p>The second argument of <code>\raisebox</code> is set to text mode, but it can contain math if the math is nested within <code>$…$</code> delimiters, as in <code>\raisebox{0.25em}{$\frac a b$}</code></p>
+<p>LaTeX puts the second argument of <code>\raisebox</code> into text mode, but it can contain math if the math is nested within <code>$…$</code> delimiters, as in <code>\raisebox{0.25em}{$\frac a b$}</code></p>
 <h3 id="overlap-and-spacing">Overlap and Spacing</h3>
 <table>
 <thead>
@@ -2689,7 +2689,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mo>‡</mo></mrow><annotation encoding="application/x-tex">\Dagger</annotation></semantics></math> <code>\Dagger</code></td>
 </tr>
 </tbody></table>
-<p>Direct Input: <span class="direct">§ ¶ £ ¥ ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ ✓ …  ⋮  ⋯  ⋱  ! ‼</span></p>
+<p>Direct Input: <span class="direct">§ ¶ £ ¥ € ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ © ® ☺ ✓ ↯ …  ⋮  ⋯  ⋱  ! ‼</span></p>
 <h2 id="units">Units</h2>
 <table>
 <thead>

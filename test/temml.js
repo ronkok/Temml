@@ -970,7 +970,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(text, textord, "\u00a7", "\\S");
   defineSymbol(math, textord, "\u00b6", "\\P", true);
   defineSymbol(text, textord, "\u00b6", "\\P");
-  defineSymbol(text, textord, "\u263a", "\\smiley");
+  defineSymbol(text, textord, "\u263a", "\\smiley", true);
   defineSymbol(math, textord, "\u263a", "\\smiley", true);
 
   // Math and Text
@@ -1628,8 +1628,8 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(text, textord, "\u00a3", "\\textsterling", true);
   defineSymbol(math, textord, "\u2720", "\\maltese");
   defineSymbol(text, textord, "\u2720", "\\maltese");
-  defineSymbol(math, textord, "\u20ac", "\\euro");
-  defineSymbol(text, textord, "\u20ac", "\\euro");
+  defineSymbol(math, textord, "\u20ac", "\\euro", true);
+  defineSymbol(text, textord, "\u20ac", "\\euro", true);
   defineSymbol(text, textord, "\u20ac", "\\texteuro");
   defineSymbol(math, textord, "\u00a9", "\\copyright", true);
   defineSymbol(text, textord, "\u00a9", "\\textcopyright");

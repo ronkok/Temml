@@ -732,7 +732,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\mathrlap|$\mathrlap{\,/}{=}$|`\mathrlap{\,/}{=}`| mathtools |
 |\mathring|$\mathring{a}$|`\mathring{a}`| ams |
 |\mathrm|$\mathrm{AaBb12}$|`\mathrm{AaBb12}`||
-|\mathscr|$\mathscr{AB}$|`\mathscr{AaBb123}`||
+|\mathscr|$\mathscr{AB}$|`\mathscr{AB}`||
 |\mathsf|$\mathsf{AaBb123}$|`\mathsf{AaBb123}`||
 |\mathsterling|$\mathsterling$|||
 |\mathstrut|$\sqrt{\mathstrut a}$|`\sqrt{\mathstrut a}`||
