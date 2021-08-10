@@ -217,6 +217,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\Bra|$\left\langle\psi\right\|$|`\Bra{\psi}`| braket |
 |\bra|$\mathinner{\langle{\psi}\|}$|`\bra{\psi}`| braket |
 |\braket|$\mathinner{\langle{\phi\|\psi}\rangle}$|`\braket{\phi\|\psi}`| braket |
+|\Braket|$\Braket{ \phi \| \frac{\partial^2}{\partial t^2} \| \psi }$|`\Braket{ϕ\|\frac{∂^2}{∂ t^2}\|ψ}`| braket
 |\brace|${n\brace k}$|`{n\brace k}`||
 |\bracevert|<span class="no-sup">Not supported</span>|||
 |\brack|${n\brack k}$|`{n\brack k}`||
@@ -1073,6 +1074,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\searrow|$\searrow$|||
 |\sec|$\sec$|||
 |\sect|$\text{\sect}$|`\text{\sect}`| texvc extension |
+|\Set| $\Set{ x \| x<\frac 1 2 }$ |`\Set{ x \| x<\frac 1 2 }`| braket
 |\setlength|<span class="no-sup">Not supported</span>|||
 |\setminus|$\setminus$|||
 |\sf|${\sf AaBb123}$|`{\sf AaBb123}`||

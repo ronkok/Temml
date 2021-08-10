@@ -290,7 +290,7 @@ Temml also supports `\llap`, `\rlap`, and `\clap`, but they will take only text,
 | $\in$ `\in`           | $\mid$ `\mid`               | $\to$ `\to`               | $\impliedby$ `\impliedby` |
 | $\ni$ `\ni`           | $\land$ `\land`             | $\gets$ `\gets`           | $\iff$ `\iff` |
 | $\notin$ `\notin`     | $\lor$ `\lor`     | $\leftrightarrow$ `\leftrightarrow` | $\lightning$ `\lightning` |
-| $\notni$ `\notni`     | $\neg$ `\neg` or `\lnot`    | | |
+| $\notni$ `\notni`     | $\neg$ `\neg` or `\lnot`    | $\Set{ x \| x<\frac 1 2 }$<br>`\Set{ x \| x<\frac 1 2 }` ||
 
 Equivalents in the *texvc* extension
 
@@ -423,7 +423,8 @@ Functions in the bottom five rows of this table can take `\limits`.
 |:-------------------------|:--------------------------------------------
 |$\bra{\phi}$ `\bra{\phi}` | $\prescript{a}{2}{\mathbf{C}}^{5+}_{2}$ `\prescript{a}{2}{\mathbf{C}}^{5+}_{2}`
 |$\ket{\psi}$ `\ket{\psi}` | $\braket{\phi\vert\psi}$ `\braket{\phi\vert\psi}` 
-|$\Bra{\phi}$ `\Bra{\phi}` | $\Ket{\psi}$ `\Ket{\psi}`
+|$\Bra{\phi}$ `\Bra{\phi}` | $\Braket{ \phi \| \frac{\partial^2}{\partial t^2} \| \psi }$<br>`\Braket{ \phi \| \frac{\partial^2}{\partial t^2} \| \psi }`
+| $\Ket{\psi}$ `\Ket{\psi}`|
 
 From the *mhchem* extension:
 

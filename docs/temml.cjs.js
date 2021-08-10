@@ -7751,6 +7751,24 @@ function defineMacro(name, body) {
   builtinMacros[name] = body;
 }
 
+// helper function
+const recreateArgStr = context => {
+  // Recreate the macro's original argument string from the array of parse tokens.
+  const tokens = context.consumeArgs(1)[0];
+  let str = "";
+  let expectedLoc = tokens[tokens.length - 1].loc.start;
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    if (tokens[i].loc.start > expectedLoc) {
+      // context.consumeArgs has eaten a space.
+      str += " ";
+      expectedLoc = tokens[i].loc.start;
+    }
+    str += tokens[i].text;
+    expectedLoc += tokens[i].text.length;
+  }
+  return str
+};
+
 //////////////////////////////////////////////////////////////////////
 // macro tools
 
@@ -8329,6 +8347,15 @@ defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
 defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
 defineMacro("\\Bra", "\\left\\langle#1\\right|");
 defineMacro("\\Ket", "\\left|#1\\right\\rangle");
+defineMacro("\\Braket",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\left\\langle" + argStr.replace(/\|/g, "\\,\\middle\\vert\\,") + "\\right\\rangle"
+});
+defineMacro("\\Set",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\left\\{" + argStr.replace(/\|/, "\\,\\middle\\vert\\,") + "\\right\\}"
+});
+
 
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx
