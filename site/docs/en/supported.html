@@ -18,7 +18,7 @@
 
 <h1 id="supported-functions">Supported Functions</h1>
 <p><strong>Temml</strong> is a JavaScript library that converts TeX math-mode functions to MathML. This page lists the TeX functions it supports, sorted into logical groups.</p>
-<p>To read this page, use a browser that supports MathML, such as Firefox or Safari. Chrome and Edge will support MathML <a href="https://mathml.igalia.com/">soon</a>.</p>
+<p>To read this page, use a browser that supports MathML, such as Firefox or Safari. Chrome and Edge will support MathML <a href="https://www.igalia.com/2021/08/09/MathML-Progress.html">soon</a>.</p>
 <p>There is a similar <a href="./support_table.html">Support Table</a>, sorted alphabetically, that lists both supported and some un-supported functions.</p>
 <h2 id="accents">Accents</h2>
 <table>
@@ -31,12 +31,12 @@
 </thead>
 <tbody><tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><msup><mi>a</mi><mo lspace="0em" rspace="0em">′</mo></msup></mrow><annotation encoding="application/x-tex">a&#x27;</annotation></semantics></math> <code>a&#39;</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">~</mo></mover></mrow><annotation encoding="application/x-tex">\tilde{a}</annotation></semantics></math> <code>\tilde{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>~</mo></mover></mrow><annotation encoding="application/x-tex">\tilde{a}</annotation></semantics></math> <code>\tilde{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>a</mi><mi>c</mi></mrow><mo stretchy="true">~</mo></mover></mrow><annotation encoding="application/x-tex">\widetilde{ac}</annotation></semantics></math> <code>\widetilde{ac}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><msup><mi>a</mi><mrow><mo>′</mo><mo>′</mo></mrow></msup></mrow><annotation encoding="application/x-tex">a&#x27;&#x27;</annotation></semantics></math> <code>a&#39;&#39;</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>F</mi><mo stretchy="false">⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{F}</annotation></semantics></math> <code>\vec{F}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>F</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vec{F}</annotation></semantics></math> <code>\vec{F}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">~</mo></munder></mrow><annotation encoding="application/x-tex">\utilde{AB}</annotation></semantics></math> <code>\utilde{AB}</code></td>
 </tr>
 <tr>
@@ -45,52 +45,52 @@
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">→</mo></mover></mrow><annotation encoding="application/x-tex">\overrightarrow{AB}</annotation></semantics></math> <code>\overrightarrow{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\acute{a}</annotation></semantics></math> <code>\acute{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\acute{a}</annotation></semantics></math> <code>\acute{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">←</mo></munder></mrow><annotation encoding="application/x-tex">\underleftarrow{AB}</annotation></semantics></math> <code>\underleftarrow{AB}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">→</mo></munder></mrow><annotation encoding="application/x-tex">\underrightarrow{AB}</annotation></semantics></math> <code>\underrightarrow{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>y</mi><mo stretchy="false">ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{y}</annotation></semantics></math> <code>\bar{y}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>y</mi><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\bar{y}</annotation></semantics></math> <code>\bar{y}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{AB}</annotation></semantics></math> <code>\overline{AB}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⇒</mo></mover></mrow><annotation encoding="application/x-tex">\Overrightarrow{AB}</annotation></semantics></math> <code>\Overrightarrow{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">˘</mo></mover></mrow><annotation encoding="application/x-tex">\breve{a}</annotation></semantics></math> <code>\breve{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>˘</mo></mover></mrow><annotation encoding="application/x-tex">\breve{a}</annotation></semantics></math> <code>\breve{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">‾</mo></munder></mrow><annotation encoding="application/x-tex">\underline{AB}</annotation></semantics></math> <code>\underline{AB}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">↔</mo></mover></mrow><annotation encoding="application/x-tex">\overleftrightarrow{AB}</annotation></semantics></math> <code>\overleftrightarrow{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\check{a}</annotation></semantics></math> <code>\check{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\check{a}</annotation></semantics></math> <code>\check{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>a</mi><mi>c</mi></mrow><mo stretchy="true">ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\widecheck{ac}</annotation></semantics></math> <code>\widecheck{ac}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">↔</mo></munder></mrow><annotation encoding="application/x-tex">\underleftrightarrow{AB}</annotation></semantics></math> <code>\underleftrightarrow{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">˙</mo></mover></mrow><annotation encoding="application/x-tex">\dot{a}</annotation></semantics></math> <code>\dot{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>˙</mo></mover></mrow><annotation encoding="application/x-tex">\dot{a}</annotation></semantics></math> <code>\dot{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>a</mi><mi>c</mi></mrow><mo stretchy="true">↼</mo></mover></mrow><annotation encoding="application/x-tex">\overleftharpoon{ac}</annotation></semantics></math> <code>\overleftharpoon{ac}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>a</mi><mi>c</mi></mrow><mo stretchy="true">⇀</mo></mover></mrow><annotation encoding="application/x-tex">\overrightharpoon{ac}</annotation></semantics></math> <code>\overrightharpoon{ac}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">¨</mo></mover></mrow><annotation encoding="application/x-tex">\ddot{a}</annotation></semantics></math> <code>\ddot{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>¨</mo></mover></mrow><annotation encoding="application/x-tex">\ddot{a}</annotation></semantics></math> <code>\ddot{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏠</mo></mover></mrow><annotation encoding="application/x-tex">\overgroup{AB}</annotation></semantics></math> <code>\overgroup{AB}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏜</mo></mover></mrow><annotation encoding="application/x-tex">\wideparen{AB}</annotation></semantics></math> <code>\wideparen{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">⃛</mo></mover></mrow><annotation encoding="application/x-tex">\dddot{a}</annotation></semantics></math> <code>\dddot{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>⃛</mo></mover></mrow><annotation encoding="application/x-tex">\dddot{a}</annotation></semantics></math> <code>\dddot{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏡</mo></munder></mrow><annotation encoding="application/x-tex">\undergroup{AB}</annotation></semantics></math> <code>\undergroup{AB}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏜</mo></mover></mrow><annotation encoding="application/x-tex">\overparen{AB}</annotation></semantics></math> <code>\overparen{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">⃜</mo></mover></mrow><annotation encoding="application/x-tex">\ddddot{a}</annotation></semantics></math> <code>\ddddot{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>⃜</mo></mover></mrow><annotation encoding="application/x-tex">\ddddot{a}</annotation></semantics></math> <code>\ddddot{a}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mtext>X</mtext><mo stretchy="true">‾</mo></munder></mrow><annotation encoding="application/x-tex">\underbar{X}</annotation></semantics></math> <code>\underbar{X}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏝</mo></munder></mrow><annotation encoding="application/x-tex">\underparen{AB}</annotation></semantics></math> <code>\underparen{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo stretchy="false">ˋ</mo></mover></mrow><annotation encoding="application/x-tex">\grave{a}</annotation></semantics></math> <code>\grave{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>g</mi><mo stretchy="false">˚</mo></mover></mrow><annotation encoding="application/x-tex">\mathring{g}</annotation></semantics></math> <code>\mathring{g}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>a</mi><mo>ˋ</mo></mover></mrow><annotation encoding="application/x-tex">\grave{a}</annotation></semantics></math> <code>\grave{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>g</mi><mo>˚</mo></mover></mrow><annotation encoding="application/x-tex">\mathring{g}</annotation></semantics></math> <code>\mathring{g}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏞</mo></mover></mrow><annotation encoding="application/x-tex">\overbrace{AB}</annotation></semantics></math> <code>\overbrace{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>θ</mi><mo stretchy="false">^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\theta}</annotation></semantics></math> <code>\hat{\theta}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>θ</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\hat{\theta}</annotation></semantics></math> <code>\hat{\theta}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mrow><mi>a</mi><mi>c</mi></mrow><mo stretchy="true">^</mo></mover></mrow><annotation encoding="application/x-tex">\widehat{ac}</annotation></semantics></math> <code>\widehat{ac}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><munder><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⏟</mo></munder></mrow><annotation encoding="application/x-tex">\underbrace{AB}</annotation></semantics></math> <code>\underbrace{AB}</code></td>
 </tr>
@@ -106,21 +106,21 @@
 </tr>
 </thead>
 <tbody><tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&#x27;{a}}</annotation></semantics></math> <code>\&#39;{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">˜</mo></mover></mrow><annotation encoding="application/x-tex">\text{\~{a}}</annotation></semantics></math> <code>\~{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">˙</mo></mover></mrow><annotation encoding="application/x-tex">\text{\.{a}}</annotation></semantics></math> <code>\.{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">˝</mo></mover></mrow><annotation encoding="application/x-tex">\text{\H{a}}</annotation></semantics></math> <code>\H{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&#x27;{a}}</annotation></semantics></math> <code>\&#39;{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˜</mo></mover></mrow><annotation encoding="application/x-tex">\text{\~{a}}</annotation></semantics></math> <code>\~{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˙</mo></mover></mrow><annotation encoding="application/x-tex">\text{\.{a}}</annotation></semantics></math> <code>\.{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˝</mo></mover></mrow><annotation encoding="application/x-tex">\text{\H{a}}</annotation></semantics></math> <code>\H{a}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">ˋ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\`{a}}</annotation></semantics></math> <code>\`{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\={a}}</annotation></semantics></math> <code>\={a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">¨</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&quot;{a}}</annotation></semantics></math> <code>\&quot;{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\v{a}}</annotation></semantics></math> <code>\v{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˋ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\`{a}}</annotation></semantics></math> <code>\`{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\={a}}</annotation></semantics></math> <code>\={a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>¨</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&quot;{a}}</annotation></semantics></math> <code>\&quot;{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\v{a}}</annotation></semantics></math> <code>\v{a}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">ˆ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\^{a}}</annotation></semantics></math> <code>\^{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">˘</mo></mover></mrow><annotation encoding="application/x-tex">\text{\u{a}}</annotation></semantics></math> <code>\u{a}</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">˚</mo></mover></mrow><annotation encoding="application/x-tex">\text{\r{a}}</annotation></semantics></math> <code>\r{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˆ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\^{a}}</annotation></semantics></math> <code>\^{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˘</mo></mover></mrow><annotation encoding="application/x-tex">\text{\u{a}}</annotation></semantics></math> <code>\u{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˚</mo></mover></mrow><annotation encoding="application/x-tex">\text{\r{a}}</annotation></semantics></math> <code>\r{a}</code></td>
 <td style="text-align: left;"></td>
 </tr>
 </tbody></table>
@@ -606,14 +606,14 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">ℵ</mi></mrow><annotation encoding="application/x-tex">\aleph</annotation></semantics></math> <code>\aleph</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">∇</mi></mrow><annotation encoding="application/x-tex">\nabla</annotation></semantics></math> <code>\nabla</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>ı</mi></mrow><annotation encoding="application/x-tex">\imath</annotation></semantics></math> <code>\imath</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo stretchy="false">˚</mo></mover></mrow><annotation encoding="application/x-tex">\text{\aa}</annotation></semantics></math> <code>\text{\aa}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˚</mo></mover></mrow><annotation encoding="application/x-tex">\text{\aa}</annotation></semantics></math> <code>\text{\aa}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>Œ</mtext></mrow><annotation encoding="application/x-tex">\text{\OE}</annotation></semantics></math> <code>\text{\OE}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">ℶ</mi></mrow><annotation encoding="application/x-tex">\beth</annotation></semantics></math> <code>\beth</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="italic">∂</mi></mrow><annotation encoding="application/x-tex">\partial</annotation></semantics></math> <code>\partial</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>ȷ</mi></mrow><annotation encoding="application/x-tex">\jmath</annotation></semantics></math> <code>\jmath</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>A</mtext><mo stretchy="false">˚</mo></mover></mrow><annotation encoding="application/x-tex">\text{\AA}</annotation></semantics></math> <code>\text{\AA}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mtext>A</mtext><mo>˚</mo></mover></mrow><annotation encoding="application/x-tex">\text{\AA}</annotation></semantics></math> <code>\text{\AA}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mtext>ø</mtext></mrow><annotation encoding="application/x-tex">\text{\o}</annotation></semantics></math> <code>\text{\o}</code></td>
 </tr>
 <tr>
@@ -1698,7 +1698,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi mathvariant="normal">erf</mi><mo>⁡</mo><mo stretchy="false" form="prefix">(</mo><mi>x</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\erf(x)</annotation></semantics></math> <code>\erf(x)</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mspace width="1em"></mspace><mtext>and</mtext><mspace width="1em"></mspace></mrow></mrow><annotation encoding="application/x-tex">\qand</annotation></semantics></math> <code>\qand</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo stretchy="false">⃗</mo></mover></mrow><annotation encoding="application/x-tex">\va{a}</annotation></semantics></math> <code>\va{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\va{a}</annotation></semantics></math> <code>\va{a}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mo fence="true" form="prefix">⟨</mo><mi>x</mi><mo fence="true" form="postfix">⟩</mo></mrow></mrow><annotation encoding="application/x-tex">\ev{x}</annotation></semantics></math> <code>\ev{x}</code></td>
@@ -1723,7 +1723,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mo fence="true" form="prefix">⟨</mo><mi>x</mi><mo fence="true" form="postfix">⟩</mo></mrow></mrow><annotation encoding="application/x-tex">\expval{x}</annotation></semantics></math> <code>\expval{x}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mtext>,</mtext><mspace width="1em"></mspace></mrow></mrow><annotation encoding="application/x-tex">\qcomma</annotation></semantics></math> <code>\qcomma</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo stretchy="false">⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vectorarrow{a}</annotation></semantics></math> <code>\vectorarrow{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo>⃗</mo></mover></mrow><annotation encoding="application/x-tex">\vectorarrow{a}</annotation></semantics></math> <code>\vectorarrow{a}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mfrac><mrow><mi>δ</mi><mi>x</mi></mrow><mrow><mi>δ</mi><mi>y</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\fdv{x}{y}</annotation></semantics></math> <code>\fdv{x}{y}</code></td>
@@ -1733,7 +1733,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mfrac><mrow><mi>δ</mi><mi>x</mi></mrow><mrow><mi>δ</mi><mi>y</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\functionalderivative{x}{y}</annotation></semantics></math> <code>\functionalderivative{x}{y}</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mspace width="1em"></mspace><mtext>even</mtext><mspace width="1em"></mspace></mrow></mrow><annotation encoding="application/x-tex">\qeven</annotation></semantics></math> <code>\qeven</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo stretchy="false">^</mo></mover></mrow><annotation encoding="application/x-tex">\vectorunit{a}</annotation></semantics></math> <code>\vectorunit{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\vectorunit{a}</annotation></semantics></math> <code>\vectorunit{a}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>𝜵</mi></mrow><annotation encoding="application/x-tex">\grad</annotation></semantics></math> <code>\grad</code></td>
@@ -1743,7 +1743,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z"></path></svg></span></spa
 <tr>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mi>𝜵</mi></mrow><annotation encoding="application/x-tex">\gradient</annotation></semantics></math> <code>\gradient</code></td>
 <td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mrow><mspace width="1em"></mspace><mtext>given</mtext><mspace width="1em"></mspace></mrow></mrow><annotation encoding="application/x-tex">\qgiven</annotation></semantics></math> <code>\qgiven</code></td>
-<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo stretchy="false">^</mo></mover></mrow><annotation encoding="application/x-tex">\vu{a}</annotation></semantics></math> <code>\vu{a}</code></td>
+<td style="text-align: left;"><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mover accent="true"><mi>𝒂</mi><mo>^</mo></mover></mrow><annotation encoding="application/x-tex">\vu{a}</annotation></semantics></math> <code>\vu{a}</code></td>
 </tr>
 </tbody></table>
 </details>

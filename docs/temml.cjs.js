@@ -1976,9 +1976,8 @@ const mathmlBuilder = (group, style) => {
     ? stretchy.mathMLnode(group.label)
     : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
 
-  if (!group.isStretchy) {
-    // Make non-stretchiness explicit, to get proper behavior from Firefox.
-    accentNode.setAttribute("stretchy", "false");
+  if (group.isStretchy) {
+    accentNode.setAttribute("stretchy", "true");
   }
 
   const node = new mathMLTree.MathNode("mover",
