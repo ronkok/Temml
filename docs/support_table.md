@@ -23,7 +23,7 @@
 
 **Temml** is a JavaScript library that converts TeX math-mode functions to MathML. This page provides an alphabetically sorted list of TeX functions that Temml supports and some functions that it does not support. There is a similar page, with functions [sorted by type](supported.html).
 
-To read this page, use a browser that supports MathML, such as Firefox or Safari. Chrome and Edge will support MathML [soon](https://mathml.igalia.com/).
+To read this page, use a browser that supports MathML, such as Firefox or Safari. Chrome and Edge will support MathML [soon](https://www.igalia.com/2021/08/09/MathML-Progress.html).
 
 Some functions are provided by an extension and are listed as such. They will be available only in pages that include the extension.
 
