@@ -555,6 +555,7 @@ var inline = {
   strong: /^__([^\s_])__(?!_)|^\*\*([^\s*])\*\*(?!\*)|^__([^\s][\s\S]*?[^\s])__(?!_)|^\*\*([^\s][\s\S]*?[^\s])\*\*(?!\*)/,
   em: /^_([^\s_])_(?!_)|^\*([^\s*<\[])\*(?!\*)|^_([^\s<][\s\S]*?[^\s_])_(?!_|[^\spunctuation])|^_([^\s_<][\s\S]*?[^\s])_(?!_|[^\spunctuation])|^\*([^\s<"][\s\S]*?[^\s\*])\*(?!\*|[^\spunctuation])|^\*([^\s*"<\[][\s\S]*?[^\s])\*(?!\*)/,
   texDisplay: /^\$\$((?:[^\s\\])|(?:\S.*?[^\s{\\]))\$\$(?=(?:$|[^0-9}]))/,
+  tex2: /^\$!((?:[^\s\\])|(?:\S.*?[^\s{\\]))!\$(?=(?:$|[^0-9}]))/,
   tex: /^\$((?:[^\s\\])|(?:\S.*?[^\s{\\]))\$(?=(?:$|[^0-9}]))/,
   code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
   br: /^( {2,}|\\)\n(?!\s*$)/,
@@ -822,6 +823,12 @@ InlineLexer.prototype.output = function(src) {
       continue;
     }
 
+    // LaTeX math, between $!…!$ delimiters. Enables interior $…$.
+    if (cap = this.rules.tex2.exec(src)) {
+      src = src.substring(cap[0].length);
+      out += this.renderer.tex(cap[1]);
+      continue;
+    }
     // LaTeX math, between $…$ delimiters
     if (cap = this.rules.tex.exec(src)) {
       src = src.substring(cap[0].length);
