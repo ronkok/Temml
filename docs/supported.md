@@ -1129,13 +1129,9 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.1
     const links = [...document.head.getElementsByTagName('link')];
     links.forEach(link => {
       if (temmlRegEx.test(link.href)) {
-        link.remove()
+        link.setAttribute("href", `./temml/Temml-${document.getElementById("MathFont").value}.css`);
       }
     })
-    const newLink = document.createElement("link");
-    newLink.href = `../../temml/Temml-${document.getElementById("MathFont").value}.css`;
-    newLink.rel = "stylesheet";
-    document.head.appendChild(newLink);
   }
 </script>
 </p>
