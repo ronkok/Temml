@@ -476,7 +476,7 @@ $\ce{1/2 H2O}$ `\ce{1/2 H2O}`
 
 $\ce{(1/2) H2O}$ `\ce{(1/2) H2O}` IUPAC Green Book
 
-$!\ce{$n$ H2O}!$ `\ce{$n$ H2O}`
+\(\ce{$n$ H2O}\) `\ce{$n$ H2O}`
 
 ## Isotopes
 
@@ -516,7 +516,7 @@ $\ce{A ->[H2O] B}$ `\ce{A ->[H2O] B}` % chemistry
 
 $\ce{A ->[{text above}][{text below}] B}$ `\ce{A ->[{text above}][{text below}] B}` % upright text, see below
 
-$!\ce{A ->[$x$][$x_i$] B}!$ `\ce{A ->[$x$][$x_i$] B}` % italic math, see below
+\(\ce{A ->[$x$][$x_i$] B}\) `\ce{A ->[$x$][$x_i$] B}` % italic math, see below
 
 ## Parentheses, Brackets, Braces
 
@@ -540,9 +540,9 @@ $\ce{NaOH(aq, $\infty $)}$ `\ce{NaOH(aq,$\infty$)}`
 
 ## Crystal Systems
 
-$!\ce{ZnS($c$)}!$ `\ce{ZnS($c$)}`
+\(\ce{ZnS($c$)}\) `\ce{ZnS($c$)}`
 
-$!\ce{ZnS(\ca$c$)}!$ `\ce{ZnS(\ca$c$)}` % Circa, tilde
+\(\ce{ZnS(\ca$c$)}\) `\ce{ZnS(\ca$c$)}` % Circa, tilde
 
 ## Variables like __*x*, *n*, 2*n*+1__
 
@@ -574,21 +574,21 @@ $\ce{^40_18Ar + \gamma{} + \nu_e}$ `\ce{^40_18Ar + \gamma{} + \nu_e}`
 
 By using `$...$` you can escape to math mode.
 
-$!\ce{NaOH(aq,$\infty$)}!$ `\ce{NaOH(aq,$\infty$)}`
+\(\ce{NaOH(aq,$\infty$)}\) `\ce{NaOH(aq,$\infty$)}`
 
-$!\ce{Fe(CN)_{{$\frac{6}{2}$}}}!$ `\ce{Fe(CN)_{$\frac{6}{2}$}}`
+\(\ce{Fe(CN)_{{$\frac{6}{2}$}}}\) `\ce{Fe(CN)_{$\frac{6}{2}$}}`
 
-$!\ce{X_{$i$}^{$x$}}!$ `\ce{X_{$i$}^{$x$}}`
+\(\ce{X_{$i$}^{$x$}}\) `\ce{X_{$i$}^{$x$}}`
 
-$!\ce{X_{$i$}^{$x$}}!$ `\ce{X_$i$^$x$}`
+\(\ce{X_{$i$}^{$x$}}\) `\ce{X_$i$^$x$}`
 
 ## Italic Text
 
 With the same mechanism you can mimic an italic text font.
 
-$!\ce{$cis${-}[PtCl2(NH3)2]}!$ `\ce{$cis${-}[PtCl2(NH3)2]}`
+\(\ce{$cis${-}[PtCl2(NH3)2]}\) `\ce{$cis${-}[PtCl2(NH3)2]}`
 
-$!\ce{CuS($hP12$)}!$ `\ce{CuS($hP12$)}` % Pearson Symbol
+\(\ce{CuS($hP12$)}\) `\ce{CuS($hP12$)}` % Pearson Symbol
 
 Spaces will be ignored. Use a `~` when you need to typeset a space.
 
@@ -962,7 +962,7 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\scriptscriptstyle x$      | `\scriptscriptstyle x` (The size of subsequent sub/superscripts) |
 | $\lim\limits_y x$           | `\lim\limits_y x`     |
 | $\lim\nolimits_y x$         | `\lim\nolimits_y x` |
-| $\verb!x^2!$                | `\verb!x^2!`           |
+| \(\verb!x^2!\)              | `\verb!x^2!`           |
 | $\text{ABcd }ABcd$          | `\text{ABcd $ABcd$}` |
 
 `\text{…}` shifts its contents into text mode, but you can shift back into math mode by nesting `$…$`.

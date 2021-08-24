@@ -540,7 +540,7 @@ Lexer.prototype.token = function(src, top) {
  */
 
 var inline = {
-  escape: /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/,
+  escape: /^\\([!"#$%&'*+,\-./:;<=>?@\[\]\\^_`{|}~])/,
   autolink: /^<(scheme:[^\s\x00-\x1f<>]*|email)>/,
   url: noop,
   tag: '^comment'
@@ -555,7 +555,7 @@ var inline = {
   strong: /^__([^\s_])__(?!_)|^\*\*([^\s*])\*\*(?!\*)|^__([^\s][\s\S]*?[^\s])__(?!_)|^\*\*([^\s][\s\S]*?[^\s])\*\*(?!\*)/,
   em: /^_([^\s_])_(?!_)|^\*([^\s*<\[])\*(?!\*)|^_([^\s<][\s\S]*?[^\s_])_(?!_|[^\spunctuation])|^_([^\s_<][\s\S]*?[^\s])_(?!_|[^\spunctuation])|^\*([^\s<"][\s\S]*?[^\s\*])\*(?!\*|[^\spunctuation])|^\*([^\s*"<\[][\s\S]*?[^\s])\*(?!\*)/,
   texDisplay: /^\$\$((?:[^\s\\])|(?:\S.*?[^\s{\\]))\$\$(?=(?:$|[^0-9}]))/,
-  tex2: /^\$!((?:[^\s\\])|(?:\S.*?[^\s{\\]))!\$(?=(?:$|[^0-9}]))/,
+  tex2: /^\\\(((?:[^\\]|\\\\(?=\))|\\(?!\)))+)\\\)/,
   tex: /^\$((?:[^\s\\])|(?:\S.*?[^\s{\\]))\$(?=(?:$|[^0-9}]))/,
   code: /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/,
   br: /^( {2,}|\\)\n(?!\s*$)/,
@@ -568,7 +568,7 @@ var inline = {
 inline._punctuation = '!"#$%&\'()*+,\\-./:;<=>?@\\[^_{|}~';
 inline.em = edit(inline.em).replace(/punctuation/g, inline._punctuation).getRegex();
 
-inline._escapes = /\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/g;
+inline._escapes = /\\([!"#$%&'*+,\-./:;<=>?@\[\]\\^_`{|}~])/g;
 
 inline._scheme = /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/;
 inline._email = /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/;
@@ -816,14 +816,14 @@ InlineLexer.prototype.output = function(src) {
       continue;
     }
 
-    // LaTeX math, between $…$ delimiters
+    // LaTeX display math, between $$…$$ delimiters
     if (cap = this.rules.texDisplay.exec(src)) {
       src = src.substring(cap[0].length);
       out += this.renderer.texDisplay(cap[1]);
       continue;
     }
 
-    // LaTeX math, between $!…!$ delimiters. Enables interior $…$.
+    // LaTeX math, between \(…\) delimiters. Enables interior $…$.
     if (cap = this.rules.tex2.exec(src)) {
       src = src.substring(cap[0].length);
       out += this.renderer.tex(cap[1]);
