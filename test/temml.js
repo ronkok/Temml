@@ -64,254 +64,6 @@ var temml = (function () {
 
   ParseError.prototype.__proto__ = Error.prototype;
 
-  //
-  /**
-   * This file contains a list of utility functions which are useful in other
-   * files.
-   */
-
-  /**
-   * Return whether an element is contained in a list
-   */
-  const contains = function(list, elem) {
-    return list.indexOf(elem) !== -1;
-  };
-
-  /**
-   * Provide a default value if a setting is undefined
-   */
-  const deflt = function(setting, defaultIfUndefined) {
-    return setting === undefined ? defaultIfUndefined : setting;
-  };
-
-  // hyphenate and escape adapted from Facebook's React under Apache 2 license
-
-  const uppercase = /([A-Z])/g;
-  const hyphenate = function(str) {
-    return str.replace(uppercase, "-$1").toLowerCase();
-  };
-
-  const ESCAPE_LOOKUP = {
-    "&": "&amp;",
-    ">": "&gt;",
-    "<": "&lt;",
-    '"': "&quot;",
-    "'": "&#x27;"
-  };
-
-  const ESCAPE_REGEX = /[&><"']/g;
-
-  /**
-   * Escapes text to prevent scripting attacks.
-   */
-  function escape(text) {
-    return String(text).replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match]);
-  }
-
-  /**
-   * Sometimes we want to pull out the innermost element of a group. In most
-   * cases, this will just be the group itself, but when ordgroups and colors have
-   * a single element, we want to pull that out.
-   */
-  const getBaseElem = function(group) {
-    if (group.type === "ordgroup") {
-      if (group.body.length === 1) {
-        return getBaseElem(group.body[0]);
-      } else {
-        return group;
-      }
-    } else if (group.type === "color") {
-      if (group.body.length === 1) {
-        return getBaseElem(group.body[0]);
-      } else {
-        return group;
-      }
-    } else if (group.type === "font") {
-      return getBaseElem(group.body);
-    } else {
-      return group;
-    }
-  };
-
-  /**
-   * TeXbook algorithms often reference "character boxes", which are simply groups
-   * with a single character in them. To decide if something is a character box,
-   * we find its innermost group, and see if it is a single character.
-   */
-  const isCharacterBox = function(group) {
-    const baseElem = getBaseElem(group);
-
-    // These are all the types of groups which hold single characters
-    return baseElem.type === "mathord" || baseElem.type === "textord" || baseElem.type === "atom"
-  };
-
-  const assert = function(value) {
-    if (!value) {
-      throw new Error("Expected non-null, but got " + String(value));
-    }
-    return value;
-  };
-
-  /**
-   * Return the protocol of a URL, or "_relative" if the URL does not specify a
-   * protocol (and thus is relative).
-   */
-  const protocolFromUrl = function(url) {
-    const protocol = /^\s*([^\\/#]*?)(?::|&#0*58|&#x0*3a)/i.exec(url);
-    return protocol != null ? protocol[1] : "_relative";
-  };
-
-  /**
-   * Round `n` to 4 decimal places, or to the nearest 1/10,000th em. The TeXbook
-   * gives an acceptable rounding error of 100sp (which would be the nearest
-   * 1/6551.6em with our ptPerEm = 10):
-   * http://www.ctex.org/documents/shredder/src/texbook.pdf#page=69
-   */
-  const round = function(n) {
-    return +n.toFixed(4);
-  };
-
-  var utils = {
-    contains,
-    deflt,
-    escape,
-    hyphenate,
-    getBaseElem,
-    isCharacterBox,
-    protocolFromUrl,
-    round
-  };
-
-  /**
-   * This is a module for storing settings passed into Temml. It correctly handles
-   * default settings.
-   */
-
-  /**
-   * The main Settings object
-   */
-  class Settings {
-    constructor(options) {
-      // allow null options
-      options = options || {};
-      this.displayMode = utils.deflt(options.displayMode, false);   // boolean
-      this.leqno = utils.deflt(options.leqno, false);               // boolean
-      this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
-      this.macros = options.macros || {};
-      this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
-      this.strict = utils.deflt(options.strict, false);    // boolean
-      this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
-      this.maxSize = Math.max(0, utils.deflt(options.maxSize, Infinity)); // number
-      this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1000)); // number
-    }
-
-    /**
-     * Report nonstrict (non-LaTeX-compatible) input.
-     * Can safely not be called if `this.strict` is false in JavaScript.
-     */
-    reportNonstrict(errorCode, errorMsg, token) {
-      const strict = this.strict;
-      if (strict === false) {
-        return;
-      } else if (strict === true) {
-        throw new ParseError(
-          "LaTeX-incompatible input and strict mode is set to 'error': " +
-            `${errorMsg} [${errorCode}]`,
-          token
-        );
-      } else {
-        // won't happen in type-safe code
-        return;
-      }
-    }
-
-    /**
-     * Check whether to test potentially dangerous input, and return
-     * `true` (trusted) or `false` (untrusted).  The sole argument `context`
-     * should be an object with `command` field specifying the relevant LaTeX
-     * command (as a string starting with `\`), and any other arguments, etc.
-     * If `context` has a `url` field, a `protocol` field will automatically
-     * get added by this function (changing the specified object).
-     */
-    isTrusted(context) {
-      if (context.url && !context.protocol) {
-        context.protocol = utils.protocolFromUrl(context.url);
-      }
-      const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
-      return Boolean(trust);
-    }
-  }
-
-  /**
-   * All registered functions.
-   * `functions.js` just exports this same dictionary again and makes it public.
-   * `Parser.js` requires this dictionary.
-   */
-  const _functions = {};
-
-  /**
-   * All MathML builders. Should be only used in the `define*` and the `build*ML`
-   * functions.
-   */
-  const _mathmlGroupBuilders = {};
-
-  function defineFunction({
-    type,
-    names,
-    props,
-    handler,
-    mathmlBuilder
-  }) {
-    // Set default values of functions
-    const data = {
-      type,
-      numArgs: props.numArgs,
-      argTypes: props.argTypes,
-      allowedInArgument: !!props.allowedInArgument,
-      allowedInText: !!props.allowedInText,
-      allowedInMath: props.allowedInMath === undefined ? true : props.allowedInMath,
-      numOptionalArgs: props.numOptionalArgs || 0,
-      infix: !!props.infix,
-      primitive: !!props.primitive,
-      handler: handler
-    };
-    for (let i = 0; i < names.length; ++i) {
-      _functions[names[i]] = data;
-    }
-    if (type) {
-      if (mathmlBuilder) {
-        _mathmlGroupBuilders[type] = mathmlBuilder;
-      }
-    }
-  }
-
-  /**
-   * Use this to register only the MathML builder for a function(e.g.
-   * if the function's ParseNode is generated in Parser.js rather than via a
-   * stand-alone handler provided to `defineFunction`).
-   */
-  function defineFunctionBuilders({ type, mathmlBuilder }) {
-    defineFunction({
-      type,
-      names: [],
-      props: { numArgs: 0 },
-      handler() {
-        throw new Error("Should never be called.")
-      },
-      mathmlBuilder
-    });
-  }
-
-  const normalizeArgument = function(arg) {
-    return arg.type === "ordgroup" && arg.body.length === 1 ? arg.body[0] : arg
-  };
-
-  // Since the corresponding buildMathML function expects a
-  // list of elements, we normalize for different kinds of arguments
-  const ordargument = function(arg) {
-    return arg.type === "ordgroup" ? arg.body : [arg]
-  };
-
   /**
    * This node represents a document fragment, which contains elements, but when
    * placed into the DOM doesn't have any representation itself. It only contains
@@ -686,6 +438,265 @@ var temml = (function () {
     MathNode,
     TextNode: TextNode$1,
     newDocumentFragment
+  };
+
+  //
+  /**
+   * This file contains a list of utility functions which are useful in other
+   * files.
+   */
+
+  /**
+   * Return whether an element is contained in a list
+   */
+  const contains = function(list, elem) {
+    return list.indexOf(elem) !== -1;
+  };
+
+  /**
+   * Provide a default value if a setting is undefined
+   */
+  const deflt = function(setting, defaultIfUndefined) {
+    return setting === undefined ? defaultIfUndefined : setting;
+  };
+
+  // hyphenate and escape adapted from Facebook's React under Apache 2 license
+
+  const uppercase = /([A-Z])/g;
+  const hyphenate = function(str) {
+    return str.replace(uppercase, "-$1").toLowerCase();
+  };
+
+  const ESCAPE_LOOKUP = {
+    "&": "&amp;",
+    ">": "&gt;",
+    "<": "&lt;",
+    '"': "&quot;",
+    "'": "&#x27;"
+  };
+
+  const ESCAPE_REGEX = /[&><"']/g;
+
+  /**
+   * Escapes text to prevent scripting attacks.
+   */
+  function escape(text) {
+    return String(text).replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match]);
+  }
+
+  /**
+   * Sometimes we want to pull out the innermost element of a group. In most
+   * cases, this will just be the group itself, but when ordgroups and colors have
+   * a single element, we want to pull that out.
+   */
+  const getBaseElem = function(group) {
+    if (group.type === "ordgroup") {
+      if (group.body.length === 1) {
+        return getBaseElem(group.body[0]);
+      } else {
+        return group;
+      }
+    } else if (group.type === "color") {
+      if (group.body.length === 1) {
+        return getBaseElem(group.body[0]);
+      } else {
+        return group;
+      }
+    } else if (group.type === "font") {
+      return getBaseElem(group.body);
+    } else {
+      return group;
+    }
+  };
+
+  /**
+   * TeXbook algorithms often reference "character boxes", which are simply groups
+   * with a single character in them. To decide if something is a character box,
+   * we find its innermost group, and see if it is a single character.
+   */
+  const isCharacterBox = function(group) {
+    const baseElem = getBaseElem(group);
+
+    // These are all the types of groups which hold single characters
+    return baseElem.type === "mathord" || baseElem.type === "textord" || baseElem.type === "atom"
+  };
+
+  const assert = function(value) {
+    if (!value) {
+      throw new Error("Expected non-null, but got " + String(value));
+    }
+    return value;
+  };
+
+  /**
+   * Return the protocol of a URL, or "_relative" if the URL does not specify a
+   * protocol (and thus is relative).
+   */
+  const protocolFromUrl = function(url) {
+    const protocol = /^\s*([^\\/#]*?)(?::|&#0*58|&#x0*3a)/i.exec(url);
+    return protocol != null ? protocol[1] : "_relative";
+  };
+
+  /**
+   * Round `n` to 4 decimal places, or to the nearest 1/10,000th em. The TeXbook
+   * gives an acceptable rounding error of 100sp (which would be the nearest
+   * 1/6551.6em with our ptPerEm = 10):
+   * http://www.ctex.org/documents/shredder/src/texbook.pdf#page=69
+   */
+  const round = function(n) {
+    return +n.toFixed(4);
+  };
+
+  const wrapWithMstyle = expression => {
+    let node;
+    if (expression.length === 0 && expression[0].type === "mrow") {
+      const node = expression[0];
+      node.type = "mstyle";
+    } else {
+      node = new mathMLTree.MathNode("mstyle", expression);
+    }
+    return node
+  };
+
+  var utils = {
+    contains,
+    deflt,
+    escape,
+    hyphenate,
+    getBaseElem,
+    isCharacterBox,
+    protocolFromUrl,
+    round
+  };
+
+  /**
+   * This is a module for storing settings passed into Temml. It correctly handles
+   * default settings.
+   */
+
+  /**
+   * The main Settings object
+   */
+  class Settings {
+    constructor(options) {
+      // allow null options
+      options = options || {};
+      this.displayMode = utils.deflt(options.displayMode, false);   // boolean
+      this.leqno = utils.deflt(options.leqno, false);               // boolean
+      this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
+      this.macros = options.macros || {};
+      this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
+      this.strict = utils.deflt(options.strict, false);    // boolean
+      this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
+      this.maxSize = Math.max(0, utils.deflt(options.maxSize, Infinity)); // number
+      this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1000)); // number
+    }
+
+    /**
+     * Report nonstrict (non-LaTeX-compatible) input.
+     * Can safely not be called if `this.strict` is false in JavaScript.
+     */
+    reportNonstrict(errorCode, errorMsg, token) {
+      const strict = this.strict;
+      if (strict === false) {
+        return;
+      } else if (strict === true) {
+        throw new ParseError(
+          "LaTeX-incompatible input and strict mode is set to 'error': " +
+            `${errorMsg} [${errorCode}]`,
+          token
+        );
+      } else {
+        // won't happen in type-safe code
+        return;
+      }
+    }
+
+    /**
+     * Check whether to test potentially dangerous input, and return
+     * `true` (trusted) or `false` (untrusted).  The sole argument `context`
+     * should be an object with `command` field specifying the relevant LaTeX
+     * command (as a string starting with `\`), and any other arguments, etc.
+     * If `context` has a `url` field, a `protocol` field will automatically
+     * get added by this function (changing the specified object).
+     */
+    isTrusted(context) {
+      if (context.url && !context.protocol) {
+        context.protocol = utils.protocolFromUrl(context.url);
+      }
+      const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
+      return Boolean(trust);
+    }
+  }
+
+  /**
+   * All registered functions.
+   * `functions.js` just exports this same dictionary again and makes it public.
+   * `Parser.js` requires this dictionary.
+   */
+  const _functions = {};
+
+  /**
+   * All MathML builders. Should be only used in the `define*` and the `build*ML`
+   * functions.
+   */
+  const _mathmlGroupBuilders = {};
+
+  function defineFunction({
+    type,
+    names,
+    props,
+    handler,
+    mathmlBuilder
+  }) {
+    // Set default values of functions
+    const data = {
+      type,
+      numArgs: props.numArgs,
+      argTypes: props.argTypes,
+      allowedInArgument: !!props.allowedInArgument,
+      allowedInText: !!props.allowedInText,
+      allowedInMath: props.allowedInMath === undefined ? true : props.allowedInMath,
+      numOptionalArgs: props.numOptionalArgs || 0,
+      infix: !!props.infix,
+      primitive: !!props.primitive,
+      handler: handler
+    };
+    for (let i = 0; i < names.length; ++i) {
+      _functions[names[i]] = data;
+    }
+    if (type) {
+      if (mathmlBuilder) {
+        _mathmlGroupBuilders[type] = mathmlBuilder;
+      }
+    }
+  }
+
+  /**
+   * Use this to register only the MathML builder for a function(e.g.
+   * if the function's ParseNode is generated in Parser.js rather than via a
+   * stand-alone handler provided to `defineFunction`).
+   */
+  function defineFunctionBuilders({ type, mathmlBuilder }) {
+    defineFunction({
+      type,
+      names: [],
+      props: { numArgs: 0 },
+      handler() {
+        throw new Error("Should never be called.")
+      },
+      mathmlBuilder
+    });
+  }
+
+  const normalizeArgument = function(arg) {
+    return arg.type === "ordgroup" && arg.body.length === 1 ? arg.body[0] : arg
+  };
+
+  // Since the corresponding buildMathML function expects a
+  // list of elements, we normalize for different kinds of arguments
+  const ordargument = function(arg) {
+    return arg.type === "ordgroup" ? arg.body : [arg]
   };
 
   /**
@@ -1389,9 +1400,9 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, mathord, "\u03e1", "\\sampi", true);
   defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
   defineSymbol(math, mathord, "\u03db", "\\stigma", true);
-  defineSymbol(math, bin, "\u2217", "*");
+  defineSymbol(math, bin, "\u2217", "\u2217", true);
   defineSymbol(math, bin, "+", "+");
-  defineSymbol(math, bin, "\u2212", "-");
+  defineSymbol(math, bin, "\u2212", "\u2212", true);
   defineSymbol(math, bin, "\u22c5", "\\cdot", true);
   defineSymbol(math, bin, "\u2218", "\\circ");
   defineSymbol(math, bin, "\u00f7", "\\div", true);
@@ -6484,7 +6495,14 @@ min-width: ${svgData[key].minWidth}em;`
     },
     mathmlBuilder: (group, style) => {
       const inner = buildExpression(group.body, style);
-      const node = new mathMLTree.MathNode("mstyle", inner);
+      const node = wrapWithMstyle(inner);
+  /*    let node
+      if (inner.length === 0 && inner[0].type === "mrow") {
+        const node = inner[0]
+        node.type = "mstyle"
+      } else {
+        node = new mathMLTree.MathNode("mstyle", inner);
+      } */
       node.setAttribute("mathsize", sizeMap[group.funcName] + "em");
       return node;
     }
@@ -6614,8 +6632,7 @@ min-width: ${svgData[key].minWidth}em;`
       const newStyle = style.withLevel(styleMap[group.scriptLevel]);
 
       const inner = buildExpression(group.body, newStyle);
-
-      const node = new mathMLTree.MathNode("mstyle", inner);
+      const node = wrapWithMstyle(inner);
 
       const styleAttributes = {
         display: ["0", "true"],

@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import { wrapWithMstyle } from "../utils"
 import * as mml from "../buildMathML";
 
 const styleMap = {
@@ -36,8 +36,8 @@ defineFunction({
     const newStyle = style.withLevel(styleMap[group.scriptLevel]);
 
     const inner = mml.buildExpression(group.body, newStyle);
-
-    const node = new mathMLTree.MathNode("mstyle", inner);
+    // Wrap with an <mstyle> element.
+    const node = wrapWithMstyle(inner)
 
     const styleAttributes = {
       display: ["0", "true"],

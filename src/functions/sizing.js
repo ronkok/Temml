@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import { wrapWithMstyle } from "../utils"
 import * as mml from "../buildMathML";
 
 // The size mappings are taken from TeX with \normalsize=10pt.
@@ -50,7 +50,8 @@ defineFunction({
   },
   mathmlBuilder: (group, style) => {
     const inner = mml.buildExpression(group.body, style);
-    const node = new mathMLTree.MathNode("mstyle", inner);
+    // Wrap with an <mstyle> element.
+    const node = wrapWithMstyle(inner)
     node.setAttribute("mathsize", sizeMap[group.funcName] + "em");
     return node;
   }

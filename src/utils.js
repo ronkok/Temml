@@ -1,4 +1,5 @@
 //
+import mathMLTree from "./mathMLTree";
 /**
  * This file contains a list of utility functions which are useful in other
  * files.
@@ -104,6 +105,19 @@ export const protocolFromUrl = function(url) {
 const round = function(n) {
   return +n.toFixed(4);
 };
+
+// Do not make an <mrow> the only child of a <mstyle>.
+// An <mstyle> acts as its own implicit <mrow>.
+export const wrapWithMstyle = expression => {
+  let node
+  if (expression.length === 0 && expression[0].type === "mrow") {
+    const node = expression[0]
+    node.type = "mstyle"
+  } else {
+    node = new mathMLTree.MathNode("mstyle", expression);
+  }
+  return node
+}
 
 export default {
   contains,

@@ -1,12 +1,12 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import mathMLTree from "../mathMLTree"
+import { wrapWithMstyle } from "../utils"
 import { assertNodeType } from "../parseNode"
 import * as mml from "../buildMathML"
 
 const mathmlBuilder = (group, style) => {
   const inner = mml.buildExpression(group.body, style.withColor(group.color))
-
-  const node = new mathMLTree.MathNode("mstyle", inner)
+  // Wrap with an <mstyle> element.
+  const node = wrapWithMstyle(inner)
 
   node.setAttribute("mathcolor", group.color)
 

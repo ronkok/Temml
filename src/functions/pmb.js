@@ -1,5 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import mathMLTree from "../mathMLTree"
+import { wrapWithMstyle } from "../utils"
 import * as mml from "../buildMathML"
 
 // \pmb is a simulation of bold font.
@@ -23,7 +23,8 @@ defineFunction({
   },
   mathmlBuilder(group, style) {
     const inner = mml.buildExpression(group.body, style)
-    const node = new mathMLTree.MathNode("mstyle", inner)
+    // Wrap with an <mstyle> element.
+    const node = wrapWithMstyle(inner)
     node.setAttribute("style", "text-shadow: 0.02em 0.01em 0.04px")
     return node
   }
