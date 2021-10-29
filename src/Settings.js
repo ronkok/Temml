@@ -17,6 +17,7 @@ export default class Settings {
     this.leqno = utils.deflt(options.leqno, false);               // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
     this.macros = options.macros || {};
+    this.xml = options.xml || false;
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
     this.strict = utils.deflt(options.strict, false);    // boolean
     this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.

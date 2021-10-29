@@ -7,9 +7,6 @@ The WOFF fonts have been obtained from
 http://mirrors.ctan.org/fonts/
 */
 
-@namespace url('http://www.w3.org/1999/xhtml');
-@namespace m url('http://www.w3.org/1998/Math/MathML');
-
 @font-face {
   font-family: XITS;
   src: local('XITS'),
@@ -46,7 +43,7 @@ http://mirrors.ctan.org/fonts/
   font-weight: bold;
 }
 
-m|math {
+math {
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -62,15 +59,15 @@ m|math {
   border-color: currentColor;
 }
 
-m|mtext {
+mtext {
   font-family: XITS;
 }
 
-m|math {
+math {
   font-family: XITS Math, math;
 }
 
-m|*.mathcal {
+*.mathcal {
   font-feature-settings: 'ss01';
 }
 

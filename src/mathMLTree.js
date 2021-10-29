@@ -142,7 +142,7 @@ export class TextNode {
 export const wrapWithMstyle = expression => {
   let node
   if (expression.length === 1 && expression[0].type === "mrow") {
-    const node = expression[0]
+    node = expression.pop()
     node.type = "mstyle"
   } else {
     node = new MathNode("mstyle", expression);

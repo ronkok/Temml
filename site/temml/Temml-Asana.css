@@ -8,16 +8,13 @@ The WOFF fonts have been obtained from
 http://mirrors.ctan.org/fonts/
 */
 
-@namespace url('http://www.w3.org/1999/xhtml');
-@namespace m url('http://www.w3.org/1998/Math/MathML');
-
 @font-face {
   font-family: Asana Math;
   src: local('Asana Math'), local('Asana-Math'),
        url('./Asana/Asana-Math.woff2');
 }
 
-m|math {
+math {
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -33,15 +30,15 @@ m|math {
   border-color: currentColor;
 }
 
-m|mtext {
+mtext {
   font-family: Asana Math;
 }
 
-m|math {
+math {
   font-family: Asana Math;
 }
 
-m|*.mathcal {
+*.mathcal {
   font-feature-settings: 'salt';
 }
 

@@ -65,7 +65,9 @@ temml.render(
 </li>
 <li><p><code>maxExpand</code>: <code>number</code>. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. If set to <code>Infinity</code>, the macro expander will try to fully expand as in LaTeX. (default: 1000)</p>
 </li>
-<li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default = <code>false</code>) </p>
+<li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default = <code>false</code>)</p>
+</li>
+<li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. This is unnecessary for modern browsers but may be helpful for other user agents. Default = <code>false</code>.</p>
 </li>
 <li><p><code>trust</code>: <code>boolean</code> or <code>function</code> (default: <code>false</code>). If <code>false</code> (do not trust input), prevent any commands like <code>\includegraphics</code> that could enable adverse behavior, rendering them instead in <code>errorColor</code>. If <code>true</code> (trust input), allow all such commands. Provide a custom function <code>handler(context)</code> to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:</p>
 <ul>
@@ -225,7 +227,7 @@ math expressions before rendering.</p>
 <nav>
 <div id="sidebar">
 
-<p><math xmlns="http://www.w3.org/1998/Math/MathML" class ="temml"><semantics><mrow><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow><annotation encoding="application/x-tex">\href{https://temml.org/}{\color{black}\Large\Temml}</annotation></semantics></math> &nbsp;&nbsp;v0.2.1</p>
+<p><math class ="temml"><semantics><mrow><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow><annotation encoding="application/x-tex">\href{https://temml.org/}{\color{black}\Large\Temml}</annotation></semantics></math> &nbsp;&nbsp;v0.2.1</p>
 <h3><a href="#top">Contents</a></h3>
 
 <ul>
