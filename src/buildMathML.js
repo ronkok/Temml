@@ -144,9 +144,6 @@ export default function buildMathML(tree, texExpression, style, settings) {
 
   if (tag) {
     wrapper = taggedExpression(wrapper, tag, style, settings.leqno)
-  } else if (wrapper.children.length === 1 && settings.displayMode) {
-    wrapper.children[0].setAttribute("display", "block")
-    wrapper.children[0].setAttribute("style", "width: 100%;")
   }
 
   // Build a TeX annotation of the source
