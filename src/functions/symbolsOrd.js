@@ -70,7 +70,9 @@ defineFunctionBuilders({
       } else if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant)
       } else {
-        if (variant !== "normal") { text.text = variantChar(text.text, variant) }
+        if (variant !== "normal") {
+          text.text = text.text.split("").map(c => variantChar(c, variant)).join("")
+        }
         node = new mathMLTree.MathNode("mn", [text])
       }
     } else if (group.text === "\\prime") {
