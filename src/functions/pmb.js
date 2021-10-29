@@ -1,5 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import { wrapWithMstyle } from "../utils"
+import { wrapWithMstyle } from "../mathMLTree"
 import * as mml from "../buildMathML"
 
 // \pmb is a simulation of bold font.

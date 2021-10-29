@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import { wrapWithMstyle } from "../utils"
+import { wrapWithMstyle } from "../mathMLTree"
 import * as mml from "../buildMathML";
 
 const styleMap = {

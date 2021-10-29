@@ -1,5 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import { wrapWithMstyle } from "../utils"
+import { wrapWithMstyle } from "../mathMLTree"
 import { assertNodeType } from "../parseNode"
 import * as mml from "../buildMathML"
 

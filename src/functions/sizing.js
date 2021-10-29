@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import { wrapWithMstyle } from "../utils"
+import { wrapWithMstyle } from "../mathMLTree"
 import * as mml from "../buildMathML";
 
 // The size mappings are taken from TeX with \normalsize=10pt.
