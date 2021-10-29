@@ -141,7 +141,7 @@ export class TextNode {
 // An <mstyle> acts as its own implicit <mrow>.
 export const wrapWithMstyle = expression => {
   let node
-  if (expression.length === 0 && expression[0].type === "mrow") {
+  if (expression.length === 1 && expression[0].type === "mrow") {
     const node = expression[0]
     node.type = "mstyle"
   } else {
