@@ -72,8 +72,13 @@ const mathmlBuilder = (group, style) => {
     }
   }
 
-  const identifier = new mathMLTree.MathNode("mi", expression)
-  identifier.setAttribute("mathvariant", "normal")
+  let wrapper;
+  if (isAllString) {
+    wrapper = new mathMLTree.MathNode("mi", expression)
+    wrapper.setAttribute("mathvariant", "normal")
+  } else {
+    wrapper = new mathMLTree.MathNode("mrow", expression)
+  }
 
   if (!group.parentIsSupSub) {
     // Append an <mo>&ApplyFunction;</mo>.
@@ -84,13 +89,13 @@ const mathmlBuilder = (group, style) => {
       // So add a leading space.
       const space = new mathMLTree.MathNode("mspace")
       space.setAttribute("width", "0.1667em") // thin space.
-      return mathMLTree.newDocumentFragment([space, identifier, operator])
+      return mathMLTree.newDocumentFragment([space, wrapper, operator])
     } else {
-      return mathMLTree.newDocumentFragment([identifier, operator])
+      return mathMLTree.newDocumentFragment([wrapper, operator])
     }
   }
 
-  return identifier
+  return wrapper
 };
 
 // \operatorname
