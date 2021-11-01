@@ -223,7 +223,9 @@ Regarding calligraphic and script: The MathML and Unicode standards are [in flux
 
 ### Line Breaks
 
-Hard line breaks are `\\` and `\newline`. No soft line breaks, sorry. When browsers support soft line breaks, I'll add them to Temml.
+Hard line breaks are `\\` and `\newline`.
+
+If the rendering options do not include annotations, Hurmet will write MathML with soft line breaks after relations and binary operators. These soft line breaks will appear only in Firefox. Chromium and Safari do not support soft line breaks.
 
 ### Vertical Layout
 
@@ -1009,7 +1011,8 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\circledS$ `\circledS` | $\diamondsuit$ `\diamondsuit` | $\vardiamondsuit$ `\vardiamondsuit` |
 | $\text{\textregistered}$ `\text{\textregistered}` | $\heartsuit$ `\heartsuit` | $\varheartsuit$ `\varheartsuit` |
 | $\text{\textbullet}$ `\text{\textbullet}` | $\spadesuit$ `\spadesuit` | $\varspadesuit$ `\varspadesuit` |
-| $\smiley$ `\smiley` | $\standardstate$ `\standardstate` | |
+| $\smiley$ `\smiley` | $\female$ `\female` | $\male$ `\male` |
+| $\standardstate$ `\standardstate` | | |
 
 Symbols in the *texvc* extension
 

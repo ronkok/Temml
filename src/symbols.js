@@ -142,6 +142,8 @@ defineSymbol(math, textord, "\u2665", "\\varheartsuit", true);
 defineSymbol(math, textord, "\u2111", "\\Im", true);
 defineSymbol(math, textord, "\u2660", "\\spadesuit", true);
 defineSymbol(math, textord, "\u2664", "\\varspadesuit", true);
+defineSymbol(math, textord, "\u2640", "\\female", true);
+defineSymbol(math, textord, "\u2642", "\\male", true);
 defineSymbol(math, textord, "\u00a7", "\\S", true);
 defineSymbol(text, textord, "\u00a7", "\\S");
 defineSymbol(math, textord, "\u00b6", "\\P", true);
