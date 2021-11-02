@@ -622,7 +622,7 @@ const braketHelper = (one) => (context) => {
     }
     return {
       tokens: doubled ? middleDouble : middle,
-      numArgs: 0,
+      numArgs: 0
     };
   };
   context.macros.set("|", midMacro(false));
@@ -634,7 +634,7 @@ const braketHelper = (one) => (context) => {
   context.macros.endGroup();
   return {
     tokens: expanded.reverse(),
-    numArgs: 0,
+    numArgs: 0
   };
 };
 defineMacro("\\bra@ket", braketHelper(false));
