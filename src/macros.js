@@ -22,24 +22,6 @@ export function defineMacro(name, body) {
   builtinMacros[name] = body;
 }
 
-// helper function
-const recreateArgStr = context => {
-  // Recreate the macro's original argument string from the array of parse tokens.
-  const tokens = context.consumeArgs(1)[0]
-  let str = "";
-  let expectedLoc = tokens[tokens.length - 1].loc.start
-  for (let i = tokens.length - 1; i >= 0; i--) {
-    if (tokens[i].loc.start > expectedLoc) {
-      // context.consumeArgs has eaten a space.
-      str += " ";
-      expectedLoc = tokens[i].loc.start;
-    }
-    str += tokens[i].text;
-    expectedLoc += tokens[i].text.length;
-  }
-  return str
-}
-
 //////////////////////////////////////////////////////////////////////
 // macro tools
 
@@ -491,12 +473,7 @@ defineMacro("\\tag@literal", (context) => {
 // \newcommand{\mod}[1]{\allowbreak\if@display\mkern18mu
 //   \else\mkern12mu\fi{\operator@font mod}\,\,#1}
 // TODO: math mode should use \medmuskip = 4mu plus 2mu minus 4mu
-defineMacro(
-  "\\bmod",
-  "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}" +
-    "\\mathbin{\\rm mod}" +
-    "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}"
-);
+defineMacro("\\bmod", "\\mathbin{\\text{mod}}");
 defineMacro(
   "\\pod",
   "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern8mu}{\\mkern8mu}{\\mkern8mu}(#1)"
@@ -549,23 +526,23 @@ defineMacro("\\prescript", "\\pres@cript{_{#1}^{#2}}{}{#3}")
 defineMacro("\\ordinarycolon", ":");
 //\def\vcentcolon{\mathrel{\mathop\ordinarycolon}}
 //TODO(edemaine): Not yet centered. Fix via \raisebox or #726
-defineMacro("\\vcentcolon", "\\mathrel{\\mathop\\ordinarycolon}");
+defineMacro("\\vcentcolon", "\\mathrel{\\mathrel\\ordinarycolon}");
 // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-defineMacro("\\coloneq", '\\mathop{\\char"3a\\char"2212}');
+defineMacro("\\coloneq", '\\mathrel{\\char"3a\\char"2212}');
 // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-defineMacro("\\Coloneq", '\\mathop{\\char"2237\\char"2212}');
+defineMacro("\\Coloneq", '\\mathrel{\\char"2237\\char"2212}');
 // \providecommand*\Eqqcolon{=\mathrel{\mkern-1.2mu}\dblcolon}
-defineMacro("\\Eqqcolon", '\\mathop{\\char"3d\\char"2237}');
+defineMacro("\\Eqqcolon", '\\mathrel{\\char"3d\\char"2237}');
 // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
-defineMacro("\\Eqcolon", '\\mathop{\\char"2212\\char"2237}');
+defineMacro("\\Eqcolon", '\\mathrel{\\char"2212\\char"2237}');
 // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
-defineMacro("\\colonapprox", '\\mathop{\\char"3a\\char"2248}');
+defineMacro("\\colonapprox", '\\mathrel{\\char"3a\\char"2248}');
 // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
-defineMacro("\\Colonapprox", '\\mathop{\\char"2237\\char"2248}');
+defineMacro("\\Colonapprox", '\\mathrel{\\char"2237\\char"2248}');
 // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
-defineMacro("\\colonsim", '\\mathop{\\char"3a\\char"223c}');
+defineMacro("\\colonsim", '\\mathrel{\\char"3a\\char"223c}');
 // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
-defineMacro("\\Colonsim", '\\mathop{\\char"2237\\char"223c}');
+defineMacro("\\Colonsim", '\\mathrel{\\char"2237\\char"223c}');
 
 //////////////////////////////////////////////////////////////////////
 // colonequals.sty
@@ -607,7 +584,7 @@ defineMacro("\\varprojlim", "\\DOTSB\\operatorname*{\\underleftarrow{\\text{lim}
 
 defineMacro("\\argmin", "\\DOTSB\\operatorname*{arg\\,min}");
 defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
-defineMacro("\\plim", "\\DOTSB\\mathop{\\operatorname{plim}}\\limits");
+defineMacro("\\plim", "\\DOTSB\\operatorname*{plim}");
 
 //////////////////////////////////////////////////////////////////////
 // braket.sty
@@ -618,19 +595,56 @@ defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
 defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
 defineMacro("\\Bra", "\\left\\langle#1\\right|");
 defineMacro("\\Ket", "\\left|#1\\right\\rangle");
-defineMacro("\\Braket",  function(context) {
-  const argStr = recreateArgStr(context)
-  return "\\left\\langle" + argStr.replace(/\|/g, "\\,\\middle\\vert\\,") + "\\right\\rangle"
-})
-defineMacro("\\Set",  function(context) {
-  const argStr = recreateArgStr(context)
-  return "\\left\\{" + argStr.replace(/\|/, "\\,\\middle\\vert\\,") + "\\right\\}"
-})
-defineMacro("\\set",  function(context) {
-  const argStr = recreateArgStr(context)
-  return "\\{" + argStr.replace(/\|/, "\\mid ") + "\\}"
-})
-
+const braketHelper = (one) => (context) => {
+  const left = context.consumeArg().tokens;
+  const middle = context.consumeArg().tokens;
+  const middleDouble = context.consumeArg().tokens;
+  const right = context.consumeArg().tokens;
+  const oldMiddle = context.macros.get("|");
+  const oldMiddleDouble = context.macros.get("\\|");
+  context.macros.beginGroup();
+  const midMacro = (double) => (context) => {
+    if (one) {
+      // Only modify the first instance of | or \|
+      context.macros.set("|", oldMiddle);
+      if (middleDouble.length) {
+        context.macros.set("\\|", oldMiddleDouble);
+      }
+    }
+    let doubled = double;
+    if (!double && middleDouble.length) {
+      // Mimic \@ifnextchar
+      const nextToken = context.future();
+      if (nextToken.text === "|") {
+        context.popToken();
+        doubled = true;
+      }
+    }
+    return {
+      tokens: doubled ? middleDouble : middle,
+      numArgs: 0,
+    };
+  };
+  context.macros.set("|", midMacro(false));
+  if (middleDouble.length) {
+    context.macros.set("\\|", midMacro(true));
+  }
+  const arg = context.consumeArg().tokens;
+  const expanded = context.expandTokens([...right, ...arg, ...left]);  // reversed
+  context.macros.endGroup();
+  return {
+    tokens: expanded.reverse(),
+    numArgs: 0,
+  };
+};
+defineMacro("\\bra@ket", braketHelper(false));
+defineMacro("\\bra@set", braketHelper(true));
+defineMacro("\\Braket", "\\bra@ket{\\left\\langle}" +
+  "{\\,\\middle\\vert\\,}{\\,\\middle\\vert\\,}{\\right\\rangle}");
+defineMacro("\\Set", "\\bra@set{\\left\\{\\:}" +
+  "{\\;\\middle\\vert\\;}{\\;\\middle\\Vert\\;}{\\:\\right\\}}");
+defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
+  // has no support for special || or \|
 
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx

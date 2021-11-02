@@ -336,7 +336,9 @@ export default class MacroExpander {
   }
 
   /**
-   * Fully expand the given token stream and return the resulting list of tokens
+   * Fully expand the given token stream and return the resulting list of
+   * tokens.  Note that the input tokens are in reverse order, but the
+   * output tokens are in forward order.
    */
   expandTokens(tokens) {
     const output = [];
