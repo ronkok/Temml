@@ -569,7 +569,7 @@ defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
 defineSymbol(math, mathord, "\u03db", "\\stigma", true);
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
-defineSymbol(math, bin, "\u2212", "\u2212", true);
+defineSymbol(math, bin, "\u2212", "-", true);
 defineSymbol(math, bin, "\u22c5", "\\cdot", true);
 defineSymbol(math, bin, "\u2218", "\\circ");
 defineSymbol(math, bin, "\u00f7", "\\div", true);
