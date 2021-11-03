@@ -14,10 +14,11 @@ export default class Settings {
     // allow null options
     options = options || {};
     this.displayMode = utils.deflt(options.displayMode, false);   // boolean
+    this.annotate = utils.deflt(options.annotate, false)          // boolean
     this.leqno = utils.deflt(options.leqno, false);               // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
     this.macros = options.macros || {};
-    this.xml = options.xml || false;
+    this.xml = utils.deflt(options.xml, false);                   // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
     this.strict = utils.deflt(options.strict, false);    // boolean
     this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.

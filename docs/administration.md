@@ -79,6 +79,7 @@ Available options are:
 - `macros`: `object`. A collection of custom macros. Each macro is a key-value pair in which the key is a new Temml function name and the value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.
   
   If you do not pre-define any macros, provide an empty macros object. This enables user-created persistent `\gdef` macros. See the [macros](#persistent-macros-and-ref) example below.
+- `annotate`: `boolean`. If `true`, include an `<annotation>` element that contains the inputted TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox.
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX.
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. Default is `false.`
 - `errorColor`: `string`. A color string given in the format `"#XXX"` or `"#XXXXXX"`. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: `#b22222`)
