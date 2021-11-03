@@ -23,11 +23,11 @@ math {
   direction: ltr;
 }
 
-.temml * {
+math * {
   border-color: currentColor;
 }
 
-mtext {
+math mtext {
   font-family: "Cambria Math", "Times New Roman", math;
 }
 
@@ -35,11 +35,11 @@ math {
   font-family: "Cambria Math", "Times New Roman", math;
 }
 
-*.mathscr {
+math .mathscr {
   font-family: "Temml-Script";
 }
 
-.oldstylenums {
+math .oldstylenums {
   font-feature-settings: 'onum';
 }
 

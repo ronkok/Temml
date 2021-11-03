@@ -7,7 +7,6 @@
 import mathMLTree from "./mathMLTree"
 import ParseError from "./ParseError"
 import symbols, { ligatures } from "./symbols"
-import utils from "./utils"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
 import { MathNode } from "./mathMLTree"
 import setLineBreaks from "./linebreaking"
@@ -134,28 +133,27 @@ export default function buildMathML(tree, texExpression, style, settings) {
 
   const expression = buildExpression(tree, style);
 
-  // A MathML <semantics> element will recognize only one visual child.
-  let wrapper =
-    expression.length === 1 && tag !== null &&
-    expression[0] instanceof MathNode &&
-    utils.contains(["mrow", "mtable"], expression[0].type)
+  let wrapper = expression.length === 1 && tag === null && (expression[0] instanceof MathNode)
       ? expression[0]
-      : setLineBreaks(expression, settings.displayMode)
+      : setLineBreaks(expression, settings.displayMode, settings.annotate)
 
   if (tag) {
     wrapper = taggedExpression(wrapper, tag, style, settings.leqno)
   }
 
-  // Build a TeX annotation of the source
-  const annotation = new mathMLTree.MathNode(
-    "annotation", [new mathMLTree.TextNode(texExpression)]);
+  let semantics
+  if (settings.annotate) {
+    // Build a TeX annotation of the source
+    const annotation = new mathMLTree.MathNode(
+      "annotation", [new mathMLTree.TextNode(texExpression)]);
+    annotation.setAttribute("encoding", "application/x-tex");
+    semantics = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
+  }
 
-  annotation.setAttribute("encoding", "application/x-tex");
+  const math = settings.annotate
+    ? new mathMLTree.MathNode("math", [semantics])
+    : new mathMLTree.MathNode("math", [wrapper])
 
-  const semantics = new mathMLTree.MathNode(
-      "semantics", [wrapper, annotation]);
-
-  const math = new mathMLTree.MathNode("math", [semantics], ["temml"]);
   if (settings.xml) {
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
   }

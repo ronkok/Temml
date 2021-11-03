@@ -55,7 +55,7 @@ math {
   direction: ltr;
 }
 
-.temml * {
+math * {
   border-color: currentColor;
 }
 
