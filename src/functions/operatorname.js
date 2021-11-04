@@ -1,4 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
+import defineMacro from "../defineMacro";
 import mathMLTree from "../mathMLTree"
 import { spaceCharacter } from "./kern"
 import { ordTypes } from "./op"
@@ -121,3 +122,6 @@ defineFunction({
   },
   mathmlBuilder
 });
+
+defineMacro("\\operatorname",
+  "\\@ifstar\\operatornamewithlimits\\operatorname@");

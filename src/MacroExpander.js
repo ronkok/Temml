@@ -10,7 +10,7 @@ import { Token } from "./Token";
 
 import ParseError from "./ParseError";
 import Namespace from "./Namespace";
-import builtinMacros from "./macros";
+import macros from "./macros";
 
 // List of commands that act like macros but aren't defined as a macro,
 // function, or symbol.  Used in `isDefined`.
@@ -28,7 +28,7 @@ export default class MacroExpander {
     this.expansionCount = 0;
     this.feed(input);
     // Make new global namespace
-    this.macros = new Namespace(builtinMacros, settings.macros);
+    this.macros = new Namespace(macros, settings.macros);
     this.mode = mode;
     this.stack = []; // contains tokens in REVERSE order
   }

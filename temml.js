@@ -17,7 +17,7 @@ import Style from "./src/Style";
 import { Span } from "./src/domTree";
 import { TextNode } from "./src/domTree";
 import { defineSymbol } from "./src/symbols";
-import { defineMacro } from "./src/macros";
+import defineMacro from "./src/defineMacro";
 import { postProcess, version } from "./src/postProcess";
 
 /**

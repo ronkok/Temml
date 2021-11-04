@@ -3,24 +3,14 @@
  * This can be used to define some commands in terms of others.
  */
 
+// Export global macros object from defineMacro
+import defineMacro, {_macros} from "./defineMacro";
+const macros = _macros;
+export default macros;
+
 import symbols from "./symbols";
 import utils from "./utils";
 import ParseError from "./ParseError";
-
-/**
- * Provides context to macros defined by functions. Implemented by
- * MacroExpander.
- */
-
-/** Macro tokens (in reverse order). */
-
-const builtinMacros = {};
-export default builtinMacros;
-
-// This function might one day accept an additional argument and do more things.
-export function defineMacro(name, body) {
-  builtinMacros[name] = body;
-}
 
 //////////////////////////////////////////////////////////////////////
 // macro tools
@@ -241,8 +231,6 @@ defineMacro("\u22ee", "\\vdots");
 //////////////////////////////////////////////////////////////////////
 // amsmath.sty
 // http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
-
-defineMacro("\\operatorname", "\\@ifstar\\operatornamewithlimits\\operatorname@")
 
 //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
