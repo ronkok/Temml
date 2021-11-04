@@ -42,6 +42,7 @@ import "./functions/phantom";
 import "./functions/pmb";
 import "./functions/raise";
 import "./functions/ref";
+import "./functions/relax";
 import "./functions/rule";
 import "./functions/sizing";
 import "./functions/smash";

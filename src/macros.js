@@ -240,7 +240,7 @@ defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
 defineMacro(
   "\\colon",
   "\\nobreak\\mskip2mu\\mathpunct{}" +
-  "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu"
+  "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu\\relax"
 );
 
 // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
