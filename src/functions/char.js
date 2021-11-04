@@ -27,7 +27,7 @@ defineFunction({
     return {
       type: "textord",
       mode: parser.mode,
-      text: String.fromCharCode(code)
+      text: String.fromCodePoint(code)
     }
   }
 })
