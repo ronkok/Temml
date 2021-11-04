@@ -768,6 +768,7 @@ defineSymbol(text, accent, "\u02dc", "\\~"); // tilde
 defineSymbol(text, accent, "\u02c9", "\\="); // macron
 defineSymbol(text, accent, "\u02d8", "\\u"); // breve
 defineSymbol(text, accent, "\u02d9", "\\."); // dot above
+defineSymbol(text, accent, "\u00b8", "\\c"); // cedilla
 defineSymbol(text, accent, "\u02da", "\\r"); // ring above
 defineSymbol(text, accent, "\u02c7", "\\v"); // caron
 defineSymbol(text, accent, "\u00a8", '\\"'); // diaresis

@@ -12,7 +12,7 @@ const mathmlBuilder = (group, style) => {
     accentNode.setAttribute("stretchy", "true")
   }
 
-  const node = new mathMLTree.MathNode("mover",
+  const node = new mathMLTree.MathNode((group.label === "\\c" ? "munder" : "mover"),
     [mml.buildGroup(group.base, style), accentNode]
   );
 
@@ -98,7 +98,7 @@ defineFunction({
 // Text-mode accents
 defineFunction({
   type: "accent",
-  names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"],
+  names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\c", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"],
   props: {
     numArgs: 1,
     allowedInText: true,
