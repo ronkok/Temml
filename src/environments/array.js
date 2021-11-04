@@ -608,7 +608,8 @@ defineEnvironment({
     }
     const res = parseArray(context.parser, payload, "text");
     // Populate cols with the correct number of column alignment specs.
-    res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign });
+    const numCols = Math.max(0, ...res.body.map((row) => row.length));
+    res.cols = new Array(numCols).fill({ type: "align", align: colAlign })
     return delimiters
       ? {
         type: "leftright",
