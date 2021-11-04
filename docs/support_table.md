@@ -453,6 +453,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\fbox|$\fbox{Hi there!}$|`\fbox{Hi there!}`||
 |\fcolorbox|$\fcolorbox{red}{aqua}{A}$|`\fcolorbox{red}{aqua}{A}`| color |
 |\fdv|$\fdv{x}{y}$|`\fdv{x}{y}`| physics extension |
+|\female|$\female$|| stix |
 |\fi|<span class="no-sup">Not supported</span>|||
 |\Finv|$\Finv$|| ams |
 |\flat|$\flat$|||
@@ -710,7 +711,8 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
-|\maltese|$\maltese$| ams |
+|\male|$\male$|| stix |
+|\maltese|$\maltese$|| ams |
 |\mapsto|$\mapsto$|||
 |\mathbb|$\mathbb{AB}$|`\mathbb{AB}`| ams |
 |\mathbf|$\mathbf{AaBb123}$|`\mathbf{AaBb123}`||
