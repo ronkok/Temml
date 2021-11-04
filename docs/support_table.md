@@ -233,6 +233,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 | Function       |  Rendered   | Source or Comment|  Package
 |:---------------|:------------|:-----------------|-----------|
 |\C|<span class="no-sup">Not supported</span>|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
+|\c|$\text{\c{c}}$|`\text{\c{c}}`||
 |\cal|${\cal AaBb}$|`{\cal AaBb}`||
 |\cancel|$\cancel{5}$|`\cancel{5}`| cancel |
 |\cancelto|$\cancelto{0}{x+1}$|`\cancelto{0}{x+1}`| cancel |

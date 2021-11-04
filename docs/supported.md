@@ -48,7 +48,7 @@ There is a similar [Support Table](./support_table.html), sorted alphabetically,
 |:----------------------------------|:---------------------|:---------------------|:-----
 |$\text{\'{a}}$ `\'{a}`             |$\text{\~{a}}$ `\~{a}`|$\text{\.{a}}$ `\.{a}`|$\text{\H{a}}$ `\H{a}`
 |$\text{\`{a}}$ <code>\\`{a}</code> |$\text{\={a}}$ `\={a}`|$\text{\"{a}}$ `\"{a}`|$\text{\v{a}}$ `\v{a}`
-|$\text{\^{a}}$ `\^{a}`             |$\text{\u{a}}$ `\u{a}`|$\text{\r{a}}$ `\r{a}`|
+|$\text{\^{a}}$ `\^{a}`             |$\text{\u{a}}$ `\u{a}`|$\text{\r{a}}$ `\r{a}`|$\text{\c{c}}$ `\c{c}`
 
 See also [letters](#letters)
 
