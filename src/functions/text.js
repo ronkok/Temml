@@ -86,8 +86,9 @@ defineFunction({
 
     // Consolidate the <mtext> elements.
     for (let i = 1; i < mrow.children.length; i++) {
-      mtext.children.push(mrow.children[i].children[0])
+      mtext.children[0].text += mrow.children[i].children[0].text
     }
+    mtext.children.splice(1, mtext.children.length - 1)
     return mtext
   }
 });
