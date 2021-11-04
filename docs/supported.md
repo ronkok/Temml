@@ -27,16 +27,16 @@ There is a similar [Support Table](./support_table.html), sorted alphabetically,
 ## Accents
 
 ||||
-|:----------|:------------------------|:----------------------------------|
-| $a'$ `a'` | $\tilde{a}$ `\tilde{a}` | $\widetilde{ac}$ `\widetilde{ac}`  |
-| $a''$ `a''` | $\vec{F}$ `\vec{F}` | $\utilde{AB}$ `\utilde{AB}` |
+|:------------------------|:------------------------|:----------------------------------|
+| $a'$ `a'`               | $\tilde{a}$ `\tilde{a}` | $\widetilde{ac}$ `\widetilde{ac}`  |
+| $a''$ `a''`             | $\vec{F}$ `\vec{F}` | $\utilde{AB}$ `\utilde{AB}` |
 | $a^{\prime}$ `a^{\prime}` | $\overleftarrow{AB}$ `\overleftarrow{AB}` | $\overrightarrow{AB}$ `\overrightarrow{AB}` |
 | $\acute{a}$ `\acute{a}` | $\underleftarrow{AB}$ `\underleftarrow{AB}` | $\underrightarrow{AB}$ `\underrightarrow{AB}` |
-| $\bar{y}$ `\bar{y}` | $\overline{AB}$ `\overline{AB}` | $\Overrightarrow{AB}$ `\Overrightarrow{AB}` |
+| $\bar{y}$ `\bar{y}`     | $\overline{AB}$ `\overline{AB}` | $\Overrightarrow{AB}$ `\Overrightarrow{AB}` |
 | $\breve{a}$ `\breve{a}` | $\underline{AB}$ `\underline{AB}` | $\overleftrightarrow{AB}$ `\overleftrightarrow{AB}` |
 | $\check{a}$ `\check{a}` | $\widecheck{ac}$ `\widecheck{ac}` | $\underleftrightarrow{AB}$ `\underleftrightarrow{AB}` |
-| $\dot{a}$ `\dot{a}` | $\overleftharpoon{ac}$ `\overleftharpoon{ac}` | $\overrightharpoon{ac}$ `\overrightharpoon{ac}` |
-| $\ddot{a}$ `\ddot{a}` | $\overgroup{AB}$ `\overgroup{AB}` | $\wideparen{AB}$ `\wideparen{AB}` |
+| $\dot{a}$ `\dot{a}`     | $\overleftharpoon{ac}$ `\overleftharpoon{ac}` | $\overrightharpoon{ac}$ `\overrightharpoon{ac}` |
+| $\ddot{a}$ `\ddot{a}`   | $\overgroup{AB}$ `\overgroup{AB}` | $\wideparen{AB}$ `\wideparen{AB}` |
 | $\dddot{a}$ `\dddot{a}` | $\undergroup{AB}$ `\undergroup{AB}` | $\overparen{AB}$ `\overparen{AB}` |
 | $\ddddot{a}$ `\ddddot{a}` | $\underbar{X}$ `\underbar{X}` | $\underparen{AB}$ `\underparen{AB}` |
 | $\grave{a}$ `\grave{a}` | $\mathring{g}$ `\mathring{g}` | $\overbrace{AB}$ `\overbrace{AB}` |
@@ -258,21 +258,21 @@ Temml also supports `\llap`, `\rlap`, and `\clap`, but they will take only text,
 **Spacing**
 
 | Function        | Produces           | Function             | Produces|
-|:----------------|:-------------------|:---------------------|:--------------------------------------|
-| `\,`            | ³∕₁₈ em space      | `\kern{distance}`    | space, width = *distance*
-| `\thinspace`    | ³∕₁₈ em space      | `\mkern{distance}`   | space, width = *distance*
-| `\>`            | ⁴∕₁₈ em space      | `\mskip{distance}`   | space, width = *distance*
-| `\:`            | ⁴∕₁₈ em space      | `\hskip{distance}`   | space, width = *distance*
-| `\medspace`     | ⁴∕₁₈ em space      | `\hspace{distance}`  | space, width = *distance*
-| `\;`            | ⁵∕₁₈ em space      | `\hspace*{distance}` | space, width = *distance*
-| `\thickspace`   | ⁵∕₁₈ em space      | `\phantom{content}`  | space the width and height of content
-| `\enspace`      | ½ em space         | `\hphantom{content}` | space the width of content
-| `\quad`         | 1 em space         | `\vphantom{content}` | a strut the height of content
-| `\qquad`        | 2 em space         | `\!`                 | – ³∕₁₈ em space
-| `~`             | non-breaking space | `\negthinspace`      | – ³∕₁₈ em space
-| `\<space>`      | space              | `\negmedspace`       | – ⁴∕₁₈ em space
-| `\nobreakspace` | non-breaking space | `\negthickspace`     | – ⁵∕₁₈ em space
-| `\space`        | space              |
+|:----------------|:-------------------|:---------------------|:--------------------------|
+| `\,`            | ³∕₁₈ em space      | `\kern{distance}`    | space, width = *distance* |
+| `\thinspace`    | ³∕₁₈ em space      | `\mkern{distance}`   | space, width = *distance* |
+| `\>`            | ⁴∕₁₈ em space      | `\mskip{distance}`   | space, width = *distance* |
+| `\:`            | ⁴∕₁₈ em space      | `\hskip{distance}`   | space, width = *distance* |
+| `\medspace`     | ⁴∕₁₈ em space      | `\hspace{distance}`  | space, width = *distance* |
+| `\;`            | ⁵∕₁₈ em space      | `\hspace*{distance}` | space, width = *distance* |
+| `\thickspace`   | ⁵∕₁₈ em space      | `\phantom{content}`  | space the width and height of content |
+| `\enspace`      | ½ em space         | `\hphantom{content}` | space the width of content |
+| `\quad`         | 1 em space         | `\vphantom{content}` | a strut the height of content |
+| `\qquad`        | 2 em space         | `\!`                 | – ³∕₁₈ em space |
+| `~`             | non-breaking space | `\negthinspace`      | – ³∕₁₈ em space |
+| `\<space>`      | space              | `\negmedspace`       | – ⁴∕₁₈ em space |
+| `\nobreakspace` | non-breaking space | `\negthickspace`     | – ⁵∕₁₈ em space |
+| `\space`        | space              | | |
 
 **Notes:**
 
@@ -1129,10 +1129,11 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.1
   function updateMathFont() {
     // Change the CSS style sheet.
     const temmlRegEx = /temml\/Temml-.+\.css$/
+    const value = document.getElementById("MathFont").value
     const links = [...document.head.getElementsByTagName('link')];
     links.forEach(link => {
       if (temmlRegEx.test(link.href)) {
-        link.setAttribute("href", `./temml/Temml-${document.getElementById("MathFont").value}.css`);
+        link.setAttribute("href", `../../temml/Temml-${value}.css`);
       }
     })
   }
