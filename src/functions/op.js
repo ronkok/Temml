@@ -128,15 +128,43 @@ defineFunction({
   },
   handler: ({ parser }, args) => {
     const body = args[0];
-    return {
+    const prevAtomType = parser.prevAtomType
+    // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+    // In that case, we instead promote the text contents of the body to the parent.
+    let mustPromote = true
+    const atom = {
       type: "op",
       mode: parser.mode,
       limits: false,
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      body: ordargument(body)
+      needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
+      name: "\\"
     };
+    const arr = (body.body) ? body.body : [body]
+    for (const arg of arr) {
+      if (utils.textAtomTypes.includes(arg.type)) {
+        atom.name += arg.text
+      } else {
+        mustPromote = false
+        break
+      }
+    }
+    if (mustPromote) {
+      atom.mode = parser.mode
+      return atom
+    } else {
+      return {
+        type: "op",
+        mode: parser.mode,
+        limits: false,
+        parentIsSupSub: false,
+        symbol: false,
+        stack: false,
+        body: ordargument(body)
+      };
+    }
   },
   mathmlBuilder
 });

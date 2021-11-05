@@ -19,11 +19,12 @@ export function newDocumentFragment(children) {
  * `<mspace>` tags).
  */
 export class MathNode {
-  constructor(type, children, classes, isSVG) {
+  constructor(type, children, classes, style, isSVG) {
     this.type = type;
     this.attributes = {};
     this.children = children || [];
     this.classes = classes || [];
+    this.style = style || {};   // Used for <mstyle> elements
     this.isSVG = isSVG || false;
   }
 
@@ -60,6 +61,13 @@ export class MathNode {
       node.className = createClass(this.classes);
     }
 
+    // Apply inline styles
+    for (const style in this.style) {
+      if (Object.prototype.hasOwnProperty.call(this.style, style )) {
+        node.style[style] = this.style[style];
+      }
+    }
+
     for (let i = 0; i < this.children.length; i++) {
       node.appendChild(this.children[i].toNode());
     }
@@ -84,6 +92,19 @@ export class MathNode {
 
     if (this.classes.length > 0) {
       markup += ` class ="${utils.escape(createClass(this.classes))}"`;
+    }
+
+    let styles = "";
+
+    // Add the styles, after hyphenation
+    for (const style in this.style) {
+      if (Object.prototype.hasOwnProperty.call(this.style, style )) {
+        styles += `${utils.hyphenate(style)}:${this.style[style]};`;
+      }
+    }
+
+    if (styles) {
+      markup += ` style="${styles}"`;
     }
 
     markup += ">";

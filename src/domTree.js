@@ -80,7 +80,7 @@ const toMarkup = function(tagName) {
   }
 
   if (styles) {
-    markup += ` style="${utils.escape(styles)}"`;
+    markup += ` style="${styles}"`;
   }
 
   // Add the attributes
@@ -170,7 +170,7 @@ export class Img {
   }
 
   toMarkup() {
-    let markup = `<img  src='${this.src} 'alt='${this.alt}' `;
+    let markup = `<img src='${this.src}' alt='${this.alt}'`;
 
     // Add the styles, after hyphenation
     let styles = "";
@@ -183,7 +183,7 @@ export class Img {
       markup += ` style="${utils.escape(styles)}"`;
     }
 
-    markup += "'/>";
+    markup += "/>";
     return markup;
   }
 }

@@ -64,13 +64,31 @@ defineFunction({
   },
   handler({ parser, funcName }, args) {
     const body = args[0];
-    return {
-      type: "mclass",
-      mode: parser.mode,
-      mclass: "m" + funcName.substr(5),
-      body: ordargument(body),
-      isCharacterBox: utils.isCharacterBox(body)
-    };
+    // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+    // In that case, we instead promote the text contents of the body to the parent.
+    let mustPromote = true
+    const atom = { type: "atom", family: funcName.substr(5), text:"" }
+    const arr = (body.body) ? body.body : [body]
+    for (const arg of arr) {
+      if (utils.textAtomTypes.includes(arg.type)) {
+        atom.text += arg.text
+      } else {
+        mustPromote = false
+        break
+      }
+    }
+    if (mustPromote) {
+      atom.mode = parser.mode
+      return atom
+    } else {
+      return {
+        type: "mclass",
+        mode: parser.mode,
+        mclass: "m" + funcName.substr(5),
+        body: ordargument(body),
+        isCharacterBox: utils.isCharacterBox(body)
+      };
+    }
   },
   mathmlBuilder
 });
