@@ -33,10 +33,8 @@ defineFunctionBuilders({
     let node
 
     if (Object.prototype.hasOwnProperty.call(regularSpace, group.text)) {
-      node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("\u00a0")])
-      if (regularSpace[group.text].className === "nobreak") {
-        node.setAttribute("linebreak", "nobreak")
-      }
+      const ch = (regularSpace[group.text].className === "nobreak") ? "\u00a0" : " "
+      node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode(ch)])
     } else if (Object.prototype.hasOwnProperty.call(cssSpace, group.text)) {
       // MathML 3.0 calls for nobreak to occur in an <mo>, not an <mtext>
       // Ref: https://www.w3.org/Math/draft-spec/mathml.html#chapter3_presm.lbattrs
