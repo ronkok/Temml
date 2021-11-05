@@ -85,21 +85,21 @@ const stretchySVG = (key, macros) => {
   // So we'll create our own arrow from SVGs.
 
   // Two SVGs, one for each end of the arrow. The SVGs are very long (400em).
-  const leftPath = new mathMLTree.MathNode("path", [], [], true)
+  const leftPath = new mathMLTree.MathNode("path", [], [], {}, true)
   leftPath.setAttribute("stroke", "none")
   const leftPathGeometry = macros.get(key + "Left")
   leftPath.setAttribute("d", leftPathGeometry)
 
-  const rightPath = new mathMLTree.MathNode("path", [], [], true)
+  const rightPath = new mathMLTree.MathNode("path", [], [], {}, true)
   rightPath.setAttribute("stroke", "none")
   const rightPathGeometry = macros.get(key + "Right")
   rightPath.setAttribute("d", rightPathGeometry)
 
-  let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], true)
+  let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], {}, true)
   leftSVG = setSvgAttributes(leftSVG, key, "xMinYMin slice")
   leftSVG.setAttribute("style", "position: absolute; left:0;")
 
-  let rightSVG = new mathMLTree.MathNode("svg", [rightPath], [], true)
+  let rightSVG = new mathMLTree.MathNode("svg", [rightPath], [], {}, true)
   rightSVG = setSvgAttributes(rightSVG, key, "xMaxYMin slice")
   rightSVG.setAttribute("style", "position: absolute; right:0")
 
