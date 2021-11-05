@@ -144,6 +144,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\backslash|$\backslash$|||
 |\bar|$\bar{y}$|`\bar{y}`||
 |\barwedge|$\barwedge$|| ams |
+|\ballotx|$\ballotx$|| arev |
 |\Bbb|$\Bbb{ABC}$|`\Bbb{ABC}`||
 |\Bbbk|$\Bbbk$|||
 |\bbox|<span class="no-sup">Not supported</span>|||
@@ -913,6 +914,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\partialderivative|$\partialderivative{x}{y}$|`\partialderivative{x}{y}`| physics extension |
 |\pb|$\pb{x}{y}$|`\pb{x}{y}`| physics extension |
 |\pdv|$\pdv{x}{y}$|`\pdv{x}{y}`| physics extension |
+|\permil|$\permil$|| wasysym |
 |\perp|$\perp$|||
 |\phantom|$\Gamma^{\phantom{i}j}_{i\phantom{j}k}$|`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`||
 |\phase|$\phase{-78^\circ}$|`\phase{-78^\circ}`| steinmetz |

@@ -204,6 +204,8 @@ defineSymbol(math, rel, "\u21c1", "\\rightharpoondown", true);
 defineSymbol(math, rel, "\u2196", "\\nwarrow", true);
 defineSymbol(math, rel, "\u21cc", "\\rightleftharpoons", true);
 defineSymbol(math, mathord, "\u21af", "\\lightning", true);
+defineSymbol(math, mathord, "\u2030", "\\permil", true);
+defineSymbol(text, textord, "\u2030", "\\permil");
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);

@@ -979,7 +979,7 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\&$ `\&` | $\ldots$ `\ldots` | $\surd$ `\surd` |
 | $\_$ `\_` | $\vdots$ `\vdots` | $\infty$ `\infty` |
 | $\text{\textunderscore}$ `\text{\textunderscore}` | $\iddots$ `\iddots` | $\checkmark$ `\checkmark` |
-| $\text{--}$ `\text{--}` | $\dotsb$ `\dotsb` | $\lightning$ `\lightning` |
+| $\text{--}$ `\text{--}` | $\dotsb$ `\dotsb` | $\ballotx$ `\ballotx` |
 | $\text{\textendash}$ `\text{\textendash}` | $\dotsc$ `\dotsc` | $\dag$ `\dag` |
 | $\text{---}$ `\text{---}` | $\dotsi$ `\dotsi` | $\dagger$ `\dagger` |
 | $\text{\textemdash}$ `\text{\textemdash}` | $\dotsm$ `\dotsm` | $\text{\textdagger}$ `\text{\textdagger}` |
@@ -1012,7 +1012,7 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\text{\textregistered}$ `\text{\textregistered}` | $\heartsuit$ `\heartsuit` | $\varheartsuit$ `\varheartsuit` |
 | $\text{\textbullet}$ `\text{\textbullet}` | $\spadesuit$ `\spadesuit` | $\varspadesuit$ `\varspadesuit` |
 | $\smiley$ `\smiley` | $\female$ `\female` | $\male$ `\male` |
-| $\standardstate$ `\standardstate` | | |
+| $\standardstate$ `\standardstate` | $\lightning$ `\lightning` | $\permil$ `\permil` |
 
 Symbols in the *texvc* extension
 
