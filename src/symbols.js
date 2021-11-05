@@ -300,6 +300,8 @@ defineSymbol(math, textord, "\u00a5", "\\yen", true);
 defineSymbol(text, textord, "\u00a5", "\\yen", true);
 defineSymbol(math, textord, "\u2713", "\\checkmark", true);
 defineSymbol(text, textord, "\u2713", "\\checkmark");
+defineSymbol(math, textord, "\u2717", "\\ballotx", true);
+defineSymbol(text, textord, "\u2717", "\\ballotx");
 defineSymbol(text, textord, "\u2022", "\\textbullet");
 
 // AMS Hebrew
