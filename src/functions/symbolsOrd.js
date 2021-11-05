@@ -11,12 +11,12 @@ import { Span } from "../domTree"
 const numberRegEx = /^\d[\d.]*$/  // Keep in sync with numberRegEx in Parser.js
 
 const italicNumber = (text, variant) => {
-  const span = new Span([], [text])
-  const numberStyle = variant === "italic"
-    ? `font-family: Cambria, "Times New Roman", serif; font-style: italic;`
-    : `font-family: Cambria, "Times New Roman", serif; font-style: italic; font-weight: bold;`
-  span.setAttribute("style", numberStyle)
-  return new mathMLTree.MathNode("mn", [span])
+  const mn = new mathMLTree.MathNode("mn", [text])
+  const wrapper = new mathMLTree.MathNode("mstyle", [mn])
+  wrapper.style["font-style"] = "italic"
+  wrapper.style["font-family"] = "Cambria, 'Times New Roman', serif"
+  if (variant === "bold-italic") { wrapper.style["font-weight"] = "bold" }
+  return wrapper
 }
 
 defineFunctionBuilders({
@@ -65,8 +65,8 @@ defineFunctionBuilders({
       node = new mathMLTree.MathNode("mtext", [text])
     } else if (numberRegEx.test(group.text)) {
       if (variant === "oldstylenums") {
-        const span = new Span(["oldstylenums"], [text])
-        node = new mathMLTree.MathNode("mn", [span])
+        const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"])
+        node = new mathMLTree.MathNode("mn", [ms])
       } else if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant)
       } else {
