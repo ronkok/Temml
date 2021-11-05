@@ -2,6 +2,33 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.2] - 2021-11-04
+
+### Added
+
+- Support \c
+- Support \female and \male
+- Support \relax
+- Soft line breaks in Firefox, if no <annotation>
+
+### Changed
+
+- <math> element namespace is now optional
+- <annotation> elemennt w/TeX string is now optional
+- Removed "temml" class from <math> element
+- Reduced number of visible DOM elements
+- Support AMS environment w/one empty row
+- \bar{} accent now uses character U+2015, horizontal bar
+
+### Fixed
+
+- Spaces inside \text{}
+- \char now supports >16-bit Unicode characters
+- \mathbb operating on numbers
+- Circular dependency
+- Stretchy arrow bug
+- Validation errors in \mathop, \mathrel, and \operatorname
+
 ## [0.2.1] - 2021-08-10
 
 ### Changed

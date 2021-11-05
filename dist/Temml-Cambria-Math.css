@@ -4,9 +4,6 @@ have been changed from ASCII to Unicode Mathematical Alphanumeric Symbols Script
 Unicode range 1D49C to 1D4B5.
 */
 
-@namespace url('http://www.w3.org/1999/xhtml');
-@namespace m url('http://www.w3.org/1998/Math/MathML');
-
 @font-face {
   font-family: 'Temml-Script';
   src: url('Temml-Script.woff2') format('woff2');
@@ -14,7 +11,7 @@ Unicode range 1D49C to 1D4B5.
   font-style: normal;
 }
 
-m|math {
+math {
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -26,23 +23,23 @@ m|math {
   direction: ltr;
 }
 
-.temml * {
+math * {
   border-color: currentColor;
 }
 
-m|mtext {
+math mtext {
   font-family: "Cambria Math", "Times New Roman", math;
 }
 
-m|math {
+math {
   font-family: "Cambria Math", "Times New Roman", math;
 }
 
-m|*.mathscr {
+math .mathscr {
   font-family: "Temml-Script";
 }
 
-.oldstylenums {
+math .oldstylenums {
   font-feature-settings: 'onum';
 }
 

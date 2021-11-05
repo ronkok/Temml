@@ -55,6 +55,8 @@ temml.render(
 <li><p><code>macros</code>: <code>object</code>. A collection of custom macros. Each macro is a key-value pair in which the key is a new Temml function name and the value is the expansion of the macro.  Example: <code>macros: {&quot;\\R&quot;: &quot;\\mathbb{R}&quot;}</code>.</p>
 <p>If you do not pre-define any macros, provide an empty macros object. This enables user-created persistent <code>\gdef</code> macros. See the <a href="#persistent-macros-and-ref">macros</a> example below.</p>
 </li>
+<li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, include an <code>&lt;annotation&gt;</code> element that contains the inputted TeX string. Note: this will defeat <a href="./supported.html#line-breaks">soft line breaks</a> in Firefox.</p>
+</li>
 <li><p><code>leqno</code>: <code>boolean</code>. If <code>true</code>, display math has <code>\tag</code>s rendered on the left instead of the right, like <code>\usepackage[leqno]{amsmath}</code> in LaTeX.</p>
 </li>
 <li><p><code>colorIsTextColor</code>: <code>boolean</code>. In LaTeX, <code>\color</code> is a switch, but in early versions of MathJax and KaTeX, <code>\color</code> applied its color to a second argument, the way that LaTeX <code>\textcolor</code> works. Set option <code>colorIsTextColor</code> to <code>true</code> if you want <code>\color</code> to work like early MathJax or KaTeX. Default is <code>false.</code></p>
@@ -67,7 +69,7 @@ temml.render(
 </li>
 <li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default = <code>false</code>)</p>
 </li>
-<li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. This is unnecessary for modern browsers but may be helpful for other user agents. Default = <code>false</code>.</p>
+<li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. Default = <code>false</code>.</p>
 </li>
 <li><p><code>trust</code>: <code>boolean</code> or <code>function</code> (default: <code>false</code>). If <code>false</code> (do not trust input), prevent any commands like <code>\includegraphics</code> that could enable adverse behavior, rendering them instead in <code>errorColor</code>. If <code>true</code> (trust input), allow all such commands. Provide a custom function <code>handler(context)</code> to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:</p>
 <ul>
@@ -227,7 +229,7 @@ math expressions before rendering.</p>
 <nav>
 <div id="sidebar">
 
-<p><math class ="temml"><semantics><mrow><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow><annotation encoding="application/x-tex">\href{https://temml.org/}{\color{black}\Large\Temml}</annotation></semantics></math> &nbsp;&nbsp;v0.2.1</p>
+<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math> &nbsp;&nbsp;v0.2.2</p>
 <h3><a href="#top">Contents</a></h3>
 
 <ul>

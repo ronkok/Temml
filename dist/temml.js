@@ -152,6 +152,8 @@ var temml = (function () {
     return value;
   };
 
+  const textAtomTypes = ["text", "textord", "mathord", "atom"];
+
   /**
    * Return the protocol of a URL, or "_relative" if the URL does not specify a
    * protocol (and thus is relative).
@@ -179,7 +181,8 @@ var temml = (function () {
     getBaseElem,
     isCharacterBox,
     protocolFromUrl,
-    round
+    round,
+    textAtomTypes
   };
 
   /**
@@ -195,9 +198,11 @@ var temml = (function () {
       // allow null options
       options = options || {};
       this.displayMode = utils.deflt(options.displayMode, false);   // boolean
+      this.annotate = utils.deflt(options.annotate, false);          // boolean
       this.leqno = utils.deflt(options.leqno, false);               // boolean
       this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
       this.macros = options.macros || {};
+      this.xml = utils.deflt(options.xml, false);                   // boolean
       this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
       this.strict = utils.deflt(options.strict, false);    // boolean
       this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
@@ -444,7 +449,7 @@ var temml = (function () {
     }
 
     if (styles) {
-      markup += ` style="${utils.escape(styles)}"`;
+      markup += ` style="${styles}"`;
     }
 
     // Add the attributes
@@ -534,7 +539,7 @@ var temml = (function () {
     }
 
     toMarkup() {
-      let markup = `<img  src='${this.src} 'alt='${this.alt}' `;
+      let markup = `<img src='${this.src}' alt='${this.alt}'`;
 
       // Add the styles, after hyphenation
       let styles = "";
@@ -547,7 +552,7 @@ var temml = (function () {
         markup += ` style="${utils.escape(styles)}"`;
       }
 
-      markup += "'/>";
+      markup += "/>";
       return markup;
     }
   }
@@ -564,11 +569,12 @@ var temml = (function () {
    * `<mspace>` tags).
    */
   class MathNode {
-    constructor(type, children, classes, isSVG) {
+    constructor(type, children, classes, style, isSVG) {
       this.type = type;
       this.attributes = {};
       this.children = children || [];
       this.classes = classes || [];
+      this.style = style || {};   // Used for <mstyle> elements
       this.isSVG = isSVG || false;
     }
 
@@ -605,6 +611,13 @@ var temml = (function () {
         node.className = createClass(this.classes);
       }
 
+      // Apply inline styles
+      for (const style in this.style) {
+        if (Object.prototype.hasOwnProperty.call(this.style, style )) {
+          node.style[style] = this.style[style];
+        }
+      }
+
       for (let i = 0; i < this.children.length; i++) {
         node.appendChild(this.children[i].toNode());
       }
@@ -629,6 +642,19 @@ var temml = (function () {
 
       if (this.classes.length > 0) {
         markup += ` class ="${utils.escape(createClass(this.classes))}"`;
+      }
+
+      let styles = "";
+
+      // Add the styles, after hyphenation
+      for (const style in this.style) {
+        if (Object.prototype.hasOwnProperty.call(this.style, style )) {
+          styles += `${utils.hyphenate(style)}:${this.style[style]};`;
+        }
+      }
+
+      if (styles) {
+        markup += ` style="${styles}"`;
       }
 
       markup += ">";
@@ -681,6 +707,19 @@ var temml = (function () {
       return this.text;
     }
   }
+
+  // Do not make an <mrow> the only child of a <mstyle>.
+  // An <mstyle> acts as its own implicit <mrow>.
+  const wrapWithMstyle = expression => {
+    let node;
+    if (expression.length === 1 && expression[0].type === "mrow") {
+      node = expression.pop();
+      node.type = "mstyle";
+    } else {
+      node = new MathNode("mstyle", expression);
+    }
+    return node
+  };
 
   var mathMLTree = {
     MathNode,
@@ -765,21 +804,21 @@ var temml = (function () {
     // So we'll create our own arrow from SVGs.
 
     // Two SVGs, one for each end of the arrow. The SVGs are very long (400em).
-    const leftPath = new mathMLTree.MathNode("path", [], [], true);
+    const leftPath = new mathMLTree.MathNode("path", [], [], {}, true);
     leftPath.setAttribute("stroke", "none");
     const leftPathGeometry = macros.get(key + "Left");
     leftPath.setAttribute("d", leftPathGeometry);
 
-    const rightPath = new mathMLTree.MathNode("path", [], [], true);
+    const rightPath = new mathMLTree.MathNode("path", [], [], {}, true);
     rightPath.setAttribute("stroke", "none");
     const rightPathGeometry = macros.get(key + "Right");
     rightPath.setAttribute("d", rightPathGeometry);
 
-    let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], true);
+    let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], {}, true);
     leftSVG = setSvgAttributes(leftSVG, key, "xMinYMin slice");
     leftSVG.setAttribute("style", "position: absolute; left:0;");
 
-    let rightSVG = new mathMLTree.MathNode("svg", [rightPath], [], true);
+    let rightSVG = new mathMLTree.MathNode("svg", [rightPath], [], {}, true);
     rightSVG = setSvgAttributes(rightSVG, key, "xMaxYMin slice");
     rightSVG.setAttribute("style", "position: absolute; right:0");
 
@@ -966,6 +1005,8 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, textord, "\u2111", "\\Im", true);
   defineSymbol(math, textord, "\u2660", "\\spadesuit", true);
   defineSymbol(math, textord, "\u2664", "\\varspadesuit", true);
+  defineSymbol(math, textord, "\u2640", "\\female", true);
+  defineSymbol(math, textord, "\u2642", "\\male", true);
   defineSymbol(math, textord, "\u00a7", "\\S", true);
   defineSymbol(text, textord, "\u00a7", "\\S");
   defineSymbol(math, textord, "\u00b6", "\\P", true);
@@ -1389,9 +1430,9 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, mathord, "\u03e1", "\\sampi", true);
   defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
   defineSymbol(math, mathord, "\u03db", "\\stigma", true);
-  defineSymbol(math, bin, "\u2217", "*");
+  defineSymbol(math, bin, "\u2217", "\u2217", true);
   defineSymbol(math, bin, "+", "+");
-  defineSymbol(math, bin, "\u2212", "-");
+  defineSymbol(math, bin, "\u2212", "-", true);
   defineSymbol(math, bin, "\u22c5", "\\cdot", true);
   defineSymbol(math, bin, "\u2218", "\\circ");
   defineSymbol(math, bin, "\u00f7", "\\div", true);
@@ -1563,7 +1604,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, accent, "\u20db", "\\dddot");
   defineSymbol(math, accent, "\u20dc", "\\ddddot");
   defineSymbol(math, accent, "\u007e", "\\tilde");
-  defineSymbol(math, accent, "\u02c9", "\\bar");
+  defineSymbol(math, accent, "\u2015", "\\bar");
   defineSymbol(math, accent, "\u02d8", "\\breve");
   defineSymbol(math, accent, "\u02c7", "\\check");
   defineSymbol(math, accent, "\u005e", "\\hat");
@@ -1590,6 +1631,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(text, accent, "\u02c9", "\\="); // macron
   defineSymbol(text, accent, "\u02d8", "\\u"); // breve
   defineSymbol(text, accent, "\u02d9", "\\."); // dot above
+  defineSymbol(text, accent, "\u00b8", "\\c"); // cedilla
   defineSymbol(text, accent, "\u02da", "\\r"); // ring above
   defineSymbol(text, accent, "\u02c7", "\\v"); // caron
   defineSymbol(text, accent, "\u00a8", '\\"'); // diaresis
@@ -1762,21 +1804,31 @@ min-width: ${svgData[key].minWidth}em;`
   /*
    * Neither Firefox nor Chrome support hard line breaks or soft line breaks.
    * (Despite https://www.w3.org/Math/draft-spec/mathml.html#chapter3_presm.lbattrs)
-   * So Temml has a work-around for hard line breaks.
-   * They are simulated by creating a <mtable> and putting each line in its own <mtr>.
+   * So Temml has work-arounds for both hard and soft breaks.
+   * The work-arounds sadly do not work simultaneously. Any top-level hard
+   * break makes soft line breaks impossible.
    *
-   * LaTeX also places soft line breaks at top-level relations and binary operators.
-   * I would like to emulate that behavior, but the Chromium version of MathML provides no
-   * way that I can do so.
+   * Hard breaks are simulated by creating a <mtable> and putting each line in its own <mtr>.
+   *
+   * To create soft line breaks, Temml avoids using the <semantics> and <annotation> tags.
+   * Then the top level of a <math> element can be occupied by <mrow> elements, and the browser
+   * will break after a <mrow> if the expression extends beyond the container limit.
+   *
+   * We want the expression to render with soft line breaks after each top-level binary or
+   * relational operator, per TeXbook p. 173. So we gather the expression into <mrow>s so that
+   * each <mrow> ends in a binary or relational operator.
+   *
+   * Soft line breaks will not work in Chromium and Safari, only Firefox.
    *
    * Hopefully browsers will someday do their own linebreaking and we will be able to delete
-   * most of this module.
+   * much of this module.
    */
 
-  function setLineBreaks(expression, isDisplayMode) {
+  function setLineBreaks(expression, isDisplayMode, isAnnotated) {
     const mtrs = [];
     let mrows = [];
     let block = [];
+    let canBeBIN = false; // The first node cannot be an infix binary operator.
     for (let i = 0; i < expression.length; i++) {
       const node = expression[i];
       if (node.attributes && node.attributes.linebreak &&
@@ -1793,6 +1845,56 @@ min-width: ${svgData[key].minWidth}em;`
         continue
       }
       block.push(node);
+      if (node.type && node.type === "mo" && !isDisplayMode && !isAnnotated) {
+        // This may be a place for a soft line break.
+        if (canBeBIN && !node.attributes.form) {
+          // Check if the following node is a \nobreak text node, e.g. "~""
+          const next = i < expression.length - 1 ? expression[i + 1] : null;
+          let glueIsFreeOfNobreak = true;
+          if (
+            !(
+              next &&
+              next.type === "mtext" &&
+              next.attributes.linebreak &&
+              next.attributes.linebreak === "nobreak"
+            )
+          ) {
+            // We may need to start a new block.
+            // First, put any post-operator glue on same line as operator.
+            for (let j = i + 1; j < expression.length; j++) {
+              const nd = expression[j];
+              if (
+                nd.type &&
+                nd.type === "mspace" &&
+                !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
+              ) {
+                block.push(nd);
+                i += 1;
+                if (
+                  nd.attributes &&
+                  nd.attributes.linebreak &&
+                  nd.attributes.linebreak === "nobreak"
+                ) {
+                  glueIsFreeOfNobreak = false;
+                }
+              } else {
+                break;
+              }
+            }
+          }
+          if (glueIsFreeOfNobreak) {
+            // Start a new block. (Insert a soft linebreak.)
+            mrows.push(new mathMLTree.MathNode("mrow", block));
+            block = [];
+          }
+          canBeBIN = false;
+        }
+        const isOpenDelimiter = node.attributes.form && node.attributes.form === "prefix";
+        // Any operator that follows an open delimiter is unary.
+        canBeBIN = !(node.attributes.separator || isOpenDelimiter);
+      } else {
+        canBeBIN = true;
+      }
     }
     if (block.length > 0) {
       mrows.push(new mathMLTree.MathNode("mrow", block));
@@ -1939,32 +2041,30 @@ min-width: ${svgData[key].minWidth}em;`
 
     const expression = buildExpression(tree, style);
 
-    // A MathML <semantics> element will recognize only one visual child.
-    let wrapper =
-      expression.length === 1 && tag !== null &&
-      expression[0] instanceof MathNode &&
-      utils.contains(["mrow", "mtable"], expression[0].type)
+    let wrapper = expression.length === 1 && tag === null && (expression[0] instanceof MathNode)
         ? expression[0]
-        : setLineBreaks(expression, settings.displayMode);
+        : setLineBreaks(expression, settings.displayMode, settings.annotate);
 
     if (tag) {
       wrapper = taggedExpression(wrapper, tag, style, settings.leqno);
-    } else if (wrapper.children.length === 1 && settings.displayMode) {
-      wrapper.children[0].setAttribute("display", "block");
-      wrapper.children[0].setAttribute("style", "width: 100%;");
     }
 
-    // Build a TeX annotation of the source
-    const annotation = new mathMLTree.MathNode(
-      "annotation", [new mathMLTree.TextNode(texExpression)]);
+    let semantics;
+    if (settings.annotate) {
+      // Build a TeX annotation of the source
+      const annotation = new mathMLTree.MathNode(
+        "annotation", [new mathMLTree.TextNode(texExpression)]);
+      annotation.setAttribute("encoding", "application/x-tex");
+      semantics = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
+    }
 
-    annotation.setAttribute("encoding", "application/x-tex");
+    const math = settings.annotate
+      ? new mathMLTree.MathNode("math", [semantics])
+      : new mathMLTree.MathNode("math", [wrapper]);
 
-    const semantics = new mathMLTree.MathNode(
-        "semantics", [wrapper, annotation]);
-
-    const math = new mathMLTree.MathNode("math", [semantics], ["temml"]);
-    math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
+    if (settings.xml) {
+      math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
+    }
     if (settings.displayMode) {
       math.setAttribute("display", "block");
     }
@@ -1981,7 +2081,7 @@ min-width: ${svgData[key].minWidth}em;`
       accentNode.setAttribute("stretchy", "true");
     }
 
-    const node = new mathMLTree.MathNode("mover",
+    const node = new mathMLTree.MathNode((group.label === "\\c" ? "munder" : "mover"),
       [buildGroup(group.base, style), accentNode]
     );
 
@@ -2067,19 +2167,26 @@ min-width: ${svgData[key].minWidth}em;`
   // Text-mode accents
   defineFunction({
     type: "accent",
-    names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"],
+    names: ["\\'", "\\`", "\\^", "\\~", "\\=", "\\c", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"],
     props: {
       numArgs: 1,
       allowedInText: true,
-      allowedInMath: false,
+      allowedInMath: true, // unless in strict mode
       argTypes: ["primitive"]
     },
     handler: (context, args) => {
       const base = args[0];
+      let mode = context.parser.mode;
+
+      if (mode === "math") {
+        context.parser.settings.reportNonstrict("mathVsTextAccents",
+            `LaTeX's accent ${context.funcName} works only in text mode`);
+        mode = "text";
+      }
 
       return {
         type: "accent",
-        mode: context.parser.mode,
+        mode: mode,
         label: context.funcName,
         isStretchy: false,
         isShifty: true,
@@ -2550,15 +2657,15 @@ min-width: ${svgData[key].minWidth}em;`
       return {
         type: "textord",
         mode: parser.mode,
-        text: String.fromCharCode(code)
+        text: String.fromCodePoint(code)
       }
     }
   });
 
   const mathmlBuilder$1 = (group, style) => {
     const inner = buildExpression(group.body, style.withColor(group.color));
-
-    const node = new mathMLTree.MathNode("mstyle", inner);
+    // Wrap with an <mstyle> element.
+    const node = wrapWithMstyle(inner);
 
     node.setAttribute("mathcolor", group.color);
 
@@ -4093,7 +4200,8 @@ min-width: ${svgData[key].minWidth}em;`
       }
       const res = parseArray(context.parser, payload, "text");
       // Populate cols with the correct number of column alignment specs.
-      res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign });
+      const numCols = Math.max(0, ...res.body.map((row) => row.length));
+      res.cols = new Array(numCols).fill({ type: "align", align: colAlign });
       return delimiters
         ? {
           type: "leftright",
@@ -4487,13 +4595,31 @@ min-width: ${svgData[key].minWidth}em;`
     },
     handler({ parser, funcName }, args) {
       const body = args[0];
-      return {
-        type: "mclass",
-        mode: parser.mode,
-        mclass: "m" + funcName.substr(5),
-        body: ordargument(body),
-        isCharacterBox: utils.isCharacterBox(body)
-      };
+      // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+      // In that case, we instead promote the text contents of the body to the parent.
+      let mustPromote = true;
+      const atom = { type: "atom", family: funcName.substr(5), text:"" };
+      const arr = (body.body) ? body.body : [body];
+      for (const arg of arr) {
+        if (utils.textAtomTypes.includes(arg.type)) {
+          atom.text += arg.text;
+        } else {
+          mustPromote = false;
+          break
+        }
+      }
+      if (mustPromote) {
+        atom.mode = parser.mode;
+        return atom
+      } else {
+        return {
+          type: "mclass",
+          mode: parser.mode,
+          mclass: "m" + funcName.substr(5),
+          body: ordargument(body),
+          isCharacterBox: utils.isCharacterBox(body)
+        };
+      }
     },
     mathmlBuilder: mathmlBuilder$4
   });
@@ -5879,15 +6005,43 @@ min-width: ${svgData[key].minWidth}em;`
     },
     handler: ({ parser }, args) => {
       const body = args[0];
-      return {
+      const prevAtomType = parser.prevAtomType;
+      // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+      // In that case, we instead promote the text contents of the body to the parent.
+      let mustPromote = true;
+      const atom = {
         type: "op",
         mode: parser.mode,
         limits: false,
         parentIsSupSub: false,
         symbol: false,
         stack: false,
-        body: ordargument(body)
+        needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
+        name: "\\"
       };
+      const arr = (body.body) ? body.body : [body];
+      for (const arg of arr) {
+        if (utils.textAtomTypes.includes(arg.type)) {
+          atom.name += arg.text;
+        } else {
+          mustPromote = false;
+          break
+        }
+      }
+      if (mustPromote) {
+        atom.mode = parser.mode;
+        return atom
+      } else {
+        return {
+          type: "op",
+          mode: parser.mode,
+          limits: false,
+          parentIsSupSub: false,
+          symbol: false,
+          stack: false,
+          body: ordargument(body)
+        };
+      }
     },
     mathmlBuilder: mathmlBuilder$8
   });
@@ -6064,6 +6218,18 @@ min-width: ${svgData[key].minWidth}em;`
     mathmlBuilder: mathmlBuilder$8
   });
 
+  /**
+   * All registered global/built-in macros.
+   * `macros.js` exports this same dictionary again and makes it public.
+   * `Parser.js` requires this dictionary via `macros.js`.
+   */
+  const _macros = {};
+
+  // This function might one day accept an additional argument and do more things.
+  function defineMacro(name, body) {
+      _macros[name] = body;
+  }
+
   // NOTE: Unlike most builders, this one handles not only
   // "operatorname", but also  "supsub" since \operatorname* can
   // affect super/subscripting.
@@ -6130,8 +6296,13 @@ min-width: ${svgData[key].minWidth}em;`
       }
     }
 
-    const identifier = new mathMLTree.MathNode("mi", expression);
-    identifier.setAttribute("mathvariant", "normal");
+    let wrapper;
+    if (isAllString) {
+      wrapper = new mathMLTree.MathNode("mi", expression);
+      wrapper.setAttribute("mathvariant", "normal");
+    } else {
+      wrapper = new mathMLTree.MathNode("mrow", expression);
+    }
 
     if (!group.parentIsSupSub) {
       // Append an <mo>&ApplyFunction;</mo>.
@@ -6142,13 +6313,13 @@ min-width: ${svgData[key].minWidth}em;`
         // So add a leading space.
         const space = new mathMLTree.MathNode("mspace");
         space.setAttribute("width", "0.1667em"); // thin space.
-        return mathMLTree.newDocumentFragment([space, identifier, operator])
+        return mathMLTree.newDocumentFragment([space, wrapper, operator])
       } else {
-        return mathMLTree.newDocumentFragment([identifier, operator])
+        return mathMLTree.newDocumentFragment([wrapper, operator])
       }
     }
 
-    return identifier
+    return wrapper
   };
 
   // \operatorname
@@ -6174,6 +6345,9 @@ min-width: ${svgData[key].minWidth}em;`
     },
     mathmlBuilder: mathmlBuilder$9
   });
+
+  defineMacro("\\operatorname",
+    "\\@ifstar\\operatornamewithlimits\\operatorname@");
 
   defineFunctionBuilders({
     type: "ordgroup",
@@ -6301,7 +6475,8 @@ min-width: ${svgData[key].minWidth}em;`
     },
     mathmlBuilder(group, style) {
       const inner = buildExpression(group.body, style);
-      const node = new mathMLTree.MathNode("mstyle", inner);
+      // Wrap with an <mstyle> element.
+      const node = wrapWithMstyle(inner);
       node.setAttribute("style", "text-shadow: 0.02em 0.01em 0.04px");
       return node
     }
@@ -6389,6 +6564,21 @@ min-width: ${svgData[key].minWidth}em;`
       node.setAttribute("href", "#" + group.string);
       return node
     }
+  });
+
+  defineFunction({
+    type: "internal",
+    names: ["\\relax"],
+    props: {
+      numArgs: 0,
+      allowedInText: true
+    },
+    handler({parser}) {
+      return {
+        type: "internal",
+        mode: parser.mode
+      };
+    },
   });
 
   defineFunction({
@@ -6484,7 +6674,8 @@ min-width: ${svgData[key].minWidth}em;`
     },
     mathmlBuilder: (group, style) => {
       const inner = buildExpression(group.body, style);
-      const node = new mathMLTree.MathNode("mstyle", inner);
+      // Wrap with an <mstyle> element.
+      const node = wrapWithMstyle(inner);
       node.setAttribute("mathsize", sizeMap[group.funcName] + "em");
       return node;
     }
@@ -6614,8 +6805,8 @@ min-width: ${svgData[key].minWidth}em;`
       const newStyle = style.withLevel(styleMap[group.scriptLevel]);
 
       const inner = buildExpression(group.body, newStyle);
-
-      const node = new mathMLTree.MathNode("mstyle", inner);
+      // Wrap with an <mstyle> element.
+      const node = wrapWithMstyle(inner);
 
       const styleAttributes = {
         display: ["0", "true"],
@@ -7055,12 +7246,12 @@ min-width: ${svgData[key].minWidth}em;`
   const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
 
   const italicNumber = (text, variant) => {
-    const span = new Span([], [text]);
-    const numberStyle = variant === "italic"
-      ? `font-family: Cambria, "Times New Roman", serif; font-style: italic;`
-      : `font-family: Cambria, "Times New Roman", serif; font-style: italic; font-weight: bold;`;
-    span.setAttribute("style", numberStyle);
-    return new mathMLTree.MathNode("mn", [span])
+    const mn = new mathMLTree.MathNode("mn", [text]);
+    const wrapper = new mathMLTree.MathNode("mstyle", [mn]);
+    wrapper.style["font-style"] = "italic";
+    wrapper.style["font-family"] = "Cambria, 'Times New Roman', serif";
+    if (variant === "bold-italic") { wrapper.style["font-weight"] = "bold"; }
+    return wrapper
   };
 
   defineFunctionBuilders({
@@ -7109,12 +7300,14 @@ min-width: ${svgData[key].minWidth}em;`
         node = new mathMLTree.MathNode("mtext", [text]);
       } else if (numberRegEx.test(group.text)) {
         if (variant === "oldstylenums") {
-          const span = new Span(["oldstylenums"], [text]);
-          node = new mathMLTree.MathNode("mn", [span]);
+          const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"]);
+          node = new mathMLTree.MathNode("mn", [ms]);
         } else if (variant === "italic" || variant === "bold-italic") {
           return italicNumber(text, variant)
         } else {
-          if (variant !== "normal") { text.text = variantChar(text.text, variant); }
+          if (variant !== "normal") {
+            text.text = text.text.split("").map(c => variantChar(c, variant)).join("");
+          }
           node = new mathMLTree.MathNode("mn", [text]);
         }
       } else if (group.text === "\\prime") {
@@ -7164,10 +7357,8 @@ min-width: ${svgData[key].minWidth}em;`
       let node;
 
       if (Object.prototype.hasOwnProperty.call(regularSpace, group.text)) {
-        node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("\u00a0")]);
-        if (regularSpace[group.text].className === "nobreak") {
-          node.setAttribute("linebreak", "nobreak");
-        }
+        const ch = (regularSpace[group.text].className === "nobreak") ? "\u00a0" : " ";
+        node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode(ch)]);
       } else if (Object.prototype.hasOwnProperty.call(cssSpace, group.text)) {
         // MathML 3.0 calls for nobreak to occur in an <mo>, not an <mtext>
         // Ref: https://www.w3.org/Math/draft-spec/mathml.html#chapter3_presm.lbattrs
@@ -7274,8 +7465,9 @@ min-width: ${svgData[key].minWidth}em;`
 
       // Consolidate the <mtext> elements.
       for (let i = 1; i < mrow.children.length; i++) {
-        mtext.children.push(mrow.children[i].children[0]);
+        mtext.children[0].text += mrow.children[i].children[0].text;
       }
+      mtext.children.splice(1, mtext.children.length - 1);
       return mtext
     }
   });
@@ -7736,38 +7928,7 @@ min-width: ${svgData[key].minWidth}em;`
    * Predefined macros for Temml.
    * This can be used to define some commands in terms of others.
    */
-
-  /**
-   * Provides context to macros defined by functions. Implemented by
-   * MacroExpander.
-   */
-
-  /** Macro tokens (in reverse order). */
-
-  const builtinMacros = {};
-
-  // This function might one day accept an additional argument and do more things.
-  function defineMacro(name, body) {
-    builtinMacros[name] = body;
-  }
-
-  // helper function
-  const recreateArgStr = context => {
-    // Recreate the macro's original argument string from the array of parse tokens.
-    const tokens = context.consumeArgs(1)[0];
-    let str = "";
-    let expectedLoc = tokens[tokens.length - 1].loc.start;
-    for (let i = tokens.length - 1; i >= 0; i--) {
-      if (tokens[i].loc.start > expectedLoc) {
-        // context.consumeArgs has eaten a space.
-        str += " ";
-        expectedLoc = tokens[i].loc.start;
-      }
-      str += tokens[i].text;
-      expectedLoc += tokens[i].text.length;
-    }
-    return str
-  };
+  const macros = _macros;
 
   //////////////////////////////////////////////////////////////////////
   // macro tools
@@ -7989,8 +8150,6 @@ min-width: ${svgData[key].minWidth}em;`
   // amsmath.sty
   // http://mirrors.concertpass.com/tex-archive/macros/latex/required/amsmath/amsmath.pdf
 
-  defineMacro("\\operatorname", "\\@ifstar\\operatornamewithlimits\\operatorname@");
-
   //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
   defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
 
@@ -7999,7 +8158,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineMacro(
     "\\colon",
     "\\nobreak\\mskip2mu\\mathpunct{}" +
-    "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu"
+    "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu\\relax"
   );
 
   // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
@@ -8220,12 +8379,7 @@ min-width: ${svgData[key].minWidth}em;`
   // \newcommand{\mod}[1]{\allowbreak\if@display\mkern18mu
   //   \else\mkern12mu\fi{\operator@font mod}\,\,#1}
   // TODO: math mode should use \medmuskip = 4mu plus 2mu minus 4mu
-  defineMacro(
-    "\\bmod",
-    "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}" +
-      "\\mathbin{\\rm mod}" +
-      "\\mathchoice{\\mskip1mu}{\\mskip1mu}{\\mskip5mu}{\\mskip5mu}"
-  );
+  defineMacro("\\bmod", "\\mathbin{\\text{mod}}");
   defineMacro(
     "\\pod",
     "\\allowbreak" + "\\mathchoice{\\mkern18mu}{\\mkern8mu}{\\mkern8mu}{\\mkern8mu}(#1)"
@@ -8278,23 +8432,23 @@ min-width: ${svgData[key].minWidth}em;`
   defineMacro("\\ordinarycolon", ":");
   //\def\vcentcolon{\mathrel{\mathop\ordinarycolon}}
   //TODO(edemaine): Not yet centered. Fix via \raisebox or #726
-  defineMacro("\\vcentcolon", "\\mathrel{\\mathop\\ordinarycolon}");
+  defineMacro("\\vcentcolon", "\\mathrel{\\mathrel\\ordinarycolon}");
   // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-  defineMacro("\\coloneq", '\\mathop{\\char"3a\\char"2212}');
+  defineMacro("\\coloneq", '\\mathrel{\\char"3a\\char"2212}');
   // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-  defineMacro("\\Coloneq", '\\mathop{\\char"2237\\char"2212}');
+  defineMacro("\\Coloneq", '\\mathrel{\\char"2237\\char"2212}');
   // \providecommand*\Eqqcolon{=\mathrel{\mkern-1.2mu}\dblcolon}
-  defineMacro("\\Eqqcolon", '\\mathop{\\char"3d\\char"2237}');
+  defineMacro("\\Eqqcolon", '\\mathrel{\\char"3d\\char"2237}');
   // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
-  defineMacro("\\Eqcolon", '\\mathop{\\char"2212\\char"2237}');
+  defineMacro("\\Eqcolon", '\\mathrel{\\char"2212\\char"2237}');
   // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
-  defineMacro("\\colonapprox", '\\mathop{\\char"3a\\char"2248}');
+  defineMacro("\\colonapprox", '\\mathrel{\\char"3a\\char"2248}');
   // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
-  defineMacro("\\Colonapprox", '\\mathop{\\char"2237\\char"2248}');
+  defineMacro("\\Colonapprox", '\\mathrel{\\char"2237\\char"2248}');
   // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
-  defineMacro("\\colonsim", '\\mathop{\\char"3a\\char"223c}');
+  defineMacro("\\colonsim", '\\mathrel{\\char"3a\\char"223c}');
   // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
-  defineMacro("\\Colonsim", '\\mathop{\\char"2237\\char"223c}');
+  defineMacro("\\Colonsim", '\\mathrel{\\char"2237\\char"223c}');
 
   //////////////////////////////////////////////////////////////////////
   // colonequals.sty
@@ -8336,7 +8490,7 @@ min-width: ${svgData[key].minWidth}em;`
 
   defineMacro("\\argmin", "\\DOTSB\\operatorname*{arg\\,min}");
   defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
-  defineMacro("\\plim", "\\DOTSB\\mathop{\\operatorname{plim}}\\limits");
+  defineMacro("\\plim", "\\DOTSB\\operatorname*{plim}");
 
   //////////////////////////////////////////////////////////////////////
   // braket.sty
@@ -8347,19 +8501,56 @@ min-width: ${svgData[key].minWidth}em;`
   defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
   defineMacro("\\Bra", "\\left\\langle#1\\right|");
   defineMacro("\\Ket", "\\left|#1\\right\\rangle");
-  defineMacro("\\Braket",  function(context) {
-    const argStr = recreateArgStr(context);
-    return "\\left\\langle" + argStr.replace(/\|/g, "\\,\\middle\\vert\\,") + "\\right\\rangle"
-  });
-  defineMacro("\\Set",  function(context) {
-    const argStr = recreateArgStr(context);
-    return "\\left\\{" + argStr.replace(/\|/, "\\,\\middle\\vert\\,") + "\\right\\}"
-  });
-  defineMacro("\\set",  function(context) {
-    const argStr = recreateArgStr(context);
-    return "\\{" + argStr.replace(/\|/, "\\mid ") + "\\}"
-  });
-
+  const braketHelper = (one) => (context) => {
+    const left = context.consumeArg().tokens;
+    const middle = context.consumeArg().tokens;
+    const middleDouble = context.consumeArg().tokens;
+    const right = context.consumeArg().tokens;
+    const oldMiddle = context.macros.get("|");
+    const oldMiddleDouble = context.macros.get("\\|");
+    context.macros.beginGroup();
+    const midMacro = (double) => (context) => {
+      if (one) {
+        // Only modify the first instance of | or \|
+        context.macros.set("|", oldMiddle);
+        if (middleDouble.length) {
+          context.macros.set("\\|", oldMiddleDouble);
+        }
+      }
+      let doubled = double;
+      if (!double && middleDouble.length) {
+        // Mimic \@ifnextchar
+        const nextToken = context.future();
+        if (nextToken.text === "|") {
+          context.popToken();
+          doubled = true;
+        }
+      }
+      return {
+        tokens: doubled ? middleDouble : middle,
+        numArgs: 0
+      };
+    };
+    context.macros.set("|", midMacro(false));
+    if (middleDouble.length) {
+      context.macros.set("\\|", midMacro(true));
+    }
+    const arg = context.consumeArg().tokens;
+    const expanded = context.expandTokens([...right, ...arg, ...left]);  // reversed
+    context.macros.endGroup();
+    return {
+      tokens: expanded.reverse(),
+      numArgs: 0
+    };
+  };
+  defineMacro("\\bra@ket", braketHelper(false));
+  defineMacro("\\bra@set", braketHelper(true));
+  defineMacro("\\Braket", "\\bra@ket{\\left\\langle}" +
+    "{\\,\\middle\\vert\\,}{\\,\\middle\\vert\\,}{\\right\\rangle}");
+  defineMacro("\\Set", "\\bra@set{\\left\\{\\:}" +
+    "{\\;\\middle\\vert\\;}{\\;\\middle\\Vert\\;}{\\:\\right\\}}");
+  defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
+    // has no support for special || or \|
 
   //////////////////////////////////////////////////////////////////////
   // actuarialangle.dtx
@@ -8425,7 +8616,6 @@ min-width: ${svgData[key].minWidth}em;`
   // List of commands that act like macros but aren't defined as a macro,
   // function, or symbol.  Used in `isDefined`.
   const implicitCommands = {
-    "\\relax": true, // MacroExpander.js
     "^": true, // Parser.js
     _: true, // Parser.js
     "\\limits": true, // Parser.js
@@ -8438,7 +8628,7 @@ min-width: ${svgData[key].minWidth}em;`
       this.expansionCount = 0;
       this.feed(input);
       // Make new global namespace
-      this.macros = new Namespace(builtinMacros, settings.macros);
+      this.macros = new Namespace(macros, settings.macros);
       this.mode = mode;
       this.stack = []; // contains tokens in REVERSE order
     }
@@ -8721,15 +8911,11 @@ min-width: ${svgData[key].minWidth}em;`
         const expanded = this.expandOnce();
         // expandOnce returns Token if and only if it's fully expanded.
         if (expanded instanceof Token) {
-          // \relax stops the expansion, but shouldn't get returned (a
-          // null return value couldn't get implemented as a function).
-          // the token after \noexpand is interpreted as if its meaning
-          // were ‘\relax’
-          if (expanded.text === "\\relax" || expanded.treatAsRelax) {
-            this.stack.pop();
-          } else {
-            return this.stack.pop(); // === expanded
+          // The token after \noexpand is interpreted as if its meaning were ‘\relax’
+          if (expanded.treatAsRelax) {
+            expanded.text = "\\relax";
           }
+          return this.stack.pop(); // === expanded
         }
       }
 
@@ -8746,7 +8932,9 @@ min-width: ${svgData[key].minWidth}em;`
     }
 
     /**
-     * Fully expand the given token stream and return the resulting list of tokens
+     * Fully expand the given token stream and return the resulting list of
+     * tokens.  Note that the input tokens are in reverse order, but the
+     * output tokens are in forward order.
      */
     expandTokens(tokens) {
       const output = [];
@@ -8965,7 +9153,8 @@ min-width: ${svgData[key].minWidth}em;`
     "\u0302": { text: "\\^", math: "\\hat" },
     "\u0307": { text: "\\.", math: "\\dot" },
     "\u030a": { text: "\\r", math: "\\mathring" },
-    "\u030b": { text: "\\H" }
+    "\u030b": { text: "\\H" },
+    '\u0327': {text: '\\c'}
   };
 
   var unicodeSymbols = {
@@ -10202,7 +10391,8 @@ min-width: ${svgData[key].minWidth}em;`
           if (!unicodeAccents[accent]) {
             throw new ParseError(`Unknown accent ' ${accent}'`, nucleus);
           }
-          const command = unicodeAccents[accent][this.mode];
+          const command = unicodeAccents[accent][this.mode] ||
+                          unicodeAccents[accent].text;
           if (!command) {
             throw new ParseError(`Accent ${accent} unsupported in ${this.mode} mode`, nucleus);
           }
@@ -10395,7 +10585,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.2.1";
+  const version = "0.2.2";
 
   function postProcess(block) {
     const labelMap = {};
