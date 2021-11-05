@@ -559,7 +559,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\iint|$\iint$|| ams |
 |\Im|$\Im$|||
 |\image|$\image$|| texvc extension |
-|\imageof|$\imageof$|||
+|\imageof|$\imageof$|| stix |
 |\imath|$\imath$|||
 |\impliedby|$P\impliedby Q$|`P\impliedby Q`| ams |
 |\implies|$P\implies Q$|`P\implies Q`| ams |
@@ -880,7 +880,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\oplus|$\oplus$|||
 |\or|<span class="no-sup">Not supported</span>|||
 |\order|$\order{x^2}$|`\order{x^2}`| physics extension |
-|\origof|$\origof$|||
+|\origof|$\origof$|| stix |
 |\oslash|$\oslash$|||
 |\otimes|$\otimes$|||
 |\outerproduct|$\outerproduct{a}{b}$|`\outerproduct{a}{b}`| physics extension |
