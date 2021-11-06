@@ -159,7 +159,7 @@ Persistent macros can change the behavior of Temml (e.g. redefining standard com
 
 Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.
 
-**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml-Script.woff2` in order to support `\mathscr{…}`. Cambria Math is in general a good choice. It's only drawback is that Firefox sometimes selects radicals and and integration symbols that are a little too tall.
+**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml-Script.woff2` in order to support `\mathscr{…}`. Cambria Math radicals and integration symbols are sometimes too tall for their content. Otherwise, this would be a good choice.
 
 **Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in `dist` contains the Latin Modern fonts. This option also needs that additional 12kb `Temml-Script.woff2` file in order to support `\mathscr{…}`.
 
@@ -170,9 +170,7 @@ Several other math fonts exist and you can try them out at Frédéric Wang’s [
 If you want a different math font size, you can edit add a rule to your own page's CSS, like this example:
 
 ```css
-@namespace url('http://www.w3.org/1999/xhtml');
-@namespace m url('http://www.w3.org/1998/Math/MathML');
-m|math { font-size: 125%; }
+math { font-size: 125%; }
 ```
 
 # Auto-numbering
