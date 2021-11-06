@@ -121,14 +121,12 @@ for (let i = matches.length - 1; i &gt;= 0; i--) {
 <p>Persistent macros can change the behavior of Temml (e.g. redefining standard commands), so for security, such a setup should be used only for multiple elements of common trust.  For example, you might enable persistent macros within a message posted by a single user (by creating a <code>macros</code> object for that message), but you probably should not enable persistent macros across multiple messages posted by multiple users.</p>
 <h1 id="fonts">Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
-<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml-Script.woff2</code> in order to support <code>\mathscr{…}</code>. Cambria Math is in general a good choice. It&#39;s only drawback is that Firefox sometimes selects radicals and and integration symbols that are a little too tall.</p>
+<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml-Script.woff2</code> in order to support <code>\mathscr{…}</code>. Cambria Math radicals and integration symbols are sometimes too tall for their content. Otherwise, this would be a good choice.</p>
 <p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in <code>dist</code> contains the Latin Modern fonts. This option also needs that additional 12kb <code>Temml-Script.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
 <p><strong>Asana</strong> and <strong>XITS</strong> can be served without the <code>Temml-Script.woff2</code> file. </p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href="https://fred-wang.github.io/MathFonts/" title="Math fonts">Mathematical OpenType Fonts</a>.</p>
 <p>If you want a different math font size, you can edit add a rule to your own page&#39;s CSS, like this example:</p>
-<pre><code class="language-css">@namespace url(&#39;http://www.w3.org/1999/xhtml&#39;);
-@namespace m url(&#39;http://www.w3.org/1998/Math/MathML&#39;);
-m|math { font-size: 125%; }</code></pre>
+<pre><code class="language-css">math { font-size: 125%; }</code></pre>
 <h1 id="auto-numbering">Auto-numbering</h1>
 <p>In order to place automatic numbering in certain AMS environments, Temml contains a CSS rule:</p>
 <pre><code>body { counter-reset: tmlEqnNo; }</code></pre><p>If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.</p>
@@ -229,7 +227,7 @@ math expressions before rendering.</p>
 <nav>
 <div id="sidebar">
 
-<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math> &nbsp;&nbsp;v0.2.2</p>
+<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math> &nbsp;&nbsp;v0.2.3</p>
 <h3><a href="#top">Contents</a></h3>
 
 <ul>

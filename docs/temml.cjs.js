@@ -1066,6 +1066,8 @@ defineSymbol(math, rel, "\u21c1", "\\rightharpoondown", true);
 defineSymbol(math, rel, "\u2196", "\\nwarrow", true);
 defineSymbol(math, rel, "\u21cc", "\\rightleftharpoons", true);
 defineSymbol(math, mathord, "\u21af", "\\lightning", true);
+defineSymbol(math, mathord, "\u2030", "\\permil", true);
+defineSymbol(text, textord, "\u2030", "\\permil");
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);
@@ -1162,6 +1164,8 @@ defineSymbol(math, textord, "\u00a5", "\\yen", true);
 defineSymbol(text, textord, "\u00a5", "\\yen", true);
 defineSymbol(math, textord, "\u2713", "\\checkmark", true);
 defineSymbol(text, textord, "\u2713", "\\checkmark");
+defineSymbol(math, textord, "\u2717", "\\ballotx", true);
+defineSymbol(text, textord, "\u2717", "\\ballotx");
 defineSymbol(text, textord, "\u2022", "\\textbullet");
 
 // AMS Hebrew
@@ -12505,7 +12509,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.2.2";
+const version = "0.2.3";
 
 function postProcess(block) {
   const labelMap = {};
