@@ -745,7 +745,7 @@ defineSymbol(math, accent, "\u00a8", "\\ddot");
 defineSymbol(math, accent, "\u20db", "\\dddot");
 defineSymbol(math, accent, "\u20dc", "\\ddddot");
 defineSymbol(math, accent, "\u007e", "\\tilde");
-defineSymbol(math, accent, "\u2015", "\\bar");
+defineSymbol(math, accent, "\u00af", "\\bar");
 defineSymbol(math, accent, "\u02d8", "\\breve");
 defineSymbol(math, accent, "\u02c7", "\\check");
 defineSymbol(math, accent, "\u005e", "\\hat");
