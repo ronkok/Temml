@@ -130,7 +130,7 @@ The auto-render extension will render the following environments even if they ar
 
 Acceptable horizontal line separators are: `\\` and `\cr`.
 
-Temml supports `\tag{…}` and `\notag` to modify equation numbering.
+Temml supports `\tag{…}`, `\notag`, and `\nonumber` to modify equation numbering.
 
 The `{array}` environment does not yet support `\cline` or `\multicolumn`.
 

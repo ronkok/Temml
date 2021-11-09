@@ -16,8 +16,6 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    // We should never get here.
-    // \env@tag is pre-empted by array.js.
     return new mathMLTree.MathNode("mrow");
   }
 });
@@ -35,8 +33,6 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    // We should never get here.
-    // \env@notag is pre-empted by array.js.
     return new mathMLTree.MathNode("mrow");
   }
 });

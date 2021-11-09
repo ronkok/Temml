@@ -99,6 +99,7 @@ function parseArray(
   if (addEqnNum) {
     parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
     parser.gullet.macros.set("\\notag", "\\env@notag");
+    parser.gullet.macros.set("\\nonumber", "\\env@notag")
   }
 
   // Get current arraystretch if it's not set by the environment
