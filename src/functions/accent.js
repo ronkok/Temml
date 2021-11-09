@@ -112,7 +112,7 @@ defineFunction({
     if (mode === "math" && context.parser.settings.strict) {
       // LaTeX only writes a warning. It doesn't stop. We'll issue the same warning.
       // eslint-disable-next-line no-console
-      console.log(`Command ${context.funcName} is invalid in math mode.`)
+      console.log(`Temml parse error: Command ${context.funcName} is invalid in math mode.`)
     }
 
     return {
