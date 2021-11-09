@@ -187,6 +187,9 @@ defineMacro("\\char", function(context) {
 
 defineMacro("\\hbox", "\\text{#1}");
 
+// Since Temml has no \par, ignore \long.
+defineMacro("\\long", "")
+
 //////////////////////////////////////////////////////////////////////
 // Grouping
 // \let\bgroup={ \let\egroup=}
