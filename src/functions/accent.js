@@ -102,17 +102,17 @@ defineFunction({
   props: {
     numArgs: 1,
     allowedInText: true,
-    allowedInMath: true, // unless in strict mode
+    allowedInMath: true,
     argTypes: ["primitive"]
   },
   handler: (context, args) => {
-    const base = args[0];
-    let mode = context.parser.mode;
+    const base = normalizeArgument(args[0]);
+    const mode = context.parser.mode;
 
-    if (mode === "math") {
-      context.parser.settings.reportNonstrict("mathVsTextAccents",
-          `LaTeX's accent ${context.funcName} works only in text mode`);
-      mode = "text";
+    if (mode === "math" && context.parser.settings.strict) {
+      // LaTeX only writes a warning. It doesn't stop. We'll issue the same warning.
+      // eslint-disable-next-line no-console
+      console.log(`Command ${context.funcName} is invalid in math mode.`)
     }
 
     return {
