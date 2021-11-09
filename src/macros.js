@@ -4,7 +4,7 @@
  */
 
 // Export global macros object from defineMacro
-import defineMacro, {_macros} from "./defineMacro";
+import defineMacro, { _macros } from "./defineMacro";
 const macros = _macros;
 export default macros;
 

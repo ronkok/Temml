@@ -43,9 +43,30 @@ A server-side installation should include `temml.cjs.js` instead of `temml.min.j
 
 # API
 
+### Overview
+
+Say that you have an array of DOM elements whose contents should be converted from TeX
+strings to math. And also say that you wish to define two macros with document-wide
+scope. The code for such a conversion might look like this:
+
+```js
+const macros = temml.definePreamble(
+    `\\newcommand\\d[0]{\\operatorname{d}\\!}
+    \\def\\foo{x^2}`
+);
+for (let element of mathElements) {
+    const tex = element.textContent;
+    const displayMode = element.classList.contains("display")
+    temml.render(tex, element, { macros, displayMode });
+}
+temml.postProcess(document.body);
+```
+
+Below, we examine the parts of that code.
+
 ### In-Browser
 
-Call `temml.render` with a TeX expression and a DOM element to render into:
+To render math in one DOM element, call `temml.render` with a TeX expression and a DOM element to render into:
 
 ```js
 temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
@@ -60,12 +81,24 @@ const temml = require('./temml.cjs.js');  // if in Node.js
 const html = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
 ```
 
-### Options
+### Preamble
 
-You can provide an object of options as the last argument to [`temml.render` and `temml.renderToString`](#api). For example:
+To give document-wide scope to a set of macros, define them in a preamble.
 
 ```js
-const macros = {};
+const macros = temml.definePreamble(
+    `\\newcommand\\d[0]{\\operatorname{d}\\!}
+    \\def\\foo{x^2}`
+);
+```
+
+Any valid [Temml macro](supported.html#macros) may be written into a preamble.
+
+### Options
+
+You can provide an object of options as the last argument to `temml.render` and `temml.renderToString`. For example:
+
+```js
 temml.render(
   "c = \\pm\\sqrt{a^2 + b^2}",
   element, 
@@ -76,17 +109,15 @@ temml.render(
 Available options are:
 
 - `displayMode`: `boolean`. If `true` the math will be rendered in display mode, which will put the math in display style (so `\int` and `\sum` are large, for example), and will center the math on the page on its own line. If `false` the math will be rendered in inline mode. (default: `false`)
-- `macros`: `object`. A collection of custom macros. Each macro is a key-value pair in which the key is a new Temml function name and the value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.
-  
-  If you do not pre-define any macros, provide an empty macros object. This enables user-created persistent `\gdef` macros. See the [macros](#persistent-macros-and-ref) example below.
-- `annotate`: `boolean`. If `true`, include an `<annotation>` element that contains the inputted TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox.
-- `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX.
-- `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. Default is `false.`
+- `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.  
+- `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox. (default: `false`)
+- `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
+- `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
 - `errorColor`: `string`. A color string given in the format `"#XXX"` or `"#XXXXXX"`. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: `#b22222`)
 - `maxSize`: `number`. All user-specified sizes, e.g. in `\rule{500em}{500em}`, will be capped to `maxSize` ems. If set to `Infinity` (the default), users can make elements and spaces arbitrarily large.
 - `maxExpand`: `number`. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. If set to `Infinity`, the macro expander will try to fully expand as in LaTeX. (default: 1000)
-- `strict`: `boolean`. If `false` (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If `true` (LaTeX faithfulness mode), throw an error for any such transgressions. (default = `false`)
-- `xml`: `boolean`. If `true`, write a namespace into the `<math>` element. That namespace is `xmlns="http://www.w3.org/1998/Math/MathML"`. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. Default = `false`.
+- `strict`: `boolean`. If `false` (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If `true` (LaTeX faithfulness mode), throw an error for any such transgressions. (default: `false`)
+- `xml`: `boolean`. If `true`, Temml will write a namespace into the `<math>` element. That namespace is `xmlns="http://www.w3.org/1998/Math/MathML"`. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. (default: `false`)
 - `trust`: `boolean` or `function` (default: `false`). If `false` (do not trust input), prevent any commands like `\includegraphics` that could enable adverse behavior, rendering them instead in `errorColor`. If `true` (trust input), allow all such commands. Provide a custom function `handler(context)` to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:
 
   - `{command: "\\url", url, protocol}`
@@ -107,53 +138,21 @@ Available options are:
   - Allow all commands but forbid specific protocol: `trust: (context) => context.protocol !== 'file'`
   - Allow certain commands with specific protocols: `trust: (context) => ['\\url', '\\href'].includes(context.command) && ['http', 'https', '_relative'].includes(context.protocol)`
 
-## Persistent Macros and \ref
+## Post Process
 
-Temml’s [macro documentation](supported.html#gdef) tells the author that `\gdef` will create a macro that persists between Temml elements. In order to enable that persistence, you must create one shared `macros` object that you pass into every call to `temml.render` or `temml.renderToString`. (Do not create a fresh `macros` object for each call.)
-
-For example, suppose that you have an array `mathElements` of DOM elements that contain math. Then you could write this code:
-
-```js
-const macros = {};
-for (let element of mathElements) {
-    temml.render(element.textContent, element, { macros });
-}
-temml.postProcess(document.body);
-```
-Notice that you create the `macros` object outside the loop. If an author uses `\gdef`, Temml will insert that macro definition into the `macros` object and since `macros` continues to exist between calls to `temml.render`, `\gdef` macros will persist between `mathElements`.
-
-`macros` can be omitted if you choose not to support persistent macros.
-
-The `postProcess` function implements the AMS functions `\ref` and `\label`. It should also be called outside the loop
+The `postProcess` function implements the AMS functions `\ref` and `\label`. It should be called outside of any loop.
 
 `temml.render` and `temml.renderToString` each operate on only one element at a time. In contrast, the `postProcess` function makes two passes throught the entire document. `postProcess` can be omitted if you choose not to support `\ref.`
-
-Next, a server-side example. Say that you have written a Markdown document with math delimited by `$…$` or `$$…$$`. And say that you have an array of matches to the math. Then you could render the math so:
-
-```js
-const macros = {};
-for (let i = matches.length - 1; i >= 0; i--) {
-    const displayMode = matches[i].value.slice(0, 2) === "$$";
-    const delimLength = displayMode ? 2 : 1;
-    const tex = matches[i].value.slice(delimLength, -delimLength).trim();
-    const mathML =  temml.renderToString(tex, { displayMode, macros });
-    str = str.slice(0, matches[i].index) + mathML + str.slice(matches[i].lastindex);
-}
-```
 
 If Temml is used server-side, `\ref` and `\label` are still implemented at runtime with client-side JavaScript. A small file, `temmlPostProcess.js`, is provided to be installed in place of `temml.min.js`. It exposes one function:
 
 ```
-temml.postProcess(document body)
+temml.postProcess(document.body)
 ```
 
 If you do not do a runtime `postProcess`, everthing in Temml will work except `\ref`.
 
-If you use the [auto-render extension](#auto-render-extension), it includes the `macros` and post-processor nuances.
-
-### Security of Persistent Macros
-
-Persistent macros can change the behavior of Temml (e.g. redefining standard commands), so for security, such a setup should be used only for multiple elements of common trust.  For example, you might enable persistent macros within a message posted by a single user (by creating a `macros` object for that message), but you probably should not enable persistent macros across multiple messages posted by multiple users.
+If you use the [auto-render extension](#auto-render-extension), it includes the post-processor nuances.
 
 # Fonts
 
@@ -253,7 +252,7 @@ options passed to `temml.render`](#options), in addition to two auto-render-spec
     // Put $ after $$.
     {left: "$", right: "$", display: false},
     {left: "\\(", right: "\\)", display: false},
-    // Put \[ last to avoid conflict with \\[1em] row separator
+    // Put \[ last to avoid conflict with possible future \\[1em] row separator.
     {left: "\\[", right: "\\]", display: true}
   ]
   ```
@@ -312,10 +311,12 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.3
 * [Browser Support](#browser-support)
 * [Installation](#installation)
 * [API](#api)
+    * [Overview](#overview)
     * [In Browser](#in-browser)
     * [Server Side](#server-side)
+    * [Preamble](#preamble)
     * [Options](#options)
-    * [Macros and \ref](#persistent-macros-and-ref)
+    * [Post Process](#post-process)
 * [Fonts](#fonts)
 * [Auto-numbering](#auto-numbering)
 * [Auto-Render Extension](#auto-render-extension)

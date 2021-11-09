@@ -7,5 +7,5 @@ export const _macros = {};
 
 // This function might one day accept an additional argument and do more things.
 export default function defineMacro(name, body) {
-    _macros[name] = body;
+  _macros[name] = body;
 }

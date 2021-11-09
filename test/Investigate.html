@@ -5,12 +5,25 @@
 	<meta name="viewport" content="initial-scale=1">
 	<title>Investigate</title>
    <link rel="stylesheet" type="text/css" href="../site/temml/Temml-Cambria-Math.css">
-   <link rel="stylesheet" type="text/css" href="main.css">        
+   <link rel="stylesheet" type="text/css" href="main.css">   
+   <script src="./temml.js"></script>     
 </head>
 
 <body>
 
 <!-- I use this file to hand-write MathML. I examine the rendered result before I write JavaScript to produce it. -->
+
+<p><span id="test"></span></p>
+
+<script>
+  const macros = temml.definePreamble(
+   `\\newcommand\\d[0]{\\operatorname{d}\\!}
+   \\def\\foo{x^2}`
+  );
+  const el = document.getElementById("test")
+  const tex = `\\oint_C \\vec{B}\\circ \\d\\vec{l} = \\mu_0 \\left( I_{\\text{enc}} + \\varepsilon_0 \\frac{\\d}{\\d t} \\int_S \\vec{E} \\circ \\hat{n}\\; \\d a \\right)`
+  temml.render(tex, el, { macros, displayMode: true });
+</script>
 
 <p>
    <math>

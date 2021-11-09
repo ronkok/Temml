@@ -45,7 +45,7 @@ const numberRegEx = /^\d[\d.]*$/  // Keep in sync with numberRegEx in symbolsOrd
  */
 
 export default class Parser {
-  constructor(input, settings) {
+  constructor(input, settings, isPreamble = false) {
     // Start in math mode
     this.mode = "math";
     // Create a new macro expander (gullet) and (indirectly via that) also a
@@ -53,6 +53,8 @@ export default class Parser {
     this.gullet = new MacroExpander(input, settings, this.mode);
     // Store the settings for use in parsing
     this.settings = settings;
+    // Are we defining a preamble?
+    this.isPreamble = isPreamble;
     // Count leftright depth (for \middle errors)
     this.leftrightDepth = 0;
     this.prevAtomType = "";
@@ -118,6 +120,15 @@ export default class Parser {
 
     // If we succeeded, make sure there's an EOF at the end
     this.expect("EOF");
+
+    if (this.isPreamble) {
+      const macros = Object.create(null)
+      Object.entries(this.gullet.macros.current).forEach(([key, value]) => {
+        macros[key] = value
+      })
+      this.gullet.endGroup();
+      return macros
+    }
 
     // End the group namespace for the expression
     this.gullet.endGroup();

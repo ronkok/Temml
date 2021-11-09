@@ -480,7 +480,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |{gather*}|$$\begin{gather*}a=b\\e=b+c\end{gather*}$$|`\begin{gather*}`<br>&nbsp;&nbsp;&nbsp;`a=b \\ `<br>&nbsp;&nbsp;&nbsp;`e=b+c`<br>`\end{gather*}`| ams |
 |{gathered}|$\begin{gathered}a=b\\e=b+c\end{gathered}$|`\begin{gathered}`<br>&nbsp;&nbsp;&nbsp;`a=b \\ `<br>&nbsp;&nbsp;&nbsp;`e=b+c`<br>`\end{gathered}`| ams |
 |\gcd|$\gcd$|||
-|\gdef|$\gdef\bar#1{#1^2}$ $\bar{y} + \bar{y}$|`\gdef\bar#1{#1^2} \bar{y} + \bar{y}`||
+|\gdef|<span class="no-sup">Not supported</span>|||
 |\ge|$\ge$|||
 |\geneuro|<span class="no-sup">Not supported</span>|See `\euro`||
 |\geneuronarrow|<span class="no-sup">Not supported</span>|See `\euro`||
@@ -494,7 +494,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 |\ggg|$\ggg$|| ams |
 |\gggtr|$\gggtr$|| ams |
 |\gimel|$\gimel$|| ams |
-|\global|$\global\def\add#1#2{#1+#2} \add 2 3$|`\global\def\add#1#2{#1+#2} \add 2 3`||
+|\global|<span class="no-sup">Not supported</span>|||
 |\gnapprox|$\gnapprox$|| ams |
 |\gneq|$\gneq$|| ams |
 |\gneqq|$\gneqq$|| ams |
@@ -1411,7 +1411,7 @@ If you know the shape of a character, but not its name, [Detexify](http://detexi
 | Function       |  Rendered   | Source or Comment |  Package  |
 |:---------------|:------------|:------------------|-----------|
 |\xcancel|$\xcancel{ABC}$|`\xcancel{ABC}`| cancel |
-|\xdef|$\def\foo{a}\xdef\bar{\foo}\def\foo{}\bar$|`\def\foo{a}\xdef\bar{\foo}\def\foo{}\bar`||
+|\xdef|<span class="no-sup">Not supported</span>|||
 |\Xi|$\Xi$|||
 |\xi|$\xi$|||
 |\xhookleftarrow|$\xhookleftarrow{abc}$|`\xhookleftarrow{abc}`| mathtools |

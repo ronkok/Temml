@@ -307,31 +307,26 @@ Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ �
 |||
 |:-------------------------------------|:------
 |$\def\foo{x^2} \foo + \foo$           | `\def\foo{x^2} \foo + \foo`
-|$\gdef\bar#1{#1^2} \bar{y} + \bar{y}$ | `\gdef\bar#1{#1^2} \bar{y} + \bar{y}`
 |                                      | `\edef\macroname#1#2…{definition to be expanded}`
-|                                      | `\xdef\macroname#1#2…{definition to be expanded}`
 |                                      | `\let\foo=\bar`
 |                                      | `\futurelet\foo\bar x`
-|                                      | `\global\def\macroname#1#2…{definition}`
 |                                      | `\newcommand\macroname[numargs]{definition}`
 |                                      | `\renewcommand\macroname[numargs]{definition}`
 |                                      | `\providecommand\macroname[numargs]{definition}`
 
-Macros can also be defined in the Temml [rendering options](options.md).
+To create macros with document-wide scope, A [preamble](./administration.html#preamble) can be defined
+as one of the Temml [rendering options](./administration.html#options)
 
 Macros accept up to nine arguments: #1, #2, etc.
-
-<div id="gdef"></div>
-
-Macros defined by `\gdef`, `\xdef`, `\global\def`, `\global\edef`, `\global\let`, and `\global\futurelet` will persist between math expressions. (Exception: macro persistence may be disabled. There are legitimate security reasons for that.)
-
-Temml has no `\par`, so all macros are long by default and `\long` will be ignored.
 
 Available functions include:
 
 `\char` `\mathchoice` `\TextOrMath` `\@ifstar` `\@ifnextchar` `\@firstoftwo` `\@secondoftwo` `\relax` `\expandafter` `\noexpand`
 
 @ is a valid character for commands, as if `\makeatletter` were in effect.
+
+Temml macros do not escape their scope and Temml has no `\par`.
+So `\gdef`, `\xdef`,`\global`, and `\long` are not supported.
 
 ## Operators
 

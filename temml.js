@@ -10,6 +10,7 @@
 import ParseError from "./src/ParseError";
 import Settings from "./src/Settings";
 
+import Parser from "./src/Parser";
 import parseTree from "./src/parseTree";
 import buildMathML from "./src/buildMathML";
 import { StyleLevel } from "./src/constants";
@@ -60,6 +61,23 @@ const renderToString = function(expression, options) {
 const generateParseTree = function(expression, options) {
   const settings = new Settings(options);
   return parseTree(expression, settings);
+};
+
+/**
+ * Take an expression which contains a preamble.
+ * Parse it and return the macros.
+ */
+const definePreamble = function(expression, options) {
+  const settings = new Settings(options);
+  settings.macros = {};
+  if (!(typeof expression === "string" || expression instanceof String)) {
+    throw new TypeError("Temml can only parse string typed expression")
+  }
+  const parser = new Parser(expression, settings, true)
+  // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
+  delete parser.gullet.macros.current["\\df@tag"]
+  const macros = parser.parse()
+  return macros
 };
 
 /**
@@ -120,6 +138,10 @@ export default {
    * Temml error, usually during parsing.
    */
   ParseError,
+  /**
+   * Creates a set of macros with document-wide scope.
+   */
+  definePreamble,
   /**
    * Parses the given LaTeX into Temml's internal parse tree structure,
    * without rendering to HTML or MathML.
