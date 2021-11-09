@@ -38,9 +38,8 @@ const letCommand = (parser, name, tok) => {
   parser.gullet.macros.set(name, macro);
 };
 
-// Basic support for macro definitions: \def, \gdef
+// Basic support for macro definitions: \def
 // <definition> -> <def><control sequence><definition text>
-// <def> -> \def|\gdef
 // <definition text> -> <parameter text><left brace><balanced text><right brace>
 defineFunction({
   type: "internal",

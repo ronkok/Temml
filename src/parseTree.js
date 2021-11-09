@@ -14,10 +14,6 @@ const parseTree = function(toParse, settings) {
 
   let tree = parser.parse()
 
-  // Prevent a color definition from persisting between calls to temml.render().
-  delete parser.gullet.macros.current["\\current@color"];
-  delete parser.gullet.macros.current["\\color"];
-
   // LaTeX ignores a \tag placed outside an AMS environment.
   if (!(tree.length > 0 &&  tree[0].type && tree[0].type === "array" && tree[0].addEqnNum)) {
     // If the input used \tag, it will set the \df@tag macro to the tag.

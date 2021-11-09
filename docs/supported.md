@@ -217,7 +217,7 @@ Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À
 
 Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$.
 
-Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicode script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
+Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future document breaks, I advise that you avoid inputting Unicode script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
 
 ## Layout
 

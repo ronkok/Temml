@@ -130,8 +130,13 @@ export default class Parser {
       return macros
     }
 
+    // The only local macro that we want to save is from \tag.
+    const tag = this.gullet.macros.get("\\df@tag")
+
     // End the group namespace for the expression
     this.gullet.endGroup();
+
+    if (tag) { this.gullet.macros.current["\\df@tag"] = tag }
 
     return parse;
   }

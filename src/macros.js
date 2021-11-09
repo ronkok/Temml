@@ -452,7 +452,7 @@ defineMacro("\\tag@literal", (context) => {
   if (context.macros.get("\\df@tag")) {
     throw new ParseError("Multiple \\tag");
   }
-  return "\\gdef\\df@tag{\\text{#1}}";
+  return "\\def\\df@tag{\\text{#1}}";
 });
 
 // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
