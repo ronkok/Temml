@@ -1118,6 +1118,7 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.3
   <option value="Cambria-Math">Local font</option>
   <option value="Latin-Modern">Latin Modern</option>
   <option value="Asana">Asana</option>
+  <option value="STIX2">STIX TWO</option>
   <option value="XITS">XITS</option>
 </select>
 <script>
