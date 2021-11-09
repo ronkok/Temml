@@ -325,8 +325,8 @@ Available functions include:
 
 @ is a valid character for commands, as if `\makeatletter` were in effect.
 
-Temml macros do not escape their scope and Temml has no `\par`.
-So `\gdef`, `\xdef`,`\global`, and `\long` are not supported.
+Temml macros do not escape their group, so `\gdef`, `\xdef`, and`\global` are not supported.
+Temml has no `\par`, so `\long` is ignored.
 
 ## Operators
 
