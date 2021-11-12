@@ -7207,6 +7207,7 @@ min-width: ${svgData[key].minWidth}em;`
         text.text = variantChar(text.text, variant);
       }
       const node = new mathMLTree.MathNode("mi", [text]);
+      // TODO: Handle U+1D49C - U+1D4CF per https://www.unicode.org/charts/PDF/U1D400.pdf
       if (variant === "normal") {
         node.setAttribute("mathvariant", "normal");
       }
@@ -10525,7 +10526,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.2.3";
+  const version = "0.3.0";
 
   function postProcess(block) {
     const labelMap = {};
