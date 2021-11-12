@@ -7,14 +7,14 @@ or package managers.
 The Latin Modern WOFF fonts have been obtained from
 http://www.gust.org.pl/projects/e-foundry/
 
-The Temml-Script is a clone of KaTeX_Script-Regular, except that the code points
+The Temml.woff2 is a clone of KaTeX_Script-Regular, except that the code points
 have been changed from ASCII to Unicode Mathematical Alphanumeric Symbols Script capitals,
 Unicode range 1D49C to 1D4B5.
 */
 
 @font-face {
-  font-family: 'Temml-Script';
-  src: url('Temml-Script.woff2') format('woff2');
+  font-family: 'Temml';
+  src: url('Temml.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -24,22 +24,22 @@ Unicode range 1D49C to 1D4B5.
 */
 @font-face {
   font-family: LMRoman12;
-  src: url('./LatinModern/lmroman12-regular.woff2');
+  src: url('./lmroman12-regular.woff2');
 }
 @font-face {
   font-family: LMRoman12;
-  src: url('./LatinModern/lmroman12-bold.woff2');
+  src: url('./lmroman12-bold.woff2');
   font-weight: bold;
 }
 @font-face {
   font-family: LMRoman12;
-  src: url('./LatinModern/lmroman12-italic.woff2');
+  src: url('./lmroman12-italic.woff2');
   font-style: italic;
 }
 @font-face {
   font-family: Latin Modern Math;
   src: local('Latin Modern Math'), local('LatinModernMath-Regular'),
-       url('./LatinModern/latinmodern-math.woff2');
+       url('./latinmodern-math.woff2');
 }
 
 math {
@@ -71,7 +71,7 @@ math {
 }
 
 *.mathscr {
-  font-family: "Temml-Script";
+  font-family: "Temml";
 }
 
 .oldstylenums {

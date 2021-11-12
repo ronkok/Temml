@@ -11,7 +11,7 @@ http://mirrors.ctan.org/fonts/
 @font-face {
   font-family: Asana Math;
   src: local('Asana Math'), local('Asana-Math'),
-       url('./Asana/Asana-Math.woff2');
+       url('./Asana-Math.woff2');
 }
 
 math {

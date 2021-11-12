@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.0] - 2021-11-12
+
+### Removed
+
+- Support for \global, \gdef, and \xdef
+
+### Added
+
+- Preamble definition
+- Support \nonumber
+- STIX2 is now available on the home page
+
+### Fixed
+
+- Text mode accents in strict mode get only a console message, not an error.
+
+### Changed
+
+- Revert to macron character for \bar
+- Change a font name from Temml-Script.woff2 to Temml.woff2.
+- Change a folder name from /temml/ to /assets/.
+- Documentation clarifies the current chancery/roundhand situation.
+
 ## [0.2.3] - 2021-11-06
 
 ### Added

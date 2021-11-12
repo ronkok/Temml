@@ -1072,7 +1072,7 @@ To determine the Temml version number, open the console (Ctrl-Shift-I) and type 
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.3
+$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.3.0
 
 <h3><a href="#top">Contents</a></h3>
 
