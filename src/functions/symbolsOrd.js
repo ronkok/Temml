@@ -3,7 +3,6 @@ import { getVariant } from "../variant"
 import { variantChar, smallCaps } from "../replace"
 import mathMLTree from "../mathMLTree"
 import * as mml from "../buildMathML"
-import { Span } from "../domTree"
 
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
 // src/symbols.js.
@@ -31,6 +30,7 @@ defineFunctionBuilders({
       text.text = variantChar(text.text, variant)
     }
     const node = new mathMLTree.MathNode("mi", [text])
+    // TODO: Handle U+1D49C - U+1D4CF per https://www.unicode.org/charts/PDF/U1D400.pdf
     if (variant === "normal") {
       node.setAttribute("mathvariant", "normal")
     }

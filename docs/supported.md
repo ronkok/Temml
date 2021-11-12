@@ -217,7 +217,15 @@ Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À
 
 Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$.
 
-Regarding calligraphic and script: The MathML and Unicode standards are [in flux](https://github.com/w3c/mathml/issues/61) for these two type faces. To avoid future document breaks, I advise that you avoid inputting Unicode script letters for now. `\mathcal{}` and `\mathscr{}` are reliable alternatives.
+<br>
+
+<div>For chancery or roundhand characters, it’s probably best to use <code>\mathcal</code> and <code>\mathscr</code> instead of Unicode input.<details><summary>Why?</summary>
+<p>Unicode has historically accepted either chancery or roundhand glyphs in the range U+1D49C—U+1D4B5. That's confusing,
+because Cambria Math has chancery in those code points and some other math fonts have roundhand in the same code points.
+<a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14</a> has recently added code points that resolve the ambiguity. Both chancery and roundhand still occupy the same range, but each unambigous chancery character has a <code>\ufe00</code> appended to the code point and each unambigous roundhand character has a <code>\ufe01</code> appended to the code point.</p>
+<p>Published fonts have not yet caught up to the new code point assignments. If you want your documents to not break in the future, it’s probably best to stick with <code>\mathcal</code> and <code>\mathscr</code>.</p>
+</details>
+</div>
 
 ## Layout
 
