@@ -1,17 +1,18 @@
 /*
-The Temml-Script is a clone of KaTeX_Script-Regular, except that the code points
+Temml.woff2 is a clone of KaTeX_Script-Regular, except that the code points
 have been changed from ASCII to Unicode Mathematical Alphanumeric Symbols Script capitals,
 Unicode range 1D49C to 1D4B5.
 */
 
 @font-face {
-  font-family: 'Temml-Script';
-  src: url('Temml-Script.woff2') format('woff2');
+  font-family: 'Temml';
+  src: url('Temml.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
 
 math {
+  font-family: "Cambria Math", "Times New Roman", math;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -27,16 +28,8 @@ math * {
   border-color: currentColor;
 }
 
-math mtext {
-  font-family: "Cambria Math", "Times New Roman", math;
-}
-
-math {
-  font-family: "Cambria Math", "Times New Roman", math;
-}
-
 math .mathscr {
-  font-family: "Temml-Script";
+  font-family: "Temml";
 }
 
 math .oldstylenums {

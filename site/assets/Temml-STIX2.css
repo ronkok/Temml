@@ -1,22 +1,15 @@
 /*
-XITS is released under the SIL Open Font License. See the files in this
-directory for details. The font can be obtained from several TeX distributions
-or package managers.
+XITS is released under the SIL Open Font License.
+See https://github.com/stipub/stixfonts/blob/master/OFL.txt details.
 
-The WOFF fonts have been obtained from
-http://mirrors.ctan.org/fonts/
+The WOFF font has been obtained from
+https://github.com/stipub/stixfonts
 */
 
 @font-face {
-  font-family: XITS Math;
-  src: local('XITS Math'), local('XITSMath-Regular'),
-       url('./XITS/xits-math.woff2');
-}
-@font-face {
-  font-family: XITS Math;
-  src: local('XITS Math Bold'), local('XITSMath-Bold'),
-       url('./XITS/xits-mathbold.woff2');
-  font-weight: bold;
+  font-family: STIX2;
+  src: local('STIXTwoMath-Regular'),
+       url('./STIXTwoMath-Regular.woff2');
 }
 
 math {
@@ -36,14 +29,14 @@ math * {
 }
 
 mtext {
-  font-family: XITS;
+  font-family: STIX2;
 }
 
 math {
-  font-family: XITS Math, math;
+  font-family: STIX2, math;
 }
 
-*.mathcal {
+*.mathscr {
   font-feature-settings: 'ss01';
 }
 

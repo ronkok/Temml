@@ -1608,7 +1608,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, accent, "\u20db", "\\dddot");
   defineSymbol(math, accent, "\u20dc", "\\ddddot");
   defineSymbol(math, accent, "\u007e", "\\tilde");
-  defineSymbol(math, accent, "\u2015", "\\bar");
+  defineSymbol(math, accent, "\u00af", "\\bar");
   defineSymbol(math, accent, "\u02d8", "\\breve");
   defineSymbol(math, accent, "\u02c7", "\\check");
   defineSymbol(math, accent, "\u005e", "\\hat");
@@ -1640,6 +1640,18 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(text, accent, "\u02c7", "\\v"); // caron
   defineSymbol(text, accent, "\u00a8", '\\"'); // diaresis
   defineSymbol(text, accent, "\u02dd", "\\H"); // double acute
+  defineSymbol(math, accent, "\u02ca", "\\'"); // acute
+  defineSymbol(math, accent, "\u02cb", "\\`"); // grave
+  defineSymbol(math, accent, "\u02c6", "\\^"); // circumflex
+  defineSymbol(math, accent, "\u02dc", "\\~"); // tilde
+  defineSymbol(math, accent, "\u02c9", "\\="); // macron
+  defineSymbol(math, accent, "\u02d8", "\\u"); // breve
+  defineSymbol(math, accent, "\u02d9", "\\."); // dot above
+  defineSymbol(math, accent, "\u00b8", "\\c"); // cedilla
+  defineSymbol(math, accent, "\u02da", "\\r"); // ring above
+  defineSymbol(math, accent, "\u02c7", "\\v"); // caron
+  defineSymbol(math, accent, "\u00a8", '\\"'); // diaresis
+  defineSymbol(math, accent, "\u02dd", "\\H"); // double acute
 
   // These ligatures are detected and created in Parser.js's `formLigatures`.
   const ligatures = {
@@ -2175,17 +2187,17 @@ min-width: ${svgData[key].minWidth}em;`
     props: {
       numArgs: 1,
       allowedInText: true,
-      allowedInMath: true, // unless in strict mode
+      allowedInMath: true,
       argTypes: ["primitive"]
     },
     handler: (context, args) => {
-      const base = args[0];
-      let mode = context.parser.mode;
+      const base = normalizeArgument(args[0]);
+      const mode = context.parser.mode;
 
-      if (mode === "math") {
-        context.parser.settings.reportNonstrict("mathVsTextAccents",
-            `LaTeX's accent ${context.funcName} works only in text mode`);
-        mode = "text";
+      if (mode === "math" && context.parser.settings.strict) {
+        // LaTeX only writes a warning. It doesn't stop. We'll issue the same warning.
+        // eslint-disable-next-line no-console
+        console.log(`Temml parse error: Command ${context.funcName} is invalid in math mode.`);
       }
 
       return {
@@ -2899,9 +2911,8 @@ min-width: ${svgData[key].minWidth}em;`
     parser.gullet.macros.set(name, macro);
   };
 
-  // Basic support for macro definitions: \def, \gdef
+  // Basic support for macro definitions: \def
   // <definition> -> <def><control sequence><definition text>
-  // <def> -> \def|\gdef
   // <definition text> -> <parameter text><left brace><balanced text><right brace>
   defineFunction({
     type: "internal",
@@ -3624,6 +3635,7 @@ min-width: ${svgData[key].minWidth}em;`
     if (addEqnNum) {
       parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
       parser.gullet.macros.set("\\notag", "\\env@notag");
+      parser.gullet.macros.set("\\nonumber", "\\env@notag");
     }
 
     // Get current arraystretch if it's not set by the environment
@@ -4443,8 +4455,6 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      // We should never get here.
-      // \env@tag is pre-empted by array.js.
       return new mathMLTree.MathNode("mrow");
     }
   });
@@ -4462,8 +4472,6 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      // We should never get here.
-      // \env@notag is pre-empted by array.js.
       return new mathMLTree.MathNode("mrow");
     }
   });
@@ -8022,6 +8030,9 @@ min-width: ${svgData[key].minWidth}em;`
 
   defineMacro("\\hbox", "\\text{#1}");
 
+  // Since Temml has no \par, ignore \long.
+  defineMacro("\\long", "");
+
   //////////////////////////////////////////////////////////////////////
   // Grouping
   // \let\bgroup={ \let\egroup=}
@@ -8284,7 +8295,7 @@ min-width: ${svgData[key].minWidth}em;`
     if (context.macros.get("\\df@tag")) {
       throw new ParseError("Multiple \\tag");
     }
-    return "\\gdef\\df@tag{\\text{#1}}";
+    return "\\def\\df@tag{\\text{#1}}";
   });
 
   // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
@@ -9515,8 +9526,13 @@ min-width: ${svgData[key].minWidth}em;`
         return macros
       }
 
+      // The only local macro that we want to save is from \tag.
+      const tag = this.gullet.macros.get("\\df@tag");
+
       // End the group namespace for the expression
       this.gullet.endGroup();
+
+      if (tag) { this.gullet.macros.current["\\df@tag"] = tag; }
 
       return parse;
     }
@@ -10351,10 +10367,6 @@ min-width: ${svgData[key].minWidth}em;`
     delete parser.gullet.macros.current["\\df@tag"];
 
     let tree = parser.parse();
-
-    // Prevent a color definition from persisting between calls to temml.render().
-    delete parser.gullet.macros.current["\\current@color"];
-    delete parser.gullet.macros.current["\\color"];
 
     // LaTeX ignores a \tag placed outside an AMS environment.
     if (!(tree.length > 0 &&  tree[0].type && tree[0].type === "array" && tree[0].addEqnNum)) {

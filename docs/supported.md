@@ -4,9 +4,9 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
-   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
+   <link rel="stylesheet" href="../../assets/Temml-Local.css">
    <link rel="stylesheet" href="../docStyles.css">
-   <script src="../../temml/temml.min.js"></script>
+   <script src="../../assets/temml.min.js"></script>
    <style>
       #env + table tr td:nth-child(1) { min-width: 9em }
       #env + table tr td:nth-child(3) { min-width: 11em }
@@ -1115,7 +1115,7 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.3
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
-  <option value="Cambria-Math">Local font</option>
+  <option value="Local">Local font</option>
   <option value="Latin-Modern">Latin Modern</option>
   <option value="Asana">Asana</option>
   <option value="STIX2">STIX TWO</option>
@@ -1124,12 +1124,12 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.2.3
 <script>
   function updateMathFont() {
     // Change the CSS style sheet.
-    const temmlRegEx = /temml\/Temml-.+\.css$/
+    const temmlRegEx = /assets\/Temml-.+\.css$/
     const value = document.getElementById("MathFont").value
     const links = [...document.head.getElementsByTagName('link')];
     links.forEach(link => {
       if (temmlRegEx.test(link.href)) {
-        link.setAttribute("href", `../../temml/Temml-${value}.css`);
+        link.setAttribute("href", `../../assets/Temml-${value}.css`);
       }
     })
   }

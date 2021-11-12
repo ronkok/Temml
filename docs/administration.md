@@ -21,8 +21,8 @@ Temml works in browsers that support MathML. This includes Firefox and Safari. I
 You can download Temml files from the [`dist` folder](https://github.com/ronkok/Temml/dist/) of the Temml repository and serve them from your own site. The minimum browser  installation needs the following files. The `css` file and font file must be in the same folder.
 
 * temml.min.js
-* Temml-Cambria-Math.css
-* Temml-Script.woff2
+* Temml-Local.css
+* Temml.woff2
 
 A server-side installation should include `temml.cjs.js` instead of `temml.min.js`.
 
@@ -158,11 +158,13 @@ If you use the [auto-render extension](#auto-render-extension), it includes the 
 
 Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.
 
-**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml-Script.woff2` in order to support `\mathscr{…}`. Cambria Math radicals and integration symbols are sometimes too tall for their content. Otherwise, this would be a good choice.
+**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2` in order to support `\mathscr{…}`. Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.
 
-**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in `dist` contains the Latin Modern fonts. This option also needs that additional 12kb `Temml-Script.woff2` file in order to support `\mathscr{…}`.
+**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in `dist` contains the Latin Modern fonts. This option also needs that additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
-**Asana**, **STIX TWO**, and **XITS** can be served without the `Temml-Script.woff2` file. 
+**Asana**, **STIX TWO**, and **XITS** can be served without the `Temml.woff2` file.
+
+XITS is my current favorite of all the math fonts. I think it does the best job at matching radical sizes to (sub|super)scripts.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts](https://fred-wang.github.io/MathFonts/ "Math fonts").
 
@@ -194,7 +196,7 @@ This extension isn't part of Temml proper, so the script needs to be included
 ```html
 <head>
    ...
-<link rel="stylesheet" href="./temml.css">
+<link rel="stylesheet" href="./Temml-Local.css">
 <script src="./temml.min.js"></script>
 <script src="./auto-render.min.js"></script>
   ...
@@ -283,7 +285,7 @@ To install extensions for browser use, include the appropriate file from the `co
 ```html
   <head>
     ...
-    <link rel="stylesheet" href="./temml.css">
+    <link rel="stylesheet" href="./Temml-Local.css">
     <script src="./temml.min.js"></script>
     <script src="./mhchem.min.js"></script>
   </head>

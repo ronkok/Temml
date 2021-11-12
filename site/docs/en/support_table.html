@@ -4,9 +4,9 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Support Table</title>
-   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
+   <link rel="stylesheet" href="../../assets/Temml-Local.css">
    <link rel="stylesheet" href="../docStyles.css">
-   <script src="../../temml/temml.min.js"></script>
+   <script src="../../assets/temml.min.js"></script>
    <style>
       #atbl + table tr td:nth-child(2) { min-width: 12em }
       #gtbl + table tr td:nth-child(2) { min-width: 9em }
@@ -636,7 +636,7 @@
 </tr>
 <tr>
 <td style="text-align: left;">\bar</td>
-<td style="text-align: left;"><math><msup><mi>y</mi><mn>2</mn></msup></math></td>
+<td style="text-align: left;"><math><mover accent="true"><mi>y</mi><mo>¯</mo></mover></math></td>
 <td style="text-align: left;"><code>\bar{y}</code></td>
 <td></td>
 </tr>
@@ -2553,8 +2553,8 @@
 </tr>
 <tr>
 <td style="text-align: left;">\gdef</td>
-<td style="text-align: left;"><math></math> <math><mrow><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>y</mi><mn>2</mn></msup></mrow></math></td>
-<td style="text-align: left;"><code>\gdef\bar#1{#1^2} \bar{y} + \bar{y}</code></td>
+<td style="text-align: left;"><span class="no-sup">Not supported</span></td>
+<td style="text-align: left;"></td>
 <td></td>
 </tr>
 <tr>
@@ -2637,8 +2637,8 @@
 </tr>
 <tr>
 <td style="text-align: left;">\global</td>
-<td style="text-align: left;"><math><mrow><mn>2</mn><mo>+</mo></mrow><mrow><mn>3</mn></mrow></math></td>
-<td style="text-align: left;"><code>\global\def\add#1#2{#1+#2} \add 2 3</code></td>
+<td style="text-align: left;"><span class="no-sup">Not supported</span></td>
+<td style="text-align: left;"></td>
 <td></td>
 </tr>
 <tr>
@@ -7805,8 +7805,8 @@
 </tr>
 <tr>
 <td style="text-align: left;">\xdef</td>
-<td style="text-align: left;"><math><mi>a</mi></math></td>
-<td style="text-align: left;"><code>\def\foo{a}\xdef\bar{\foo}\def\foo{}\bar</code></td>
+<td style="text-align: left;"><span class="no-sup">Not supported</span></td>
+<td style="text-align: left;"></td>
 <td></td>
 </tr>
 <tr>

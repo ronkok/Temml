@@ -7,12 +7,12 @@
 <title>Temml - Convert TeX to MathML</title>
 
 <link rel="stylesheet" href="./indexStyles.css">
-<link rel="stylesheet" href="./temml/Temml-Latin-Modern.css">
+<link rel="stylesheet" href="./assets/Temml-Latin-Modern.css">
 
-<script src="./temml/temml.min.js"></script>
-<script src="./temml/mhchem.min.js"></script>
-<script src="./temml/physics.js"></script>
-<script src="./temml/texvc.js"></script>
+<script src="./assets/temml.min.js"></script>
+<script src="./assets/mhchem.min.js"></script>
+<script src="./assets/physics.js"></script>
+<script src="./assets/texvc.js"></script>
 <script type="text/javascript" src="./xml-formatter.js"></script>
 </head>
 
@@ -32,8 +32,7 @@
  
 <article>
   <section id="demo">
-    <p>A TeX-to-MathML conversion library in JavaScript.<br>
-      Try it!</p>
+    <p>A TeX-to-MathML conversion library in JavaScript.</p>
 
     <p></p>
     
@@ -52,7 +51,81 @@
       <br/>
   
       <div class="ioArea" id="demoRendering">
-        <div id="math"></div>
+        <div id="math">
+          <math>
+            <mrow>
+              <msub>
+                <mo movablelimits="false">∮</mo>
+                <mi>C</mi>
+              </msub>
+              <mover accent="true">
+                <mi>B</mi>
+                <mo>⃗</mo>
+              </mover>
+              <mo>∘</mo>
+            </mrow>
+            <mrow>
+              <mi mathvariant="normal">d</mi>
+              <mo>⁡</mo>
+              <mspace width="-0.1667em"></mspace>
+              <mover accent="true">
+                <mi>l</mi>
+                <mo>⃗</mo>
+              </mover>
+              <mo stretchy="false">=</mo>
+            </mrow>
+            <mrow>
+              <msub>
+                <mi>μ</mi>
+                <mn>0</mn>
+              </msub>
+              <mrow>
+                <mo fence="true" form="prefix">(</mo>
+                <msub>
+                  <mi>I</mi>
+                  <mtext>enc</mtext>
+                </msub>
+                <mo>+</mo>
+                <msub>
+                  <mi>ε</mi>
+                  <mn>0</mn>
+                </msub>
+                <mfrac>
+                  <mrow>
+                    <mi mathvariant="normal">d</mi>
+                    <mo>⁡</mo>
+                    <mspace width="-0.1667em"></mspace>
+                  </mrow>
+                  <mrow>
+                    <mi mathvariant="normal">d</mi>
+                    <mo>⁡</mo>
+                    <mspace width="-0.1667em"></mspace>
+                    <mi>t</mi>
+                  </mrow>
+                </mfrac>
+                <msub>
+                  <mo movablelimits="false">∫</mo>
+                  <mi>S</mi>
+                </msub>
+                <mover accent="true">
+                  <mi>E</mi>
+                  <mo>⃗</mo>
+                </mover>
+                <mo>∘</mo>
+                <mover accent="true">
+                  <mi>n</mi>
+                  <mo>^</mo>
+                </mover>
+                <mspace width="0.2778em"></mspace>
+                <mi mathvariant="normal">d</mi>
+                <mo>⁡</mo>
+                <mspace width="-0.1667em"></mspace>
+                <mi>a</mi>
+                <mo fence="true" form="postfix">)</mo>
+              </mrow>
+            </mrow>
+          </math>          
+        </div>
         <div id="notice"></div>
       </div>
       
@@ -63,7 +136,7 @@
     <label for="displayMode">Display Mode</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <select id="MathFont" onchange="updateMathFont()">
       <option value="Latin-Modern">Latin Modern</option>
-      <option value="Cambria-Math">Local font</option>
+      <option value="Local">Local font</option>
       <option value="Asana">Asana</option>
       <option value="STIX2">STIX TWO</option>
       <option value="XITS">XITS</option>
@@ -137,11 +210,11 @@
 
   function updateMathFont() {
     // Change the CSS style sheet.
-    const temmlRegEx = /temml\/Temml-.+\.css$/
+    const temmlRegEx = /assets\/Temml-.+\.css$/
     const links = [...document.head.getElementsByTagName('link')];
     links.forEach(link => {
       if (temmlRegEx.test(link.href)) {
-        link.setAttribute("href", `./temml/Temml-${document.getElementById("MathFont").value}.css`);
+        link.setAttribute("href", `./assets/Temml-${document.getElementById("MathFont").value}.css`);
       }
     })
   }

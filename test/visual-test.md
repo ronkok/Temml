@@ -4,13 +4,13 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1">
 	<title>Screenshots</title>
-  <link rel="stylesheet" type="text/css" href="./temml.css">
+  <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Local.css">
 	<script src="./temmlPostProcess.js"></script>
 	<style>body{font-size: 18pt}</style>
 </head>
 
 <body>
-<!-- I use this file to simulate KaTeX screenshotter tests -->
+<!-- I use this file to simulate screenshotter tests -->
 
 ### Accents
 

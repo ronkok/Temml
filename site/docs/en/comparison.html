@@ -4,10 +4,10 @@
     <meta charset="utf-8"/>
     <title>Comparison of TeX Coverage</title>
     
-    <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
+    <link rel="stylesheet" href="../../assets/Temml-Local.css">
     <link rel="stylesheet" href="../katex.css">
     <link rel="stylesheet" href="../docStyles.css">
-    <script src="../../temml/temml.min.js"></script>
+    <script src="../../assets/temml.min.js"></script>
     <style>
         .mathHighlight { background-color:yellow; color:red; }
         mjx-container[display="block"] { display: block; margin: 1em 0; }
@@ -834,7 +834,7 @@
           </tr>
           <tr>
             <td>\bar</td>
-            <td><math><msup><mi>y</mi><mn>2</mn></msup></math></td>
+            <td><math><mover accent="true"><mi>y</mi><mo>¯</mo></mover></math></td>
             <td>\(\bar{y}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\bar{y}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mi>y</mi><mo stretchy="false">¯</mo></mover><annotation encoding="TeX">\bar{y}</annotation></semantics></math></td>
@@ -3078,7 +3078,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\gdef</td>
-            <td><math><mrow><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>y</mi><mn>2</mn></msup></mrow></math></td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\gdef\bar#1{#1^2} \bar{y} + \bar{y}</annotation></semantics></math></span></td>
             <td data-tex="\gdef\bar#1{#1^2} \bar{y} + \bar{y}"><span class="no-sup">Not supported</span></td>
@@ -3190,7 +3190,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\global</td>
-            <td><math><mrow><mn>2</mn><mo>+</mo></mrow><mrow><mn>3</mn></mrow></math></td>
+            <td><span class="no-sup">Not supported</span></td>
             <td>\(\global\def\add#1#2{#1+#2} \add 2 3\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mo>+</mo><mn>3</mn></mrow><annotation encoding="application/x-tex">\global\def\add#1#2{#1+#2} \add 2 3</annotation></semantics></math></span></td>
             <td data-tex="\global\def\add#1#2{#1+#2} \add 2 3"><span class="no-sup">Not supported</span></td>

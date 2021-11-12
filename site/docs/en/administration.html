@@ -17,8 +17,8 @@
 <p>You can download Temml files from the <a href="https://github.com/ronkok/Temml/dist/"><code>dist</code> folder</a> of the Temml repository and serve them from your own site. The minimum browser  installation needs the following files. The <code>css</code> file and font file must be in the same folder.</p>
 <ul>
 <li>temml.min.js</li>
-<li>Temml-Cambria-Math.css</li>
-<li>Temml-Script.woff2</li>
+<li>Temml-Local.css</li>
+<li>Temml.woff2</li>
 </ul>
 <p>A server-side installation should include <code>temml.cjs.js</code> instead of <code>temml.min.js</code>.</p>
 <h4 id="starter-template">Starter template</h4>
@@ -33,17 +33,38 @@
     ...
 &lt;/html&gt;</code></pre>
 <h1 id="api">API</h1>
+<h3 id="overview">Overview</h3>
+<p>Say that you have an array of DOM elements whose contents should be converted from TeX
+strings to math. And also say that you wish to define two macros with document-wide
+scope. The code for such a conversion might look like this:</p>
+<pre><code class="language-js">const macros = temml.definePreamble(
+    `\\newcommand\\d[0]{\\operatorname{d}\\!}
+    \\def\\foo{x^2}`
+);
+for (let element of mathElements) {
+    const tex = element.textContent;
+    const displayMode = element.classList.contains(&quot;display&quot;)
+    temml.render(tex, element, { macros, displayMode });
+}
+temml.postProcess(document.body);</code></pre>
+<p>Below, we examine the parts of that code.</p>
 <h3 id="in-browser">In-Browser</h3>
-<p>Call <code>temml.render</code> with a TeX expression and a DOM element to render into:</p>
+<p>To render math in one DOM element, call <code>temml.render</code> with a TeX expression and a DOM element to render into:</p>
 <pre><code class="language-js">temml.render(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;, element);</code></pre>
 <h3 id="server-side">Server-Side</h3>
 <p>To generate HTML on the server or to generate an HTML string of the rendered math, you can use <code>temml.renderToString</code>:</p>
 <pre><code class="language-js">const temml = require(&#39;./temml.cjs.js&#39;);  // if in Node.js
 const html = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code></pre>
+<h3 id="preamble">Preamble</h3>
+<p>To give document-wide scope to a set of macros, define them in a preamble.</p>
+<pre><code class="language-js">const macros = temml.definePreamble(
+    `\\newcommand\\d[0]{\\operatorname{d}\\!}
+    \\def\\foo{x^2}`
+);</code></pre>
+<p>Any valid <a href="supported.html#macros">Temml macro</a> may be written into a preamble.</p>
 <h3 id="options">Options</h3>
-<p>You can provide an object of options as the last argument to <a href="#api"><code>temml.render</code> and <code>temml.renderToString</code></a>. For example:</p>
-<pre><code class="language-js">const macros = {};
-temml.render(
+<p>You can provide an object of options as the last argument to <code>temml.render</code> and <code>temml.renderToString</code>. For example:</p>
+<pre><code class="language-js">temml.render(
   &quot;c = \\pm\\sqrt{a^2 + b^2}&quot;,
   element, 
   { displayMode: true,  macros }
@@ -52,14 +73,13 @@ temml.render(
 <ul>
 <li><p><code>displayMode</code>: <code>boolean</code>. If <code>true</code> the math will be rendered in display mode, which will put the math in display style (so <code>\int</code> and <code>\sum</code> are large, for example), and will center the math on the page on its own line. If <code>false</code> the math will be rendered in inline mode. (default: <code>false</code>)</p>
 </li>
-<li><p><code>macros</code>: <code>object</code>. A collection of custom macros. Each macro is a key-value pair in which the key is a new Temml function name and the value is the expansion of the macro.  Example: <code>macros: {&quot;\\R&quot;: &quot;\\mathbb{R}&quot;}</code>.</p>
-<p>If you do not pre-define any macros, provide an empty macros object. This enables user-created persistent <code>\gdef</code> macros. See the <a href="#persistent-macros-and-ref">macros</a> example below.</p>
+<li><p><code>macros</code>: <code>object</code>. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: <code>macros: {&quot;\\R&quot;: &quot;\\mathbb{R}&quot;}</code>.  </p>
 </li>
-<li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, include an <code>&lt;annotation&gt;</code> element that contains the inputted TeX string. Note: this will defeat <a href="./supported.html#line-breaks">soft line breaks</a> in Firefox.</p>
+<li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, Temml will include an <code>&lt;annotation&gt;</code> element that contains the input TeX string. Note: this will defeat <a href="./supported.html#line-breaks">soft line breaks</a> in Firefox. (default: <code>false</code>)</p>
 </li>
-<li><p><code>leqno</code>: <code>boolean</code>. If <code>true</code>, display math has <code>\tag</code>s rendered on the left instead of the right, like <code>\usepackage[leqno]{amsmath}</code> in LaTeX.</p>
+<li><p><code>leqno</code>: <code>boolean</code>. If <code>true</code>, display math has <code>\tag</code>s rendered on the left instead of the right, like <code>\usepackage[leqno]{amsmath}</code> in LaTeX. (default: <code>false</code>)</p>
 </li>
-<li><p><code>colorIsTextColor</code>: <code>boolean</code>. In LaTeX, <code>\color</code> is a switch, but in early versions of MathJax and KaTeX, <code>\color</code> applied its color to a second argument, the way that LaTeX <code>\textcolor</code> works. Set option <code>colorIsTextColor</code> to <code>true</code> if you want <code>\color</code> to work like early MathJax or KaTeX. Default is <code>false.</code></p>
+<li><p><code>colorIsTextColor</code>: <code>boolean</code>. In LaTeX, <code>\color</code> is a switch, but in early versions of MathJax and KaTeX, <code>\color</code> applied its color to a second argument, the way that LaTeX <code>\textcolor</code> works. Set option <code>colorIsTextColor</code> to <code>true</code> if you want <code>\color</code> to work like early MathJax or KaTeX. (default: <code>false</code>)</p>
 </li>
 <li><p><code>errorColor</code>: <code>string</code>. A color string given in the format <code>&quot;#XXX&quot;</code> or <code>&quot;#XXXXXX&quot;</code>. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: <code>#b22222</code>)</p>
 </li>
@@ -67,9 +87,9 @@ temml.render(
 </li>
 <li><p><code>maxExpand</code>: <code>number</code>. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. If set to <code>Infinity</code>, the macro expander will try to fully expand as in LaTeX. (default: 1000)</p>
 </li>
-<li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default = <code>false</code>)</p>
+<li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default: <code>false</code>)</p>
 </li>
-<li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. Default = <code>false</code>.</p>
+<li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, Temml will write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. (default: <code>false</code>)</p>
 </li>
 <li><p><code>trust</code>: <code>boolean</code> or <code>function</code> (default: <code>false</code>). If <code>false</code> (do not trust input), prevent any commands like <code>\includegraphics</code> that could enable adverse behavior, rendering them instead in <code>errorColor</code>. If <code>true</code> (trust input), allow all such commands. Provide a custom function <code>handler(context)</code> to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:</p>
 <ul>
@@ -93,37 +113,18 @@ temml.render(
 </ul>
 </li>
 </ul>
-<h2 id="persistent-macros-and-ref">Persistent Macros and \ref</h2>
-<p>Temml’s <a href="supported.html#gdef">macro documentation</a> tells the author that <code>\gdef</code> will create a macro that persists between Temml elements. In order to enable that persistence, you must create one shared <code>macros</code> object that you pass into every call to <code>temml.render</code> or <code>temml.renderToString</code>. (Do not create a fresh <code>macros</code> object for each call.)</p>
-<p>For example, suppose that you have an array <code>mathElements</code> of DOM elements that contain math. Then you could write this code:</p>
-<pre><code class="language-js">const macros = {};
-for (let element of mathElements) {
-    temml.render(element.textContent, element, { macros });
-}
-temml.postProcess(document.body);</code></pre>
-<p>Notice that you create the <code>macros</code> object outside the loop. If an author uses <code>\gdef</code>, Temml will insert that macro definition into the <code>macros</code> object and since <code>macros</code> continues to exist between calls to <code>temml.render</code>, <code>\gdef</code> macros will persist between <code>mathElements</code>.</p>
-<p><code>macros</code> can be omitted if you choose not to support persistent macros.</p>
-<p>The <code>postProcess</code> function implements the AMS functions <code>\ref</code> and <code>\label</code>. It should also be called outside the loop</p>
+<h2 id="post-process">Post Process</h2>
+<p>The <code>postProcess</code> function implements the AMS functions <code>\ref</code> and <code>\label</code>. It should be called outside of any loop.</p>
 <p><code>temml.render</code> and <code>temml.renderToString</code> each operate on only one element at a time. In contrast, the <code>postProcess</code> function makes two passes throught the entire document. <code>postProcess</code> can be omitted if you choose not to support <code>\ref.</code></p>
-<p>Next, a server-side example. Say that you have written a Markdown document with math delimited by <code>$…$</code> or <code>$$…$$</code>. And say that you have an array of matches to the math. Then you could render the math so:</p>
-<pre><code class="language-js">const macros = {};
-for (let i = matches.length - 1; i &gt;= 0; i--) {
-    const displayMode = matches[i].value.slice(0, 2) === &quot;$$&quot;;
-    const delimLength = displayMode ? 2 : 1;
-    const tex = matches[i].value.slice(delimLength, -delimLength).trim();
-    const mathML =  temml.renderToString(tex, { displayMode, macros });
-    str = str.slice(0, matches[i].index) + mathML + str.slice(matches[i].lastindex);
-}</code></pre>
 <p>If Temml is used server-side, <code>\ref</code> and <code>\label</code> are still implemented at runtime with client-side JavaScript. A small file, <code>temmlPostProcess.js</code>, is provided to be installed in place of <code>temml.min.js</code>. It exposes one function:</p>
-<pre><code>temml.postProcess(document body)</code></pre><p>If you do not do a runtime <code>postProcess</code>, everthing in Temml will work except <code>\ref</code>.</p>
-<p>If you use the <a href="#auto-render-extension">auto-render extension</a>, it includes the <code>macros</code> and post-processor nuances.</p>
-<h3 id="security-of-persistent-macros">Security of Persistent Macros</h3>
-<p>Persistent macros can change the behavior of Temml (e.g. redefining standard commands), so for security, such a setup should be used only for multiple elements of common trust.  For example, you might enable persistent macros within a message posted by a single user (by creating a <code>macros</code> object for that message), but you probably should not enable persistent macros across multiple messages posted by multiple users.</p>
+<pre><code>temml.postProcess(document.body)</code></pre><p>If you do not do a runtime <code>postProcess</code>, everthing in Temml will work except <code>\ref</code>.</p>
+<p>If you use the <a href="#auto-render-extension">auto-render extension</a>, it includes the post-processor nuances.</p>
 <h1 id="fonts">Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
-<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml-Script.woff2</code> in order to support <code>\mathscr{…}</code>. Cambria Math radicals and integration symbols are sometimes too tall for their content. Otherwise, this would be a good choice.</p>
-<p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in <code>dist</code> contains the Latin Modern fonts. This option also needs that additional 12kb <code>Temml-Script.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
-<p><strong>Asana</strong> and <strong>XITS</strong> can be served without the <code>Temml-Script.woff2</code> file. </p>
+<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code> in order to support <code>\mathscr{…}</code>. Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.</p>
+<p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in <code>dist</code> contains the Latin Modern fonts. This option also needs that additional 12kb <code>Temml.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
+<p><strong>Asana</strong>, <strong>STIX TWO</strong>, and <strong>XITS</strong> can be served without the <code>Temml.woff2</code> file.</p>
+<p>XITS is my current favorite of all the math fonts. I think it does the best job at matching radical sizes to (sub|super)scripts.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href="https://fred-wang.github.io/MathFonts/" title="Math fonts">Mathematical OpenType Fonts</a>.</p>
 <p>If you want a different math font size, you can edit add a rule to your own page&#39;s CSS, like this example:</p>
 <pre><code class="language-css">math { font-size: 125%; }</code></pre>
@@ -138,7 +139,7 @@ element for the specified delimiters, ignoring certain tags like <code>&lt;pre&g
 (via a <code>&lt;script&gt;</code> tag) in the page along with Temml itself.  For example:</p>
 <pre><code class="language-html">&lt;head&gt;
    ...
-&lt;link rel=&quot;stylesheet&quot; href=&quot;./temml.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;./Temml-Local.css&quot;&gt;
 &lt;script src=&quot;./temml.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;./auto-render.min.js&quot;&gt;&lt;/script&gt;
   ...
@@ -183,7 +184,7 @@ match <code>$$</code> and treat as an empty math expression. Here is an example 
   // Put $ after $$.
   {left: &quot;$&quot;, right: &quot;$&quot;, display: false},
   {left: &quot;\\(&quot;, right: &quot;\\)&quot;, display: false},
-  // Put \[ last to avoid conflict with \\[1em] row separator
+  // Put \[ last to avoid conflict with possible future \\[1em] row separator.
   {left: &quot;\\[&quot;, right: &quot;\\]&quot;, display: true}
 ]</code></pre>
 </li>
@@ -211,7 +212,7 @@ math expressions before rendering.</p>
 <p>To install extensions for browser use, include the appropriate file from the <code>contrib</code> folder of the Temml repository. Then reference the file in the <code>&lt;head&gt;</code> of the HTML page. As in this <code>mhchem</code> example:</p>
 <pre><code class="language-html">  &lt;head&gt;
     ...
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;./temml.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;./Temml-Local.css&quot;&gt;
     &lt;script src=&quot;./temml.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;./mhchem.min.js&quot;&gt;&lt;/script&gt;
   &lt;/head&gt;</code></pre>
@@ -234,10 +235,12 @@ math expressions before rendering.</p>
 <li><a href="#browser-support">Browser Support</a></li>
 <li><a href="#installation">Installation</a></li>
 <li><a href="#api">API</a><ul>
+<li><a href="#overview">Overview</a></li>
 <li><a href="#in-browser">In Browser</a></li>
 <li><a href="#server-side">Server Side</a></li>
+<li><a href="#preamble">Preamble</a></li>
 <li><a href="#options">Options</a></li>
-<li><a href="#persistent-macros-and-ref">Macros and \ref</a></li>
+<li><a href="#post-process">Post Process</a></li>
 </ul>
 </li>
 <li><a href="#fonts">Fonts</a></li>

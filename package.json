@@ -25,7 +25,7 @@
     "lint": "eslint *.js src contrib",
     "unit-test": "node -r esm ./test/unit-test.js",
     "test": "yarn lint && node test/buildTests.js && yarn unit-test",
-    "minify": "terser test/temml.js -o site/temml/temml.min.js -c -m && terser contrib/mhchem/mhchem.js -o site/temml/mhchem.min.js -c -m",
+    "minify": "terser test/temml.js -o site/assets/temml.min.js -c -m && terser contrib/mhchem/mhchem.js -o site/assets/mhchem.min.js -c -m",
     "build": "rollup --config ./rollupConfig.js && yarn minify && node docs/insertPlugins.js",
     "docs": "node docs/buildDocs.js",
     "dist": "yarn build && node copyfiles.js && terser contrib/auto-render/test/auto-render.js -o contrib/auto-render/dist/auto-render.min.js -c -m"

@@ -4,9 +4,9 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
-   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
+   <link rel="stylesheet" href="../../assets/Temml-Local.css">
    <link rel="stylesheet" href="../docStyles.css">
-   <script src="../../temml/temml.min.js"></script>
+   <script src="../../assets/temml.min.js"></script>
    <style>
       #env + table tr td:nth-child(1) { min-width: 9em }
       #env + table tr td:nth-child(3) { min-width: 11em }
@@ -50,7 +50,7 @@
 <td style="text-align: left;"><math><munder accentunder="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">→</mo></munder></math> <code>\underrightarrow{AB}</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math><mover accent="true"><mi>y</mi><mo>―</mo></mover></math> <code>\bar{y}</code></td>
+<td style="text-align: left;"><math><mover accent="true"><mi>y</mi><mo>¯</mo></mover></math> <code>\bar{y}</code></td>
 <td style="text-align: left;"><math><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">‾</mo></mover></math> <code>\overline{AB}</code></td>
 <td style="text-align: left;"><math><mover accent="true"><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true">⇒</mo></mover></math> <code>\Overrightarrow{AB}</code></td>
 </tr>
@@ -384,7 +384,7 @@
 </tr>
 </tbody></table>
 <p>Acceptable horizontal line separators are: <code>\\</code> and <code>\cr</code>.</p>
-<p>Temml supports <code>\tag{…}</code> and <code>\notag</code> to modify equation numbering.</p>
+<p>Temml supports <code>\tag{…}</code>, <code>\notag</code>, and <code>\nonumber</code> to modify equation numbering.</p>
 <p>The <code>{array}</code> environment does not yet support <code>\cline</code> or <code>\multicolumn</code>.</p>
 <h2 id="html">HTML</h2>
 <p>The following &quot;raw HTML&quot; features are potentially dangerous for untrusted
@@ -721,7 +721,7 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 </tr>
 </tbody></table>
 <p>Any character can be written with the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math><mi mathvariant="italic">☺</mi></math>.</p>
-<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future documents breaks, I advise that you avoid inputting Unicode script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
+<p>Regarding calligraphic and script: The MathML and Unicode standards are <a href="https://github.com/w3c/mathml/issues/61">in flux</a> for these two type faces. To avoid future document breaks, I advise that you avoid inputting Unicode script letters for now. <code>\mathcal{}</code> and <code>\mathscr{}</code> are reliable alternatives.</p>
 <h2 id="layout">Layout</h2>
 <h3 id="line-breaks">Line Breaks</h3>
 <p>Hard line breaks are <code>\\</code> and <code>\newline</code>.</p>
@@ -982,16 +982,8 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <td style="text-align: left;"><code>\def\foo{x^2} \foo + \foo</code></td>
 </tr>
 <tr>
-<td style="text-align: left;"><math><mrow><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>y</mi><mn>2</mn></msup></mrow></math></td>
-<td style="text-align: left;"><code>\gdef\bar#1{#1^2} \bar{y} + \bar{y}</code></td>
-</tr>
-<tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>\edef\macroname#1#2…{definition to be expanded}</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>\xdef\macroname#1#2…{definition to be expanded}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
@@ -1000,10 +992,6 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <tr>
 <td style="text-align: left;"></td>
 <td style="text-align: left;"><code>\futurelet\foo\bar x</code></td>
-</tr>
-<tr>
-<td style="text-align: left;"></td>
-<td style="text-align: left;"><code>\global\def\macroname#1#2…{definition}</code></td>
 </tr>
 <tr>
 <td style="text-align: left;"></td>
@@ -1018,15 +1006,14 @@ or for just some URLs via the <code>trust</code> <a href="administration.html#op
 <td style="text-align: left;"><code>\providecommand\macroname[numargs]{definition}</code></td>
 </tr>
 </tbody></table>
-<p>Macros can also be defined in the Temml <a href="options.md">rendering options</a>.</p>
+<p>To create macros with document-wide scope, A <a href="./administration.html#preamble">preamble</a> can be defined
+as one of the Temml <a href="./administration.html#options">rendering options</a></p>
 <p>Macros accept up to nine arguments: #1, #2, etc.</p>
-<div id="gdef"></div>
-
-<p>Macros defined by <code>\gdef</code>, <code>\xdef</code>, <code>\global\def</code>, <code>\global\edef</code>, <code>\global\let</code>, and <code>\global\futurelet</code> will persist between math expressions. (Exception: macro persistence may be disabled. There are legitimate security reasons for that.)</p>
-<p>Temml has no <code>\par</code>, so all macros are long by default and <code>\long</code> will be ignored.</p>
 <p>Available functions include:</p>
 <p><code>\char</code> <code>\mathchoice</code> <code>\TextOrMath</code> <code>\@ifstar</code> <code>\@ifnextchar</code> <code>\@firstoftwo</code> <code>\@secondoftwo</code> <code>\relax</code> <code>\expandafter</code> <code>\noexpand</code></p>
 <p>@ is a valid character for commands, as if <code>\makeatletter</code> were in effect.</p>
+<p>Temml macros do not escape their group, so <code>\gdef</code>, <code>\xdef</code>, and<code>\global</code> are not supported.
+Temml has no <code>\par</code>, so <code>\long</code> is ignored.</p>
 <h2 id="operators">Operators</h2>
 <h3 id="big-operators">Big Operators</h3>
 <table>
@@ -2853,20 +2840,21 @@ exponent. </p>
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
-  <option value="Cambria-Math">Local font</option>
+  <option value="Local">Local font</option>
   <option value="Latin-Modern">Latin Modern</option>
   <option value="Asana">Asana</option>
+  <option value="STIX2">STIX TWO</option>
   <option value="XITS">XITS</option>
 </select>
 <script>
   function updateMathFont() {
     // Change the CSS style sheet.
-    const temmlRegEx = /temml\/Temml-.+\.css$/
+    const temmlRegEx = /assets\/Temml-.+\.css$/
     const value = document.getElementById("MathFont").value
     const links = [...document.head.getElementsByTagName('link')];
     links.forEach(link => {
       if (temmlRegEx.test(link.href)) {
-        link.setAttribute("href", `../../temml/Temml-${value}.css`);
+        link.setAttribute("href", `../../assets/Temml-${value}.css`);
       }
     })
   }

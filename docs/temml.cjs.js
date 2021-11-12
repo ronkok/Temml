@@ -1607,7 +1607,7 @@ defineSymbol(math, accent, "\u00a8", "\\ddot");
 defineSymbol(math, accent, "\u20db", "\\dddot");
 defineSymbol(math, accent, "\u20dc", "\\ddddot");
 defineSymbol(math, accent, "\u007e", "\\tilde");
-defineSymbol(math, accent, "\u2015", "\\bar");
+defineSymbol(math, accent, "\u00af", "\\bar");
 defineSymbol(math, accent, "\u02d8", "\\breve");
 defineSymbol(math, accent, "\u02c7", "\\check");
 defineSymbol(math, accent, "\u005e", "\\hat");
@@ -1639,6 +1639,18 @@ defineSymbol(text, accent, "\u02da", "\\r"); // ring above
 defineSymbol(text, accent, "\u02c7", "\\v"); // caron
 defineSymbol(text, accent, "\u00a8", '\\"'); // diaresis
 defineSymbol(text, accent, "\u02dd", "\\H"); // double acute
+defineSymbol(math, accent, "\u02ca", "\\'"); // acute
+defineSymbol(math, accent, "\u02cb", "\\`"); // grave
+defineSymbol(math, accent, "\u02c6", "\\^"); // circumflex
+defineSymbol(math, accent, "\u02dc", "\\~"); // tilde
+defineSymbol(math, accent, "\u02c9", "\\="); // macron
+defineSymbol(math, accent, "\u02d8", "\\u"); // breve
+defineSymbol(math, accent, "\u02d9", "\\."); // dot above
+defineSymbol(math, accent, "\u00b8", "\\c"); // cedilla
+defineSymbol(math, accent, "\u02da", "\\r"); // ring above
+defineSymbol(math, accent, "\u02c7", "\\v"); // caron
+defineSymbol(math, accent, "\u00a8", '\\"'); // diaresis
+defineSymbol(math, accent, "\u02dd", "\\H"); // double acute
 
 // These ligatures are detected and created in Parser.js's `formLigatures`.
 const ligatures = {
@@ -2174,17 +2186,17 @@ defineFunction({
   props: {
     numArgs: 1,
     allowedInText: true,
-    allowedInMath: true, // unless in strict mode
+    allowedInMath: true,
     argTypes: ["primitive"]
   },
   handler: (context, args) => {
-    const base = args[0];
-    let mode = context.parser.mode;
+    const base = normalizeArgument(args[0]);
+    const mode = context.parser.mode;
 
-    if (mode === "math") {
-      context.parser.settings.reportNonstrict("mathVsTextAccents",
-          `LaTeX's accent ${context.funcName} works only in text mode`);
-      mode = "text";
+    if (mode === "math" && context.parser.settings.strict) {
+      // LaTeX only writes a warning. It doesn't stop. We'll issue the same warning.
+      // eslint-disable-next-line no-console
+      console.log(`Temml parse error: Command ${context.funcName} is invalid in math mode.`);
     }
 
     return {
@@ -2861,18 +2873,6 @@ defineFunction({
   }
 });
 
-const globalMap = {
-  "\\global": "\\global",
-  "\\long": "\\\\globallong",
-  "\\\\globallong": "\\\\globallong",
-  "\\def": "\\gdef",
-  "\\gdef": "\\gdef",
-  "\\edef": "\\xdef",
-  "\\xdef": "\\xdef",
-  "\\let": "\\\\globallet",
-  "\\futurelet": "\\\\globalfuture"
-};
-
 const checkControlSequence = (tok) => {
   const name = tok.text;
   if (/^(?:[\\{}$&#^_]|EOF)$/.test(name)) {
@@ -2894,7 +2894,7 @@ const getRHS = (parser) => {
   return tok;
 };
 
-const letCommand = (parser, name, tok, global) => {
+const letCommand = (parser, name, tok) => {
   let macro = parser.gullet.macros.get(tok.text);
   if (macro == null) {
     // don't expand it later even if a macro with the same name is defined
@@ -2907,45 +2907,15 @@ const letCommand = (parser, name, tok, global) => {
       unexpandable: !parser.gullet.isExpandable(tok.text)
     };
   }
-  parser.gullet.macros.set(name, macro, global);
+  parser.gullet.macros.set(name, macro);
 };
 
-// <assignment> -> <non-macro assignment>|<macro assignment>
-// <non-macro assignment> -> <simple assignment>|\global<non-macro assignment>
-// <macro assignment> -> <definition>|<prefix><macro assignment>
-// <prefix> -> \global|\long|\outer
-defineFunction({
-  type: "internal",
-  names: [
-    "\\global",
-    "\\long",
-    "\\\\globallong" // can’t be entered directly
-  ],
-  props: {
-    numArgs: 0,
-    allowedInText: true
-  },
-  handler({ parser, funcName }) {
-    parser.consumeSpaces();
-    const token = parser.fetch();
-    if (globalMap[token.text]) {
-      // Temml doesn't have \par, so ignore \long
-      if (funcName === "\\global" || funcName === "\\\\globallong") {
-        token.text = globalMap[token.text];
-      }
-      return assertNodeType(parser.parseFunction(), "internal");
-    }
-    throw new ParseError(`Invalid token after macro prefix`, token);
-  }
-});
-
-// Basic support for macro definitions: \def, \gdef, \edef, \xdef
+// Basic support for macro definitions: \def
 // <definition> -> <def><control sequence><definition text>
-// <def> -> \def|\gdef|\edef|\xdef
 // <definition text> -> <parameter text><left brace><balanced text><right brace>
 defineFunction({
   type: "internal",
-  names: ["\\def", "\\gdef", "\\edef", "\\xdef"],
+  names: ["\\def", "\\edef"],
   props: {
     numArgs: 0,
     allowedInText: true,
@@ -2998,25 +2968,14 @@ defineFunction({
       tokens.unshift(insert);
     }
 
-    if (funcName === "\\edef" || funcName === "\\xdef") {
+    if (funcName === "\\edef") {
       tokens = parser.gullet.expandTokens(tokens);
       tokens.reverse(); // to fit in with stack order
     }
     // Final arg is the expansion of the macro
-    parser.gullet.macros.set(
-      name,
-      {
-        tokens,
-        numArgs,
-        delimiters
-      },
-      funcName === globalMap[funcName]
+    parser.gullet.macros.set(name, { tokens, numArgs, delimiters }
     );
-
-    return {
-      type: "internal",
-      mode: parser.mode
-    };
+    return { type: "internal", mode: parser.mode };
   }
 });
 
@@ -3026,10 +2985,7 @@ defineFunction({
 // <equals> -> <optional spaces>|<optional spaces>=
 defineFunction({
   type: "internal",
-  names: [
-    "\\let",
-    "\\\\globallet" // can’t be entered directly
-  ],
+  names: ["\\let"],
   props: {
     numArgs: 0,
     allowedInText: true,
@@ -3039,21 +2995,15 @@ defineFunction({
     const name = checkControlSequence(parser.gullet.popToken());
     parser.gullet.consumeSpaces();
     const tok = getRHS(parser);
-    letCommand(parser, name, tok, funcName === "\\\\globallet");
-    return {
-      type: "internal",
-      mode: parser.mode
-    };
+    letCommand(parser, name, tok);
+    return { type: "internal", mode: parser.mode };
   }
 });
 
 // ref: https://www.tug.org/TUGboat/tb09-3/tb22bechtolsheim.pdf
 defineFunction({
   type: "internal",
-  names: [
-    "\\futurelet",
-    "\\\\globalfuture" // can’t be entered directly
-  ],
+  names: ["\\futurelet"],
   props: {
     numArgs: 0,
     allowedInText: true,
@@ -3063,13 +3013,10 @@ defineFunction({
     const name = checkControlSequence(parser.gullet.popToken());
     const middle = parser.gullet.popToken();
     const tok = parser.gullet.popToken();
-    letCommand(parser, name, tok, funcName === "\\\\globalfuture");
+    letCommand(parser, name, tok);
     parser.gullet.pushToken(tok);
     parser.gullet.pushToken(middle);
-    return {
-      type: "internal",
-      mode: parser.mode
-    };
+    return { type: "internal", mode: parser.mode };
   }
 });
 
@@ -3120,16 +3067,9 @@ defineFunction({
     // replacement text, enclosed in '{' and '}' and properly nested
     const { tokens } = parser.gullet.consumeArg();
 
-    parser.gullet.macros.set(
-      name,
-      { tokens, numArgs },
-      !parser.settings.strict
-    );
+    parser.gullet.macros.set(name, { tokens, numArgs });
 
-    return {
-      type: "internal",
-      mode: parser.mode
-    };
+    return { type: "internal", mode: parser.mode };
 
   }
 });
@@ -3694,6 +3634,7 @@ function parseArray(
   if (addEqnNum) {
     parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
     parser.gullet.macros.set("\\notag", "\\env@notag");
+    parser.gullet.macros.set("\\nonumber", "\\env@notag");
   }
 
   // Get current arraystretch if it's not set by the environment
@@ -4513,8 +4454,6 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    // We should never get here.
-    // \env@tag is pre-empted by array.js.
     return new mathMLTree.MathNode("mrow");
   }
 });
@@ -4532,8 +4471,6 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    // We should never get here.
-    // \env@notag is pre-empted by array.js.
     return new mathMLTree.MathNode("mrow");
   }
 });
@@ -6230,7 +6167,7 @@ const _macros = {};
 
 // This function might one day accept an additional argument and do more things.
 function defineMacro(name, body) {
-    _macros[name] = body;
+  _macros[name] = body;
 }
 
 // NOTE: Unlike most builders, this one handles not only
@@ -7825,8 +7762,7 @@ class Lexer {
  * A `Namespace` refers to a space of nameable things like macros or lengths,
  * which can be `set` either globally or local to a nested group, using an
  * undo stack similar to how TeX implements this functionality.
- * Performance-wise, `get` and local `set` take constant time, while global
- * `set` takes time proportional to the depth of group nesting.
+ * Performance-wise, `get` and `set` take constant time.
  */
 
 class Namespace {
@@ -7897,31 +7833,16 @@ class Namespace {
   }
 
   /**
-   * Set the current value of a name, and optionally set it globally too.
-   * Local set() sets the current value and (when appropriate) adds an undo
-   * operation to the undo stack.  Global set() may change the undo
-   * operation at every level, so takes time linear in their number.
+   * Set the current value of a name, and adds an undo
+   * operation to the undo stack.
    */
-  set(name, value, global = false) {
-    if (global) {
-      // Global set is equivalent to setting in all groups.  Simulate this
-      // by destroying any undos currently scheduled for this name,
-      // and adding an undo with the *new* value (in case it later gets
-      // locally reset within this environment).
-      for (let i = 0; i < this.undefStack.length; i++) {
-        delete this.undefStack[i][name];
-      }
-      if (this.undefStack.length > 0) {
-        this.undefStack[this.undefStack.length - 1][name] = value;
-      }
-    } else {
-      // Undo this set at end of this group (possibly to `undefined`),
-      // unless an undo is already in place, in which case that older
-      // value is the correct one.
-      const top = this.undefStack[this.undefStack.length - 1];
-      if (top && !Object.prototype.hasOwnProperty.call(top, name )) {
-        top[name] = this.current[name];
-      }
+  set(name, value) {
+    // Undo this set at end of this group (possibly to `undefined`),
+    // unless an undo is already in place, in which case that older
+    // value is the correct one.
+    const top = this.undefStack[this.undefStack.length - 1];
+    if (top && !Object.prototype.hasOwnProperty.call(top, name )) {
+      top[name] = this.current[name];
     }
     this.current[name] = value;
   }
@@ -8107,6 +8028,9 @@ defineMacro("\\char", function(context) {
 });
 
 defineMacro("\\hbox", "\\text{#1}");
+
+// Since Temml has no \par, ignore \long.
+defineMacro("\\long", "");
 
 //////////////////////////////////////////////////////////////////////
 // Grouping
@@ -8370,7 +8294,7 @@ defineMacro("\\tag@literal", (context) => {
   if (context.macros.get("\\df@tag")) {
     throw new ParseError("Multiple \\tag");
   }
-  return "\\gdef\\df@tag{\\text{#1}}";
+  return "\\def\\df@tag{\\text{#1}}";
 });
 
 // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
@@ -11437,7 +11361,7 @@ const numberRegEx$1 = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in symbols
  */
 
 class Parser {
-  constructor(input, settings) {
+  constructor(input, settings, isPreamble = false) {
     // Start in math mode
     this.mode = "math";
     // Create a new macro expander (gullet) and (indirectly via that) also a
@@ -11445,6 +11369,8 @@ class Parser {
     this.gullet = new MacroExpander(input, settings, this.mode);
     // Store the settings for use in parsing
     this.settings = settings;
+    // Are we defining a preamble?
+    this.isPreamble = isPreamble;
     // Count leftright depth (for \middle errors)
     this.leftrightDepth = 0;
     this.prevAtomType = "";
@@ -11511,8 +11437,22 @@ class Parser {
     // If we succeeded, make sure there's an EOF at the end
     this.expect("EOF");
 
+    if (this.isPreamble) {
+      const macros = Object.create(null);
+      Object.entries(this.gullet.macros.current).forEach(([key, value]) => {
+        macros[key] = value;
+      });
+      this.gullet.endGroup();
+      return macros
+    }
+
+    // The only local macro that we want to save is from \tag.
+    const tag = this.gullet.macros.get("\\df@tag");
+
     // End the group namespace for the expression
     this.gullet.endGroup();
+
+    if (tag) { this.gullet.macros.current["\\df@tag"] = tag; }
 
     return parse;
   }
@@ -12348,10 +12288,6 @@ const parseTree = function(toParse, settings) {
 
   let tree = parser.parse();
 
-  // Prevent a color definition from persisting between calls to temml.render().
-  delete parser.gullet.macros.current["\\current@color"];
-  delete parser.gullet.macros.current["\\color"];
-
   // LaTeX ignores a \tag placed outside an AMS environment.
   if (!(tree.length > 0 &&  tree[0].type && tree[0].type === "array" && tree[0].addEqnNum)) {
     // If the input used \tag, it will set the \df@tag macro to the tag.
@@ -12602,6 +12538,23 @@ const generateParseTree = function(expression, options) {
 };
 
 /**
+ * Take an expression which contains a preamble.
+ * Parse it and return the macros.
+ */
+const definePreamble = function(expression, options) {
+  const settings = new Settings(options);
+  settings.macros = {};
+  if (!(typeof expression === "string" || expression instanceof String)) {
+    throw new TypeError("Temml can only parse string typed expression")
+  }
+  const parser = new Parser(expression, settings, true);
+  // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
+  delete parser.gullet.macros.current["\\df@tag"];
+  const macros = parser.parse();
+  return macros
+};
+
+/**
  * If the given error is a Temml ParseError,
  * renders the invalid LaTeX as a span with hover title giving the Temml
  * error message.  Otherwise, simply throws the error.
@@ -12659,6 +12612,10 @@ var temml = {
    * Temml error, usually during parsing.
    */
   ParseError,
+  /**
+   * Creates a set of macros with document-wide scope.
+   */
+  definePreamble,
   /**
    * Parses the given LaTeX into Temml's internal parse tree structure,
    * without rendering to HTML or MathML.

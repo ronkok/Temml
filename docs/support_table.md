@@ -4,9 +4,9 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Support Table</title>
-   <link rel="stylesheet" href="../../temml/Temml-Cambria-Math.css">
+   <link rel="stylesheet" href="../../assets/Temml-Local.css">
    <link rel="stylesheet" href="../docStyles.css">
-   <script src="../../temml/temml.min.js"></script>
+   <script src="../../assets/temml.min.js"></script>
    <style>
       #atbl + table tr td:nth-child(2) { min-width: 12em }
       #gtbl + table tr td:nth-child(2) { min-width: 9em }
