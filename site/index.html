@@ -52,7 +52,7 @@
   
       <div class="ioArea" id="demoRendering">
         <div id="math">
-          <math>
+          <math display="block">
             <mrow>
               <msub>
                 <mo movablelimits="false">∮</mo>
@@ -192,7 +192,6 @@
 
   input.addEventListener("input", reprocess, false);
   mode.addEventListener('change', () => reprocess());
-  reprocess();
 
   function reprocess() {
     if (document.getElementById("OutputType").value === "Math") {
