@@ -27,7 +27,7 @@
 &lt;html&gt;
     &lt;head&gt;
         ...
-        &lt;link rel=&quot;stylesheet&quot; href=&quot;./temml.css&quot;&gt;
+        &lt;link rel=&quot;stylesheet&quot; href=&quot;./Temml-Local.css&quot;&gt;
         &lt;script src=&quot;./temml.min.js&quot;&gt;&lt;/script&gt;
     &lt;/head&gt;
     ...
@@ -37,15 +37,18 @@
 <p>Say that you have an array of DOM elements whose contents should be converted from TeX
 strings to math. And also say that you wish to define two macros with document-wide
 scope. The code for such a conversion might look like this:</p>
-<pre><code class="language-js">const macros = temml.definePreamble(
+<pre><code class="language-js">\\ Optional preamble.
+const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}`
 );
+// Render all the math.
 for (let element of mathElements) {
     const tex = element.textContent;
     const displayMode = element.classList.contains(&quot;display&quot;)
     temml.render(tex, element, { macros, displayMode });
 }
+// Optional postProcess to render \ref{}
 temml.postProcess(document.body);</code></pre>
 <p>Below, we examine the parts of that code.</p>
 <h3 id="in-browser">In-Browser</h3>

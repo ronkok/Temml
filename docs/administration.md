@@ -34,7 +34,7 @@ A server-side installation should include `temml.cjs.js` instead of `temml.min.j
 <html>
     <head>
         ...
-        <link rel="stylesheet" href="./temml.css">
+        <link rel="stylesheet" href="./Temml-Local.css">
         <script src="./temml.min.js"></script>
     </head>
     ...
@@ -50,15 +50,18 @@ strings to math. And also say that you wish to define two macros with document-w
 scope. The code for such a conversion might look like this:
 
 ```js
+\\ Optional preamble.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}`
 );
+// Render all the math.
 for (let element of mathElements) {
     const tex = element.textContent;
     const displayMode = element.classList.contains("display")
     temml.render(tex, element, { macros, displayMode });
 }
+// Optional postProcess to render \ref{}
 temml.postProcess(document.body);
 ```
 
