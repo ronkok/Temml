@@ -25,7 +25,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.3.0, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.3.1, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -3230,7 +3230,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\grave</td>
-            <td><math><mover accent="true"><mrow><mi>e</mi><mi>u</mi></mrow><mo>ˋ</mo></mover></math></td>
+            <td><math><mover accent="true"><mrow><mi>e</mi><mi>u</mi></mrow><mo>`</mo></mover></math></td>
             <td>\(\grave{eu}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mrow><mi>e</mi><mi>u</mi></mrow><mo>ˋ</mo></mover></mrow><annotation encoding="application/x-tex">\grave{eu}</annotation></semantics></math></span></td>
             <td data-tex="\grave{eu}"><span class="no-sup">Not supported</span></td>
@@ -5958,7 +5958,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\overline</td>
-            <td><math><mover accent="true"><mtext>a long argument</mtext><mo stretchy="true">‾</mo></mover></math></td>
+            <td><math><mover accent="true"><mtext>a long argument</mtext><mo stretchy="true">―</mo></mover></math></td>
             <td>\(\overline{\text{a long argument}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a long argument</mtext><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{\text{a long argument}}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mover><mtext>a long argument</mtext><mo>¯</mo></mover><annotation encoding="TeX">\overline{\text{a long argument}}</annotation></semantics></math></td>
@@ -8144,7 +8144,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\toggle</td>
-            <td><math><maction actiontype="toggle" class ="tml-toggle"><mtext>Click Here</mtext><mrow><mi>O</mi><mi>u</mi><mi>c</mi><mi>h</mi></mrow></maction></math></td>
+            <td><math><maction actiontype="toggle" style="cursor:default;"><mtext>Click Here</mtext><mrow><mi>O</mi><mi>u</mi><mi>c</mi><mi>h</mi></mrow></maction></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><maction actiontype="toggle" selection="2"><mtext>Hey!</mtext><mtext>Click Here</mtext></maction><annotation encoding="TeX">\toggle{\text{Hey!}}{\text{Click Here}}</annotation></semantics></math></td>
@@ -8344,7 +8344,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\underline</td>
-            <td><math><munder accentunder="true"><mtext>a long argument</mtext><mo stretchy="true">‾</mo></munder></math></td>
+            <td><math><munder accentunder="true"><mtext>a long argument</mtext><mo stretchy="true">―</mo></munder></math></td>
             <td>\(\underline{\text{a long argument}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder accentunder="true"><mtext>a long argument</mtext><mo stretchy="true">‾</mo></munder></mrow><annotation encoding="application/x-tex">\underline{\text{a long argument}}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><munder><mtext>a long argument</mtext><mo>_</mo></munder><annotation encoding="TeX">\underline{\text{a long argument}}</annotation></semantics></math></td>
@@ -8792,7 +8792,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\varliminf</td>
-            <td><math><mrow><munder><mrow><munder accentunder="true"><mi>lim</mi><mo stretchy="true">‾</mo></munder></mrow><mi>n</mi></munder><mo>⁡</mo><mi>x</mi></mrow></math></td>
+            <td><math><mrow><munder><mrow><munder accentunder="true"><mi>lim</mi><mo stretchy="true">―</mo></munder></mrow><mi>n</mi></munder><mo>⁡</mo><mi>x</mi></mrow></math></td>
             <td>\(\varliminf\limits_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mrow><mi mathvariant="normal"><munder accentunder="true"><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="true">‾</mo></munder></mi><mo>⁡</mo></mrow><mi>n</mi></munder><mi>x</mi></mrow><annotation encoding="application/x-tex">\varliminf\limits_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -8800,7 +8800,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\varlimsup</td>
-            <td><math><mrow><munder><mrow><mover accent="true"><mi>lim</mi><mo stretchy="true">‾</mo></mover></mrow><mi>n</mi></munder><mo>⁡</mo><mi>x</mi></mrow></math></td>
+            <td><math><mrow><munder><mrow><mover accent="true"><mi>lim</mi><mo stretchy="true">―</mo></mover></mrow><mi>n</mi></munder><mo>⁡</mo><mi>x</mi></mrow></math></td>
             <td>\(\varlimsup\limits_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mrow><mi mathvariant="normal"><mover accent="true"><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="true">‾</mo></mover></mi><mo>⁡</mo></mrow><mi>n</mi></munder><mi>x</mi></mrow><annotation encoding="application/x-tex">\varlimsup\limits_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9136,7 +9136,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\vphantom</td>
-            <td><math><mover accent="true"><mrow><mpadded width="0px"><mphantom><mi>M</mi></mphantom></mpadded><mi>a</mi></mrow><mo stretchy="true">‾</mo></mover></math></td>
+            <td><math><mover accent="true"><mrow><mpadded width="0px"><mphantom><mi>M</mi></mphantom></mpadded><mi>a</mi></mrow><mo stretchy="true">―</mo></mover></math></td>
             <td>\(\overline{\vphantom{M}a}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mrow><mpadded width="0px"><mphantom><mi>M</mi></mphantom></mpadded><mi>a</mi></mrow><mo stretchy="true">‾</mo></mover></mrow><annotation encoding="application/x-tex">\overline{\vphantom{M}a}</annotation></semantics></math></span></td>
             <td data-tex="\overline{\vphantom{M}a}"><span class="no-sup">Not supported</span></td>

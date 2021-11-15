@@ -20,7 +20,7 @@
             reprocess();
 
             function reprocess() {
-                temml.render(input.value, math, {displayMode: mode.checked, strict: strict.checked, fleqn: true, trust: true});
+                temml.render(input.value, math, {displayMode: mode.checked, leqno: true, strict: strict.checked, divide: true, fleqn: true, trust: true});
                 temml.postProcess(document.body)
             }
 
