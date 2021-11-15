@@ -6,7 +6,7 @@ defineFunctionBuilders({
   type: "toggle",
   mathmlBuilder(group, style) {
     const expression = mml.buildExpression(group.body, style)
-    const node = new mathMLTree.MathNode("maction", expression, ["tml-toggle"])
+    const node = new mathMLTree.MathNode("maction", expression, [], { cursor: "default" })
     node.setAttribute("actiontype", "toggle")
     return node
   }
