@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. This CHANGE
 
 ## Added
 
-- Rendering option to divide tags from math.
+- Rendering option preventTagLap
 
 ## [0.3.0] - 2021-11-12
 

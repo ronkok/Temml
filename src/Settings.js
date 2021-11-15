@@ -17,7 +17,7 @@ export default class Settings {
     this.annotate = utils.deflt(options.annotate, false)          // boolean
     this.leqno = utils.deflt(options.leqno, false);               // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
-    this.divide = utils.deflt(options.divide, false);             // boolean
+    this.preventTagLap = utils.deflt(options.preventTagLap, false); // boolean
     this.macros = options.macros || {};
     this.xml = utils.deflt(options.xml, false);                   // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean

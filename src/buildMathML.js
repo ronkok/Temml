@@ -98,19 +98,19 @@ export const buildGroup = function(group, style) {
 };
 
 
-const taggedExpression = (expression, tag, style, leqno, divide) => {
+const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
   const glue = new mathMLTree.MathNode("mtd", [])
   glue.setAttribute("style", "padding: 0;width: 50%;")
   tag = buildExpressionRow(tag[0].body, style)
   tag.classes = ["tml-tag"];
-  if (!divide) {
+  if (!preventTagLap) {
     tag = new mathMLTree.MathNode("mpadded", [tag])
     tag.setAttribute("style", "width:0;")
     tag.setAttribute("width", "0")
     tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width")
   }
   tag = new mathMLTree.MathNode("mtd", [tag])
-  if (!divide) { tag.setAttribute("style", "padding: 0; min-width:0") }
+  if (!preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0") }
 
   expression = new mathMLTree.MathNode("mtd", [expression])
   const rowArray = leqno
@@ -141,7 +141,7 @@ export default function buildMathML(tree, texExpression, style, settings) {
       : setLineBreaks(expression, settings.displayMode, settings.annotate)
 
   if (tag) {
-    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.divide)
+    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.preventTagLap)
   }
 
   let semantics

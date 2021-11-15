@@ -200,7 +200,7 @@ class Settings {
     this.annotate = utils.deflt(options.annotate, false);          // boolean
     this.leqno = utils.deflt(options.leqno, false);               // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
-    this.divide = utils.deflt(options.divide, false);             // boolean
+    this.preventTagLap = utils.deflt(options.preventTagLap, false); // boolean
     this.macros = options.macros || {};
     this.xml = utils.deflt(options.xml, false);                   // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
@@ -2021,19 +2021,19 @@ const buildGroup = function(group, style) {
 };
 
 
-const taggedExpression = (expression, tag, style, leqno, divide) => {
+const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
   const glue = new mathMLTree.MathNode("mtd", []);
   glue.setAttribute("style", "padding: 0;width: 50%;");
   tag = buildExpressionRow(tag[0].body, style);
   tag.classes = ["tml-tag"];
-  if (!divide) {
+  if (!preventTagLap) {
     tag = new mathMLTree.MathNode("mpadded", [tag]);
     tag.setAttribute("style", "width:0;");
     tag.setAttribute("width", "0");
     tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width");
   }
   tag = new mathMLTree.MathNode("mtd", [tag]);
-  if (!divide) { tag.setAttribute("style", "padding: 0; min-width:0"); }
+  if (!preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0"); }
 
   expression = new mathMLTree.MathNode("mtd", [expression]);
   const rowArray = leqno
@@ -2064,7 +2064,7 @@ function buildMathML(tree, texExpression, style, settings) {
       : setLineBreaks(expression, settings.displayMode, settings.annotate);
 
   if (tag) {
-    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.divide);
+    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.preventTagLap);
   }
 
   let semantics;
@@ -3597,14 +3597,14 @@ const getTag = (group, style, rowNum) => {
     // Insert a class so the element can be populated by a post-processor.
     tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"]);
   }
-  if (!group.divide) {
+  if (!group.preventTagLap) {
     tag = new mathMLTree.MathNode("mpadded", [tag]);
     tag.setAttribute("style", "width:0;");
     tag.setAttribute("width", "0");
     if (!group.leqno) { tag.setAttribute("lspace", "-1width"); }
   }
   tag = new mathMLTree.MathNode("mtd", [tag]);
-  if (!group.divide) { tag.setAttribute("style", "padding: 0; min-width:0"); }
+  if (!group.preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0"); }
   return tag
 };
 
@@ -3770,7 +3770,7 @@ function parseArray(
     scriptLevel,
     tags,
     leqno,
-    divide: parser.settings.divide
+    preventTagLap: parser.settings.preventTagLap
   };
 }
 
