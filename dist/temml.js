@@ -201,6 +201,7 @@ var temml = (function () {
       this.annotate = utils.deflt(options.annotate, false);          // boolean
       this.leqno = utils.deflt(options.leqno, false);               // boolean
       this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
+      this.divide = utils.deflt(options.divide, false);             // boolean
       this.macros = options.macros || {};
       this.xml = utils.deflt(options.xml, false);                   // boolean
       this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
@@ -1603,7 +1604,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, inner, "\u22f1", "\\ddots", true);
   defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
   defineSymbol(math, accent, "\u02ca", "\\acute");
-  defineSymbol(math, accent, "\u02cb", "\\grave");
+  defineSymbol(math, accent, "\u0060", "\\grave");
   defineSymbol(math, accent, "\u00a8", "\\ddot");
   defineSymbol(math, accent, "\u20db", "\\dddot");
   defineSymbol(math, accent, "\u20dc", "\\ddddot");
@@ -2021,17 +2022,19 @@ min-width: ${svgData[key].minWidth}em;`
   };
 
 
-  const taggedExpression = (expression, tag, style, leqno) => {
+  const taggedExpression = (expression, tag, style, leqno, divide) => {
     const glue = new mathMLTree.MathNode("mtd", []);
     glue.setAttribute("style", "padding: 0;width: 50%;");
     tag = buildExpressionRow(tag[0].body, style);
     tag.classes = ["tml-tag"];
-    tag = new mathMLTree.MathNode("mpadded", [tag]);
-    tag.setAttribute("style", "width:0;");
-    tag.setAttribute("width", "0");
-    tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width");
+    if (!divide) {
+      tag = new mathMLTree.MathNode("mpadded", [tag]);
+      tag.setAttribute("style", "width:0;");
+      tag.setAttribute("width", "0");
+      tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width");
+    }
     tag = new mathMLTree.MathNode("mtd", [tag]);
-    tag.setAttribute("style", "padding: 0; min-width:0");
+    if (!divide) { tag.setAttribute("style", "padding: 0; min-width:0"); }
 
     expression = new mathMLTree.MathNode("mtd", [expression]);
     const rowArray = leqno
@@ -2062,7 +2065,7 @@ min-width: ${svgData[key].minWidth}em;`
         : setLineBreaks(expression, settings.displayMode, settings.annotate);
 
     if (tag) {
-      wrapper = taggedExpression(wrapper, tag, style, settings.leqno);
+      wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.divide);
     }
 
     let semantics;
@@ -3595,12 +3598,14 @@ min-width: ${svgData[key].minWidth}em;`
       // Insert a class so the element can be populated by a post-processor.
       tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"]);
     }
-    tag = new mathMLTree.MathNode("mpadded", [tag]);
-    tag.setAttribute("style", "width:0;");
-    tag.setAttribute("width", "0");
-    if (!group.leqno) { tag.setAttribute("lspace", "-1width"); }
+    if (!group.divide) {
+      tag = new mathMLTree.MathNode("mpadded", [tag]);
+      tag.setAttribute("style", "width:0;");
+      tag.setAttribute("width", "0");
+      if (!group.leqno) { tag.setAttribute("lspace", "-1width"); }
+    }
     tag = new mathMLTree.MathNode("mtd", [tag]);
-    tag.setAttribute("style", "padding: 0; min-width:0");
+    if (!group.divide) { tag.setAttribute("style", "padding: 0; min-width:0"); }
     return tag
   };
 
@@ -3765,7 +3770,8 @@ min-width: ${svgData[key].minWidth}em;`
       addEqnNum,
       scriptLevel,
       tags,
-      leqno
+      leqno,
+      divide: parser.settings.divide
     };
   }
 
@@ -6312,7 +6318,7 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u203e")]);
+      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2015")]);
       operator.setAttribute("stretchy", "true");
 
       const node = new mathMLTree.MathNode(
@@ -7478,7 +7484,7 @@ min-width: ${svgData[key].minWidth}em;`
     type: "toggle",
     mathmlBuilder(group, style) {
       const expression = buildExpression(group.body, style);
-      const node = new mathMLTree.MathNode("maction", expression, ["tml-toggle"]);
+      const node = new mathMLTree.MathNode("maction", expression, [], { cursor: "default" });
       node.setAttribute("actiontype", "toggle");
       return node
     }
@@ -7499,7 +7505,7 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u203e")]);
+      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2015")]);
       operator.setAttribute("stretchy", "true");
 
       const node = new mathMLTree.MathNode("munder",
@@ -10526,7 +10532,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.3.0";
+  const version = "0.3.1";
 
   function postProcess(block) {
     const labelMap = {};

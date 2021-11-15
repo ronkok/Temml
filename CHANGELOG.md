@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.1] - 2021-11-15
+
+## Added
+
+- Rendering option to divide tags from math.
+
 ## [0.3.0] - 2021-11-12
 
 ### Removed
