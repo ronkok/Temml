@@ -59,12 +59,14 @@ const getTag = (group, style, rowNum) => {
     // Insert a class so the element can be populated by a post-processor.
     tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"])
   }
-  tag = new mathMLTree.MathNode("mpadded", [tag])
-  tag.setAttribute("style", "width:0;")
-  tag.setAttribute("width", "0")
-  if (!group.leqno) { tag.setAttribute("lspace", "-1width") }
+  if (!group.divide) {
+    tag = new mathMLTree.MathNode("mpadded", [tag])
+    tag.setAttribute("style", "width:0;")
+    tag.setAttribute("width", "0")
+    if (!group.leqno) { tag.setAttribute("lspace", "-1width") }
+  }
   tag = new mathMLTree.MathNode("mtd", [tag])
-  tag.setAttribute("style", "padding: 0; min-width:0")
+  if (!group.divide) { tag.setAttribute("style", "padding: 0; min-width:0") }
   return tag
 }
 
@@ -229,7 +231,8 @@ function parseArray(
     addEqnNum,
     scriptLevel,
     tags,
-    leqno
+    leqno,
+    divide: parser.settings.divide
   };
 }
 

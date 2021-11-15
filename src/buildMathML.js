@@ -5,6 +5,7 @@
  */
 
 import mathMLTree from "./mathMLTree"
+import { Span } from "./domTree";
 import ParseError from "./ParseError"
 import symbols, { ligatures } from "./symbols"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
@@ -97,17 +98,19 @@ export const buildGroup = function(group, style) {
 };
 
 
-const taggedExpression = (expression, tag, style, leqno) => {
+const taggedExpression = (expression, tag, style, leqno, divide) => {
   const glue = new mathMLTree.MathNode("mtd", [])
   glue.setAttribute("style", "padding: 0;width: 50%;")
   tag = buildExpressionRow(tag[0].body, style)
-  tag.classes = ["tml-tag"]
-  tag = new mathMLTree.MathNode("mpadded", [tag])
-  tag.setAttribute("style", "width:0;")
-  tag.setAttribute("width", "0")
-  tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width")
+  tag.classes = ["tml-tag"];
+  if (!divide) {
+    tag = new mathMLTree.MathNode("mpadded", [tag])
+    tag.setAttribute("style", "width:0;")
+    tag.setAttribute("width", "0")
+    tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width")
+  }
   tag = new mathMLTree.MathNode("mtd", [tag])
-  tag.setAttribute("style", "padding: 0; min-width:0")
+  if (!divide) { tag.setAttribute("style", "padding: 0; min-width:0") }
 
   expression = new mathMLTree.MathNode("mtd", [expression])
   const rowArray = leqno
@@ -138,7 +141,7 @@ export default function buildMathML(tree, texExpression, style, settings) {
       : setLineBreaks(expression, settings.displayMode, settings.annotate)
 
   if (tag) {
-    wrapper = taggedExpression(wrapper, tag, style, settings.leqno)
+    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.divide)
   }
 
   let semantics
