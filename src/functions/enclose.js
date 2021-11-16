@@ -1,6 +1,7 @@
 import defineFunction from "../defineFunction";
 import mathMLTree from "../mathMLTree";
 import { assertNodeType } from "../parseNode";
+import { colorFromSpec, validateColor } from "./color"
 import * as mml from "../buildMathML";
 
 const mathmlBuilder = (group, style) => {
@@ -60,11 +61,19 @@ defineFunction({
   names: ["\\colorbox"],
   props: {
     numArgs: 2,
+    numOptionalArgs: 1,
     allowedInText: true,
-    argTypes: ["color", "text"]
+    argTypes: ["raw", "raw", "text"]
   },
-  handler({ parser, funcName }, args) {
-    const color = assertNodeType(args[0], "color-token").color;
+  handler({ parser, funcName }, args, optArgs) {
+    const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string
+    let color = ""
+    if (model) {
+      const spec = assertNodeType(args[0], "raw").string
+      color = colorFromSpec(model, spec)
+    } else {
+      color = validateColor(assertNodeType(args[0], "raw").string)
+    }
     const body = args[1];
     return {
       type: "enclose",
@@ -82,12 +91,23 @@ defineFunction({
   names: ["\\fcolorbox"],
   props: {
     numArgs: 3,
+    numOptionalArgs: 1,
     allowedInText: true,
-    argTypes: ["color", "color", "text"]
+    argTypes: ["raw", "raw", "raw", "text"]
   },
-  handler({ parser, funcName }, args) {
-    const borderColor = assertNodeType(args[0], "color-token").color;
-    const backgroundColor = assertNodeType(args[1], "color-token").color;
+  handler({ parser, funcName }, args, optArgs) {
+    const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string
+    let borderColor = ""
+    let backgroundColor
+    if (model) {
+      const borderSpec = assertNodeType(args[0], "raw").string
+      const backgroundSpec = assertNodeType(args[0], "raw").string
+      borderColor = colorFromSpec(model, borderSpec)
+      backgroundColor = colorFromSpec(model, backgroundSpec)
+    } else {
+      borderColor = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros)
+      backgroundColor = validateColor(assertNodeType(args[1], "raw").string, parser.gullet.macros)
+    }
     const body = args[2];
     return {
       type: "enclose",

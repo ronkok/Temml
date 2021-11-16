@@ -486,8 +486,6 @@ export default class Parser {
    */
   parseGroupOfType(name, type, optional) {
     switch (type) {
-      case "color":
-        return this.parseColorGroup(optional);
       case "size":
         return this.parseSizeGroup(optional);
       case "url":
@@ -591,32 +589,6 @@ export default class Parser {
       throw new ParseError("Invalid " + modeName + ": '" + firstToken.text + "'", firstToken);
     }
     return firstToken.range(lastToken, str);
-  }
-
-  /**
-   * Parses a color description.
-   */
-  parseColorGroup(optional) {
-    const res = this.parseStringGroup("color", optional);
-    if (res == null) {
-      return null;
-    }
-    const match = /^(#[a-f0-9]{3}|#?[a-f0-9]{6}|[a-z]+)$/i.exec(res.text);
-    if (!match) {
-      throw new ParseError("Invalid color: '" + res.text + "'", res);
-    }
-    let color = match[0];
-    if (/^[0-9a-f]{6}$/i.test(color)) {
-      // We allow a 6-digit HTML color spec without a leading "#".
-      // This follows the xcolor package's HTML color model.
-      // Predefined color names are all missed by this RegEx pattern.
-      color = "#" + color;
-    }
-    return {
-      type: "color-token",
-      mode: this.mode,
-      color
-    };
   }
 
   /**

@@ -5,7 +5,6 @@
  */
 
 import mathMLTree from "./mathMLTree"
-import { Span } from "./domTree";
 import ParseError from "./ParseError"
 import symbols, { ligatures } from "./symbols"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
