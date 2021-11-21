@@ -2,9 +2,27 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.2] - 2021-11-21
+
+### Added
+
+- \definecolor
+- Optional argument that sets the color model in color functions
+- Predefined colors per Tables 4.1 and 4.2 in xcolor package
+- \nsubset and \nsupset
+
+### Changed
+
+- Use character U+005F for \overline and \underline. Regain stretchiness.
+
+### Fixed
+
+- Spacing for \mid
+- Workaround a Fireox bug for spacing of <mtext>
+
 ## [0.3.1] - 2021-11-15
 
-## Added
+### Added
 
 - Rendering option preventTagLap
 

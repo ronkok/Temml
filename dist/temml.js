@@ -152,7 +152,7 @@ var temml = (function () {
     return value;
   };
 
-  const textAtomTypes = ["text", "textord", "mathord", "atom"];
+  const textAtomTypes = ["text", "textord", "mathord"];
 
   /**
    * Return the protocol of a URL, or "_relative" if the URL does not specify a
@@ -1091,6 +1091,8 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, rel, "\u22ad", "\\nvDash", true);
   defineSymbol(math, rel, "\u22ea", "\\ntriangleleft");
   defineSymbol(math, rel, "\u22ec", "\\ntrianglelefteq", true);
+  defineSymbol(math, rel, "\u2284", "\\nsubset", true);
+  defineSymbol(math, rel, "\u2285", "\\nsupset", true);
   defineSymbol(math, rel, "\u228a", "\\subsetneq", true);
   defineSymbol(math, rel, "\u228a\ufe00", "\\varsubsetneq");
   defineSymbol(math, rel, "\u2acb", "\\subsetneqq", true);
@@ -2681,6 +2683,139 @@ min-width: ${svgData[key].minWidth}em;`
     }
   });
 
+  // Helpers
+  const htmlRegEx = /^(#[a-f0-9]{3}|#?[a-f0-9]{6})$/i;
+  const htmlOrNameRegEx = /^(#[a-f0-9]{3}|#?[a-f0-9]{6}|[a-z]+)$/i;
+  const RGBregEx = /^ *\d{1,3} *(?:, *\d{1,3} *){2}$/;
+  const rgbRegEx = /^ *[10](?:\.\d*)? *(?:, *[10](?:\.\d*)? *){2}$/;
+  const xcolorHtmlRegEx = /^[a-f0-9]{6}$/i;
+  const toHex = num => {
+    let str = num.toString(16);
+    if (str.length === 1) { str = "0" + str; }
+    return str
+  };
+
+  // Colors from Tables 4.1 and 4.2 of the xcolor package.
+  const xcolors = JSON.parse(`{
+  "apricot": "#ffb484",
+  "aquamarine": "#08b4bc",
+  "bittersweet": "#c84c14",
+  "blue": "#303494",
+  "bluegreen": "#08b4bc",
+  "blueviolet": "#503c94",
+  "brickred": "#b8341c",
+  "brown": "#802404",
+  "burntorange": "#f8941c",
+  "cadetblue": "#78749c",
+  "carnationpink": "#f884b4",
+  "cerulean": "#08a4e4",
+  "cornflowerblue": "#40ace4",
+  "cyan": "#08acec",
+  "dandelion": "#ffbc44",
+  "darkgray": "#484444",
+  "darkorchid": "#a8548c",
+  "emerald": "#08ac9c",
+  "forestgreen": "#089c54",
+  "fuchsia": "#90348c",
+  "goldenrod": "#ffdc44",
+  "gray": "#98949c",
+  "green": "#08a44c",
+  "greenyellow": "#e0e474",
+  "junglegreen": "#08ac9c",
+  "lavender": "#f89cc4",
+  "lightgray": "#c0bcbc",
+  "lime": "#c0fc04",
+  "limegreen": "#90c43c",
+  "magenta": "#f0048c",
+  "mahogany": "#b0341c",
+  "maroon": "#b03434",
+  "melon": "#f89c7c",
+  "midnightblue": "#086494",
+  "mulberry": "#b03c94",
+  "navyblue": "#086cbc",
+  "olive": "#988c04",
+  "olivegreen": "#407c34",
+  "orange": "#f8843c",
+  "orangered": "#f0145c",
+  "orchid": "#b074ac",
+  "peach": "#f8945c",
+  "periwinkle": "#8074bc",
+  "pinegreen": "#088c74",
+  "pink": "#ffbcbc",
+  "plum": "#98248c",
+  "processblue": "#08b4ec",
+  "purple": "#a0449c",
+  "rawsienna": "#983c04",
+  "red": "#f01c24",
+  "redorange": "#f86434",
+  "redviolet": "#a0246c",
+  "rhodamine": "#f0549c",
+  "royalblue": "#0874bc",
+  "royalpurple": "#683c9c",
+  "rubinered": "#f0047c",
+  "salmon": "#f8948c",
+  "seagreen": "#30bc9c",
+  "sepia": "#701404",
+  "skyblue": "#48c4dc",
+  "springgreen": "#c8dc64",
+  "tan": "#e09c74",
+  "teal": "#088484",
+  "tealblue": "#08acb4",
+  "thistle": "#d884b4",
+  "turquoise": "#08b4cc",
+  "violet": "#60449c",
+  "violetred": "#f054a4",
+  "wildstrawberry": "#f0246c",
+  "yellow": "#fff404",
+  "yellowgreen": "#98cc6c",
+  "yelloworange": "#ffa41c"
+}`);
+
+  const colorFromSpec = (model, spec) => {
+    let color = "";
+    if (model === "HTML") {
+      if (!htmlRegEx.test(spec)) {
+        throw new ParseError("Invalid HTML input.")
+      }
+      color = spec;
+    } else if (model === "RGB") {
+      if (!RGBregEx.test(spec)) {
+        throw new ParseError("Invalid RGB input.")
+      }
+      spec.split(",").map(e => { color += toHex(Number(e.trim())); });
+    } else {
+      if (!rgbRegEx.test(spec)) {
+        throw new ParseError("Invalid rbg input.")
+      }
+      spec.split(",").map(e => {
+        const num = Number(e.trim());
+        if (num > 1) { throw new ParseError("Color rgb input must be < 1.") }
+        color += toHex((num * 255));
+      });
+    }
+    if (color.charAt(0) !== "#") { color = "#" + color; }
+    return color
+  };
+
+  const validateColor = (color, macros) => {
+    const macroName = `\\\\color@${color}`; // from \defineColor.
+    const match = htmlOrNameRegEx.exec(color);
+    if (!match) { throw new ParseError("Invalid color: '" + color + "'") }
+    // We allow a 6-digit HTML color spec without a leading "#".
+    // This follows the xcolor package's HTML color model.
+    // Predefined color names are all missed by this RegEx pattern.
+    if (xcolorHtmlRegEx.test(color)) {
+      return "#" + color
+    } else if (color.charAt(0) === "#") {
+      return color
+    } else if (macros.has(macroName)) {
+      color = macros.get(macroName).tokens[0].text;
+    } else if (xcolors[color.toLowerCase()]) {
+      color = xcolors[color.toLowerCase()];
+    }
+    return color
+  };
+
   const mathmlBuilder$1 = (group, style) => {
     const inner = buildExpression(group.body, style.withColor(group.color));
     // Wrap with an <mstyle> element.
@@ -2696,11 +2831,19 @@ min-width: ${svgData[key].minWidth}em;`
     names: ["\\textcolor"],
     props: {
       numArgs: 2,
+      numOptionalArgs: 1,
       allowedInText: true,
-      argTypes: ["color", "original"]
+      argTypes: ["raw", "raw", "original"]
     },
-    handler({ parser }, args) {
-      const color = assertNodeType(args[0], "color-token").color;
+    handler({ parser }, args, optArgs) {
+      const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
+      let color = "";
+      if (model) {
+        const spec = assertNodeType(args[0], "raw").string;
+        color = colorFromSpec(model, spec);
+      } else {
+        color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros);
+      }
       const body = args[1];
       return {
         type: "color",
@@ -2717,11 +2860,19 @@ min-width: ${svgData[key].minWidth}em;`
     names: ["\\color"],
     props: {
       numArgs: 1,
+      numOptionalArgs: 1,
       allowedInText: true,
-      argTypes: ["color"]
+      argTypes: ["raw", "raw"]
     },
-    handler({ parser, breakOnTokenText }, args) {
-      const color = assertNodeType(args[0], "color-token").color;
+    handler({ parser, breakOnTokenText }, args, optArgs) {
+      const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
+      let color = "";
+      if (model) {
+        const spec = assertNodeType(args[0], "raw").string;
+        color = colorFromSpec(model, spec);
+      } else {
+        color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros);
+      }
 
       // Set macro \current@color in current namespace to store the current
       // color, mimicking the behavior of color.sty.
@@ -2740,6 +2891,31 @@ min-width: ${svgData[key].minWidth}em;`
       }
     },
     mathmlBuilder: mathmlBuilder$1
+  });
+
+  defineFunction({
+    type: "color",
+    names: ["\\definecolor"],
+    props: {
+      numArgs: 3,
+      allowedInText: true,
+      argTypes: ["raw", "raw", "raw"]
+    },
+    handler({ parser }, args) {
+      const name = assertNodeType(args[0], "raw").string;
+      if (!/^[A-Za-z]+$/.test(name)) {
+        throw new ParseError("Color name must be latin letters.")
+      }
+      const model = assertNodeType(args[1], "raw").string;
+      if (!["HTML", "RGB", "rgb"].includes(model)) {
+        throw new ParseError("Color model must be HTML, RGB, or rgb.")
+      }
+      const spec = assertNodeType(args[2], "raw").string;
+      const color = colorFromSpec(model, spec);
+      parser.gullet.macros.set(`\\\\color@${name}`, { tokens: [{ text: color }], numArgs: 0 });
+      return { type: "internal", mode: parser.mode }
+    }
+    // No mathmlBuilder. The point of \definecolor is to set a macro.
   });
 
   /**
@@ -3420,11 +3596,19 @@ min-width: ${svgData[key].minWidth}em;`
     names: ["\\colorbox"],
     props: {
       numArgs: 2,
+      numOptionalArgs: 1,
       allowedInText: true,
-      argTypes: ["color", "text"]
+      argTypes: ["raw", "raw", "text"]
     },
-    handler({ parser, funcName }, args) {
-      const color = assertNodeType(args[0], "color-token").color;
+    handler({ parser, funcName }, args, optArgs) {
+      const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
+      let color = "";
+      if (model) {
+        const spec = assertNodeType(args[0], "raw").string;
+        color = colorFromSpec(model, spec);
+      } else {
+        color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros);
+      }
       const body = args[1];
       return {
         type: "enclose",
@@ -3442,12 +3626,23 @@ min-width: ${svgData[key].minWidth}em;`
     names: ["\\fcolorbox"],
     props: {
       numArgs: 3,
+      numOptionalArgs: 1,
       allowedInText: true,
-      argTypes: ["color", "color", "text"]
+      argTypes: ["raw", "raw", "raw", "text"]
     },
-    handler({ parser, funcName }, args) {
-      const borderColor = assertNodeType(args[0], "color-token").color;
-      const backgroundColor = assertNodeType(args[1], "color-token").color;
+    handler({ parser, funcName }, args, optArgs) {
+      const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
+      let borderColor = "";
+      let backgroundColor;
+      if (model) {
+        const borderSpec = assertNodeType(args[0], "raw").string;
+        const backgroundSpec = assertNodeType(args[0], "raw").string;
+        borderColor = colorFromSpec(model, borderSpec);
+        backgroundColor = colorFromSpec(model, backgroundSpec);
+      } else {
+        borderColor = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros);
+        backgroundColor = validateColor(assertNodeType(args[1], "raw").string, parser.gullet.macros);
+      }
       const body = args[2];
       return {
         type: "enclose",
@@ -6318,7 +6513,7 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2015")]);
+      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u005F")]);
       operator.setAttribute("stretchy", "true");
 
       const node = new mathMLTree.MathNode(
@@ -6904,7 +7099,7 @@ min-width: ${svgData[key].minWidth}em;`
       const node = new mathMLTree.MathNode("mo", [makeText(group.text, group.mode)]);
       if (group.family === "punct") {
         node.setAttribute("separator", "true");
-      } else if (group.family === "open" || group.family === "close" || group.family === "rel") {
+      } else if (group.family === "open" || group.family === "close") {
         // Delims built here should not stretch vertically.
         // See delimsizing.js for stretchy delims.
         node.setAttribute("stretchy", "false");
@@ -6913,6 +7108,10 @@ min-width: ${svgData[key].minWidth}em;`
         } else if (group.family === "close") {
           node.setAttribute("form", "postfix");
         }
+      } else if (group.text === "\\mid") {
+        // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
+        node.setAttribute("lspace", "0.22em"); // medium space
+        node.setAttribute("rspace", "0.22em");
       }
       return node;
     }
@@ -7305,8 +7504,10 @@ min-width: ${svgData[key].minWidth}em;`
       let node;
 
       if (Object.prototype.hasOwnProperty.call(regularSpace, group.text)) {
-        const ch = (regularSpace[group.text].className === "nobreak") ? "\u00a0" : " ";
-        node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode(ch)]);
+        // Firefox does not render a space in a <mtext> </mtext>. So write a no-break space.
+        // TODO: If Firefox fixes that bug, uncomment the next line and write ch into the node.
+        //const ch = (regularSpace[group.text].className === "nobreak") ? "\u00a0" : " "
+        node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("\u00a0")]);
       } else if (Object.prototype.hasOwnProperty.call(cssSpace, group.text)) {
         // MathML 3.0 calls for nobreak to occur in an <mo>, not an <mtext>
         // Ref: https://www.w3.org/Math/draft-spec/mathml.html#chapter3_presm.lbattrs
@@ -7416,6 +7617,15 @@ min-width: ${svgData[key].minWidth}em;`
         mtext.children[0].text += mrow.children[i].children[0].text;
       }
       mtext.children.splice(1, mtext.children.length - 1);
+      // Firefox does not render a space at either end of the <mtext> string.
+      // To get proper rendering, we replace with no-break spaces.
+      if (mtext.children[0].text.charAt(0) === " ") {
+        mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
+      }
+      const L = mtext.children[0].text.length;
+      if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
+        mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
+      }
       return mtext
     }
   });
@@ -7505,7 +7715,7 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2015")]);
+      const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u005f")]);
       operator.setAttribute("stretchy", "true");
 
       const node = new mathMLTree.MathNode("munder",
@@ -9889,8 +10099,6 @@ min-width: ${svgData[key].minWidth}em;`
      */
     parseGroupOfType(name, type, optional) {
       switch (type) {
-        case "color":
-          return this.parseColorGroup(optional);
         case "size":
           return this.parseSizeGroup(optional);
         case "url":
@@ -9994,32 +10202,6 @@ min-width: ${svgData[key].minWidth}em;`
         throw new ParseError("Invalid " + modeName + ": '" + firstToken.text + "'", firstToken);
       }
       return firstToken.range(lastToken, str);
-    }
-
-    /**
-     * Parses a color description.
-     */
-    parseColorGroup(optional) {
-      const res = this.parseStringGroup("color", optional);
-      if (res == null) {
-        return null;
-      }
-      const match = /^(#[a-f0-9]{3}|#?[a-f0-9]{6}|[a-z]+)$/i.exec(res.text);
-      if (!match) {
-        throw new ParseError("Invalid color: '" + res.text + "'", res);
-      }
-      let color = match[0];
-      if (/^[0-9a-f]{6}$/i.test(color)) {
-        // We allow a 6-digit HTML color spec without a leading "#".
-        // This follows the xcolor package's HTML color model.
-        // Predefined color names are all missed by this RegEx pattern.
-        color = "#" + color;
-      }
-      return {
-        type: "color-token",
-        mode: this.mode,
-        color
-      };
     }
 
     /**
@@ -10532,7 +10714,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.3.1";
+  const version = "0.3.2";
 
   function postProcess(block) {
     const labelMap = {};
