@@ -19,6 +19,10 @@ defineFunctionBuilders({
       } else if (group.family === "close") {
         node.setAttribute("form", "postfix");
       }
+    } else if (group.text === "\\mid") {
+      // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
+      node.setAttribute("lspace", "0.22em") // medium space
+      node.setAttribute("rspace", "0.22em")
     }
     return node;
   }
