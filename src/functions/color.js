@@ -119,6 +119,7 @@ export const colorFromSpec = (model, spec) => {
 }
 
 export const validateColor = (color, macros) => {
+  const macroName = `\\\\color@${color}` // from \defineColor.
   const match = htmlOrNameRegEx.exec(color);
   if (!match) { throw new ParseError("Invalid color: '" + color + "'") }
   // We allow a 6-digit HTML color spec without a leading "#".
@@ -128,14 +129,10 @@ export const validateColor = (color, macros) => {
     return "#" + color
   } else if (color.charAt(0) === "#") {
     return color
+  } else if (macros.has(macroName)) {
+    color = macros.get(macroName).tokens[0].text
   } else if (xcolors[color.toLowerCase()]) {
     color = xcolors[color.toLowerCase()]
-  } else {
-    // Check if \defineColor has created a color for this name.
-    const macroName = `\\\\color@${color}`
-    if (macros.has(macroName)) {
-      color = macros.get(macroName).tokens[0].text
-    }
   }
   return color
 }
