@@ -17,7 +17,7 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2015")]);
+    const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u005f")]);
     operator.setAttribute("stretchy", "true");
 
     const node = new mathMLTree.MathNode("munder",
