@@ -56,10 +56,10 @@ that lists both supported and some un-supported functions.
 |                          |  `\overgroup{AB}`        |  `\wideparen{AB}`                  |
 +--------------------------+--------------------------+------------------------------------+
 | $`\dddot{a}` `\dddot{a}` | $`\undergroup{AB}`       | $`\overparen{AB}`                  |
-|                          |  `\undergroup{AB}`       |  `\overparen{AB}`                  |
+|                          |  `\undergroup{AB}`       |  `\overparen{AB}` or `\overarc`    |
 +--------------------------+--------------------------+------------------------------------+
 | $`\ddddot{a}`            | $`\underbar{X}`          | $`\underparen{AB}`                 |
-|  `\ddddot{a}`            |  `\underbar{X}`          |  `\underparen{AB}`                 |
+|  `\ddddot{a}`            |  `\underbar{X}`          |  `\underparen{AB}` or `\underarc`  |
 +--------------------------+--------------------------+------------------------------------+
 | $`\grave{a}` `\grave{a}` | $`\mathring{g}`          | $`\overbrace{AB}`                  |
 |                          |  `\mathring{g}`          |  `\overbrace{AB}`                  |
@@ -67,6 +67,7 @@ that lists both supported and some un-supported functions.
 | $`\hat{\theta}`          | $`\widehat{ac}`          | $`\underbrace{AB}`                 |
 | `\hat{\theta}`           |  `\widehat{ac}`          |  `\underbrace{AB}`                 |
 +--------------------------+--------------------------+------------------------------------+
+
 
 **Accent functions inside \\text{…}**
 

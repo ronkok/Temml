@@ -12,6 +12,7 @@ defineFunction({
     "\\underleftrightarrow",
     "\\undergroup",
     "\\underparen",
+    "\\underarc",
     "\\utilde"
   ],
   props: {
