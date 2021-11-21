@@ -10,7 +10,7 @@ defineFunctionBuilders({
     const node = new mathMLTree.MathNode("mo", [mml.makeText(group.text, group.mode)]);
     if (group.family === "punct") {
       node.setAttribute("separator", "true");
-    } else if (group.family === "open" || group.family === "close" || group.family === "rel") {
+    } else if (group.family === "open" || group.family === "close") {
       // Delims built here should not stretch vertically.
       // See delimsizing.js for stretchy delims.
       node.setAttribute("stretchy", "false");
