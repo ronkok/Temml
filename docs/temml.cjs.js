@@ -4743,7 +4743,11 @@ defineFunction({
     const arr = (body.body) ? body.body : [body];
     for (const arg of arr) {
       if (utils.textAtomTypes.includes(arg.type)) {
-        atom.text += arg.text;
+        if (arg.text) {
+          atom.text += arg.text;
+        } else if (arg.body) {
+          arg.body.map(e => { atom.text += e.text; });
+        }
       } else {
         mustPromote = false;
         break
