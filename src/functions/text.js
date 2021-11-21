@@ -89,6 +89,15 @@ defineFunction({
       mtext.children[0].text += mrow.children[i].children[0].text
     }
     mtext.children.splice(1, mtext.children.length - 1)
+    // Firefox does not render a space at either end of the <mtext> string.
+    // To get proper rendering, we replace with no-break spaces.
+    if (mtext.children[0].text.charAt(0) === " ") {
+      mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1)
+    }
+    const L = mtext.children[0].text.length
+    if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
+      mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0"
+    }
     return mtext
   }
 });
