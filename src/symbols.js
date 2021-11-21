@@ -227,6 +227,8 @@ defineSymbol(math, rel, "\u22ac", "\\nvdash", true);
 defineSymbol(math, rel, "\u22ad", "\\nvDash", true);
 defineSymbol(math, rel, "\u22ea", "\\ntriangleleft");
 defineSymbol(math, rel, "\u22ec", "\\ntrianglelefteq", true);
+defineSymbol(math, rel, "\u2284", "\\nsubset", true);
+defineSymbol(math, rel, "\u2285", "\\nsupset", true);
 defineSymbol(math, rel, "\u228a", "\\subsetneq", true);
 defineSymbol(math, rel, "\u228a\ufe00", "\\varsubsetneq");
 defineSymbol(math, rel, "\u2acb", "\\subsetneqq", true);
