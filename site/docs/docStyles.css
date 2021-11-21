@@ -185,6 +185,27 @@ table tbody tr:nth-child(even) {
   background-color: #f6f8fa;
 }
 
+/* Column alignment. Apply these classes to the table node. */
+.c1r td:nth-child(1), .c1r th:nth-child(1),
+.c2r td:nth-child(2), .c2r th:nth-child(2),
+.c3r td:nth-child(3), .c3r th:nth-child(3),
+.c4r td:nth-child(4), .c4r th:nth-child(4),
+.c5r td:nth-child(5), .c5r th:nth-child(5),
+.c6r td:nth-child(6), .c6r th:nth-child(6),
+.c7r td:nth-child(7), .c7r th:nth-child(7),
+.c8r td:nth-child(8), .c8r th:nth-child(8),
+.c9r td:nth-child(9), .c9r th:nth-child(9) { text-align:right }
+
+.c1c td:nth-child(1), .c1c th:nth-child(1),
+.c2c td:nth-child(2), .c2c th:nth-child(2),
+.c3c td:nth-child(3), .c3c th:nth-child(3),
+.c4c td:nth-child(4), .c4c th:nth-child(4),
+.c5c td:nth-child(5), .c5c th:nth-child(5),
+.c6c td:nth-child(6), .c6c th:nth-child(6),
+.c7c td:nth-child(7), .c7c th:nth-child(7),
+.c8c td:nth-child(8), .c8c th:nth-child(8),
+.c9c td:nth-child(9), .c9c th:nth-child(9) { text-align:center }
+
 ul {
   padding: 0;
 }
@@ -202,6 +223,10 @@ ul li {
   margin-top: 0.5em;
   position: relative;
   left: 1.8em;
+}
+
+ul li p {
+  margin-top: 0;
 }
 
 a {

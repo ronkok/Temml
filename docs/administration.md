@@ -14,11 +14,18 @@
 
 # Browser Support
 
-Temml works in browsers that support MathML. This includes Firefox and Safari. It will [soon](https://www.igalia.com/2021/08/09/MathML-Progress.html) include Chrome, Edge, Opera, Brave, and Vivaldi. Temml will never work in Internet Explorer.
+Temml works in browsers that support MathML. This includes Firefox and Safari.
+It will [soon](https://www.igalia.com/2021/08/09/MathML-Progress.html) include
+Chrome, Edge, Opera, Brave, and Vivaldi.\
+Temml will never work in Internet Explorer.
 
 # Installation
 
-You can download Temml files from the [`dist` folder](https://github.com/ronkok/Temml/dist/) of the Temml repository and serve them from your own site. The minimum browser  installation needs the following files. The `css` file and font file must be in the same folder.
+You can download Temml files from the [dist folder][] of the Temml repository
+and serve them from your own site. The minimum browser  installation needs the
+following files. The `css` file and font file must be in the same folder.
+
+[dist folder]: https://github.com/ronkok/Temml/tree/main/dist
 
 * temml.min.js
 * Temml-Local.css
@@ -46,19 +53,20 @@ A server-side installation should include `temml.cjs.js` instead of `temml.min.j
 ### Overview
 
 Say that you have an array of DOM elements whose contents should be converted from TeX
-strings to math. And also say that you wish to define two macros with document-wide
+strings to math. And also say that you wish to define two macros and a color with document-wide
 scope. The code for such a conversion might look like this:
 
 ```js
 \\ Optional preamble.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
-    \\def\\foo{x^2}`
+    \\def\\foo{x^2}
+    \\definecolor{sortaGreen}{RGB}{128,128,0}`
 );
 // Render all the math.
 for (let element of mathElements) {
     const tex = element.textContent;
-    const displayMode = element.classList.contains("display")
+    const displayMode = element.classList.contains("display");
     temml.render(tex, element, { macros, displayMode });
 }
 // Optional postProcess to render \ref{}
@@ -86,16 +94,18 @@ const html = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
 
 ### Preamble
 
-To give document-wide scope to a set of macros, define them in a preamble.
+To give document-wide scope to a set of macros or colors, define them in a preamble.
 
 ```js
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
-    \\def\\foo{x^2}`
+    \\def\\foo{x^2}
+    \\definecolor{sortaGreen}{RGB}{128,128,0}`
 );
 ```
 
-Any valid [Temml macro](supported.html#macros) may be written into a preamble.
+Any valid [Temml macro](supported.html#macros) or [\definecolor](supported.html#style-color-size-and-font)
+may be written into a preamble. The resulting macros are then included in Temml options.
 
 ### Options
 
@@ -115,7 +125,7 @@ Available options are:
 - `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.  
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox. (default: `false`)
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
-- `preventTagLap`: `boolean`. This option affects the horizontal alignment of `displayMode` math and `\tag`s. The default (`false`) acts in the LaTeX manner and centers the math. That’s good in a wide container, but if the container is narrow, the tag will overlap the math. The `preventTagLap: true` option acts differently. It will first place the tag and then center the math in the remainder of the container, with no overlap. `preventTagLap: true` is probably a good choice if you are targeting mobile.
+- `preventTagLap`: `boolean`. This option affects the horizontal alignment of `displayMode` math and `\tag`s. The default (`false`) acts in the LaTeX manner and centers the math. That’s good in a wide container, but if the container is narrow, the tag will overlap the math. The `preventTagLap: true` option acts differently. It will first place the tag and then center the math in the remainder of the container, with no overlap. If you are targeting mobile, `preventTagLap: true` is probably a good choice .
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
 - `errorColor`: `string`. A color string given in the format `"#XXX"` or `"#XXXXXX"`. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: `#b22222`)
 - `maxSize`: `number`. All user-specified sizes, e.g. in `\rule{500em}{500em}`, will be capped to `maxSize` ems. If set to `Infinity` (the default), users can make elements and spaces arbitrarily large.
@@ -146,7 +156,7 @@ Available options are:
 
 The `postProcess` function implements the AMS functions `\ref` and `\label`. It should be called outside of any loop.
 
-`temml.render` and `temml.renderToString` each operate on only one element at a time. In contrast, the `postProcess` function makes two passes throught the entire document. `postProcess` can be omitted if you choose not to support `\ref.`
+Unlike other Temml functions, the `postProcess` function makes two passes through the entire document. In contrast, `temml.render` and `temml.renderToString` each operate on only one element at a time. If you choose not to support `\ref`, `postProcess` can be omitted.
 
 If Temml is used server-side, `\ref` and `\label` are still implemented at runtime with client-side JavaScript. A small file, `temmlPostProcess.js`, is provided to be installed in place of `temml.min.js`. It exposes one function:
 
@@ -162,15 +172,23 @@ If you use the [auto-render extension](#auto-render-extension), it includes the 
 
 Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.
 
-**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria <ath> lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2` in order to support `\mathscr{…}`. Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.
+**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`. Sadly, Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.
 
-**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. The LatinModern folder in `dist` contains the Latin Modern fonts. This option also needs that additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
+**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
 **Asana**, **STIX TWO**, and **XITS** can be served without the `Temml.woff2` file.
 
-XITS is my current favorite of all the math fonts. I think it does the best job at matching radical sizes to (sub|super)scripts.
+XITS is my current favorite of all the math fonts. I think it does the best job at matching radical sizes to (sub|super)scripts. I wish it had better looking parentheses.
 
-Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts](https://fred-wang.github.io/MathFonts/ "Math fonts").
+Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts][].
+
+Where to find font files:
+
+- Temml.woff2 can be found in the Temml [dist folder][].
+- STIXTwoMath-Regular.woff2 is located at the STIX [repository](https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2).
+- The other fonts can be downloaded at [Mathematical OpenType Fonts][].
+
+[Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
 If you want a different math font size, you can edit add a rule to your own page's CSS, like this example:
 
@@ -301,7 +319,7 @@ For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.c
 
 <br>
 
-<span class="reduced">Copyright © 2021 Ron Kok. Released under the [MIT License](https://opensource.org/licenses/MIT)</span>
+<p class="reduced">Copyright © 2021 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
 
@@ -310,19 +328,21 @@ For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.c
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$ &nbsp;&nbsp;v0.3.1
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.2
 
 <h3><a href="#top">Contents</a></h3>
 
 * [Browser Support](#browser-support)
 * [Installation](#installation)
 * [API](#api)
+
     * [Overview](#overview)
     * [In Browser](#in-browser)
     * [Server Side](#server-side)
     * [Preamble](#preamble)
     * [Options](#options)
     * [Post Process](#post-process)
+
 * [Fonts](#fonts)
 * [Auto-numbering](#auto-numbering)
 * [Auto-Render Extension](#auto-render-extension)
