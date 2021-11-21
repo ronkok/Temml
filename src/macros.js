@@ -206,7 +206,6 @@ defineMacro("~", "\\nobreakspace");
 defineMacro("\\lq", "`");
 defineMacro("\\rq", "'");
 defineMacro("\\aa", "\\r a");
-defineMacro("\\AA", "\\r A");
 
 defineMacro("\\Bbbk", "\\Bbb{k}");
 

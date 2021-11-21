@@ -130,6 +130,8 @@ defineSymbol(math, textord, "\u2207", "\\nabla", true);
 defineSymbol(math, textord, "\u266d", "\\flat", true);
 defineSymbol(math, textord, "\u2113", "\\ell", true);
 defineSymbol(math, textord, "\u266e", "\\natural", true);
+defineSymbol(math, textord, "Å", "\\AA", true);
+defineSymbol(text, textord, "Å", "\\AA", true);
 defineSymbol(math, textord, "\u2663", "\\clubsuit", true);
 defineSymbol(math, textord, "\u2667", "\\varclubsuit", true);
 defineSymbol(math, textord, "\u2118", "\\wp", true);
