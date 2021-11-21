@@ -237,17 +237,20 @@ defineFunction({
     if (group.left !== ".") {
       const leftNode = new mathMLTree.MathNode("mo", [mml.makeText(group.left, group.mode)]);
 
-      leftNode.setAttribute("fence", "true");
-      leftNode.setAttribute("form", "prefix");
+      leftNode.setAttribute("fence", "true")
+      leftNode.setAttribute("form", "prefix")
+      // Set stretchy explicitly because browsers miss "/" and \backslash
+      leftNode.setAttribute("stretchy", "true")
 
-      inner.unshift(leftNode);
+      inner.unshift(leftNode)
     }
 
     if (group.right !== ".") {
       const rightNode = new mathMLTree.MathNode("mo", [mml.makeText(group.right, group.mode)]);
 
-      rightNode.setAttribute("fence", "true");
+      rightNode.setAttribute("fence", "true")
       rightNode.setAttribute("form", "postfix")
+      rightNode.setAttribute("stretchy", "true")
 
       if (group.rightColor) {
         rightNode.setAttribute("mathcolor", group.rightColor);
