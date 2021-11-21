@@ -72,7 +72,7 @@ defineFunction({
       const spec = assertNodeType(args[0], "raw").string
       color = colorFromSpec(model, spec)
     } else {
-      color = validateColor(assertNodeType(args[0], "raw").string)
+      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros)
     }
     const body = args[1];
     return {

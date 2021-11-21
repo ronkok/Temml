@@ -16,6 +16,82 @@ const toHex = num => {
   return str
 }
 
+// Colors from Tables 4.1 and 4.2 of the xcolor package.
+const xcolors = JSON.parse(`{
+  "apricot": "#ffb484",
+  "aquamarine": "#08b4bc",
+  "bittersweet": "#c84c14",
+  "blue": "#303494",
+  "bluegreen": "#08b4bc",
+  "blueviolet": "#503c94",
+  "brickred": "#b8341c",
+  "brown": "#802404",
+  "burntorange": "#f8941c",
+  "cadetblue": "#78749c",
+  "carnationpink": "#f884b4",
+  "cerulean": "#08a4e4",
+  "cornflowerblue": "#40ace4",
+  "cyan": "#08acec",
+  "dandelion": "#ffbc44",
+  "darkgray": "#484444",
+  "darkorchid": "#a8548c",
+  "emerald": "#08ac9c",
+  "forestgreen": "#089c54",
+  "fuchsia": "#90348c",
+  "goldenrod": "#ffdc44",
+  "gray": "#98949c",
+  "green": "#08a44c",
+  "greenyellow": "#e0e474",
+  "junglegreen": "#08ac9c",
+  "lavender": "#f89cc4",
+  "lightgray": "#c0bcbc",
+  "lime": "#c0fc04",
+  "limegreen": "#90c43c",
+  "magenta": "#f0048c",
+  "mahogany": "#b0341c",
+  "maroon": "#b03434",
+  "melon": "#f89c7c",
+  "midnightblue": "#086494",
+  "mulberry": "#b03c94",
+  "navyblue": "#086cbc",
+  "olive": "#988c04",
+  "olivegreen": "#407c34",
+  "orange": "#f8843c",
+  "orangered": "#f0145c",
+  "orchid": "#b074ac",
+  "peach": "#f8945c",
+  "periwinkle": "#8074bc",
+  "pinegreen": "#088c74",
+  "pink": "#ffbcbc",
+  "plum": "#98248c",
+  "processblue": "#08b4ec",
+  "purple": "#a0449c",
+  "rawsienna": "#983c04",
+  "red": "#f01c24",
+  "redorange": "#f86434",
+  "redviolet": "#a0246c",
+  "rhodamine": "#f0549c",
+  "royalblue": "#0874bc",
+  "royalpurple": "#683c9c",
+  "rubinered": "#f0047c",
+  "salmon": "#f8948c",
+  "seagreen": "#30bc9c",
+  "sepia": "#701404",
+  "skyblue": "#48c4dc",
+  "springgreen": "#c8dc64",
+  "tan": "#e09c74",
+  "teal": "#088484",
+  "tealblue": "#08acb4",
+  "thistle": "#d884b4",
+  "turquoise": "#08b4cc",
+  "violet": "#60449c",
+  "violetred": "#f054a4",
+  "wildstrawberry": "#f0246c",
+  "yellow": "#fff404",
+  "yellowgreen": "#98cc6c",
+  "yelloworange": "#ffa41c"
+}`)
+
 export const colorFromSpec = (model, spec) => {
   let color = ""
   if (model === "HTML") {
@@ -33,7 +109,6 @@ export const colorFromSpec = (model, spec) => {
       throw new ParseError("Invalid rbg input.")
     }
     spec.split(",").map(e => {
-      if (!isNaN(e)) { throw new ParseError("Non-numeric rgb input.") }
       const num = Number(e.trim())
       if (num > 1) { throw new ParseError("Color rgb input must be < 1.") }
       color += toHex((num * 255))
@@ -53,6 +128,8 @@ export const validateColor = (color, macros) => {
     return "#" + color
   } else if (color.charAt(0) === "#") {
     return color
+  } else if (xcolors[color.toLowerCase()]) {
+    color = xcolors[color.toLowerCase()]
   } else {
     // Check if \defineColor has created a color for this name.
     const macroName = `\\\\color@${color}`
