@@ -56,10 +56,10 @@ that lists both supported and some un-supported functions.
 |                          |  `\overgroup{AB}`        |  `\wideparen{AB}`                  |
 +--------------------------+--------------------------+------------------------------------+
 | $`\dddot{a}` `\dddot{a}` | $`\undergroup{AB}`       | $`\overparen{AB}`                  |
-|                          |  `\undergroup{AB}`       |  `\overparen{AB}` or `\overarc`    |
+|                          |  `\undergroup{AB}`       |  `\overparen{AB}`                  |
 +--------------------------+--------------------------+------------------------------------+
 | $`\ddddot{a}`            | $`\underbar{X}`          | $`\underparen{AB}`                 |
-|  `\ddddot{a}`            |  `\underbar{X}`          |  `\underparen{AB}` or `\underarc`  |
+|  `\ddddot{a}`            |  `\underbar{X}`          |  `\underparen{AB}`                 |
 +--------------------------+--------------------------+------------------------------------+
 | $`\grave{a}` `\grave{a}` | $`\mathring{g}`          | $`\overbrace{AB}`                  |
 |                          |  `\mathring{g}`          |  `\overbrace{AB}`                  |

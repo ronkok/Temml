@@ -58,7 +58,6 @@ defineFunction({
     "\\dot",
     "\\mathring",
     "\\overparen",
-    "\\overarc",
     "\\widecheck",
     "\\widehat",
     "\\wideparen",

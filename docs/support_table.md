@@ -896,7 +896,6 @@ If you know the shape of a character, but not its name,
 |\otimes|$`\otimes`|||
 |\outerproduct|$`\outerproduct{a}{b}`|`\outerproduct{a}{b}`| physics extension |
 |\over|$`{a+1 \over b+2}+c`|`{a+1 \over b+2}+c`||
-|\overarc|$`\overarc{abc}`|`\overarc{abc}`| arcs |
 |\overbrace|$`\overbrace{x+⋯+x}^{n\text{ times}}`|`\overbrace{x+⋯+x}^{n\text{ times}}`||
 |\overbracket|(Not supported)|||
 |\overgroup|$`\overgroup{AB}`|`\overgroup{AB}`| MnSymbol |
@@ -1271,7 +1270,6 @@ If you know the shape of a character, but not its name,
 | \uArr                | $`\uArr`                    |                            | texvc extension |
 | \uarr                | $`\uarr`                    |                            | texvc extension |
 | \ulcorner            | $`\ulcorner`                |                            | ams             |
-| \underarc            | $`\underarc{abc}`           | `\underarc{abc}`           | arcs            |
 | \underbar            | $`\underbar{X}`             | `\underbar{X}`             |                 |
 | \underbrace          | $`\underbrace{x+⋯+x}_{n\text{ times}}`| `\underbrace{x+⋯+x}_{n\text{ times}}`| |
 | \underbracket        | (Not supported)             |                            |                 |
