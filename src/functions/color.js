@@ -202,7 +202,8 @@ defineFunction({
     parser.gullet.macros.set("\\current@color", color)
 
     // Parse out the implicit body that should be colored.
-    const body = parser.parseExpression(true, breakOnTokenText)
+    // Since \color nodes should not be nested, break on \color.
+    const body = parser.parseExpression(true, "\\color")
 
     return {
       type: "color",

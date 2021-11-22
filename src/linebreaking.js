@@ -23,18 +23,46 @@ import mathMLTree from "./mathMLTree"
  * much of this module.
  */
 
-export default function setLineBreaks(expression, isDisplayMode, isAnnotated) {
+export default function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined) {
+  if (color === undefined) {
+    // First, make one pass through the expression and split any color nodes.
+    const upperLimit = expression.length - 1
+    for (let i = upperLimit; i >= 0; i--) {
+      const node = expression[i];
+      if (node.type === "mstyle" && node.attributes.mathcolor) {
+        const color = node.attributes.mathcolor
+        const fragment = setLineBreaks(node.children, isDisplayMode, isAnnotated, color)
+        if (!(fragment.type && fragment.type !== "mtable")) {
+          expression.splice(i, 1, ...fragment.children)
+
+        }
+      }
+    }
+  }
+
+  const tagName = color ? "mstyle" : "mrow"
+
   const mtrs = [];
   let mrows = [];
   let block = [];
   let canBeBIN = false // The first node cannot be an infix binary operator.
   for (let i = 0; i < expression.length; i++) {
     const node = expression[i];
+    if (node.type && node.type === "mstyle" && node.attributes.mathcolor) {
+      // Start a new block. (Insert a soft linebreak.)
+      mrows.push(new mathMLTree.MathNode(tagName, block))
+      // Insert the mstyle
+      mrows.push(node)
+      block = [];
+      continue
+    }
     if (node.attributes && node.attributes.linebreak &&
       node.attributes.linebreak === "newline") {
       // A hard line break. Create a <mtr> for the current block.
       if (block.length > 0) {
-        mrows.push(new mathMLTree.MathNode("mrow", block))
+        const element = new mathMLTree.MathNode(tagName, block)
+        if (color) { element.setAttribute("mathcolor", color) }
+        mrows.push(new mathMLTree.MathNode(tagName, block))
       }
       mrows.push(node)
       block = [];
@@ -83,7 +111,9 @@ export default function setLineBreaks(expression, isDisplayMode, isAnnotated) {
         }
         if (glueIsFreeOfNobreak) {
           // Start a new block. (Insert a soft linebreak.)
-          mrows.push(new mathMLTree.MathNode("mrow", block));
+          const element = new mathMLTree.MathNode(tagName, block)
+          if (color) { element.setAttribute("mathcolor", color) }
+          mrows.push(element)
           block = [];
         }
         canBeBIN = false;
@@ -96,7 +126,9 @@ export default function setLineBreaks(expression, isDisplayMode, isAnnotated) {
     }
   }
   if (block.length > 0) {
-    mrows.push(new mathMLTree.MathNode("mrow", block));
+    const element = new mathMLTree.MathNode(tagName, block)
+    if (color) { element.setAttribute("mathcolor", color) }
+    mrows.push(element)
   }
   if (mtrs.length > 0) {
     const mtd = new mathMLTree.MathNode("mtd", mrows)
