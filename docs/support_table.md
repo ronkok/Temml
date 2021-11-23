@@ -871,6 +871,8 @@ If you know the shape of a character, but not its name,
 |\O|$`\text{\O}`|`\text{\O}`||
 |\o|$`\text{\o}`|`\text{\o}`||
 |\odot|$`\odot`|||
+|\odv|$`\odv{f}{x}`|`\odv{f}{x}`| derivative |
+|\odv*|$`\odv*{f}{x}`|`\odv*{f}{x}`| derivative |
 |\OE|$`\text{\OE}`|`\text{\OE}`||
 |\oe|$`\text{\oe}`|`\text{\oe}`||
 |\officialeuro|(Not supported)|See `\euro`||
@@ -923,7 +925,8 @@ If you know the shape of a character, but not its name,
 |\partial|$`\partial`|||
 |\partialderivative|$`\partialderivative{x}{y}`|`\partialderivative{x}{y}`| physics extension |
 |\pb|$`\pb{x}{y}`|`\pb{x}{y}`| physics extension |
-|\pdv|$`\pdv{x}{y}`|`\pdv{x}{y}`| physics extension |
+|\pdv|$`\pdv{f}{x,y}`|`\pdv{f}{x,y}`| derivative |
+|\pdv*|$`\pdv*{f}{x,y}`|`\pdv*{f}{x,y}`| derivative |
 |\permil|$`\permil`|| wasysym |
 |\perp|$`\perp`|||
 |\phantom|$`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`|`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`||

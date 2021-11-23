@@ -107,7 +107,6 @@ temml.__defineMacro("\\dd", "{\\text{d}}");
 temml.__defineMacro("\\derivative", "{\\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}}");
 temml.__defineMacro("\\dv", "{\\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}}");
 temml.__defineMacro("\\partialderivative", "{\\frac{\\partial{ #1 }}{\\partial{ #2 }}}");
-temml.__defineMacro("\\pdv", "{\\frac{\\partial{ #1 }}{\\partial{ #2 }}}");
 temml.__defineMacro("\\variation", "{\\delta}");
 temml.__defineMacro("\\var", "{\\delta}");
 temml.__defineMacro("\\functionalderivative", "{\\frac{\\delta{ #1 }}{\\delta{ #2 }}}");

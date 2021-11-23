@@ -640,6 +640,31 @@ defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
 defineMacro("\\angln", "{\\angl n}");
 
 //////////////////////////////////////////////////////////////////////
+// derivative.sty
+defineMacro("\\odv", "\\@ifstar\\odv@next\\odv@numerator");
+defineMacro("\\odv@numerator", "\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}")
+defineMacro("\\odv@next", "\\frac{\\mathrm{d}}{\\mathrm{d}#2}#1")
+defineMacro("\\pdv", "\\@ifstar\\pdv@next\\pdv@numerator");
+
+const pdvHelper = args => {
+  const numerator = args[0][0].text
+  const denoms = stringFromArg(args[1]).split(",")
+  const power = String(denoms.length)
+  const numOp = power === "1" ? "\\partial" : `\\partial^${power}`
+  let denominator = ""
+  denoms.map(e => { denominator += "\\partial " + e.trim() +  "\\,"})
+  return [numerator, numOp,  denominator.replace(/\\,$/, "")]
+}
+defineMacro("\\pdv@numerator", function(context) {
+  const [numerator, numOp, denominator] = pdvHelper(context.consumeArgs(2))
+  return `\\frac{${numOp} ${numerator}}{${denominator}}`
+})
+defineMacro("\\pdv@next", function(context) {
+  const [numerator, numOp, denominator] = pdvHelper(context.consumeArgs(2))
+  return `\\frac{${numOp}}{${denominator}} ${numerator}`
+})
+
+//////////////////////////////////////////////////////////////////////
 // extpfeil package
 // \newextarrow{\arrowName}{lspace,rspace}{unicode-charcode}  lspace & rspace are in mu.
 // Unlike the extpfeil package, this command does not support an optional lower note.
