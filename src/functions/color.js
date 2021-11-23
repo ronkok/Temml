@@ -77,7 +77,7 @@ const xcolors = JSON.parse(`{
   "RawSienna": "#983c04",
   "red": "#ff0404",
   "Red": "#f01c24",
-  "redOrange": "#f86434",
+  "RedOrange": "#f86434",
   "RedViolet": "#a0246c",
   "Rhodamine": "#f0549c",
   "Royallue": "#0874bc",
