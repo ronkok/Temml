@@ -27,8 +27,14 @@ import { postProcess, version } from "./src/postProcess";
  */
 let render = function(expression, baseNode, options) {
   baseNode.textContent = "";
-  const node = renderToMathMLTree(expression, options).toNode();
-  baseNode.appendChild(node);
+  const math = renderToMathMLTree(expression, options)
+  if (options.elementIsMath) {
+    // The <math> element already exists. Populate it.
+    baseNode.textContent = ""
+    math.children.forEach(e => { baseNode.appendChild(e.toNode()) })
+  } else {
+    baseNode.appendChild(math.toNode())
+  }
 };
 
 // Temml's styles don't work properly in quirks mode. Print out an error, and
