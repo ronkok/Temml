@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.3] - 2021-11-24
+
+### Added
+
+- Support \odv and \pdv from derivative package
+- Rendering option `elementIsMath`
+
+### Changed
+
+- Make color names case-sensitive
+- Use Unicode character U+212B for \AA
+
+### Fixed
+
+- Explicitly set stretchy="true" on delimiters to evade a Firefox bug
+- Soft line breaks inside \color
+- \mathbin that contains a <mtext>
+
 ## [0.3.2] - 2021-11-21
 
 ### Added

@@ -31,32 +31,32 @@
 &lt;/html&gt;</code></pre><h1 id='api'>API</h1>
 <h3 id='overview'>Overview</h3>
 <p>Say that you have an array of DOM elements whose contents should be converted from TeX strings to math. And also say that you wish to define two macros and a color with document-wide scope. The code for such a conversion might look like this:</p>
-<pre><code>\\ Optional preamble.
+<pre><code>// Optional preamble.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}
     \\definecolor{sortaGreen}{RGB}{128,128,0}`
 );
 // Render all the math.
-for (let element of mathElements) {
-    const tex = element.textContent;
-    const displayMode = element.classList.contains(&quot;display&quot;);
-    temml.render(tex, element, { macros, displayMode });
+for (let aSpan of mathSpans) {
+    const tex = aSpan.textContent;
+    const displayMode = aSpan.classList.contains(&quot;display&quot;);
+    temml.render(tex, aSpan, { macros, displayMode });
 }
 // Optional postProcess to render \ref{}
 temml.postProcess(document.body);</code></pre><p>Below, we examine the parts of that code.</p>
 <h3 id='in-browser'>In-Browser</h3>
 <p>To render math in one DOM element, call <code>temml.render</code> with a TeX expression and a DOM element to render into:</p>
 <pre><code>temml.render(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;, element);</code></pre><h3 id='server-side'>Server-Side</h3>
-<p>To generate HTML on the server or to generate an HTML string of the rendered math, you can use <code>temml.renderToString</code>:</p>
+<p>To generate MathML on the server or to generate an MathML string of the rendered math, you can use <code>temml.renderToString</code>:</p>
 <pre><code>const temml = require(&#x27;./temml.cjs.js&#x27;);  // if in Node.js
-const html = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code></pre><h3 id='preamble'>Preamble</h3>
+const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code></pre><h3 id='preamble'>Preamble</h3>
 <p>To give document-wide scope to a set of macros or colors, define them in a preamble.</p>
 <pre><code>const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}
     \\definecolor{sortaGreen}{RGB}{128,128,0}`
-);</code></pre><p>Any valid <a href='supported.html#macros'>Temml macro</a> or <a href='supported.html#style-color-size-and-font'>\definecolor</a> may be written into a preamble. The resulting macros are then included in Temml options.</p>
+);</code></pre><p>Any valid <a href='supported.html#macros'>Temml macro</a> or <a href='supported.html#style-color-size-and-font'>\definecolor</a> may be written into a preamble. Then include the resulting macros in the Temml options.</p>
 <h3 id='options'>Options</h3>
 <p>You can provide an object of options as the last argument to <code>temml.render</code> and <code>temml.renderToString</code>. For example:</p>
 <pre><code>temml.render(
@@ -69,6 +69,8 @@ const html = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code>
 <li><p><code>macros</code>: <code>object</code>. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: <code>macros: {&quot;\\R&quot;: &quot;\\mathbb{R}&quot;}</code>.</p>
 </li>
 <li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, Temml will include an <code>&lt;annotation&gt;</code> element that contains the input TeX string. Note: this will defeat <a href='./supported.html#line-breaks'>soft line breaks</a> in Firefox. (default: <code>false</code>)</p>
+</li>
+<li><p><code>elementIsMath</code>: <code>boolean</code>. When you call the <code>temml.render()</code> function, you pass an <code>element</code> as an argument to the function. If that <code>element</code> is a span, then allow <code>elementIsMath</code> to remain <code>false</code> (the default), and Temml will create a new <code>&lt;math&gt;</code> element inside the span. It you pass a <code>&lt;math&gt;</code> element as the argument, then set <code>elementIsMath</code> to <code>true</code>. Then Temml will populate it with math contents.</p>
 </li>
 <li><p><code>leqno</code>: <code>boolean</code>. If <code>true</code>, display math has <code>\tag</code>s rendered on the left instead of the right, like <code>\usepackage[leqno]{amsmath}</code> in LaTeX. (default: <code>false</code>)</p>
 </li>
@@ -117,7 +119,6 @@ const html = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code>
 <p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>. Sadly, Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.</p>
 <p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb <code>Temml.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
 <p><strong>Asana</strong>, <strong>STIX TWO</strong>, and <strong>XITS</strong> can be served without the <code>Temml.woff2</code> file.</p>
-<p>XITS is my current favorite of all the math fonts. I think it does the best job at matching radical sizes to (sub|super)scripts. I wish it had better looking parentheses.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
 <ul><li>Temml.woff2 can be found in the Temml <a href='https://github.com/ronkok/Temml/tree/main/dist'>dist folder</a>.</li>
@@ -198,7 +199,7 @@ const html = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.3.2</p>
+<p><math><mrow></mrow><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.3.3</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>

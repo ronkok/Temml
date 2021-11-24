@@ -196,13 +196,14 @@ class Settings {
   constructor(options) {
     // allow null options
     options = options || {};
-    this.displayMode = utils.deflt(options.displayMode, false);   // boolean
-    this.annotate = utils.deflt(options.annotate, false);          // boolean
-    this.leqno = utils.deflt(options.leqno, false);               // boolean
-    this.errorColor = utils.deflt(options.errorColor, "#b22222"); // string
+    this.displayMode = utils.deflt(options.displayMode, false);    // boolean
+    this.annotate = utils.deflt(options.annotate, false);           // boolean
+    this.elementIsMath = utils.deflt(options.elementIsMath, false); // boolean
+    this.leqno = utils.deflt(options.leqno, false);                // boolean
+    this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
     this.preventTagLap = utils.deflt(options.preventTagLap, false); // boolean
     this.macros = options.macros || {};
-    this.xml = utils.deflt(options.xml, false);                   // boolean
+    this.xml = utils.deflt(options.xml, false);                     // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
     this.strict = utils.deflt(options.strict, false);    // boolean
     this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
@@ -993,6 +994,8 @@ defineSymbol(math, textord, "\u2207", "\\nabla", true);
 defineSymbol(math, textord, "\u266d", "\\flat", true);
 defineSymbol(math, textord, "\u2113", "\\ell", true);
 defineSymbol(math, textord, "\u266e", "\\natural", true);
+defineSymbol(math, textord, "Å", "\\AA", true);
+defineSymbol(text, textord, "Å", "\\AA", true);
 defineSymbol(math, textord, "\u2663", "\\clubsuit", true);
 defineSymbol(math, textord, "\u2667", "\\varclubsuit", true);
 defineSymbol(math, textord, "\u2118", "\\wp", true);
@@ -1842,18 +1845,46 @@ for (let i = 0; i < 10; i++) {
  * much of this module.
  */
 
-function setLineBreaks(expression, isDisplayMode, isAnnotated) {
+function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined) {
+  if (color === undefined) {
+    // First, make one pass through the expression and split any color nodes.
+    const upperLimit = expression.length - 1;
+    for (let i = upperLimit; i >= 0; i--) {
+      const node = expression[i];
+      if (node.type === "mstyle" && node.attributes.mathcolor) {
+        const color = node.attributes.mathcolor;
+        const fragment = setLineBreaks(node.children, isDisplayMode, isAnnotated, color);
+        if (!(fragment.type && fragment.type !== "mtable")) {
+          expression.splice(i, 1, ...fragment.children);
+
+        }
+      }
+    }
+  }
+
+  const tagName = color ? "mstyle" : "mrow";
+
   const mtrs = [];
   let mrows = [];
   let block = [];
   let canBeBIN = false; // The first node cannot be an infix binary operator.
   for (let i = 0; i < expression.length; i++) {
     const node = expression[i];
+    if (node.type && node.type === "mstyle" && node.attributes.mathcolor) {
+      // Start a new block. (Insert a soft linebreak.)
+      mrows.push(new mathMLTree.MathNode(tagName, block));
+      // Insert the mstyle
+      mrows.push(node);
+      block = [];
+      continue
+    }
     if (node.attributes && node.attributes.linebreak &&
       node.attributes.linebreak === "newline") {
       // A hard line break. Create a <mtr> for the current block.
       if (block.length > 0) {
-        mrows.push(new mathMLTree.MathNode("mrow", block));
+        const element = new mathMLTree.MathNode(tagName, block);
+        if (color) { element.setAttribute("mathcolor", color); }
+        mrows.push(new mathMLTree.MathNode(tagName, block));
       }
       mrows.push(node);
       block = [];
@@ -1902,7 +1933,9 @@ function setLineBreaks(expression, isDisplayMode, isAnnotated) {
         }
         if (glueIsFreeOfNobreak) {
           // Start a new block. (Insert a soft linebreak.)
-          mrows.push(new mathMLTree.MathNode("mrow", block));
+          const element = new mathMLTree.MathNode(tagName, block);
+          if (color) { element.setAttribute("mathcolor", color); }
+          mrows.push(element);
           block = [];
         }
         canBeBIN = false;
@@ -1915,7 +1948,9 @@ function setLineBreaks(expression, isDisplayMode, isAnnotated) {
     }
   }
   if (block.length > 0) {
-    mrows.push(new mathMLTree.MathNode("mrow", block));
+    const element = new mathMLTree.MathNode(tagName, block);
+    if (color) { element.setAttribute("mathcolor", color); }
+    mrows.push(element);
   }
   if (mtrs.length > 0) {
     const mtd = new mathMLTree.MathNode("mtd", mrows);
@@ -2061,7 +2096,9 @@ function buildMathML(tree, texExpression, style, settings) {
 
   const expression = buildExpression(tree, style);
 
-  let wrapper = expression.length === 1 && tag === null && (expression[0] instanceof MathNode)
+  const n1 = expression.length === 0 ? null : expression[0];
+  let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
+          && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
       : setLineBreaks(expression, settings.displayMode, settings.annotate);
 
@@ -2079,8 +2116,8 @@ function buildMathML(tree, texExpression, style, settings) {
   }
 
   const math = settings.annotate
-    ? new mathMLTree.MathNode("math", [semantics])
-    : new mathMLTree.MathNode("math", [wrapper]);
+  ? new mathMLTree.MathNode("math", [semantics])
+  : new mathMLTree.MathNode("math", [wrapper]);
 
   if (settings.xml) {
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
@@ -2088,7 +2125,6 @@ function buildMathML(tree, texExpression, style, settings) {
   if (settings.displayMode) {
     math.setAttribute("display", "block");
   }
-
   return math;
 }
 
@@ -2696,78 +2732,89 @@ const toHex = num => {
 
 // Colors from Tables 4.1 and 4.2 of the xcolor package.
 const xcolors = JSON.parse(`{
-  "apricot": "#ffb484",
-  "aquamarine": "#08b4bc",
-  "bittersweet": "#c84c14",
-  "blue": "#303494",
-  "bluegreen": "#08b4bc",
-  "blueviolet": "#503c94",
-  "brickred": "#b8341c",
-  "brown": "#802404",
-  "burntorange": "#f8941c",
-  "cadetblue": "#78749c",
-  "carnationpink": "#f884b4",
-  "cerulean": "#08a4e4",
-  "cornflowerblue": "#40ace4",
+  "Apricot": "#ffb484",
+  "Aquamarine": "#08b4bc",
+  "Bittersweet": "#c84c14",
+  "blue": "#0804fc",
+  "Blue": "#303494",
+  "BlueGreen": "#08b4bc",
+  "BlueViolet": "#503c94",
+  "BrickRed": "#b8341c",
+  "brown": "#c08444",
+  "Brown": "#802404",
+  "BurntOrange": "#f8941c",
+  "CadetBlue": "#78749c",
+  "CarnationPink": "#f884b4",
+  "Cerulean": "#08a4e4",
+  "CornflowerBlue": "#40ace4",
   "cyan": "#08acec",
-  "dandelion": "#ffbc44",
+  "Cyan": "#08acec",
+  "Dandelion": "#ffbc44",
   "darkgray": "#484444",
-  "darkorchid": "#a8548c",
-  "emerald": "#08ac9c",
-  "forestgreen": "#089c54",
-  "fuchsia": "#90348c",
-  "goldenrod": "#ffdc44",
-  "gray": "#98949c",
-  "green": "#08a44c",
-  "greenyellow": "#e0e474",
-  "junglegreen": "#08ac9c",
-  "lavender": "#f89cc4",
+  "DarkOrchid": "#a8548c",
+  "Emerald": "#08ac9c",
+  "ForestGreen": "#089c54",
+  "Fuchsia": "#90348c",
+  "Goldenrod": "#ffdc44",
+  "gray": "#888484",
+  "Gray": "#98949c",
+  "green": "#08fc04",
+  "Green": "#08a44c",
+  "GreenYellow": "#e0e474",
+  "JungleGreen": "#08ac9c",
+  "Lavender": "#f89cc4",
   "lightgray": "#c0bcbc",
   "lime": "#c0fc04",
-  "limegreen": "#90c43c",
+  "LimeGreen": "#90c43c",
   "magenta": "#f0048c",
-  "mahogany": "#b0341c",
-  "maroon": "#b03434",
-  "melon": "#f89c7c",
-  "midnightblue": "#086494",
-  "mulberry": "#b03c94",
-  "navyblue": "#086cbc",
+  "Magenta": "#f0048c",
+  "Mahogany": "#b0341c",
+  "Maroon": "#b03434",
+  "Melon": "#f89c7c",
+  "MidnightBlue": "#086494",
+  "Mulberry": "#b03c94",
+  "NavyBlue": "#086cbc",
   "olive": "#988c04",
-  "olivegreen": "#407c34",
-  "orange": "#f8843c",
-  "orangered": "#f0145c",
-  "orchid": "#b074ac",
-  "peach": "#f8945c",
-  "periwinkle": "#8074bc",
-  "pinegreen": "#088c74",
+  "OliveGreen": "#407c34",
+  "orange": "#ff8404",
+  "Orange": "#f8843c",
+  "OrangeRed": "#f0145c",
+  "Orchid": "#b074ac",
+  "Peach": "#f8945c",
+  "Periwinkle": "#8074bc",
+  "PineGreen": "#088c74",
   "pink": "#ffbcbc",
-  "plum": "#98248c",
-  "processblue": "#08b4ec",
-  "purple": "#a0449c",
-  "rawsienna": "#983c04",
-  "red": "#f01c24",
-  "redorange": "#f86434",
-  "redviolet": "#a0246c",
-  "rhodamine": "#f0549c",
-  "royalblue": "#0874bc",
-  "royalpurple": "#683c9c",
-  "rubinered": "#f0047c",
-  "salmon": "#f8948c",
-  "seagreen": "#30bc9c",
-  "sepia": "#701404",
-  "skyblue": "#48c4dc",
-  "springgreen": "#c8dc64",
-  "tan": "#e09c74",
+  "Plum": "#98248c",
+  "ProcessBlue": "#08b4ec",
+  "purple": "#c00444",
+  "Purple": "#a0449c",
+  "RawSienna": "#983c04",
+  "red": "#ff0404",
+  "Red": "#f01c24",
+  "RedOrange": "#f86434",
+  "RedViolet": "#a0246c",
+  "Rhodamine": "#f0549c",
+  "Royallue": "#0874bc",
+  "RoyalPurple": "#683c9c",
+  "RubineRed": "#f0047c",
+  "Salmon": "#f8948c",
+  "SeaGreen": "#30bc9c",
+  "Sepia": "#701404",
+  "SkyBlue": "#48c4dc",
+  "SpringGreen": "#c8dc64",
+  "Tan": "#e09c74",
   "teal": "#088484",
-  "tealblue": "#08acb4",
-  "thistle": "#d884b4",
-  "turquoise": "#08b4cc",
-  "violet": "#60449c",
-  "violetred": "#f054a4",
-  "wildstrawberry": "#f0246c",
+  "TealBlue": "#08acb4",
+  "Thistle": "#d884b4",
+  "Turquoise": "#08b4cc",
+  "violet": "#880484",
+  "Violet": "#60449c",
+  "VioletRed": "#f054a4",
+  "WildStrawberry": "#f0246c",
   "yellow": "#fff404",
-  "yellowgreen": "#98cc6c",
-  "yelloworange": "#ffa41c"
+  "Yellow": "#fff404",
+  "YellowGreen": "#98cc6c",
+  "YellowOrange": "#ffa41c"
 }`);
 
 const colorFromSpec = (model, spec) => {
@@ -2809,8 +2856,8 @@ const validateColor = (color, macros) => {
     return color
   } else if (macros.has(macroName)) {
     color = macros.get(macroName).tokens[0].text;
-  } else if (xcolors[color.toLowerCase()]) {
-    color = xcolors[color.toLowerCase()];
+  } else if (xcolors[color]) {
+    color = xcolors[color];
   }
   return color
 };
@@ -2880,7 +2927,8 @@ defineFunction({
     parser.gullet.macros.set("\\current@color", color);
 
     // Parse out the implicit body that should be colored.
-    const body = parser.parseExpression(true, breakOnTokenText);
+    // Since \color nodes should not be nested, break on \color.
+    const body = parser.parseExpression(true, "\\color");
 
     return {
       type: "color",
@@ -3486,6 +3534,8 @@ defineFunction({
 
       leftNode.setAttribute("fence", "true");
       leftNode.setAttribute("form", "prefix");
+      // Set stretchy explicitly because browsers miss "/" and \backslash
+      leftNode.setAttribute("stretchy", "true");
 
       inner.unshift(leftNode);
     }
@@ -3495,6 +3545,7 @@ defineFunction({
 
       rightNode.setAttribute("fence", "true");
       rightNode.setAttribute("form", "postfix");
+      rightNode.setAttribute("stretchy", "true");
 
       if (group.rightColor) {
         rightNode.setAttribute("mathcolor", group.rightColor);
@@ -8264,12 +8315,10 @@ defineMacro("\\egroup", "}");
 // \def\lq{`}
 // \def\rq{'}
 // \def \aa {\r a}
-// \def \AA {\r A}
 defineMacro("~", "\\nobreakspace");
 defineMacro("\\lq", "`");
 defineMacro("\\rq", "'");
 defineMacro("\\aa", "\\r a");
-defineMacro("\\AA", "\\r A");
 
 defineMacro("\\Bbbk", "\\Bbb{k}");
 
@@ -8703,6 +8752,31 @@ defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx
 defineMacro("\\angln", "{\\angl n}");
+
+//////////////////////////////////////////////////////////////////////
+// derivative.sty
+defineMacro("\\odv", "\\@ifstar\\odv@next\\odv@numerator");
+defineMacro("\\odv@numerator", "\\frac{\\mathrm{d}#1}{\\mathrm{d}#2}");
+defineMacro("\\odv@next", "\\frac{\\mathrm{d}}{\\mathrm{d}#2}#1");
+defineMacro("\\pdv", "\\@ifstar\\pdv@next\\pdv@numerator");
+
+const pdvHelper = args => {
+  const numerator = args[0][0].text;
+  const denoms = stringFromArg(args[1]).split(",");
+  const power = String(denoms.length);
+  const numOp = power === "1" ? "\\partial" : `\\partial^${power}`;
+  let denominator = "";
+  denoms.map(e => { denominator += "\\partial " + e.trim() +  "\\,";});
+  return [numerator, numOp,  denominator.replace(/\\,$/, "")]
+};
+defineMacro("\\pdv@numerator", function(context) {
+  const [numerator, numOp, denominator] = pdvHelper(context.consumeArgs(2));
+  return `\\frac{${numOp} ${numerator}}{${denominator}}`
+});
+defineMacro("\\pdv@next", function(context) {
+  const [numerator, numOp, denominator] = pdvHelper(context.consumeArgs(2));
+  return `\\frac{${numOp}}{${denominator}} ${numerator}`
+});
 
 //////////////////////////////////////////////////////////////////////
 // extpfeil package
@@ -10653,7 +10727,6 @@ defineMacro("\\dd", "{\\text{d}}");
 defineMacro("\\derivative", "{\\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}}");
 defineMacro("\\dv", "{\\frac{\\text{d}{ #1 }}{\\text{d}{ #2 }}}");
 defineMacro("\\partialderivative", "{\\frac{\\partial{ #1 }}{\\partial{ #2 }}}");
-defineMacro("\\pdv", "{\\frac{\\partial{ #1 }}{\\partial{ #2 }}}");
 defineMacro("\\variation", "{\\delta}");
 defineMacro("\\var", "{\\delta}");
 defineMacro("\\functionalderivative", "{\\frac{\\delta{ #1 }}{\\delta{ #2 }}}");
@@ -12638,7 +12711,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.3.2";
+const version = "0.3.3";
 
 function postProcess(block) {
   const labelMap = {};
@@ -12694,8 +12767,14 @@ function postProcess(block) {
  */
 let render = function(expression, baseNode, options) {
   baseNode.textContent = "";
-  const node = renderToMathMLTree(expression, options).toNode();
-  baseNode.appendChild(node);
+  const math = renderToMathMLTree(expression, options);
+  if (options.elementIsMath) {
+    // The <math> element already exists. Populate it.
+    baseNode.textContent = "";
+    math.children.forEach(e => { baseNode.appendChild(e.toNode()); });
+  } else {
+    baseNode.appendChild(math.toNode());
+  }
 };
 
 // Temml's styles don't work properly in quirks mode. Print out an error, and

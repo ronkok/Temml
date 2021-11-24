@@ -760,7 +760,6 @@ Direct Input: <span class="direct">+ - / * ⋅ ± × ÷ ∓ ∔ ∧ ∨ ∩ ∪ 
 +---------------------------+------------------------+--------------------------------+--------------------+
 | $` \operatorname*{f} `    | $` \inf ` `\inf`       | $` \max ` `\max`               | $` \sup ` `\sup`   |
 | `\operatorname*{f}` or\   |                        |                                |                    |
-|                           |                        |                                |                    |
 | `\operatornamewithlimits` |                        |                                |                    |
 +---------------------------+------------------------+--------------------------------+--------------------+
 | $` \argmax ` `\argmax`    | $` \injlim ` `\injlim` | $` \min ` `\min`               | $` \varinjlim `    |
@@ -1444,7 +1443,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.3
 
 <h3><a href="#top">Contents</a></h3>
 

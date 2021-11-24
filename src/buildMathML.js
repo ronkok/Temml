@@ -154,19 +154,15 @@ export default function buildMathML(tree, texExpression, style, settings) {
     semantics = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   }
 
-  if (settings.elementIsMath) {
-    return settings.annotate ? semantics : wrapper
-  } else {
-    const math = settings.annotate
-    ? new mathMLTree.MathNode("math", [semantics])
-    : new mathMLTree.MathNode("math", [wrapper])
+  const math = settings.annotate
+  ? new mathMLTree.MathNode("math", [semantics])
+  : new mathMLTree.MathNode("math", [wrapper])
 
-    if (settings.xml) {
-      math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
-    }
-    if (settings.displayMode) {
-      math.setAttribute("display", "block");
-    }
-    return math;
+  if (settings.xml) {
+    math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
   }
+  if (settings.displayMode) {
+    math.setAttribute("display", "block");
+  }
+  return math;
 }

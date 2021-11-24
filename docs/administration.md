@@ -57,17 +57,17 @@ strings to math. And also say that you wish to define two macros and a color wit
 scope. The code for such a conversion might look like this:
 
 ```js
-\\ Optional preamble.
+// Optional preamble.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}
     \\definecolor{sortaGreen}{RGB}{128,128,0}`
 );
 // Render all the math.
-for (let element of mathElements) {
-    const tex = element.textContent;
-    const displayMode = element.classList.contains("display");
-    temml.render(tex, element, { macros, displayMode });
+for (let aSpan of mathSpans) {
+    const tex = aSpan.textContent;
+    const displayMode = aSpan.classList.contains("display");
+    temml.render(tex, aSpan, { macros, displayMode });
 }
 // Optional postProcess to render \ref{}
 temml.postProcess(document.body);
@@ -77,7 +77,8 @@ Below, we examine the parts of that code.
 
 ### In-Browser
 
-To render math in one DOM element, call `temml.render` with a TeX expression and a DOM element to render into:
+To render math in one DOM element, call `temml.render` with a TeX expression
+and a DOM element to render into:
 
 ```js
 temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
@@ -85,11 +86,12 @@ temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
 
 ### Server-Side
 
-To generate HTML on the server or to generate an HTML string of the rendered math, you can use `temml.renderToString`:
+To generate MathML on the server or to generate an MathML string of the
+rendered math, you can use `temml.renderToString`:
 
 ```js
 const temml = require('./temml.cjs.js');  // if in Node.js
-const html = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+const mathML = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
 ```
 
 ### Preamble
@@ -105,7 +107,7 @@ const macros = temml.definePreamble(
 ```
 
 Any valid [Temml macro](supported.html#macros) or [\definecolor](supported.html#style-color-size-and-font)
-may be written into a preamble. The resulting macros are then included in Temml options.
+may be written into a preamble. Then include the resulting macros in the Temml options.
 
 ### Options
 
@@ -124,6 +126,7 @@ Available options are:
 - `displayMode`: `boolean`. If `true` the math will be rendered in display mode, which will put the math in display style (so `\int` and `\sum` are large, for example), and will center the math on the page on its own line. If `false` the math will be rendered in inline mode. (default: `false`)
 - `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.  
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox. (default: `false`)
+- `elementIsMath`: `boolean`. When you call the `temml.render()` function, you pass an `element` as an argument to the function. If that `element` is a span, then allow `elementIsMath` to remain `false` (the default), and Temml will create a new `<math>` element inside the span. It you pass a `<math>` element as the argument, then set `elementIsMath` to `true`. Then Temml will populate it with math contents. 
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
 - `preventTagLap`: `boolean`. This option affects the horizontal alignment of `displayMode` math and `\tag`s. The default (`false`) acts in the LaTeX manner and centers the math. That’s good in a wide container, but if the container is narrow, the tag will overlap the math. The `preventTagLap: true` option acts differently. It will first place the tag and then center the math in the remainder of the container, with no overlap. If you are targeting mobile, `preventTagLap: true` is probably a good choice .
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
@@ -177,8 +180,6 @@ Temml has several different pre-written CSS files. You should use only one and b
 **Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
 **Asana**, **STIX TWO**, and **XITS** can be served without the `Temml.woff2` file.
-
-XITS is my current favorite of all the math fonts. I think it does the best job at matching radical sizes to (sub|super)scripts. I wish it had better looking parentheses.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts][].
 
@@ -328,7 +329,7 @@ For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.c
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.3
 
 <h3><a href="#top">Contents</a></h3>
 
