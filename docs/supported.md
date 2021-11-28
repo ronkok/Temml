@@ -1526,20 +1526,20 @@ $`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.3
 </nav>
 
 <div id="mobile-nav">
-  <!--On very small screens, the sidebar TOC is replaced by a button with a drop-down menu. -->
-  <input type="checkbox" id="checkbox_toggle">
-  <label for="checkbox_toggle"><svg xmlns="http://www.w3.org/2000/svg" width="25.6" height="25.6"><path d="M4.8 12.05h16v1.6h-16zM4.8 7.25h16v1.6h-16zM4.8 16.85h16v1.6h-16z"/></svg></label>
-  <ul>
-    <li><a href="#accents">Accents</a></li>
-    <li><a href="#delimiters">Delimiters</a></li>
-    <li><a href="#environments">Environments</a></li>
-    <li><a href="#letters">Letters</a></li>
-    <li><a href="#layout">Layout</a></li>
-    <li><a href="#operators">Operators</a></li>
-    <li><a href="#relations">Relations</a></li>
-    <li><a href="#style-color-size-and-font">Style</a></li>
-    <li><a href="#symbols">Symbols</a></li>
-  </ul>
+<!--On very small screens, the sidebar TOC is replaced by a button with a drop-down menu. -->
+<input type="checkbox" id="checkbox_toggle">
+<label for="checkbox_toggle"><svg xmlns="http://www.w3.org/2000/svg" width="25.6" height="25.6"><path d="M4.8 12.05h16v1.6h-16zM4.8 7.25h16v1.6h-16zM4.8 16.85h16v1.6h-16z"/></svg></label>
+<ul>
+  <li><a href="#accents">Accents</a></li>
+  <li><a href="#delimiters">Delimiters</a></li>
+  <li><a href="#environments">Environments</a></li>
+  <li><a href="#letters">Letters</a></li>
+  <li><a href="#layout">Layout</a></li>
+  <li><a href="#operators">Operators</a></li>
+  <li><a href="#relations">Relations</a></li>
+  <li><a href="#style-color-size-and-font">Style</a></li>
+  <li><a href="#symbols">Symbols</a></li>
+</ul>
 </div>
 
 <script>
