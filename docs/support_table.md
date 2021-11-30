@@ -1377,7 +1377,7 @@ If you know the shape of a character, but not its name,
 |\varXi|$`\varXi`|| ams |
 |\vb|$`\vb{a}`|`\vb{a}`| physics extension |
 |\vcentcolon|$`\vcentcolon`|||
-|\vcenter|$`a+\left(\vcenter{\frac{\frac a b}c}\right)`|`a+\left(\vcenter{\frac{\frac a b}c}\right)`||
+|\vcenter|(Not supported)|||
 |\Vdash|$`\Vdash`|| ams |
 |\vDash|$`\vDash`|| ams |
 |\vdash|$`\vdash`|||

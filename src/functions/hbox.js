@@ -3,9 +3,7 @@ import { StyleLevel } from "../constants"
 import mathMLTree from "../mathMLTree";
 import * as mml from "../buildMathML";
 
-// \hbox is provided for compatibility with LaTeX \vcenter.
-// In LaTeX, \vcenter can act only on a box, as in
-// \vcenter{\hbox{$\frac{a+b}{\dfrac{c}{d}}$}}
+// \hbox is provided for compatibility with LaTeX functions that act on a box.
 // This function by itself doesn't do anything but prevent a soft line break.
 
 defineFunction({
