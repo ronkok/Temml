@@ -421,7 +421,6 @@ defineSymbol(math, bin, "\u22cf", "\\curlywedge", true);
 defineSymbol(math, bin, "\u22ce", "\\curlyvee", true);
 defineSymbol(math, bin, "\u229d", "\\circleddash", true);
 defineSymbol(math, bin, "\u229b", "\\circledast", true);
-defineSymbol(math, bin, "\u22c5", "\\centerdot");
 defineSymbol(math, bin, "\u22ba", "\\intercal", true);
 defineSymbol(math, bin, "\u22d2", "\\doublecap");
 defineSymbol(math, bin, "\u22d3", "\\doublecup");

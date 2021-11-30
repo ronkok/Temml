@@ -254,7 +254,7 @@ If you know the shape of a character, but not its name,
 |\cdots|$`\cdots`|||
 |\ce |$`{\mathrm{C}{\vphantom{X}}_{\smash[t]{6}}\mathrm{H}{\vphantom{X}}_{\smash[t]{5}}{-}\mathrm{CHO}}`|`\ce{C6H5-CHO}` | mhchem extension |
 |\cee|(Not supported)|Deprecated<br>Use `\ce` instead. | mhchem |
-|\centerdot|$`a\centerdot b`|`a\centerdot b`| ams |
+|\centerdot|(Not supported)|| ams |
 |\cf|(Not supported)|Deprecated<br>Use `\ce` instead.| mhchem |
 |\cfrac|$`\cfrac{2}{1+\cfrac{2}{1}}`|`\cfrac{2}{1+\cfrac{2}{1}}`| ams |
 |\check|$`\check{oe}`|`\check{oe}`||
