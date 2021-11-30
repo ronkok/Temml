@@ -808,7 +808,7 @@ If you know the shape of a character, but not its name,
 |\neq|$`\neq`|||
 |\newcommand|$`\newcommand\chk{\checkmark} \chk`|`\newcommand\chk{\checkmark} \chk`| newcommand |
 |\newenvironment|(Not supported)|||
-|\newextarrow|$`\newextarrow{\xArrOpen}{10,10}{0x21fe} \xArrOpen{Hello}`|`\newextarrow{\xArrOpen}{10,10}{0x21fe}`<br>`\xArrOpen{Hello}`| extpfeil |
+|\newextarrow|(Not supported)|| extpfeil |
 |\newline|$`a\newline b`|`a\newline b`||
 |\nexists|$`\nexists`|| ams |
 |\ngeq|$`\ngeq`|| ams |

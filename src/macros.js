@@ -665,26 +665,6 @@ defineMacro("\\pdv@next", function(context) {
 })
 
 //////////////////////////////////////////////////////////////////////
-// extpfeil package
-// \newextarrow{\arrowName}{lspace,rspace}{unicode-charcode}  lspace & rspace are in mu.
-// Unlike the extpfeil package, this command does not support an optional lower note.
-defineMacro("\\newextarrow", function(context) {
-  const args = context.consumeArgs(3);
-  const arrowName = args[0][0].text
-  const padText = stringFromArg(args[1])
-  const padNums = padText.split(",")
-  if (padNums.length !== 2 || isNaN(padNums[0] || isNaN(padNums[1]))) {
-    throw new ParseError("Invalid lspace,rspace in \\newextarrow.");
-  }
-  const charText = stringFromArg(args[2])
-  if (isNaN(charText)) {
-    throw new ParseError("Invalid Unicode character code in \\newextarrow.");
-  }
-  defineMacro(arrowName, `\\ext@arrow{${padNums[0]}}{${padNums[1]}}{${charText}}{#1}`)
-  return "";
-});
-
-//////////////////////////////////////////////////////////////////////
 // upgreek.dtx
 defineMacro("\\upalpha", "\\up@greek{\\alpha}");
 defineMacro("\\upbeta", "\\up@greek{\\beta}");

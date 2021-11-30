@@ -32,7 +32,6 @@ import "./functions/math";
 import "./functions/mathchoice";
 import "./functions/mclass";
 import "./functions/multiscript";
-import "./functions/newextarrow";
 import "./functions/not";
 import "./functions/op";
 import "./functions/operatorname";

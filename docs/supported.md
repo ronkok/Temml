@@ -1166,8 +1166,6 @@ Direct Input: <span class="direct">← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ �
 
 ### Extensible Arrows
 
-$`\newextarrow{\xArrOpen}{5,5}{0x21fe} \xArrOpen{Hello}` `\newextarrow{\xArrOpen}{5,5}{0x21fe} \xArrOpen{Hello}`
-
 +:-------------------------------------------------------+:---------------------------------------------------------+
 | $`\xleftarrow{abc}` `\xleftarrow{abc}`                 | $`\xrightarrow[under]{over}` `\xrightarrow[under]{over}` |
 +--------------------------------------------------------+----------------------------------------------------------+
@@ -1190,7 +1188,7 @@ $`\newextarrow{\xArrOpen}{5,5}{0x21fe} \xArrOpen{Hello}` `\newextarrow{\xArrOpen
 | $`\xlongequal{abc}` `\xlongequal{abc}`                 |                                                          |
 +--------------------------------------------------------+----------------------------------------------------------+
 
-All extensible arrows except `\newextarrow` can take an optional argument in the same manner as `\xrightarrow[under]{over}`.
+All extensible arrows can take an optional argument in the same manner as `\xrightarrow[under]{over}`.
 
 ## Style, Size, and Font
 
