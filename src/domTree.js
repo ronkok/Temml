@@ -61,10 +61,6 @@ const toNode = function(tagName) {
 const toMarkup = function(tagName) {
   let markup = `<${tagName}`;
 
-  if (tagName === "svg") {
-    markup += ' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"'
-  }
-
   // Add the class
   if (this.classes.length) {
     markup += ` class="${utils.escape(createClass(this.classes))}"`;
