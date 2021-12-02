@@ -104,8 +104,8 @@ const toMarkup = function(tagName) {
  *
  */
 export class Span {
-  constructor(classes, children) {
-    initNode.call(this, classes);
+  constructor(classes, children, style) {
+    initNode.call(this, classes, style);
     this.children = children || [];
   }
 
