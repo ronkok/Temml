@@ -11,6 +11,8 @@ import * as mml from "../buildMathML"
  * handling them itself.
  */
 
+const symbolRegEx = /^m(over|under|underover)$/
+
 // Super scripts and subscripts, whose precise placement can depend on other
 // functions that precede them.
 defineFunctionBuilders({
@@ -122,7 +124,7 @@ defineFunctionBuilders({
       } else {
         node = mathMLTree.newDocumentFragment([node, operator])
       }
-    } else if (nodeType === "munderover") {
+    } else if (symbolRegEx.test(nodeType)) {
       // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not include limits.
       node = new mathMLTree.MathNode("mrow", [node])
     }
