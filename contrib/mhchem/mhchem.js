@@ -1637,9 +1637,9 @@ temml.__defineMacro("\\@longLeftrightharpoons", arrowNode("\\longLeftrightharpoo
             rq: texify._goInner(buf.rq)
           };
           var arrow = texify._getArrow(buf.r);
-          if (b6.rq) { arrow += "[{" + b6.rq + "}]"; }
+          if (b6.rq) { arrow += "[{\\rm " + b6.rq + "}]"; }
           if (b6.rd) {
-            arrow += "{" + b6.rd + "}";
+            arrow += "{\\rm " + b6.rd + "}";
           } else {
             arrow += "{}";
           }
