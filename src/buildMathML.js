@@ -155,8 +155,8 @@ export default function buildMathML(tree, texExpression, style, settings) {
   }
 
   const math = settings.annotate
-  ? new mathMLTree.MathNode("math", [semantics])
-  : new mathMLTree.MathNode("math", [wrapper])
+    ? new mathMLTree.MathNode("math", [semantics])
+    : new mathMLTree.MathNode("math", [wrapper])
 
   if (settings.xml) {
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
