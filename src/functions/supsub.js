@@ -122,6 +122,9 @@ defineFunctionBuilders({
       } else {
         node = mathMLTree.newDocumentFragment([node, operator])
       }
+    } else if (nodeType === "munderover") {
+      // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not include limits.
+      node = new mathMLTree.MathNode("mrow", [node])
     }
 
     return node
