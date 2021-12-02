@@ -91,6 +91,82 @@ c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
 c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
 M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`)
 
+
+const path = {
+  "\\longRightleftharpoons" : {
+    left: `M507,435c-4,4,-6.3,8.7,-7,14
+c0,5.3,0.7,9,2,11c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17
+c2,0.7,5,1,9,1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21
+c-32,-87.3,-82.7,-157.7,-152,-211c0,0,-3,-3,-3,-3l399351,0l0,-40
+c-398570,0,-399437,0,-399437,0z M593 435 v40 H399500 v-40z
+M0 281 v-40 H399908 v40z M0 281 v-40 H399908 v40z`,
+    right: `M0,241 l0,40c399126,0,399993,0,399993,0
+c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
+-231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
+c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
+M0 241 v40 H399908 v-40z M0 475 v-40 H399500 v40z M0 475 v-40 H399500 v40z`
+  },
+  "\\longLeftrightharpoons": {
+    left: `M7,435c-4,4,-6.3,8.7,-7,14c0,5.3,0.7,9,2,11
+c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17c2,0.7,5,1,9,
+1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21c-32,-87.3,-82.7,-157.7,
+-152,-211c0,0,-3,-3,-3,-3l399907,0l0,-40c-399126,0,-399993,0,-399993,0z
+M93 435 v40 H400000 v-40z M500 241 v40 H400000 v-40z M500 241 v40 H400000 v-40z`,
+    right: `M53,241l0,40c398570,0,399437,0,399437,0
+c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
+-231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
+c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
+M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`
+  }
+}
+
+const svg = (name, end) => {
+  const svg = {
+    type: "svg",
+    attributes: {
+      xmlns: "http://www.w3.org/2000/svg",
+      width: "400em",
+      height: "0.716em",
+      viewBox: "0 0 400000 716",
+      preserveAspectRatio: `x${end === "left" ? "Min" : "Max"}yMin slice`,
+      fill: "currrentColor",
+      "fill-rule": "non-zero",
+      "fill-opacity" : 1
+    },
+    style: { position: "absolute" },
+    children: [{
+      type: "path",
+      attributes: { d: path[name][end], stroke: "none" },
+      children: []
+    }]
+  }
+  if (end === "left") { svg.style.left = 0 } else { svg.style.right = 0 }
+  return svg
+}
+
+const endSpan = (name, end) => {
+  const span = {
+    type: "span",
+    attributes: {},
+    style: { position: "absolute", width: "50.2%", height: "0.716em", overflow: "hidden" },
+    children: [svg(name, end)]
+  }
+  if (end === "left") { span.style.left = 0 } else { span.style.right = 0 }
+  return span
+}
+
+const arrowNode = name => {
+  return JSON.stringify({
+    type: "span",
+    attributes: {},
+    style: { display: "block", position: "relative", width: "100%", height: "0.716em", "min-width": "1.75em" },
+    children: [endSpan(name, "left"), endSpan(name, "right")]
+  })
+}
+
+temml.__defineMacro("\\@longRightleftharpoons", arrowNode("\\longRightleftharpoons"))
+temml.__defineMacro("\\@longLeftrightharpoons", arrowNode("\\longLeftrightharpoons"))
+
   //
   //  This is the main function for handing the \ce and \pu commands.
   //  It takes the argument to \ce or \pu and returns the corresponding TeX string.
