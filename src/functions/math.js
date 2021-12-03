@@ -18,9 +18,8 @@ defineFunction({
     parser.expect(close);
     parser.switchMode(outerMode);
     return {
-      type: "styling",
+      type: "ordgroup",
       mode: parser.mode,
-      scriptLevel: "text",
       body
     };
   }

@@ -69,8 +69,7 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    const newStyle = styleWithFont(group, style.withLevel(StyleLevel.TEXT))
-    const mrow = mml.buildExpressionRow(group.body, newStyle)
+    const mrow = mml.buildExpressionRow(group.body, style)
 
     // If possible, consolidate adjacent <mtext> elements into a single element.
     // First, check if it is possible. If not, return the <mrow>.

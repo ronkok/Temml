@@ -262,7 +262,11 @@ const mathmlBuilder = function(group, style) {
   for (let i = 0; i < numRows; i++) {
     const rw = group.body[i];
     const row = [];
-    const cellStyle = group.scriptLevel === "text" ? StyleLevel.TEXT : StyleLevel.DISPLAY
+    const cellStyle = group.scriptLevel === "text"
+    ? StyleLevel.TEXT
+    : group.scriptLevel === "script"
+    ? StyleLevel.SCRIPT
+    : StyleLevel.DISPLAY
 
     for (let j = 0; j < rw.length; j++) {
       const mtd = new mathMLTree.MathNode(
