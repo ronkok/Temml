@@ -7,10 +7,10 @@ defineFunction({
     numArgs: 0,
     allowedInText: true
   },
-  handler({parser}) {
+  handler({ parser }) {
     return {
       type: "internal",
       mode: parser.mode
     };
-  },
+  }
 })
