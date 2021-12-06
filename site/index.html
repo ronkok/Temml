@@ -133,7 +133,7 @@
     </div>
   </section>
   <div style="float: right;"><input type="checkbox" id="displayMode" name="displayMode" checked>
-    <label for="displayMode">Display Mode</label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <label for="displayMode">Display Mode</label>&nbsp;
     <select id="MathFont" onchange="updateMathFont()">
       <option value="Latin-Modern">Latin Modern</option>
       <option value="Local">Local font</option>
@@ -144,7 +144,8 @@
     <select id="OutputType" onchange="reprocess()">
       <option value="Math">Math</option>
       <option value="MathML">MathML</option>
-    </select>
+    </select>&nbsp;
+    <button onclick="copyMathML()">Copy</button>
 </div>
 
 <div id="why">
@@ -223,6 +224,15 @@
       }
     })
   }
+
+  function copyMathML() {
+    const format = require('xml-formatter');
+    var copyText = format(
+      temml.renderToString(input.value, {displayMode: mode.checked}),
+      { indentation: '  ', collapseContent: true, lineSeparator: '\n' }
+    )
+    navigator.clipboard.writeText(copyText)
+} 
 </script>
 
 </body>
