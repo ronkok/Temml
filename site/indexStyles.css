@@ -133,9 +133,15 @@ a {
   color:rgb(182, 32, 32);
 }
 
-@media (max-width: 720px){
-  .input, .output, nav, #title, #copyright {
+@media (max-width: 799px){
+  nav {
+    width: 90%;
+  }
+  article, #input, #output, #title, #copyright {
     width: 100%;
+  }
+  .ioArea {
+    width: 93%
   }
 }
 
