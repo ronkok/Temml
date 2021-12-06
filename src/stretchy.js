@@ -7,7 +7,7 @@ import { Span } from "./domTree";
 import ParseError from "./ParseError";
 
 // From mhchem reaction arrows \ce{A <=>> B} and \ce{A <<=> B}
-const keysWithoutUnicodePoints = ["longRightleftharpoons", "longLeftrightharpoons"]
+const keysWithoutUnicodePoints = ["equilibriumRight", "equilibriumLeft"]
 
 const stretchyCodePoint = {
   widehat: "^",
@@ -47,6 +47,11 @@ const stretchyCodePoint = {
   xtwoheadrightarrow: "\u21a0",
   xlongequal: "=",
   xrightleftarrows: "\u21c4",
+  yields: "\u2192",
+  yieldsLeft: "\u2190",
+  mesomerism: "\u2194",
+  longrightharpoonup: "\u21c0",
+  longleftharpoondown: "\u21bd",
   "\\cdrightarrow": "\u2192",
   "\\cdleftarrow": "\u2190",
   "\\cdlongequal": "="
@@ -59,12 +64,11 @@ const nodeFromObject = (obj) => {
     obj.children.map(child => { children.push(nodeFromObject(child)) })
   }
   const node = obj.type === "span"
-    ? new Span(null, children)
+    ? new Span(null, children, obj.style)
     : new mathMLTree.MathNode(obj.type, children, [], obj.style, true)
   Object.entries(obj.attributes).forEach(([key, value]) => {
     node.setAttribute(key, value)
   })
-  if (obj.type === "span") { node.style = obj.style }
   return node
 }
 

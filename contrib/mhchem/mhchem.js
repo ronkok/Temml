@@ -13,7 +13,7 @@
  *    2. \rlap and \llap are replaced with \mathrlap and \mathllap.
  *    3. The reaction arrow code is simplified. All reaction arrows are rendered
  *       using Temml extensible arrows instead of building non-extensible arrows.
- *    4. SVG path geometry is supplied for \longRightleftharpoons & \longLeftrightharpoons.
+ *    4. SVG path geometry is supplied for \equilibriumRight & \equilibriumLeft.
  *    5. \tripledash uses Unicode character U+2504, ┄.
  *    6. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
  *    7. The electron dot uses \textbullet instead of \bullet.
@@ -93,7 +93,7 @@ M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`)
 
 
 const path = {
-  "\\longRightleftharpoons" : {
+  "\\equilibriumRight" : {
     left: `M507,435c-4,4,-6.3,8.7,-7,14
 c0,5.3,0.7,9,2,11c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17
 c2,0.7,5,1,9,1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21
@@ -106,7 +106,7 @@ c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
 c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
 M0 241 v40 H399908 v-40z M0 475 v-40 H399500 v40z M0 475 v-40 H399500 v40z`
   },
-  "\\longLeftrightharpoons": {
+  "\\equilibriumLeft": {
     left: `M7,435c-4,4,-6.3,8.7,-7,14c0,5.3,0.7,9,2,11
 c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17c2,0.7,5,1,9,
 1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21c-32,-87.3,-82.7,-157.7,
@@ -164,8 +164,8 @@ const arrowNode = name => {
   })
 }
 
-temml.__defineMacro("\\@longRightleftharpoons", arrowNode("\\longRightleftharpoons"))
-temml.__defineMacro("\\@longLeftrightharpoons", arrowNode("\\longLeftrightharpoons"))
+temml.__defineMacro("\\@equilibriumRight", arrowNode("\\equilibriumRight"))
+temml.__defineMacro("\\@equilibriumLeft", arrowNode("\\equilibriumLeft"))
 
   //
   //  This is the main function for handing the \ce and \pu commands.
@@ -1729,16 +1729,16 @@ temml.__defineMacro("\\@longLeftrightharpoons", arrowNode("\\longLeftrightharpoo
     },
     _getArrow: function (a) {
       switch (a) {
-        case "->": return "\\xrightarrow";
-        case "\u2192": return "\\xrightarrow";
-        case "\u27F6": return "\\xrightarrow";
-        case "<-": return "\\xleftarrow";
-        case "<->": return "\\xleftrightarrow";
-        case "<-->": return "\\longleftrightarrows";
-        case "<=>": return "\\longrightleftharpoons";
-        case "\u21CC": return "\\longrightleftharpoons";
-        case "<=>>": return "\\longRightleftharpoons";
-        case "<<=>": return "\\longLeftrightharpoons";
+        case "->": return "\\yields";
+        case "\u2192": return "\\yields";
+        case "\u27F6": return "\\yields";
+        case "<-": return "\\yieldsLeft";
+        case "<->": return "\\mesomerism";
+        case "<-->": return "\\yieldsLeftRight";
+        case "<=>": return "\\equilibrium";
+        case "\u21CC": return "\\equilibrium";
+        case "<=>>": return "\\equilibriumRight";
+        case "<<=>": return "\\equilibriumLeft";
         default:
           assertNever(a);
           throw ["MhchemBugT", "mhchem bug T. Please report."];
