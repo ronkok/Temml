@@ -190,8 +190,14 @@
   const math = document.getElementById("math");
   const mode = document.querySelector('input[id="displayMode"]');
 
+  if (input.value !== `\\newcommand\\d[0]{\\operatorname{d}\\!}
+
+\\oint_C \\vec{B}\\circ \\d\\vec{l} = \\mu_0 \\left( I_{\\text{enc}} + \\varepsilon_0 \\frac{\\d}{\\d t} \\int_S \\vec{E} \\circ \\hat{n}\\; \\d a \\right)`) {
+  reprocess()
+}
+
   input.addEventListener("input", reprocess, false);
-  mode.addEventListener('change', () => reprocess());
+  mode.addEventListener('change', () => { reprocess() });
 
   function reprocess() {
     if (document.getElementById("OutputType").value === "Math") {
