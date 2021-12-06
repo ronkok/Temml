@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * This is the ParseError class, which is the main error thrown by Temml
  * functions when something has gone wrong. This is used to distinguish internal
@@ -12958,4 +12956,4 @@ var temml = {
   __defineMacro: defineMacro
 };
 
-module.exports = temml;
+export default temml;

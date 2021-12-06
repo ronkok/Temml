@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.0] = 2021-12-06
+
+### Changed
+
+- Remove \centerdot
+- Remove \vcenter
+- Remove \newextarrow
+- Edit mhchem to sync w/extensible arrow fix.
+
+### Fixed
+
+- Prevent arrowhead distortion on extensible arrows
+- Fix scriptstyle errors.
+- Adjust RGB values of base colors.
+
 ## [0.3.3] - 2021-11-24
 
 ### Added

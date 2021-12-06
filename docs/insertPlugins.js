@@ -1,9 +1,10 @@
-// Embed extensions into the cjs version of Temml.
+// Embed extensions into the cjs and mjs version of Temml.
 
 const fs = require("fs")  // Node.js file system
 
-// Get the temml.cjs code
-let temml = fs.readFileSync('./docs/temml.cjs.js').toString('utf8')
+// Get the temml.cjs and mjs code
+let cjs = fs.readFileSync('./docs/temml.cjs.js').toString('utf8')
+let mjs = fs.readFileSync('./docs/temml.mjs.js').toString('utf8')
 
 // Get the extension macros
 const regex = /temml\.__/g;
@@ -11,7 +12,12 @@ const mhchem = fs.readFileSync('./contrib/mhchem/mhchem.js').toString('utf8').re
 const texvc = fs.readFileSync('./contrib/texvc/texvc.js').toString('utf8').replace(regex, "")
 const physics = fs.readFileSync('./contrib/physics/physics.js').toString('utf8').replace(regex, "")
 
-// Insert the extension macros into temml.cjs
-const pos = temml.indexOf("⦵") + 6
-temml = temml.slice(0, pos) + "\n" + mhchem + "\n" + texvc + "\n" + physics + "\n" + temml.slice(pos + 1)
-fs.writeFileSync('./docs/temml.cjs.js', temml)
+// Insert the extension macros into temml.cjs and temml.mjs
+let pos = cjs.indexOf("⦵") + 6
+cjs = cjs.slice(0, pos) + "\n" + mhchem + "\n" + texvc + "\n" + physics + "\n" + cjs.slice(pos + 1)
+fs.writeFileSync('./docs/temml.cjs.js', cjs)
+
+pos = mjs.indexOf("⦵") + 6
+mjs = mjs.slice(0, pos) + "\n" + mhchem + "\n" + texvc + "\n" + physics + "\n" + mjs.slice(pos + 1)
+fs.writeFileSync('./docs/temml.mjs.js', mjs)
+

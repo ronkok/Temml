@@ -1090,7 +1090,7 @@ const nodes = {
   tex(node) {
     return temml.renderToString(
       node.attrs.tex,
-      { trust: true, displayMode: node.attrs.displayMode }
+      { trust: true, displayMode: (node.attrs.displayMode || false) }
     )
   },
   indented_div(node)    { return htmlTag("div", output(node.content), { class: 'indented' }) },

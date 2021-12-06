@@ -52,7 +52,7 @@ A server-side installation should include `temml.cjs.js` instead of `temml.min.j
 
 ### Overview
 
-Say that you have an array of DOM elements whose contents should be converted from TeX
+Say that you have an HTMLCollection of elements whose contents should be converted from TeX
 strings to math. And also say that you wish to define two macros and a color with document-wide
 scope. The code for such a conversion might look like this:
 
@@ -64,7 +64,7 @@ const macros = temml.definePreamble(
     \\definecolor{sortaGreen}{RGB}{128,128,0}`
 );
 // Render all the math.
-for (let aSpan of mathSpans) {
+for (let aSpan of [...mathSpans]) {
     const tex = aSpan.textContent;
     const displayMode = aSpan.classList.contains("display");
     temml.render(tex, aSpan, { macros, displayMode });
@@ -329,7 +329,7 @@ For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.c
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.3
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.0
 
 <h3><a href="#top">Contents</a></h3>
 

@@ -34,6 +34,10 @@ fs.copyFile('docs/temml.cjs.js', 'dist/temml.cjs.js', (err) => {
   if (err) { throw err }
 })
 
+fs.copyFile('docs/temml.mjs.js', 'dist/temml.mjs.js', (err) => {
+  if (err) { throw err }
+})
+
 fs.copyFile('test/temmlPostProcess.js', 'dist/temmlPostProcess.js', (err) => {
   if (err) { throw err }
 })

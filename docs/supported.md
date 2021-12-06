@@ -151,7 +151,7 @@ required.) Temml supports color models `HTML`, `RGB`, and `rgb`.
 
 If the color model is omitted, Temml color functions will accept:
 
-- A color definition in CSS hexa­decimal style. The "#" is optional before a six-digit specification.
+- `#rrggbb`, `#rgb`, or `rrggbb`.
 - A color name previously created by `\definecolor`.
 - Any color from the following `xcolor` table.
 - Any of the standard HTML [predefined color names](https://www.w3schools.com/colors/colors_names.asp).
@@ -242,7 +242,7 @@ If the color model is omitted, Temml color functions will accept:
 The _texvc_ extension includes $`\lang` `\lang`, $`\rang` `\rang`,
 $`\langle` `\langle`, and $`\rangle` `\rangle`.
 
-**Delimiter Sizing**
+#### Delimiter Sizing 
 
 $`\left(\LARGE{AB}\right)` `\left(\LARGE{AB}\right)`
 
@@ -444,7 +444,7 @@ or for just some URLs via the `trust` [option](administration.html#options).
 Direct Input: <span class="direct">Α Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ω
  α β γ δ ϵ ζ η θ ι κ λ μ ν ξ o π ρ σ τ υ ϕ χ ψ ω ε ϑ ϖ ϱ ς φ ϝ</span>
 
-**Other Letters**
+#### Other Letters
 
 +:---------------------+:-------------------+:-------------------+:---------------------------+:---------------------------+
 | $`\aleph` `\aleph`   | $`\nabla` `\nabla` | $`\imath` `\imath` | $`\text{\aa}` `\text{\aa}` | $`\text{\OE}` `\text{\OE}` |
@@ -475,7 +475,7 @@ Letters in the _texvc_ extension
 Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À Á Â Ã Ä Å Æ Ç È É Ê Ë
 Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö Ù Ú Û Ü Ý Þ ß à á â ã ä å ç è é ê ë ì í î ï ð ñ ò ó ô ö ù ú û ü ý þ ÿ</span>
 
-**Unicode Mathematical Alphanumeric Symbols**
+#### Unicode Mathematical Alphanumeric Symbols
 
 | Item         |  Range                |  Item             |  Range                  |
 |--------------|-----------------------|-------------------|-------------------------|
@@ -546,7 +546,7 @@ contain math if the math is nested within `$…$` delimiters, as in
 
 Temml also supports `\llap`, `\rlap`, and `\clap`, but they will take only text, not math, as arguments.
 
-**Spacing**
+#### Spacing
 
 | Function        | Produces           | Function             | Produces                  |
 |:----------------|:-------------------|:---------------------|:--------------------------|
@@ -1192,12 +1192,21 @@ All extensible arrows can take an optional argument in the same manner as `\xrig
 
 ## Style, Size, and Font
 
-**Class Assignment**
+#### Class Assignment
 
-`\mathbin` `\mathclose` `\mathinner` `\mathop`\
-`\mathopen` `\mathord` `\mathpunct` `\mathrel`
+Override the usual spacing and semantic meaning of a character or fragment.
 
-**Font**
++-----------------------------------------------+-----------------------------------------------+
+| $`a = b`  `a = b` \                           | $`a | b\;\,`  `a | b` \                       |
+| $`a \mathord = b\;\,`  `a \mathord{=} b` \    | $`a \mathpunct | b\;`  `a \mathpunct{|} b` \  |
+| $`a \mathopen = b\;\,`  `a \mathopen{=} b` \  | $`a \mathop | b\;`  `a \mathop{|} b` \        |
+| $`a \mathclose = b\;\,`  `a \mathclose{=} b`  | $`a \mathbin | b\,`  `a \mathbin{|} b` \      |
+|                                               | $`a \mathrel | b`  `a \mathrel{|} b`          |
++-----------------------------------------------+-----------------------------------------------+
+
+See also [\operatorname](#math-operators).
+
+#### Font
 
 +:-------------------------------+:---------------------------------+:---------------------------------+
 | $`\mathrm{Ab0}` `\mathrm{Ab0}` | $`\mathbf{Ab0θ}` `\mathbf{Ab0θ}` | $`\mathit{Ab0θ}` `\mathit{Ab0θ}` |
@@ -1227,11 +1236,11 @@ All extensible arrows can take an optional argument in the same manner as `\xrig
 |  `\oldstylenums{123}`          |                                  |                                  |
 +--------------------------------+----------------------------------+----------------------------------+
 
-One can stack font family, font weight, and font shape by using the `\textXX` versions of the font functions. So `\textsf{\textbf{H}}` will produce $`\textsf{\textbf{H}}`. The other versions do not stack, e.g., `\mathsf{\mathbf{H}}` will produce $`\mathsf{\mathbf{H}}`.
+The `\textXX` versions can stack font family, font weight, and font shape. So `\textsf{\textbf{H}}` will produce $`\textsf{\textbf{H}}`. The other versions do not stack, e.g., `\mathsf{\mathbf{H}}` will produce $`\mathsf{\mathbf{H}}`.
 
 In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For example, `\pmb{\vartheta}` renders as : $`\pmb{\vartheta}`
 
-**Font Size**
+#### Font Size
 
 +:-------------------------+:---------------------------------------+
 | $`\Huge AB` `\Huge AB`   | $`\normalsize AB` `\normalsize AB`     |
@@ -1247,14 +1256,14 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 |                          | $`\tiny AB` `\tiny AB`                 |
 +--------------------------+----------------------------------------+
 
-**Style**
+#### Style
 
 +:-----------------------------+:-----------------------------------------------------------------+
 | $`\displaystyle\sum_{i=1}^n` | `\displaystyle\sum_{i=1}^n`                                      |
 +------------------------------+------------------------------------------------------------------+
 | $`\textstyle\sum_{i=1}^n`    | `\textstyle\sum_{i=1}^n`                                         |
 +------------------------------+------------------------------------------------------------------+
-| $`\scriptstyle x`            |`\scriptstyle x`     (The size of a first sub/superscript)        |
+| $`\scriptstyle x`            | `\scriptstyle x`     (The size of a first sub/superscript)       |
 +------------------------------+------------------------------------------------------------------+
 | $`\scriptscriptstyle x`      | `\scriptscriptstyle x` (The size of subsequent sub/superscripts) |
 +------------------------------+------------------------------------------------------------------+
@@ -1443,7 +1452,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.3.3
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.0
 
 <h3><a href="#top">Contents</a></h3>
 

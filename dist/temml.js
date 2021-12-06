@@ -152,7 +152,7 @@ var temml = (function () {
     return value;
   };
 
-  const textAtomTypes = ["text", "textord", "mathord"];
+  const textAtomTypes = ["text", "textord", "mathord", "atom"];
 
   /**
    * Return the protocol of a URL, or "_relative" if the URL does not specify a
@@ -432,10 +432,6 @@ var temml = (function () {
   const toMarkup = function(tagName) {
     let markup = `<${tagName}`;
 
-    if (tagName === "svg") {
-      markup += ' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"';
-    }
-
     // Add the class
     if (this.classes.length) {
       markup += ` class="${utils.escape(createClass(this.classes))}"`;
@@ -479,8 +475,8 @@ var temml = (function () {
    *
    */
   class Span {
-    constructor(classes, children) {
-      initNode.call(this, classes);
+    constructor(classes, children, style) {
+      initNode.call(this, classes, style);
       this.children = children || [];
     }
 
@@ -733,7 +729,8 @@ var temml = (function () {
    * This file provides support for building horizontal stretchy elements.
    */
 
-  const keysWithoutUnicodePoints = ["longRightleftharpoons", "longLeftrightharpoons"];
+  // From mhchem reaction arrows \ce{A <=>> B} and \ce{A <<=> B}
+  const keysWithoutUnicodePoints = ["equilibriumRight", "equilibriumLeft"];
 
   const stretchyCodePoint = {
     widehat: "^",
@@ -769,92 +766,47 @@ var temml = (function () {
     xmapsto: "\u21a6",
     xrightharpoondown: "\u21c1",
     xleftharpoondown: "\u21bd",
-    xrightleftharpoons: "\u21cc",
-    xleftrightharpoons: "\u21cb",
     xtwoheadleftarrow: "\u219e",
     xtwoheadrightarrow: "\u21a0",
     xlongequal: "=",
-    xtofrom: "\u21c4",
     xrightleftarrows: "\u21c4",
-    longleftrightarrows: "\u21c4",
-    longrightleftharpoons: "\u21cc",
+    yields: "\u2192",
+    yieldsLeft: "\u2190",
+    mesomerism: "\u2194",
+    longrightharpoonup: "\u21c0",
+    longleftharpoondown: "\u21bd",
     "\\cdrightarrow": "\u2192",
     "\\cdleftarrow": "\u2190",
     "\\cdlongequal": "="
   };
 
-  // For stretchy elements for which no font glyph exists.
-  const svgData = {
-    longRightleftharpoons: { minWidth: 1.75,  height: 0.716 },
-    longLeftrightharpoons: { minWidth: 1.75,  height: 0.716 }
+  const nodeFromObject = (obj) => {
+    // Build a stretchy arrow from two SVGs.
+    const children = [];
+    if (obj.children) {
+      obj.children.map(child => { children.push(nodeFromObject(child)); });
+    }
+    const node = obj.type === "span"
+      ? new Span(null, children, obj.style)
+      : new mathMLTree.MathNode(obj.type, children, [], obj.style, true);
+    Object.entries(obj.attributes).forEach(([key, value]) => {
+      node.setAttribute(key, value);
+    });
+    return node
   };
 
-  const setSvgAttributes = (svg, key, aspect) => {
-    svg.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-    svg.setAttribute("width", "400em");
-    svg.setAttribute("height", svgData[key].height + "em");
-    svg.setAttribute("viewBox", `0 0 400000 ${1000 * svgData[key].height}`);
-    svg.setAttribute("preserveAspectRatio", aspect);
-    svg.setAttribute("fill", "currentColor");
-    svg.setAttribute("fill-rule", "non-zero");
-    svg.setAttribute("fill-opacity", "1");
-    return svg
-  };
-
-  const stretchySVG = (key, macros) => {
-    // No Unicode glyph matches the desired arrow.
-    // So we'll create our own arrow from SVGs.
-
-    // Two SVGs, one for each end of the arrow. The SVGs are very long (400em).
-    const leftPath = new mathMLTree.MathNode("path", [], [], {}, true);
-    leftPath.setAttribute("stroke", "none");
-    const leftPathGeometry = macros.get(key + "Left");
-    leftPath.setAttribute("d", leftPathGeometry);
-
-    const rightPath = new mathMLTree.MathNode("path", [], [], {}, true);
-    rightPath.setAttribute("stroke", "none");
-    const rightPathGeometry = macros.get(key + "Right");
-    rightPath.setAttribute("d", rightPathGeometry);
-
-    let leftSVG = new mathMLTree.MathNode("svg", [leftPath], [], {}, true);
-    leftSVG = setSvgAttributes(leftSVG, key, "xMinYMin slice");
-    leftSVG.setAttribute("style", "position: absolute; left:0;");
-
-    let rightSVG = new mathMLTree.MathNode("svg", [rightPath], [], {}, true);
-    rightSVG = setSvgAttributes(rightSVG, key, "xMaxYMin slice");
-    rightSVG.setAttribute("style", "position: absolute; right:0");
-
-    const height = svgData[key].height;
-
-    // Wrap the SVG in a span. Set the span width to 50% and set overflow: hidden.
-    // That enables us to stretch the arrow without deforming the arrowhead.
-    const leftSpan = new Span([], [leftSVG]);
-    leftSpan.setAttribute(
-      "style",
-      `position: absolute; left: 0; width: 50.2%; height: ${height}em; overflow: hidden;`
-    );
-
-    const rightSpan = new Span([], [rightSVG]);
-    rightSpan.setAttribute(
-      "style",
-      `position: absolute; right: 0; width: 50.2%; height: ${height}em; overflow: hidden;`
-    );
-
-    const wrapper = new Span(["stretchy"], [leftSpan, rightSpan]);
-    wrapper.setAttribute(
-      "style",
-      `display: block; position: relative; width: 100%; height: ${height}em;
-min-width: ${svgData[key].minWidth}em;`
-    );
-
-    return wrapper
-  };
-
-  const mathMLnode = function(label, macros) {
+  const mathMLnode = function(label, macros = {}) {
     const key = label.slice(1);
-    const child = utils.contains(keysWithoutUnicodePoints, key)
-      ? stretchySVG(key, macros)
-      : new mathMLTree.TextNode(stretchyCodePoint[key]);
+    let child;
+    if (!keysWithoutUnicodePoints.includes(key)) {
+      child = new mathMLTree.TextNode(stretchyCodePoint[key]);
+    } else {
+      const atKey = "\\@" + key;
+      if (!macros.has(atKey)) {
+        throw new ParseError("Arrow not available. The mhchem package is needed.")
+      }
+      child = nodeFromObject(JSON.parse(macros.get(atKey)));
+    }
     const node = new mathMLTree.MathNode("mo", [child]);
     node.setAttribute("stretchy", "true");
     return node
@@ -1286,7 +1238,6 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, bin, "\u22ce", "\\curlyvee", true);
   defineSymbol(math, bin, "\u229d", "\\circleddash", true);
   defineSymbol(math, bin, "\u229b", "\\circledast", true);
-  defineSymbol(math, bin, "\u22c5", "\\centerdot");
   defineSymbol(math, bin, "\u22ba", "\\intercal", true);
   defineSymbol(math, bin, "\u22d2", "\\doublecap");
   defineSymbol(math, bin, "\u22d3", "\\doublecup");
@@ -1442,6 +1393,7 @@ min-width: ${svgData[key].minWidth}em;`
   defineSymbol(math, mathord, "\u03db", "\\stigma", true);
   defineSymbol(math, bin, "\u2217", "\u2217", true);
   defineSymbol(math, bin, "+", "+");
+  defineSymbol(math, bin, "*", "*");
   defineSymbol(math, bin, "\u2212", "-", true);
   defineSymbol(math, bin, "\u22c5", "\\cdot", true);
   defineSymbol(math, bin, "\u2218", "\\circ");
@@ -2117,8 +2069,8 @@ min-width: ${svgData[key].minWidth}em;`
     }
 
     const math = settings.annotate
-    ? new mathMLTree.MathNode("math", [semantics])
-    : new mathMLTree.MathNode("math", [wrapper]);
+      ? new mathMLTree.MathNode("math", [semantics])
+      : new mathMLTree.MathNode("math", [wrapper]);
 
     if (settings.xml) {
       math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
@@ -2286,12 +2238,36 @@ min-width: ${svgData[key].minWidth}em;`
     }
   });
 
-  // Helper function
-  const paddedNode$1 = (group, width = "+0.6em") => {
+  // Helper functions
+  const paddedNode = (group, width = "+0.6em") => {
     const node = new mathMLTree.MathNode("mpadded", group ? [group] : []);
     node.setAttribute("width", width);
     node.setAttribute("lspace", "0.3em");
     return node;
+  };
+
+  const munderoverNode = (label, body, below, style, macros = {}) => {
+    const arrowNode = stretchy.mathMLnode(label, macros);
+    const minWidth = label.charAt(1) === "x"
+      ? "1.75em"  // mathtools extensible arrows
+      : label.slice(2, 4) === "cd"
+      ? "3.0em"  // cd package arrows
+      : "2.0em"; // mhchem arrows
+    arrowNode.setAttribute("minsize", minWidth);
+    // minsize attribute doesn't work in Firefox.
+    // https://bugzilla.mozilla.org/show_bug.cgi?id=320303
+    const labelStyle = style.incrementLevel();
+
+    const upperNode = (body && body.body && body.body.length > 0)
+      ? paddedNode(buildGroup(body, labelStyle))
+        // Since Firefox does not recognize minsize set on the arrow,
+        // create an upper node w/correct width.
+      : paddedNode(null, minWidth);
+    const lowerNode = (below && below.body && below.body.length > 0)
+      ? paddedNode(buildGroup(below, labelStyle))
+      : paddedNode(null, minWidth);
+    const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
+    return node
   };
 
   // Stretchy arrows with an optional argument
@@ -2311,18 +2287,17 @@ min-width: ${svgData[key].minWidth}em;`
       "\\xrightharpoonup",
       "\\xleftharpoondown",
       "\\xleftharpoonup",
-      "\\xrightleftharpoons",
-      "\\xleftrightharpoons",
       "\\xlongequal",
       "\\xtwoheadrightarrow",
       "\\xtwoheadleftarrow",
-      "\\xtofrom",
-      // The next 4 functions are here to support the mhchem extension.
-      // Direct use of these functions is discouraged and may break someday.
-      "\\longrightleftharpoons",
-      "\\longleftrightarrows",   // <--> or
-      "\\longRightleftharpoons",
-      "\\longLeftrightharpoons",
+      // The next 7 functions are here only to support mhchem
+      "\\yields",
+      "\\yieldsLeft",
+      "\\mesomerism",
+      "\\longrightharpoonup",
+      "\\longleftharpoondown",
+      "\\equilibriumRight",
+      "\\equilibriumLeft",
       // The next 3 functions are here only to support the {CD} environment.
       "\\\\cdrightarrow",
       "\\\\cdleftarrow",
@@ -2343,23 +2318,82 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      const arrowNode = stretchy.mathMLnode(group.label, group.macros);
-      const minWidth = group.label.charAt(1) === "x" ? "1.75em" : "3.0em";
-      arrowNode.setAttribute("minsize", minWidth);
-      // minsize attribute doesn't work in Firefox.
-      // https://bugzilla.mozilla.org/show_bug.cgi?id=320303
-      const labelOptions = style.incrementLevel();
+      return munderoverNode(group.label, group.body, group.below, style, group.macros)
+    }
+  });
 
-      const upperNode = (group.body && group.body.body.length > 0)
-        ? paddedNode$1(buildGroup(group.body, labelOptions))
-          // Since Firefox does not recognize minsize set on the arrow,
-          // create an upper node w/correct width.
-        : paddedNode$1(null, minWidth);
-      const lowerNode = (group.below && group.below.body.length > 0)
-        ? paddedNode$1(buildGroup(group.below, labelOptions))
-        : paddedNode$1(null, minWidth);
-      const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
-      return node;
+  const arrowComponent = {
+    "\\xtofrom": ["\\xrightarrow", "\\xleftarrow"],
+    "\\xleftrightharpoons": ["\\xleftharpoonup", "\\xrightharpoondown"],
+    "\\xrightleftharpoons": ["\\xrightharpoonup", "\\xleftharpoondown"],
+    "\\yieldsLeftRight": ["\\yields", "\\yieldsLeft"],
+    "\\equilibrium": ["\\longrightharpoonup", "\\longleftharpoondown"]
+  };
+
+  // Browser are not good at stretching stacked arrows such as ⇄.
+  // So we stack a pair of single arrows.
+  defineFunction({
+    type: "stackedArrow",
+    names: [
+      "\\xtofrom",              // expfeil
+      "\\xleftrightharpoons",   // mathtools
+      "\\xrightleftharpoons",   // mathtools
+      "\\yieldsLeftRight",      // mhchem
+      "\\equilibrium"           // mhchem
+    ],
+    props: {
+      numArgs: 1,
+      numOptionalArgs: 1
+    },
+    handler({ parser, funcName }, args, optArgs) {
+      const lowerArrowBody = args[0]
+        ? {
+          type: "hphantom",
+          mode: parser.mode,
+          body: args[0]
+        }
+        : null;
+      const upperArrowBelow = optArgs[0]
+        ? {
+          type: "hphantom",
+          mode: parser.mode,
+          body: optArgs[0]
+        }
+        : null;
+      return {
+        type: "stackedArrow",
+        mode: parser.mode,
+        label: funcName,
+        body: args[0],
+        upperArrowBelow,
+        lowerArrowBody,
+        below: optArgs[0]
+      };
+    },
+    mathmlBuilder(group, style) {
+      const topLabel = arrowComponent[group.label][0];
+      const botLabel = arrowComponent[group.label][1];
+      const topArrow = munderoverNode(topLabel, group.body, group.upperArrowBelow, style);
+      const botArrow = munderoverNode(botLabel, group.lowerArrowBody, group.below, style);
+
+      const topSpace = new mathMLTree.MathNode("mspace");
+      topSpace.setAttribute("width", "0.2778em");
+      const botSpace = new mathMLTree.MathNode("mspace");
+      botSpace.setAttribute("width", "-0.2778em");
+
+      const raiseNode = new mathMLTree.MathNode("mpadded", [topSpace, topArrow]);
+      raiseNode.setAttribute("voffset", "0.3em");
+      raiseNode.setAttribute("height", "+0.3em");
+      raiseNode.setAttribute("depth", "-0.3em");
+      raiseNode.setAttribute("width", "0em");
+
+      const botRow = new mathMLTree.MathNode("mrow", [botSpace, botArrow]);
+
+      const wrapper = new mathMLTree.MathNode("mpadded", [raiseNode, botRow]);
+      wrapper.setAttribute("voffset", "-0.18em");
+      wrapper.setAttribute("height", "-0.18em");
+      wrapper.setAttribute("depth", "+0.18em");
+      return wrapper
     }
   });
 
@@ -2732,42 +2766,45 @@ min-width: ${svgData[key].minWidth}em;`
   };
 
   // Colors from Tables 4.1 and 4.2 of the xcolor package.
+  // Table 4.1 (lower case) RGB values are taken from chroma and xcolor.dtx.
+  // Table 4.2 (Capitalizzed) values were sampled, because Chroma contains a unreliable
+  // conversion from cmyk to RGB. See https://tex.stackexchange.com/a/537274.
   const xcolors = JSON.parse(`{
   "Apricot": "#ffb484",
   "Aquamarine": "#08b4bc",
   "Bittersweet": "#c84c14",
-  "blue": "#0804fc",
+  "blue": "#0000FF",
   "Blue": "#303494",
   "BlueGreen": "#08b4bc",
   "BlueViolet": "#503c94",
   "BrickRed": "#b8341c",
-  "brown": "#c08444",
+  "brown": "#BF804",
   "Brown": "#802404",
   "BurntOrange": "#f8941c",
   "CadetBlue": "#78749c",
   "CarnationPink": "#f884b4",
   "Cerulean": "#08a4e4",
   "CornflowerBlue": "#40ace4",
-  "cyan": "#08acec",
+  "cyan": "#00FFF",
   "Cyan": "#08acec",
   "Dandelion": "#ffbc44",
-  "darkgray": "#484444",
+  "darkgray": "#404040",
   "DarkOrchid": "#a8548c",
   "Emerald": "#08ac9c",
   "ForestGreen": "#089c54",
   "Fuchsia": "#90348c",
   "Goldenrod": "#ffdc44",
-  "gray": "#888484",
+  "gray": "#80808",
   "Gray": "#98949c",
-  "green": "#08fc04",
+  "green": "#00FF0",
   "Green": "#08a44c",
   "GreenYellow": "#e0e474",
   "JungleGreen": "#08ac9c",
   "Lavender": "#f89cc4",
-  "lightgray": "#c0bcbc",
-  "lime": "#c0fc04",
+  "lightgray": "#BFBFB",
+  "lime": "#BFFF00",
   "LimeGreen": "#90c43c",
-  "magenta": "#f0048c",
+  "magenta": "#FF00F",
   "Magenta": "#f0048c",
   "Mahogany": "#b0341c",
   "Maroon": "#b03434",
@@ -2775,22 +2812,22 @@ min-width: ${svgData[key].minWidth}em;`
   "MidnightBlue": "#086494",
   "Mulberry": "#b03c94",
   "NavyBlue": "#086cbc",
-  "olive": "#988c04",
+  "olive": "#7F7F00",
   "OliveGreen": "#407c34",
-  "orange": "#ff8404",
+  "orange": "#FF800",
   "Orange": "#f8843c",
   "OrangeRed": "#f0145c",
   "Orchid": "#b074ac",
   "Peach": "#f8945c",
   "Periwinkle": "#8074bc",
   "PineGreen": "#088c74",
-  "pink": "#ffbcbc",
+  "pink": "#ff7f7f",
   "Plum": "#98248c",
   "ProcessBlue": "#08b4ec",
-  "purple": "#c00444",
+  "purple": "#BF0040",
   "Purple": "#a0449c",
   "RawSienna": "#983c04",
-  "red": "#ff0404",
+  "red": "#ff0000",
   "Red": "#f01c24",
   "RedOrange": "#f86434",
   "RedViolet": "#a0246c",
@@ -2804,15 +2841,15 @@ min-width: ${svgData[key].minWidth}em;`
   "SkyBlue": "#48c4dc",
   "SpringGreen": "#c8dc64",
   "Tan": "#e09c74",
-  "teal": "#088484",
+  "teal": "#007F7F",
   "TealBlue": "#08acb4",
   "Thistle": "#d884b4",
   "Turquoise": "#08b4cc",
-  "violet": "#880484",
+  "violet": "#800080",
   "Violet": "#60449c",
   "VioletRed": "#f054a4",
   "WildStrawberry": "#f0246c",
-  "yellow": "#fff404",
+  "yellow": "#FFFF00",
   "Yellow": "#fff404",
   "YellowGreen": "#98cc6c",
   "YellowOrange": "#ffa41c"
@@ -4047,7 +4084,11 @@ min-width: ${svgData[key].minWidth}em;`
     for (let i = 0; i < numRows; i++) {
       const rw = group.body[i];
       const row = [];
-      const cellStyle = group.scriptLevel === "text" ? StyleLevel.TEXT : StyleLevel.DISPLAY;
+      const cellStyle = group.scriptLevel === "text"
+      ? StyleLevel.TEXT
+      : group.scriptLevel === "script"
+      ? StyleLevel.SCRIPT
+      : StyleLevel.DISPLAY;
 
       for (let j = 0; j < rw.length; j++) {
         const mtd = new mathMLTree.MathNode(
@@ -4735,7 +4776,7 @@ min-width: ${svgData[key].minWidth}em;`
     if (group.mclass === "minner") {
       return mathMLTree.newDocumentFragment(inner);
     } else if (group.mclass === "mord") {
-      if (group.isCharacterBox) {
+      if (group.isCharacterBox || inner[0].type === "mathord") {
         node = inner[0];
         node.type = "mi";
       } else {
@@ -4754,18 +4795,26 @@ min-width: ${svgData[key].minWidth}em;`
 
       // Set spacing based on what is the most likely adjacent atom type.
       // See TeXbook p170.
+      const doSpacing = style.level < 2; // Operator spacing is zero inside a (sub|super)script.
       if (group.mclass === "mbin") {
-        node.attributes.lspace = "0.22em"; // medium space
-        node.attributes.rspace = "0.22em";
+        // medium space
+        node.attributes.lspace = (doSpacing ? "0.2222em" : "0");
+        node.attributes.rspace = (doSpacing ? "0.2222em" : "0");
+      } else if (group.mclass === "mrel") {
+        // thickspace
+        node.attributes.lspace = (doSpacing ? "0.2778em" : "0");
+        node.attributes.rspace = (doSpacing ? "0.2778em" : "0");
       } else if (group.mclass === "mpunct") {
         node.attributes.lspace = "0em";
-        node.attributes.rspace = "0.17em"; // thinspace
+        node.attributes.rspace = (doSpacing ? "0.1667em" : "0");
       } else if (group.mclass === "mopen" || group.mclass === "mclose") {
         node.attributes.lspace = "0em";
         node.attributes.rspace = "0em";
       }
-      // MathML <mo> default space is 5/18 em, so <mrel> needs no action.
-      // Ref: https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo
+      if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
+        delete node.attributes.stretchy;
+        delete node.attributes.form;
+      }
     }
     return node;
   }
@@ -4791,32 +4840,27 @@ min-width: ${svgData[key].minWidth}em;`
       // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
       // In that case, we instead promote the text contents of the body to the parent.
       let mustPromote = true;
-      const atom = { type: "atom", family: funcName.substr(5), text:"" };
+      const mord = { type: "mathord", text: "", mode: parser.mode };
       const arr = (body.body) ? body.body : [body];
       for (const arg of arr) {
         if (utils.textAtomTypes.includes(arg.type)) {
           if (arg.text) {
-            atom.text += arg.text;
+            mord.text += arg.text;
           } else if (arg.body) {
-            arg.body.map(e => { atom.text += e.text; });
+            arg.body.map(e => { mord.text += e.text; });
           }
         } else {
           mustPromote = false;
           break
         }
       }
-      if (mustPromote) {
-        atom.mode = parser.mode;
-        return atom
-      } else {
-        return {
-          type: "mclass",
-          mode: parser.mode,
-          mclass: "m" + funcName.substr(5),
-          body: ordargument(body),
-          isCharacterBox: utils.isCharacterBox(body)
-        };
-      }
+      return {
+        type: "mclass",
+        mode: parser.mode,
+        mclass: "m" + funcName.substr(5),
+        body: ordargument(mustPromote ? mord : body),
+        isCharacterBox: utils.isCharacterBox(body) || mustPromote
+      };
     },
     mathmlBuilder: mathmlBuilder$4
   });
@@ -5829,7 +5873,7 @@ min-width: ${svgData[key].minWidth}em;`
 
   // Switching from text mode back to math mode
   defineFunction({
-    type: "styling",
+    type: "ordgroup",
     names: ["\\(", "$"],
     props: {
       numArgs: 0,
@@ -5844,9 +5888,8 @@ min-width: ${svgData[key].minWidth}em;`
       parser.expect(close);
       parser.switchMode(outerMode);
       return {
-        type: "styling",
+        type: "ordgroup",
         mode: parser.mode,
-        scriptLevel: "text",
         body
       };
     }
@@ -5988,50 +6031,6 @@ min-width: ${svgData[key].minWidth}em;`
       }
 
       return new mathMLTree.MathNode("mmultiscripts", children);
-    }
-  });
-
-  // The \newextarrow macro expands to this function.
-  defineFunction({
-    type: "newExtArrow",
-    names: ["\\ext@arrow"],
-    props: {
-      numArgs: 4,
-      argTypes: ["raw", "raw", "raw", "math"]
-    },
-    handler({ parser }, args) {
-      return {
-        type: "newExtArrow",
-        mode: parser.mode,
-        lspace: utils.round(Number(args[0].string.trim()) / 18),
-        rspace: utils.round(Number(args[1].string.trim()) / 18),
-        charCode: Number(args[2].string.trim()),
-        body: args[3]
-      };
-    },
-    mathmlBuilder(group, style) {
-      const arrowNode = new mathMLTree.MathNode(
-        "mo",
-        [new mathMLTree.TextNode(String.fromCodePoint(group.charCode))]
-      );
-      arrowNode.setAttribute("stretchy", "true");
-      arrowNode.setAttribute("minsize", "1.75em");
-
-      let node;
-      if (group.body) {
-        let upperNode = buildGroup(group.body, style.incrementLevel());
-        upperNode = new mathMLTree.MathNode("mpadded", [upperNode]);
-        upperNode.setAttribute("width", "+" + (group.lspace + group.rspace) + "em");
-        upperNode.setAttribute("lspace", group.lspace + "em");
-        node = new mathMLTree.MathNode("mover", [arrowNode, upperNode]);
-      } else {
-        // This should never happen.
-        // Parser.js throws an error if there is no argument.
-        // eslint-disable-next-line no-undef
-        node = paddedNode();
-        node = new mathMLTree.MathNode("mover", [arrowNode, node]);
-      }
-      return node;
     }
   });
 
@@ -6770,12 +6769,12 @@ min-width: ${svgData[key].minWidth}em;`
       numArgs: 0,
       allowedInText: true
     },
-    handler({parser}) {
+    handler({ parser }) {
       return {
         type: "internal",
         mode: parser.mode
       };
-    },
+    }
   });
 
   defineFunction({
@@ -7029,6 +7028,9 @@ min-width: ${svgData[key].minWidth}em;`
    * handling them itself.
    */
 
+  // Helpers
+  const symbolRegEx = /^m(over|under|underover)$/;
+
   // Super scripts and subscripts, whose precise placement can depend on other
   // functions that precede them.
   defineFunctionBuilders({
@@ -7060,13 +7062,13 @@ min-width: ${svgData[key].minWidth}em;`
         ? [buildGroup(group.base.body[0], style)]
         : [buildGroup(group.base, style)];
 
-      const childOptions = style.incrementLevel();
+      const childStyle = style.inSubOrSup();
       if (group.sub) {
-        children.push(buildGroup(group.sub, childOptions));
+        children.push(buildGroup(group.sub, childStyle));
       }
 
       if (group.sup) {
-        children.push(buildGroup(group.sup, childOptions));
+        children.push(buildGroup(group.sup, childStyle));
       }
 
       let nodeType;
@@ -7140,6 +7142,9 @@ min-width: ${svgData[key].minWidth}em;`
         } else {
           node = mathMLTree.newDocumentFragment([node, operator]);
         }
+      } else if (symbolRegEx.test(nodeType)) {
+        // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not stretch to include limits.
+        node = new mathMLTree.MathNode("mrow", [node]);
       }
 
       return node
@@ -7652,7 +7657,7 @@ min-width: ${svgData[key].minWidth}em;`
       };
     },
     mathmlBuilder(group, style) {
-      const newStyle = styleWithFont(group, style.withLevel(StyleLevel.TEXT));
+      const newStyle = styleWithFont(group, style);
       const mrow = buildExpressionRow(group.body, newStyle);
 
       // If possible, consolidate adjacent <mtext> elements into a single element.
@@ -7779,33 +7784,6 @@ min-width: ${svgData[key].minWidth}em;`
       node.setAttribute("accentunder", "true");
 
       return node;
-    }
-  });
-
-  // \vcenter:  Vertically center the argument group on the math axis.
-
-  defineFunction({
-    type: "vcenter",
-    names: ["\\vcenter"],
-    props: {
-      numArgs: 1,
-      argTypes: ["math"],
-      allowedInText: false
-    },
-    handler({ parser }, args) {
-      return {
-        type: "vcenter",
-        mode: parser.mode,
-        body: args[0]
-      };
-    },
-    mathmlBuilder(group, style) {
-      // There is no way to do this in MathML.
-      // Write a class so a post-processor can easily find this element.
-      // TODO: Monitor MathML and update this when possible.
-      return new mathMLTree.MathNode("mpadded",
-        [buildGroup(group.body, style)], ["vcenter"]
-      );
     }
   });
 
@@ -8777,26 +8755,6 @@ min-width: ${svgData[key].minWidth}em;`
   defineMacro("\\pdv@next", function(context) {
     const [numerator, numOp, denominator] = pdvHelper(context.consumeArgs(2));
     return `\\frac{${numOp}}{${denominator}} ${numerator}`
-  });
-
-  //////////////////////////////////////////////////////////////////////
-  // extpfeil package
-  // \newextarrow{\arrowName}{lspace,rspace}{unicode-charcode}  lspace & rspace are in mu.
-  // Unlike the extpfeil package, this command does not support an optional lower note.
-  defineMacro("\\newextarrow", function(context) {
-    const args = context.consumeArgs(3);
-    const arrowName = args[0][0].text;
-    const padText = stringFromArg(args[1]);
-    const padNums = padText.split(",");
-    if (padNums.length !== 2 || isNaN(padNums[0] || isNaN(padNums[1]))) {
-      throw new ParseError("Invalid lspace,rspace in \\newextarrow.");
-    }
-    const charText = stringFromArg(args[2]);
-    if (isNaN(charText)) {
-      throw new ParseError("Invalid Unicode character code in \\newextarrow.");
-    }
-    defineMacro(arrowName, `\\ext@arrow{${padNums[0]}}{${padNums[1]}}{${charText}}{#1}`);
-    return "";
   });
 
   //////////////////////////////////////////////////////////////////////
@@ -10664,6 +10622,8 @@ min-width: ${svgData[key].minWidth}em;`
    * recursing, a new `Style` object can be created with the `.with*` functions.
    */
 
+  const subOrSupLevel = [2, 2, 3, 3];
+
   /**
    * This is the main Style class. It contains the current style.level, color, and font.
    *
@@ -10723,6 +10683,12 @@ min-width: ${svgData[key].minWidth}em;`
       return this.extend({
         level: Math.min(this.level + 1, 3)
       });
+    }
+
+    inSubOrSup() {
+      return this.extend({
+        level: subOrSupLevel[this.level]
+      })
     }
 
     /**
@@ -10792,7 +10758,7 @@ min-width: ${svgData[key].minWidth}em;`
    * https://mit-license.org/
    */
 
-  const version = "0.3.3";
+  const version = "0.4.0";
 
   function postProcess(block) {
     const labelMap = {};

@@ -30,7 +30,7 @@
     ...
 &lt;/html&gt;</code></pre><h1 id='api'>API</h1>
 <h3 id='overview'>Overview</h3>
-<p>Say that you have an array of DOM elements whose contents should be converted from TeX strings to math. And also say that you wish to define two macros and a color with document-wide scope. The code for such a conversion might look like this:</p>
+<p>Say that you have an HTMLCollection of elements whose contents should be converted from TeX strings to math. And also say that you wish to define two macros and a color with document-wide scope. The code for such a conversion might look like this:</p>
 <pre><code>// Optional preamble.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
@@ -38,7 +38,7 @@ const macros = temml.definePreamble(
     \\definecolor{sortaGreen}{RGB}{128,128,0}`
 );
 // Render all the math.
-for (let aSpan of mathSpans) {
+for (let aSpan of [...mathSpans]) {
     const tex = aSpan.textContent;
     const displayMode = aSpan.classList.contains(&quot;display&quot;);
     temml.render(tex, aSpan, { macros, displayMode });
@@ -199,7 +199,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow></mrow><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.3.3</p>
+<p><math><mrow></mrow><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.4.0</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>

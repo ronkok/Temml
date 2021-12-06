@@ -6,16 +6,16 @@
 	<title>Investigate</title>
    <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Local.css">
    <link rel="stylesheet" type="text/css" href="main.css">   
-   <script src="./temml.js"></script>     
+   <script src="./temml.js"></script>
 </head>
 
 <body>
 
 <!-- I use this file to hand-write MathML. I examine the rendered result before I write JavaScript to produce it. -->
+<p>
+   <math>\frac a b</math>
+</p>
 
-<p><math>a = \frac b c</math></p>
-
-<p><math display="block">e = m c^2</math></p>
 
 
 <script>
@@ -24,11 +24,11 @@
    \\def\\foo{x^2}`
   );
   const mathElements = document.getElementsByTagName("math");
-  [...mathElements].forEach(element => {
+  for (const element of [...mathElements]) {
     const tex = element.textContent
     const displayMode = element.getAttribute("display") === "block"
     temml.render(tex, element, { macros, displayMode, elementIsMath: true })
-  });
+  }
 </script>
 
 </body>

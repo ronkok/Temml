@@ -8,6 +8,10 @@ export default [
     output: { format: "cjs", name: "temml", exports: "auto", file: "./docs/temml.cjs.js" }
   },
   {
+    input: "./temml.js",
+    output: { format: "es", name: "temml", exports: "auto", file: "./docs/temml.mjs.js" }
+  },
+  {
     input: "./src/postProcess.js",
     output: { format: "umd", name: "temml", file: "./test/temmlPostProcess.js" }
   },
