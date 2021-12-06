@@ -86,29 +86,30 @@ a {
   color: black;
 }
 
-.demo {
+#demo-parent {
+  width: 100%;
+}
+
+#demo {
+  width: 100%;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-
 }
 
-.input,
-.output {
-    display: flex;
-    flex-basis: 0;
-    flex-grow: 1;
-    flex-direction: column;
-    width: 100%;
+#input,
+#output {
+  width: 395px;
+  flex-basis: auto;
 }
 
-.input, output {
-    margin-right: 40px;
+#spacer {
+  width: 10px;
 }
 
 .ioArea {
     font-size: 0.9em;
-    width: 100%;
+    width: 360px;
     height: 10em;
     border-radius: 4px;
     border: 1px solid rgb(200, 200, 200);
@@ -133,7 +134,7 @@ a {
 }
 
 @media (max-width: 720px){
-  article, nav, #title {
+  .input, .output, nav, #title, #copyright {
     width: 100%;
   }
 }

@@ -31,13 +31,13 @@
 </h1>
  
 <article>
-  <section id="demo">
+  <section id="demo-parent">
     <p>A TeX-to-MathML conversion library in JavaScript.</p>
 
     <p></p>
     
-    <div class="demo">
-    <div class="input">
+    <div id="demo">
+    <div id="input">
       <label for="demoSource">Input:</label>
       <br/>
   
@@ -45,8 +45,8 @@
 
 \oint_C \vec{B}\circ \d\vec{l} = \mu_0 \left( I_{\text{enc}} + \varepsilon_0 \frac{\d}{\d t} \int_S \vec{E} \circ \hat{n}\; \d a \right)</textarea>
     </div>
-  
-    <div class="output">
+    <div id="spacer"></div>
+    <div id="output">
       <label for="demoRendering">Output:</label>
       <br/>
   
