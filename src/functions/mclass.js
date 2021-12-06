@@ -11,7 +11,7 @@ function mathmlBuilder(group, style) {
   if (group.mclass === "minner") {
     return mathMLTree.newDocumentFragment(inner);
   } else if (group.mclass === "mord") {
-    if (group.isCharacterBox) {
+    if (group.isCharacterBox || inner[0].type === "mathord") {
       node = inner[0];
       node.type = "mi";
     } else {
@@ -30,18 +30,26 @@ function mathmlBuilder(group, style) {
 
     // Set spacing based on what is the most likely adjacent atom type.
     // See TeXbook p170.
+    const doSpacing = style.level < 2 // Operator spacing is zero inside a (sub|super)script.
     if (group.mclass === "mbin") {
-      node.attributes.lspace = "0.22em"; // medium space
-      node.attributes.rspace = "0.22em";
+      // medium space
+      node.attributes.lspace = (doSpacing ? "0.2222em" : "0")
+      node.attributes.rspace = (doSpacing ? "0.2222em" : "0")
+    } else if (group.mclass === "mrel") {
+      // thickspace
+      node.attributes.lspace = (doSpacing ? "0.2778em" : "0")
+      node.attributes.rspace = (doSpacing ? "0.2778em" : "0")
     } else if (group.mclass === "mpunct") {
       node.attributes.lspace = "0em";
-      node.attributes.rspace = "0.17em"; // thinspace
+      node.attributes.rspace = (doSpacing ? "0.1667em" : "0")
     } else if (group.mclass === "mopen" || group.mclass === "mclose") {
-      node.attributes.lspace = "0em";
-      node.attributes.rspace = "0em";
+      node.attributes.lspace = "0em"
+      node.attributes.rspace = "0em"
     }
-    // MathML <mo> default space is 5/18 em, so <mrel> needs no action.
-    // Ref: https://developer.mozilla.org/en-US/docs/Web/MathML/Element/mo
+    if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
+      delete node.attributes.stretchy
+      delete node.attributes.form
+    }
   }
   return node;
 }
@@ -63,36 +71,31 @@ defineFunction({
     primitive: true
   },
   handler({ parser, funcName }, args) {
-    const body = args[0];
+    const body = args[0]
     // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
     // In that case, we instead promote the text contents of the body to the parent.
     let mustPromote = true
-    const atom = { type: "atom", family: funcName.substr(5), text:"" }
+    const mord = { type: "mathord", text: "", mode: parser.mode }
     const arr = (body.body) ? body.body : [body]
     for (const arg of arr) {
       if (utils.textAtomTypes.includes(arg.type)) {
         if (arg.text) {
-          atom.text += arg.text
+          mord.text += arg.text
         } else if (arg.body) {
-          arg.body.map(e => { atom.text += e.text })
+          arg.body.map(e => { mord.text += e.text })
         }
       } else {
         mustPromote = false
         break
       }
     }
-    if (mustPromote) {
-      atom.mode = parser.mode
-      return atom
-    } else {
-      return {
-        type: "mclass",
-        mode: parser.mode,
-        mclass: "m" + funcName.substr(5),
-        body: ordargument(body),
-        isCharacterBox: utils.isCharacterBox(body)
-      };
-    }
+    return {
+      type: "mclass",
+      mode: parser.mode,
+      mclass: "m" + funcName.substr(5),
+      body: ordargument(mustPromote ? mord : body),
+      isCharacterBox: utils.isCharacterBox(body) || mustPromote
+    };
   },
   mathmlBuilder
 });

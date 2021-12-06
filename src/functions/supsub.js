@@ -11,6 +11,7 @@ import * as mml from "../buildMathML"
  * handling them itself.
  */
 
+// Helpers
 const symbolRegEx = /^m(over|under|underover)$/
 
 // Super scripts and subscripts, whose precise placement can depend on other
@@ -44,13 +45,13 @@ defineFunctionBuilders({
       ? [mml.buildGroup(group.base.body[0], style)]
       : [mml.buildGroup(group.base, style)]
 
-    const childOptions = style.incrementLevel()
+    const childStyle = style.inSubOrSup()
     if (group.sub) {
-      children.push(mml.buildGroup(group.sub, childOptions))
+      children.push(mml.buildGroup(group.sub, childStyle))
     }
 
     if (group.sup) {
-      children.push(mml.buildGroup(group.sup, childOptions))
+      children.push(mml.buildGroup(group.sup, childStyle))
     }
 
     let nodeType;
@@ -125,7 +126,7 @@ defineFunctionBuilders({
         node = mathMLTree.newDocumentFragment([node, operator])
       }
     } else if (symbolRegEx.test(nodeType)) {
-      // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not include limits.
+      // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not stretch to include limits.
       node = new mathMLTree.MathNode("mrow", [node])
     }
 

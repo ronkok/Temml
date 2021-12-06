@@ -3,7 +3,7 @@ import ParseError from "../ParseError";
 
 // Switching from text mode back to math mode
 defineFunction({
-  type: "styling",
+  type: "ordgroup",
   names: ["\\(", "$"],
   props: {
     numArgs: 0,

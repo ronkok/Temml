@@ -4,6 +4,8 @@
  * recursing, a new `Style` object can be created with the `.with*` functions.
  */
 
+const subOrSupLevel = [2, 2, 3, 3];
+
 /**
  * This is the main Style class. It contains the current style.level, color, and font.
  *
@@ -63,6 +65,12 @@ class Style {
     return this.extend({
       level: Math.min(this.level + 1, 3)
     });
+  }
+
+  inSubOrSup() {
+    return this.extend({
+      level: subOrSupLevel[this.level]
+    })
   }
 
   /**
