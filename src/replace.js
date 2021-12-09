@@ -126,7 +126,7 @@ export const variantChar = (ch, variant) => {
     ? "upperCaseLatin"
     : 0x60 < codePoint && codePoint < 0x7b
     ? "lowerCaseLatin"
-    : (0x390  < codePoint && codePoint < 0x3A1) || ch === "∇"
+    : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
     ? "upperCaseGreek"
     : 0x3B0 < codePoint && codePoint < 0x3CA
     ? "lowerCaseGreek"
