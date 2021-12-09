@@ -4,6 +4,8 @@ import utils from "../utils";
 
 import * as mml from "../buildMathML";
 
+const textAtomTypes = ["text", "textord", "mathord", "atom"]
+
 function mathmlBuilder(group, style) {
   let node;
   const inner = mml.buildExpression(group.body, style);
@@ -78,7 +80,7 @@ defineFunction({
     const mord = { type: "mathord", text: "", mode: parser.mode }
     const arr = (body.body) ? body.body : [body]
     for (const arg of arr) {
-      if (utils.textAtomTypes.includes(arg.type)) {
+      if (textAtomTypes.includes(arg.type)) {
         if (arg.text) {
           mord.text += arg.text
         } else if (arg.body) {

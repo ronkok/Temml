@@ -5,6 +5,8 @@ import utils from "../utils";
 
 import * as mml from "../buildMathML";
 
+const ordAtomTypes = ["textord", "mathord", "atom"]
+
 // Most operators have a large successor symbol, but these don't.
 const noSuccessor = ["\\smallint"];
 
@@ -128,43 +130,21 @@ defineFunction({
   },
   handler: ({ parser }, args) => {
     const body = args[0];
-    const prevAtomType = parser.prevAtomType
-    // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+    // It would be convienient to just wrap a <mo> around the argument.
+    // But if the argument is a <mi> or <mord>, that would be invalid MathML.
     // In that case, we instead promote the text contents of the body to the parent.
-    let mustPromote = true
-    const atom = {
+    const arr = (body.body) ? body.body : [body];
+    const isSymbol = arr.length === 1 && ordAtomTypes.includes(arr[0].type)
+    return {
       type: "op",
       mode: parser.mode,
-      limits: false,
+      limits: true,
       parentIsSupSub: false,
-      symbol: false,
+      symbol: isSymbol,
       stack: false,
-      needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
-      name: "\\"
+      name: isSymbol ? arr[0].text : null,
+      body: isSymbol ? null : ordargument(body)
     };
-    const arr = (body.body) ? body.body : [body]
-    for (const arg of arr) {
-      if (utils.textAtomTypes.includes(arg.type)) {
-        atom.name += arg.text
-      } else {
-        mustPromote = false
-        break
-      }
-    }
-    if (mustPromote) {
-      atom.mode = parser.mode
-      return atom
-    } else {
-      return {
-        type: "op",
-        mode: parser.mode,
-        limits: false,
-        parentIsSupSub: false,
-        symbol: false,
-        stack: false,
-        body: ordargument(body)
-      };
-    }
   },
   mathmlBuilder
 });

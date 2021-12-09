@@ -86,8 +86,6 @@ export const assert = function(value) {
   return value;
 };
 
-const textAtomTypes = ["text", "textord", "mathord", "atom"]
-
 /**
  * Return the protocol of a URL, or "_relative" if the URL does not specify a
  * protocol (and thus is relative).
@@ -115,6 +113,5 @@ export default {
   getBaseElem,
   isCharacterBox,
   protocolFromUrl,
-  round,
-  textAtomTypes
+  round
 };
