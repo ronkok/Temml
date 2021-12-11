@@ -97,7 +97,11 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
-  const symDelim = checkSymbolNodeType(delim);
+  if (delim.type === "ordgroup" && delim.body.length === 1 && delim.body[0].text === "\u2044") {
+    // Recover "/" from the zero spacing group. (See macros.js)
+    delim = { type: "textord", text: "/", mode: "math" }
+  }
+  const symDelim = checkSymbolNodeType(delim)
   if (symDelim && utils.contains(delimiters, symDelim.text)) {
     if (utils.contains(["<", "\\lt"], symDelim.text)) { symDelim.text = "⟨" }
     if (utils.contains([">", "\\gt"], symDelim.text)) { symDelim.text = "⟩" }

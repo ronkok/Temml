@@ -187,6 +187,10 @@ defineMacro("\\char", function(context) {
 
 defineMacro("\\hbox", "\\text{#1}");
 
+// Per TeXbook p.122, "/" gets zero operator spacing.
+// Also, MDN recommends using U+2044 instead of / for inline fractions.
+defineMacro("/", "{\u2044}")
+
 // Since Temml has no \par, ignore \long.
 defineMacro("\\long", "")
 
