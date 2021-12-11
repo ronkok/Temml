@@ -332,11 +332,11 @@ const mathmlBuilder = function(group, style) {
     let iEnd = cols.length;
 
     if (cols[0].type === "separator") {
-      menclose += "top ";
+      menclose += "left ";
       iStart = 1;
     }
     if (cols[cols.length - 1].type === "separator") {
-      menclose += "bottom ";
+      menclose += "right ";
       iEnd -= 1;
     }
 
@@ -403,8 +403,8 @@ const mathmlBuilder = function(group, style) {
   let rowLines = "";
   const hlines = group.hLinesBeforeRow;
 
-  menclose += hlines[0].length > 0 ? "left " : "";
-  menclose += hlines[hlines.length - 1].length > 0 ? "right " : "";
+  menclose += hlines[0].length > 0 ? "top " : "";
+  menclose += hlines[hlines.length - 1].length > 0 ? "bottom " : "";
 
   for (let i = 1; i < hlines.length - 1; i++) {
     rowLines +=
