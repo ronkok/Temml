@@ -1,32 +1,35 @@
-import { binrelClass } from "./mclass"
 import defineFunction, { normalizeArgument } from "../defineFunction"
-import utils from "../utils"
 import * as mml from "../buildMathML"
 import mathMLTree from "../mathMLTree"
 
 const mathmlBuilder = (group, style) => {
   const font = group.font
-  const newOptions = style.withFont(font)
-  const mrow = mml.buildGroup(group.body, newOptions)
+  const newStyle = style.withFont(font)
+  const mathGroup = mml.buildGroup(group.body, newStyle)
 
-  // If possible, consolidate adjacent <mi> elements into a single element.
-  // First, check if it is possible. If not, return the <mrow>.
-  if (mrow.children.length === 0) { return mrow } // empty group, e.g., \mathrm{}
-  let mi = mrow.children[0]
-  if (mi.type !== "mi") {
-    mi = mrow
-  } else {
-    for (let i = 1; i < mrow.children.length; i++) {
-      if (mrow.children[i].type !== "mi") { return mrow }
-      const localVariant = mrow.children[i].attributes.mathvariant || ""
-      if (localVariant !== "normal") { return mrow }
-    }
-    // Consolidate the <mi> elements.
-    for (let i = 1; i < mrow.children.length; i++) {
-      mi.children.push(mrow.children[i].children[0])
-    }
-    if (mrow.attributes.mathcolor) { mi.attributes.mathcolor = mrow.attributes.mathcolor }
+  if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
+  if (mathGroup.type === "mo" && font === "boldsymbol") {
+    mathGroup.style.fontWeight = "bold"
+    return mathGroup
   }
+  // Check if it is possible to consolidate elements into a single <mi> element.
+  let canConsolidate = mathGroup.children[0].type === "mo"
+  for (let i = 1; i < mathGroup.children.length; i++) {
+    if (mathGroup.children[i].type === "mo" && font === "boldsymbol") {
+      mathGroup.children[i].style.fontWeight = "bold"
+    }
+    if (mathGroup.children[i].type !== "mi") { canConsolidate = false }
+    const localVariant = mathGroup.children[i].attributes &&
+      mathGroup.children[i].attributes.mathvariant || ""
+    if (localVariant !== "normal") { canConsolidate = false }
+  }
+  if (!canConsolidate) { return mathGroup }
+  // Consolidate the <mi> elements.
+  const mi = mathGroup.children[0]
+  for (let i = 1; i < mathGroup.children.length; i++) {
+    mi.children.push(mathGroup.children[i].children[0])
+  }
+  if (mathGroup.attributes.mathcolor) { mi.attributes.mathcolor = mathGroup.attributes.mathcolor }
   if (mi.attributes.mathvariant && mi.attributes.mathvariant === "normal") {
     // Workaround for a Firefox bug that renders spurious space around
     // a <mi mathvariant="normal">
@@ -49,13 +52,14 @@ const fontAliases = {
 defineFunction({
   type: "font",
   names: [
-    // styles, except \boldsymbol defined below
+    // styles
     "\\mathrm",
     "\\mathit",
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
     "\\pmb",
+    "\\boldsymbol",
 
     // families
     "\\mathbb",
@@ -66,8 +70,9 @@ defineFunction({
     "\\mathtt",
     "\\oldstylenums",
 
-    // aliases, except \bm defined below
+    // aliases
     "\\Bbb",
+    "\\bm",
     "\\bold",
     "\\frak"
   ],
@@ -89,44 +94,6 @@ defineFunction({
     };
   },
   mathmlBuilder
-});
-
-defineFunction({
-  type: "mclass",
-  names: ["\\bm", "\\boldsymbol"],
-  props: {
-    numArgs: 1
-  },
-  handler: ({ parser }, args) => {
-    const body = args[0];
-    const isCharacterBox = utils.isCharacterBox(body);
-    // amsbsy.sty's \boldsymbol uses \binrel spacing to inherit the
-    // argument's bin|rel|ord status
-    const mclass =  binrelClass(body)
-    if (mclass === "mbin" || mclass === "mrel") {
-      return {
-        type: "mclass",
-        mode: parser.mode,
-        mclass,
-        body: [
-          {
-            type: "font",
-            mode: parser.mode,
-            font: "boldsymbol",
-            body
-          }
-        ],
-        isCharacterBox: isCharacterBox
-      };
-    } else {
-      return {
-        type: "font",
-        mode: parser.mode,
-        font: "boldsymbol",
-        body
-      }
-    }
-  }
 });
 
 // Old font changing functions
