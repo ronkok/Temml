@@ -105,6 +105,9 @@ function checkDelimiter(delim, context) {
   if (symDelim && utils.contains(delimiters, symDelim.text)) {
     if (utils.contains(["<", "\\lt"], symDelim.text)) { symDelim.text = "⟨" }
     if (utils.contains([">", "\\gt"], symDelim.text)) { symDelim.text = "⟩" }
+    if (symDelim.text === "\\backslash") {
+      symDelim.text = "\u2216" // Firefox will not stretch "\"
+    }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
