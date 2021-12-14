@@ -650,7 +650,8 @@ export default class Parser {
     // generate valid links in such cases; we interpret this as
     // "undefined" behaviour, and keep them as-is. Some browser will
     // replace backslashes with forward slashes.
-    const url = res.text.replace(/\\([#$%&~_^{}])/g, "$1");
+    let url = res.text.replace(/\\([#$%&~_^{}])/g, "$1");
+    url = res.text.replace(/{\u2044}/g, "/");
     return {
       type: "url",
       mode: this.mode,
