@@ -162,7 +162,6 @@ defineFunction({
   names: ["\\angl"],
   props: {
     numArgs: 1,
-    argTypes: ["hbox"],
     allowedInText: false
   },
   handler({ parser }, args) {
