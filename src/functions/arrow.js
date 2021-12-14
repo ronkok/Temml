@@ -23,12 +23,15 @@ const munderoverNode = (label, body, below, style, macros = {}) => {
   // https://bugzilla.mozilla.org/show_bug.cgi?id=320303
   const labelStyle = style.incrementLevel();
 
-  const upperNode = (body && body.body && body.body.length > 0)
+  const upperNode = (body && body.body &&
+    // \hphantom        visible content
+    (body.body.body || body.body.length > 0))
     ? paddedNode(mml.buildGroup(body, labelStyle))
       // Since Firefox does not recognize minsize set on the arrow,
       // create an upper node w/correct width.
     : paddedNode(null, minWidth)
-  const lowerNode = (below && below.body && below.body.length > 0)
+  const lowerNode = (below && below.body &&
+    (below.body.body || below.body.length > 0))
     ? paddedNode(mml.buildGroup(below, labelStyle))
     : paddedNode(null, minWidth)
   const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
@@ -158,6 +161,8 @@ defineFunction({
     wrapper.setAttribute("voffset", "-0.18em")
     wrapper.setAttribute("height", "-0.18em")
     wrapper.setAttribute("depth", "+0.18em")
+    wrapper.setAttribute("lspace", "0em")
+    wrapper.setAttribute("rspace", "0em")
     return wrapper
   }
 });
