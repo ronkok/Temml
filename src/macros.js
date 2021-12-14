@@ -212,11 +212,6 @@ defineMacro("\\aa", "\\r a");
 
 defineMacro("\\Bbbk", "\\Bbb{k}");
 
-// \llap and \rlap render their contents in text mode
-defineMacro("\\llap", "\\mathllap{\\textrm{#1}}");
-defineMacro("\\rlap", "\\mathrlap{\\textrm{#1}}");
-defineMacro("\\clap", "\\mathclap{\\textrm{#1}}");
-
 // \mathstrut from the TeXbook, p 360
 defineMacro("\\mathstrut", "\\vphantom{(}");
 
