@@ -105,7 +105,7 @@ function parseArray(
   }
 
   // Get current arraystretch if it's not set by the environment
-  if (!arraystretch) {
+  if (Number.isNaN(arraystretch)) {
     const stretch = parser.gullet.expandMacroAsText("\\arraystretch");
     if (stretch == null) {
       // Default \arraystretch from lttab.dtx
@@ -309,8 +309,10 @@ const mathmlBuilder = function(group, style) {
   // The 0.16 and 0.09 values are found emprically. They produce an array
   // similar to LaTeX and in which content does not interfere with \hines.
   const gap =
-    group.arraystretch === 0.5
-      ? 0.1 // {smallmatrix}, {subarray}
+    group.arraystretch === 0
+      ? 0 // {subarray}
+      : group.arraystretch === 0.5
+      ? 0.1 // {smallmatrix}
       : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
   table.setAttribute("rowspacing", utils.round(gap) + "em")
 
@@ -424,7 +426,7 @@ const mathmlBuilder = function(group, style) {
     table.setAttribute("notation", menclose.trim());
   }
 
-  if (group.arraystretch && group.arraystretch < 1) {
+  if (!Number.isNaN(group.arraystretch) && group.arraystretch < 1) {
     // A small array. Wrap in scriptstyle so row gap is not too large.
     table = new mathMLTree.MathNode("mstyle", [table]);
     table.setAttribute("scriptlevel", "1");
@@ -676,7 +678,7 @@ defineEnvironment({
       cols,
       hskipBeforeAndAfter: false,
       colSeparationType: "array",
-      arraystretch: 0.5
+      arraystretch: 0
     };
     res = parseArray(context.parser, res, "script");
     if (res.body.length > 0 && res.body[0].length > 1) {
