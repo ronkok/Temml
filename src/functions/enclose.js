@@ -141,7 +141,7 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\phase", "\\longdiv"],
+  names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\angl", "\\phase", "\\longdiv"],
   props: {
     numArgs: 1
   },
@@ -155,21 +155,4 @@ defineFunction({
     };
   },
   mathmlBuilder
-});
-
-defineFunction({
-  type: "enclose",
-  names: ["\\angl"],
-  props: {
-    numArgs: 1,
-    allowedInText: false
-  },
-  handler({ parser }, args) {
-    return {
-      type: "enclose",
-      mode: parser.mode,
-      label: "\\angl",
-      body: args[0]
-    };
-  }
 });
