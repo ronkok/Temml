@@ -105,7 +105,7 @@ function parseArray(
   }
 
   // Get current arraystretch if it's not set by the environment
-  if (Number.isNaN(arraystretch)) {
+  if (arraystretch === undefined || Number.isNaN(arraystretch)) {
     const stretch = parser.gullet.expandMacroAsText("\\arraystretch");
     if (stretch == null) {
       // Default \arraystretch from lttab.dtx
