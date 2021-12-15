@@ -1,5 +1,4 @@
 import defineFunction, { ordargument } from "../defineFunction";
-import { StyleLevel } from "../constants"
 import * as mml from "../buildMathML";
 
 // Non-mathy text, possibly in a font

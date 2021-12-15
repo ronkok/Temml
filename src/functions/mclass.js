@@ -20,10 +20,10 @@ function mathmlBuilder(group, style) {
       node = new mathMLTree.MathNode("mi", inner);
     }
   } else {
-    if (group.isCharacterBox) {
+    if (group.mustPromote) {
       node = inner[0];
       node.type = "mo";
-      if (group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
+      if (group.isCharacterBox && group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
         node.setAttribute("mathvariant", "italic")
       }
     } else {
@@ -74,11 +74,12 @@ defineFunction({
   },
   handler({ parser, funcName }, args) {
     const body = args[0]
+    const isCharacterBox = utils.isCharacterBox(body)
     // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
     // In that case, we instead promote the text contents of the body to the parent.
     let mustPromote = true
     const mord = { type: "mathord", text: "", mode: parser.mode }
-    const arr = (body.body) ? body.body : [body]
+    const arr = (body.body) ? body.body : [body];
     for (const arg of arr) {
       if (textAtomTypes.includes(arg.type)) {
         if (arg.text) {
@@ -96,7 +97,8 @@ defineFunction({
       mode: parser.mode,
       mclass: "m" + funcName.substr(5),
       body: ordargument(mustPromote ? mord : body),
-      isCharacterBox: utils.isCharacterBox(body) || mustPromote
+      isCharacterBox,
+      mustPromote
     };
   },
   mathmlBuilder
