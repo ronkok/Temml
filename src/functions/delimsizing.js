@@ -171,7 +171,6 @@ defineFunction({
       node.setAttribute("fence", "false");
     }
 
-    node.setAttribute("stretchy", "true");
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
     node.setAttribute("maxsize", sizeToMaxHeight[group.size] + "em");
@@ -247,8 +246,6 @@ defineFunction({
 
       leftNode.setAttribute("fence", "true")
       leftNode.setAttribute("form", "prefix")
-      // Set stretchy explicitly because browsers miss "/" and \backslash
-      leftNode.setAttribute("stretchy", "true")
 
       inner.unshift(leftNode)
     }
@@ -258,7 +255,6 @@ defineFunction({
 
       rightNode.setAttribute("fence", "true")
       rightNode.setAttribute("form", "postfix")
-      rightNode.setAttribute("stretchy", "true")
 
       if (group.rightColor) {
         rightNode.setAttribute("mathcolor", group.rightColor);
