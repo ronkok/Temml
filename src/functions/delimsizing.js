@@ -155,9 +155,8 @@ defineFunction({
   mathmlBuilder: (group) => {
     const children = [];
 
-    if (group.delim !== ".") {
-      children.push(mml.makeText(group.delim, group.mode));
-    }
+    if (group.delim === ".") { group.delim = "" }
+    children.push(mml.makeText(group.delim, group.mode));
 
     const node = new mathMLTree.MathNode("mo", children);
 
@@ -241,27 +240,18 @@ defineFunction({
     assertParsed(group);
     const inner = mml.buildExpression(group.body, style);
 
-    if (group.left !== ".") {
-      const leftNode = new mathMLTree.MathNode("mo", [mml.makeText(group.left, group.mode)]);
+    if (group.left === ".") { group.left = "" }
+    const leftNode = new mathMLTree.MathNode("mo", [mml.makeText(group.left, group.mode)]);
+    leftNode.setAttribute("fence", "true")
+    leftNode.setAttribute("form", "prefix")
+    inner.unshift(leftNode)
 
-      leftNode.setAttribute("fence", "true")
-      leftNode.setAttribute("form", "prefix")
-
-      inner.unshift(leftNode)
-    }
-
-    if (group.right !== ".") {
-      const rightNode = new mathMLTree.MathNode("mo", [mml.makeText(group.right, group.mode)]);
-
-      rightNode.setAttribute("fence", "true")
-      rightNode.setAttribute("form", "postfix")
-
-      if (group.rightColor) {
-        rightNode.setAttribute("mathcolor", group.rightColor);
-      }
-
-      inner.push(rightNode);
-    }
+    if (group.right === ".") { group.right = "" }
+    const rightNode = new mathMLTree.MathNode("mo", [mml.makeText(group.right, group.mode)]);
+    rightNode.setAttribute("fence", "true")
+    rightNode.setAttribute("form", "postfix")
+    if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor) }
+    inner.push(rightNode)
 
     return mml.makeRow(inner);
   }
