@@ -103,11 +103,12 @@ function checkDelimiter(delim, context) {
   }
   const symDelim = checkSymbolNodeType(delim)
   if (symDelim && utils.contains(delimiters, symDelim.text)) {
+    // If a character is not in the MathML operator dictionary, it will not stretch.
+    // Replace such characters w/characters that will stretch.
     if (utils.contains(["<", "\\lt"], symDelim.text)) { symDelim.text = "⟨" }
     if (utils.contains([">", "\\gt"], symDelim.text)) { symDelim.text = "⟩" }
-    if (symDelim.text === "\\backslash") {
-      symDelim.text = "\u2216" // Firefox will not stretch "\"
-    }
+    if (symDelim.text === "/") { symDelim.text = "\u2215" }
+    if (symDelim.text === "\\backslash") { symDelim.text = "\u2216" }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
