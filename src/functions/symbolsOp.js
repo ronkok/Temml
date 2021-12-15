@@ -13,7 +13,6 @@ defineFunctionBuilders({
     } else if (group.family === "open" || group.family === "close") {
       // Delims built here should not stretch vertically.
       // See delimsizing.js for stretchy delims.
-      node.setAttribute("stretchy", "false");
       if (group.family === "open") {
         node.setAttribute("form", "prefix");
       } else if (group.family === "close") {
