@@ -12,6 +12,7 @@ import "./functions/arrow";
 import "./functions/cancelto";
 import "./environments/cd";
 import "./functions/char";
+import "./functions/colon";
 import "./functions/color";
 import "./functions/cr";
 import "./functions/def";

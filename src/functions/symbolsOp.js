@@ -22,6 +22,10 @@ defineFunctionBuilders({
       // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
       node.setAttribute("lspace", "0.22em") // medium space
       node.setAttribute("rspace", "0.22em")
+    } else if (group.text === ":") {
+      // ":" is not in the MathML operator dictionary. Give it BIN spacing.
+      node.attributes.lspace = "0.2222em"
+      node.attributes.rspace = "0.2222em"
     }
     return node;
   }

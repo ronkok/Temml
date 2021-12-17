@@ -6,7 +6,6 @@ fs.copyFile('site/assets/Temml-Local.css', 'dist/Temml-Local.css', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('site/assets/Temml-Latin-Modern.css', 'dist/Temml-Latin-Modern.css', (err) => {
   if (err) { throw err }
 })
 
