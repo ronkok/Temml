@@ -11,9 +11,9 @@ const styleMap = {
 
 const styleAttributes = {
   display: ["0", "true"],
-  text: ["1", "false"],
-  script: ["2", "false"],
-  scriptscript: ["3", "false"]
+  text: ["0", "false"],
+  script: ["1", "false"],
+  scriptscript: ["2", "false"]
 };
 
 defineFunction({
