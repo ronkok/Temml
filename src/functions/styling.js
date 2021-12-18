@@ -9,6 +9,13 @@ const styleMap = {
   scriptscript: 3
 };
 
+const styleAttributes = {
+  display: ["0", "true"],
+  text: ["1", "false"],
+  script: ["2", "false"],
+  scriptscript: ["3", "false"]
+};
+
 defineFunction({
   type: "styling",
   names: ["\\displaystyle", "\\textstyle", "\\scriptstyle", "\\scriptscriptstyle"],
@@ -34,20 +41,15 @@ defineFunction({
   mathmlBuilder(group, style) {
     // Figure out what scriptLevel we're changing to.
     const newStyle = style.withLevel(styleMap[group.scriptLevel]);
-
+    // The style argument in the next line does NOT directly set a MathML script level.
+    // It just tracks the style level, in case we need to know it for supsub or mathchoice.
     const inner = mml.buildExpression(group.body, newStyle);
     // Wrap with an <mstyle> element.
     const node = wrapWithMstyle(inner)
 
-    const styleAttributes = {
-      display: ["0", "true"],
-      text: ["0", "false"],
-      script: ["1", "false"],
-      scriptscript: ["2", "false"]
-    };
-
     const attr = styleAttributes[group.scriptLevel];
 
+    // Here is where we set the MathML script level.
     node.setAttribute("scriptlevel", attr[0]);
     node.setAttribute("displaystyle", attr[1]);
 
