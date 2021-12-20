@@ -14,14 +14,18 @@ defineFunctionBuilders({
       // Delims built here should not stretch vertically.
       // See delimsizing.js for stretchy delims.
       if (group.family === "open") {
-        node.setAttribute("form", "prefix");
+        node.setAttribute("form", "prefix")
+        // Set an explicit attribute for stretch. Otherwise Firefox may do it wrong.
+        node.setAttribute("stretchy", "false")
       } else if (group.family === "close") {
         node.setAttribute("form", "postfix");
+        node.setAttribute("stretchy", "false")
       }
     } else if (group.text === "\\mid") {
       // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
       node.setAttribute("lspace", "0.22em") // medium space
       node.setAttribute("rspace", "0.22em")
+      node.setAttribute("stretchy", "false")
     } else if (group.text === ":") {
       // ":" is not in the MathML operator dictionary. Give it BIN spacing.
       node.attributes.lspace = "0.2222em"
