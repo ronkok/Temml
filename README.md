@@ -7,11 +7,19 @@
 | KaTeX         |         280 KB            |
 | TeXZilla      |         168 KB            |
 
-As a futher advantage, Temml mostly uses local system fonts. The minimum Temml installation serves a font file that is only 12kb.
+As a futher advantage, Temml can use local system fonts. The minimum Temml installation serves a font file that is only 12kb.
 
 When the [MathML-in-Chromium](https://mathml.igalia.com/news/) project is complete, all the major browsers will support MathML and Temml will become the most lightweight way to render math in a browser.
 
 Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.13.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
+
+Temml's visual test suite includes images from LaTeX for comparison. The tests are available to be viewed at:
+
+* [Mozilla Torture Test](https://temml.org/tests/mozilla-tests.html)
+
+* [KaTeX Screenshotter Tests](https://temml.org/tests/katex-tests.html)
+
+* [mhchem Manual Examples](https://temml.org/tests/mhchem-tests.html)
 
 Documentation can be found at:
 
@@ -29,12 +37,12 @@ I built Temml by:
 
 2. Deleting half the code, removing the HTML parts and keeping the parser, the macro expander, and the MathML parts.
 
-3. Doing some code refactoring and MathML bug fixes.
+3. Doing some code refactoring and many MathML bug fixes.
 
-4. Adding new functions: upright lower-case Greek letters, `\euro`, `\label{…}`, `\ref{…}`, `\longdiv{…}`, `\prescript`, etc.
+4. Adding new functionality: upright lower-case Greek letters, `\euro`, `\label{…}`, `\ref{…}`, `\longdiv{…}`, `\prescript`, `xcolor` color names, etc.
 
 I wish to thank Khan Academy and the many volunteer KaTeX contributors. This library would not exist if KaTeX had not existed first.
 
-####
+---
 
 Temml is released under terms of the [MIT license](https://mit-license.org/)
