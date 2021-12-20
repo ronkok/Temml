@@ -5,11 +5,11 @@ export default [
   },
   {
     input: "./temml.js",
-    output: { format: "cjs", name: "temml", exports: "auto", file: "./docs/temml.cjs.js" }
+    output: { format: "cjs", name: "temml", exports: "auto", file: "./utils/temml.cjs.js" }
   },
   {
     input: "./temml.js",
-    output: { format: "es", name: "temml", exports: "auto", file: "./docs/temml.mjs.js" }
+    output: { format: "es", name: "temml", exports: "auto", file: "./utils/temml.mjs.js" }
   },
   {
     input: "./src/postProcess.js",

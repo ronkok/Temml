@@ -24,11 +24,12 @@
   "scripts": {
     "lint": "eslint *.js src contrib",
     "unit-test": "node -r esm ./test/unit-test.js",
-    "test": "yarn lint && node test/buildTests.js && yarn unit-test",
+    "visual-test": "node utils/buildTests.js",
+    "test": "yarn lint && node utils/buildTests.js && yarn unit-test",
     "minify": "terser test/temml.js -o site/assets/temml.min.js -c -m && terser contrib/mhchem/mhchem.js -o site/assets/mhchem.min.js -c -m",
-    "build": "rollup --config ./rollupConfig.js && yarn minify && node docs/insertPlugins.js",
-    "docs": "node docs/buildDocs.js",
-    "dist": "yarn build && node copyfiles.js && terser contrib/auto-render/test/auto-render.js -o contrib/auto-render/dist/auto-render.min.js -c -m"
+    "build": "rollup --config ./utils/rollupConfig.js && yarn minify && node utils/insertPlugins.js",
+    "docs": "node utils/buildDocs.js",
+    "dist": "yarn build && node ./utils/copyfiles.js && terser contrib/auto-render/test/auto-render.js -o contrib/auto-render/dist/auto-render.min.js -c -m"
   },
   "dependencies": {
     "xml-formatter": "^2.4.0"
