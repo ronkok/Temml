@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.1] = 2021-12-20
+
+### Fixed
+
+- \bmod
+- \colon spacing
+- \right .
+- \includegraphics
+- \angle padding
+- \subarray row spacing
+- "/" spacing
+- width of stacked harpoons
+- operator spacing when adjacent to \color
+- Improve laps
+- Use character U+2044 for inline fractions
+- Work around Firefox bug affecting \mathrlap
+- \boldsymbol when it wraps an operator
+- array environment enclosing lines
+- \mathbf{\Omega}
+- \mathop
+
+### Added
+
+- Copy button to home page.
+- Images from LaTeX in KaTeX screenshotter tests
+- Mozilla test suite
+- mhchem test suite
+
 ## [0.4.0] = 2021-12-06
 
 ### Changed

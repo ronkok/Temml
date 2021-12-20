@@ -544,7 +544,8 @@ contain math if the math is nested within `$…$` delimiters, as in
 | $$                                        |                                               |
 +-------------------------------------------+-----------------------------------------------+
 
-Temml also supports `\llap`, `\rlap`, and `\clap`, but they will take only text, not math, as arguments.
+Temml also supports `\llap`, `\rlap`, and `\clap`. They work only in text mode if the rendering options
+include `strict: true`.
 
 #### Spacing
 
@@ -1452,7 +1453,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.0
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.1
 
 <h3><a href="#top">Contents</a></h3>
 

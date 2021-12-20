@@ -1025,7 +1025,7 @@ If you know the shape of a character, but not its name,
 | \rBrace            | $`\rBrace`| |  stix |
 | \rbrace            | $`\rbrace`| | |
 | \rbrack            | $`\rbrack`| | |
-| {rcases}           | $`\begin{rcases}a&\text{if }b\\c&\text{if }d\end{rcases}`| `\begin{rcases}`<br>   `a &\text{if } b  \\`<br>   `c &\text{if } d`<br>`\end{rcases}`| ams |
+| {rcases}           | $`\begin{rcases}a&\text{if }b\\c&\text{if }d\end{rcases}`| `\begin{rcases}`<br>   `a &\text{if } b  \\`<br>   `c &\text{if } d`<br>`\end{rcases}`| mathtools |
 | \rceil             | $`\rceil`| | |
 | \Re                | $`\Re`| | |
 | \real              | $`\real`| | texvc extension |
@@ -1468,7 +1468,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.0
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.1
 
 <div style="height:0.5em;"></div>
 

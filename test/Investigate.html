@@ -13,11 +13,26 @@
 
 <!-- I use this file to hand-write MathML. I examine the rendered result before I write JavaScript to produce it. -->
 <p>
-   <math>\frac a b</math>
+  <math display="block">
+    <mrow>
+      <mrow>
+        <munder>
+          <mo movablelimits="false">∑</mo>
+          <mn>0</mn>
+        </munder>
+      </mrow>
+      <mi>P</mi>
+      <mo form="prefix" stretchy="false">(</mo>
+      <mi>i</mi>
+      <mo separator="true">,</mo>
+      <mi>j</mi>
+      <mo form="postfix">)</mo>
+    </mrow>
+  </math>
 </p>
 
 
-
+<!--
 <script>
   const macros = temml.definePreamble(
    `\\newcommand\\d[0]{\\operatorname{d}\\!}
@@ -30,6 +45,6 @@
     temml.render(tex, element, { macros, displayMode, elementIsMath: true })
   }
 </script>
-
+-->
 </body>
 </html>

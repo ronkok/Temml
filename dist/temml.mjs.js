@@ -149,8 +149,6 @@ const assert = function(value) {
   return value;
 };
 
-const textAtomTypes = ["text", "textord", "mathord", "atom"];
-
 /**
  * Return the protocol of a URL, or "_relative" if the URL does not specify a
  * protocol (and thus is relative).
@@ -178,8 +176,7 @@ var utils = {
   getBaseElem,
   isCharacterBox,
   protocolFromUrl,
-  round,
-  textAtomTypes
+  round
 };
 
 /**
@@ -1391,6 +1388,7 @@ defineSymbol(math, mathord, "\u03db", "\\stigma", true);
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "*", "*");
+defineSymbol(math, bin, "\u2044", "\u2044");
 defineSymbol(math, bin, "\u2212", "-", true);
 defineSymbol(math, bin, "\u22c5", "\\cdot", true);
 defineSymbol(math, bin, "\u2218", "\\circ");
@@ -2255,12 +2253,15 @@ const munderoverNode = (label, body, below, style, macros = {}) => {
   // https://bugzilla.mozilla.org/show_bug.cgi?id=320303
   const labelStyle = style.incrementLevel();
 
-  const upperNode = (body && body.body && body.body.length > 0)
+  const upperNode = (body && body.body &&
+    // \hphantom        visible content
+    (body.body.body || body.body.length > 0))
     ? paddedNode(buildGroup(body, labelStyle))
       // Since Firefox does not recognize minsize set on the arrow,
       // create an upper node w/correct width.
     : paddedNode(null, minWidth);
-  const lowerNode = (below && below.body && below.body.length > 0)
+  const lowerNode = (below && below.body &&
+    (below.body.body || below.body.length > 0))
     ? paddedNode(buildGroup(below, labelStyle))
     : paddedNode(null, minWidth);
   const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
@@ -2390,6 +2391,8 @@ defineFunction({
     wrapper.setAttribute("voffset", "-0.18em");
     wrapper.setAttribute("height", "-0.18em");
     wrapper.setAttribute("depth", "+0.18em");
+    wrapper.setAttribute("lspace", "0em");
+    wrapper.setAttribute("rspace", "0em");
     return wrapper
   }
 });
@@ -2750,6 +2753,27 @@ defineFunction({
   }
 });
 
+/* In LaTeX, \colon is defined as:
+ * \renewcommand{\colon}{\nobreak\mskip2mu\mathpunct{}\nonscript
+ * \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
+ *
+ * Doing that with a Temml macro produces semantically poor MathML. Do it more directly.
+ */
+
+defineFunction({
+  type: "colonFunction",
+  names: ["\\colon"],
+  props: { numArgs: 0 },
+  handler({ parser }) { return { type: "colonFunction", mode: parser.mode } },
+  mathmlBuilder(group, style) {
+    const mo = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode(":")]);
+    // lspace depends on the script level.
+    mo.attributes.lspace = (style.level < 2 ? "0.05556em" : "0.1111em");
+    mo.attributes.rspace = "0.3333em"; // 6mu
+    return mo
+  }
+});
+
 // Helpers
 const htmlRegEx = /^(#[a-f0-9]{3}|#?[a-f0-9]{6})$/i;
 const htmlOrNameRegEx = /^(#[a-f0-9]{3}|#?[a-f0-9]{6}|[a-z]+)$/i;
@@ -2901,10 +2925,9 @@ const mathmlBuilder$1 = (group, style) => {
   const inner = buildExpression(group.body, style.withColor(group.color));
   // Wrap with an <mstyle> element.
   const node = wrapWithMstyle(inner);
-
   node.setAttribute("mathcolor", group.color);
-
-  return node
+  // Wrap w/<mrow>. We get better operator spacing that way.
+  return new mathMLTree.MathNode("mrow", [node])
 };
 
 defineFunction({
@@ -3427,10 +3450,18 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
+  if (delim.type === "ordgroup" && delim.body.length === 1 && delim.body[0].text === "\u2044") {
+    // Recover "/" from the zero spacing group. (See macros.js)
+    delim = { type: "textord", text: "/", mode: "math" };
+  }
   const symDelim = checkSymbolNodeType(delim);
   if (symDelim && utils.contains(delimiters, symDelim.text)) {
+    // If a character is not in the MathML operator dictionary, it will not stretch.
+    // Replace such characters w/characters that will stretch.
     if (utils.contains(["<", "\\lt"], symDelim.text)) { symDelim.text = "⟨"; }
     if (utils.contains([">", "\\gt"], symDelim.text)) { symDelim.text = "⟩"; }
+    if (symDelim.text === "/") { symDelim.text = "\u2215"; }
+    if (symDelim.text === "\\backslash") { symDelim.text = "\u2216"; }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
@@ -3477,9 +3508,8 @@ defineFunction({
   mathmlBuilder: (group) => {
     const children = [];
 
-    if (group.delim !== ".") {
-      children.push(makeText(group.delim, group.mode));
-    }
+    if (group.delim === ".") { group.delim = ""; }
+    children.push(makeText(group.delim, group.mode));
 
     const node = new mathMLTree.MathNode("mo", children);
 
@@ -3493,7 +3523,6 @@ defineFunction({
       node.setAttribute("fence", "false");
     }
 
-    node.setAttribute("stretchy", "true");
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
     node.setAttribute("maxsize", sizeToMaxHeight[group.size] + "em");
@@ -3564,30 +3593,18 @@ defineFunction({
     assertParsed(group);
     const inner = buildExpression(group.body, style);
 
-    if (group.left !== ".") {
-      const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
+    if (group.left === ".") { group.left = ""; }
+    const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
+    leftNode.setAttribute("fence", "true");
+    leftNode.setAttribute("form", "prefix");
+    inner.unshift(leftNode);
 
-      leftNode.setAttribute("fence", "true");
-      leftNode.setAttribute("form", "prefix");
-      // Set stretchy explicitly because browsers miss "/" and \backslash
-      leftNode.setAttribute("stretchy", "true");
-
-      inner.unshift(leftNode);
-    }
-
-    if (group.right !== ".") {
-      const rightNode = new mathMLTree.MathNode("mo", [makeText(group.right, group.mode)]);
-
-      rightNode.setAttribute("fence", "true");
-      rightNode.setAttribute("form", "postfix");
-      rightNode.setAttribute("stretchy", "true");
-
-      if (group.rightColor) {
-        rightNode.setAttribute("mathcolor", group.rightColor);
-      }
-
-      inner.push(rightNode);
-    }
+    if (group.right === ".") { group.right = ""; }
+    const rightNode = new mathMLTree.MathNode("mo", [makeText(group.right, group.mode)]);
+    rightNode.setAttribute("fence", "true");
+    rightNode.setAttribute("form", "postfix");
+    if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor); }
+    inner.push(rightNode);
 
     return makeRow(inner);
   }
@@ -3761,7 +3778,7 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\phase", "\\longdiv"],
+  names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\angl", "\\phase", "\\longdiv"],
   props: {
     numArgs: 1
   },
@@ -3775,24 +3792,6 @@ defineFunction({
     };
   },
   mathmlBuilder: mathmlBuilder$2
-});
-
-defineFunction({
-  type: "enclose",
-  names: ["\\angl"],
-  props: {
-    numArgs: 1,
-    argTypes: ["hbox"],
-    allowedInText: false
-  },
-  handler({ parser }, args) {
-    return {
-      type: "enclose",
-      mode: parser.mode,
-      label: "\\angl",
-      body: args[0]
-    };
-  }
 });
 
 /**
@@ -3924,7 +3923,7 @@ function parseArray(
   }
 
   // Get current arraystretch if it's not set by the environment
-  if (!arraystretch) {
+  if (arraystretch === undefined || Number.isNaN(arraystretch)) {
     const stretch = parser.gullet.expandMacroAsText("\\arraystretch");
     if (stretch == null) {
       // Default \arraystretch from lttab.dtx
@@ -4128,8 +4127,10 @@ const mathmlBuilder$3 = function(group, style) {
   // The 0.16 and 0.09 values are found emprically. They produce an array
   // similar to LaTeX and in which content does not interfere with \hines.
   const gap =
-    group.arraystretch === 0.5
-      ? 0.1 // {smallmatrix}, {subarray}
+    group.arraystretch === 0
+      ? 0 // {subarray}
+      : group.arraystretch === 0.5
+      ? 0.1 // {smallmatrix}
       : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
   table.setAttribute("rowspacing", utils.round(gap) + "em");
 
@@ -4151,11 +4152,11 @@ const mathmlBuilder$3 = function(group, style) {
     let iEnd = cols.length;
 
     if (cols[0].type === "separator") {
-      menclose += "top ";
+      menclose += "left ";
       iStart = 1;
     }
     if (cols[cols.length - 1].type === "separator") {
-      menclose += "bottom ";
+      menclose += "right ";
       iEnd -= 1;
     }
 
@@ -4222,8 +4223,8 @@ const mathmlBuilder$3 = function(group, style) {
   let rowLines = "";
   const hlines = group.hLinesBeforeRow;
 
-  menclose += hlines[0].length > 0 ? "left " : "";
-  menclose += hlines[hlines.length - 1].length > 0 ? "right " : "";
+  menclose += hlines[0].length > 0 ? "top " : "";
+  menclose += hlines[hlines.length - 1].length > 0 ? "bottom " : "";
 
   for (let i = 1; i < hlines.length - 1; i++) {
     rowLines +=
@@ -4243,7 +4244,7 @@ const mathmlBuilder$3 = function(group, style) {
     table.setAttribute("notation", menclose.trim());
   }
 
-  if (group.arraystretch && group.arraystretch < 1) {
+  if (!Number.isNaN(group.arraystretch) && group.arraystretch < 1) {
     // A small array. Wrap in scriptstyle so row gap is not too large.
     table = new mathMLTree.MathNode("mstyle", [table]);
     table.setAttribute("scriptlevel", "1");
@@ -4495,7 +4496,7 @@ defineEnvironment({
       cols,
       hskipBeforeAndAfter: false,
       colSeparationType: "array",
-      arraystretch: 0.5
+      arraystretch: 0
     };
     res = parseArray(context.parser, res, "script");
     if (res.body.length > 0 && res.body[0].length > 1) {
@@ -4766,191 +4767,34 @@ defineFunction({
   }
 });
 
-function mathmlBuilder$4(group, style) {
-  let node;
-  const inner = buildExpression(group.body, style);
-
-  if (group.mclass === "minner") {
-    return mathMLTree.newDocumentFragment(inner);
-  } else if (group.mclass === "mord") {
-    if (group.isCharacterBox || inner[0].type === "mathord") {
-      node = inner[0];
-      node.type = "mi";
-    } else {
-      node = new mathMLTree.MathNode("mi", inner);
-    }
-  } else {
-    if (group.isCharacterBox) {
-      node = inner[0];
-      node.type = "mo";
-      if (group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
-        node.setAttribute("mathvariant", "italic");
-      }
-    } else {
-      node = new mathMLTree.MathNode("mo", inner);
-    }
-
-    // Set spacing based on what is the most likely adjacent atom type.
-    // See TeXbook p170.
-    const doSpacing = style.level < 2; // Operator spacing is zero inside a (sub|super)script.
-    if (group.mclass === "mbin") {
-      // medium space
-      node.attributes.lspace = (doSpacing ? "0.2222em" : "0");
-      node.attributes.rspace = (doSpacing ? "0.2222em" : "0");
-    } else if (group.mclass === "mrel") {
-      // thickspace
-      node.attributes.lspace = (doSpacing ? "0.2778em" : "0");
-      node.attributes.rspace = (doSpacing ? "0.2778em" : "0");
-    } else if (group.mclass === "mpunct") {
-      node.attributes.lspace = "0em";
-      node.attributes.rspace = (doSpacing ? "0.1667em" : "0");
-    } else if (group.mclass === "mopen" || group.mclass === "mclose") {
-      node.attributes.lspace = "0em";
-      node.attributes.rspace = "0em";
-    }
-    if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
-      delete node.attributes.stretchy;
-      delete node.attributes.form;
-    }
-  }
-  return node;
-}
-
-// Math class commands except \mathop
-defineFunction({
-  type: "mclass",
-  names: [
-    "\\mathord",
-    "\\mathbin",
-    "\\mathrel",
-    "\\mathopen",
-    "\\mathclose",
-    "\\mathpunct",
-    "\\mathinner"
-  ],
-  props: {
-    numArgs: 1,
-    primitive: true
-  },
-  handler({ parser, funcName }, args) {
-    const body = args[0];
-    // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
-    // In that case, we instead promote the text contents of the body to the parent.
-    let mustPromote = true;
-    const mord = { type: "mathord", text: "", mode: parser.mode };
-    const arr = (body.body) ? body.body : [body];
-    for (const arg of arr) {
-      if (utils.textAtomTypes.includes(arg.type)) {
-        if (arg.text) {
-          mord.text += arg.text;
-        } else if (arg.body) {
-          arg.body.map(e => { mord.text += e.text; });
-        }
-      } else {
-        mustPromote = false;
-        break
-      }
-    }
-    return {
-      type: "mclass",
-      mode: parser.mode,
-      mclass: "m" + funcName.substr(5),
-      body: ordargument(mustPromote ? mord : body),
-      isCharacterBox: utils.isCharacterBox(body) || mustPromote
-    };
-  },
-  mathmlBuilder: mathmlBuilder$4
-});
-
-const binrelClass = (arg) => {
-  // \binrel@ spacing varies with (bin|rel|ord) of the atom in the argument.
-  // (by rendering separately and with {}s before and after, and measuring
-  // the change in spacing).  We'll do roughly the same by detecting the
-  // atom type directly.
-  const atom = arg.type === "ordgroup" && arg.body.length ? arg.body[0] : arg;
-  if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
-    return "m" + atom.family;
-  } else {
-    return "mord";
-  }
-};
-
-// \@binrel{x}{y} renders like y but as mbin/mrel/mord if x is mbin/mrel/mord.
-// This is equivalent to \binrel@{x}\binrel@@{y} in AMSTeX.
-defineFunction({
-  type: "mclass",
-  names: ["\\@binrel"],
-  props: {
-    numArgs: 2
-  },
-  handler({ parser }, args) {
-    return {
-      type: "mclass",
-      mode: parser.mode,
-      mclass: binrelClass(args[0]),
-      body: ordargument(args[1]),
-      isCharacterBox: utils.isCharacterBox(args[1])
-    };
-  }
-});
-
-// Build a relation or stacked op by placing one symbol on top of another
-defineFunction({
-  type: "mclass",
-  names: ["\\stackrel", "\\overset", "\\underset"],
-  props: {
-    numArgs: 2
-  },
-  handler({ parser, funcName }, args) {
-    const baseArg = args[1];
-    const shiftedArg = args[0];
-
-    const baseOp = {
-      type: "op",
-      mode: baseArg.mode,
-      limits: true,
-      alwaysHandleSupSub: true,
-      parentIsSupSub: false,
-      symbol: false,
-      stack: true,
-      suppressBaseShift: funcName !== "\\stackrel",
-      body: ordargument(baseArg)
-    };
-
-    return {
-      type: "supsub",
-      mode: shiftedArg.mode,
-      base: baseOp,
-      sup: funcName === "\\underset" ? null : shiftedArg,
-      sub: funcName === "\\underset" ? shiftedArg : null
-    };
-  },
-  mathmlBuilder: mathmlBuilder$4
-});
-
-const mathmlBuilder$5 = (group, style) => {
+const mathmlBuilder$4 = (group, style) => {
   const font = group.font;
-  const newOptions = style.withFont(font);
-  const mrow = buildGroup(group.body, newOptions);
+  const newStyle = style.withFont(font);
+  const mathGroup = buildGroup(group.body, newStyle);
 
-  // If possible, consolidate adjacent <mi> elements into a single element.
-  // First, check if it is possible. If not, return the <mrow>.
-  if (mrow.children.length === 0) { return mrow } // empty group, e.g., \mathrm{}
-  let mi = mrow.children[0];
-  if (mi.type !== "mi") {
-    mi = mrow;
-  } else {
-    for (let i = 1; i < mrow.children.length; i++) {
-      if (mrow.children[i].type !== "mi") { return mrow }
-      const localVariant = mrow.children[i].attributes.mathvariant || "";
-      if (localVariant !== "normal") { return mrow }
-    }
-    // Consolidate the <mi> elements.
-    for (let i = 1; i < mrow.children.length; i++) {
-      mi.children.push(mrow.children[i].children[0]);
-    }
-    if (mrow.attributes.mathcolor) { mi.attributes.mathcolor = mrow.attributes.mathcolor; }
+  if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
+  if (mathGroup.type === "mo" && font === "boldsymbol") {
+    mathGroup.style.fontWeight = "bold";
+    return mathGroup
   }
+  // Check if it is possible to consolidate elements into a single <mi> element.
+  let canConsolidate = mathGroup.children[0].type === "mo";
+  for (let i = 1; i < mathGroup.children.length; i++) {
+    if (mathGroup.children[i].type === "mo" && font === "boldsymbol") {
+      mathGroup.children[i].style.fontWeight = "bold";
+    }
+    if (mathGroup.children[i].type !== "mi") { canConsolidate = false; }
+    const localVariant = mathGroup.children[i].attributes &&
+      mathGroup.children[i].attributes.mathvariant || "";
+    if (localVariant !== "normal") { canConsolidate = false; }
+  }
+  if (!canConsolidate) { return mathGroup }
+  // Consolidate the <mi> elements.
+  const mi = mathGroup.children[0];
+  for (let i = 1; i < mathGroup.children.length; i++) {
+    mi.children.push(mathGroup.children[i].children[0]);
+  }
+  if (mathGroup.attributes.mathcolor) { mi.attributes.mathcolor = mathGroup.attributes.mathcolor; }
   if (mi.attributes.mathvariant && mi.attributes.mathvariant === "normal") {
     // Workaround for a Firefox bug that renders spurious space around
     // a <mi mathvariant="normal">
@@ -4973,13 +4817,14 @@ const fontAliases = {
 defineFunction({
   type: "font",
   names: [
-    // styles, except \boldsymbol defined below
+    // styles
     "\\mathrm",
     "\\mathit",
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
     "\\pmb",
+    "\\boldsymbol",
 
     // families
     "\\mathbb",
@@ -4990,8 +4835,9 @@ defineFunction({
     "\\mathtt",
     "\\oldstylenums",
 
-    // aliases, except \bm defined below
+    // aliases
     "\\Bbb",
+    "\\bm",
     "\\bold",
     "\\frak"
   ],
@@ -5012,45 +4858,7 @@ defineFunction({
       body
     };
   },
-  mathmlBuilder: mathmlBuilder$5
-});
-
-defineFunction({
-  type: "mclass",
-  names: ["\\bm", "\\boldsymbol"],
-  props: {
-    numArgs: 1
-  },
-  handler: ({ parser }, args) => {
-    const body = args[0];
-    const isCharacterBox = utils.isCharacterBox(body);
-    // amsbsy.sty's \boldsymbol uses \binrel spacing to inherit the
-    // argument's bin|rel|ord status
-    const mclass =  binrelClass(body);
-    if (mclass === "mbin" || mclass === "mrel") {
-      return {
-        type: "mclass",
-        mode: parser.mode,
-        mclass,
-        body: [
-          {
-            type: "font",
-            mode: parser.mode,
-            font: "boldsymbol",
-            body
-          }
-        ],
-        isCharacterBox: isCharacterBox
-      };
-    } else {
-      return {
-        type: "font",
-        mode: parser.mode,
-        font: "boldsymbol",
-        body
-      }
-    }
-  }
+  mathmlBuilder: mathmlBuilder$4
 });
 
 // Old font changing functions
@@ -5077,13 +4885,13 @@ defineFunction({
       }
     };
   },
-  mathmlBuilder: mathmlBuilder$5
+  mathmlBuilder: mathmlBuilder$4
 });
 
 const stylArray = ["display", "text", "script", "scriptscript"];
 const scriptLevel = { auto: -1, display: 0, text: 0, script: 1, scriptscript: 2 };
 
-const mathmlBuilder$6 = (group, style) => {
+const mathmlBuilder$5 = (group, style) => {
   // Track the scriptLevel of the numerator and denominator.
   // We may need that info for \mathchoice or for adjusting em dimensions.
   const childOptions = group.scriptLevel === "auto"
@@ -5215,7 +5023,7 @@ defineFunction({
       barSize: null
     };
   },
-  mathmlBuilder: mathmlBuilder$6
+  mathmlBuilder: mathmlBuilder$5
 });
 
 defineFunction({
@@ -5353,7 +5161,7 @@ defineFunction({
       scriptLevel
     };
   },
-  mathmlBuilder: mathmlBuilder$6
+  mathmlBuilder: mathmlBuilder$5
 });
 
 // \above is an infix fraction that also defines a fraction bar size.
@@ -5403,10 +5211,10 @@ defineFunction({
     };
   },
 
-  mathmlBuilder: mathmlBuilder$6
+  mathmlBuilder: mathmlBuilder$5
 });
 
-const mathmlBuilder$7 = (group, style) => {
+const mathmlBuilder$6 = (group, style) => {
   const accentNode = stretchy.mathMLnode(group.label);
   return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [
     buildGroup(group.base, style),
@@ -5430,7 +5238,7 @@ defineFunction({
       base: args[0]
     };
   },
-  mathmlBuilder: mathmlBuilder$7
+  mathmlBuilder: mathmlBuilder$6
 });
 
 defineFunction({
@@ -5839,19 +5647,29 @@ defineFunction({
 
 // Horizontal overlap functions
 
+const textModeLap = ["\\clap", "\\llap", "\\rlap"];
+
 defineFunction({
   type: "lap",
-  names: ["\\mathllap", "\\mathrlap", "\\mathclap"],
+  names: ["\\mathllap", "\\mathrlap", "\\mathclap", "\\clap", "\\llap", "\\rlap"],
   props: {
     numArgs: 1,
     allowedInText: true
   },
   handler: ({ parser, funcName }, args) => {
+    if (textModeLap.includes(funcName)) {
+      if (parser.settings.strict && parser.mode !== "text") {
+        throw new ParseError(`{${funcName}} can be used only in text mode.`)
+      }
+      funcName = funcName.slice(1);
+    } else {
+      funcName = funcName.slice(5);
+    }
     const body = args[0];
     return {
       type: "lap",
       mode: parser.mode,
-      alignment: funcName.slice(5),
+      alignment: funcName,
       body
     }
   },
@@ -5859,7 +5677,12 @@ defineFunction({
     // mathllap, mathrlap, mathclap
     const node = new mathMLTree.MathNode("mpadded", [buildGroup(group.body, style)]);
 
-    if (group.alignment !== "rlap") {
+    if (group.alignment === "rlap") {
+      if (group.body.body.length > 0 && group.body.body[0].type === "genfrac") {
+        // In Firefox, a <mpadded> squashes the 3/18em padding of a child \frac. Put it back.
+        node.setAttribute("lspace", "0.16667em");
+      }
+    } else {
       const offset = group.alignment === "llap" ? "-1" : "-0.5";
       node.setAttribute("lspace", offset + "width");
     }
@@ -5942,6 +5765,172 @@ defineFunction({
     const body = chooseStyle(group, style);
     return buildExpressionRow(body, style);
   }
+});
+
+const textAtomTypes = ["text", "textord", "mathord", "atom"];
+
+function mathmlBuilder$7(group, style) {
+  let node;
+  const inner = buildExpression(group.body, style);
+
+  if (group.mclass === "minner") {
+    return mathMLTree.newDocumentFragment(inner);
+  } else if (group.mclass === "mord") {
+    if (group.isCharacterBox || inner[0].type === "mathord") {
+      node = inner[0];
+      node.type = "mi";
+    } else {
+      node = new mathMLTree.MathNode("mi", inner);
+    }
+  } else {
+    if (group.mustPromote) {
+      node = inner[0];
+      node.type = "mo";
+      if (group.isCharacterBox && group.body[0].text && /[A-Za-z]/.test(group.body[0].text)) {
+        node.setAttribute("mathvariant", "italic");
+      }
+    } else {
+      node = new mathMLTree.MathNode("mo", inner);
+    }
+
+    // Set spacing based on what is the most likely adjacent atom type.
+    // See TeXbook p170.
+    const doSpacing = style.level < 2; // Operator spacing is zero inside a (sub|super)script.
+    if (group.mclass === "mbin") {
+      // medium space
+      node.attributes.lspace = (doSpacing ? "0.2222em" : "0");
+      node.attributes.rspace = (doSpacing ? "0.2222em" : "0");
+    } else if (group.mclass === "mrel") {
+      // thickspace
+      node.attributes.lspace = (doSpacing ? "0.2778em" : "0");
+      node.attributes.rspace = (doSpacing ? "0.2778em" : "0");
+    } else if (group.mclass === "mpunct") {
+      node.attributes.lspace = "0em";
+      node.attributes.rspace = (doSpacing ? "0.1667em" : "0");
+    } else if (group.mclass === "mopen" || group.mclass === "mclose") {
+      node.attributes.lspace = "0em";
+      node.attributes.rspace = "0em";
+    }
+    if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
+      delete node.attributes.stretchy;
+      delete node.attributes.form;
+    }
+  }
+  return node;
+}
+
+// Math class commands except \mathop
+defineFunction({
+  type: "mclass",
+  names: [
+    "\\mathord",
+    "\\mathbin",
+    "\\mathrel",
+    "\\mathopen",
+    "\\mathclose",
+    "\\mathpunct",
+    "\\mathinner"
+  ],
+  props: {
+    numArgs: 1,
+    primitive: true
+  },
+  handler({ parser, funcName }, args) {
+    const body = args[0];
+    const isCharacterBox = utils.isCharacterBox(body);
+    // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+    // In that case, we instead promote the text contents of the body to the parent.
+    let mustPromote = true;
+    const mord = { type: "mathord", text: "", mode: parser.mode };
+    const arr = (body.body) ? body.body : [body];
+    for (const arg of arr) {
+      if (textAtomTypes.includes(arg.type)) {
+        if (arg.text) {
+          mord.text += arg.text;
+        } else if (arg.body) {
+          arg.body.map(e => { mord.text += e.text; });
+        }
+      } else {
+        mustPromote = false;
+        break
+      }
+    }
+    return {
+      type: "mclass",
+      mode: parser.mode,
+      mclass: "m" + funcName.substr(5),
+      body: ordargument(mustPromote ? mord : body),
+      isCharacterBox,
+      mustPromote
+    };
+  },
+  mathmlBuilder: mathmlBuilder$7
+});
+
+const binrelClass = (arg) => {
+  // \binrel@ spacing varies with (bin|rel|ord) of the atom in the argument.
+  // (by rendering separately and with {}s before and after, and measuring
+  // the change in spacing).  We'll do roughly the same by detecting the
+  // atom type directly.
+  const atom = arg.type === "ordgroup" && arg.body.length ? arg.body[0] : arg;
+  if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
+    return "m" + atom.family;
+  } else {
+    return "mord";
+  }
+};
+
+// \@binrel{x}{y} renders like y but as mbin/mrel/mord if x is mbin/mrel/mord.
+// This is equivalent to \binrel@{x}\binrel@@{y} in AMSTeX.
+defineFunction({
+  type: "mclass",
+  names: ["\\@binrel"],
+  props: {
+    numArgs: 2
+  },
+  handler({ parser }, args) {
+    return {
+      type: "mclass",
+      mode: parser.mode,
+      mclass: binrelClass(args[0]),
+      body: ordargument(args[1]),
+      isCharacterBox: utils.isCharacterBox(args[1])
+    };
+  }
+});
+
+// Build a relation or stacked op by placing one symbol on top of another
+defineFunction({
+  type: "mclass",
+  names: ["\\stackrel", "\\overset", "\\underset"],
+  props: {
+    numArgs: 2
+  },
+  handler({ parser, funcName }, args) {
+    const baseArg = args[1];
+    const shiftedArg = args[0];
+
+    const baseOp = {
+      type: "op",
+      mode: baseArg.mode,
+      limits: true,
+      alwaysHandleSupSub: true,
+      parentIsSupSub: false,
+      symbol: false,
+      stack: true,
+      suppressBaseShift: funcName !== "\\stackrel",
+      body: ordargument(baseArg)
+    };
+
+    return {
+      type: "supsub",
+      mode: shiftedArg.mode,
+      base: baseOp,
+      sup: funcName === "\\underset" ? null : shiftedArg,
+      sub: funcName === "\\underset" ? shiftedArg : null
+    };
+  },
+  mathmlBuilder: mathmlBuilder$7
 });
 
 // Helper function
@@ -6075,6 +6064,8 @@ defineFunction({
 
 // Limits, symbols
 
+const ordAtomTypes = ["textord", "mathord", "atom"];
+
 // Most operators have a large successor symbol, but these don't.
 const noSuccessor = ["\\smallint"];
 
@@ -6198,43 +6189,21 @@ defineFunction({
   },
   handler: ({ parser }, args) => {
     const body = args[0];
-    const prevAtomType = parser.prevAtomType;
-    // We should not wrap a <mo> around a <mi> or <mord>. That would be invalid MathML.
+    // It would be convienient to just wrap a <mo> around the argument.
+    // But if the argument is a <mi> or <mord>, that would be invalid MathML.
     // In that case, we instead promote the text contents of the body to the parent.
-    let mustPromote = true;
-    const atom = {
+    const arr = (body.body) ? body.body : [body];
+    const isSymbol = arr.length === 1 && ordAtomTypes.includes(arr[0].type);
+    return {
       type: "op",
       mode: parser.mode,
-      limits: false,
+      limits: true,
       parentIsSupSub: false,
-      symbol: false,
+      symbol: isSymbol,
       stack: false,
-      needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
-      name: "\\"
+      name: isSymbol ? arr[0].text : null,
+      body: isSymbol ? null : ordargument(body)
     };
-    const arr = (body.body) ? body.body : [body];
-    for (const arg of arr) {
-      if (utils.textAtomTypes.includes(arg.type)) {
-        atom.name += arg.text;
-      } else {
-        mustPromote = false;
-        break
-      }
-    }
-    if (mustPromote) {
-      atom.mode = parser.mode;
-      return atom
-    } else {
-      return {
-        type: "op",
-        mode: parser.mode,
-        limits: false,
-        parentIsSupSub: false,
-        symbol: false,
-        stack: false,
-        body: ordargument(body)
-      };
-    }
   },
   mathmlBuilder: mathmlBuilder$8
 });
@@ -6971,6 +6940,13 @@ const styleMap = {
   scriptscript: 3
 };
 
+const styleAttributes = {
+  display: ["0", "true"],
+  text: ["0", "false"],
+  script: ["1", "false"],
+  scriptscript: ["2", "false"]
+};
+
 defineFunction({
   type: "styling",
   names: ["\\displaystyle", "\\textstyle", "\\scriptstyle", "\\scriptscriptstyle"],
@@ -6996,20 +6972,15 @@ defineFunction({
   mathmlBuilder(group, style) {
     // Figure out what scriptLevel we're changing to.
     const newStyle = style.withLevel(styleMap[group.scriptLevel]);
-
+    // The style argument in the next line does NOT directly set a MathML script level.
+    // It just tracks the style level, in case we need to know it for supsub or mathchoice.
     const inner = buildExpression(group.body, newStyle);
     // Wrap with an <mstyle> element.
     const node = wrapWithMstyle(inner);
 
-    const styleAttributes = {
-      display: ["0", "true"],
-      text: ["0", "false"],
-      script: ["1", "false"],
-      scriptscript: ["2", "false"]
-    };
-
     const attr = styleAttributes[group.scriptLevel];
 
+    // Here is where we set the MathML script level.
     node.setAttribute("scriptlevel", attr[0]);
     node.setAttribute("displaystyle", attr[1]);
 
@@ -7159,16 +7130,23 @@ defineFunctionBuilders({
     } else if (group.family === "open" || group.family === "close") {
       // Delims built here should not stretch vertically.
       // See delimsizing.js for stretchy delims.
-      node.setAttribute("stretchy", "false");
       if (group.family === "open") {
         node.setAttribute("form", "prefix");
+        // Set an explicit attribute for stretch. Otherwise Firefox may do it wrong.
+        node.setAttribute("stretchy", "false");
       } else if (group.family === "close") {
         node.setAttribute("form", "postfix");
+        node.setAttribute("stretchy", "false");
       }
     } else if (group.text === "\\mid") {
       // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
       node.setAttribute("lspace", "0.22em"); // medium space
       node.setAttribute("rspace", "0.22em");
+      node.setAttribute("stretchy", "false");
+    } else if (group.text === ":") {
+      // ":" is not in the MathML operator dictionary. Give it BIN spacing.
+      node.attributes.lspace = "0.2222em";
+      node.attributes.rspace = "0.2222em";
     }
     return node;
   }
@@ -7402,7 +7380,7 @@ const variantChar = (ch, variant) => {
     ? "upperCaseLatin"
     : 0x60 < codePoint && codePoint < 0x7b
     ? "lowerCaseLatin"
-    : (0x390  < codePoint && codePoint < 0x3A1) || ch === "∇"
+    : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
     ? "upperCaseGreek"
     : 0x3B0 < codePoint && codePoint < 0x3CA
     ? "lowerCaseGreek"
@@ -8277,6 +8255,10 @@ defineMacro("\\char", function(context) {
 
 defineMacro("\\hbox", "\\text{#1}");
 
+// Per TeXbook p.122, "/" gets zero operator spacing.
+// And MDN recommends using U+2044 instead of / for inline
+defineMacro("/", "{\u2044}");
+
 // Since Temml has no \par, ignore \long.
 defineMacro("\\long", "");
 
@@ -8297,11 +8279,6 @@ defineMacro("\\rq", "'");
 defineMacro("\\aa", "\\r a");
 
 defineMacro("\\Bbbk", "\\Bbb{k}");
-
-// \llap and \rlap render their contents in text mode
-defineMacro("\\llap", "\\mathllap{\\textrm{#1}}");
-defineMacro("\\rlap", "\\mathrlap{\\textrm{#1}}");
-defineMacro("\\clap", "\\mathclap{\\textrm{#1}}");
 
 // \mathstrut from the TeXbook, p 360
 defineMacro("\\mathstrut", "\\vphantom{(}");
@@ -8325,14 +8302,6 @@ defineMacro("\u22ee", "\\vdots");
 
 //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
-
-// \renewcommand{\colon}{\nobreak\mskip2mu\mathpunct{}\nonscript
-// \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
-defineMacro(
-  "\\colon",
-  "\\nobreak\\mskip2mu\\mathpunct{}" +
-  "\\mathchoice{\\mkern-3mu}{\\mkern-3mu}{}{}{:}\\mskip6mu\\relax"
-);
 
 // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
 defineMacro("\\boxed", "\\fbox{$\\displaystyle{#1}$}");
@@ -12292,7 +12261,8 @@ class Parser {
     // generate valid links in such cases; we interpret this as
     // "undefined" behaviour, and keep them as-is. Some browser will
     // replace backslashes with forward slashes.
-    const url = res.text.replace(/\\([#$%&~_^{}])/g, "$1");
+    let url = res.text.replace(/\\([#$%&~_^{}])/g, "$1");
+    url = res.text.replace(/{\u2044}/g, "/");
     return {
       type: "url",
       mode: this.mode,
@@ -12751,7 +12721,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.4.0";
+const version = "0.4.1";
 
 function postProcess(block) {
   const labelMap = {};
