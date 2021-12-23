@@ -80,7 +80,8 @@ const offset = Object.freeze({
     "fraktur": ch =>                { return 0 },
     "fraktur-bold": ch =>           { return 0 },
     "double-struck": ch =>          { return 0 },
-    "sans-serif": ch =>             { return 0 },
+    // Unicode has no code points for regular-weight san-serif Greek. Use bold.
+    "sans-serif": ch =>             { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
     "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
     "sans-serif-italic": ch =>      { return 0 },
     "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
@@ -96,7 +97,8 @@ const offset = Object.freeze({
     "fraktur": ch =>                { return 0 },
     "fraktur-bold": ch =>           { return 0 },
     "double-struck": ch =>          { return 0 },
-    "sans-serif": ch =>             { return 0 },
+    // Unicode has no code points for regular-weight san-serif Greek. Use bold.
+    "sans-serif": ch =>             { return 0x1D3BF },
     "sans-serif-bold": ch =>        { return 0x1D3BF },
     "sans-serif-italic": ch =>      { return 0 },
     "sans-serif-bold-italic": ch => { return 0x1D3F9 },
