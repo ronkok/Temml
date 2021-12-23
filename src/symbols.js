@@ -770,6 +770,7 @@ defineSymbol(text, textord, "\u00f8", "\\o", true);
 defineSymbol(text, textord, "\u00c6", "\\AE", true);
 defineSymbol(text, textord, "\u0152", "\\OE", true);
 defineSymbol(text, textord, "\u00d8", "\\O", true);
+defineSymbol(math, mathord, "\u00d8", "\\O", true);
 defineSymbol(text, accent, "\u02ca", "\\'"); // acute
 defineSymbol(text, accent, "\u02cb", "\\`"); // grave
 defineSymbol(text, accent, "\u02c6", "\\^"); // circumflex
