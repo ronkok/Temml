@@ -59,7 +59,7 @@ const offset = Object.freeze({
     "bold": ch =>                   { return 0x1D3B9 },
     "italic": ch =>                 { return ch === "h" ? 0x20A6 : 0x1D3ED },
     "bold-italic": ch =>            { return 0x1D421 },
-    "script": ch =>                 { return 0x1D455 },
+    "script": ch =>                 { return script[ch] || 0x1D455 },
     "script-bold": ch =>            { return 0x1D489 },
     "fraktur": ch =>                { return 0x1D4BD },
     "fraktur-bold": ch =>           { return 0x1D525 },
