@@ -169,6 +169,11 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
+    if (group.delim === "\u2216") {
+      // \backslash is not in the operator dictionary,
+      // so we have to explicitly set stretchy to true.
+      node.setAttribute("stretchy", "true")
+    }
 
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
