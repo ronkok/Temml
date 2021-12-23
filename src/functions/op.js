@@ -321,3 +321,21 @@ defineFunction({
   },
   mathmlBuilder
 });
+
+defineFunction({
+  type: "colonequal",
+  names: [":"],
+  props: { numArgs: 0 },
+  handler({ parser }, args) {
+    if (parser.fetch().text === "=") {
+      // Special case for :=
+      parser.consume()
+      return { type: "colonequal", mode: parser.mode }
+    }
+    return { type: "atom", family: "rel", text: ":", mode: parser.mode }
+  },
+  mathmlBuilder(group, style) {
+    return new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2254")])
+  }
+});
+
