@@ -208,6 +208,7 @@ defineFunction({
     "\\sin",
     "\\sinh",
     "\\sh",
+    "\\sgn",
     "\\tan",
     "\\tanh",
     "\\tg",
