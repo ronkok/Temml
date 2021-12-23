@@ -97,7 +97,7 @@ defineFunctionBuilders({
       }
     } else {
       const base = group.base;
-      if (base && base.type === "op" && base.limits &&
+      if (base && ((base.type === "op" && base.limits) || base.type === "multiscript") &&
         (style.level === StyleLevel.DISPLAY || base.alwaysHandleSupSub)
       ) {
         nodeType = "munderover"
