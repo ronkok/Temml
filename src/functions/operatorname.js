@@ -105,7 +105,8 @@ defineFunction({
   type: "operatorname",
   names: ["\\operatorname@", "\\operatornamewithlimits"],
   props: {
-    numArgs: 1
+    numArgs: 1,
+    allowedInArgument: true
   },
   handler: ({ parser, funcName }, args) => {
     const body = args[0]
