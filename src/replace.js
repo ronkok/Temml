@@ -90,7 +90,7 @@ const offset = Object.freeze({
     "normal": ch =>                 { return 0 },
     "bold": ch =>                   { return 0x1D311 },
     "italic": ch =>                 { return 0x1D34B },
-    "bold-italic": ch =>            { return 0x1D385 },
+    "bold-italic": ch =>            { return ch === "\u03d5" ? 0x1D37E : 0x1D385 },
     "script": ch =>                 { return 0 },
     "script-bold": ch =>            { return 0 },
     "fraktur": ch =>                { return 0 },
@@ -128,7 +128,7 @@ export const variantChar = (ch, variant) => {
     ? "lowerCaseLatin"
     : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
     ? "upperCaseGreek"
-    : 0x3B0 < codePoint && codePoint < 0x3CA
+    : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
     ? "lowerCaseGreek"
     : 0x2F < codePoint && codePoint <  0x3A
     ? "numeral"
