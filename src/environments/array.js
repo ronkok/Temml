@@ -690,7 +690,7 @@ defineEnvironment({
 });
 
 // A cases environment (in amsmath.sty) is almost equivalent to
-// \def\arraystretch{1.2}%
+// \def
 // \left\{\begin{array}{@{}l@{\quad}l@{}} … \end{array}\right.
 // {dcases} is a {cases} environment where cells are set in \displaystyle,
 // as defined in mathtools.sty.
@@ -703,7 +703,6 @@ defineEnvironment({
   },
   handler(context) {
     const payload = {
-      arraystretch: 1.2,
       cols: [
         {
           type: "align",
