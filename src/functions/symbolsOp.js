@@ -26,6 +26,8 @@ defineFunctionBuilders({
       node.setAttribute("lspace", "0.22em") // medium space
       node.setAttribute("rspace", "0.22em")
       node.setAttribute("stretchy", "false")
+    } else if (group.text === "\\shortmid" || group.text === "\\nshortmid") {
+      node.setAttribute("mathsize", "70%")
     } else if (group.text === ":") {
       // ":" is not in the MathML operator dictionary. Give it BIN spacing.
       node.attributes.lspace = "0.2222em"
