@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.4.2] = 2021-12-24
+
+### Fixed
+
+- \mathcal{ego}
+- \not\operatorname
+- \big\backslash and \right\backslash
+- displaystyle \sideset
+- :=
+- {cases} environment row spacing
+- \varnothing
+- math-mode \O and \o
+- Greek edge cases of bold, italic, and sans-serif
+- \shortmid, \nshortmid, \shortparallel, \nshortparallel, \smallsetminus
+- non-stretchy accents (so they do not stretch)
+- Make best effort to support Greek sans-serif
+
+### Added
+
+- \sgn
+
 ## [0.4.1] = 2021-12-20
 
 ### Fixed

@@ -1,9 +1,8 @@
 const fs = require("fs")  // Node.js file system
 const hurmetMark = require("./hurmetMark.cjs")
-/*const temml = require('./temml.cjs.js');
+const temml = require('./temml.cjs.js');
 const katex = require('./katex.min.js');
-const TeXZilla = require("./TeXZilla.js"); */
-
+const TeXZilla = require("./TeXZilla.js");
 
 // Build supported.html.
 let supported = fs.readFileSync('./docs/supported.md').toString('utf8')
@@ -21,7 +20,7 @@ let admin = fs.readFileSync('./docs/administration.md').toString('utf8')
 // convert Markdown to HTML
 admin =  hurmetMark.hmd.md2html(admin, true)
 fs.writeFileSync('./site/docs/en/administration.html', admin)
-/*
+
 // helper function for comparison page.
 const arrayOfRegExMatches = (regex, text) => {
   if (regex.constructor !== RegExp) { throw new Error('not RegExp') }
@@ -90,4 +89,4 @@ for (let i = matches.length - 1; i >= 0; i--) {
   comp = comp.slice(0, matches[i].index) + math + comp.slice(matches[i].lastindex);
 }
 
-fs.writeFileSync('./site/docs/en/comparison.html', comp) */
+fs.writeFileSync('./site/docs/en/comparison.html', comp)

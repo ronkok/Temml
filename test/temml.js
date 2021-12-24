@@ -1319,36 +1319,36 @@ var temml = (function () {
   defineSymbol(text, textord, "\u03a7", "\\Chi", true);
   defineSymbol(text, textord, "\u03a8", "\\Psi", true);
   defineSymbol(text, textord, "\u03a9", "\\Omega", true);
-  defineSymbol(math, textord, "\u0391", "\\Alpha", true);
-  defineSymbol(math, textord, "\u0392", "\\Beta", true);
-  defineSymbol(math, textord, "\u0393", "\\Gamma", true);
-  defineSymbol(math, textord, "\u0394", "\\Delta", true);
-  defineSymbol(math, textord, "\u0395", "\\Epsilon", true);
-  defineSymbol(math, textord, "\u0396", "\\Zeta", true);
-  defineSymbol(math, textord, "\u0397", "\\Eta", true);
-  defineSymbol(math, textord, "\u0398", "\\Theta", true);
-  defineSymbol(math, textord, "\u0399", "\\Iota", true);
-  defineSymbol(math, textord, "\u039a", "\\Kappa", true);
-  defineSymbol(math, textord, "\u039b", "\\Lambda", true);
-  defineSymbol(math, textord, "\u039c", "\\Mu", true);
-  defineSymbol(math, textord, "\u039d", "\\Nu", true);
-  defineSymbol(math, textord, "\u039e", "\\Xi", true);
-  defineSymbol(math, textord, "\u039f", "\\Omicron", true);
-  defineSymbol(math, textord, "\u03a0", "\\Pi", true);
-  defineSymbol(math, textord, "\u03a1", "\\Rho", true);
-  defineSymbol(math, textord, "\u03a3", "\\Sigma", true);
-  defineSymbol(math, textord, "\u03a4", "\\Tau", true);
-  defineSymbol(math, textord, "\u03a5", "\\Upsilon", true);
-  defineSymbol(math, textord, "\u03a6", "\\Phi", true);
-  defineSymbol(math, textord, "\u03a7", "\\Chi", true);
-  defineSymbol(math, textord, "\u03a8", "\\Psi", true);
-  defineSymbol(math, textord, "\u03a9", "\\Omega", true);
+  defineSymbol(math, mathord, "\u0391", "\\Alpha", true);
+  defineSymbol(math, mathord, "\u0392", "\\Beta", true);
+  defineSymbol(math, mathord, "\u0393", "\\Gamma", true);
+  defineSymbol(math, mathord, "\u0394", "\\Delta", true);
+  defineSymbol(math, mathord, "\u0395", "\\Epsilon", true);
+  defineSymbol(math, mathord, "\u0396", "\\Zeta", true);
+  defineSymbol(math, mathord, "\u0397", "\\Eta", true);
+  defineSymbol(math, mathord, "\u0398", "\\Theta", true);
+  defineSymbol(math, mathord, "\u0399", "\\Iota", true);
+  defineSymbol(math, mathord, "\u039a", "\\Kappa", true);
+  defineSymbol(math, mathord, "\u039b", "\\Lambda", true);
+  defineSymbol(math, mathord, "\u039c", "\\Mu", true);
+  defineSymbol(math, mathord, "\u039d", "\\Nu", true);
+  defineSymbol(math, mathord, "\u039e", "\\Xi", true);
+  defineSymbol(math, mathord, "\u039f", "\\Omicron", true);
+  defineSymbol(math, mathord, "\u03a0", "\\Pi", true);
+  defineSymbol(math, mathord, "\u03a1", "\\Rho", true);
+  defineSymbol(math, mathord, "\u03a3", "\\Sigma", true);
+  defineSymbol(math, mathord, "\u03a4", "\\Tau", true);
+  defineSymbol(math, mathord, "\u03a5", "\\Upsilon", true);
+  defineSymbol(math, mathord, "\u03a6", "\\Phi", true);
+  defineSymbol(math, mathord, "\u03a7", "\\Chi", true);
+  defineSymbol(math, mathord, "\u03a8", "\\Psi", true);
+  defineSymbol(math, mathord, "\u03a9", "\\Omega", true);
   defineSymbol(math, textord, "\u00ac", "\\neg", true);
   defineSymbol(math, textord, "\u00ac", "\\lnot");
   defineSymbol(math, textord, "\u22a4", "\\top");
   defineSymbol(math, textord, "\u22a5", "\\bot");
   defineSymbol(math, textord, "\u2205", "\\emptyset");
-  defineSymbol(math, textord, "\u2205", "\\varnothing");
+  defineSymbol(math, textord, "\u00f8", "\\varnothing");
   defineSymbol(math, mathord, "\u03b1", "\\alpha", true);
   defineSymbol(math, mathord, "\u03b2", "\\beta", true);
   defineSymbol(math, mathord, "\u03b3", "\\gamma", true);
@@ -1420,7 +1420,6 @@ var temml = (function () {
   defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
   defineSymbol(math, close, "\u2984", "\\rBrace", true);
   defineSymbol(math, rel, "=", "=");
-  defineSymbol(math, rel, ":", ":");
   defineSymbol(math, rel, "\u2248", "\\approx", true);
   defineSymbol(math, rel, "\u2245", "\\cong", true);
   defineSymbol(math, rel, "\u2265", "\\ge");
@@ -1581,9 +1580,11 @@ var temml = (function () {
   defineSymbol(text, textord, "\u00e6", "\\ae", true);
   defineSymbol(text, textord, "\u0153", "\\oe", true);
   defineSymbol(text, textord, "\u00f8", "\\o", true);
+  defineSymbol(math, mathord, "\u00f8", "\\o", true);
   defineSymbol(text, textord, "\u00c6", "\\AE", true);
   defineSymbol(text, textord, "\u0152", "\\OE", true);
   defineSymbol(text, textord, "\u00d8", "\\O", true);
+  defineSymbol(math, mathord, "\u00d8", "\\O", true);
   defineSymbol(text, accent, "\u02ca", "\\'"); // acute
   defineSymbol(text, accent, "\u02cb", "\\`"); // grave
   defineSymbol(text, accent, "\u02c6", "\\^"); // circumflex
@@ -2084,8 +2085,8 @@ var temml = (function () {
       ? stretchy.mathMLnode(group.label)
       : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
 
-    if (group.isStretchy) {
-      accentNode.setAttribute("stretchy", "true");
+    if (!group.isStretchy) {
+      accentNode.setAttribute("stretchy", "false");
     }
 
     const node = new mathMLTree.MathNode((group.label === "\\c" ? "munder" : "mover"),
@@ -2774,6 +2775,23 @@ var temml = (function () {
       mo.attributes.lspace = (style.level < 2 ? "0.05556em" : "0.1111em");
       mo.attributes.rspace = "0.3333em"; // 6mu
       return mo
+    }
+  });
+
+  defineFunction({
+    type: "colonequal",
+    names: [":"],
+    props: { numArgs: 0 },
+    handler({ parser }, args) {
+      if (parser.fetch().text === "=") {
+        // Special case for :=
+        parser.consume();
+        return { type: "colonequal", mode: parser.mode }
+      }
+      return { type: "atom", family: "rel", text: ":", mode: parser.mode }
+    },
+    mathmlBuilder(group, style) {
+      return new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2254")])
     }
   });
 
@@ -3525,6 +3543,11 @@ var temml = (function () {
         // defaults.
         node.setAttribute("fence", "false");
       }
+      if (group.delim === "\u2216") {
+        // \backslash is not in the operator dictionary,
+        // so we have to explicitly set stretchy to true.
+        node.setAttribute("stretchy", "true");
+      }
 
       node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
       node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
@@ -3600,12 +3623,14 @@ var temml = (function () {
       const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
       leftNode.setAttribute("fence", "true");
       leftNode.setAttribute("form", "prefix");
+      if (group.left === "\u2216") { leftNode.setAttribute("stretchy", "true"); }
       inner.unshift(leftNode);
 
       if (group.right === ".") { group.right = ""; }
       const rightNode = new mathMLTree.MathNode("mo", [makeText(group.right, group.mode)]);
       rightNode.setAttribute("fence", "true");
       rightNode.setAttribute("form", "postfix");
+      if (group.right === "\u2216") { rightNode.setAttribute("stretchy", "true"); }
       if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor); }
       inner.push(rightNode);
 
@@ -4511,7 +4536,7 @@ var temml = (function () {
   });
 
   // A cases environment (in amsmath.sty) is almost equivalent to
-  // \def\arraystretch{1.2}%
+  // \def
   // \left\{\begin{array}{@{}l@{\quad}l@{}} … \end{array}\right.
   // {dcases} is a {cases} environment where cells are set in \displaystyle,
   // as defined in mathtools.sty.
@@ -4524,7 +4549,6 @@ var temml = (function () {
     },
     handler(context) {
       const payload = {
-        arraystretch: 1.2,
         cols: [
           {
             type: "align",
@@ -6270,6 +6294,7 @@ var temml = (function () {
       "\\sin",
       "\\sinh",
       "\\sh",
+      "\\sgn",
       "\\tan",
       "\\tanh",
       "\\tg",
@@ -6493,7 +6518,8 @@ var temml = (function () {
     type: "operatorname",
     names: ["\\operatorname@", "\\operatornamewithlimits"],
     props: {
-      numArgs: 1
+      numArgs: 1,
+      allowedInArgument: true
     },
     handler: ({ parser, funcName }, args) => {
       const body = args[0];
@@ -7085,7 +7111,7 @@ var temml = (function () {
         }
       } else {
         const base = group.base;
-        if (base && base.type === "op" && base.limits &&
+        if (base && ((base.type === "op" && base.limits) || base.type === "multiscript") &&
           (style.level === StyleLevel.DISPLAY || base.alwaysHandleSupSub)
         ) {
           nodeType = "munderover";
@@ -7124,6 +7150,9 @@ var temml = (function () {
 
   // Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
 
+  const short = ["\\shortmid", "\\nshortmid", "\\shortparallel",
+    "\\nshortparallel", "\\smallsetminus"];
+
   defineFunctionBuilders({
     type: "atom",
     mathmlBuilder(group, style) {
@@ -7146,6 +7175,8 @@ var temml = (function () {
         node.setAttribute("lspace", "0.22em"); // medium space
         node.setAttribute("rspace", "0.22em");
         node.setAttribute("stretchy", "false");
+      } else if (short.includes(group.text)) {
+        node.setAttribute("mathsize", "70%");
       } else if (group.text === ":") {
         // ":" is not in the MathML operator dictionary. Give it BIN spacing.
         node.attributes.lspace = "0.2222em";
@@ -7293,6 +7324,42 @@ var temml = (function () {
     Z: 0x20CA
   });
 
+  const bold = Object.freeze({
+    "\u03f5": 0x1D2E7, // lunate epsilon
+    "\u03d1": 0x1D30C, // vartheta
+    "\u03f0": 0x1D2EE, // varkappa
+    "\u03c6": 0x1D319, // varphi
+    "\u03f1": 0x1D2EF, // varrho
+    "\u03d6": 0x1D30B  // varpi
+  });
+
+  const boldItalic = Object.freeze({
+    "\u03f5": 0x1D35B, // lunate epsilon
+    "\u03d1": 0x1D380, // vartheta
+    "\u03f0": 0x1D362, // varkappa
+    "\u03c6": 0x1D38D, // varphi
+    "\u03f1": 0x1D363, // varrho
+    "\u03d6": 0x1D37F  // varpi
+  });
+
+  const boldsf = Object.freeze({
+    "\u03f5": 0x1D395, // lunate epsilon
+    "\u03d1": 0x1D3BA, // vartheta
+    "\u03f0": 0x1D39C, // varkappa
+    "\u03c6": 0x1D3C7, // varphi
+    "\u03f1": 0x1D39D, // varrho
+    "\u03d6": 0x1D3B9  // varpi
+  });
+
+  const bisf = Object.freeze({
+    "\u03f5": 0x1D3CF, // lunate epsilon
+    "\u03d1": 0x1D3F4, // vartheta
+    "\u03f0": 0x1D3D6, // varkappa
+    "\u03c6": 0x1D401, // varphi
+    "\u03f1": 0x1D3D7, // varrho
+    "\u03d6": 0x1D3F3  // varpi
+  });
+
   // Code point offsets below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
   const offset = Object.freeze({
     upperCaseLatin: { // A-Z
@@ -7316,7 +7383,7 @@ var temml = (function () {
       "bold": ch =>                   { return 0x1D3B9 },
       "italic": ch =>                 { return ch === "h" ? 0x20A6 : 0x1D3ED },
       "bold-italic": ch =>            { return 0x1D421 },
-      "script": ch =>                 { return 0x1D455 },
+      "script": ch =>                 { return script[ch] || 0x1D455 },
       "script-bold": ch =>            { return 0x1D489 },
       "fraktur": ch =>                { return 0x1D4BD },
       "fraktur-bold": ch =>           { return 0x1D525 },
@@ -7331,13 +7398,15 @@ var temml = (function () {
       "normal": ch =>                 { return 0 },
       "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
       "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
-      "bold-italic": ch =>            { return ch === "∇" ? 0x1B52E : 0x1D38B },
+      // \boldsymbol actually returns upright bold for upperCaseGreek
+      "bold-italic": ch =>            { return ch === "∇" ? 0x1B4BA : 0x1D317 },
       "script": ch =>                 { return 0 },
       "script-bold": ch =>            { return 0 },
       "fraktur": ch =>                { return 0 },
       "fraktur-bold": ch =>           { return 0 },
       "double-struck": ch =>          { return 0 },
-      "sans-serif": ch =>             { return 0 },
+      // Unicode has no code points for regular-weight san-serif Greek. Use bold.
+      "sans-serif": ch =>             { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
       "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
       "sans-serif-italic": ch =>      { return 0 },
       "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
@@ -7347,16 +7416,33 @@ var temml = (function () {
       "normal": ch =>                 { return 0 },
       "bold": ch =>                   { return 0x1D311 },
       "italic": ch =>                 { return 0x1D34B },
-      "bold-italic": ch =>            { return 0x1D385 },
+      "bold-italic": ch =>            { return ch === "\u03d5" ? 0x1D37E : 0x1D385 },
       "script": ch =>                 { return 0 },
       "script-bold": ch =>            { return 0 },
       "fraktur": ch =>                { return 0 },
       "fraktur-bold": ch =>           { return 0 },
       "double-struck": ch =>          { return 0 },
-      "sans-serif": ch =>             { return 0 },
+      // Unicode has no code points for regular-weight san-serif Greek. Use bold.
+      "sans-serif": ch =>             { return 0x1D3BF },
       "sans-serif-bold": ch =>        { return 0x1D3BF },
       "sans-serif-italic": ch =>      { return 0 },
       "sans-serif-bold-italic": ch => { return 0x1D3F9 },
+      "monospace": ch =>              { return 0 }
+    },
+    varGreek: { // \varGamma, etc
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return  bold[ch] || -51 },
+      "italic": ch =>                 { return 0 },
+      "bold-italic": ch =>            { return boldItalic[ch] || 0x3A },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0 },
+      "sans-serif": ch =>             { return boldsf[ch] || 0x74 },
+      "sans-serif-bold": ch =>        { return boldsf[ch] || 0x74 },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return bisf[ch] || 0xAE },
       "monospace": ch =>              { return 0 }
     },
     numeral: { // 0-9
@@ -7385,9 +7471,11 @@ var temml = (function () {
       ? "lowerCaseLatin"
       : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
       ? "upperCaseGreek"
-      : 0x3B0 < codePoint && codePoint < 0x3CA
+      : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
       ? "lowerCaseGreek"
-      : 0x2F < codePoint && codePoint <  0x3A
+      : 0x1D6E1 < codePoint && codePoint < 0x1D6FC  || bold[ch]
+      ? "varGreek"
+      : (0x2F < codePoint && codePoint <  0x3A)
       ? "numeral"
       : "other";
     return block === "other"
@@ -7442,7 +7530,10 @@ var temml = (function () {
     type: "mathord",
     mathmlBuilder(group, style) {
       const text = makeText(group.text, group.mode, style);
-      const variant = getVariant(group, style) || "italic";
+      const codePoint = text.text.codePointAt(0);
+      // Test for upper-case Greek
+      const defaultVariant = (0x0390 < codePoint && codePoint < 0x03aa) ? "normal" : "italic";
+      const variant = getVariant(group, style) || defaultVariant;
       if (variant === "script") {
         text.text = variantChar(text.text, variant);
         return new mathMLTree.MathNode("mi", [text], [style.font])
@@ -10728,7 +10819,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.4.1";
+  const version = "0.4.2";
 
   function postProcess(block) {
     const labelMap = {};
