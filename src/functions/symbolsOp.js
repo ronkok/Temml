@@ -4,7 +4,8 @@ import * as mml from "../buildMathML";
 
 // Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
 
-const short = ["\\shortmid", "\\nshortmid", "\\shortparallel", "\\nshortparallel"]
+const short = ["\\shortmid", "\\nshortmid", "\\shortparallel",
+  "\\nshortparallel", "\\smallsetminus"]
 
 defineFunctionBuilders({
   type: "atom",
