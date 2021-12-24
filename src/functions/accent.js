@@ -8,8 +8,8 @@ const mathmlBuilder = (group, style) => {
     ? stretchy.mathMLnode(group.label)
     : new mathMLTree.MathNode("mo", [mml.makeText(group.label, group.mode)]);
 
-  if (group.isStretchy) {
-    accentNode.setAttribute("stretchy", "true")
+  if (!group.isStretchy) {
+    accentNode.setAttribute("stretchy", "false")
   }
 
   const node = new mathMLTree.MathNode((group.label === "\\c" ? "munder" : "mover"),
