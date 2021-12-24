@@ -39,7 +39,7 @@ const bbb = Object.freeze({
 const bold = Object.freeze({
   "\u03f5": 0x1D2E7, // lunate epsilon
   "\u03d1": 0x1D30C, // vartheta
-  "\u03f0": 0x1D364, // varkappa
+  "\u03f0": 0x1D2EE, // varkappa
   "\u03c6": 0x1D319, // varphi
   "\u03f1": 0x1D2EF, // varrho
   "\u03d6": 0x1D30B  // varpi
@@ -48,7 +48,7 @@ const bold = Object.freeze({
 const boldItalic = Object.freeze({
   "\u03f5": 0x1D35B, // lunate epsilon
   "\u03d1": 0x1D380, // vartheta
-  "\u03b5": 0x1D3D8, // varkappa
+  "\u03f0": 0x1D362, // varkappa
   "\u03c6": 0x1D38D, // varphi
   "\u03f1": 0x1D363, // varrho
   "\u03d6": 0x1D37F  // varpi
@@ -57,7 +57,7 @@ const boldItalic = Object.freeze({
 const boldsf = Object.freeze({
   "\u03f5": 0x1D395, // lunate epsilon
   "\u03d1": 0x1D3BA, // vartheta
-  "\u03b5": 0x1D412, // varkappa
+  "\u03f0": 0x1D39C, // varkappa
   "\u03c6": 0x1D3C7, // varphi
   "\u03f1": 0x1D39D, // varrho
   "\u03d6": 0x1D3B9  // varpi
@@ -66,7 +66,7 @@ const boldsf = Object.freeze({
 const bisf = Object.freeze({
   "\u03f5": 0x1D3CF, // lunate epsilon
   "\u03d1": 0x1D3F4, // vartheta
-  "\u03b5": 0x1D44C, // varkappa
+  "\u03f0": 0x1D3D6, // varkappa
   "\u03c6": 0x1D401, // varphi
   "\u03f1": 0x1D3D7, // varrho
   "\u03d6": 0x1D3F3  // varpi
