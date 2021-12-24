@@ -4,6 +4,8 @@ import * as mml from "../buildMathML";
 
 // Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
 
+const short = ["\\shortmid", "\\nshortmid", "\\shortparallel", "\\nshortparallel"]
+
 defineFunctionBuilders({
   type: "atom",
   mathmlBuilder(group, style) {
@@ -26,7 +28,7 @@ defineFunctionBuilders({
       node.setAttribute("lspace", "0.22em") // medium space
       node.setAttribute("rspace", "0.22em")
       node.setAttribute("stretchy", "false")
-    } else if (group.text === "\\shortmid" || group.text === "\\nshortmid") {
+    } else if (short.includes(group.text)) {
       node.setAttribute("mathsize", "70%")
     } else if (group.text === ":") {
       // ":" is not in the MathML operator dictionary. Give it BIN spacing.
