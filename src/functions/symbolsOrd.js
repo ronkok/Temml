@@ -22,7 +22,10 @@ defineFunctionBuilders({
   type: "mathord",
   mathmlBuilder(group, style) {
     const text = mml.makeText(group.text, group.mode, style)
-    const variant = getVariant(group, style) || "italic"
+    const codePoint = text.text.codePointAt(0)
+    // Test for upper-case Greek
+    const defaultVariant = (0x0390 < codePoint && codePoint < 0x03aa) ? "normal" : "italic"
+    const variant = getVariant(group, style) || defaultVariant
     if (variant === "script") {
       text.text = variantChar(text.text, variant)
       return new mathMLTree.MathNode("mi", [text], [style.font])
