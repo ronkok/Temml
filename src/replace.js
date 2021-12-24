@@ -36,6 +36,42 @@ const bbb = Object.freeze({
   Z: 0x20CA
 })
 
+const bold = Object.freeze({
+  "\u03f5": 0x1D2E7, // lunate epsilon
+  "\u03d1": 0x1D30C, // vartheta
+  "\u03f0": 0x1D364, // varkappa
+  "\u03c6": 0x1D319, // varphi
+  "\u03f1": 0x1D2EF, // varrho
+  "\u03d6": 0x1D30B  // varpi
+})
+
+const boldItalic = Object.freeze({
+  "\u03f5": 0x1D35B, // lunate epsilon
+  "\u03d1": 0x1D380, // vartheta
+  "\u03b5": 0x1D3D8, // varkappa
+  "\u03c6": 0x1D38D, // varphi
+  "\u03f1": 0x1D363, // varrho
+  "\u03d6": 0x1D37F  // varpi
+})
+
+const boldsf = Object.freeze({
+  "\u03f5": 0x1D395, // lunate epsilon
+  "\u03d1": 0x1D3BA, // vartheta
+  "\u03b5": 0x1D412, // varkappa
+  "\u03c6": 0x1D3C7, // varphi
+  "\u03f1": 0x1D39D, // varrho
+  "\u03d6": 0x1D3B9  // varpi
+})
+
+const bisf = Object.freeze({
+  "\u03f5": 0x1D3CF, // lunate epsilon
+  "\u03d1": 0x1D3F4, // vartheta
+  "\u03b5": 0x1D44C, // varkappa
+  "\u03c6": 0x1D401, // varphi
+  "\u03f1": 0x1D3D7, // varrho
+  "\u03d6": 0x1D3F3  // varpi
+})
+
 // Code point offsets below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
 const offset = Object.freeze({
   upperCaseLatin: { // A-Z
@@ -74,7 +110,8 @@ const offset = Object.freeze({
     "normal": ch =>                 { return 0 },
     "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
     "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
-    "bold-italic": ch =>            { return ch === "∇" ? 0x1B52E : 0x1D38B },
+    // \boldsymbol actually returns upright bold for upperCaseGreek
+    "bold-italic": ch =>            { return ch === "∇" ? 0x1B4BA : 0x1D317 },
     "script": ch =>                 { return 0 },
     "script-bold": ch =>            { return 0 },
     "fraktur": ch =>                { return 0 },
@@ -102,6 +139,22 @@ const offset = Object.freeze({
     "sans-serif-bold": ch =>        { return 0x1D3BF },
     "sans-serif-italic": ch =>      { return 0 },
     "sans-serif-bold-italic": ch => { return 0x1D3F9 },
+    "monospace": ch =>              { return 0 }
+  },
+  varGreek: { // \varGamma, etc
+    "normal": ch =>                 { return 0 },
+    "bold": ch =>                   { return  bold[ch] || -51 },
+    "italic": ch =>                 { return 0 },
+    "bold-italic": ch =>            { return boldItalic[ch] || 0x3A },
+    "script": ch =>                 { return 0 },
+    "script-bold": ch =>            { return 0 },
+    "fraktur": ch =>                { return 0 },
+    "fraktur-bold": ch =>           { return 0 },
+    "double-struck": ch =>          { return 0 },
+    "sans-serif": ch =>             { return boldsf[ch] || 0x74 },
+    "sans-serif-bold": ch =>        { return boldsf[ch] || 0x74 },
+    "sans-serif-italic": ch =>      { return 0 },
+    "sans-serif-bold-italic": ch => { return bisf[ch] || 0xAE },
     "monospace": ch =>              { return 0 }
   },
   numeral: { // 0-9
@@ -132,7 +185,9 @@ export const variantChar = (ch, variant) => {
     ? "upperCaseGreek"
     : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
     ? "lowerCaseGreek"
-    : 0x2F < codePoint && codePoint <  0x3A
+    : 0x1D6E1 < codePoint && codePoint < 0x1D6FC  || bold[ch]
+    ? "varGreek"
+    : (0x2F < codePoint && codePoint <  0x3A)
     ? "numeral"
     : "other"
   return block === "other"
