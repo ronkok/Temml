@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * This is the ParseError class, which is the main error thrown by Temml
  * functions when something has gone wrong. This is used to distinguish internal
@@ -11390,7 +11388,7 @@ var unicodeAccents = {
   "\u0307": { text: "\\.", math: "\\dot" },
   "\u030a": { text: "\\r", math: "\\mathring" },
   "\u030b": { text: "\\H" },
-  '\u0327': {text: '\\c'}
+  '\u0327': { text: '\\c' }
 };
 
 var unicodeSymbols = {
@@ -13019,4 +13017,4 @@ var temml = {
   __defineMacro: defineMacro
 };
 
-module.exports = temml;
+export default temml;

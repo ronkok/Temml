@@ -30,11 +30,11 @@ fs.copyFile('test/temml.js', 'dist/temml.js', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('utils/temml.cjs.js', 'dist/temml.cjs.js', (err) => {
+fs.copyFile('utils/temml.cjs', 'dist/temml.cjs', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('utils/temml.mjs.js', 'dist/temml.mjs.js', (err) => {
+fs.copyFile('utils/temml.mjs', 'dist/temml.mjs', (err) => {
   if (err) { throw err }
 })
 

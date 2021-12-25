@@ -231,14 +231,14 @@ const test = () => {
 
   let assertion = "Parser should work"
   new Expect("").toParse()
-  new Expect("1234|/@.\"`abcdefgzABCDEFGZ").toParse()
+  new Expect("1234|/@.`abcdefgzABCDEFGZ").toParse()
 
   assertion = "Parser should ignore whitespace"
   new Expect(`    x    y    `).toParseLike("xy")
   new Expect(`    x   ^ y    `).toParseLike("x^y")
 
   assertion = "Parser should build a list of ords"
-  const ords = parse("1234|/@.\"`abcdefgzABCDEFGZ");
+  const ords = parse("1234|/@.`abcdefgzABCDEFGZ");
   for (let i = 0; i < ords.length; i++) {
       new Expect(ords[i].type.slice(4)).toEqual("ord");
   }

@@ -1,6 +1,6 @@
 const fs = require("fs")  // Node.js file system
 const hurmetMark = require("./hurmetMark.cjs")
-const temml = require('./temml.cjs.js');
+const temml = require('./temml.cjs');
 const katex = require('./katex.min.js');
 const TeXZilla = require("./TeXZilla.js");
 

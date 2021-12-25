@@ -959,7 +959,7 @@ const md2ast = (md, inHtml = false) => {
 };
 
 // const hurmet = require("./hurmet.js");
-const temml = require('./temml.cjs.js');
+const temml = require('./temml.cjs');
 
 const sanitizeUrl = function(url) {
   if (url == null) {
