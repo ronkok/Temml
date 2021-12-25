@@ -17,7 +17,7 @@
 <li>Temml-Local.css</li>
 <li>Temml.woff2</li>
 </ul>
-<p>A server-side installation should include <code>temml.cjs.js</code> instead of <code>temml.min.js</code>.</p>
+<p>A server-side installation should include <code>temml.cjs</code> instead of <code>temml.min.js</code>.</p>
 <h4 id='starter-template'>Starter template</h4>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;!-- Temml requires the use of the HTML5 doctype. --&gt;
@@ -49,7 +49,7 @@ temml.postProcess(document.body);</code></pre><p>Below, we examine the parts of 
 <p>To render math in one DOM element, call <code>temml.render</code> with a TeX expression and a DOM element to render into:</p>
 <pre><code>temml.render(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;, element);</code></pre><h3 id='server-side'>Server-Side</h3>
 <p>To generate MathML on the server or to generate an MathML string of the rendered math, you can use <code>temml.renderToString</code>:</p>
-<pre><code>const temml = require(&#x27;./temml.cjs.js&#x27;);  // if in Node.js
+<pre><code>const temml = require(&#x27;./temml.cjs&#x27;);  // if in Node.js
 const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code></pre><h3 id='preamble'>Preamble</h3>
 <p>To give document-wide scope to a set of macros or colors, define them in a preamble.</p>
 <pre><code>const macros = temml.definePreamble(
@@ -192,7 +192,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
     &lt;script src=&quot;./temml.min.js&quot;&gt;&lt;/script&gt;
     &lt;script src=&quot;./mhchem.min.js&quot;&gt;&lt;/script&gt;
   &lt;/head&gt;</code></pre><p>The extension reference must come after the reference to <code>temml.min.js</code>.</p>
-<p>For server-side use, just use <code>temml.cjs.js</code> instead of <code>temml.min.js</code>. <code>temml.cjs.js</code> includes <code>mhchem</code>, <code>physics</code>, and <code>texvc</code>.</p>
+<p>For server-side use, just use <code>temml.cjs</code> instead of <code>temml.min.js</code>. <code>temml.cjs</code> includes <code>mhchem</code>, <code>physics</code>, and <code>texvc</code>.</p>
 <br>
 <p class="reduced">Copyright © 2021 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 <br>

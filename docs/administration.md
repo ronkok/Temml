@@ -31,7 +31,7 @@ following files. The `css` file and font file must be in the same folder.
 * Temml-Local.css
 * Temml.woff2
 
-A server-side installation should include `temml.cjs.js` instead of `temml.min.js`.
+A server-side installation should include `temml.cjs` instead of `temml.min.js`.
 
 #### Starter template
 
@@ -90,7 +90,7 @@ To generate MathML on the server or to generate an MathML string of the
 rendered math, you can use `temml.renderToString`:
 
 ```js
-const temml = require('./temml.cjs.js');  // if in Node.js
+const temml = require('./temml.cjs');  // if in Node.js
 const mathML = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
 ```
 
@@ -316,7 +316,7 @@ To install extensions for browser use, include the appropriate file from the `co
 
 The extension reference must come after the reference to `temml.min.js`.
 
-For server-side use, just use `temml.cjs.js` instead of `temml.min.js`. `temml.cjs.js` includes `mhchem`, `physics`, and `texvc`.
+For server-side use, just use `temml.cjs` instead of `temml.min.js`. `temml.cjs` includes `mhchem`, `physics`, and `texvc`.
 
 <br>
 
