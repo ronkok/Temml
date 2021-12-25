@@ -22,7 +22,7 @@
     "terser": "^5.5.0"
   },
   "scripts": {
-    "lint": "eslint *.js src contrib",
+    "lint": "eslint temml.js src",
     "unit-test": "node -r esm ./test/unit-test.js",
     "visual-test": "node utils/buildTests.js",
     "test": "yarn lint && node utils/buildTests.js && yarn unit-test",
