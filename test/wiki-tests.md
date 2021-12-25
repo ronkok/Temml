@@ -888,7 +888,7 @@ in the Temml function support page.
 | 255 | f(x) = \begin{cases} \                        | $`f(x) = \begin{cases}                           |
 |     | 1 & -1 \le x < 0 \\\\ \                       | 1 & -1 \le x < 0 \\                              |
 |     | \frac{1}{2} & x = 0 \\\\ \                    | \frac{1}{2} & x = 0 \\                           |
-|     | 1 - x^2 & \text{otherwise}                    | 1 - x^2 & \text{otherwise}                       |
+|     | 1 - x^2 & \text{otherwise} \                  | 1 - x^2 & \text{otherwise}                       |
 |     | \end{cases}                                   | \end{cases}`                                     |
 +-----+-----------------------------------------------+--------------------------------------------------+
 | 256 | {}\_pF_q(a\_1,\dots,a_p;c\_1,\dots,c\_q;z) \  | $`{}_pF_q(a_1,\dots,a_p;c_1,\dots,c_q;z)         |
