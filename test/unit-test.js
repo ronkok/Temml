@@ -3,7 +3,7 @@
 /* eslint-disable indent-legacy */
 /* eslint-disable no-console */
 
-import temml from "../docs/temml.cjs"; // includess mhchem & physics extensions
+import temml from "../utils/temml.cjs"; // includess mhchem & physics extensions
 import ParseError from "../src/ParseError";
 import parseTree from "../src/parseTree";
 import Settings from "../src/Settings";
