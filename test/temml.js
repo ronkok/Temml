@@ -9395,7 +9395,7 @@ var temml = (function () {
     "\u0307": { text: "\\.", math: "\\dot" },
     "\u030a": { text: "\\r", math: "\\mathring" },
     "\u030b": { text: "\\H" },
-    '\u0327': {text: '\\c'}
+    '\u0327': { text: '\\c' }
   };
 
   var unicodeSymbols = {
