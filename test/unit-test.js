@@ -39,11 +39,6 @@ const stripPositions = expr => {
   return expr;
 };
 
-const dataTexRegEx = / data-tex="[^"]*"/
-const stripDataTex = str => {
-  return str.replace(dataTexRegEx, "")
-}
-
 const parse = (expr, settings = defaultSettings) => {
   const tree = parseTree(expr, settings)
   return stripPositions(tree)
@@ -215,7 +210,7 @@ const test = () => {
         if (tree instanceof ParseError) { result = false }
         const comp = build(str, settings)
         if (comp instanceof ParseError) { result = false }
-        result = stripDataTex(JSON.stringify(tree)) === stripDataTex(JSON.stringify(comp))
+        result = JSON.stringify(tree) === JSON.stringify(comp)
       } catch (e) {
         result = false
       }
