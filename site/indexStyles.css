@@ -143,6 +143,7 @@ math {
   .ioArea {
     width: 93%
   }
+  #why ul { padding-inline-start: 0; }
 }
 
 #copyright {
