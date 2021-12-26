@@ -21,6 +21,7 @@ import Settings from "../src/Settings";
 // First, a few helpers.
 const defaultSettings = new Settings();
 const strictSettings = new Settings({ strict: true });
+const mathTagRegEx = /<\/?math>/g
 
 // tagging literal
 const r = x => x != null && Object.prototype.hasOwnProperty.call(x, 'raw') ? x.raw[0] : x;
@@ -46,15 +47,11 @@ const parse = (expr, settings = defaultSettings) => {
 
 function build(expr, settings) {
   expr = r(expr); // support tagging literals
-  const rootNode = temml.__renderToMathMLTree(expr, settings);
+  const builtMathML = temml.__renderToMathMLTree(expr, settings);
 
-  if (rootNode.classes.indexOf('temml-error') >= 0) {
-      return rootNode;
+  if (builtMathML.classes.indexOf('temml-error') >= 0) {
+      return builtMathML;
   }
-
-  // grab the root node of the MathML rendering
-  // rootNode.children[0] is the MathML rendering
-  const builtMathML = rootNode.children[0];
 
   // combine the non-strut children of all base spans
   const children = [];
@@ -187,7 +184,9 @@ const test = () => {
       } catch (e) {
         result = false
       }
-      if (!result) { say(this.input + " does not build.") }
+      if (!result) {
+        say(this.input + " does not build.")
+      }
     }
 
     toNotBuild(settings = defaultSettings) {
@@ -233,7 +232,7 @@ const test = () => {
   new Expect(`    x   ^ y    `).toParseLike("x^y")
 
   assertion = "Parser should build a list of ords"
-  const ords = parse("1234|/@.`abcdefgzABCDEFGZ");
+  const ords = parse("1234|@.`abcdefgzABCDEFGZ");
   for (let i = 0; i < ords.length; i++) {
       new Expect(ords[i].type.slice(4)).toEqual("ord");
   }
@@ -391,10 +390,10 @@ const test = () => {
   new Expect(nodes[1].body[1].body).toHaveLength(1);
 
   assertion = "An implicit group parser should work within optional groups"
-  new Expect(parse(`\\sqrt[\\small 3]{x}`)).toMatchSnapshot('[{"type":"sqrt","mode":"math","body":{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"x"}]},"index":{"type":"ordgroup","mode":"math","body":[{"type":"sizing","mode":"math","funcName":"\\\\small","body":[{"type":"textord","mode":"math","text":"3"}]}]}}]');
-  new Expect(parse(`\\sqrt[\\color{red} 3]{x}`)).toMatchSnapshot('[{"type":"sqrt","mode":"math","body":{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"x"}]},"index":{"type":"ordgroup","mode":"math","body":[{"type":"color","mode":"math","color":"red","body":[{"type":"textord","mode":"math","text":"3"}]}]}}]')
-  new Expect(parse("\\sqrt[\\textstyle 3]{x}")).toMatchSnapshot('[{"type":"sqrt","mode":"math","body":{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"x"}]},"index":{"type":"ordgroup","mode":"math","body":[{"type":"styling","mode":"math","style":"text","body":[{"type":"textord","mode":"math","text":"3"}]}]}}]')
-  new Expect(parse("\\sqrt[\\tt 3]{x}")).toMatchSnapshot('[{"type":"sqrt","mode":"math","body":{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"x"}]},"index":{"type":"ordgroup","mode":"math","body":[{"type":"font","mode":"math","font":"mathtt","body":{"type":"ordgroup","mode":"math","body":[{"type":"textord","mode":"math","text":"3"}]}}]}}]')
+  new Expect(`\\sqrt[\\small 3]{x}`).toParse();
+  new Expect(`\\sqrt[\\color{red} 3]{x}`).toParse()
+  new Expect("\\sqrt[\\textstyle 3]{x}").toParse()
+  new Expect("\\sqrt[\\tt 3]{x}").toParse()
 
   assertion = "A function parser should work"
   new Expect(`\\div`).toParse();
@@ -653,9 +652,9 @@ const test = () => {
   new Expect(`\\mathrlap{\\frac{a}{b}}{=}`).toParse();
   new Expect(`{=}\\mathllap{\\frac{a}{b}}`).toParse();
   new Expect(`\\sum_{\\mathclap{\\frac{a}{b}}}`).toParse();
-  new Expect(`\\rlap{\\frac{a}{b}}{=}`).toNotParse();
-  new Expect(`{=}\\llap{\\frac{a}{b}}`).toNotParse();
-  new Expect(`\\sum_{\\clap{\\frac{a}{b}}}`).toNotParse();
+  new Expect(`\\rlap{\\frac{a}{b}}{=}`).toNotParse(strictSettings);
+  new Expect(`{=}\\llap{\\frac{a}{b}}`).toNotParse(strictSettings);
+  new Expect(`\\sum_{\\clap{\\frac{a}{b}}}`).toNotParse(strictSettings);
   node = parse(`\\mathrlap{\\,/}`)[0];
   new Expect(node.type).toEqual("lap");
 
@@ -805,8 +804,6 @@ const test = () => {
   new Expect(r`\begin{matrix}a&b\cr[c]&d\end{matrix}`).toParse();
   const m3 = parse(r`\begin{matrix}a&b\\ c&d \\ \end{matrix}`)[0];
   new Expect(m3.body).toHaveLength(2);
-  node = parse(r`\def\arraystretch{1.5}\begin{matrix}a&b\\c&d\end{matrix}`);
-  new Expect(node).toMatchSnapshot(r`[{"type":"array","mode":"math","arraystretch":1.5,"body":[[{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"a"}]},{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"b"}]}],[{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"c"}]},{"type":"ordgroup","mode":"math","body":[{"type":"mathord","mode":"math","text":"d"}]}]],"cols":[{"type":"align","align":"c"},{"type":"align","align":"c"}],"rowGaps":[null],"hskipBeforeAndAfter":false,"hLinesBeforeRow":[[],[],[]],"style":"text","tags":[null,null]}]`);
   new Expect("\\begin{matrix*}[r] a & -1 \\\\ -1 & d \\end{matrix*}").toBuild();
   new Expect("\\begin{pmatrix*}[r] a & -1 \\\\ -1 & d \\end{pmatrix*}").toBuild();
   new Expect("\\begin{bmatrix*}[r] a & -1 \\\\ -1 & d \\end{bmatrix*}").toBuild();
@@ -944,9 +941,9 @@ const test = () => {
   new Expect(r`\scriptstyle x`).toParse();
   new Expect(r`\scriptscriptstyle x`).toParse();
   const displayParse = parse(r`\displaystyle x`)[0];
-  new Expect(displayParse.style).toEqual("display");
+  new Expect(displayParse.scriptLevel).toEqual("display");
   const scriptscriptParse = parse(r`\scriptscriptstyle x`)[0];
-  new Expect(scriptscriptParse.style).toEqual("scriptscript");
+  new Expect(scriptscriptParse.scriptLevel).toEqual("scriptscript");
   const text = r`a b { c d \displaystyle e f } g h`;
   const displayNode = parse(text)[2].body[2];
   new Expect(displayNode.type).toEqual("styling");
@@ -994,7 +991,7 @@ const test = () => {
   new Expect(bbBody[2].type).toEqual("font");
   const colorMathbbParse = parse(r`\textcolor{blue}{\mathbb R}`)[0];
   new Expect(colorMathbbParse.type).toEqual("color");
-  new Expect(colorMathbbParse.color).toEqual("blue");
+  new Expect(colorMathbbParse.color).toEqual("#0000FF");
   const cbody = colorMathbbParse.body;
   new Expect(cbody).toHaveLength(1);
   new Expect(cbody[0].type).toEqual("font");
@@ -1008,8 +1005,6 @@ const test = () => {
   new Expect(bf.body.body[1].font).toEqual("mathrm");
   new Expect(bf.body.body[2].text).toEqual("c");
   new Expect(r`e^\mathbf{x}`).toParse();
-  const built = build(r`a\boldsymbol{}b\boldsymbol{=}c\boldsymbol{+}d\boldsymbol{++}e\boldsymbol{xyz}f`);
-  new Expect(built).toMatchSnapshot('[{"type":"mi","attributes":{},"children":[{"text":"a"}],"classes":[],"isSVG":false},{"type":"mrow","attributes":{},"children":[],"classes":[],"isSVG":false},{"type":"mi","attributes":{},"children":[{"text":"b"}],"classes":[],"isSVG":false},{"type":"mo","attributes":{"stretchy":"false","lspace":"0em","rspace":"0em","mathvariant":"italic"},"children":[{"text":"="}],"classes":[],"isSVG":false},{"type":"mi","attributes":{},"children":[{"text":"c"}],"classes":[],"isSVG":false},{"type":"mo","attributes":{"mathvariant":"italic","lspace":"0.22em","rspace":"0.22em"},"children":[{"text":"+"}],"classes":[],"isSVG":false},{"type":"mi","attributes":{},"children":[{"text":"d"}],"classes":[],"isSVG":false},{"type":"mo","attributes":{"lspace":"0.22em","rspace":"0.22em"},"children":[{"type":"mrow","attributes":{},"children":[{"type":"mo","attributes":{"mathvariant":"bold-italic"},"children":[{"text":"+"}],"classes":[],"isSVG":false},{"type":"mo","attributes":{"mathvariant":"bold-italic"},"children":[{"text":"+"}],"classes":[],"isSVG":false}],"classes":[],"isSVG":false}],"classes":[],"isSVG":false},{"type":"mi","attributes":{},"children":[{"text":"e"}],"classes":[],"isSVG":false},{"type":"mi","attributes":{"mathvariant":"bold-italic"},"children":[{"text":"x"},{"text":"y"},{"text":"z"}],"classes":[],"isSVG":false},{"type":"mi","attributes":{},"children":[{"text":"f"}],"classes":[],"isSVG":false}]');
   new Expect(r`\rm xyz`).toParseLike(r`\mathrm{xyz}`);
   new Expect(r`\sf xyz`).toParseLike(r`\mathsf{xyz}`);
   new Expect(r`\tt xyz`).toParseLike(r`\mathtt{xyz}`);
@@ -1060,52 +1055,48 @@ const test = () => {
   new Expect("5 % comment\n").toParseLike(`5`);
 
   assertion = "A font tree-builder should work"
-  let markup = temml.renderToString(r`\mathbb{R}`);
-  new Expect(markup).toContain('<mi mathvariant="double-struck">R</mi>');
-  markup = temml.renderToString(r`\mathrm{R}`);
-  new Expect(markup).toContain('<mi mathvariant="normal">R</mi>');
-  markup = temml.renderToString(r`\mathcal{R}`);
-  new Expect(markup).toContain('<mrow><mi mathvariant="script">R</mi>');
-  markup = temml.renderToString(r`\mathfrak{R}`);
-  new Expect(markup).toContain('<mi mathvariant="fraktur">R</mi>');
-  markup = temml.renderToString(r`\text{R}`);
-  new Expect(markup).toContain('<mtext>R</mtext>');
-  markup = temml.renderToString(r`\textit{R}`);
-  new Expect(markup).toContain('<mtext mathvariant="italic">R</mtext>');
-  markup = temml.renderToString(r`\text{\textit{R}}`);
-  new Expect(markup).toContain('<mtext mathvariant="italic">R</mtext>');
-  let markup1 = temml.renderToString(r`\textup{R}`);
-  new Expect(markup1).toContain('<mtext>R</mtext>');
-  let markup2 = temml.renderToString(r`\textit{\textup{R}}`);
-  new Expect(markup2).toContain('<mtext>R</mtext>');
-  let markup3 = temml.renderToString(r`\textup{\textit{R}}`);
-  new Expect(markup3).toContain('<mtext mathvariant="italic">R</mtext>');
-  markup = temml.renderToString(r`\text{R\textit{S}T}`);
-  new Expect(markup).toContain('<mtext>R</mtext><mtext mathvariant="italic">S</mtext><mtext>T</mtext>');
-  markup = temml.renderToString(r`\textbf{R }`);
-  new Expect(markup).toContain('<mrow><mtext mathvariant="bold">R</mtext><mtext> </mtext>');
-  markup1 = temml.renderToString(r`\textmd{R}`);
-  new Expect(markup1).toContain('<mtext>R</mtext>');
-  markup2 = temml.renderToString(r`\textbf{\textmd{R}}`);
-  new Expect(markup2).toContain('<mtext>R</mtext>');
-  markup3 = temml.renderToString(r`\textmd{\textbf{R}}`);
-  new Expect(markup3).toContain('<mtext mathvariant="bold">R</mtext>');
-  markup = temml.renderToString(r`\textsf{R}`);
-  new Expect(markup).toContain('<mtext mathvariant="sans-serif">R</mtext>');
-  markup = temml.renderToString(r`\textsf{\textit{R}G\textbf{B}}`);
-  new Expect(markup).toContain('<mtext mathvariant="sans-serif-italic">R</mtext>');
-  new Expect(markup).toContain('<mtext mathvariant="sans-serif">G</mtext>');
-  new Expect(markup).toContain('<mtext mathvariant="bold-sans-serif">B</mtext>');
-  markup = temml.renderToString(r`\texttt{R}`);
-  new Expect(markup).toContain('<mtext mathvariant="monospace">R</mtext>');
+  let markup = temml.renderToString(r`\mathbb{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mi>ℝ</mi>');
+  markup = temml.renderToString(r`\mathrm{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mi mathvariant="normal">R</mi>');
+  markup = temml.renderToString(r`\mathcal{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mi class="mathcal">ℛ</mi>');
+  markup = temml.renderToString(r`\mathfrak{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mi>ℜ</mi>');
+  markup = temml.renderToString(r`\text{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>R</mtext>');
+  markup = temml.renderToString(r`\textit{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>𝑅</mtext>');
+  markup = temml.renderToString(r`\text{\textit{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>𝑅</mtext>');
+  let markup1 = temml.renderToString(r`\textup{R}`).replace(mathTagRegEx, "");
+  new Expect(markup1).toEqual('<mtext>R</mtext>');
+  let markup2 = temml.renderToString(r`\textit{\textup{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup2).toEqual('<mtext>R</mtext>');
+  let markup3 = temml.renderToString(r`\textup{\textit{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup3).toEqual('<mtext>𝑅</mtext>');
+  markup = temml.renderToString(r`\text{R\textit{S}T}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>R𝑆T</mtext>');
+  markup1 = temml.renderToString(r`\textmd{R}`).replace(mathTagRegEx, "");
+  new Expect(markup1).toEqual('<mtext>R</mtext>');
+  markup2 = temml.renderToString(r`\textbf{\textmd{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup2).toEqual('<mtext>R</mtext>');
+  markup3 = temml.renderToString(r`\textmd{\textbf{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup3).toEqual('<mtext>𝐑</mtext>');
+  markup = temml.renderToString(r`\textsf{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>𝖱</mtext>');
+  markup = temml.renderToString(r`\textsf{\textit{R}G\textbf{B}}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>𝘙𝖦𝗕</mtext>');
+  markup = temml.renderToString(r`\texttt{R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mtext>𝚁</mtext>');
   assertion = "A font tree-builder should render a combination of font and color changes"
-  markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`);
-  new Expect(markup).toContain('<mstyle mathcolor="blue"><mi mathvariant="double-struck">R</mi></mstyle>');
-  markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`);
-  new Expect(markup).toContain('<mi mathvariant="double-struck" mathcolor="blue">R</mi>');
+  markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>');
+  markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>');
   assertion = "A font tree-builder should render wide characters with <mi> and with the correct font"
-  markup = temml.renderToString("𝐀");
-  new Expect(markup).toContain('<mi>𝐀</mi>');
+  markup = temml.renderToString("𝐀").replace(mathTagRegEx, "");
+  new Expect(markup).toEqual('<mi>𝐀</mi>');
 
   assertion = "A parser should throw an error when the expression is of the wrong type"
   new Expect([1, 2]).toNotParse()
@@ -1118,7 +1109,7 @@ const test = () => {
   new Expect(new String(r`\sqrt{123}`)).toParse()
 
   assertion = "A font tree-builder should render the correct mathvariants"
-  markup = temml.renderToString(r`Ax2k\omega\Omega\imath+`);
+  markup = temml.renderToString(r`Ax2k\omega\Omega\imath+`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi>A</mi>");
   new Expect(markup).toContain("<mi>x</mi>");
   new Expect(markup).toContain("<mn>2</mn>");
@@ -1126,15 +1117,9 @@ const test = () => {
   new Expect(markup).toContain('<mi mathvariant="normal">Ω</mi>');   // \Omega
   new Expect(markup).toContain('<mi>ı</mi>');   // \imath
   new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathbb{Ax2k\omega\Omega\imath+}`);
-  new Expect(markup).toContain("<mi mathvariant=\"double-struck\">A</mi>");
-  new Expect(markup).toContain("<mi mathvariant=\"double-struck\">x</mi>");
-  new Expect(markup).toContain("<mn mathvariant=\"double-struck\">2</mn>");
-  new Expect(markup).toContain("<mi mathvariant=\"double-struck\">ω</mi>");  // \omega
-  new Expect(markup).toContain("<mi mathvariant=\"double-struck\">Ω</mi>"); // \Omega
-  new Expect(markup).toContain("<mi mathvariant=\"double-struck\">ı</mi>");  // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathrm{Ax2k\omega\Omega\imath+}`);
+  markup = temml.renderToString(r`\mathbb{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual("<mrow><mi>𝔸</mi><mi>𝕩</mi><mn>𝟚</mn><mi>𝕜</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo>+</mo></mrow>");
+  markup = temml.renderToString(r`\mathrm{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi mathvariant=\"normal\">A</mi>");
   new Expect(markup).toContain("<mi mathvariant=\"normal\">x</mi>");
   new Expect(markup).toContain("<mn>2</mn>");
@@ -1142,15 +1127,9 @@ const test = () => {
   new Expect(markup).toContain("<mi mathvariant=\"normal\">Ω</mi>");   // \Omega
   new Expect(markup).toContain("<mi mathvariant=\"normal\">ı</mi>");   // \imath
   new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathit{Ax2k\omega\Omega\imath+}`);
-  new Expect(markup).toContain("<mi>A</mi>");
-  new Expect(markup).toContain("<mi>x</mi>");
-  new Expect(markup).toContain("<mn mathvariant=\"italic\">2</mn>");
-  new Expect(markup).toContain("<mi>ω</mi>");   // \omega
-  new Expect(markup).toContain("<mi>Ω</mi>");   // \Omega
-  new Expect(markup).toContain("<mi>ı</mi>");   // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathnormal{Ax2k\omega\Omega\imath+}`);
+  markup = temml.renderToString(r`\mathit{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mi>A</mi><mi>x</mi><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mn>2</mn></mstyle><mi>k</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  markup = temml.renderToString(r`\mathnormal{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi>A</mi>");
   new Expect(markup).toContain("<mi>x</mi>");
   new Expect(markup).toContain("<mn>2</mn>");
@@ -1158,47 +1137,23 @@ const test = () => {
   new Expect(markup).toContain("<mi mathvariant=\"normal\">Ω</mi>");   // \Omega
   new Expect(markup).toContain("<mi>ı</mi>");   // \imath
   new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathbf{Ax2k\omega\Omega\imath+}`);
-  new Expect(markup).toContain("<mi mathvariant=\"bold\">A</mi>");
-  new Expect(markup).toContain("<mi mathvariant=\"bold\">x</mi>");
-  new Expect(markup).toContain("<mn mathvariant=\"bold\">2</mn>");
-  new Expect(markup).toContain("<mi mathvariant=\"bold\">ω</mi>");   // \omega
-  new Expect(markup).toContain("<mi mathvariant=\"bold\">Ω</mi>");   // \Omega
-  new Expect(markup).toContain("<mi mathvariant=\"bold\">ı</mi>");   // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathcal{Ax2k\omega\Omega\imath+}`);
-  new Expect(markup).toContain("<mi mathvariant=\"script\">A</mi>");
-  new Expect(markup).toContain("<mi mathvariant=\"script\">x</mi>");
-  new Expect(markup).toContain("<mn mathvariant=\"script\">2</mn>");
-  new Expect(markup).toContain("<mi mathvariant=\"script\">ω</mi>"); // \omega
-  new Expect(markup).toContain("<mi mathvariant=\"script\">Ω</mi>"); // \Omega
-  new Expect(markup).toContain("<mi mathvariant=\"script\">ı</mi>"); // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathfrak{Ax2k\omega\Omega\imath+}`);
-  new Expect(markup).toContain("<mi mathvariant=\"fraktur\">A</mi>");
-  new Expect(markup).toContain("<mi mathvariant=\"fraktur\">x</mi>");
-  new Expect(markup).toContain("<mn mathvariant=\"fraktur\">2</mn>");
-  new Expect(markup).toContain("<mi mathvariant=\"fraktur\">ω</mi>"); // \omega
-  new Expect(markup).toContain("<mi mathvariant=\"fraktur\">Ω</mi>"); // \Omega
-  new Expect(markup).toContain("<mi mathvariant=\"fraktur\">ı</mi>"); // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
-  markup = temml.renderToString(r`\mathscr{A}`);
-  new Expect(markup).toContain("<mi><span class=\"script\">A</span></mi>");
-  markup = temml.renderToString(r`\mathsf{Ax2k\omega\Omega\imath+}`);
-  new Expect(markup).toContain("<mi mathvariant=\"sans-serif\">A</mi>");
-  new Expect(markup).toContain("<mi mathvariant=\"sans-serif\">x</mi>");
-  new Expect(markup).toContain("<mn mathvariant=\"sans-serif\">2</mn>");
-  new Expect(markup).toContain("<mi mathvariant=\"sans-serif\">ω</mi>"); // \omega
-  new Expect(markup).toContain("<mi mathvariant=\"sans-serif\">Ω</mi>"); // \Omega
-  new Expect(markup).toContain("<mi mathvariant=\"sans-serif\">ı</mi>"); // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
+  markup = temml.renderToString(r`\mathbf{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mi>𝐀</mi><mi>𝐱</mi><mn>𝟐</mn><mi>𝐤</mi><mi>𝛚</mi><mi>𝛀</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  markup = temml.renderToString(r`\mathcal{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">𝓍</mi><mn>2</mn><mi class="mathcal">𝓀</mi><mi class="mathcal">ω</mi><mi class="mathcal">Ω</mi><mi class="mathcal">ı</mi><mo>+</mo></mrow>`);
+  markup = temml.renderToString(r`\mathfrak{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mi>𝔄</mi><mi>𝔵</mi><mn>2</mn><mi>𝔨</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  markup = temml.renderToString(r`\mathscr{A}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mi class="mathscr">𝒜</mi>`);
+  markup = temml.renderToString(r`\mathsf{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mi>𝖠</mi><mi>𝗑</mi><mn>𝟤</mn><mi>𝗄</mi><mi>𝞈</mi><mi>𝝮</mi><mi>ı</mi><mo>+</mo></mrow>`);
 
   assertion = "A font tree-builder should render a combination of font and color changes"
-  markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`);
-  new Expect(markup).toContain('<mstyle mathcolor="blue"><mi mathvariant="double-struck">R</mi></mstyle>');
+  markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>`);
   // reverse the order of the commands
-  markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`);
-  new Expect(markup).toContain('<mi mathvariant="double-struck" mathcolor="blue">R</mi>');
+  markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>`);
 
   assertion = "A font tree-builder should render text as <mtext>"
   markup = temml.renderToString(r`\text{for }`);
@@ -1206,7 +1161,7 @@ const test = () => {
 
   assertion = "A font tree-builder should render math within text as side-by-side children"
   markup = temml.renderToString(r`\text{graph: $y = mx + b$}`);
-  new Expect(markup).toContain("<mi>y</mi><mo stretchy=\"false\">=</mo><mi>m</mi><mi>x</mi><mo>+</mo><mi>b</mi>");
+  new Expect(markup).toContain("<mi>y</mi><mo>=</mo><mi>m</mi><mi>x</mi><mo>+</mo><mi>b</mi>");
 
   assertion = "An includegraphics builder should work"
   const img = "\\includegraphics[height=0.9em, totalheight=0.9em, width=0.9em, alt=KA logo]{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}";
@@ -1214,8 +1169,8 @@ const test = () => {
   const trustSettings = new Settings({ trust: true })
   new Expect(img, trustSettings).toParse();
   new Expect(img, trustSettings).toBuild();
-  markup = temml.renderToString(img, trustSettings);
-  new Expect(markup).toEqual(`<math xmlns="http://www.w3.org/1998/Math/MathML" data-tex="\\includegraphics[height=0.9em, totalheight=0.9em, width=0.9em, alt=KA logo]{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}" class ="temml"><mrow><mtext><img  src='https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png 'alt='KA logo'  style="height:0.9em;width:0.9em;"'/></mtext></mrow></math>`);
+  markup = temml.renderToString(img, trustSettings).replace(mathTagRegEx, "");
+  new Expect(markup).toEqual(`<mtext><img src='https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png' alt='KA logo' style="height:0.9em;width:0.9em;"/></mtext>`);
 
 /*  assertion = "An HTML extension builder should work"
   const html = "\\htmlId{bar}{x}\\htmlClass{foo}{x}\\htmlStyle{color: red;}{x}\\htmlData{foo=a, bar=b}{x}";
@@ -1270,33 +1225,7 @@ const test = () => {
   new Expect(r`\vec{x}^2`).toBuild();
   new Expect(r`\vec{x}_2`).toBuild();
   new Expect(r`\vec{x}_2^2`).toBuild();
-  console.log(build(r`\vec x`))
-  new Expect(build(r`\vec x`)[0].classes).toContain("mord");
-  new Expect(build(r`\vec +`)[0].classes).toContain("mord");
-  new Expect(build(r`\vec +`)[0].classes).not.toContain("mbin");
-  new Expect(build(r`\vec )^2`)[0].classes).toContain("mord");
-  new Expect(build(r`\vec )^2`)[0].classes).not.toContain("mclose");
-  new Expect(r`\widehat{AB}`).toBuild();
-  new Expect(r`\widecheck{AB}`).toBuild();
-  new Expect(r`\widehat{AB}^2`).toBuild();
-  new Expect(r`\widehat{AB}_2`).toBuild();
-  new Expect(r`\widehat{AB}_2^2`).toBuild();
-  new Expect(build(r`\widehat{AB}`)[0].classes).toContain("mord");
-  new Expect(build(r`\widehat +`)[0].classes).toContain("mord");
-  new Expect(build(r`\widehat +`)[0].classes).not.toContain("mbin");
-  new Expect(build(r`\widehat )^2`)[0].classes).toContain("mord");
-  new Expect(build(r`\widehat )^2`)[0].classes).not.toContain("mclose");
-  new Expect(r`\overrightarrow{AB}`).toBuild();
-  new Expect(r`\overrightarrow{AB}^2`).toBuild();
-  new Expect(r`\overrightarrow{AB}_2`).toBuild();
-  new Expect(r`\overrightarrow{AB}_2^2`).toBuild();
-  new Expect(build(r`\overrightarrow{AB}`)[0].classes).toContain("mord");
-  new Expect(build(r`\overrightarrow +`)[0].classes).toContain("mord");
-  new Expect(build(r`\overrightarrow +`)[0].classes).not.toContain("mbin");
-  new Expect(build(r`\overrightarrow )^2`)[0].classes).toContain("mord");
-  new Expect(build(r`\overrightarrow )^2`)[0].classes).not.toContain("mclose");
-
-
+  new Expect(build(r`\vec x`)[0].type).toEqual("mi");
 
   console.log("Number of tests:    " + numTests)
   console.log("Number of failures: " + numFailures)
