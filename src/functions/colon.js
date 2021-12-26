@@ -25,14 +25,16 @@ defineFunction({
 defineFunction({
   type: "colonequal",
   names: [":"],
-  props: { numArgs: 0 },
+  props: { numArgs: 0, allowedInText: true, allowedInMath: true },
   handler({ parser }, args) {
-    if (parser.fetch().text === "=") {
+    if (parser.mode === "text") {
+      return { type: "textord", text: ":", mode: "text" }
+    } else if (parser.fetch().text === "=") {
       // Special case for :=
       parser.consume()
-      return { type: "colonequal", mode: parser.mode }
+      return { type: "colonequal", mode: "math" }
     }
-    return { type: "atom", family: "rel", text: ":", mode: parser.mode }
+    return { type: "atom", family: "rel", text: ":", mode: "math" }
   },
   mathmlBuilder(group, style) {
     return new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2254")])
