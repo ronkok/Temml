@@ -17,7 +17,8 @@
 
 # mhchem
 
-This file contains all the examples in the `mhchem` manual.
+This file contains all the examples in the `mhchem` manual.\
+Ref: https://mhchem.github.io/MathJax-mhchem/
 
 ## Chemical Equations (ce)
 

@@ -530,13 +530,14 @@ Note: `\centerdot` is not supported. I can't find the right glyph in the math fo
 | 164 | `f(x) \,\!`  `\sum_{n=0}^\infty a_n x^n` \   | $`f(x) \,\!` $` = \sum_{n=0}^\infty a_n x^n`   |
 |     | `= a_0+a_1x+a_2x^2+\cdots`                   | $`= a_0+a_1x+a_2x^2+\cdots`                    |
 +-----+----------------------------------------------+------------------------------------------------+
-| 165 | \begin{array}{|c|c|c|} a & b & S \\\\ \      | $`\begin{array}{|c|c|c|} a & b & S \\          |
+| 165 | \begin{array}{|c|c|c|} \                     | $`\begin{array}{|c|c|c|}                       |
+|     | a & b & S \\\\ \                             | a & b & S \\                                   |
 |     | \hline \                                     | \hline                                         |
 |     | 0 & 0 & 1 \\\\ \                             | 0 & 0 & 1 \\                                   |
 |     | 0 & 1 & 1 \\\\ \                             | 0 & 1 & 1 \\                                   |
 |     | 1 & 0 & 1 \\\\ \                             | 1 & 0 & 1 \\                                   |
 |     | 1 & 1 & 0 \\\\ \                             | 1 & 1 & 0 \\                                   |
-|     | \end{array                                   | \end{array}`                                   |
+|     | \end{array}                                  | \end{array}`                                   |
 +-----+----------------------------------------------+------------------------------------------------+
 {colWidths="null null 400"}
 
