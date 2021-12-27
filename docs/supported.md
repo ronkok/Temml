@@ -924,95 +924,99 @@ $`\stackrel{!}{=}\vphantom{\frac a b}` `\stackrel{!}{=}`
 | $`:` `:`                | $`\eqqcolon`          | $`\lesssim` `\lesssim` | $`\sqsupseteq`           |
 |                         |  `\eqqcolon`          |                        |  `\sqsupseteq`           |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\approx` `\approx`    | $`\Eqqcolon`          | $`\ll` `\ll`           | $`\stareq` `\stareq`     |
+| $`:=`  `:=`             | $`\Eqqcolon`          | $`\ll` `\ll`           | $`\stareq` `\stareq`     |
 |                         |  `\Eqqcolon`          |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\approxeq`            | $`\eqdef` `\eqdef`    | $`\lll` `\lll`         | $`\Subset` `\Subset`     |
+| $`\approx` `\approx`    | $`\eqdef` `\eqdef`    | $`\lll` `\lll`         | $`\Subset` `\Subset`     |
++-------------------------+-----------------------+------------------------+--------------------------+
+| $`\approxeq`            | $`\eqsim` `\eqsim`    | $`\llless` `\llless`   | $`\subset` `\subset`     |
 |  `\approxeq`            |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\arceq` `\arceq`      | $`\eqsim` `\eqsim`    | $`\llless` `\llless`   | $`\subset` `\subset`     |
-+-------------------------+-----------------------+------------------------+--------------------------+
-| $`\asymp` `\asymp`      | $`\eqslantgtr`        | $`\lt` `\lt`           | $`\subseteq` `\subseteq` |
+| $`\arceq` `\arceq`      | $`\eqslantgtr`        | $`\lt` `\lt`           | $`\subseteq` `\subseteq` |
 |                         |  `\eqslantgtr`        |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\backcong`            | $`\eqslantless`       | $`\measeq` `\measeq`   | $`\subseteqq`            |
-|  `\backcong`            |  `\eqslantless`       |                        |  `\subseteqq`            |
+| $`\asymp` `\asymp`      | $`\eqslantless`       | $`\measeq` `\measeq`   | $`\subseteqq`            |
+|                         |  `\eqslantless`       |                        |  `\subseteqq`            |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\backepsilon`         | $`\equiv` `\equiv`    | $`\mid` `\mid`         | $`\succ` `\succ`         |
-|  `\backepsilon`         |                       |                        |                          |
+| $`\backcong`            | $`\equiv` `\equiv`    | $`\mid` `\mid`         | $`\succ` `\succ`         |
+|  `\backcong`            |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\backsim` `\backsim`  | $`\fallingdotseq`     | $`\models` `\models`   | $`\succapprox`           |
-|                         |  `\fallingdotseq`     |                        |  `\succapprox`           |
+| $`\backepsilon`         | $`\fallingdotseq`     | $`\models` `\models`   | $`\succapprox`           |
+|  `\backepsilon`         |  `\fallingdotseq`     |                        |  `\succapprox`           |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\backsimeq`           | $`\frown` `\frown`    | $`\multimap`           | $`\succcurlyeq`          |
-|  `\backsimeq`           |                       |  `\multimap`           |  `\succcurlyeq`          |
+| $`\backsim` `\backsim`  | $`\frown` `\frown`    | $`\multimap`           | $`\succcurlyeq`          |
+|                         |                       |  `\multimap`           |  `\succcurlyeq`          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\between` `\between`  | $`\ge` `\ge`          | $`\origof` `\origof`   | $`\succeq` `\succeq`     |
+| $`\backsimeq`           | $`\ge` `\ge`          | $`\origof` `\origof`   | $`\succeq` `\succeq`     |
+|  `\backsimeq`           |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\bowtie` `\bowtie`    | $`\geq` `\geq`        | $`\owns` `\owns`       | $`\succsim` `\succsim`   |
+| $`\between` `\between`  | $`\geq` `\geq`        | $`\owns` `\owns`       | $`\succsim` `\succsim`   |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\bumpeq` `\bumpeq`    | $`\geqq` `\geqq`      | $`\parallel`           | $`\Supset` `\Supset`     |
+| $`\bowtie` `\bowtie`    | $`\geqq` `\geqq`      | $`\parallel`           | $`\Supset` `\Supset`     |
 |                         |                       |  `\parallel`           |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\Bumpeq` `\Bumpeq`    | $`\geqslant`          | $`\perp` `\perp`       | $`\supset` `\supset`     |
+| $`\bumpeq` `\bumpeq`    | $`\geqslant`          | $`\perp` `\perp`       | $`\supset` `\supset`     |
 |                         |  `\geqslant`          |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\circeq` `\circeq`    | $`\gg` `\gg`          | $`\pitchfork`          | $`\supseteq` `\supseteq` |
+| $`\Bumpeq` `\Bumpeq`    | $`\gg` `\gg`          | $`\pitchfork`          | $`\supseteq` `\supseteq` |
 |                         |                       |  `\pitchfork`          |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\colonapprox`         | $`\ggg` `\ggg`        | $`\prec` `\prec`       | $`\supseteqq`            |
-|  `\colonapprox`         |                       |                        |  `\supseteqq`            |
+| $`\circeq` `\circeq`    | $`\ggg` `\ggg`        | $`\prec` `\prec`       | $`\supseteqq`            |
+|                         |                       |                        |  `\supseteqq`            |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\Colonapprox`         | $`\gggtr` `\gggtr`    | $`\precapprox`         | $`\thickapprox`          |
-|  `\Colonapprox` or\     |                       |  `\precapprox`         |  `\thickapprox`          |
+| $`\colonapprox`         | $`\gggtr` `\gggtr`    | $`\precapprox`         | $`\thickapprox`          |
+|  `\colonapprox`         |                       |  `\precapprox`         |  `\thickapprox`          |
++-------------------------+-----------------------+------------------------+--------------------------+
+| $`\Colonapprox`         | $`\gt` `\gt`          | $`\preccurlyeq`        | $`\thicksim` `\thicksim` |
+|  `\Colonapprox` or\     |                       |  `\preccurlyeq`        |                          |
 |     `\coloncolonapprox` |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\coloneq`             | $`\gt` `\gt`          | $`\preccurlyeq`        | $`\thicksim` `\thicksim` |
-|  `\coloneq` or\         |                       |  `\preccurlyeq`        |                          |
+| $`\coloneq`             | $`\gtrapprox`         | $`\preceq` `\preceq`   | $`\trianglelefteq`       |
+|  `\coloneq` or\         |  `\gtrapprox`         |                        |  `\trianglelefteq`       |
 |    `\colonminus`        |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\Coloneq`             | $`\gtrapprox`         | $`\preceq` `\preceq`   | $`\trianglelefteq`       |
-|  `\Coloneq` or\         |  `\gtrapprox`         |                        |  `\trianglelefteq`       |
+| $`\Coloneq`             | $`\gtreqless`         | $`\precsim` `\precsim` | $`\triangleq`            |
+|  `\Coloneq` or\         |  `\gtreqless`         |                        |  `\triangleq`            |
 |    `\coloncolonminus`   |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\coloneqq`            | $`\gtreqless`         | $`\precsim` `\precsim` | $`\triangleq`            |
-|  `\coloneqq` or\        |  `\gtreqless`         |                        |  `\triangleq`            |
+| $`\coloneqq`            | $`\gtreqqless`        | $`\propto` `\propto`   | $`\trianglerighteq`      |
+|  `\coloneqq` or\        |  `\gtreqqless`        |                        |  `\trianglerighteq`      |
 |    `\colonequals`       |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\Coloneqq`            | $`\gtreqqless`        | $`\propto` `\propto`   | $`\trianglerighteq`      |
-|  `\Coloneqq` or \       |  `\gtreqqless`        |                        |  `\trianglerighteq`      |
+| $`\Coloneqq`            | $`\gtrless`           | $`\questeq` `\questeq` | $`\varpropto`            |
+|  `\Coloneqq` or \       |  `\gtrless`           |                        |  `\varpropto`            |
 |     `\coloncolonequals` |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\colonsim`            | $`\gtrless`           | $`\questeq` `\questeq` | $`\varpropto`            |
-|  `\colonsim`            |  `\gtrless`           |                        |  `\varpropto`            |
+| $`\colonsim`            | $`\gtrsim` `\gtrsim`  | :`\ratio` or\          | $`\vartriangle`          |
+|  `\colonsim`            |                       |    `\vcentcolon`       |  `\vartriangle`          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\Colonsim`            | $`\gtrsim` `\gtrsim`  | :`\ratio` or\          | $`\vartriangle`          |
-|  `\Colonsim` or\        |                       |    `\vcentcolon`       |  `\vartriangle`          |
+| $`\Colonsim`            | $`\imageof`           | $`\risingdotseq`       | $`\vartriangleleft`      |
+|  `\Colonsim` or\        |  `\imageof`           |  `\risingdotseq`       |  `\vartriangleleft`      |
 |    `\coloncolonsim`     |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\cong` `\cong`        | $`\imageof`           | $`\risingdotseq`       | $`\vartriangleleft`      |
-|                         |  `\imageof`           |  `\risingdotseq`       |  `\vartriangleleft`      |
+| $`\cong` `\cong`        | $`\in` `\in`          | $`\shortmid`           | $`\vartriangleright`     |
+|                         | or `\isin`            |  `\shortmid`           |  `\vartriangleright`     |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\curlyeqprec`         | $`\in` `\in`          | $`\shortmid`           | $`\vartriangleright`     |
-|  `\curlyeqprec`         | or `\isin`            |  `\shortmid`           |  `\vartriangleright`     |
+| $`\curlyeqprec`         | $`\Join` `\Join`      | $`\shortparallel`      | $`\vdash` `\vdash`       |
+|  `\curlyeqprec`         |                       |  `\shortparallel`      |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\curlyeqsucc`         | $`\Join` `\Join`      | $`\shortparallel`      | $`\vdash` `\vdash`       |
-|  `\curlyeqsucc`         |                       |  `\shortparallel`      |                          |
+| $`\curlyeqsucc`         | $`\le` `\le`          | $`\sim` `\sim`         | $`\vDash` `\vDash`       |
+|  `\curlyeqsucc`         |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\dashv` `\dashv`      | $`\le` `\le`          | $`\sim` `\sim`         | $`\vDash` `\vDash`       |
+| $`\dashv` `\dashv`      | $`\leq` `\leq`        | $`\simeq` `\simeq`     | $`\Vdash` `\Vdash`       |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\dblcolon`            | $`\leq` `\leq`        | $`\simeq` `\simeq`     | $`\Vdash` `\Vdash`       |
-|  `\dblcolon` or\        |                       |                        |                          |
+| $`\dblcolon`            | $`\leqq` `\leqq`      | $`\smallfrown`         | $`\Vvdash` `\Vvdash`     |
+|  `\dblcolon` or\        |                       |  `\smallfrown`         |                          |
 |     `\coloncolon`       |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\doteq` `\doteq`      | $`\leqq` `\leqq`      | $`\smallfrown`         | $`\Vvdash` `\Vvdash`     |
-|                         |                       |  `\smallfrown`         |                          |
-+-------------------------+-----------------------+------------------------+--------------------------+
-| $`\Doteq` `\Doteq`      | $`\leqslant`          | $`\smallsmile`         | $`\veeeq` `\veeeq`       |
+| $`\doteq` `\doteq`      | $`\leqslant`          | $`\smallsmile`         | $`\veeeq` `\veeeq`       |
 |                         |  `\leqslant`          |  `\smallsmile`         |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
-| $`\doteqdot`            | $`\lessapprox`        | $`\smile` `\smile`     | $`\wedgeq` `\wedgeq`     |
-|  `\doteqdot`            |  `\lessapprox`        |                        |                          |
+| $`\Doteq` `\Doteq`      | $`\lessapprox`        | $`\smile` `\smile`     | $`\wedgeq` `\wedgeq`     |
+|                         |  `\lessapprox`        |                        |                          |
++-------------------------+-----------------------+------------------------+--------------------------+
+| $`\doteqdot`            |                       |                        |                          |
+|  `\doteqdot`            |                       |                        |                          |
 +-------------------------+-----------------------+------------------------+--------------------------+
 
 The _texvc_ extension provides $`\sub` `\sub`, $`\sube` `\sube`, and $`\supe` `\supe`.
