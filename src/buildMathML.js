@@ -96,10 +96,13 @@ export const buildGroup = function(group, style) {
   }
 };
 
+const glue = _ => {
+  const glueNode = new mathMLTree.MathNode("mtd", [])
+  glueNode.setAttribute("style", "padding: 0;width: 50%;")
+  return glueNode
+}
 
 const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
-  const glue = new mathMLTree.MathNode("mtd", [])
-  glue.setAttribute("style", "padding: 0;width: 50%;")
   tag = buildExpressionRow(tag[0].body, style)
   tag.classes = ["tml-tag"];
   if (!preventTagLap) {
@@ -113,8 +116,8 @@ const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
 
   expression = new mathMLTree.MathNode("mtd", [expression])
   const rowArray = leqno
-    ? [tag, glue, expression, glue]
-    : [glue, expression, glue, tag];
+    ? [tag, glue(), expression, glue()]
+    : [glue(), expression, glue(), tag];
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"])
   const table = new mathMLTree.MathNode("mtable", [mtr])
   table.setAttribute("width", "100%")
