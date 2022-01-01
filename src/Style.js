@@ -28,7 +28,7 @@ class Style {
     this.fontFamily = data.fontFamily || "";    // string
     this.fontWeight = data.fontWeight || "";
     this.fontShape = data.fontShape || "";
-    this.maxSize = data.maxSize;                // number
+    this.maxSize = data.maxSize;                // [number, number]
   }
 
   /**

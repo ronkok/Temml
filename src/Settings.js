@@ -24,7 +24,12 @@ export default class Settings {
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
     this.strict = utils.deflt(options.strict, false);    // boolean
     this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
-    this.maxSize = Math.max(0, utils.deflt(options.maxSize, Infinity)); // number
+    this.maxSize = (options.maxSize === undefined
+      ? [Infinity, Infinity]
+      : Array.isArray(options.maxSize)
+      ? options.maxSize
+      : [Infinity, Infinity]
+    )
     this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1000)); // number
   }
 
