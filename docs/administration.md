@@ -124,17 +124,28 @@ temml.render(
 Available options are:
 
 - `displayMode`: `boolean`. If `true` the math will be rendered in display mode, which will put the math in display style (so `\int` and `\sum` are large, for example), and will center the math on the page on its own line. If `false` the math will be rendered in inline mode. (default: `false`)
-- `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.  
+
+- `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.
+
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox. (default: `false`)
-- `elementIsMath`: `boolean`. When you call the `temml.render()` function, you pass an `element` as an argument to the function. If that `element` is a span, then allow `elementIsMath` to remain `false` (the default), and Temml will create a new `<math>` element inside the span. It you pass a `<math>` element as the argument, then set `elementIsMath` to `true`. Then Temml will populate it with math contents. 
+
+- `elementIsMath`: `boolean`. When you call the `temml.render()` function, you pass an `element` as an argument to the function. If that `element` is a span, then allow `elementIsMath` to remain `false` (the default), and Temml will create a new `<math>` element inside the span. It you pass a `<math>` element as the argument, then set `elementIsMath` to `true`. Then Temml will populate it with math contents.
+
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
+
 - `preventTagLap`: `boolean`. This option affects the horizontal alignment of `displayMode` math and `\tag`s. The default (`false`) acts in the LaTeX manner and centers the math. That’s good in a wide container, but if the container is narrow, the tag will overlap the math. The `preventTagLap: true` option acts differently. It will first place the tag and then center the math in the remainder of the container, with no overlap. If you are targeting mobile, `preventTagLap: true` is probably a good choice .
+
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
+
 - `errorColor`: `string`. A color string given in the format `"#XXX"` or `"#XXXXXX"`. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: `#b22222`)
-- `maxSize`: `number`. All user-specified sizes, e.g. in `\rule{500em}{500em}`, will be capped to `maxSize` ems. If set to `Infinity` (the default), users can make elements and spaces arbitrarily large.
+
+- `maxSize`: `[number, number]`. This provides a way to cap all user-specified sizes, e.g. in `\rule{500em}{500em}`. The first number is the cap in `em` units, which will be applied to user-specified relative units. The second number is the cap in CSS `pt` units, which will be applied to user-specified absolute units. The default is `[Infinity, Infinity]`, which allows users to make elements and spaces arbitrarily large.
+
 - `maxExpand`: `number`. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. If set to `Infinity`, the macro expander will try to fully expand as in LaTeX. (default: 1000)
+
 - `strict`: `boolean`. If `false` (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If `true` (LaTeX faithfulness mode), throw an error for any such transgressions. (default: `false`)
 - `xml`: `boolean`. If `true`, Temml will write a namespace into the `<math>` element. That namespace is `xmlns="http://www.w3.org/1998/Math/MathML"`. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. (default: `false`)
+
 - `trust`: `boolean` or `function` (default: `false`). If `false` (do not trust input), prevent any commands like `\includegraphics` that could enable adverse behavior, rendering them instead in `errorColor`. If `true` (trust input), allow all such commands. Provide a custom function `handler(context)` to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:
 
   - `{command: "\\url", url, protocol}`
