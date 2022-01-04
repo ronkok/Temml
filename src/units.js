@@ -52,7 +52,7 @@ export const validUnit = function(unit) {
   return validUnits.indexOf(unit) > -1
 }
 
-const emScale = styleLevel => {
+export const emScale = styleLevel => {
   const scriptLevel = Math.max(styleLevel - 1, 0)
   return [1, 0.7, 0.5][scriptLevel]
 };

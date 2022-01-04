@@ -3,11 +3,6 @@
  */
 
 import mathMLTree from "./mathMLTree"
-import { Span } from "./domTree";
-import ParseError from "./ParseError";
-
-// From mhchem reaction arrows \ce{A <=>> B} and \ce{A <<=> B}
-const keysWithoutUnicodePoints = ["equilibriumRight", "equilibriumLeft"]
 
 const stretchyCodePoint = {
   widehat: "^",
@@ -52,38 +47,15 @@ const stretchyCodePoint = {
   mesomerism: "\u2194",
   longrightharpoonup: "\u21c0",
   longleftharpoondown: "\u21bd",
+  eqrightharpoonup: "\u21c0",
+  eqleftharpoondown: "\u21bd",
   "\\cdrightarrow": "\u2192",
   "\\cdleftarrow": "\u2190",
   "\\cdlongequal": "="
 }
 
-const nodeFromObject = (obj) => {
-  // Build a stretchy arrow from two SVGs.
-  const children = [];
-  if (obj.children) {
-    obj.children.map(child => { children.push(nodeFromObject(child)) })
-  }
-  const node = obj.type === "span"
-    ? new Span(null, children, obj.style)
-    : new mathMLTree.MathNode(obj.type, children, [], obj.style, true)
-  Object.entries(obj.attributes).forEach(([key, value]) => {
-    node.setAttribute(key, value)
-  })
-  return node
-}
-
-const mathMLnode = function(label, macros = {}) {
-  const key = label.slice(1)
-  let child
-  if (!keysWithoutUnicodePoints.includes(key)) {
-    child = new mathMLTree.TextNode(stretchyCodePoint[key])
-  } else {
-    const atKey = "\\@" + key
-    if (!macros.has(atKey)) {
-      throw new ParseError("Arrow not available. The mhchem package is needed.")
-    }
-    child = nodeFromObject(JSON.parse(macros.get(atKey)))
-  }
+const mathMLnode = function(label) {
+  const child = new mathMLTree.TextNode(stretchyCodePoint[label.slice(1)])
   const node = new mathMLTree.MathNode("mo", [child])
   node.setAttribute("stretchy", "true")
   return node

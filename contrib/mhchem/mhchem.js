@@ -14,7 +14,7 @@
  *    3. The reaction arrow code is simplified. All reaction arrows are rendered
  *       using Temml extensible arrows instead of building non-extensible arrows.
  *    4. SVG path geometry is supplied for \equilibriumRight & \equilibriumLeft.
- *    5. \tripledash uses Unicode character U+2504, ┄.
+ *    5. \tripleDash uses Unicode character U+2504, ┄.
  *    6. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
  *    7. The electron dot uses \textbullet instead of \bullet.
  *
@@ -53,7 +53,7 @@
 // version: "3.3.0" for MathJax and Temml
 
 
-// Add \ce, \pu, and \tripledash to the Temml macros.
+// Add \ce, \pu, and \tripleDash to the Temml macros.
 
 temml.__defineMacro("\\ce", function(context) {
   return chemParse(context.consumeArgs(1)[0], "ce")
@@ -63,109 +63,28 @@ temml.__defineMacro("\\pu", function(context) {
   return chemParse(context.consumeArgs(1)[0], "pu");
 });
 
-//  Needed for \bond for the ~ forms
-//  Raise by 2.56mu, not 2mu. We're raising a hyphen-minus, U+002D, not 
-//  a mathematical minus, U+2212. So we need that extra 0.56.
-temml.__defineMacro("\\tripledash", '\\mathord{\\kern2mu\\raise{0.5mu}{\\char"2504}\\kern2mu}');
-
-// Use the Temml macro system to send SVG path geometry for equilibrium arrows.
-temml.__defineMacro("longRightleftharpoonsLeft", `M507,435c-4,4,-6.3,8.7,-7,14
-c0,5.3,0.7,9,2,11c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17
-c2,0.7,5,1,9,1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21
-c-32,-87.3,-82.7,-157.7,-152,-211c0,0,-3,-3,-3,-3l399351,0l0,-40
-c-398570,0,-399437,0,-399437,0z M593 435 v40 H399500 v-40z
-M0 281 v-40 H399908 v40z M0 281 v-40 H399908 v40z`)
-temml.__defineMacro("longRightleftharpoonsRight", `M0,241 l0,40c399126,0,399993,0,399993,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M0 241 v40 H399908 v-40z M0 475 v-40 H399500 v40z M0 475 v-40 H399500 v40z`)
-temml.__defineMacro("longLeftrightharpoonsLeft", `M7,435c-4,4,-6.3,8.7,-7,14c0,5.3,0.7,9,2,11
-c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17c2,0.7,5,1,9,
-1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21c-32,-87.3,-82.7,-157.7,
--152,-211c0,0,-3,-3,-3,-3l399907,0l0,-40c-399126,0,-399993,0,-399993,0z
-M93 435 v40 H400000 v-40z M500 241 v40 H400000 v-40z M500 241 v40 H400000 v-40z`)
-temml.__defineMacro("longLeftrightharpoonsRight", `M53,241l0,40c398570,0,399437,0,399437,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`)
-
-
+// Math fonts do not include glyphs for the ~ form of bonds. So we'll send path geometry
+// that Temml can use to write SVG images.
 const path = {
-  "\\equilibriumRight" : {
-    left: `M507,435c-4,4,-6.3,8.7,-7,14
-c0,5.3,0.7,9,2,11c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17
-c2,0.7,5,1,9,1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21
-c-32,-87.3,-82.7,-157.7,-152,-211c0,0,-3,-3,-3,-3l399351,0l0,-40
-c-398570,0,-399437,0,-399437,0z M593 435 v40 H399500 v-40z
-M0 281 v-40 H399908 v40z M0 281 v-40 H399908 v40z`,
-    right: `M0,241 l0,40c399126,0,399993,0,399993,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M0 241 v40 H399908 v-40z M0 475 v-40 H399500 v40z M0 475 v-40 H399500 v40z`
-  },
-  "\\equilibriumLeft": {
-    left: `M7,435c-4,4,-6.3,8.7,-7,14c0,5.3,0.7,9,2,11
-c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17c2,0.7,5,1,9,
-1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21c-32,-87.3,-82.7,-157.7,
--152,-211c0,0,-3,-3,-3,-3l399907,0l0,-40c-399126,0,-399993,0,-399993,0z
-M93 435 v40 H400000 v-40z M500 241 v40 H400000 v-40z M500 241 v40 H400000 v-40z`,
-    right: `M53,241l0,40c398570,0,399437,0,399437,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`
-  }
+  tripleDash: "M149 1011 V878 H449 V1011z M619 1011 V878 H910 V1011z M1079 1011 V878 H1381 V1011z",
+  tripleDashOverLine: "M149 807 V668 H449 V807z M619 807 V668 H910 V807z M1079 807 V668 H1381 V807z M149 1222 V1083 H1381 V1222z",
+  tripleDashOverDoubleLine: "M149 596 V463 H449 V596z M619 596 V463 H910 V596z M1079 596 V463 H1381 V596z M149 1011 V878 H1381 V1011z M149 1426 V1293 H1381 V1426z",
+  tripleDashBetweenDoubleLine: "M149 596 V463 H1381 V596z M149 1011 V878 H449 V1011z M619 1011 V878 H910 V1011z M1079 1011 V878 H1381 V1011z M149 1426 V1293 H1381 V1426z"
 }
 
-const svg = (name, end) => {
-  const svg = {
-    type: "svg",
-    attributes: {
-      xmlns: "http://www.w3.org/2000/svg",
-      width: "400em",
-      height: "0.716em",
-      viewBox: "0 0 400000 716",
-      preserveAspectRatio: `x${end === "left" ? "Min" : "Max"}yMin slice`,
-      fill: "currrentColor",
-      "fill-rule": "non-zero",
-      "fill-opacity" : 1
-    },
-    style: { position: "absolute" },
-    children: [{
-      type: "path",
-      attributes: { d: path[name][end], stroke: "none" },
-      children: []
-    }]
-  }
-  if (end === "left") { svg.style.left = 0 } else { svg.style.right = 0 }
-  return svg
-}
-
-const endSpan = (name, end) => {
-  const span = {
-    type: "span",
-    attributes: {},
-    style: { position: "absolute", width: "50.2%", height: "0.716em", overflow: "hidden" },
-    children: [svg(name, end)]
-  }
-  if (end === "left") { span.style.left = 0 } else { span.style.right = 0 }
-  return span
-}
-
-const arrowNode = name => {
+const svg = name => {
   return JSON.stringify({
-    type: "span",
-    attributes: {},
-    style: { display: "block", position: "relative", width: "100%", height: "0.716em", "min-width": "1.75em" },
-    children: [endSpan(name, "left"), endSpan(name, "right")]
+    width: "0.747", // ems
+    height: "0.747",
+    viewBox: "0 0 1530 1530",
+    path: path[name]
   })
 }
 
-temml.__defineMacro("\\@equilibriumRight", arrowNode("\\equilibriumRight"))
-temml.__defineMacro("\\@equilibriumLeft", arrowNode("\\equilibriumLeft"))
+temml.__defineMacro("\\@tripleDash", svg("tripleDash"))
+temml.__defineMacro("\\@tripleDashOverLine", svg("tripleDashOverLine"))
+temml.__defineMacro("\\@tripleDashOverDoubleLine", svg("tripleDashOverDoubleLine"))
+temml.__defineMacro("\\@tripleDashBetweenDoubleLine", svg("tripleDashBetweenDoubleLine"))
 
   //
   //  This is the main function for handing the \ce and \pu commands.
@@ -1752,11 +1671,11 @@ temml.__defineMacro("\\@equilibriumLeft", arrowNode("\\equilibriumLeft"))
         case "2": return "{=}";
         case "#": return "{\\equiv}";
         case "3": return "{\\equiv}";
-        case "~": return "{\\tripledash}";
-        case "~-": return "{\\mathrlap{\\raise{-.1em}{-}}\\raise{.1em}{\\tripledash}}";
-        case "~=": return "{\\mathrlap{\\raise{-.2em}{-}}\\mathrlap{\\raise{.2em}{\\tripledash}}{-}}";
-        case "~--": return "{\\mathrlap{\\raise{-.2em}{-}}\\mathrlap{\\raise{.2em}{\\tripledash}}{-}}";
-        case "-~-": return "{\\mathrlap{\\raise{-.2em}{-}}\\mathrlap{\\raise{.2em}{-}}\\tripledash}";
+        case "~": return "{\\tripleDash}";
+        case "~-": return "{\\tripleDashOverLine}";
+        case "~=": return "{\\tripleDashOverDoubleLine}";
+        case "~--": return "{\\tripleDashOverDoubleLine}";
+        case "-~-": return "{\\tripleDashBetweenDoubleLine}";
         case "...": return "{{\\cdot}{\\cdot}{\\cdot}}";
         case "....": return "{{\\cdot}{\\cdot}{\\cdot}{\\cdot}}";
         case "->": return "{\\rightarrow}";

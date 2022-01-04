@@ -19,13 +19,12 @@ export function newDocumentFragment(children) {
  * `<mspace>` tags).
  */
 export class MathNode {
-  constructor(type, children, classes, style, isSVG) {
+  constructor(type, children, classes, style) {
     this.type = type;
     this.attributes = {};
     this.children = children || [];
     this.classes = classes || [];
     this.style = style || {};   // Used for <mstyle> elements
-    this.isSVG = isSVG || false;
   }
 
   /**
@@ -47,9 +46,7 @@ export class MathNode {
    * Converts the math node into a MathML-namespaced DOM element.
    */
   toNode() {
-    const node = this.isSVG
-      ? document.createElementNS("http://www.w3.org/2000/svg", this.type)
-      : document.createElementNS("http://www.w3.org/1998/Math/MathML", this.type);
+    const node = document.createElementNS("http://www.w3.org/1998/Math/MathML", this.type);
 
     for (const attr in this.attributes) {
       if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {

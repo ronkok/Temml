@@ -315,7 +315,7 @@ The other math fonts render it fine. Not much I can do about it.
 +-----+--------------------------------------------+------------------------------------------------+
 |  **Unsorted**                                                                                     |
 +-----+--------------------------------------------+------------------------------------------------+
-| 100 | \diagup \diagdown \ltimes \                | $`\diagup \diagdown \ltimes                    |
+| 100 | \diagup \diagdown \centerdot \ltimes \     | $`\diagup \diagdown \centerdot \ltimes         |
 |     | \rtimes \leftthreetimes \rightthreetimes   | \rtimes \leftthreetimes \rightthreetimes`      |
 +-----+--------------------------------------------+------------------------------------------------+
 | 101 | \eqcirc \circeq \triangleq \bumpeq\Bumpeq\ | $`\eqcirc \circeq \triangleq \bumpeq\Bumpeq    |
@@ -330,8 +330,6 @@ The other math fonts render it fine. Not much I can do about it.
 | 104 | \trianglelefteq \ntrianglelefteq \         | $`\trianglelefteq \ntrianglelefteq             |
 |     | \trianglerighteq \ntrianglerighteq         | \trianglerighteq \ntrianglerighteq`            |
 +-----+--------------------------------------------+------------------------------------------------+
-
-Note: `\centerdot` is not supported. I can't find the right glyph in the math fonts.
 
 <br>
 
