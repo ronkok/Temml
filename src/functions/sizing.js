@@ -40,6 +40,10 @@ defineFunction({
     allowedInText: true
   },
   handler: ({ breakOnTokenText, funcName, parser }, args) => {
+    if (parser.settings.strict && parser.mode === "math") {
+      // eslint-disable-next-line no-console
+      console.log(`Temml strict-mode warning: Command ${funcName} is invalid in math mode.`)
+    }
     const body = parser.parseExpression(false, breakOnTokenText);
     return {
       type: "sizing",
