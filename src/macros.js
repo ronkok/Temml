@@ -557,6 +557,7 @@ defineMacro("\\varliminf", "\\DOTSB\\operatorname*{\\underline{\\text{lim}}}");
 defineMacro("\\varinjlim", "\\DOTSB\\operatorname*{\\underrightarrow{\\text{lim}}}");
 defineMacro("\\varprojlim", "\\DOTSB\\operatorname*{\\underleftarrow{\\text{lim}}}");
 
+defineMacro("\\centerdot", "{\\medspace\\rule{0.167em}{0.189em}\\medspace}")
 
 //////////////////////////////////////////////////////////////////////
 // statmath.sty

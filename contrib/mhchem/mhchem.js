@@ -13,10 +13,9 @@
  *    2. \rlap and \llap are replaced with \mathrlap and \mathllap.
  *    3. The reaction arrow code is simplified. All reaction arrows are rendered
  *       using Temml extensible arrows instead of building non-extensible arrows.
- *    4. SVG path geometry is supplied for \equilibriumRight & \equilibriumLeft.
- *    5. \tripleDash uses Unicode character U+2504, ┄.
- *    6. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
- *    7. The electron dot uses \textbullet instead of \bullet.
+ *    4. The ~bond forms are composed entirely of \rule elements.
+ *    5. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
+ *    6. The electron dot uses \textbullet instead of \bullet.
  *
  *    This code, as other Temml code, is released under the MIT license.
  * 
@@ -64,27 +63,13 @@ temml.__defineMacro("\\pu", function(context) {
 });
 
 // Math fonts do not include glyphs for the ~ form of bonds. So we'll send path geometry
-// that Temml can use to write SVG images.
-const path = {
-  tripleDash: "M149 1011 V878 H449 V1011z M619 1011 V878 H910 V1011z M1079 1011 V878 H1381 V1011z",
-  tripleDashOverLine: "M149 807 V668 H449 V807z M619 807 V668 H910 V807z M1079 807 V668 H1381 V807z M149 1222 V1083 H1381 V1222z",
-  tripleDashOverDoubleLine: "M149 596 V463 H449 V596z M619 596 V463 H910 V596z M1079 596 V463 H1381 V596z M149 1011 V878 H1381 V1011z M149 1426 V1293 H1381 V1426z",
-  tripleDashBetweenDoubleLine: "M149 596 V463 H1381 V596z M149 1011 V878 H449 V1011z M619 1011 V878 H910 V1011z M1079 1011 V878 H1381 V1011z M149 1426 V1293 H1381 V1426z"
-}
-
-const svg = name => {
-  return JSON.stringify({
-    width: "0.747", // ems
-    height: "0.747",
-    viewBox: "0 0 1530 1530",
-    path: path[name]
-  })
-}
-
-temml.__defineMacro("\\@tripleDash", svg("tripleDash"))
-temml.__defineMacro("\\@tripleDashOverLine", svg("tripleDashOverLine"))
-temml.__defineMacro("\\@tripleDashOverDoubleLine", svg("tripleDashOverDoubleLine"))
-temml.__defineMacro("\\@tripleDashBetweenDoubleLine", svg("tripleDashBetweenDoubleLine"))
+// So we'll compose characters built from \rule elements.
+temml.__defineMacro("\\uniDash", `{\\rule{0.672em}{0.06em}}`)
+temml.__defineMacro("\\triDash", `{\\rule{0.15em}{0.06em}\\kern2mu\\rule{0.15em}{0.06em}\\kern2mu\\rule{0.15em}{0.06em}}`)
+temml.__defineMacro("\\tripleDash", `\\kern0.075em\\raise0.25em{\\triDash}\\kern0.075em`)
+temml.__defineMacro("\\tripleDashOverLine", `\\kern0.075em\\mathrlap{\\raise0.125em{\\uniDash}}\\raise0.34em{\\triDash}\\kern0.075em`)
+temml.__defineMacro("\\tripleDashOverDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap{\\raise0.48em{\\triDash}}\\raise0.27em{\\uniDash}}{\\raise0.05em{\\uniDash}}\\kern0.075em`)
+temml.__defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap{\\raise0.48em{\\uniDash}}\\raise0.27em{\\triDash}}{\\raise0.05em{\\uniDash}}\\kern0.075em`)
 
   //
   //  This is the main function for handing the \ce and \pu commands.
