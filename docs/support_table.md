@@ -254,7 +254,7 @@ If you know the shape of a character, but not its name,
 |\cdots|$`\cdots`|||
 |\ce |$`{\mathrm{C}{\vphantom{X}}_{\smash[t]{6}}\mathrm{H}{\vphantom{X}}_{\smash[t]{5}}{-}\mathrm{CHO}}`|`\ce{C6H5-CHO}` | mhchem extension |
 |\cee|(Not supported)|Deprecated<br>Use `\ce` instead. | mhchem |
-|\centerdot|(Not supported)|| ams |
+|\centerdot|$`\centerdot`|| ams |
 |\cf|(Not supported)|Deprecated<br>Use `\ce` instead.| mhchem |
 |\cfrac|$`\cfrac{2}{1+\cfrac{2}{1}}`|`\cfrac{2}{1+\cfrac{2}{1}}`| ams |
 |\check|$`\check{oe}`|`\check{oe}`||
@@ -1460,7 +1460,7 @@ If you know the shape of a character, but not its name,
 
 <br>
 
-<p class="reduced">Copyright © 2021 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
 
@@ -1469,7 +1469,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.0
 
 <div style="height:0.5em;"></div>
 

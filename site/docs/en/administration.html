@@ -80,7 +80,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </li>
 <li><p><code>errorColor</code>: <code>string</code>. A color string given in the format <code>&quot;#XXX&quot;</code> or <code>&quot;#XXXXXX&quot;</code>. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: <code>#b22222</code>)</p>
 </li>
-<li><p><code>maxSize</code>: <code>number</code>. All user-specified sizes, e.g. in <code>\rule{500em}{500em}</code>, will be capped to <code>maxSize</code> ems. If set to <code>Infinity</code> (the default), users can make elements and spaces arbitrarily large.</p>
+<li><p><code>maxSize</code>: <code>[number, number]</code>. This provides a way to cap all user-specified sizes, e.g. in <code>\rule{500em}{500em}</code>. The first number is the cap in <code>em</code> units, which will be applied to user-specified relative units. The second number is the cap in CSS <code>pt</code> units, which will be applied to user-specified absolute units. The default is <code>[Infinity, Infinity]</code>, which allows users to make elements and spaces arbitrarily large.</p>
 </li>
 <li><p><code>maxExpand</code>: <code>number</code>. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. If set to <code>Infinity</code>, the macro expander will try to fully expand as in LaTeX. (default: 1000)</p>
 </li>
@@ -194,12 +194,12 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
   &lt;/head&gt;</code></pre><p>The extension reference must come after the reference to <code>temml.min.js</code>.</p>
 <p>For server-side use, just use <code>temml.cjs</code> instead of <code>temml.min.js</code>. <code>temml.cjs</code> includes <code>mhchem</code>, <code>physics</code>, and <code>texvc</code>.</p>
 <br>
-<p class="reduced">Copyright © 2021 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 <br>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.4.2</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.5.0</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>

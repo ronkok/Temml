@@ -666,52 +666,55 @@ Direct Input: <span class="direct">∫ ∬ ∭ ⨌ ∮ ∯ ∰ ⨖ ∲ ∏ ∐ �
 ### Binary Operators
 
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` + ` `+`               | $` \cdot ` `\cdot`       | $` \intercal `           | $` x \pod a ` `x \pod a` |
+| $` + ` `+`               | $` \cdot ` `\cdot`       | $` \gtrdot ` `\gtrdot`   | $` x \pmod a ` `x \pmod  |
+|                          |                          |                          | a`                       |
++--------------------------+--------------------------+--------------------------+--------------------------+
+| $` - ` `-`               | $` \cdotp ` `\cdotp`     | $` \intercal `           | $` x \pod a ` `x \pod a` |
 |                          |                          | `\intercal`              |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` - ` `-`               | $` \cdotp ` `\cdotp`     | $` \land ` `\land`       | $` \rhd ` `\rhd`         |
+| $` / ` `/`               | $`\centerdot`            | $` \land ` `\land`       | $` \rhd ` `\rhd`         |
+|                          | `\centerdot`             |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` / ` `/`               | $` \circ ` `\circ`       | $` \leftthreetimes `     | $` \rightthreetimes `    |
+| $` * ` `*`               | $` \circ ` `\circ`       | $` \leftthreetimes `     | $` \rightthreetimes `    |
 |                          |                          | `\leftthreetimes`        | `\rightthreetimes`       |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` * ` `*`               | $` \circledast `         | $` \ldotp ` `\ldotp`     | $` \rtimes ` `\rtimes`   |
+| $` \amalg ` `\amalg`     | $` \circledast `         | $` \ldotp ` `\ldotp`     | $` \rtimes ` `\rtimes`   |
 |                          | `\circledast`            |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \amalg ` `\amalg`     | $` \circledcirc `        | $` \lor ` `\lor`         | $` \setminus `           |
+| $` \And ` `\And`         | $` \circledcirc `        | $` \lor ` `\lor`         | $` \setminus `           |
 |                          | `\circledcirc`           |                          | `\setminus`              |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \And ` `\And`         | $` \circleddash `        | $` \lessdot ` `\lessdot` | $` \smallsetminus `      |
+| $` \ast ` `\ast`         | $` \circleddash `        | $` \lessdot ` `\lessdot` | $` \smallsetminus `      |
 |                          | `\circleddash`           |                          | `\smallsetminus`         |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \ast ` `\ast`         | $` \Cup ` `\Cup`         | $` \lhd ` `\lhd`         | $` \sqcap ` `\sqcap`     |
-+--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \barwedge `           | $` \cup ` `\cup`         | $` \ltimes ` `\ltimes`   | $` \sqcup ` `\sqcup`     |
+| $` \barwedge `           | $` \Cup ` `\Cup`         | $` \lhd ` `\lhd`         | $` \sqcap ` `\sqcap`     |
 | `\barwedge`              |                          |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \bigcirc ` `\bigcirc` | $` \curlyvee `           | $` x \mod a ` `x\mod a`  | $` \times ` `\times`     |
+| $` \bigcirc ` `\bigcirc` | $` \cup ` `\cup`         | $` \ltimes ` `\ltimes`   | $` \sqcup ` `\sqcup`     |
++--------------------------+--------------------------+--------------------------+--------------------------+
+| $` \bmod ` `\bmod`       | $` \curlyvee `           | $` x \mod a ` `x\mod a`  | $` \times ` `\times`     |
 |                          | `\curlyvee`              |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \bmod ` `\bmod`       | $` \curlywedge `         | $` \mp ` `\mp`           | $` \unlhd ` `\unlhd`     |
+| $` \boxdot `  `\boxdot`  | $` \curlywedge `         | $` \mp ` `\mp`           | $` \unlhd ` `\unlhd`     |
 |                          | `\curlywedge`            |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \boxdot `  `\boxdot`  | $` \div ` `\div`         | $` \odot ` `\odot`       | $` \unrhd ` `\unrhd`     |
+| $` \boxminus `           | $` \div ` `\div`         | $` \odot ` `\odot`       | $` \unrhd ` `\unrhd`     |
+| `\boxminus`              |                          |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \boxminus `           | $` \divideontimes `      | $` \ominus ` `\ominus`   | $` \uplus ` `\uplus`     |
-| `\boxminus`              | `\divideontimes`         |                          |                          |
+| $` \boxplus ` `\boxplus` | $` \divideontimes `      | $` \ominus ` `\ominus`   | $` \uplus ` `\uplus`     |
+|                          | `\divideontimes`         |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \boxplus ` `\boxplus` | $` \dotplus ` `\dotplus` | $` \oplus ` `\oplus`     | $` \vee ` `\vee`         |
+| $` \boxtimes `           | $` \dotplus ` `\dotplus` | $` \oplus ` `\oplus`     | $` \vee ` `\vee`         |
+| `\boxtimes`              |                          |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \boxtimes `           | $` \doublebarwedge `     | $` \otimes ` `\otimes`   | $` \veebar ` `\veebar`   |
-| `\boxtimes`              | `\doublebarwedge`        |                          |                          |
+| $` \bullet `  `\bullet`  | $` \doublebarwedge `     | $` \otimes ` `\otimes`   | $` \veebar ` `\veebar`   |
+|                          | `\doublebarwedge`        |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \bullet `  `\bullet`  | $` \doublecap `          | $` \oslash ` `\oslash`   | $` \wedge ` `\wedge`     |
+| $` \Cap ` `\Cap`         | $` \doublecap `          | $` \oslash ` `\oslash`   | $` \wedge ` `\wedge`     |
 |                          | `\doublecap`             |                          |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \Cap ` `\Cap`         | $` \doublecup `          | $` \pm ` `\pm`           | $` \wr ` `\wr`           |
+| $` \cap ` `\cap`         | $` \doublecup `          | $` \pm ` `\pm`           | $` \wr ` `\wr`           |
 |                          | `\doublecup`             |                          |                          |
-+--------------------------+--------------------------+--------------------------+--------------------------+
-| $` \cap ` `\cap`         | $` \gtrdot ` `\gtrdot`   | $` x \pmod a `           |                          |
-|                          |                          | `x \pmod a`              |                          |
 +--------------------------+--------------------------+--------------------------+--------------------------+
 
 The _texvc_ extension provides $`\plusmn` `\plusmn`.
@@ -1447,7 +1450,7 @@ To determine the Temml version number, open the console (Ctrl-Shift-I) and type 
 
 <br>
 
-<p class="reduced" style="text-align: center">Copyright © 2021 Ron Kok.
+<p class="reduced" style="text-align: center">Copyright © 2021, 2022 Ron Kok.
 Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
@@ -1457,7 +1460,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.0
 
 <h3><a href="#top">Contents</a></h3>
 

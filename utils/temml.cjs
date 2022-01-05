@@ -204,7 +204,12 @@ class Settings {
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
     this.strict = utils.deflt(options.strict, false);    // boolean
     this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
-    this.maxSize = Math.max(0, utils.deflt(options.maxSize, Infinity)); // number
+    this.maxSize = (options.maxSize === undefined
+      ? [Infinity, Infinity]
+      : Array.isArray(options.maxSize)
+      ? options.maxSize
+      : [Infinity, Infinity]
+    );
     this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1000)); // number
   }
 
@@ -563,13 +568,12 @@ function newDocumentFragment(children) {
  * `<mspace>` tags).
  */
 class MathNode {
-  constructor(type, children, classes, style, isSVG) {
+  constructor(type, children, classes, style) {
     this.type = type;
     this.attributes = {};
     this.children = children || [];
     this.classes = classes || [];
     this.style = style || {};   // Used for <mstyle> elements
-    this.isSVG = isSVG || false;
   }
 
   /**
@@ -591,9 +595,7 @@ class MathNode {
    * Converts the math node into a MathML-namespaced DOM element.
    */
   toNode() {
-    const node = this.isSVG
-      ? document.createElementNS("http://www.w3.org/2000/svg", this.type)
-      : document.createElementNS("http://www.w3.org/1998/Math/MathML", this.type);
+    const node = document.createElementNS("http://www.w3.org/1998/Math/MathML", this.type);
 
     for (const attr in this.attributes) {
       if (Object.prototype.hasOwnProperty.call(this.attributes, attr)) {
@@ -725,9 +727,6 @@ var mathMLTree = {
  * This file provides support for building horizontal stretchy elements.
  */
 
-// From mhchem reaction arrows \ce{A <=>> B} and \ce{A <<=> B}
-const keysWithoutUnicodePoints = ["equilibriumRight", "equilibriumLeft"];
-
 const stretchyCodePoint = {
   widehat: "^",
   widecheck: "ˇ",
@@ -771,38 +770,15 @@ const stretchyCodePoint = {
   mesomerism: "\u2194",
   longrightharpoonup: "\u21c0",
   longleftharpoondown: "\u21bd",
+  eqrightharpoonup: "\u21c0",
+  eqleftharpoondown: "\u21bd",
   "\\cdrightarrow": "\u2192",
   "\\cdleftarrow": "\u2190",
   "\\cdlongequal": "="
 };
 
-const nodeFromObject = (obj) => {
-  // Build a stretchy arrow from two SVGs.
-  const children = [];
-  if (obj.children) {
-    obj.children.map(child => { children.push(nodeFromObject(child)); });
-  }
-  const node = obj.type === "span"
-    ? new Span(null, children, obj.style)
-    : new mathMLTree.MathNode(obj.type, children, [], obj.style, true);
-  Object.entries(obj.attributes).forEach(([key, value]) => {
-    node.setAttribute(key, value);
-  });
-  return node
-};
-
-const mathMLnode = function(label, macros = {}) {
-  const key = label.slice(1);
-  let child;
-  if (!keysWithoutUnicodePoints.includes(key)) {
-    child = new mathMLTree.TextNode(stretchyCodePoint[key]);
-  } else {
-    const atKey = "\\@" + key;
-    if (!macros.has(atKey)) {
-      throw new ParseError("Arrow not available. The mhchem package is needed.")
-    }
-    child = nodeFromObject(JSON.parse(macros.get(atKey)));
-  }
+const mathMLnode = function(label) {
+  const child = new mathMLTree.TextNode(stretchyCodePoint[label.slice(1)]);
   const node = new mathMLTree.MathNode("mo", [child]);
   node.setAttribute("stretchy", "true");
   return node
@@ -1562,7 +1538,7 @@ defineSymbol(math, accent, "\u00a8", "\\ddot");
 defineSymbol(math, accent, "\u20db", "\\dddot");
 defineSymbol(math, accent, "\u20dc", "\\ddddot");
 defineSymbol(math, accent, "\u007e", "\\tilde");
-defineSymbol(math, accent, "\u00af", "\\bar");
+defineSymbol(math, accent, "\u2015", "\\bar");
 defineSymbol(math, accent, "\u02d8", "\\breve");
 defineSymbol(math, accent, "\u02c7", "\\check");
 defineSymbol(math, accent, "\u005e", "\\hat");
@@ -1917,6 +1893,121 @@ function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined
   return mathMLTree.newDocumentFragment(mrows);
 }
 
+const consolidateText = mrow => {
+  // If possible, consolidate adjacent <mtext> elements into a single element.
+  if (mrow.type !== "mrow") { return mrow }
+  if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
+  const mtext = mrow.children[0];
+  if (!mtext.attributes || mtext.type !== "mtext") { return mrow }
+  const variant = mtext.attributes.mathvariant || "";
+  for (let i = 1; i < mrow.children.length; i++) {
+    // Check each child and, if possible, copy the character into child[0].
+    const localVariant = mrow.children[i].attributes.mathvariant || "";
+    if (mrow.children[i].type === "mrow") {
+      const childRow = mrow.children[i];
+      for (let j = 0; j < childRow.children.length; j++) {
+        // We'll also check the children of a mrow. One level only. No recursion.
+        const childVariant = childRow.children[j].attributes.mathvariant || "";
+        if (childVariant !== variant || childRow.children[j].type !== "mtext") {
+          return mrow // At least one element cannot be consolidated. Get out.
+        } else {
+          mtext.children[0].text += childRow.children[j].children[0].text;
+        }
+      }
+    } else if (localVariant !== variant || mrow.children[i].type !== "mtext") {
+      return mrow
+    } else {
+      mtext.children[0].text += mrow.children[i].children[0].text;
+    }
+  }
+  // Since we have gotten here, the text has been loaded into a single mtext node.
+  // Next, consolidate the children into a single <mtext> element.
+  mtext.children.splice(1, mtext.children.length - 1);
+  // Firefox does not render a space at either end of an <mtext> string.
+  // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
+  if (mtext.children[0].text.charAt(0) === " ") {
+    mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
+  }
+  const L = mtext.children[0].text.length;
+  if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
+    mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
+  }
+  return mtext
+};
+
+// Non-mathy text, possibly in a font
+const textFontFamilies = {
+  "\\text": undefined,
+  "\\textrm": "textrm",
+  "\\textsf": "textsf",
+  "\\texttt": "texttt",
+  "\\textnormal": "textrm",
+  "\\textsc": "textsc"      // small caps
+};
+
+const textFontWeights = {
+  "\\textbf": "textbf",
+  "\\textmd": "textmd"
+};
+
+const textFontShapes = {
+  "\\textit": "textit",
+  "\\textup": "textup"
+};
+
+const styleWithFont = (group, style) => {
+  const font = group.font;
+  // Checks if the argument is a font family or a font style.
+  if (!font) {
+    return style;
+  } else if (textFontFamilies[font]) {
+    return style.withTextFontFamily(textFontFamilies[font]);
+  } else if (textFontWeights[font]) {
+    return style.withTextFontWeight(textFontWeights[font]);
+  } else {
+    return style.withTextFontShape(textFontShapes[font]);
+  }
+};
+
+defineFunction({
+  type: "text",
+  names: [
+    // Font families
+    "\\text",
+    "\\textrm",
+    "\\textsf",
+    "\\texttt",
+    "\\textnormal",
+    "\\textsc",
+    // Font weights
+    "\\textbf",
+    "\\textmd",
+    // Font Shapes
+    "\\textit",
+    "\\textup"
+  ],
+  props: {
+    numArgs: 1,
+    argTypes: ["text"],
+    allowedInArgument: true,
+    allowedInText: true
+  },
+  handler({ parser, funcName }, args) {
+    const body = args[0];
+    return {
+      type: "text",
+      mode: parser.mode,
+      body: ordargument(body),
+      font: funcName
+    };
+  },
+  mathmlBuilder(group, style) {
+    const newStyle = styleWithFont(group, style);
+    const mrow = buildExpressionRow(group.body, newStyle);
+    return consolidateText(mrow)
+  }
+});
+
 /**
  * This file converts a parse tree into a cooresponding MathML tree. The main
  * entry point is the `buildMathML` function, which takes a parse tree from the
@@ -2008,11 +2099,15 @@ const buildGroup = function(group, style) {
   }
 };
 
+const glue = _ => {
+  const glueNode = new mathMLTree.MathNode("mtd", []);
+  glueNode.setAttribute("style", "padding: 0;width: 50%;");
+  return glueNode
+};
 
 const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
-  const glue = new mathMLTree.MathNode("mtd", []);
-  glue.setAttribute("style", "padding: 0;width: 50%;");
   tag = buildExpressionRow(tag[0].body, style);
+  tag = consolidateText(tag);
   tag.classes = ["tml-tag"];
   if (!preventTagLap) {
     tag = new mathMLTree.MathNode("mpadded", [tag]);
@@ -2025,8 +2120,8 @@ const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
 
   expression = new mathMLTree.MathNode("mtd", [expression]);
   const rowArray = leqno
-    ? [tag, glue, expression, glue]
-    : [glue, expression, glue, tag];
+    ? [tag, glue(), expression, glue()]
+    : [glue(), expression, glue(), tag];
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
   const table = new mathMLTree.MathNode("mtable", [mtr]);
   table.setAttribute("width", "100%");
@@ -2236,37 +2331,157 @@ defineFunction({
   }
 });
 
+/**
+ * This file does conversion between units.  In particular, it provides
+ * calculateSize to convert other units into CSS units.
+ */
+
+const ptPerUnit = {
+  // Convert to CSS (Postscipt) points, not TeX points
+  // https://en.wikibooks.org/wiki/LaTeX/Lengths and
+  // https://tex.stackexchange.com/a/8263
+  pt: 800 / 803, // convert TeX point to CSS (Postscript) point
+  pc: (12 * 800) / 803, // pica
+  dd: ((1238 / 1157) * 800) / 803, // didot
+  cc: ((14856 / 1157) * 800) / 803, // cicero (12 didot)
+  nd: ((685 / 642) * 800) / 803, // new didot
+  nc: ((1370 / 107) * 800) / 803, // new cicero (12 new didot)
+  sp: ((1 / 65536) * 800) / 803, // scaled point (TeX's internal smallest unit)
+  mm: (25.4 / 72),
+  cm: (2.54 / 72),
+  in: (1 / 72),
+  px: (96 / 72)
+};
+
+/**
+ * Determine whether the specified unit (either a string defining the unit
+ * or a "size" parse node containing a unit field) is valid.
+ */
+const validUnits = [
+  "em",
+  "ex",
+  "mu",
+  "pt",
+  "mm",
+  "cm",
+  "in",
+  "px",
+  "bp",
+  "pc",
+  "dd",
+  "cc",
+  "nd",
+  "nc",
+  "sp"
+];
+
+const validUnit = function(unit) {
+  if (typeof unit !== "string") {
+    unit = unit.unit;
+  }
+  return validUnits.indexOf(unit) > -1
+};
+
+const emScale = styleLevel => {
+  const scriptLevel = Math.max(styleLevel - 1, 0);
+  return [1, 0.7, 0.5][scriptLevel]
+};
+
+/*
+ * Convert a "size" parse node (with numeric "number" and string "unit" fields,
+ * as parsed by functions.js argType "size") into a CSS value.
+ */
+const calculateSize = function(sizeValue, style) {
+  let number = sizeValue.number;
+  if (style.maxSize[0] < 0 && number > 0) {
+    return { number: 0, unit: "em" }
+  }
+  const unit = sizeValue.unit;
+  switch (unit) {
+    case "mm":
+    case "cm":
+    case "in":
+    case "px": {
+      const numInCssPts = number * ptPerUnit[unit];
+      if (numInCssPts > style.maxSize[1]) {
+        return { number: style.maxSize[1], unit: "pt" }
+      }
+      return { number, unit }; // absolute CSS units.
+    }
+    case "em":
+    case "ex": {
+      // In TeX, em and ex do not change size in \scriptstyle.
+      if (unit === "ex") { number *= 0.431; }
+      number = Math.min(number / emScale(style.level), style.maxSize[0]);
+      return { number: utils.round(number), unit: "em" };
+    }
+    case "bp": {
+      if (number > style.maxSize[1]) { number = style.maxSize[1]; }
+      return { number, unit: "pt" }; // TeX bp is a CSS pt. (1/72 inch).
+    }
+    case "pt":
+    case "pc":
+    case "dd":
+    case "cc":
+    case "nd":
+    case "nc":
+    case "sp": {
+      number = Math.min(number * ptPerUnit[unit], style.maxSize[1]);
+      return { number: utils.round(number), unit: "pt" }
+    }
+    case "mu": {
+      number = Math.min(number / 18, style.maxSize[0]);
+      return { number: utils.round(number), unit: "em" }
+    }
+    default:
+      throw new ParseError("Invalid unit: '" + unit + "'")
+  }
+};
+
 // Helper functions
-const paddedNode = (group, width = "+0.6em") => {
+const paddedNode = (group, width, lspace = "0.3em") => {
   const node = new mathMLTree.MathNode("mpadded", group ? [group] : []);
   node.setAttribute("width", width);
-  node.setAttribute("lspace", "0.3em");
+  node.setAttribute("lspace", lspace);
   return node;
 };
 
-const munderoverNode = (label, body, below, style, macros = {}) => {
-  const arrowNode = stretchy.mathMLnode(label, macros);
-  const minWidth = label.charAt(1) === "x"
-    ? "1.75em"  // mathtools extensible arrows
-    : label.slice(2, 4) === "cd"
-    ? "3.0em"  // cd package arrows
-    : "2.0em"; // mhchem arrows
-  arrowNode.setAttribute("minsize", minWidth);
-  // minsize attribute doesn't work in Firefox.
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=320303
-  const labelStyle = style.incrementLevel();
+const labelSize = (size, scriptLevel) =>  (size / emScale(scriptLevel)).toFixed(4) + "em";
+
+const munderoverNode = (name, body, below, style) => {
+  const arrowNode = stretchy.mathMLnode(name);
+  // Is this the short part of a mhchem equilibrium arrow?
+  const isEq = name.slice(1, 3) === "eq";
+  const minWidth = name.charAt(1) === "x"
+    ? "1.75"  // mathtools extensible arrows are 1.75em long
+    : name.slice(2, 4) === "cd"
+    ? "3.0"  // cd package arrows
+    : isEq
+    ? "1.0"  // The shorter harpoon of a mhchem equilibrium arrow
+    : "2.0"; // other mhchem arrows
+  arrowNode.setAttribute("minsize", String(minWidth) + "em");
+  arrowNode.setAttribute("lspace", "0");
+  arrowNode.setAttribute("rspace", (isEq ? "0.5em" : "0"));
+
+  // <munderover> upper and lower labels are set to scriptlevel by MathML
+  // So we have to adjust our dimensions accordingly.
+  const labelStyle = style.withLevel(style.level < 2 ? 2 : 3);
+  const emptyLabelWidth = labelSize(minWidth, labelStyle.level);
+  const lspace = labelSize((isEq ? 0 : 0.3), labelStyle.level);
+  let widthAdder = labelSize((isEq ? -0.4 : 0.6), labelStyle.level);
+  if (widthAdder.charAt(0) !== "-") { widthAdder = "+" + widthAdder; }
 
   const upperNode = (body && body.body &&
     // \hphantom        visible content
     (body.body.body || body.body.length > 0))
-    ? paddedNode(buildGroup(body, labelStyle))
+    ? paddedNode(buildGroup(body, labelStyle), widthAdder, lspace)
       // Since Firefox does not recognize minsize set on the arrow,
       // create an upper node w/correct width.
-    : paddedNode(null, minWidth);
+    : paddedNode(null, emptyLabelWidth, "0");
   const lowerNode = (below && below.body &&
     (below.body.body || below.body.length > 0))
-    ? paddedNode(buildGroup(below, labelStyle))
-    : paddedNode(null, minWidth);
+    ? paddedNode(buildGroup(below, labelStyle), widthAdder, lspace)
+    : paddedNode(null, emptyLabelWidth, "0");
   const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
   return node
 };
@@ -2297,8 +2512,6 @@ defineFunction({
     "\\mesomerism",
     "\\longrightharpoonup",
     "\\longleftharpoondown",
-    "\\equilibriumRight",
-    "\\equilibriumLeft",
     // The next 3 functions are here only to support the {CD} environment.
     "\\\\cdrightarrow",
     "\\\\cdleftarrow",
@@ -2312,14 +2525,19 @@ defineFunction({
     return {
       type: "xArrow",
       mode: parser.mode,
-      label: funcName,
+      name: funcName,
       body: args[0],
-      below: optArgs[0],
-      macros: parser.gullet.macros // Contains SVG paths for mhchem equilibrium arrows.
+      below: optArgs[0]
     };
   },
   mathmlBuilder(group, style) {
-    return munderoverNode(group.label, group.body, group.below, style, group.macros)
+    // Build the arrow and its labels.
+    const node = munderoverNode(group.name, group.body, group.below, style);
+    // Create operator spacing for a relation.
+    const wrapper  = new mathMLTree.MathNode("mpadded", [node]);
+    wrapper.setAttribute("lspace", "0.2778em");
+    wrapper.setAttribute("width", "+0.5556em");
+    return wrapper
   }
 });
 
@@ -2328,10 +2546,13 @@ const arrowComponent = {
   "\\xleftrightharpoons": ["\\xleftharpoonup", "\\xrightharpoondown"],
   "\\xrightleftharpoons": ["\\xrightharpoonup", "\\xleftharpoondown"],
   "\\yieldsLeftRight": ["\\yields", "\\yieldsLeft"],
-  "\\equilibrium": ["\\longrightharpoonup", "\\longleftharpoondown"]
+  // The next three all get the same harpoon glyphs. Only the lengths and paddings differ.
+  "\\equilibrium": ["\\longrightharpoonup", "\\longleftharpoondown"],
+  "\\equilibriumRight": ["\\longrightharpoonup", "\\eqleftharpoondown"],
+  "\\equilibriumLeft": ["\\eqrightharpoonup", "\\longleftharpoondown"]
 };
 
-// Browser are not good at stretching stacked arrows such as ⇄.
+// Browsers are not good at stretching a glyph that contains a pair of stacked arrows such as ⇄.
 // So we stack a pair of single arrows.
 defineFunction({
   type: "stackedArrow",
@@ -2340,7 +2561,9 @@ defineFunction({
     "\\xleftrightharpoons",   // mathtools
     "\\xrightleftharpoons",   // mathtools
     "\\yieldsLeftRight",      // mhchem
-    "\\equilibrium"           // mhchem
+    "\\equilibrium",           // mhchem
+    "\\equilibriumRight",
+    "\\equilibriumLeft"
   ],
   props: {
     numArgs: 1,
@@ -2364,7 +2587,7 @@ defineFunction({
     return {
       type: "stackedArrow",
       mode: parser.mode,
-      label: funcName,
+      name: funcName,
       body: args[0],
       upperArrowBelow,
       lowerArrowBody,
@@ -2372,30 +2595,31 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    const topLabel = arrowComponent[group.label][0];
-    const botLabel = arrowComponent[group.label][1];
+    const topLabel = arrowComponent[group.name][0];
+    const botLabel = arrowComponent[group.name][1];
     const topArrow = munderoverNode(topLabel, group.body, group.upperArrowBelow, style);
     const botArrow = munderoverNode(botLabel, group.lowerArrowBody, group.below, style);
+    let wrapper;
 
-    const topSpace = new mathMLTree.MathNode("mspace");
-    topSpace.setAttribute("width", "0.2778em");
-    const botSpace = new mathMLTree.MathNode("mspace");
-    botSpace.setAttribute("width", "-0.2778em");
-
-    const raiseNode = new mathMLTree.MathNode("mpadded", [topSpace, topArrow]);
+    const raiseNode = new mathMLTree.MathNode("mpadded", [topArrow]);
     raiseNode.setAttribute("voffset", "0.3em");
     raiseNode.setAttribute("height", "+0.3em");
     raiseNode.setAttribute("depth", "-0.3em");
-    raiseNode.setAttribute("width", "0em");
+    // One of the arrows is given ~zero width. so the other has the same horzontal alignment.
+    if (group.name === "\\equilibriumLeft") {
+      const botNode =  new mathMLTree.MathNode("mpadded", [botArrow]);
+      botNode.setAttribute("width", "0.5em");
+      wrapper = new mathMLTree.MathNode("mpadded", [botNode, raiseNode]);
+    } else {
+      raiseNode.setAttribute("width", (group.name === "\\equilibriumRight" ? "0.5em" : "0"));
+      wrapper = new mathMLTree.MathNode("mpadded", [raiseNode, botArrow]);
+    }
 
-    const botRow = new mathMLTree.MathNode("mrow", [botSpace, botArrow]);
-
-    const wrapper = new mathMLTree.MathNode("mpadded", [raiseNode, botRow]);
     wrapper.setAttribute("voffset", "-0.18em");
+    wrapper.setAttribute("width", "+0.5556em");
     wrapper.setAttribute("height", "-0.18em");
     wrapper.setAttribute("depth", "+0.18em");
-    wrapper.setAttribute("lspace", "0em");
-    wrapper.setAttribute("rspace", "0em");
+    wrapper.setAttribute("lspace", "0.2778em");
     return wrapper
   }
 });
@@ -3044,93 +3268,6 @@ defineFunction({
   }
   // No mathmlBuilder. The point of \definecolor is to set a macro.
 });
-
-/**
- * This file does conversion between units.  In particular, it provides
- * calculateSize to convert other units into CSS units.
- */
-
-const ptPerUnit = {
-  // Convert to CSS (Postscipt) points, not TeX points
-  // https://en.wikibooks.org/wiki/LaTeX/Lengths and
-  // https://tex.stackexchange.com/a/8263
-  pt: 800 / 803, // convert TeX point to CSS (Postscript) point
-  pc: (12 * 800) / 803, // pica
-  dd: ((1238 / 1157) * 800) / 803, // didot
-  cc: ((14856 / 1157) * 800) / 803, // cicero (12 didot)
-  nd: ((685 / 642) * 800) / 803, // new didot
-  nc: ((1370 / 107) * 800) / 803, // new cicero (12 new didot)
-  sp: ((1 / 65536) * 800) / 803 // scaled point (TeX's internal smallest unit)
-};
-
-/**
- * Determine whether the specified unit (either a string defining the unit
- * or a "size" parse node containing a unit field) is valid.
- */
-const validUnits = [
-  "em",
-  "ex",
-  "mu",
-  "pt",
-  "mm",
-  "cm",
-  "in",
-  "px",
-  "bp",
-  "pc",
-  "dd",
-  "cc",
-  "nd",
-  "nc",
-  "sp"
-];
-
-const validUnit = function(unit) {
-  if (typeof unit !== "string") {
-    unit = unit.unit;
-  }
-  return validUnits.indexOf(unit) > -1
-};
-
-const emScale = styleLevel => {
-  const scriptLevel = Math.max(styleLevel - 1, 0);
-  return [1, 0.7, 0.5][scriptLevel]
-};
-
-/*
- * Convert a "size" parse node (with numeric "number" and string "unit" fields,
- * as parsed by functions.js argType "size") into a CSS value.
- */
-const calculateSize = function(sizeValue, style) {
-  const number = sizeValue.number;
-  const unit = sizeValue.unit;
-  switch (unit) {
-    case "mm":
-    case "cm":
-    case "in":
-    case "px":
-      return { number, unit }; // absolute CSS units.
-    case "em":
-    case "ex":
-      // In TeX, em and ex do not change size in \scriptstyle.
-      return { number: utils.round(number / emScale(style.level)), unit };
-    case "bp":
-      return { number, unit: "pt" }; // TeX bp is a CSS pt. (1/72 inch).
-    case "pt":
-    case "pc":
-    case "dd":
-    case "cc":
-    case "nd":
-    case "nc":
-    case "sp":
-      return { number: utils.round(number * ptPerUnit[unit]), unit: "pt" }
-    case "mu": {
-      return { number: utils.round(number / 18), unit: "em" }
-    }
-    default:
-      throw new ParseError("Invalid unit: '" + unit + "'")
-  }
-};
 
 // Row breaks within tabular environments, and line breaks at top level
 
@@ -6856,6 +6993,10 @@ defineFunction({
     allowedInText: true
   },
   handler: ({ breakOnTokenText, funcName, parser }, args) => {
+    if (parser.settings.strict && parser.mode === "math") {
+      // eslint-disable-next-line no-console
+      console.log(`Temml strict-mode warning: Command ${funcName} is invalid in math mode.`);
+    }
     const body = parser.parseExpression(false, breakOnTokenText);
     return {
       type: "sizing",
@@ -7657,108 +7798,8 @@ defineFunctionBuilders({
   type: "tag"
 });
 
-// For a \tag, the work usually done in a  mathmlBuilder is instead done in buildMathML.js.
+// For a \tag, the work usually done in a mathmlBuilder is instead done in buildMathML.js.
 // That way, a \tag can be pulled out of the parse tree and wrapped around the outer node.
-
-// Non-mathy text, possibly in a font
-const textFontFamilies = {
-  "\\text": undefined,
-  "\\textrm": "textrm",
-  "\\textsf": "textsf",
-  "\\texttt": "texttt",
-  "\\textnormal": "textrm",
-  "\\textsc": "textsc"      // small caps
-};
-
-const textFontWeights = {
-  "\\textbf": "textbf",
-  "\\textmd": "textmd"
-};
-
-const textFontShapes = {
-  "\\textit": "textit",
-  "\\textup": "textup"
-};
-
-const styleWithFont = (group, style) => {
-  const font = group.font;
-  // Checks if the argument is a font family or a font style.
-  if (!font) {
-    return style;
-  } else if (textFontFamilies[font]) {
-    return style.withTextFontFamily(textFontFamilies[font]);
-  } else if (textFontWeights[font]) {
-    return style.withTextFontWeight(textFontWeights[font]);
-  } else {
-    return style.withTextFontShape(textFontShapes[font]);
-  }
-};
-
-defineFunction({
-  type: "text",
-  names: [
-    // Font families
-    "\\text",
-    "\\textrm",
-    "\\textsf",
-    "\\texttt",
-    "\\textnormal",
-    "\\textsc",
-    // Font weights
-    "\\textbf",
-    "\\textmd",
-    // Font Shapes
-    "\\textit",
-    "\\textup"
-  ],
-  props: {
-    numArgs: 1,
-    argTypes: ["text"],
-    allowedInArgument: true,
-    allowedInText: true
-  },
-  handler({ parser, funcName }, args) {
-    const body = args[0];
-    return {
-      type: "text",
-      mode: parser.mode,
-      body: ordargument(body),
-      font: funcName
-    };
-  },
-  mathmlBuilder(group, style) {
-    const newStyle = styleWithFont(group, style);
-    const mrow = buildExpressionRow(group.body, newStyle);
-
-    // If possible, consolidate adjacent <mtext> elements into a single element.
-    // First, check if it is possible. If not, return the <mrow>.
-    if (mrow.type !== "mrow") { return mrow }
-    if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
-    const mtext = mrow.children[0];
-    if (!mtext.attributes || mtext.type !== "mtext") { return mrow }
-    const variant = mtext.attributes.mathvariant || "";
-    for (let i = 1; i < mrow.children.length; i++) {
-      const localVariant = mrow.children[i].attributes.mathvariant || "";
-      if (localVariant !== variant || mrow.children[i].type !== "mtext") { return mrow }
-    }
-
-    // Consolidate the <mtext> elements.
-    for (let i = 1; i < mrow.children.length; i++) {
-      mtext.children[0].text += mrow.children[i].children[0].text;
-    }
-    mtext.children.splice(1, mtext.children.length - 1);
-    // Firefox does not render a space at either end of the <mtext> string.
-    // To get proper rendering, we replace with no-break spaces.
-    if (mtext.children[0].text.charAt(0) === " ") {
-      mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
-    }
-    const L = mtext.children[0].text.length;
-    if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
-      mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
-    }
-    return mtext
-  }
-});
 
 // Two functions included to enable migration from Mathjax.
 
@@ -8720,6 +8761,7 @@ defineMacro("\\varliminf", "\\DOTSB\\operatorname*{\\underline{\\text{lim}}}");
 defineMacro("\\varinjlim", "\\DOTSB\\operatorname*{\\underrightarrow{\\text{lim}}}");
 defineMacro("\\varprojlim", "\\DOTSB\\operatorname*{\\underleftarrow{\\text{lim}}}");
 
+defineMacro("\\centerdot", "{\\medspace\\rule{0.167em}{0.189em}\\medspace}");
 
 //////////////////////////////////////////////////////////////////////
 // statmath.sty
@@ -8848,7 +8890,7 @@ defineMacro("\\upomega", "\\up@greek{\\omega}");
 
 //////////////////////////////////////////////////////////////////////
 // chemstyle package
-defineMacro("\\standardstate", "{\\tiny\\char`⦵}");
+defineMacro("\\standardstate", "\\text{\\tiny\\char`⦵}");
 
 ﻿/* eslint-disable */
 /* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
@@ -8865,10 +8907,9 @@ defineMacro("\\standardstate", "{\\tiny\\char`⦵}");
  *    2. \rlap and \llap are replaced with \mathrlap and \mathllap.
  *    3. The reaction arrow code is simplified. All reaction arrows are rendered
  *       using Temml extensible arrows instead of building non-extensible arrows.
- *    4. SVG path geometry is supplied for \equilibriumRight & \equilibriumLeft.
- *    5. \tripledash uses Unicode character U+2504, ┄.
- *    6. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
- *    7. The electron dot uses \textbullet instead of \bullet.
+ *    4. The ~bond forms are composed entirely of \rule elements.
+ *    5. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
+ *    6. The electron dot uses \textbullet instead of \bullet.
  *
  *    This code, as other Temml code, is released under the MIT license.
  * 
@@ -8905,7 +8946,7 @@ defineMacro("\\standardstate", "{\\tiny\\char`⦵}");
 // version: "3.3.0" for MathJax and Temml
 
 
-// Add \ce, \pu, and \tripledash to the Temml macros.
+// Add \ce, \pu, and \tripleDash to the Temml macros.
 
 defineMacro("\\ce", function(context) {
   return chemParse(context.consumeArgs(1)[0], "ce")
@@ -8915,109 +8956,14 @@ defineMacro("\\pu", function(context) {
   return chemParse(context.consumeArgs(1)[0], "pu");
 });
 
-//  Needed for \bond for the ~ forms
-//  Raise by 2.56mu, not 2mu. We're raising a hyphen-minus, U+002D, not 
-//  a mathematical minus, U+2212. So we need that extra 0.56.
-defineMacro("\\tripledash", '\\mathord{\\kern2mu\\raise{0.5mu}{\\char"2504}\\kern2mu}');
-
-// Use the Temml macro system to send SVG path geometry for equilibrium arrows.
-defineMacro("longRightleftharpoonsLeft", `M507,435c-4,4,-6.3,8.7,-7,14
-c0,5.3,0.7,9,2,11c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17
-c2,0.7,5,1,9,1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21
-c-32,-87.3,-82.7,-157.7,-152,-211c0,0,-3,-3,-3,-3l399351,0l0,-40
-c-398570,0,-399437,0,-399437,0z M593 435 v40 H399500 v-40z
-M0 281 v-40 H399908 v40z M0 281 v-40 H399908 v40z`)
-defineMacro("longRightleftharpoonsRight", `M0,241 l0,40c399126,0,399993,0,399993,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M0 241 v40 H399908 v-40z M0 475 v-40 H399500 v40z M0 475 v-40 H399500 v40z`)
-defineMacro("longLeftrightharpoonsLeft", `M7,435c-4,4,-6.3,8.7,-7,14c0,5.3,0.7,9,2,11
-c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17c2,0.7,5,1,9,
-1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21c-32,-87.3,-82.7,-157.7,
--152,-211c0,0,-3,-3,-3,-3l399907,0l0,-40c-399126,0,-399993,0,-399993,0z
-M93 435 v40 H400000 v-40z M500 241 v40 H400000 v-40z M500 241 v40 H400000 v-40z`)
-defineMacro("longLeftrightharpoonsRight", `M53,241l0,40c398570,0,399437,0,399437,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`)
-
-
-const path = {
-  "\\equilibriumRight" : {
-    left: `M507,435c-4,4,-6.3,8.7,-7,14
-c0,5.3,0.7,9,2,11c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17
-c2,0.7,5,1,9,1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21
-c-32,-87.3,-82.7,-157.7,-152,-211c0,0,-3,-3,-3,-3l399351,0l0,-40
-c-398570,0,-399437,0,-399437,0z M593 435 v40 H399500 v-40z
-M0 281 v-40 H399908 v40z M0 281 v-40 H399908 v40z`,
-    right: `M0,241 l0,40c399126,0,399993,0,399993,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M0 241 v40 H399908 v-40z M0 475 v-40 H399500 v40z M0 475 v-40 H399500 v40z`
-  },
-  "\\equilibriumLeft": {
-    left: `M7,435c-4,4,-6.3,8.7,-7,14c0,5.3,0.7,9,2,11
-c1.3,2,5.3,5.3,12,10c90.7,54,156,130,196,228c3.3,10.7,6.3,16.3,9,17c2,0.7,5,1,9,
-1c0,0,5,0,5,0c10.7,0,16.7,-2,18,-6c2,-2.7,1,-9.7,-3,-21c-32,-87.3,-82.7,-157.7,
--152,-211c0,0,-3,-3,-3,-3l399907,0l0,-40c-399126,0,-399993,0,-399993,0z
-M93 435 v40 H400000 v-40z M500 241 v40 H400000 v-40z M500 241 v40 H400000 v-40z`,
-    right: `M53,241l0,40c398570,0,399437,0,399437,0
-c4.7,-4.7,7,-9.3,7,-14c0,-9.3,-3.7,-15.3,-11,-18c-92.7,-56.7,-159,-133.7,-199,
--231c-3.3,-9.3,-6,-14.7,-8,-16c-2,-1.3,-7,-2,-15,-2c-10.7,0,-16.7,2,-18,6
-c-2,2.7,-1,9.7,3,21c15.3,42,36.7,81.8,64,119.5c27.3,37.7,58,69.2,92,94.5z
-M500 241 v40 H399408 v-40z M500 435 v40 H400000 v-40z`
-  }
-}
-
-const svg = (name, end) => {
-  const svg = {
-    type: "svg",
-    attributes: {
-      xmlns: "http://www.w3.org/2000/svg",
-      width: "400em",
-      height: "0.716em",
-      viewBox: "0 0 400000 716",
-      preserveAspectRatio: `x${end === "left" ? "Min" : "Max"}yMin slice`,
-      fill: "currrentColor",
-      "fill-rule": "non-zero",
-      "fill-opacity" : 1
-    },
-    style: { position: "absolute" },
-    children: [{
-      type: "path",
-      attributes: { d: path[name][end], stroke: "none" },
-      children: []
-    }]
-  }
-  if (end === "left") { svg.style.left = 0 } else { svg.style.right = 0 }
-  return svg
-}
-
-const endSpan = (name, end) => {
-  const span = {
-    type: "span",
-    attributes: {},
-    style: { position: "absolute", width: "50.2%", height: "0.716em", overflow: "hidden" },
-    children: [svg(name, end)]
-  }
-  if (end === "left") { span.style.left = 0 } else { span.style.right = 0 }
-  return span
-}
-
-const arrowNode = name => {
-  return JSON.stringify({
-    type: "span",
-    attributes: {},
-    style: { display: "block", position: "relative", width: "100%", height: "0.716em", "min-width": "1.75em" },
-    children: [endSpan(name, "left"), endSpan(name, "right")]
-  })
-}
-
-defineMacro("\\@equilibriumRight", arrowNode("\\equilibriumRight"))
-defineMacro("\\@equilibriumLeft", arrowNode("\\equilibriumLeft"))
+// Math fonts do not include glyphs for the ~ form of bonds. So we'll send path geometry
+// So we'll compose characters built from \rule elements.
+defineMacro("\\uniDash", `{\\rule{0.672em}{0.06em}}`)
+defineMacro("\\triDash", `{\\rule{0.15em}{0.06em}\\kern2mu\\rule{0.15em}{0.06em}\\kern2mu\\rule{0.15em}{0.06em}}`)
+defineMacro("\\tripleDash", `\\kern0.075em\\raise0.25em{\\triDash}\\kern0.075em`)
+defineMacro("\\tripleDashOverLine", `\\kern0.075em\\mathrlap{\\raise0.125em{\\uniDash}}\\raise0.34em{\\triDash}\\kern0.075em`)
+defineMacro("\\tripleDashOverDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap{\\raise0.48em{\\triDash}}\\raise0.27em{\\uniDash}}{\\raise0.05em{\\uniDash}}\\kern0.075em`)
+defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap{\\raise0.48em{\\uniDash}}\\raise0.27em{\\triDash}}{\\raise0.05em{\\uniDash}}\\kern0.075em`)
 
   //
   //  This is the main function for handing the \ce and \pu commands.
@@ -10604,11 +10550,11 @@ defineMacro("\\@equilibriumLeft", arrowNode("\\equilibriumLeft"))
         case "2": return "{=}";
         case "#": return "{\\equiv}";
         case "3": return "{\\equiv}";
-        case "~": return "{\\tripledash}";
-        case "~-": return "{\\mathrlap{\\raise{-.1em}{-}}\\raise{.1em}{\\tripledash}}";
-        case "~=": return "{\\mathrlap{\\raise{-.2em}{-}}\\mathrlap{\\raise{.2em}{\\tripledash}}{-}}";
-        case "~--": return "{\\mathrlap{\\raise{-.2em}{-}}\\mathrlap{\\raise{.2em}{\\tripledash}}{-}}";
-        case "-~-": return "{\\mathrlap{\\raise{-.2em}{-}}\\mathrlap{\\raise{.2em}{-}}\\tripledash}";
+        case "~": return "{\\tripleDash}";
+        case "~-": return "{\\tripleDashOverLine}";
+        case "~=": return "{\\tripleDashOverDoubleLine}";
+        case "~--": return "{\\tripleDashOverDoubleLine}";
+        case "-~-": return "{\\tripleDashBetweenDoubleLine}";
         case "...": return "{{\\cdot}{\\cdot}{\\cdot}}";
         case "....": return "{{\\cdot}{\\cdot}{\\cdot}{\\cdot}}";
         case "->": return "{\\rightarrow}";
@@ -12704,7 +12650,7 @@ class Style {
     this.fontFamily = data.fontFamily || "";    // string
     this.fontWeight = data.fontWeight || "";
     this.fontShape = data.fontShape || "";
-    this.maxSize = data.maxSize;                // number
+    this.maxSize = data.maxSize;                // [number, number]
   }
 
   /**
@@ -12816,7 +12762,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.4.2";
+const version = "0.5.0";
 
 function postProcess(block) {
   const labelMap = {};
