@@ -686,4 +686,4 @@ defineMacro("\\upomega", "\\up@greek{\\omega}");
 
 //////////////////////////////////////////////////////////////////////
 // chemstyle package
-defineMacro("\\standardstate", "{\\tiny\\char`⦵}");
+defineMacro("\\standardstate", "\\text{\\tiny\\char`⦵}");

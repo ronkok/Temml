@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.0] = 2022-01-04
+
+### Changed
+
+- Rendering option `maxSize` now takes an array of two numbers.
+
+### Added
+
+- \centerdot
+
+### Fixed
+
+- text-mode colon
+- All unit tests now pass.
+- All SVG images have been removed from Temml
+
 ## [0.4.2] = 2021-12-24
 
 ### Fixed

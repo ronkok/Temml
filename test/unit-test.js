@@ -1285,7 +1285,7 @@ const test = () => {
   assertion = "An extensible arrow parser should be grouped more tightly than supsubs"
   new Expect(parse(r`\xrightarrow x^2`)[0].type).toBe("supsub")
   assertion = "An extensible arrow builder should produce munderover"
-  new Expect(build(r`\xrightarrow [under]{over}`)[0].type).toBe("munderover")
+  new Expect(build(r`\xrightarrow [under]{over}`)[0].children[0].type).toBe("munderover")
 
   assertion = "A horizontal brace builder should work"
   new Expect(r`\overbrace{x}`).toParse()

@@ -43,7 +43,7 @@ I built Temml by:
 
 3. Doing some code refactoring and many MathML bug fixes.
 
-4. Adding new functionality: upright lower-case Greek letters, `\euro`, `\label{…}`, `\ref{…}`, `\longdiv{…}`, `\prescript`, `xcolor` color names, etc.
+4. Adding new functionality: upright lower-case Greek letters, `\euro`, `\label{…}`, `\ref{…}`, `\longdiv{…}`, `\prescript`, `definecolor`, `xcolor` color names, etc.
 
 I wish to thank Khan Academy and the many volunteer KaTeX contributors. This library would not exist if KaTeX had not existed first.
 

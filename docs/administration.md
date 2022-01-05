@@ -331,7 +331,7 @@ For server-side use, just use `temml.cjs` instead of `temml.min.js`. `temml.cjs`
 
 <br>
 
-<p class="reduced">Copyright © 2021 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
 
@@ -340,7 +340,7 @@ For server-side use, just use `temml.cjs` instead of `temml.min.js`. `temml.cjs`
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.4.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.0
 
 <h3><a href="#top">Contents</a></h3>
 
