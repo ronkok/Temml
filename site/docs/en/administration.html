@@ -126,9 +126,17 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <li>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</li>
 </ul>
 <p>If you want a different math font size, you can edit add a rule to your own page&#x27;s CSS, like this example:</p>
-<pre><code>math { font-size: 125%; }</code></pre><h1 id='auto-numbering'>Auto-numbering</h1>
-<p>In order to place automatic numbering in certain AMS environments, Temml contains a CSS rule:</p>
-<pre><code>body { counter-reset: tmlEqnNo; }</code></pre><p>If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.</p>
+<pre><code>math { font-size: 125%; }</code></pre><h1 id='equation-numbering'>Equation numbering</h1>
+<p>In order to place automatic equation numbering in certain AMS environments, Temml contains these CSS rules:</p>
+<pre><code>.tml-eqn::before {
+  counter-increment: tmlEqnNo;
+  content: &quot;(&quot; counter(tmlEqnNo) &quot;)&quot;;
+}
+body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>content</code> rule to produce customized equation numbers. For instance, if chapter three of your book is in its own html file, that file&#x27;s head could contain:</p>
+<pre><code>&lt;style&gt;
+   .tml-eqn::before { content: &quot;(3.&quot; counter(tmlEqnNo) &quot;)&quot;; }
+&lt;/style&gt;</code></pre><p>Then the automatic equation numbering in that chapter would look like: (3.1)</p>
+<p>If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.</p>
 <h1 id='auto-render-extension'>Auto-Render Extension</h1>
 <p>The auto-render extension is a client-side JavaScript function that can automatically render all of the math inside of text. It searches all of the text nodes within a given  element for the specified delimiters, ignoring certain tags like <code>&lt;pre&gt;</code>, and renders the math in place.</p>
 <p>This extension isn&#x27;t part of Temml proper, so the script needs to be included (via a <code>&lt;script&gt;</code> tag) in the page along with Temml itself.  For example:</p>
@@ -216,7 +224,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </li>
 <li><p><a href='#fonts'>Fonts</a></p>
 </li>
-<li><p><a href='#auto-numbering'>Auto-numbering</a></p>
+<li><p><a href='#equation-numbering'>Equation numbering</a></p>
 </li>
 <li><p><a href='#auto-render-extension'>Auto-Render Extension</a></p>
 </li>

@@ -208,15 +208,32 @@ If you want a different math font size, you can edit add a rule to your own page
 math { font-size: 125%; }
 ```
 
-# Auto-numbering
+# Equation numbering
 
-In order to place automatic numbering in certain AMS environments, Temml contains a CSS rule:
+In order to place automatic equation numbering in certain AMS environments, Temml contains these CSS rules:
 
 ```
+.tml-eqn::before {
+  counter-increment: tmlEqnNo;
+  content: "(" counter(tmlEqnNo) ")";
+}
 body { counter-reset: tmlEqnNo; }
 ```
 
-If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.
+You can overwrite the `content` rule to produce customized equation numbers.
+For instance, if chapter three of your book is in its own html file, that file’s
+`<head>` could contain:
+
+```
+<style>
+   .tml-eqn::before { content: "(3." counter(tmlEqnNo) ")"; }
+</style>
+```
+
+Then the automatic equation numbering in that chapter would look like: (3.1)
+
+If your site does not render automatic numbering properly, check if your other
+CSS has overwritten the Temml counter-reset.
 
 # Auto-Render Extension
 
@@ -356,7 +373,7 @@ $`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.1
     * [Post Process](#post-process)
 
 * [Fonts](#fonts)
-* [Auto-numbering](#auto-numbering)
+* [Equation numbering](#equation-numbering)
 * [Auto-Render Extension](#auto-render-extension)
 * [Extensions](#extensions)
 
