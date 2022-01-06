@@ -9,7 +9,7 @@ import * as mml from "../buildMathML"
 
 const numberRegEx = /^\d[\d.]*$/  // Keep in sync with numberRegEx in Parser.js
 
-const latinRegEx = /[A-Ba-z0-9]/
+const latinRegEx = /[A-Ba-z]/
 
 const italicNumber = (text, variant) => {
   const mn = new mathMLTree.MathNode("mn", [text])
