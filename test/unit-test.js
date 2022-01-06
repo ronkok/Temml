@@ -1052,6 +1052,8 @@ const test = () => {
   new Expect(r`\bf xyz`).toParseLike(r`\mathbf{xyz}`);
   new Expect(r`\it xyz`).toParseLike(r`\mathit{xyz}`);
   new Expect(r`\cal xyz`).toParseLike(r`\mathcal{xyz}`);
+  new Expect(r`\uptheta\varDelta`).toParse(strictSettings)
+  new Expect(r`\uptheta\varDelta`).toBuild()
 
   assertion = "A \\pmb builder should work"
   new Expect(r`\pmb{\mu}`).toParse();
@@ -1841,6 +1843,16 @@ const test = () => {
   assertion = "\\gdef or \\xdef should produce an error"
   new Expect(temml.renderToString("\gdef\foo{Nope}")).toContain("#b22222") // color of error message
   new Expect(temml.renderToString("\xdef\foo{Nope}")).toContain("#b22222")
+
+  assertion = "A preamble should capture viable macros and definecolor."
+  let macros = temml.definePreamble(r`\definecolor{sortaGreen}{RGB}{128,128,0}`)
+  new Expect(r`\color{sortaGreen} F=ma`).toParse(new Settings({macros}))
+  macros = temml.definePreamble(r`\def\foo{x^2}`)
+  markup = temml.renderToString(r`\foo + \foo`, new Settings({macros}))
+  new Expect(markup).toContain(`<math>`)
+  macros = temml.definePreamble(r`\newcommand\d[0]{\operatorname{d}\!}`)
+  markup = temml.renderToString(r`\d x`, new Settings({macros}))
+  new Expect(markup).toContain(`<math>`)
 
   assertion = "\\textbf arguments do generate groups"
   new Expect("\\def\\x{a}\\x\\textbf{\\x\\def\\x{b}\\x}\\x").toParseLike(r`a\textbf{ab}a`)
