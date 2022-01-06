@@ -7641,7 +7641,7 @@ const smallCaps = Object.freeze({
 
 const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
 
-const latinRegEx = /[A-Ba-z0-9]/;
+const latinRegEx = /[A-Ba-z]/;
 
 const italicNumber = (text, variant) => {
   const mn = new mathMLTree.MathNode("mn", [text]);
