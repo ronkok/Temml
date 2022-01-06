@@ -1282,7 +1282,7 @@ If you know the shape of a character, but not its name,
 | \underleftrightarrow | $`\underleftrightarrow{AB}` | `\underleftrightarrow{AB}` | ams             |
 | \underrightarrow     | $`\underrightarrow{AB}`     | `\underrightarrow{AB}`     | ams             |
 | \underline           | $`\underline{\text{a long argument}}`| `\underline{\text{a long argument}}`| |
-| \underlinesegment    | (Not supported              |                            |                 |
+| \underlinesegment    | (Not supported)             |                            |                 |
 | \underparen          | $`\underparen{abc}`         | `\underparen{abc}`         |                 |
 | \underrightarrow     | $`\underrightarrow{AB}`     | `\underrightarrow{AB}`     |                 |
 | \underset            | $`\underset{!}{=}`          | `\underset{!}{=}`          | AMS             |
@@ -1469,7 +1469,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.0
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.1
 
 <div style="height:0.5em;"></div>
 

@@ -2981,26 +2981,8 @@ var temml = (function () {
     }
   });
 
-  /* In LaTeX, \colon is defined as:
-   * \renewcommand{\colon}{\nobreak\mskip2mu\mathpunct{}\nonscript
-   * \mkern-\thinmuskip{:}\mskip6muplus1mu\relax}
-   *
-   * Doing that with a Temml macro produces semantically poor MathML. Do it more directly.
-   */
-
-  defineFunction({
-    type: "colonFunction",
-    names: ["\\colon"],
-    props: { numArgs: 0 },
-    handler({ parser }) { return { type: "colonFunction", mode: parser.mode } },
-    mathmlBuilder(group, style) {
-      const mo = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode(":")]);
-      // lspace depends on the script level.
-      mo.attributes.lspace = (style.level < 2 ? "0.05556em" : "0.1111em");
-      mo.attributes.rspace = "0.3333em"; // 6mu
-      return mo
-    }
-  });
+  // Unlike TeX, MathML (at least Firefox) does not suppress spacing between relations.
+  // `:=` is so common that I want to override MathML and render it well.
 
   defineFunction({
     type: "colonequal",
@@ -7660,6 +7642,8 @@ var temml = (function () {
 
   const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
 
+  const latinRegEx = /[A-Ba-z0-9]/;
+
   const italicNumber = (text, variant) => {
     const mn = new mathMLTree.MathNode("mn", [text]);
     const wrapper = new mathMLTree.MathNode("mstyle", [mn]);
@@ -7737,7 +7721,7 @@ var temml = (function () {
           text.text = variantChar(text.text, variant);
         }
         node = new mathMLTree.MathNode("mi", [text]);
-        if (text.text === origText ) {
+        if (text.text === origText && latinRegEx.test(origText)) {
           node.setAttribute("mathvariant", "italic");
         }
       }
@@ -8702,18 +8686,19 @@ var temml = (function () {
   defineMacro("\\@hspace", "\\hskip #1\\relax");
   defineMacro("\\@hspacer", "\\rule{0pt}{0pt}\\hskip #1\\relax");
 
+  defineMacro("\\colon", `\\mathpunct{\\char"3a}`);
+
   //////////////////////////////////////////////////////////////////////
   // mathtools.sty
 
   defineMacro("\\prescript", "\\pres@cript{_{#1}^{#2}}{}{#3}");
 
   //\providecommand\ordinarycolon{:}
-  defineMacro("\\ordinarycolon", ":");
-  //\def\vcentcolon{\mathrel{\mathop\ordinarycolon}}
-  //TODO(edemaine): Not yet centered. Fix via \raisebox or #726
-  defineMacro("\\vcentcolon", "\\mathrel{\\mathrel\\ordinarycolon}");
+  defineMacro("\\ordinarycolon", `\\char"3a`);
+  // Raise to center on the math axis, as closely as possible.
+  defineMacro("\\vcentcolon", "\\mathrel{\\raisebox{0.035em}{\\ordinarycolon}}");
   // \providecommand*\coloneq{\vcentcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
-  defineMacro("\\coloneq", '\\mathrel{\\char"3a\\char"2212}');
+  defineMacro("\\coloneq", '\\mathrel{\\raisebox{0.035em}{\\ordinarycolon}\\char"2212}');
   // \providecommand*\Coloneq{\dblcolon\mathrel{\mkern-1.2mu}\mathrel{-}}
   defineMacro("\\Coloneq", '\\mathrel{\\char"2237\\char"2212}');
   // \providecommand*\Eqqcolon{=\mathrel{\mkern-1.2mu}\dblcolon}
@@ -8721,13 +8706,13 @@ var temml = (function () {
   // \providecommand*\Eqcolon{\mathrel{-}\mathrel{\mkern-1.2mu}\dblcolon}
   defineMacro("\\Eqcolon", '\\mathrel{\\char"2212\\char"2237}');
   // \providecommand*\colonapprox{\vcentcolon\mathrel{\mkern-1.2mu}\approx}
-  defineMacro("\\colonapprox", '\\mathrel{\\char"3a\\char"2248}');
+  defineMacro("\\colonapprox", '\\mathrel{\\raisebox{0.035em}{\\ordinarycolon}\\char"2248}');
   // \providecommand*\Colonapprox{\dblcolon\mathrel{\mkern-1.2mu}\approx}
   defineMacro("\\Colonapprox", '\\mathrel{\\char"2237\\char"2248}');
   // \providecommand*\colonsim{\vcentcolon\mathrel{\mkern-1.2mu}\sim}
-  defineMacro("\\colonsim", '\\mathrel{\\char"3a\\char"223c}');
+  defineMacro("\\colonsim", '\\mathrel{\\raisebox{0.035em}{\\ordinarycolon}\\char"223c}');
   // \providecommand*\Colonsim{\dblcolon\mathrel{\mkern-1.2mu}\sim}
-  defineMacro("\\Colonsim", '\\mathrel{\\char"2237\\char"223c}');
+  defineMacro("\\Colonsim", '\\mathrel{\\raisebox{0.035em}{\\ordinarycolon}\\char"223c}');
 
   //////////////////////////////////////////////////////////////////////
   // colonequals.sty
@@ -10863,7 +10848,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.5.0";
+  const version = "0.5.1";
 
   function postProcess(block) {
     const labelMap = {};
