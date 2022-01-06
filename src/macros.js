@@ -498,17 +498,6 @@ defineMacro("\\@hspace", "\\hskip #1\\relax");
 defineMacro("\\@hspacer", "\\rule{0pt}{0pt}\\hskip #1\\relax");
 
 defineMacro("\\colon", `\\mathpunct{\\char"3a}`)
-defineMacro(":", function(context) {
-  const next = context.future().text;
-  if (next === "=") {
-    // Unlike TeX, MathML does not suppress spacing between two relations.
-    // `:=` is so common that I want to override MathML and handle it well.
-    context.consumeArg()
-    return `\u2254`
-  } else {
-    return `\\char"3a`
-  }
-})
 
 //////////////////////////////////////////////////////////////////////
 // mathtools.sty
