@@ -12,7 +12,7 @@ defineFunction({
     numArgs: 1,
     allowedInText: true
   },
-  handler({ parser }, args) {
+  handler({ parser, token }, args) {
     const arg = assertNodeType(args[0], "ordgroup")
     const group = arg.body
     let number = ""
@@ -22,7 +22,7 @@ defineFunction({
     }
     const code = parseInt(number)
     if (isNaN(code)) {
-      throw new ParseError(`\\@char has non-numeric argument ${number}`)
+      throw new ParseError(`\\@char has non-numeric argument ${number}`, token)
     }
     return {
       type: "textord",

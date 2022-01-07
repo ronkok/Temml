@@ -13,10 +13,10 @@ defineFunction({
     numArgs: 1,
     allowedInText: true
   },
-  handler: ({ parser, funcName }, args) => {
+  handler: ({ parser, funcName, token }, args) => {
     if (textModeLap.includes(funcName)) {
       if (parser.settings.strict && parser.mode !== "text") {
-        throw new ParseError(`{${funcName}} can be used only in text mode.`)
+        throw new ParseError(`{${funcName}} can be used only in text mode. Try \\math${funcName.slice(1)}`, token)
       }
       funcName = funcName.slice(1)
     } else {

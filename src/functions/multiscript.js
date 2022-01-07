@@ -17,19 +17,19 @@ defineFunction({
   props: {
     numArgs: 3
   },
-  handler({ parser, funcName }, args) {
+  handler({ parser, funcName, token }, args) {
     if (args[2].body.length === 0) {
       throw new ParseError(funcName + `cannot parse an empty base.`)
     }
     const base = args[2].body[0]
     if (parser.settings.strict && funcName === "\\sideset" && !base.symbol) {
-      throw new ParseError(`The base of \\sideset must be a big operator.`)
+      throw new ParseError(`The base of \\sideset must be a big operator. Try \\prescript.`)
     }
 
     if ((args[0].body.length > 0 && args[0].body[0].type !== "supsub") ||
         (args[1].body.length > 0 && args[1].body[0].type !== "supsub")) {
       throw new ParseError("\\sideset can parse only subscripts and " +
-                            "superscripts in its first two arguments")
+                            "superscripts in its first two arguments", token)
     }
 
     // The prescripts and postscripts come wrapped in a supsub.

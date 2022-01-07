@@ -34,7 +34,7 @@ defineFunction({
     allowedInText: true,
     allowedInMath: false
   },
-  handler(context, args) {
-    throw new ParseError(`Mismatched ${context.funcName}`);
+  handler(context, token) {
+    throw new ParseError(`Mismatched ${context.funcName}`, token);
   }
 });

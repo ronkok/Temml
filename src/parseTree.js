@@ -20,7 +20,7 @@ const parseTree = function(toParse, settings) {
     // In this case, we separately parse the tag and wrap the tree.
     if (parser.gullet.macros.get("\\df@tag")) {
       if (!settings.displayMode) {
-        throw new ParseError("\\tag works only in display equations")
+        throw new ParseError("\\tag works only in display mode")
       }
       parser.gullet.feed("\\df@tag")
       tree = [

@@ -132,10 +132,10 @@ export const colorFromSpec = (model, spec) => {
   return color
 }
 
-export const validateColor = (color, macros) => {
+export const validateColor = (color, macros, token) => {
   const macroName = `\\\\color@${color}` // from \defineColor.
   const match = htmlOrNameRegEx.exec(color);
-  if (!match) { throw new ParseError("Invalid color: '" + color + "'") }
+  if (!match) { throw new ParseError("Invalid color: '" + color + "'", token) }
   // We allow a 6-digit HTML color spec without a leading "#".
   // This follows the xcolor package's HTML color model.
   // Predefined color names are all missed by this RegEx pattern.
@@ -169,14 +169,14 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw", "original"]
   },
-  handler({ parser }, args, optArgs) {
+  handler({ parser, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string
     let color = ""
     if (model) {
       const spec = assertNodeType(args[0], "raw").string
       color = colorFromSpec(model, spec)
     } else {
-      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros)
+      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token)
     }
     const body = args[1];
     return {
@@ -198,14 +198,14 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw"]
   },
-  handler({ parser, breakOnTokenText }, args, optArgs) {
+  handler({ parser, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string
     let color = ""
     if (model) {
       const spec = assertNodeType(args[0], "raw").string
       color = colorFromSpec(model, spec)
     } else {
-      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros)
+      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token)
     }
 
     // Set macro \current@color in current namespace to store the current
@@ -236,14 +236,14 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw", "raw"]
   },
-  handler({ parser }, args) {
+  handler({ parser, funcName, token }, args) {
     const name = assertNodeType(args[0], "raw").string
     if (!/^[A-Za-z]+$/.test(name)) {
-      throw new ParseError("Color name must be latin letters.")
+      throw new ParseError("Color name must be latin letters.", token)
     }
     const model = assertNodeType(args[1], "raw").string
     if (!["HTML", "RGB", "rgb"].includes(model)) {
-      throw new ParseError("Color model must be HTML, RGB, or rgb.")
+      throw new ParseError("Color model must be HTML, RGB, or rgb.", token)
     }
     const spec = assertNodeType(args[2], "raw").string
     const color = colorFromSpec(model, spec)

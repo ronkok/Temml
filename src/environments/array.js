@@ -29,8 +29,7 @@ function getHLines(parser) {
 const validateAmsEnvironmentContext = context => {
   const settings = context.parser.settings;
   if (!settings.displayMode) {
-    throw new ParseError(`{${context.envName}} can be used only in` +
-    ` display mode.`);
+    throw new ParseError(`{${context.envName}} can be used only in display mode.`);
   }
 }
 
