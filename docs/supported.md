@@ -218,9 +218,9 @@ If the color model is omitted, Temml color functions will accept:
 | `\{ \}`          | `\lbrace`\         |              | `\lmoustache`\             |  `\updownarrow`     |
 |                  | $`~~~~` `\rbrace`  |              | $`~~~~` `\rmoustache`      |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
-| $`⟨~⟩` `⟨ ⟩`     | $`\lt\gt` `\lt`\   | $`⟮~⟯` `⟮ ⟯` | $`\lgroup~\rgroup`         | $`\Uparrow`         |
-|                  | $`~~~~~~~~~~`      |              | `\lgroup`\                 | `\Uparrow`          |
-|                  | `\gt`              |              | $`~~~~~` `\rgroup`         |                     |
+| $`⟨~⟩` `⟨ ⟩`     | $`\langle~\rangle` | $`⟮~⟯` `⟮ ⟯` | $`\lgroup~\rgroup`         | $`\Uparrow`         |
+|                  | `\langle` \        |              | `\lgroup`\                 | `\Uparrow`          |
+|                  | $`~~~~~` `\rangle` |              | $`~~~~~` `\rgroup`         |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
 | $`\vert`         | $`\vert`           | $`┌ ┐` `┌ ┐` | $`\ulcorner \urcorner`     | $`\Downarrow`       |
 | `|`              |  `\vert`           |              | `\ulcorner`\               |  `\Downarrow`       |
@@ -234,13 +234,12 @@ If the color model is omitted, Temml color functions will accept:
 | `\lvert`\        | `\lVert`\          |              |                            | `\backslash`        |
 | $`~~~~` `\rvert` | $`~~~~~` `\rVert`  |              |                            |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
-|                  |                    | $`⟦~⟧` `⟦ ⟧` | $`\llbracket~\rrbracket`   | $`\lBrace~\rBrace`  |
-|                  |                    |              | `\llbracket`\              | `\lBrace \rBrace`   |
-|                  |                    |              | $`~~~~` `\rrbracket`       |                     |
+|                  | $`\lt\gt` `\lt`\   | $`⟦~⟧` `⟦ ⟧` | $`\llbracket~\rrbracket`   | $`\lBrace~\rBrace`  |
+|                  | $`~~~~~~~~~~`      |              | `\llbracket`\              | `\lBrace \rBrace`   |
+|                  | `\gt`              |              | $`~~~~` `\rrbracket`       |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
 
-The _texvc_ extension includes $`\lang` `\lang`, $`\rang` `\rang`,
-$`\langle` `\langle`, and $`\rangle` `\rangle`.
+The _texvc_ extension includes $`\lang` `\lang` and $`\rang` `\rang`.
 
 #### Delimiter Sizing 
 
