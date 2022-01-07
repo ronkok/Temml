@@ -95,7 +95,8 @@ const renderError = function(error, expression, options) {
   if (options.throwOnError || !(error instanceof ParseError)) {
     throw error;
   }
-  const node = new Span(["temml-error"], [new TextNode(error.toString() + "\n" + expression)]);
+  const node = new Span(["temml-error"], [new TextNode(expression)]);
+  node.setAttribute("title", error.toString());
   node.setAttribute("style", `color:${options.errorColor}`);
   return node;
 };
