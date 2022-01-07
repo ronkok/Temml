@@ -123,6 +123,7 @@ const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"])
   const table = new mathMLTree.MathNode("mtable", [mtr])
   table.setAttribute("width", "100%")
+  table.setAttribute("displaystyle", "true")
   return table
 }
 
