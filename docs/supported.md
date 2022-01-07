@@ -657,7 +657,7 @@ Temml has no `\par`, so `\long` is ignored.
 | $`\oiiint` `\oiiint` | $`\intlarhk` `\intlarhk` | $`\sqint` `\sqint`         | $`\intx` `\intx`              |
 +----------------------+--------------------------+----------------------------+-------------------------------+
 | $`\intbar` `\intbar` | $`\intBar` `\intBar`     | $`\fint` `\fint`           | $`\sideset{_a^b}{_c^d}\sum`   |
-|                      |                          |                            |  `\sideset{\_a^b}{\_c^d}\sum` |
+|                      |                          |                            |  `\sideset{_a^b}{_c^d}\sum`   |
 +----------------------+--------------------------+----------------------------+-------------------------------+
 
 Direct Input: <span class="direct">∫ ∬ ∭ ⨌ ∮ ∯ ∰ ⨖ ∲ ∏ ∐ ∑ ⋀ ⋁ ⋂ ⋃ ⨀ ⨁ ⨂ ⨄ ⨆ ⨅</span>
