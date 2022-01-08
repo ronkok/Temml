@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.5.2] = 2022-01-07
+
+### Fixed
+
+- \tag now stays in display mode
+
+### Changed
+
+- Parse error message now is displayed on screen, not in a hover hint.
+- Added locations to some error messages.
+
 ## [0.5.1] = 2022-01-05
 
 ### Fixed

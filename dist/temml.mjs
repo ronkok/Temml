@@ -52,7 +52,7 @@ class ParseError {
     // Some hackery to make ParseError a prototype of Error
     // See http://stackoverflow.com/a/8460753
     const self = new Error(error);
-    self.name = "TemmlParseError";
+    self.name = "ParseError";
     self.__proto__ = ParseError.prototype;
     self.position = start;
     return self;
@@ -2123,6 +2123,7 @@ const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
   const table = new mathMLTree.MathNode("mtable", [mtr]);
   table.setAttribute("width", "100%");
+  table.setAttribute("displaystyle", "true");
   return table
 };
 
@@ -2958,7 +2959,7 @@ defineFunction({
     numArgs: 1,
     allowedInText: true
   },
-  handler({ parser }, args) {
+  handler({ parser, token }, args) {
     const arg = assertNodeType(args[0], "ordgroup");
     const group = arg.body;
     let number = "";
@@ -2968,7 +2969,7 @@ defineFunction({
     }
     const code = parseInt(number);
     if (isNaN(code)) {
-      throw new ParseError(`\\@char has non-numeric argument ${number}`)
+      throw new ParseError(`\\@char has non-numeric argument ${number}`, token)
     }
     return {
       type: "textord",
@@ -3128,10 +3129,10 @@ const colorFromSpec = (model, spec) => {
   return color
 };
 
-const validateColor = (color, macros) => {
+const validateColor = (color, macros, token) => {
   const macroName = `\\\\color@${color}`; // from \defineColor.
   const match = htmlOrNameRegEx.exec(color);
-  if (!match) { throw new ParseError("Invalid color: '" + color + "'") }
+  if (!match) { throw new ParseError("Invalid color: '" + color + "'", token) }
   // We allow a 6-digit HTML color spec without a leading "#".
   // This follows the xcolor package's HTML color model.
   // Predefined color names are all missed by this RegEx pattern.
@@ -3165,14 +3166,14 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw", "original"]
   },
-  handler({ parser }, args, optArgs) {
+  handler({ parser, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
     let color = "";
     if (model) {
       const spec = assertNodeType(args[0], "raw").string;
       color = colorFromSpec(model, spec);
     } else {
-      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros);
+      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token);
     }
     const body = args[1];
     return {
@@ -3194,14 +3195,14 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw"]
   },
-  handler({ parser, breakOnTokenText }, args, optArgs) {
+  handler({ parser, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
     let color = "";
     if (model) {
       const spec = assertNodeType(args[0], "raw").string;
       color = colorFromSpec(model, spec);
     } else {
-      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros);
+      color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token);
     }
 
     // Set macro \current@color in current namespace to store the current
@@ -3232,14 +3233,14 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw", "raw"]
   },
-  handler({ parser }, args) {
+  handler({ parser, funcName, token }, args) {
     const name = assertNodeType(args[0], "raw").string;
     if (!/^[A-Za-z]+$/.test(name)) {
-      throw new ParseError("Color name must be latin letters.")
+      throw new ParseError("Color name must be latin letters.", token)
     }
     const model = assertNodeType(args[1], "raw").string;
     if (!["HTML", "RGB", "rgb"].includes(model)) {
-      throw new ParseError("Color model must be HTML, RGB, or rgb.")
+      throw new ParseError("Color model must be HTML, RGB, or rgb.", token)
     }
     const spec = assertNodeType(args[2], "raw").string;
     const color = colorFromSpec(model, spec);
@@ -3993,8 +3994,7 @@ function getHLines(parser) {
 const validateAmsEnvironmentContext = context => {
   const settings = context.parser.settings;
   if (!settings.displayMode) {
-    throw new ParseError(`{${context.envName}} can be used only in` +
-    ` display mode.`);
+    throw new ParseError(`{${context.envName}} can be used only in display mode.`);
   }
 };
 
@@ -5801,10 +5801,11 @@ defineFunction({
     numArgs: 1,
     allowedInText: true
   },
-  handler: ({ parser, funcName }, args) => {
+  handler: ({ parser, funcName, token }, args) => {
     if (textModeLap.includes(funcName)) {
       if (parser.settings.strict && parser.mode !== "text") {
-        throw new ParseError(`{${funcName}} can be used only in text mode.`)
+        throw new ParseError(`{${funcName}} can be used only in text mode.
+ Try \\math${funcName.slice(1)}`, token)
       }
       funcName = funcName.slice(1);
     } else {
@@ -5869,8 +5870,8 @@ defineFunction({
     allowedInText: true,
     allowedInMath: false
   },
-  handler(context, args) {
-    throw new ParseError(`Mismatched ${context.funcName}`);
+  handler(context, token) {
+    throw new ParseError(`Mismatched ${context.funcName}`, token);
   }
 });
 
@@ -6092,19 +6093,19 @@ defineFunction({
   props: {
     numArgs: 3
   },
-  handler({ parser, funcName }, args) {
+  handler({ parser, funcName, token }, args) {
     if (args[2].body.length === 0) {
       throw new ParseError(funcName + `cannot parse an empty base.`)
     }
     const base = args[2].body[0];
     if (parser.settings.strict && funcName === "\\sideset" && !base.symbol) {
-      throw new ParseError(`The base of \\sideset must be a big operator.`)
+      throw new ParseError(`The base of \\sideset must be a big operator. Try \\prescript.`)
     }
 
     if ((args[0].body.length > 0 && args[0].body[0].type !== "supsub") ||
         (args[1].body.length > 0 && args[1].body[0].type !== "supsub")) {
       throw new ParseError("\\sideset can parse only subscripts and " +
-                            "superscripts in its first two arguments")
+                            "superscripts in its first two arguments", token)
     }
 
     // The prescripts and postscripts come wrapped in a supsub.
@@ -12586,7 +12587,7 @@ const parseTree = function(toParse, settings) {
     // In this case, we separately parse the tag and wrap the tree.
     if (parser.gullet.macros.get("\\df@tag")) {
       if (!settings.displayMode) {
-        throw new ParseError("\\tag works only in display equations")
+        throw new ParseError("\\tag works only in display mode")
       }
       parser.gullet.feed("\\df@tag");
       tree = [
@@ -12745,7 +12746,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.5.1";
+const version = "0.5.2";
 
 function postProcess(block) {
   const labelMap = {};
@@ -12869,9 +12870,9 @@ const renderError = function(error, expression, options) {
   if (options.throwOnError || !(error instanceof ParseError)) {
     throw error;
   }
-  const node = new Span(["temml-error"], [new TextNode(expression)]);
-  node.setAttribute("title", error.toString());
-  node.setAttribute("style", `color:${options.errorColor}`);
+  const node = new Span(["temml-error"], [new TextNode(expression + "\n" + error.toString())]);
+  node.style.color = options.errorColor;
+  node.style.whiteSpace = "pre-line";
   return node;
 };
 
