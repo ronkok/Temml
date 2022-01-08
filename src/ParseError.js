@@ -52,7 +52,7 @@ class ParseError {
     // Some hackery to make ParseError a prototype of Error
     // See http://stackoverflow.com/a/8460753
     const self = new Error(error);
-    self.name = "TemmlParseError";
+    self.name = "ParseError";
     self.__proto__ = ParseError.prototype;
     self.position = start;
     return self;

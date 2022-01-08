@@ -1439,14 +1439,6 @@ exponent.
 
 The other units are absolute and are not affected by either script level or font size.
 
-# Troubleshooting
-
-If an expression is not valid LaTeX, Temml will render the expression in
-$`\color{FireBrick}\text{red}`. Hover over the expression to see a message with
-more information about the error. For example the expression `x^` will render as: $`x^`.
-
-To determine the Temml version number, open the console (Ctrl-Shift-I) and type `temml.version`.
-
 <br>
 
 <p class="reduced" style="text-align: center">Copyright © 2021, 2022 Ron Kok.
@@ -1507,7 +1499,6 @@ $`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.1
 <li><a href="#style-size-and-font">Style, Size, and Font</a></li>
 <li><a href="#symbols-and-punctuation">Symbols and Punctuation</a></li>
 <li><a href="#units">Units</a></li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
