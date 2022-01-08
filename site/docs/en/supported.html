@@ -290,7 +290,7 @@ because Cambria Math has chancery in those code points and some other math fonts
 <tr><td><math><mo movablelimits="false">∮</mo></math> <code>\oint</code> </td><td><math><mo movablelimits="false">∲</mo></math>  <code>\varointclockwise</code></td><td><math><mo movablelimits="false">∱</mo></math>  <code>\intclockwise</code></td><td><math><mo movablelimits="false">⨅</mo></math>  <code>\bigsqcap</code></td></tr>
 <tr><td><math><mo movablelimits="false">∯</mo></math> <code>\oiint</code></td><td><math><mo movablelimits="false">⨕</mo></math> <code>\pointint</code></td><td><math><mo movablelimits="false">⨒</mo></math> <code>\rppolint</code></td><td><math><mo movablelimits="false">⨓</mo></math> <code>\scpolint</code></td></tr>
 <tr><td><math><mo movablelimits="false">∰</mo></math> <code>\oiiint</code></td><td><math><mo movablelimits="false">⨗</mo></math> <code>\intlarhk</code></td><td><math><mo movablelimits="false">⨖</mo></math> <code>\sqint</code></td><td><math><mo movablelimits="false">⨘</mo></math> <code>\intx</code></td></tr>
-<tr><td><math><mo movablelimits="false">⨍</mo></math> <code>\intbar</code> </td><td><math><mo movablelimits="false">⨎</mo></math> <code>\intBar</code> </td><td><math><mo movablelimits="false">⨏</mo></math> <code>\fint</code> </td><td><math><mmultiscripts><mo movablelimits="false">∑</mo><mi>c</mi><mi>d</mi><mprescripts></mprescripts><mi style="text-align: left;">a</mi><mi style="text-align: left;">b</mi></mmultiscripts></math>  <code>\sideset{\_a^b}{\_c^d}\sum</code></td></tr>
+<tr><td><math><mo movablelimits="false">⨍</mo></math> <code>\intbar</code> </td><td><math><mo movablelimits="false">⨎</mo></math> <code>\intBar</code> </td><td><math><mo movablelimits="false">⨏</mo></math> <code>\fint</code> </td><td><math><mmultiscripts><mo movablelimits="false">∑</mo><mi>c</mi><mi>d</mi><mprescripts></mprescripts><mi style="text-align: left;">a</mi><mi style="text-align: left;">b</mi></mmultiscripts></math>  <code>\sideset{_a^b}{_c^d}\sum</code></td></tr>
 </table>
 <p>Direct Input: <span class="direct">∫ ∬ ∭ ⨌ ∮ ∯ ∰ ⨖ ∲ ∏ ∐ ∑ ⋀ ⋁ ⋂ ⋃ ⨀ ⨁ ⨂ ⨄ ⨆ ⨅</span></p>
 <h3 id='binary-operators'>Binary Operators</h3>
@@ -613,9 +613,6 @@ a</code></td></tr>
 <p><code>em</code> and <code>ex</code> are affected by font size changes such as <code>\Large</code>, but they are not affected by script level, so they will not change size in a fraction numerator or an exponent. </p>
 <p><code>mu</code> is affected by both script level and font size.</p>
 <p>The other units are absolute and are not affected by either script level or font size.</p>
-<h1 id='troubleshooting'>Troubleshooting</h1>
-<p>If an expression is not valid LaTeX, Temml will render the expression in <math><mrow><mstyle mathcolor="FireBrick"><mtext>red</mtext></mstyle></mrow></math>. Hover over the expression to see a message with more information about the error. For example the expression <code>x^</code> will render as: <span class="temml-error" title="TemmlParseError:  Expected group after &#x27;^&#x27; at position 2: x^̲" style="color:#b22222">x^</span>.</p>
-<p>To determine the Temml version number, open the console (Ctrl-Shift-I) and type <code>temml.version</code>.</p>
 <br>
 <p class="reduced" style="text-align: center">Copyright © 2021, 2022 Ron Kok.
 Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
@@ -623,7 +620,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.5.1</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.5.2</p>
 <h3><a href="#top">Contents</a></h3>
 <ul class="toc">
 <li><a href="#accents">Accents</a></li>
@@ -666,7 +663,6 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <li><a href="#style-size-and-font">Style, Size, and Font</a></li>
 <li><a href="#symbols-and-punctuation">Symbols and Punctuation</a></li>
 <li><a href="#units">Units</a></li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
 </ul>
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
   <option value="Local">Local font</option>

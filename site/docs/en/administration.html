@@ -132,7 +132,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
   counter-increment: tmlEqnNo;
   content: &quot;(&quot; counter(tmlEqnNo) &quot;)&quot;;
 }
-body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>content</code> rule to produce customized equation numbers. For instance, if chapter three of your book is in its own html file, that file&#x27;s head could contain:</p>
+body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>content</code> rule to produce customized equation numbers. For instance, if chapter three of your book is in its own html file, that file’s <code>&lt;head&gt;</code> could contain:</p>
 <pre><code>&lt;style&gt;
    .tml-eqn::before { content: &quot;(3.&quot; counter(tmlEqnNo) &quot;)&quot;; }
 &lt;/style&gt;</code></pre><p>Then the automatic equation numbering in that chapter would look like: (3.1)</p>
@@ -207,7 +207,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.5.1</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.5.2</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>
