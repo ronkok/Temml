@@ -46,6 +46,11 @@ export const makeRow = function(body) {
   }
 };
 
+const isRel = item => {
+  return (item.type === "atom" && item.family === "rel") || 
+      (item.type === "mclass" && item.mclass === "mrel")
+}
+
 /**
  * Takes a list of nodes, builds them, and returns a list of the generated
  * MathML nodes.  Also combine consecutive <mtext> outputs into a single
@@ -66,6 +71,13 @@ export const buildExpression = function(expression, style, isOrdgroup) {
   const groups = [];
   for (let i = 0; i < expression.length; i++) {
     const group = buildGroup(expression[i], style);
+    // Suppress spacing between adjacent relations
+    if (i < expression.length - 1 && isRel(expression[i]) && isRel(expression[i + 1])) {
+      group.setAttribute("rspace", "0em")
+    }
+    if (i > 0 && isRel(expression[i]) && isRel(expression[i - 1])) {
+      group.setAttribute("lspace", "0em")
+    }
     groups.push(group);
   }
   return groups;

@@ -606,6 +606,7 @@ defineSymbol(math, close, "\u2016", "\\rVert");
 defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u2984", "\\rBrace", true);
 defineSymbol(math, rel, "=", "=");
+defineSymbol(math, rel, ":", ":");
 defineSymbol(math, rel, "\u2248", "\\approx", true);
 defineSymbol(math, rel, "\u2245", "\\cong", true);
 defineSymbol(math, rel, "\u2265", "\\ge");
@@ -647,6 +648,7 @@ defineSymbol(text, spacing, "\u00a0", "\\nobreakspace");
 defineSymbol(math, spacing, null, "\\nobreak");
 defineSymbol(math, spacing, null, "\\allowbreak");
 defineSymbol(math, punct, ",", ",");
+defineSymbol(text, punct, ":", ":");
 defineSymbol(math, punct, ";", ";");
 defineSymbol(math, bin, "\u22bc", "\\barwedge", true);
 defineSymbol(math, bin, "\u22bb", "\\veebar", true);
