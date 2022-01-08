@@ -88,7 +88,7 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 |     | \frac{dy}{dx}, \                           | \frac{dy}{dx},                                 |
 |     | \frac{\mathrm{d}y}{\mathrm{d}x}, \         | \frac{\mathrm{d}y}{\mathrm{d}x},               |
 |     | \frac{\partial^2}\                         | \frac{\partial^2}                              |
-|     | {\partial x_1\partial x_2}y                | {\partial x_1\partial x_2}y`                   |
+|     | {\partial x\_1\partial x\_2}y              | {\partial x_1\partial x_2}y`                   |
 +-----+--------------------------------------------+------------------------------------------------+
 | 24  | \prime, \backprime, f^\prime, f', f'', \   | $`\prime, \backprime, f^\prime, f', f'',       |
 |     | f^{(3)}, \dot y, \ddot y                   | f^{(3)}, \dot y, \ddot y`                      |
@@ -890,7 +890,7 @@ in the Temml function support page.
 |     | 1 - x^2 & \text{otherwise} \                  | 1 - x^2 & \text{otherwise}                       |
 |     | \end{cases}                                   | \end{cases}`                                     |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 256 | {}\_pF_q(a\_1,\dots,a_p;c\_1,\dots,c\_q;z) \  | $`{}_pF_q(a_1,\dots,a_p;c_1,\dots,c_q;z)         |
+| 256 | {}\_pF\_q(a\_1,\dots,a\_p;c\_1,\dots,c\_q;z)\ | $`{}_pF_q(a_1,\dots,a_p;c_1,\dots,c_q;z)         |
 |     | = \sum\_{n=0}^\infty \                        | = \sum_{n=0}^\infty                              |
 |     | \frac{(a_1)\_n\cdots(a_p)\_n}\                | \frac{(a_1)_n\cdots(a_p)_n}                      |
 |     | {(c\_1)\_n\cdots(c\_q)_n}\frac{z^n}{n!}       | {(c_1)_n\cdots(c_q)_n}\frac{z^n}{n!}`            |

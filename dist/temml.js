@@ -1396,6 +1396,7 @@ var temml = (function () {
   defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
   defineSymbol(math, close, "\u2984", "\\rBrace", true);
   defineSymbol(math, rel, "=", "=");
+  defineSymbol(math, rel, ":", ":");
   defineSymbol(math, rel, "\u2248", "\\approx", true);
   defineSymbol(math, rel, "\u2245", "\\cong", true);
   defineSymbol(math, rel, "\u2265", "\\ge");
@@ -1437,6 +1438,7 @@ var temml = (function () {
   defineSymbol(math, spacing, null, "\\nobreak");
   defineSymbol(math, spacing, null, "\\allowbreak");
   defineSymbol(math, punct, ",", ",");
+  defineSymbol(text, punct, ":", ":");
   defineSymbol(math, punct, ";", ";");
   defineSymbol(math, bin, "\u22bc", "\\barwedge", true);
   defineSymbol(math, bin, "\u22bb", "\\veebar", true);
@@ -2049,6 +2051,11 @@ var temml = (function () {
     }
   };
 
+  const isRel = item => {
+    return (item.type === "atom" && item.family === "rel") || 
+        (item.type === "mclass" && item.mclass === "mrel")
+  };
+
   /**
    * Takes a list of nodes, builds them, and returns a list of the generated
    * MathML nodes.  Also combine consecutive <mtext> outputs into a single
@@ -2069,6 +2076,13 @@ var temml = (function () {
     const groups = [];
     for (let i = 0; i < expression.length; i++) {
       const group = buildGroup(expression[i], style);
+      // Suppress spacing between adjacent relations
+      if (i < expression.length - 1 && isRel(expression[i]) && isRel(expression[i + 1])) {
+        group.setAttribute("rspace", "0em");
+      }
+      if (i > 0 && isRel(expression[i]) && isRel(expression[i - 1])) {
+        group.setAttribute("lspace", "0em");
+      }
       groups.push(group);
     }
     return groups;
@@ -2979,28 +2993,6 @@ var temml = (function () {
         mode: parser.mode,
         text: String.fromCodePoint(code)
       }
-    }
-  });
-
-  // Unlike TeX, MathML (at least Firefox) does not suppress spacing between relations.
-  // `:=` is so common that I want to override MathML and render it well.
-
-  defineFunction({
-    type: "colonequal",
-    names: [":"],
-    props: { numArgs: 0, allowedInText: true, allowedInMath: true },
-    handler({ parser }, args) {
-      if (parser.mode === "text") {
-        return { type: "textord", text: ":", mode: "text" }
-      } else if (parser.fetch().text === "=") {
-        // Special case for :=
-        parser.consume();
-        return { type: "colonequal", mode: "math" }
-      }
-      return { type: "atom", family: "rel", text: ":", mode: "math" }
-    },
-    mathmlBuilder(group, style) {
-      return new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u2254")])
     }
   });
 
@@ -10849,7 +10841,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.5.2";
+  const version = "0.5.3";
 
   function postProcess(block) {
     const labelMap = {};

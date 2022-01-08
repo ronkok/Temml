@@ -595,7 +595,7 @@ $`\frac{x^2}{y^2} + z^2 = z^2 + \frac{x^2}{y^2} = \frac{x^2}{y^2} +\nobreak z^2 
 #### MathOp
 
 +--------------------------------------+--------------------------------------+------------------------------+
-| a\mathop+b\mathop=c\mathop{\delta} \ | $`a\mathop+b\mathop=c\mathop{\delta} | ![mathop](images/mathop.svg) |
+| a\mathop+b\mathop:c\mathop{\delta} \ | $`a\mathop+b\mathop:c\mathop{\delta} | ![mathop](images/mathop.svg) |
 | e\mathop{\textrm{and}}f \            |  e\mathop{\textrm{and}}f             |                              |
 | \mathrel{\mathop{:}}=g\sin h         |  \mathrel{\mathop{:}}=g\sin h`       |                              |
 +--------------------------------------+--------------------------------------+------------------------------+

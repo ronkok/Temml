@@ -357,7 +357,7 @@ For server-side use, just use `temml.cjs` instead of `temml.min.js`. `temml.cjs`
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.3
 
 <h3><a href="#top">Contents</a></h3>
 
