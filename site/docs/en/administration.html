@@ -110,10 +110,10 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </ul>
 <h2 id='post-process'>Post Process</h2>
 <p>The <code>postProcess</code> function implements the AMS functions <code>\ref</code> and <code>\label</code>. It should be called outside of any loop.</p>
-<p>Unlike other Temml functions, the <code>postProcess</code> function makes two passes through the entire document. In contrast, <code>temml.render</code> and <code>temml.renderToString</code> each operate on only one element at a time. If you choose not to support <code>\ref</code>, <code>postProcess</code> can be omitted.</p>
+<p>The main Temml functions, <code>temml.render</code> and <code>temml.renderToString</code>, each operate on only one element at a time. In contrast, the <code>postProcess</code> function makes two passes through the entire document. If you choose not to support <code>\ref</code>, <code>postProcess</code> can be omitted.</p>
 <p>If Temml is used server-side, <code>\ref</code> and <code>\label</code> are still implemented at runtime with client-side JavaScript. A small file, <code>temmlPostProcess.js</code>, is provided to be installed in place of <code>temml.min.js</code>. It exposes one function:</p>
-<pre><code>temml.postProcess(document.body)</code></pre><p>If you do not do a runtime <code>postProcess</code>, everthing in Temml will work except <code>\ref</code>.</p>
-<p>If you use the <a href='#auto-render-extension'>auto-render extension</a>, it includes the post-processor nuances.</p>
+<pre><code>temml.postProcess(document.body)</code></pre><p>If you do not provide a runtime <code>postProcess</code>, everthing in Temml will work except <code>\ref</code>.</p>
+<p>If you use the <a href='null' title='https://github.com/ronkok/Temml/tree/main/contrib/auto-render''>auto-render extension</a>, it includes the post-processor nuances.</p>
 <h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
 <p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>. Sadly, Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.</p>
@@ -125,7 +125,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <li>STIXTwoMath-Regular.woff2 is located at the STIX <a href='https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2'>repository</a>.</li>
 <li>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</li>
 </ul>
-<p>If you want a different math font size, you can edit add a rule to your own page&#x27;s CSS, like this example:</p>
+<p>If you want a different math font size, you can add a rule to your own page&#x27;s CSS, like this example:</p>
 <pre><code>math { font-size: 125%; }</code></pre><h1 id='equation-numbering'>Equation numbering</h1>
 <p>In order to place automatic equation numbering in certain AMS environments, Temml contains these CSS rules:</p>
 <pre><code>.tml-eqn::before {
@@ -137,62 +137,8 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
    .tml-eqn::before { content: &quot;(3.&quot; counter(tmlEqnNo) &quot;)&quot;; }
 &lt;/style&gt;</code></pre><p>Then the automatic equation numbering in that chapter would look like: (3.1)</p>
 <p>If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.</p>
-<h1 id='auto-render-extension'>Auto-Render Extension</h1>
-<p>The auto-render extension is a client-side JavaScript function that can automatically render all of the math inside of text. It searches all of the text nodes within a given  element for the specified delimiters, ignoring certain tags like <code>&lt;pre&gt;</code>, and renders the math in place.</p>
-<p>This extension isn&#x27;t part of Temml proper, so the script needs to be included (via a <code>&lt;script&gt;</code> tag) in the page along with Temml itself.  For example:</p>
-<pre><code>&lt;head&gt;
-   ...
-&lt;link rel=&quot;stylesheet&quot; href=&quot;./Temml-Local.css&quot;&gt;
-&lt;script src=&quot;./temml.min.js&quot;&gt;&lt;/script&gt;
-&lt;script src=&quot;./auto-render.min.js&quot;&gt;&lt;/script&gt;
-  ...
-&lt;/head&gt;
-&lt;body&gt;
-  ...
-&lt;script&gt;renderMathInElement(document.body);&lt;/script&gt;
-&lt;/body&gt;</code></pre><p>The auto-render extension exposes a single function, <code>window.renderMathInElement</code>, with the following API:</p>
-<pre><code>function renderMathInElement(elem, options)</code></pre><p><code>elem</code> is an HTML DOM element. The function will recursively search for text nodes inside this element and render the math in them.</p>
-<p><code>options</code> is an optional object argument that can have the same keys as <a href='#options'>the options passed to </a>, in addition to two auto-render-specific keys:</p>
-<ul><li><p><code>delimiters</code>: This is a list of delimiters to look for math, processed in the same order as the list. Each delimiter has three properties:</p>
-<ul><li><code>left</code>: A string which starts the math expression (i.e. the left delimiter).</li>
-<li><code>right</code>: A string which ends the math expression (i.e. the right delimiter).</li>
-<li><code>display</code>: A boolean of whether the math in the expression should be rendered in display mode or not.</li>
-</ul>
-<p>The default <code>delimiters</code> value is:</p>
-<pre><code>[
-  { left: &quot;$$&quot;, right: &quot;$$&quot;, display: true },
-  { left: &quot;\\(&quot;, right: &quot;\\)&quot;, display: false },
-  { left: &quot;\\begin{equation}&quot;, right: &quot;\\end{equation}&quot;, display: true },
-  { left: &quot;\\begin{align}&quot;,    right: &quot;\\end{align}&quot;, display: true },
-  { left: &quot;\\begin{alignat}&quot;,  right: &quot;\\end{alignat}&quot;, display: true },
-  { left: &quot;\\begin{gather}&quot;,   right: &quot;\\end{gather}&quot;, display: true },
-  { left: &quot;\\begin{CD}&quot;,       right: &quot;\\end{CD}&quot;, display: true },
-  { left: &quot;\\begin{multline}&quot;, right: &quot;\\end{multline}&quot;, display: true },
-  { left: &quot;\\[&quot;, right: &quot;\\]&quot;, display: true }
-]</code></pre><p>If you want to add support for inline math via <code>$…$</code>, be sure to list it *after* <code>$$…$$</code>. Because rules are processed in order, putting a <code>$</code> rule first would match <code>$$</code> and treat as an empty math expression. Here is an example that includes <code>$…$</code>: </p>
-<pre><code>[
-  {left: &quot;$$&quot;, right: &quot;$$&quot;, display: true},
-  // Put $ after $$.
-  {left: &quot;$&quot;, right: &quot;$&quot;, display: false},
-  {left: &quot;\\(&quot;, right: &quot;\\)&quot;, display: false},
-  // Put \[ last to avoid conflict with possible future \\[1em] row separator.
-  {left: &quot;\\[&quot;, right: &quot;\\]&quot;, display: true}
-]</code></pre></li>
-<li><p><code>ignoredTags</code>: This is a list of DOM node types to ignore when recursing through. The default value is <code>[&quot;script&quot;, &quot;noscript&quot;, &quot;style&quot;, &quot;textarea&quot;, &quot;pre&quot;, &quot;code&quot;, &quot;option&quot;]</code>.</p>
-</li>
-<li><p><code>ignoredClasses</code>: This is a list of DOM node class names to ignore when recursing through. By default, this value is not set.</p>
-</li>
-<li><p><code>errorCallback</code>: A callback method returning a message and an error stack in case of an critical error during rendering. The default uses <code>console.error</code>.</p>
-</li>
-<li><p><code>preProcess</code>: A callback function, <code>(math: string) =&gt; string</code>, used to process math expressions before rendering.</p>
-</li>
-</ul>
 <h1 id='extensions'>Extensions</h1>
-<p>More Temml functions can be added via the following extensions:</p>
-<ul><li><code>mhchem</code>: Write beautiful chemical equations easily.</li>
-<li><code>physics</code>: Implements much of the LaTeX <code>physics</code> package.</li>
-<li><code>texvc</code>: Provides functions used in wikimedia.</li>
-</ul>
+<p>More Temml functionality can be added via the following extensions: * <a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render</a>: Find and render all math in a running HTML page. * <a href='https://github.com/ronkok/Temml/tree/main/contrib/mhchem'>mhchem</a>: Write beautiful chemical equations easily. * <a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>physics</a>: Implement much of the LaTeX <code>physics</code> package. * <a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Provide functions used in wikimedia.</p>
 <p>To install extensions for browser use, include the appropriate file from the <code>contrib</code> folder of the Temml repository. Then reference the file in the <code>&lt;head&gt;</code> of the HTML page. As in this <code>mhchem</code> example:</p>
 <pre><code>  &lt;head&gt;
     ...
@@ -201,6 +147,52 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
     &lt;script src=&quot;./mhchem.min.js&quot;&gt;&lt;/script&gt;
   &lt;/head&gt;</code></pre><p>The extension reference must come after the reference to <code>temml.min.js</code>.</p>
 <p>For server-side use, just use <code>temml.cjs</code> instead of <code>temml.min.js</code>. <code>temml.cjs</code> includes <code>mhchem</code>, <code>physics</code>, and <code>texvc</code>.</p>
+<h1 id='security'>Security</h1>
+<p>Any HTML generated by Temml should be safe from <code>&lt;script&gt;</code> or other code injection attacks.</p>
+<p>A variety of options give finer control over the security of Temml with untrusted inputs; refer to <a href='#options'>Options</a> for more details.</p>
+<ul><li><code>maxSize</code> can prevent large width/height visual affronts.</li>
+<li><code>maxExpand</code> can prevent infinite macro loop attacks.</li>
+<li><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</li>
+</ul>
+<p>Of course, it’s never a bad idea to sanitize your HTML. If you so choose, there is a list of Temml tags and attributes below the fold.</p>
+<details><summary>More…</summary>
+<pre><code>allowedTags: [
+  &#x27;span&#x27;, &#x27;img&#x27;, &#x27;math&#x27;, &#x27;annotation&#x27;, &#x27;semantics&#x27;,
+  &#x27;maction&#x27;, &#x27;menclose&#x27;, &#x27;mfrac&#x27;, &#x27;mi&#x27;, &#x27;mmultiscripts&#x27;,
+  &#x27;mn&#x27;, &#x27;mo&#x27;, &#x27;mover&#x27;, &#x27;mpadded&#x27;, &#x27;mphantom&#x27;, &#x27;mroot&#x27;,
+  &#x27;mrow&#x27;, &#x27;mspace&#x27;, &#x27;msub&#x27;, &#x27;msup&#x27;, &#x27;msubsup&#x27;, &#x27;msqrt&#x27;, &#x27;mstyle&#x27;, &#x27;mtable&#x27;,
+  &#x27;mtd&#x27;, &#x27;mtext&#x27;, &#x27;mtr&#x27;, &#x27;munder&#x27;, &#x27;munderover&#x27;
+],
+allowedAttributes: {
+  span: [&#x27;style&#x27;],
+  img: [&#x27;src&#x27;, &#x27;alt&#x27;, &#x27;width&#x27;, &#x27;height&#x27;],
+  math: [&#x27;xmlns&#x27;, &#x27;display&#x27;],
+  annotation: [&#x27;encoding&#x27;],
+  maction: [&#x27;actiontype&#x27;],
+  menclose: [&#x27;notation&#x27;, &#x27;mathbackground&#x27;],
+  mfrac: [&#x27;linethickness&#x27;],
+  mi: [&#x27;mathvariant&#x27;, &#x27;style&#x27;],
+  mn: [&#x27;mathvariant&#x27;, &#x27;style&#x27;],
+  mo: [&#x27;accent&#x27;, &#x27;fence&#x27;, &#x27;form&#x27;, &#x27;height&#x27;, &#x27;largeop&#x27;, &#x27;mathvariant&#x27;, &#x27;mathcolor&#x27;, &#x27;movablelimits&#x27;,
+       &#x27;separator&#x27;, &#x27;stretchy&#x27;, &#x27;linebreak&#x27;, &#x27;minsize&#x27;, &#x27;maxsize&#x27;, &#x27;lspace&#x27;, &#x27;rspace&#x27;],
+  mpadded: [&#x27;width&#x27;, &#x27;height&#x27;, &#x27;depth&#x27;, &#x27;lspace&#x27;, &#x27;rspace&#x27;, &#x27;voffset&#x27;, &#x27;mathbackground&#x27;, &#x27;style&#x27;],
+  mrow: [&#x27;data&#x27;, &#x27;href&#x27;, &#x27;id&#x27;], // See `trust` rendering option.
+  mspace: [&#x27;mathbackground&#x27;, &#x27;width&#x27;, &#x27;height&#x27;],
+  mstyle: [&#x27;displaystyle&#x27;, &#x27;mathcolor&#x27;, &#x27;mathsize&#x27;, &#x27;scriptlevel&#x27;, &#x27;style&#x27;],
+  mtable: [&#x27;columnalign&#x27;, &#x27;rowspacing&#x27;, &#x27;columnspacing&#x27;, &#x27;columnlines&#x27;, &#x27;rowlines&#x27;,
+           &#x27;width&#x27;, &#x27;scriptlevel&#x27;],
+  mtd: [&#x27;columnalign&#x27;, &#x27;style&#x27;],
+  mtext: [&#x27;mathvariant&#x27;],
+  munder: [&#x27;accentunder&#x27;],
+  mover: [&#x27;accent&#x27;]
+},
+allowedClasses: [
+  // Temml creates these classes:
+  &#x27;mathcal&#x27;, &#x27;mathscr&#x27;, &#x27;oldstylenums&#x27;, &#x27;temml-error&#x27;, &#x27;tml-eqn&#x27;, &#x27;tml-tageqn&#x27;, &#x27;tml-label&#x27;, &#x27;tml-tag&#x27;
+  // If the trust setting allows \class, then users can create their own classes.
+]
+// The \label function can create HTML ids. These ids can contain only the characters [A-Za-z_0-9-]
+// An \id function, if allowed by the trust settings, can create HTML ids with unrestricted contents.</code></pre></details>
 <br>
 <p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 <br>
@@ -226,9 +218,9 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </li>
 <li><p><a href='#equation-numbering'>Equation numbering</a></p>
 </li>
-<li><p><a href='#auto-render-extension'>Auto-Render Extension</a></p>
-</li>
 <li><p><a href='#extensions'>Extensions</a></p>
+</li>
+<li><p><a href='#security'>Security</a></p>
 </li>
 </ul>
 <h3 id='elsewhere'>Elsewhere</h3>

@@ -2,13 +2,18 @@
 
 This extension adds to Temml the `\ce` and `\pu` functions from the [mhchem](https://mhchem.github.io/MathJax-mhchem/) package.
 
+You can download the `mhchem.min.js` file from this repository.
+
 ### Usage
 
-This extension isn't part of core Temml, so the script should be separately included. Write the following line into the HTML page's `<head>`. Place it *after* the line that calls `temml.js`.
+This extension isn't part of core Temml, so the script should be separately included. Write the following line into the HTML page's `<head>`. Place it _after_ the line that calls `temml.js`.
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/katex@0.1.0/dist/contrib/mhchem.min.js"></script>
+<script src="./temml.min.js"></script>
+<script src="./mhchem.min.js"></script>
 ```
+
+If you are working sever-side, just use `temml.cjs`. It already includes all the functions in `mhchem.js`.
 
 ### Syntax
 

@@ -170,7 +170,7 @@ Available options are:
 
 The `postProcess` function implements the AMS functions `\ref` and `\label`. It should be called outside of any loop.
 
-Unlike other Temml functions, the `postProcess` function makes two passes through the entire document. In contrast, `temml.render` and `temml.renderToString` each operate on only one element at a time. If you choose not to support `\ref`, `postProcess` can be omitted.
+The main Temml functions, `temml.render` and `temml.renderToString`, each operate on only one element at a time. In contrast, the `postProcess` function makes two passes through the entire document. If you choose not to support `\ref`, `postProcess` can be omitted.
 
 If Temml is used server-side, `\ref` and `\label` are still implemented at runtime with client-side JavaScript. A small file, `temmlPostProcess.js`, is provided to be installed in place of `temml.min.js`. It exposes one function:
 
@@ -178,9 +178,9 @@ If Temml is used server-side, `\ref` and `\label` are still implemented at runti
 temml.postProcess(document.body)
 ```
 
-If you do not do a runtime `postProcess`, everthing in Temml will work except `\ref`.
+If you do not provide a runtime `postProcess`, everthing in Temml will work except `\ref`.
 
-If you use the [auto-render extension](#auto-render-extension), it includes the post-processor nuances.
+If you use the [auto-render extension][https://github.com/ronkok/Temml/tree/main/contrib/auto-render], it includes the post-processor nuances.
 
 # Fonts
 
@@ -202,7 +202,7 @@ Where to find font files:
 
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
-If you want a different math font size, you can edit add a rule to your own page's CSS, like this example:
+If you want a different math font size, you can add a rule to your own page's CSS, like this example:
 
 ```css
 math { font-size: 125%; }
@@ -235,101 +235,18 @@ Then the automatic equation numbering in that chapter would look like: (3.1)
 If your site does not render automatic numbering properly, check if your other
 CSS has overwritten the Temml counter-reset.
 
-# Auto-Render Extension
-
-The auto-render extension is a client-side JavaScript function that can automatically
-render all of the math inside of text. It searches all of the text nodes within a given 
-element for the specified delimiters, ignoring certain tags like `<pre>`, and renders the math in place.
-
-This extension isn't part of Temml proper, so the script needs to be included
-(via a `<script>` tag) in the page along with Temml itself.  For example:
-
-```html
-<head>
-   ...
-<link rel="stylesheet" href="./Temml-Local.css">
-<script src="./temml.min.js"></script>
-<script src="./auto-render.min.js"></script>
-  ...
-</head>
-<body>
-  ...
-<script>renderMathInElement(document.body);</script>
-</body>
-```
-
-The auto-render extension exposes a single function, `window.renderMathInElement`, with
-the following API:
-
-```js
-function renderMathInElement(elem, options)
-```
-
-`elem` is an HTML DOM element. The function will recursively search for text
-nodes inside this element and render the math in them.
-
-`options` is an optional object argument that can have the same keys as [the
-options passed to `temml.render`](#options), in addition to two auto-render-specific keys:
-
-- `delimiters`: This is a list of delimiters to look for math, processed in
-  the same order as the list. Each delimiter has three properties:
-
-    - `left`: A string which starts the math expression (i.e. the left delimiter).
-    - `right`: A string which ends the math expression (i.e. the right delimiter).
-    - `display`: A boolean of whether the math in the expression should be
-      rendered in display mode or not.
-
-  The default `delimiters` value is:
-
-  ```js
-  [
-    { left: "$$", right: "$$", display: true },
-    { left: "\\(", right: "\\)", display: false },
-    { left: "\\begin{equation}", right: "\\end{equation}", display: true },
-    { left: "\\begin{align}",    right: "\\end{align}", display: true },
-    { left: "\\begin{alignat}",  right: "\\end{alignat}", display: true },
-    { left: "\\begin{gather}",   right: "\\end{gather}", display: true },
-    { left: "\\begin{CD}",       right: "\\end{CD}", display: true },
-    { left: "\\begin{multline}", right: "\\end{multline}", display: true },
-    { left: "\\[", right: "\\]", display: true }
-  ]
-  ```
-
-  If you want to add support for inline math via `$…$`, be sure to list it
-  *after* `$$…$$`. Because rules are processed in order, putting a `$` rule first would
-  match `$$` and treat as an empty math expression. Here is an example that includes `$…$`: 
-
-  ```js
-  [
-    {left: "$$", right: "$$", display: true},
-    // Put $ after $$.
-    {left: "$", right: "$", display: false},
-    {left: "\\(", right: "\\)", display: false},
-    // Put \[ last to avoid conflict with possible future \\[1em] row separator.
-    {left: "\\[", right: "\\]", display: true}
-  ]
-  ```
-
-- `ignoredTags`: This is a list of DOM node types to ignore when recursing
-  through. The default value is
-  `["script", "noscript", "style", "textarea", "pre", "code", "option"]`.
-
-- `ignoredClasses`: This is a list of DOM node class names to ignore when
-  recursing through. By default, this value is not set.
-
-- `errorCallback`: A callback method returning a message and an error stack
-  in case of an critical error during rendering. The default uses `console.error`.
-
-- `preProcess`: A callback function, `(math: string) => string`, used to process
-  math expressions before rendering.
-
 # Extensions
 
-More Temml functions can be added via the following extensions:
+More Temml functionality can be added via the following extensions:
+* [auto-render][]: Find and render all math in a running HTML page.
+* [mhchem][]: Write beautiful chemical equations easily.
+* [physics][]: Implement much of the LaTeX `physics` package.
+* [texvc][]: Provide functions used in wikimedia.
 
-* `mhchem`: Write beautiful chemical equations easily.
-* `physics`: Implements much of the LaTeX `physics` package.
-* `texvc`: Provides functions used in wikimedia.
+[auto-render]: https://github.com/ronkok/Temml/tree/main/contrib/auto-render
+[mhchem]: https://github.com/ronkok/Temml/tree/main/contrib/mhchem
+[physics]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
+[texvc]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
 
 To install extensions for browser use, include the appropriate file from the `contrib` folder of the Temml repository. Then reference the file in the `<head>` of the HTML page. As in this `mhchem` example:
 
@@ -346,12 +263,70 @@ The extension reference must come after the reference to `temml.min.js`.
 
 For server-side use, just use `temml.cjs` instead of `temml.min.js`. `temml.cjs` includes `mhchem`, `physics`, and `texvc`.
 
+# Security
+
+Any HTML generated by Temml should be safe from `<script>` or other code injection attacks.
+
+A variety of options give finer control over the security of Temml with untrusted inputs;
+refer to [Options](#options) for more details.
+
+- `maxSize` can prevent large width/height visual affronts.
+- `maxExpand` can prevent infinite macro loop attacks.
+- `trust` can allow certain commands that may load external resources or change
+  HTML attributes and thus are not always safe (e.g., `\includegraphics` or `\class`)
+
+Of course, it’s never a bad idea to sanitize your HTML. If you so choose, there is a list
+of Temml tags and attributes below the fold.
+
+<details><summary>More…</summary>
+
+```
+allowedTags: [
+  'span', 'img', 'math', 'annotation', 'semantics',
+  'maction', 'menclose', 'mfrac', 'mi', 'mmultiscripts',
+  'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot',
+  'mrow', 'mspace', 'msub', 'msup', 'msubsup', 'msqrt', 'mstyle', 'mtable',
+  'mtd', 'mtext', 'mtr', 'munder', 'munderover'
+],
+allowedAttributes: {
+  span: ['style'],
+  img: ['src', 'alt', 'width', 'height'],
+  math: ['xmlns', 'display'],
+  annotation: ['encoding'],
+  maction: ['actiontype'],
+  menclose: ['notation', 'mathbackground'],
+  mfrac: ['linethickness'],
+  mi: ['mathvariant', 'style'],
+  mn: ['mathvariant', 'style'],
+  mo: ['accent', 'fence', 'form', 'height', 'largeop', 'mathvariant', 'mathcolor', 'movablelimits',
+       'separator', 'stretchy', 'linebreak', 'minsize', 'maxsize', 'lspace', 'rspace'],
+  mpadded: ['width', 'height', 'depth', 'lspace', 'rspace', 'voffset', 'mathbackground', 'style'],
+  mrow: ['data', 'href', 'id'], // See `trust` rendering option.
+  mspace: ['mathbackground', 'width', 'height'],
+  mstyle: ['displaystyle', 'mathcolor', 'mathsize', 'scriptlevel', 'style'],
+  mtable: ['columnalign', 'rowspacing', 'columnspacing', 'columnlines', 'rowlines',
+           'width', 'scriptlevel'],
+  mtd: ['columnalign', 'style'],
+  mtext: ['mathvariant'],
+  munder: ['accentunder'],
+  mover: ['accent']
+},
+allowedClasses: [
+  // Temml creates these classes:
+  'mathcal', 'mathscr', 'oldstylenums', 'temml-error', 'tml-eqn', 'tml-tageqn', 'tml-label', 'tml-tag'
+  // If the trust setting allows \class, then users can create their own classes.
+]
+// The \label function can create HTML ids. These ids can contain only the characters [A-Za-z_0-9-]
+// An \id function, if allowed by the trust settings, can create HTML ids with unrestricted contents.
+```
+
+</details>
+
 <br>
 
 <p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
-
 </main>
 
 <nav>
@@ -374,8 +349,8 @@ $`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.3
 
 * [Fonts](#fonts)
 * [Equation numbering](#equation-numbering)
-* [Auto-Render Extension](#auto-render-extension)
 * [Extensions](#extensions)
+* [Security](#security)
 
 ### Elsewhere
 
