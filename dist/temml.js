@@ -2058,8 +2058,9 @@ var temml = (function () {
 
   /**
    * Takes a list of nodes, builds them, and returns a list of the generated
-   * MathML nodes.  Also combine consecutive <mtext> outputs into a single
-   * <mtext> tag.
+   * MathML nodes.  Also do a couple chores along the way: 
+   * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
+   * (2)  Suppress spacing between two adjacent relations.
    */
   const buildExpression = function(expression, style, isOrdgroup) {
     if (expression.length === 1) {
