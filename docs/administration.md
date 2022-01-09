@@ -238,6 +238,7 @@ CSS has overwritten the Temml counter-reset.
 # Extensions
 
 More Temml functionality can be added via the following extensions:
+
 * [auto-render][]: Find and render all math in a running HTML page.
 * [mhchem][]: Write beautiful chemical equations easily.
 * [physics][]: Implement much of the LaTeX `physics` package.
