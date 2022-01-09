@@ -138,7 +138,12 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 &lt;/style&gt;</code></pre><p>Then the automatic equation numbering in that chapter would look like: (3.1)</p>
 <p>If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.</p>
 <h1 id='extensions'>Extensions</h1>
-<p>More Temml functionality can be added via the following extensions: * <a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render</a>: Find and render all math in a running HTML page. * <a href='https://github.com/ronkok/Temml/tree/main/contrib/mhchem'>mhchem</a>: Write beautiful chemical equations easily. * <a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>physics</a>: Implement much of the LaTeX <code>physics</code> package. * <a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Provide functions used in wikimedia.</p>
+<p>More Temml functionality can be added via the following extensions:</p>
+<ul><li><a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render</a>: Find and render all math in a running HTML page.</li>
+<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/mhchem'>mhchem</a>: Write beautiful chemical equations easily.</li>
+<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>physics</a>: Implement much of the LaTeX <code>physics</code> package.</li>
+<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Provide functions used in wikimedia.</li>
+</ul>
 <p>To install extensions for browser use, include the appropriate file from the <code>contrib</code> folder of the Temml repository. Then reference the file in the <code>&lt;head&gt;</code> of the HTML page. As in this <code>mhchem</code> example:</p>
 <pre><code>  &lt;head&gt;
     ...
