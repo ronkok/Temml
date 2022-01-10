@@ -106,11 +106,10 @@ export default class Lexer {
       const nlIndex = input.indexOf("\n", this.tokenRegex.lastIndex);
       if (nlIndex === -1) {
         this.tokenRegex.lastIndex = input.length; // EOF
-        this.settings.reportNonstrict(
-          "commentAtEnd",
-          "% comment has no terminating newline; LaTeX would " +
-            "fail because of commenting the end of math mode (e.g. $)"
-        );
+        if (this.settings.strict) {
+          throw new ParseError("% comment has no terminating newline; LaTeX would " +
+              "fail because of commenting the end of math mode")
+        }
       } else {
         this.tokenRegex.lastIndex = nlIndex + 1;
       }
