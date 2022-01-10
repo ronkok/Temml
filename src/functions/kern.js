@@ -4,6 +4,7 @@ import defineFunction from "../defineFunction";
 import mathMLTree from "../mathMLTree";
 import { calculateSize } from "../units";
 import { assertNodeType } from "../parseNode";
+import ParseError from "../ParseError"
 
 // TODO: \hskip and \mskip should support plus and minus in lengths
 
@@ -16,31 +17,23 @@ defineFunction({
     primitive: true,
     allowedInText: true
   },
-  handler({ parser, funcName }, args) {
+  handler({ parser, funcName, token }, args) {
     const size = assertNodeType(args[0], "size");
     if (parser.settings.strict) {
       const mathFunction = funcName[1] === "m"; // \mkern, \mskip
       const muUnit = size.value.unit === "mu";
       if (mathFunction) {
         if (!muUnit) {
-          parser.settings.reportNonstrict(
-            "mathVsTextUnits",
-            `LaTeX's ${funcName} supports only mu units, ` + `not ${size.value.unit} units`
-          );
+          throw new ParseError(`LaTeX's ${funcName} supports only mu units, ` +
+            `not ${size.value.unit} units`, token)
         }
         if (parser.mode !== "math") {
-          parser.settings.reportNonstrict(
-            "mathVsTextUnits",
-            `LaTeX's ${funcName} works only in math mode`
-          );
+          throw new ParseError(`LaTeX's ${funcName} works only in math mode`, token)
         }
       } else {
         // !mathFunction
         if (muUnit) {
-          parser.settings.reportNonstrict(
-            "mathVsTextUnits",
-            `LaTeX's ${funcName} doesn't support mu units`
-          );
+          throw new ParseError(`LaTeX's ${funcName} doesn't support mu units`, token)
         }
       }
     }
