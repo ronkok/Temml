@@ -18,13 +18,7 @@ defineFunction({
 
   handler({ parser }, args, optArgs) {
     const size = optArgs[0];
-    if (parser.settings.displayMode && parser.settings.strict === "warn") {
-      parser.settings.reportNonstrict(
-        "newLineInDisplayMode",
-        "In LaTeX, \\\\ or \\newline " + "does nothing in display mode"
-      )
-    }
-    const newLine = !parser.settings.displayMode || parser.settings.strict !== true;
+    const newLine = !parser.settings.displayMode;
     return {
       type: "cr",
       mode: parser.mode,
