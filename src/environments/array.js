@@ -159,15 +159,17 @@ function parseArray(
     const next = parser.fetch().text;
     if (next === "&") {
       if (maxNumCols && row.length === maxNumCols) {
-        if (singleRow || colSeparationType) {
-          // {equation} or {split}
-          throw new ParseError("Too many tab characters: &", parser.nextToken);
+        if (colSeparationType === "split") {
+          throw new ParseError("The split environment accepts no more than two columns",
+            parser.nextToken);
+        } else if (colSeparationType === "array") {
+          if (parser.settings.strict) {
+            throw new ParseError("Too few columns " + "specified in the {array} column argument.",
+              parser.nextToken)
+          }
         } else {
-          // {array} environment
-          parser.settings.reportNonstrict(
-            "textEnv",
-            "Too few columns " + "specified in the {array} column argument."
-          );
+          throw new ParseError("The equation environment accepts only one column",
+            parser.nextToken)
         }
       }
       parser.consume();
