@@ -34,26 +34,6 @@ export default class Settings {
   }
 
   /**
-   * Report nonstrict (non-LaTeX-compatible) input.
-   * Can safely not be called if `this.strict` is false in JavaScript.
-   */
-  reportNonstrict(errorCode, errorMsg, token) {
-    const strict = this.strict;
-    if (strict === false) {
-      return;
-    } else if (strict === true) {
-      throw new ParseError(
-        "LaTeX-incompatible input and strict mode is set to 'error': " +
-          `${errorMsg} [${errorCode}]`,
-        token
-      );
-    } else {
-      // won't happen in type-safe code
-      return;
-    }
-  }
-
-  /**
    * Check whether to test potentially dangerous input, and return
    * `true` (trusted) or `false` (untrusted).  The sole argument `context`
    * should be an object with `command` field specifying the relevant LaTeX
