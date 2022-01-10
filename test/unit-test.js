@@ -1213,15 +1213,16 @@ const test = () => {
 
   assertion = "An includegraphics builder should work"
   const img = "\\includegraphics[height=0.9em, totalheight=0.9em, width=0.9em, alt=KA logo]{https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png}";
-  new Expect(img).toNotParse()
-  new Expect(img, trustSettings()).toBuild();
+  new Expect(img).toNotParse() // no trust
+  new Expect(img, trustSettings()).toNotBuild();
+  new Expect(img).toParse(trustSettings()) // no trust
   markup = temml.renderToString(img, trustSettings()).replace(mathTagRegEx, "");
   new Expect(markup).toBe(`<mtext><img src='https://cdn.kastatic.org/images/apple-touch-icon-57x57-precomposed.new.png' alt='KA logo' style="height:0.9em;width:0.9em;"/></mtext>`);
 
   assertion = "An HTML extension builder should work"
   const html = r`\id{bar}{x}\class{foo}{x}\style{color: red;}{x}\data{foo=a, bar=b}{x}`;
-  new Expect(html, trustSettings()).toParse();
-  new Expect(html, trustSettings()).toBuild();
+  new Expect(html).toParse(trustSettings());
+  new Expect(html).toBuild(trustSettings());
   let built = build(html, trustSettings())[0].children[0].children;
   new Expect(built[0].attributes.id).toBe("bar");
   new Expect(built[1].classes).toContain("foo");
