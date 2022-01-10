@@ -47,13 +47,13 @@ export const makeRow = function(body) {
 };
 
 const isRel = item => {
-  return (item.type === "atom" && item.family === "rel") || 
+  return (item.type === "atom" && item.family === "rel") ||
       (item.type === "mclass" && item.mclass === "mrel")
 }
 
 /**
  * Takes a list of nodes, builds them, and returns a list of the generated
- * MathML nodes.  Also do a couple chores along the way: 
+ * MathML nodes.  Also do a couple chores along the way:
  * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
  * (2)  Suppress spacing between two adjacent relations.
  */

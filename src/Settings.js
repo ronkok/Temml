@@ -4,7 +4,6 @@
  */
 
 import utils from "./utils";
-import ParseError from "./ParseError";
 
 /**
  * The main Settings object
