@@ -17,9 +17,7 @@ defineFunction({
     const body = args[1];
 
     if (parser.settings.strict) {
-      parser.settings.reportNonstrict(
-        "htmlExtension", "HTML extension is disabled on strict mode"
-      )
+      throw new ParseError(`Function "${funcName}" is disabled in strict mode`, token)
     }
 
     let trustContext;
@@ -68,7 +66,7 @@ defineFunction({
     }
 
     if (!parser.settings.isTrusted(trustContext)) {
-      return parser.formatUnsupportedCmd(funcName);
+      throw new ParseError(`Function "${funcName}" is not trusted`, token)
     }
     return {
       type: "html",
