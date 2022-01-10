@@ -824,9 +824,7 @@ export default class Parser {
         !symbols[this.mode][text[0]]) {
       // This behavior is not strict (XeTeX-compatible) in math mode.
       if (this.settings.strict && this.mode === "math") {
-        this.settings.reportNonstrict(
-          "unicodeTextInMathMode",
-          `Accented Unicode text character "${text[0]}" used in ` + `math mode`,
+        throw new ParseError(`Accented Unicode text character "${text[0]}" used in ` + `math mode`,
           nucleus
         );
       }
@@ -879,17 +877,10 @@ export default class Parser {
       // no symbol for e.g. ^
       if (this.settings.strict) {
         if (!supportedCodepoint(text.charCodeAt(0))) {
-          this.settings.reportNonstrict(
-            "unknownSymbol",
-            `Unrecognized Unicode character "${text[0]}"` + ` (${text.charCodeAt(0)})`,
-            nucleus
-          );
+          throw new ParseError(`Unrecognized Unicode character "${text[0]}"` +
+          ` (${text.charCodeAt(0)})`, nucleus);
         } else if (this.mode === "math") {
-          this.settings.reportNonstrict(
-            "unicodeTextInMathMode",
-            `Unicode text character "${text[0]}" used in math mode`,
-            nucleus
-          );
+          throw new ParseError(`Unicode text character "${text[0]}" used in math mode`, nucleus)
         }
       }
       // All nonmathematical Unicode characters are rendered as if they
