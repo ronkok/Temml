@@ -35,7 +35,7 @@ defineFunction({
     argTypes: ["raw", "url"],
     allowedInText: false
   },
-  handler: ({ parser }, args, optArgs) => {
+  handler: ({ parser, token }, args, optArgs) => {
     let width = { number: 0, unit: "em" }
     let height = { number: 0.9, unit: "em" }  // sorta character sized.
     let totalheight = { number: 0, unit: "em" }
@@ -85,7 +85,7 @@ defineFunction({
         url: src
       })
     ) {
-      return parser.formatUnsupportedCmd("\\includegraphics")
+      throw new ParseError(`Function "\\includegraphics" is not trusted`, token)
     }
 
     return {

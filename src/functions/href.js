@@ -2,6 +2,7 @@ import defineFunction, { ordargument } from "../defineFunction";
 import { assertNodeType } from "../parseNode";
 import { MathNode } from "../mathMLTree";
 import * as mml from "../buildMathML";
+import ParseError from "../ParseError";
 
 defineFunction({
   type: "href",
@@ -11,7 +12,7 @@ defineFunction({
     argTypes: ["url", "original"],
     allowedInText: true
   },
-  handler: ({ parser }, args) => {
+  handler: ({ parser, token }, args) => {
     const body = args[1];
     const href = assertNodeType(args[0], "url").url;
 
@@ -21,7 +22,7 @@ defineFunction({
         url: href
       })
     ) {
-      return parser.formatUnsupportedCmd("\\href");
+      throw new ParseError(`Function "\\href" is not trusted`, token)
     }
 
     return {
@@ -49,7 +50,7 @@ defineFunction({
     argTypes: ["url"],
     allowedInText: true
   },
-  handler: ({ parser }, args) => {
+  handler: ({ parser, token }, args) => {
     const href = assertNodeType(args[0], "url").url;
 
     if (
@@ -58,7 +59,7 @@ defineFunction({
         url: href
       })
     ) {
-      return parser.formatUnsupportedCmd("\\url");
+      throw new ParseError(`Function "\\url" is not trusted`, token)
     }
 
     const chars = [];
