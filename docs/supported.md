@@ -604,21 +604,25 @@ Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ �
 
 ## Macros
 
-+:-----------------------------+:--------------------------------------------------+
-| $`\def\foo{x^2} \foo + \foo` | `\def\foo{x^2} \foo + \foo`                       |
-+------------------------------+---------------------------------------------------+
-|                              | `\edef\macroname#1#2…{definition to be expanded}` |
-+------------------------------+---------------------------------------------------+
-|                              | `\let\foo=\bar`                                   |
-+------------------------------+---------------------------------------------------+
-|                              | `\futurelet\foo\bar x`                            |
-+------------------------------+---------------------------------------------------+
-|                              | `\newcommand\macroname[numargs]{definition}`      |
-+------------------------------+---------------------------------------------------+
-|                              | `\renewcommand\macroname[numargs]{definition}`    |
-+------------------------------+---------------------------------------------------+
-|                              | `\providecommand\macroname[numargs]{definition}`  |
-+------------------------------+---------------------------------------------------+
++:---------------------------------+:--------------------------------------------------------+
+| $`\def\foo#1#2{#1^2 #2^3}        | `\def\macroname<arg list>{definition to be expanded}` \ |
+| \foo a b + \foo c d`             | `\def\foo#1#2{#1^2 #2^3}` \                             |
+|                                  |  `\foo a b + \foo c d`                                  |
++----------------------------------+---------------------------------------------------------+
+|                                  | `\edef\macroname#1#2…{definition}`                      |
++----------------------------------+---------------------------------------------------------+
+|                                  | `\let\foo=\bar`                                         |
++----------------------------------+---------------------------------------------------------+
+|                                  | `\futurelet\foo\bar x`                                  |
++----------------------------------+---------------------------------------------------------+
+| $`\newcommand\foo[2]{#1^2 #2^3}  | `\newcommand\macroname[numargs]{definition}` \          |
+| \foo a b + \foo c d`             | `\newcommand\foo[2]{#1^2 #2^3}` \                       |
+|                                  | `\foo a b + \foo c d`                                   |
++----------------------------------+---------------------------------------------------------+
+|                                  | `\renewcommand\macroname[numargs]{definition}`          |
++----------------------------------+---------------------------------------------------------+
+|                                  | `\providecommand\macroname[numargs]{definition}`        |
++----------------------------------+---------------------------------------------------------+
 
 To create macros with document-wide scope, a [preamble](./administration.html#preamble) can be defined
 as one of the Temml [rendering options](./administration.html#options)
@@ -633,6 +637,19 @@ Available functions include:
 
 Temml macros do not escape their group, so `\gdef`, `\xdef`, and`\global` are not supported.
 Temml has no `\par`, so `\long` is ignored.
+
+## Numbers
+
+Temml’s default mode will consolidate a string of numerals into a single MathML
+`<mn>` element. This applies to any string that begins and ends with a digit
+(0-9) and includes digits, commas, or dots. Example: `<mn>2,000.00</mn>`.
+
+In strict mode, Temml acts like LaTeX and treats each digit individually. This
+is not as nice semantically, but it does maintain backwards compatibility for
+LaTeX macros. Say that a macro is defined as: `\def\foo#1#2{#1^4 #2}`. Then
+strict mode will expand `\foo 12 3` to: `1^4 2 3`. Default Temml will expand
+the same macro to `{12}^4 3` because it treats the string `12` as a single
+token.
 
 ## Operators
 
@@ -1475,6 +1492,7 @@ $`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.5.3
 <li><a href="#logic-and-set-theory">Logic and Set Theory</a></li>
 <li><a href="#macros">Macros</a></li>
 <li>
+<li><a href="#numbers">Numbers</a></li>
 <details><summary>Operators</summary>
 
 * [Big Operators](#big-operators)
