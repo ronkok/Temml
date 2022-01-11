@@ -214,26 +214,6 @@ class Settings {
   }
 
   /**
-   * Report nonstrict (non-LaTeX-compatible) input.
-   * Can safely not be called if `this.strict` is false in JavaScript.
-   */
-  reportNonstrict(errorCode, errorMsg, token) {
-    const strict = this.strict;
-    if (strict === false) {
-      return;
-    } else if (strict === true) {
-      throw new ParseError(
-        "LaTeX-incompatible input and strict mode is set to 'error': " +
-          `${errorMsg} [${errorCode}]`,
-        token
-      );
-    } else {
-      // won't happen in type-safe code
-      return;
-    }
-  }
-
-  /**
    * Check whether to test potentially dangerous input, and return
    * `true` (trusted) or `false` (untrusted).  The sole argument `context`
    * should be an object with `command` field specifying the relevant LaTeX
@@ -2051,13 +2031,13 @@ const makeRow = function(body) {
 };
 
 const isRel = item => {
-  return (item.type === "atom" && item.family === "rel") || 
+  return (item.type === "atom" && item.family === "rel") ||
       (item.type === "mclass" && item.mclass === "mrel")
 };
 
 /**
  * Takes a list of nodes, builds them, and returns a list of the generated
- * MathML nodes.  Also do a couple chores along the way: 
+ * MathML nodes.  Also do a couple chores along the way:
  * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
  * (2)  Suppress spacing between two adjacent relations.
  */
@@ -3260,13 +3240,7 @@ defineFunction({
 
   handler({ parser }, args, optArgs) {
     const size = optArgs[0];
-    if (parser.settings.displayMode && parser.settings.strict === "warn") {
-      parser.settings.reportNonstrict(
-        "newLineInDisplayMode",
-        "In LaTeX, \\\\ or \\newline " + "does nothing in display mode"
-      );
-    }
-    const newLine = !parser.settings.displayMode || parser.settings.strict !== true;
+    const newLine = !parser.settings.displayMode;
     return {
       type: "cr",
       mode: parser.mode,
@@ -4119,15 +4093,17 @@ function parseArray(
     const next = parser.fetch().text;
     if (next === "&") {
       if (maxNumCols && row.length === maxNumCols) {
-        if (singleRow || colSeparationType) {
-          // {equation} or {split}
-          throw new ParseError("Too many tab characters: &", parser.nextToken);
+        if (colSeparationType === "split") {
+          throw new ParseError("The split environment accepts no more than two columns",
+            parser.nextToken);
+        } else if (colSeparationType === "array") {
+          if (parser.settings.strict) {
+            throw new ParseError("Too few columns " + "specified in the {array} column argument.",
+              parser.nextToken)
+          }
         } else {
-          // {array} environment
-          parser.settings.reportNonstrict(
-            "textEnv",
-            "Too few columns " + "specified in the {array} column argument."
-          );
+          throw new ParseError("The equation environment accepts only one column",
+            parser.nextToken)
         }
       }
       parser.consume();
@@ -5389,7 +5365,7 @@ defineFunction({
     argTypes: ["url", "original"],
     allowedInText: true
   },
-  handler: ({ parser }, args) => {
+  handler: ({ parser, token }, args) => {
     const body = args[1];
     const href = assertNodeType(args[0], "url").url;
 
@@ -5399,7 +5375,7 @@ defineFunction({
         url: href
       })
     ) {
-      return parser.formatUnsupportedCmd("\\href");
+      throw new ParseError(`Function "\\href" is not trusted`, token)
     }
 
     return {
@@ -5427,7 +5403,7 @@ defineFunction({
     argTypes: ["url"],
     allowedInText: true
   },
-  handler: ({ parser }, args) => {
+  handler: ({ parser, token }, args) => {
     const href = assertNodeType(args[0], "url").url;
 
     if (
@@ -5436,7 +5412,7 @@ defineFunction({
         url: href
       })
     ) {
-      return parser.formatUnsupportedCmd("\\url");
+      throw new ParseError(`Function "\\url" is not trusted`, token)
     }
 
     const chars = [];
@@ -5479,9 +5455,7 @@ defineFunction({
     const body = args[1];
 
     if (parser.settings.strict) {
-      parser.settings.reportNonstrict(
-        "htmlExtension", "HTML extension is disabled on strict mode"
-      );
+      throw new ParseError(`Function "${funcName}" is disabled in strict mode`, token)
     }
 
     let trustContext;
@@ -5530,7 +5504,7 @@ defineFunction({
     }
 
     if (!parser.settings.isTrusted(trustContext)) {
-      return parser.formatUnsupportedCmd(funcName);
+      throw new ParseError(`Function "${funcName}" is not trusted`, token)
     }
     return {
       type: "html",
@@ -5588,7 +5562,7 @@ defineFunction({
     argTypes: ["raw", "url"],
     allowedInText: false
   },
-  handler: ({ parser }, args, optArgs) => {
+  handler: ({ parser, token }, args, optArgs) => {
     let width = { number: 0, unit: "em" };
     let height = { number: 0.9, unit: "em" };  // sorta character sized.
     let totalheight = { number: 0, unit: "em" };
@@ -5638,7 +5612,7 @@ defineFunction({
         url: src
       })
     ) {
-      return parser.formatUnsupportedCmd("\\includegraphics")
+      throw new ParseError(`Function "\\includegraphics" is not trusted`, token)
     }
 
     return {
@@ -5696,31 +5670,23 @@ defineFunction({
     primitive: true,
     allowedInText: true
   },
-  handler({ parser, funcName }, args) {
+  handler({ parser, funcName, token }, args) {
     const size = assertNodeType(args[0], "size");
     if (parser.settings.strict) {
       const mathFunction = funcName[1] === "m"; // \mkern, \mskip
       const muUnit = size.value.unit === "mu";
       if (mathFunction) {
         if (!muUnit) {
-          parser.settings.reportNonstrict(
-            "mathVsTextUnits",
-            `LaTeX's ${funcName} supports only mu units, ` + `not ${size.value.unit} units`
-          );
+          throw new ParseError(`LaTeX's ${funcName} supports only mu units, ` +
+            `not ${size.value.unit} units`, token)
         }
         if (parser.mode !== "math") {
-          parser.settings.reportNonstrict(
-            "mathVsTextUnits",
-            `LaTeX's ${funcName} works only in math mode`
-          );
+          throw new ParseError(`LaTeX's ${funcName} works only in math mode`, token)
         }
       } else {
         // !mathFunction
         if (muUnit) {
-          parser.settings.reportNonstrict(
-            "mathVsTextUnits",
-            `LaTeX's ${funcName} doesn't support mu units`
-          );
+          throw new ParseError(`LaTeX's ${funcName} doesn't support mu units`, token)
         }
       }
     }
@@ -7633,7 +7599,7 @@ const smallCaps = Object.freeze({
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
 // src/symbols.js.
 
-const numberRegEx = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in Parser.js
+const numberRegEx = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in Parser.js
 
 const latinRegEx = /[A-Ba-z]/;
 
@@ -8026,7 +7992,7 @@ const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriticalMark
 const tokenRegexString =
   `(${spaceRegexString}+)|` + // whitespace
   `${controlSpaceRegexString}|` +  // whitespace
-  "(\\d[\\d.]*" +         // numbers (in non-strict mode)
+  "(number" +         // numbers (in non-strict mode)
   "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
   `${combiningDiacriticalMarkString}*` + // ...plus accents
   "|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
@@ -8045,7 +8011,7 @@ class Lexer {
     this.tokenRegex = new RegExp(
       // Strict Temml, like TeX, lexes one numeral at a time.
       // Default Temml lexes contiguous numerals into a single <mn> element.
-      tokenRegexString.replace("\\d[\\d.]*|", settings.strict ? "" : "\\d[\\d.]*|"),
+      tokenRegexString.replace("number|", settings.strict ? "" : "\\d(?:[\\d,.]*\\d)?|"),
       "g"
     );
     // Category codes. The lexer only supports comment characters (14) for now.
@@ -8083,11 +8049,10 @@ class Lexer {
       const nlIndex = input.indexOf("\n", this.tokenRegex.lastIndex);
       if (nlIndex === -1) {
         this.tokenRegex.lastIndex = input.length; // EOF
-        this.settings.reportNonstrict(
-          "commentAtEnd",
-          "% comment has no terminating newline; LaTeX would " +
-            "fail because of commenting the end of math mode (e.g. $)"
-        );
+        if (this.settings.strict) {
+          throw new ParseError("% comment has no terminating newline; LaTeX would " +
+              "fail because of commenting the end of math mode")
+        }
       } else {
         this.tokenRegex.lastIndex = nlIndex + 1;
       }
@@ -11643,7 +11608,7 @@ var unicodeSymbols = {
 
 /* eslint no-constant-condition:0 */
 
-const numberRegEx$1 = /^\d[\d.]*$/;  // Keep in sync with numberRegEx in symbolsOrd.js
+const numberRegEx$1 = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in symbolsOrd.js
 
 /**
  * This file contains the parser used to parse out a TeX expression from the
@@ -12455,9 +12420,7 @@ class Parser {
         !symbols[this.mode][text[0]]) {
       // This behavior is not strict (XeTeX-compatible) in math mode.
       if (this.settings.strict && this.mode === "math") {
-        this.settings.reportNonstrict(
-          "unicodeTextInMathMode",
-          `Accented Unicode text character "${text[0]}" used in ` + `math mode`,
+        throw new ParseError(`Accented Unicode text character "${text[0]}" used in ` + `math mode`,
           nucleus
         );
       }
@@ -12510,17 +12473,10 @@ class Parser {
       // no symbol for e.g. ^
       if (this.settings.strict) {
         if (!supportedCodepoint(text.charCodeAt(0))) {
-          this.settings.reportNonstrict(
-            "unknownSymbol",
-            `Unrecognized Unicode character "${text[0]}"` + ` (${text.charCodeAt(0)})`,
-            nucleus
-          );
+          throw new ParseError(`Unrecognized Unicode character "${text[0]}"` +
+          ` (${text.charCodeAt(0)})`, nucleus);
         } else if (this.mode === "math") {
-          this.settings.reportNonstrict(
-            "unicodeTextInMathMode",
-            `Unicode text character "${text[0]}" used in math mode`,
-            nucleus
-          );
+          throw new ParseError(`Unicode text character "${text[0]}" used in math mode`, nucleus)
         }
       }
       // All nonmathematical Unicode characters are rendered as if they
@@ -12741,7 +12697,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.5.3";
+const version = "0.6.0";
 
 function postProcess(block) {
   const labelMap = {};
