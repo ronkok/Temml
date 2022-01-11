@@ -1604,7 +1604,8 @@ const test = () => {
   new Expect(r`\text{\yen\checkmark\circledR\maltese}`).toParse(strictSettings())
 
   assertion = "A macro expander should produce individual tokens"
-  new Expect(r`e^\foo`).toParseLike("e^a 23", new Settings({macros: {"\\foo": "a 23"}}))
+  new Expect(r`e^\foo`).toParseLike("e^a 23", new Settings({macros: {"\\foo": "a23"}}))
+  new Expect(r`e^\foo`).toParseLike("e^1 23", new Settings({strict: true, macros: {"\\foo": "123"}}))
   assertion = "A macro expander should preserve leading spaces inside macro definition"
   new Expect(r`\text{\foo}`).toParseLike(r`\text{ x}`, new Settings({macros: {"\\foo": " x"}}))
   assertion = "A macro expander should preserve leading spaces inside macro argument"
@@ -1720,7 +1721,7 @@ const test = () => {
   new Expect(r`\def\foo{x^2}\foo+\foo`).toParseLike(`x^2+x^2`)
   new Expect(r`\def\foo{hi}\foo+\text\foo`).toParseLike(r`hi+\text{hi}`)
   new Expect(r`\def\foo#1{hi #1}\text{\foo{Alice}, \foo{Bob}}`).toParseLike(r`\text{hi Alice, hi Bob}`)
-  new Expect(r`\def\foo#1#2{(#1,#2)}\foo 1 2+\foo 3 4`).toParseLike(r`(1,2)+(3,4)`)
+  new Expect(r`\def\foo#1#2{(#1,#2)}\foo 1 2+\foo 3 4`).toParseLike(r`(1, 2)+(3, 4)`)
   new Expect(r`\def\foo#a{}`).toNotParse()
   new Expect(r`\def\foo#1#2#3#4#5#6#7#8#9{}`).toParse()
   new Expect(r`\def\foo#2{}`).toNotParse()
