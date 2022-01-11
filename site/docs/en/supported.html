@@ -266,11 +266,11 @@ because Cambria Math has chancery in those code points and some other math fonts
 </table>
 <p>Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ ∧ ∨ ↦ → ← ↔ ∅ ⟹ ⟺ ¬ ↯ ℂ ℍ ℕ ℙ ℚ ℝ</span></p>
 <h2 id='macros'>Macros</h2>
-<table><tr><td><math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup></mrow></math></td><td><code>\def\foo{x^2} \foo + \foo</code></td></tr>
-<tr><td></td><td><code>\edef\macroname#1#2…{definition to be expanded}</code></td></tr>
+<table><tr><td><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo></mrow><mrow><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math> </td><td><code>\def\macroname&lt;arg list&gt;{definition to be expanded}</code> <br><code>\def\foo#1#2{#1^2 #2^3}</code> <br> <code>\foo a b + \foo c d</code></td></tr>
+<tr><td></td><td><code>\edef\macroname#1#2…{definition}</code></td></tr>
 <tr><td></td><td><code>\let\foo=\bar</code></td></tr>
 <tr><td></td><td><code>\futurelet\foo\bar x</code></td></tr>
-<tr><td></td><td><code>\newcommand\macroname[numargs]{definition}</code></td></tr>
+<tr><td><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo></mrow><mrow><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math> </td><td><code>\newcommand\macroname[numargs]{definition}</code> <br><code>\newcommand\foo[2]{#1^2 #2^3}</code> <br><code>\foo a b + \foo c d</code></td></tr>
 <tr><td></td><td><code>\renewcommand\macroname[numargs]{definition}</code></td></tr>
 <tr><td></td><td><code>\providecommand\macroname[numargs]{definition}</code></td></tr>
 </table>
@@ -280,6 +280,9 @@ because Cambria Math has chancery in those code points and some other math fonts
 <p><code>\char</code> <code>\mathchoice</code> <code>\TextOrMath</code> <code>\@ifstar</code> <code>\@ifnextchar</code> <code>\@firstoftwo</code> <code>\@secondoftwo</code> <code>\relax</code> <code>\expandafter</code> <code>\noexpand</code></p>
 <p>@ is a valid character for commands, as if <code>\makeatletter</code> were in effect.</p>
 <p>Temml macros do not escape their group, so <code>\gdef</code>, <code>\xdef</code>, and<code>\global</code> are not supported. Temml has no <code>\par</code>, so <code>\long</code> is ignored.</p>
+<h2 id='numbers'>Numbers</h2>
+<p>Temml’s default mode will consolidate a string of numerals into a single MathML <code>&lt;mn&gt;</code> element. This applies to any string that begins and ends with a digit (0-9) and includes digits, commas, or dots. Example: <code>&lt;mn&gt;2,000.00&lt;/mn&gt;</code>.</p>
+<p>In strict mode, Temml acts like LaTeX and treats each digit individually. This is not as nice semantically, but it does maintain backwards compatibility for LaTeX macros. Say that a macro is defined as: <code>\def\foo#1#2{#1^4 #2}</code>. Then strict mode will expand <code>\foo 12 3</code> to: <code>1^4 2 3</code>. Default Temml will expand the same macro to <code>{12}^4 3</code> because it treats the string <code>12</code> as a single token.</p>
 <h2 id='operators'>Operators</h2>
 <h3 id='big-operators'>Big Operators</h3>
 <table><tr><td><math><mo movablelimits="false">∑</mo></math> <code>\sum</code></td><td><math><mo movablelimits="false">∏</mo></math> <code>\prod</code></td><td><math><mo movablelimits="false">⨂</mo></math> <code>\bigotimes</code></td><td><math><mo movablelimits="false">⋁</mo></math> <code>\bigvee</code></td></tr>
@@ -641,6 +644,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <li><a href="#logic-and-set-theory">Logic and Set Theory</a></li>
 <li><a href="#macros">Macros</a></li>
 <li>
+<li><a href="#numbers">Numbers</a></li>
 <details><summary>Operators</summary>
 <ul><li><a href='#big-operators'>Big Operators</a></li>
 <li><a href='#binary-operators'>Binary Operators</a></li>
