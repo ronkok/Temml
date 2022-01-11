@@ -7,7 +7,7 @@ import * as mml from "../buildMathML"
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
 // src/symbols.js.
 
-const numberRegEx = /^\d[\d.]*$/  // Keep in sync with numberRegEx in Parser.js
+const numberRegEx = /^\d(?:[\d,.]*\d)?$/  // Keep in sync with numberRegEx in Parser.js
 
 const latinRegEx = /[A-Ba-z]/
 

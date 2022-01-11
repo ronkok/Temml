@@ -12,7 +12,7 @@ import SourceLocation from "./SourceLocation";
 import unicodeAccents from /*preval*/ "./unicodeAccents";
 import unicodeSymbols from /*preval*/ "./unicodeSymbols";
 
-const numberRegEx = /^\d[\d.]*$/  // Keep in sync with numberRegEx in symbolsOrd.js
+const numberRegEx = /^\d(?:[\d,.]*\d)?$/  // Keep in sync with numberRegEx in symbolsOrd.js
 
 /**
  * This file contains the parser used to parse out a TeX expression from the

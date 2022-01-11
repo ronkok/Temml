@@ -49,7 +49,7 @@ export const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriti
 const tokenRegexString =
   `(${spaceRegexString}+)|` + // whitespace
   `${controlSpaceRegexString}|` +  // whitespace
-  "(\\d[\\d.]*" +         // numbers (in non-strict mode)
+  "(number" +         // numbers (in non-strict mode)
   "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
   `${combiningDiacriticalMarkString}*` + // ...plus accents
   "|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
@@ -68,7 +68,7 @@ export default class Lexer {
     this.tokenRegex = new RegExp(
       // Strict Temml, like TeX, lexes one numeral at a time.
       // Default Temml lexes contiguous numerals into a single <mn> element.
-      tokenRegexString.replace("\\d[\\d.]*|", settings.strict ? "" : "\\d[\\d.]*|"),
+      tokenRegexString.replace("number|", settings.strict ? "" : "\\d(?:[\\d,.]*\\d)?|"),
       "g"
     );
     // Category codes. The lexer only supports comment characters (14) for now.
