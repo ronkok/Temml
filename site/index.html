@@ -260,17 +260,17 @@
     navigator.clipboard.writeText(copyText)
   }
 
-  const symbols = /[\r\n%#()<>?[\\\]^`{|}]/g
+  const symbols = /[\r\n%#"()<>?[\\\]^`{|}]/g
   function createPermalink() {
-    const mathML = input.value
-    if (mathML && mathML.length > 0) {
-      location.hash = "#" + mathML.replace(symbols, encodeURIComponent)
+    const tex = input.value
+    if (tex && tex.length > 0) {
+      location.hash = "#" + tex.replace(symbols, encodeURIComponent)
     }
   }
 
   function getHash()  {
     const hash = location.hash
-    if (hash.length > 1) {
+    if (hash && hash.length > 1) {
       const tex = decodeURIComponent(hash.slice(1))
       input.textContent = tex
       reprocess()
