@@ -213,8 +213,8 @@
 <tr><td>\Bqty</td><td><math><mrow><mo fence="true" form="prefix">{</mo><mn>5</mn><mtext>mm</mtext><mo fence="true" form="postfix">}</mo></mrow></math></td><td><code>\Bqty{5 \text{mm}}</code></td><td>physics extension </td></tr>
 <tr><td>\bqty</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mn>5</mn><mtext>mm</mtext><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\bqty{5 \text{mm}}</code></td><td>physics extension </td></tr>
 <tr><td>\Bra</td><td><math><mrow><mo fence="true" form="prefix">⟨</mo><mi>ψ</mi><mo fence="true" form="postfix">|</mo></mrow></math></td><td><code>\Bra{\psi}</code></td><td>braket </td></tr>
-<tr><td>\bra</td><td><math><mrow><mo form="prefix" stretchy="false">⟨</mo><mi>ψ</mi><mi>|</mi></mrow></math></td><td><code>\bra{\psi}</code></td><td>braket </td></tr>
-<tr><td>\braket</td><td><math><mrow><mo form="prefix" stretchy="false">⟨</mo><mrow><mi>ϕ</mi><mi>|</mi><mi>ψ</mi></mrow><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td><td><code>\braket{\phi\|\psi}</code></td><td>braket </td></tr>
+<tr><td>\bra</td><td><math><mpadded><mo form="prefix" stretchy="false">⟨</mo><mi>ψ</mi><mi>|</mi></mpadded></math></td><td><code>\bra{\psi}</code></td><td>braket </td></tr>
+<tr><td>\braket</td><td><math><mpadded><mo form="prefix" stretchy="false">⟨</mo><mrow><mi>ϕ</mi><mi>|</mi><mi>ψ</mi></mrow><mo form="postfix" stretchy="false">⟩</mo></mpadded></math></td><td><code>\braket{\phi\|\psi}</code></td><td>braket </td></tr>
 <tr><td>\Braket</td><td><math><mrow><mo fence="true" form="prefix">⟨</mo><mi>ϕ</mi><mspace width="0.1667em"></mspace><mo fence="true" lspace="0.05em" rspace="0.05em">|</mo><mspace width="0.1667em"></mspace><mfrac><msup><mi>∂</mi><mn>2</mn></msup><mrow><mi>∂</mi><msup><mi>t</mi><mn>2</mn></msup></mrow></mfrac><mspace width="0.1667em"></mspace><mo fence="true" lspace="0.05em" rspace="0.05em">|</mo><mspace width="0.1667em"></mspace><mi>ψ</mi><mo fence="true" form="postfix">⟩</mo></mrow></math></td><td><code>\Braket{ϕ\|\frac{∂^2}{∂ t^2}\|ψ}</code></td><td>braket</td></tr>
 <tr><td>\brace</td><td><math><mrow><mo fence="true">{</mo><mfrac linethickness="0px"><mi>n</mi><mi>k</mi></mfrac><mo fence="true">}</mo></mrow></math></td><td><code>{n\brace k}</code></td><td></td></tr>
 <tr><td>\bracevert</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
@@ -611,7 +611,7 @@
 <tr><td>\ker     </td><td><math><mrow><mi>ker</mi><mo>⁡</mo></mrow></math></td><td></td><td></td></tr>
 <tr><td>\kern    </td><td><math><mrow><mi>I</mi><mspace width="-2.4907pt"></mspace><mi>R</mi></mrow></math></td><td><code>I\kern-2.5pt R</code></td><td></td></tr>
 <tr><td>\Ket     </td><td><math><mrow><mo fence="true" form="prefix">|</mo><mi>ψ</mi><mo fence="true" form="postfix">⟩</mo></mrow></math></td><td><code>\Ket{\psi}</code></td><td>braket            </td></tr>
-<tr><td>\ket     </td><td><math><mrow><mi>|</mi><mi>ψ</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td><td><code>\ket{\psi}</code></td><td>braket            </td></tr>
+<tr><td>\ket     </td><td><math><mpadded><mi>|</mi><mi>ψ</mi><mo form="postfix" stretchy="false">⟩</mo></mpadded></math></td><td><code>\ket{\psi}</code></td><td>braket            </td></tr>
 <tr><td>\ketbra  </td><td><math><mrow><mrow><mo fence="true" form="prefix">|</mo><mi>a</mi><mo fence="true" form="postfix">⟩</mo></mrow><mrow><mo fence="true" form="prefix">⟨</mo><mi>b</mi><mo fence="true" form="postfix">|</mo></mrow></mrow></math></td><td><code>\ketbra{a}{b}</code></td><td>physics extension </td></tr>
 <tr><td>\Koppa   </td><td><math><mi>Ϟ</mi></math></td><td></td><td></td></tr>
 <tr><td>\koppa   </td><td><math><mi>ϟ</mi></math></td><td></td><td></td></tr>
@@ -741,7 +741,7 @@
 <tr><td>\mathclose</td><td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>b</mi><mo mathvariant="italic" lspace="0em" rspace="0em">&gt;</mo></mrow><mrow><mo>+</mo></mrow><mrow><mi>c</mi></mrow></math></td><td><code>a + (b\mathclose\gt + c</code></td><td></td></tr>
 <tr><td>\mathellipsis</td><td><math><mo>…</mo></math></td><td></td><td></td></tr>
 <tr><td>\mathfrak</td><td><math><mrow><mi>𝔄</mi><mi>𝔞</mi><mi>𝔅</mi><mi>𝔟</mi></mrow></math></td><td><code>\mathfrak{AaBb}</code></td><td>ams </td></tr>
-<tr><td>\mathinner</td><td><math><mrow><mi>a</mi><mi>b</mi><mi>inside</mi><mi>c</mi><mi>d</mi></mrow></math></td><td><code>ab\mathinner{\text{inside}}cd</code></td><td></td></tr>
+<tr><td>\mathinner</td><td><math><mrow><mi>a</mi><mi>b</mi><mpadded><mi>inside</mi></mpadded><mi>c</mi><mi>d</mi></mrow></math></td><td><code>ab\mathinner{\text{inside}}cd</code></td><td></td></tr>
 <tr><td>\mathit</td><td><math><mrow><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi></mrow></math></td><td><code>\mathit{AaBb}</code></td><td></td></tr>
 <tr><td>\mathllap</td><td><math><mrow><mo lspace="0em" rspace="0em">=</mo><mpadded lspace="-1width" width="0px"><mrow><mo lspace="0em" rspace="0em">⁄</mo><mspace width="0.1667em"></mspace></mrow></mpadded></mrow></math></td><td><code>{=}\mathllap{/\,}</code></td><td>mathtools </td></tr>
 <tr><td>\mathnormal</td><td><math><mrow><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi></mrow></math></td><td><code>\mathnormal{AaBb}</code></td><td></td></tr>
@@ -1492,7 +1492,7 @@
 </main>
 <nav>
 <div id="sidebar" class="narrow">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.0</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.1</p>
 <div style="height:0.5em;"></div>
 <ul><li><a href='#symbols'>Symbols</a></li>
 <li><a href='#a'>A</a></li>

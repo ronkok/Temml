@@ -5879,7 +5879,7 @@ function mathmlBuilder$7(group, style) {
   const inner = buildExpression(group.body, style);
 
   if (group.mclass === "minner") {
-    return mathMLTree.newDocumentFragment(inner);
+    node = new mathMLTree.MathNode("mpadded", inner);
   } else if (group.mclass === "mord") {
     if (group.isCharacterBox || inner[0].type === "mathord") {
       node = inner[0];
@@ -5915,6 +5915,9 @@ function mathmlBuilder$7(group, style) {
     } else if (group.mclass === "mopen" || group.mclass === "mclose") {
       node.attributes.lspace = "0em";
       node.attributes.rspace = "0em";
+    } else if (group.mclass === "minner" && doSpacing) {
+      node.attributes.lspace = "0.0556em"; // 1 mu is the most likely option
+      node.attributes.width = "+0.1111em";
     }
     if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
       delete node.attributes.stretchy;
@@ -12695,7 +12698,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.6.0";
+const version = "0.6.1";
 
 function postProcess(block) {
   const labelMap = {};

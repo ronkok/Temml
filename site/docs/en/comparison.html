@@ -25,7 +25,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.6.0, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.6.1, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -1378,7 +1378,7 @@
           </tr>
           <tr>
             <td>\bra</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⟨</mo><mi>ψ</mi><mi>|</mi></mrow></math></td>
+            <td><math><mpadded><mo form="prefix" stretchy="false">⟨</mo><mi>ψ</mi><mi>|</mi></mpadded></math></td>
             <td>Requires extension</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⟨</mo><mi>ψ</mi><mi mathvariant="normal">∣</mi></mrow><annotation encoding="application/x-tex">\bra{\psi}</annotation></semantics></math></span></td>
             <td data-tex="\bra{\psi}"><span class="no-sup">Not supported</span></td>
@@ -1402,7 +1402,7 @@
           </tr>
           <tr>
             <td>\braket</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⟨</mo><mrow><mi>ϕ</mi><mi>|</mi><mi>ψ</mi></mrow><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td>
+            <td><math><mpadded><mo form="prefix" stretchy="false">⟨</mo><mrow><mi>ϕ</mi><mi>|</mi><mi>ψ</mi></mrow><mo form="postfix" stretchy="false">⟩</mo></mpadded></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⟨</mo><mrow><mi>ϕ</mi><mi mathvariant="normal">∣</mi><mi>ψ</mi></mrow><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">\braket{\phi|\psi}</annotation></semantics></math></span></td>
             <td data-tex="\braket{\phi|\psi}"><span class="no-sup">Not supported</span></td>
@@ -3862,7 +3862,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\ket</td>
-            <td><math><mrow><mi>|</mi><mi>ψ</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td>
+            <td><math><mpadded><mi>|</mi><mi>ψ</mi><mo form="postfix" stretchy="false">⟩</mo></mpadded></math></td>
             <td>Requires extension</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">∣</mi><mi>ψ</mi><mo stretchy="false">⟩</mo></mrow><annotation encoding="application/x-tex">\ket{\psi}</annotation></semantics></math></span></td>
             <td data-tex="\ket{\psi}"><span class="no-sup">Not supported</span></td>
@@ -4790,7 +4790,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathinner</td>
-            <td><math><mrow><mi>a</mi><mi>b</mi><mi>inside</mi><mi>c</mi><mi>d</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mi>b</mi><mpadded><mi>inside</mi></mpadded><mi>c</mi><mi>d</mi></mrow></math></td>
             <td>\(ab\mathinner{\text{inside}}cd\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mi>b</mi><mtext>inside</mtext><mi>c</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">ab\mathinner{\text{inside}}cd</annotation></semantics></math></span></td>
             <td data-tex="ab\mathinner{\text{inside}}cd"><span class="no-sup">Not supported</span></td>
