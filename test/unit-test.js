@@ -245,6 +245,10 @@ const test = () => {
     new Expect(nodes[i].family).toBe("rel");
   }
 
+  assertion = "Parser should build a \\mathinner"
+  new Expect(r`\mathinner{\langle{\psi}\rangle}`).toParse()
+  new Expect(r`\frac 1 {\mathinner{\langle{\psi}\rangle}}`).toParse()
+
   assertion = "Parse should build a list of puncts"
   nodes = parse(",;")
   for (let i = 0; i < nodes.length; i++) {
