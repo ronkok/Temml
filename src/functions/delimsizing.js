@@ -7,7 +7,7 @@ import { assertNodeType, checkSymbolNodeType } from "../parseNode";
 import * as mml from "../buildMathML";
 
 // Extra data needed for the delimiter handler down below
-const delimiterSizes = {
+export const delimiterSizes = {
   "\\bigl": { mclass: "mopen", size: 1 },
   "\\Bigl": { mclass: "mopen", size: 2 },
   "\\biggl": { mclass: "mopen", size: 3 },
@@ -26,7 +26,7 @@ const delimiterSizes = {
   "\\Bigg": { mclass: "mord", size: 4 }
 };
 
-const delimiters = [
+export const delimiters = [
   "(",
   "\\lparen",
   ")",
