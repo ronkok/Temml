@@ -35,15 +35,17 @@ const mathmlBuilder = (group, style) => {
     node = new mathMLTree.MathNode("mi", [new mathMLTree.TextNode(group.name.slice(1))]);
 
     if (!group.parentIsSupSub) {
-      // Append an <mo>&ApplyFunction;</mo>.
+      // Append an invisible <mo>&ApplyFunction;</mo>.
       // ref: https://www.w3.org/TR/REC-MathML/chap3_2.html#sec3.2.4
       const operator = new mathMLTree.MathNode("mo", [mml.makeText("\u2061", "text")]);
+      node = new mathMLTree.MathNode("mpadded", [node, operator])
+      const lSpace = group.needsLeadingSpace ? 0.1667 : 0
+      const rSpace = group.isFollowedByOpenParen ? 0 : 0.1666
       if (group.needsLeadingSpace) {
-        const space = new mathMLTree.MathNode("mspace")
-        space.setAttribute("width", "0.1667em") // thin space.
-        node = mathMLTree.newDocumentFragment([space, node, operator]);
-      } else {
-        node = mathMLTree.newDocumentFragment([node, operator]);
+        node.setAttribute("lspace", "0.1667em") // thin space.
+      }
+      if ((lSpace + rSpace) > 0) {
+        node.setAttribute("width", `+${lSpace + rSpace}em`)
       }
     }
   }
@@ -219,6 +221,7 @@ defineFunction({
   },
   handler({ parser, funcName }) {
     const prevAtomType = parser.prevAtomType
+    const next = parser.gullet.future().text
     return {
       type: "op",
       mode: parser.mode,
@@ -226,6 +229,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
+      isFollowedByOpenParen: (next.length > 0 && "([|".indexOf(next) > -1),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
       name: funcName
     };
@@ -242,6 +246,7 @@ defineFunction({
   },
   handler({ parser, funcName }) {
     const prevAtomType = parser.prevAtomType
+    const next = parser.gullet.future().text
     return {
       type: "op",
       mode: parser.mode,
@@ -249,6 +254,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
+      isFollowedByOpenParen: (next.length > 0 && "([|".indexOf(next) > -1),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
       name: funcName
     };

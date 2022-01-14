@@ -8,7 +8,7 @@ const mathmlBuilder = (group, style) => {
   const mathGroup = mml.buildGroup(group.body, newStyle)
 
   if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
-  if (mathGroup.type === "mo" && font === "boldsymbol") {
+  if (font === "boldsymbol" && ["mo", "mpadded"].includes(mathGroup.type)) {
     mathGroup.style.fontWeight = "bold"
     return mathGroup
   }
@@ -58,7 +58,6 @@ defineFunction({
     "\\mathbf",
     "\\mathnormal",
     "\\up@greek",
-    "\\pmb",
     "\\boldsymbol",
 
     // families
