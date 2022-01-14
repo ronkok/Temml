@@ -6171,6 +6171,8 @@ defineFunction({
 
 // Limits, symbols
 
+// Some helpers
+
 const ordAtomTypes = ["textord", "mathord", "atom"];
 
 // Most operators have a large successor symbol, but these don't.
@@ -6178,6 +6180,9 @@ const noSuccessor = ["\\smallint"];
 
 // Math operators (e.g. \sin) need a space between these types and themselves:
 const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"];
+
+const isDelimiter = str => str.length > 0 &&
+  (delimiters.includes(str) || delimiterSizes[str] || str === "}");
 
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
@@ -6206,7 +6211,7 @@ const mathmlBuilder$8 = (group, style) => {
       const operator = new MathNode("mo", [makeText("\u2061", "text")]);
       node = new MathNode("mpadded", [node, operator]);
       const lSpace = group.needsLeadingSpace ? 0.1667 : 0;
-      const rSpace = group.isFollowedByOpenParen ? 0 : 0.1666;
+      const rSpace = group.isFollowedByDelimiter ? 0 : 0.1666;
       if (group.needsLeadingSpace) {
         node.setAttribute("lspace", "0.1667em"); // thin space.
       }
@@ -6395,7 +6400,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      isFollowedByOpenParen: (next.length > 0 && "([|".indexOf(next) > -1),
+      isFollowedByDelimiter: isDelimiter(next),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
       name: funcName
     };
@@ -6420,7 +6425,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      isFollowedByOpenParen: (next.length > 0 && "([|".indexOf(next) > -1),
+      isFollowedByDelimiter: isDelimiter(next),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
       name: funcName
     };
@@ -12703,7 +12708,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.6.2";
+const version = "0.6.3";
 
 function postProcess(block) {
   const labelMap = {};
