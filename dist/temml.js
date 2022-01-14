@@ -2040,7 +2040,7 @@ var temml = (function () {
    * Takes a list of nodes, builds them, and returns a list of the generated
    * MathML nodes.  Also do a couple chores along the way:
    * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
-   * (2)  Suppress spacing between two adjacent relations.
+   * (2) Suppress spacing between two adjacent relations.
    */
   const buildExpression = function(expression, style, isOrdgroup) {
     if (expression.length === 1) {
@@ -4890,7 +4890,7 @@ var temml = (function () {
     const mathGroup = buildGroup(group.body, newStyle);
 
     if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
-    if (mathGroup.type === "mo" && font === "boldsymbol") {
+    if (font === "boldsymbol" && ["mo", "mpadded"].includes(mathGroup.type)) {
       mathGroup.style.fontWeight = "bold";
       return mathGroup
     }
@@ -4940,7 +4940,6 @@ var temml = (function () {
       "\\mathbf",
       "\\mathnormal",
       "\\up@greek",
-      "\\pmb",
       "\\boldsymbol",
 
       // families
@@ -6205,15 +6204,17 @@ var temml = (function () {
       node = new MathNode("mi", [new TextNode$1(group.name.slice(1))]);
 
       if (!group.parentIsSupSub) {
-        // Append an <mo>&ApplyFunction;</mo>.
+        // Append an invisible <mo>&ApplyFunction;</mo>.
         // ref: https://www.w3.org/TR/REC-MathML/chap3_2.html#sec3.2.4
         const operator = new MathNode("mo", [makeText("\u2061", "text")]);
+        node = new MathNode("mpadded", [node, operator]);
+        const lSpace = group.needsLeadingSpace ? 0.1667 : 0;
+        const rSpace = group.isFollowedByOpenParen ? 0 : 0.1666;
         if (group.needsLeadingSpace) {
-          const space = new MathNode("mspace");
-          space.setAttribute("width", "0.1667em"); // thin space.
-          node = newDocumentFragment([space, node, operator]);
-        } else {
-          node = newDocumentFragment([node, operator]);
+          node.setAttribute("lspace", "0.1667em"); // thin space.
+        }
+        if ((lSpace + rSpace) > 0) {
+          node.setAttribute("width", `+${lSpace + rSpace}em`);
         }
       }
     }
@@ -6389,6 +6390,7 @@ var temml = (function () {
     },
     handler({ parser, funcName }) {
       const prevAtomType = parser.prevAtomType;
+      const next = parser.gullet.future().text;
       return {
         type: "op",
         mode: parser.mode,
@@ -6396,6 +6398,7 @@ var temml = (function () {
         parentIsSupSub: false,
         symbol: false,
         stack: false,
+        isFollowedByOpenParen: (next.length > 0 && "([|".indexOf(next) > -1),
         needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
         name: funcName
       };
@@ -6412,6 +6415,7 @@ var temml = (function () {
     },
     handler({ parser, funcName }) {
       const prevAtomType = parser.prevAtomType;
+      const next = parser.gullet.future().text;
       return {
         type: "op",
         mode: parser.mode,
@@ -6419,6 +6423,7 @@ var temml = (function () {
         parentIsSupSub: false,
         symbol: false,
         stack: false,
+        isFollowedByOpenParen: (next.length > 0 && "([|".indexOf(next) > -1),
         needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
         name: funcName
       };
@@ -10801,7 +10806,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.6.1";
+  const version = "0.6.2";
 
   function postProcess(block) {
     const labelMap = {};

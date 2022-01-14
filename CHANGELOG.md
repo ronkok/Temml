@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.2] = 2022-01-13
+
+### Fixed
+
+- \bm{\sin}
+- Remove spurious space between \sin (x)
+
 ## [0.6.1] = 2022-01-12
 
 ### Fixed
