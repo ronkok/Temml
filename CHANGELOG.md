@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.4] = 2022-01-15
+
+### Fixed
+
+- More improvement of recognition of delimiters after functions like \sin
+
 ## [0.6.3] = 2022-01-14
 
 ### Fixed

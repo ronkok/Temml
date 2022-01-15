@@ -17,3 +17,7 @@ fs.writeFileSync('./site/tests/mozilla-tests.html', mozillaTests)
 let wikiTests = fs.readFileSync('./test/wiki-tests.md').toString('utf8')
 wikiTests = hurmetMark.hmd.md2html(wikiTests, true)
 fs.writeFileSync('./site/tests/wiki-tests.html', wikiTests)
+
+let latexmlTests = fs.readFileSync('./test/LaTeXML-tests.md').toString('utf8')
+latexmlTests = hurmetMark.hmd.md2html(latexmlTests, true)
+fs.writeFileSync('./site/tests/LaTeXML-tests.html', latexmlTests)
