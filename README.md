@@ -25,6 +25,8 @@ Temml's test suite includes many rendered examples that are available for viewin
 
 * A [reproduction](https://temml.org/tests/mhchem-tests.html) of the examples in the [mhchem Manual](https://mhchem.github.io/MathJax-mhchem/) demonstrates, among many other things, Temml's support for upright lower-case Greek letters.
 
+* A [reproduction](https://temml.org/tests/LaTeXML-tests.html) of some of the examples in the [LaTeXML editor](https://latexml.mathweb.org/editor) demonstrates, among other things, Temml's support for Unicode.
+
 Documentation can be found at:
 
 * [Installation](https://temml.org/docs/en/administration.html)
