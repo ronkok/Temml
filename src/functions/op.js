@@ -15,8 +15,9 @@ const noSuccessor = ["\\smallint"];
 // Math operators (e.g. \sin) need a space between these types and themselves:
 export const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"];
 
+const dels = ["}", "\\left", "\\middle", "\\right"]
 const isDelimiter = str => str.length > 0 &&
-  (delimiters.includes(str) || delimiterSizes[str] || str === "}")
+  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str))
 
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
