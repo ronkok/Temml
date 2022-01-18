@@ -574,6 +574,7 @@ defineSymbol(math, mathord, "\u03e0", "\\Sampi", true);
 defineSymbol(math, mathord, "\u03e1", "\\sampi", true);
 defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
 defineSymbol(math, mathord, "\u03db", "\\stigma", true);
+defineSymbol(math, mathord, "\u2aeb", "\\Bot");
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "*", "*");
@@ -605,7 +606,7 @@ defineSymbol(math, close, "|", "\\rvert");
 defineSymbol(math, close, "\u2016", "\\rVert");
 defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u2984", "\\rBrace", true);
-defineSymbol(math, rel, "=", "=");
+defineSymbol(math, rel, "=", "\\equal", true);
 defineSymbol(math, rel, ":", ":");
 defineSymbol(math, rel, "\u2248", "\\approx", true);
 defineSymbol(math, rel, "\u2245", "\\cong", true);
@@ -637,6 +638,7 @@ defineSymbol(math, rel, "\u2271", "\\ngeqslant");
 defineSymbol(math, rel, "\u2270", "\\nleq", true);
 defineSymbol(math, rel, "\u2270", "\\nleqq");
 defineSymbol(math, rel, "\u2270", "\\nleqslant");
+defineSymbol(math, rel, "\u2aeb", "\\Perp", true); //cmll package
 defineSymbol(math, spacing, "\u00a0", "\\ ");
 defineSymbol(math, spacing, "\u00a0", "\\space");
 // Ref: LaTeX Source 2e: \DeclareRobustCommand{\nobreakspace}{%
