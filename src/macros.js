@@ -690,14 +690,8 @@ defineMacro("\\upomega", "\\up@greek{\\omega}");
 defineMacro("\\invamp", '\\mathbin{\\char"214b}')
 defineMacro("\\parr", '\\mathbin{\\char"214b}')
 defineMacro("\\with", '\\mathbin{\\char"26}')
-// \Perp is defined in symbols.js. It's in the MathML operator dictionary.
 defineMacro("\\multimapinv", '\\mathrel{\\char"27dc}')
 defineMacro("\\multimapboth", '\\mathrel{\\char"29df}')
-defineMacro("\\oc", '\\operatorname{\\char"21}')
-defineMacro("\\shpos", '\\operatorname{\\char"2193}')
-defineMacro("\\shift", '\\operatorname{\\char"2195}')
-defineMacro("\\shneg", '\\operatorname{\\char"2191}')
-defineMacro("\\wn", '\\operatorname{\\char"3f}')
 defineMacro("\\scoh", '{\\mkern5mu\\char"2322\\mkern5mu}')
 defineMacro("\\sincoh", '{\\mkern5mu\\char"2323\\mkern5mu}')
 defineMacro("\\coh", `{\\mkern5mu\\rule{}{0.7em}\\mathrlap{\\smash{\\raise2mu{\\char"2322}}}
