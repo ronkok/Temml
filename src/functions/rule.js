@@ -32,9 +32,12 @@ defineFunction({
     const color = (style.color && style.getColor()) || "black";
 
     const rule = new mathMLTree.MathNode("mspace");
-    rule.setAttribute("mathbackground", color);
+    if (width.number > 0 && height.number > 0) {
+      rule.setAttribute("mathbackground", color);
+    }
     rule.setAttribute("width", width.number + width.unit);
     rule.setAttribute("height", height.number + height.unit);
+    if (shift.number === 0) { return rule }
 
     const wrapper = new mathMLTree.MathNode("mpadded", [rule]);
     if (shift.number >= 0) {
