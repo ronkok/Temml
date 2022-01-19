@@ -598,11 +598,11 @@ defineSymbol(math, close, "\u27e7", "\\rrbracket", true);
 defineSymbol(math, open, "\u27e8", "\\langle", true);
 defineSymbol(math, open, "|", "\\lvert");
 defineSymbol(math, open, "\u2016", "\\lVert");
-defineSymbol(math, open, "!", "\\oc");
-defineSymbol(math, open, "?", "\\wn");
-defineSymbol(math, open, "\u2193", "\\shpos");
-defineSymbol(math, open, "\u2195", "\\shift");
-defineSymbol(math, open, "\u2191", "\\shneg");
+defineSymbol(math, textord, "!", "\\oc"); // cmll package
+defineSymbol(math, textord, "?", "\\wn");
+defineSymbol(math, textord, "\u2193", "\\shpos");
+defineSymbol(math, textord, "\u2195", "\\shift");
+defineSymbol(math, textord, "\u2191", "\\shneg");
 defineSymbol(math, close, "?", "?");
 defineSymbol(math, close, "!", "!");
 defineSymbol(math, close, "‼", "‼");
