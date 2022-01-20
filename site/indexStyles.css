@@ -97,10 +97,19 @@ a {
   flex-wrap: wrap;
 }
 
+.wide #demo {
+  flex-direction: column;
+}
+
 #input,
 #output {
   width: 395px;
   flex-basis: auto;
+}
+
+.wide #input,
+.wide #output {
+  width: 100%;
 }
 
 #spacer {
@@ -118,6 +127,10 @@ a {
     vertical-align: top;
     resize: none;
     overflow: auto;
+}
+
+.wide .ioArea {
+  width: 760px;
 }
 
 math {
