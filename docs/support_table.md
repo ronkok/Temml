@@ -212,6 +212,7 @@ If you know the shape of a character, but not its name,
 |\bold|$`\bold{AaBb123}`|`\bold{AaBb123}`||
 |\boldsymbol|$`\boldsymbol{AaBb}`|`\boldsymbol{AaBb}`| ams |
 |\bot|$`\bot`|||
+|\Bot|$`\Bot`|| cmll |
 |\bowtie|$`\bowtie`|||
 |\Box|$`\Box`|| ams |
 |\boxdot|$`\boxdot`|| ams |
@@ -277,6 +278,7 @@ If you know the shape of a character, but not its name,
 |\clubs|$`\clubs`|| texvc extension |
 |\clubsuit|$`\clubsuit`|||
 |\cnums|$`\cnums`|| texvc extension |
+|\coh|$`\coh`|| cmll |
 |\colon|$`\colon`|||
 |\Colonapprox|$`\Colonapprox`|| mathtools |
 |\colonapprox|$`\colonapprox`|| mathtools |
@@ -574,6 +576,7 @@ If you know the shape of a character, but not its name,
 | \implies         | $`P\implies Q`         | `P\implies Q`         | ams               |
 | \in              | $`\in`                 |                       |                   |
 | \includegraphics | $`\includegraphics[height=1em, totalheight=1.2em, width=1.2em, alt=sphere]{../sphere.jpg}` |  `\includegraphics[height=1em,`<br>`totalheight=1.2em, width=1.2em,`<br>`alt=sphere]{../sphere.jpg}` | graphicx |
+|\incoh            | $`\incoh`              |                       | cmll              |
 | \inf             | $`\inf`                |                       |                   |
 | \infin           | $`\infin`              |                       | texvc extension   |
 | \infty           | $`\infty`              |                       |                   |
@@ -589,6 +592,7 @@ If you know the shape of a character, but not its name,
 | \intlarhk        | $`\intlarhk`           |                       |                   |
 | \intop           | $`\intop`              |                       |                   |
 | \intx            | $`\intx`               |                       |                   |
+| \invamp          | $`\invamp`             |                       | cmll              |
 | \Iota            | $`\Iota`               |                       |                   |
 | \iota            | $`\iota`               |                       |                   |
 | \isin            | $`\isin`               |                       | texvc extension   |
@@ -785,6 +789,8 @@ If you know the shape of a character, but not its name,
 |\mu|$`\mu`|||
 |\multicolumn|(Not supported)|||
 |\multimap|$`\multimap`|| ams |
+|\multimapboth|$`\multimapboth`|| cmll |
+|\multimapinv|$`\multimapinv`|| cmll |
 |{multline}|$$\begin{multline}\rm uno \\ \rm dos \\ \rm tres\end{multline}$$|`\begin{multline}`<br>  `\rm uno \\`<br>  `\rm dos \\`<br>  `\rm tres`<br>`\end{multline}`| ams |
 |{multline*}|$$\begin{multline*}\rm uno \\ \rm dos \\ \rm tres\end{multline*}$$|`\begin{multline*}`<br>  `\rm uno \\`<br>  `\rm dos \\`<br>  `\rm tres`<br>`\end{multline*}`| ams |
 
@@ -870,6 +876,7 @@ If you know the shape of a character, but not its name,
 |----------------|-------------|-------------------|-----------|
 |\O|$`\text{\O}`|`\text{\O}`||
 |\o|$`\text{\o}`|`\text{\o}`||
+|\oc|$`\oc`|| cmll |
 |\odot|$`\odot`|||
 |\odv|$`\odv{f}{x}`|`\odv{f}{x}`| derivative |
 |\odv*|$`\odv*{f}{x}`|`\odv*{f}{x}`| derivative |
@@ -921,6 +928,7 @@ If you know the shape of a character, but not its name,
 |\P|$`\text{\P}`|`\text{\P}` or `\P`||
 |\pagecolor|(Not supported)|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\parallel|$`\parallel`|||
+|\parr|$`\parr`|| cmll |
 |\part|(Not supported)|[Deprecated](https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax)| texvc |
 |\partial|$`\partial`|||
 |\partialderivative|$`\partialderivative{x}{y}`|`\partialderivative{x}{y}`| physics extension |
@@ -929,6 +937,7 @@ If you know the shape of a character, but not its name,
 |\pdv*|$`\pdv*{f}{x,y}`|`\pdv*{f}{x,y}`| derivative |
 |\permil|$`\permil`|| wasysym |
 |\perp|$`\perp`|||
+|\Perp|$`\Perp`|| cmll |
 |\phantom|$`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`|`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`||
 |\phase|$`\phase{-78^\circ}`|`\phase{-78^\circ}`| steinmetz |
 |\Phi|$`\Phi`|||
@@ -1082,6 +1091,7 @@ If you know the shape of a character, but not its name,
 |\Sampi|$`\Sampi`|||
 |\sampi|$`\sampi`|||
 |\sc|(Not supported)|See `\textsc`||
+|\scoh|$`\scoh`|| cmll |
 |\scalebox|(Not supported)|||
 |\scpolint|$`\scpolint`|||
 |\scr|(Not supported)|See `\mathscr`||
@@ -1099,16 +1109,20 @@ If you know the shape of a character, but not its name,
 |\sf|$`{\sf AaBb123}`|`{\sf AaBb123}`||
 |\sgn|$`\sgn`|| mismath |
 |\sharp|$`\sharp`|||
+|\shift|$`\shift`|| cmll |
+|\shneg|$`\shneg`|| cmll |
 |\shortmid|$`\shortmid`|| ams |
 |\shortparallel|$`\shortparallel`|| ams |
 |\shoveleft|(Not supported)|| ams |
 |\shoveright|(Not supported)|| ams |
+|\shpos|$`\shpos`|| cmll |
 |\sideset|$`\sideset{_a^b}{_c^d}\sum`|`\sideset{_a^b}{_c^d}\sum`| ams |
 |\Sigma|$`\Sigma`|||
 |\sigma|$`\sigma`|||
 |\sim|$`\sim`|||
 |\simeq|$`\simeq`|||
 |\sin|$`\sin`|||
+|\sincoh|$`\sincoh`|| cmll |
 |\sinh|$`\sinh`|||
 |\sixptsize|$`\sixptsize sixptsize`|`\sixptsize sixptsize`||
 |\sh|$`\sh`|||
@@ -1408,8 +1422,8 @@ If you know the shape of a character, but not its name,
 
 ## W
 
-| Function   |  Rendered         | Source or Comment |  Package        |
-|------------|-------------------|-------------------|-----------------|
+| Function   |  Rendered          | Source or Comment |  Package        |
+|------------|--------------------|-------------------|-----------------|
 | \wedge     | $`\wedge`          |                   |                 |
 | \wedgeq    | $`\wedgeq`         |                   | stix            |
 | \weierp    | $`\weierp`         |                   | texvc extension |
@@ -1417,6 +1431,8 @@ If you know the shape of a character, but not its name,
 | \widehat   | $`\widehat{AB}`    |`\widehat{AB}`     |                 |
 | \wideparen | $`\wideparen{abc}` |`\wideparen{abc}`  | MnSymbol        |
 | \widetilde | $`\widetilde{AB}`  |`\widetilde{AB}`   |                 |
+| \with      | $`\with`           |                   | cmll            |
+| \wn        | $`\wn`             |                   | cmll            |
 | \wp        | $`\wp`             |                   |                 |
 | \wr        | $`\wr`             |                   |                 |
 
@@ -1469,7 +1485,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.4
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.5
 
 <div style="height:0.5em;"></div>
 

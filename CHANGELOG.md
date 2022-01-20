@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.5] = 2022-01-10
+
+### Added
+
+- 15 functions from the `cmll` package
+
+### Fixed
+
+- Omit color attribute and <mpadded> wrapper from \rule when unecessary
+
 ## [0.6.4] = 2022-01-15
 
 ### Fixed

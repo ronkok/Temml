@@ -1298,8 +1298,8 @@ defineSymbol(math, mathord, "\u03a6", "\\Phi", true);
 defineSymbol(math, mathord, "\u03a7", "\\Chi", true);
 defineSymbol(math, mathord, "\u03a8", "\\Psi", true);
 defineSymbol(math, mathord, "\u03a9", "\\Omega", true);
-defineSymbol(math, textord, "\u00ac", "\\neg", true);
-defineSymbol(math, textord, "\u00ac", "\\lnot");
+defineSymbol(math, open, "\u00ac", "\\neg", true);
+defineSymbol(math, open, "\u00ac", "\\lnot");
 defineSymbol(math, textord, "\u22a4", "\\top");
 defineSymbol(math, textord, "\u22a5", "\\bot");
 defineSymbol(math, textord, "\u2205", "\\emptyset");
@@ -1343,6 +1343,7 @@ defineSymbol(math, mathord, "\u03e0", "\\Sampi", true);
 defineSymbol(math, mathord, "\u03e1", "\\sampi", true);
 defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
 defineSymbol(math, mathord, "\u03db", "\\stigma", true);
+defineSymbol(math, mathord, "\u2aeb", "\\Bot");
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "*", "*");
@@ -1366,6 +1367,11 @@ defineSymbol(math, close, "\u27e7", "\\rrbracket", true);
 defineSymbol(math, open, "\u27e8", "\\langle", true);
 defineSymbol(math, open, "|", "\\lvert");
 defineSymbol(math, open, "\u2016", "\\lVert");
+defineSymbol(math, textord, "!", "\\oc"); // cmll package
+defineSymbol(math, textord, "?", "\\wn");
+defineSymbol(math, textord, "\u2193", "\\shpos");
+defineSymbol(math, textord, "\u2195", "\\shift");
+defineSymbol(math, textord, "\u2191", "\\shneg");
 defineSymbol(math, close, "?", "?");
 defineSymbol(math, close, "!", "!");
 defineSymbol(math, close, "‼", "‼");
@@ -1374,7 +1380,7 @@ defineSymbol(math, close, "|", "\\rvert");
 defineSymbol(math, close, "\u2016", "\\rVert");
 defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u2984", "\\rBrace", true);
-defineSymbol(math, rel, "=", "=");
+defineSymbol(math, rel, "=", "\\equal", true);
 defineSymbol(math, rel, ":", ":");
 defineSymbol(math, rel, "\u2248", "\\approx", true);
 defineSymbol(math, rel, "\u2245", "\\cong", true);
@@ -1406,6 +1412,7 @@ defineSymbol(math, rel, "\u2271", "\\ngeqslant");
 defineSymbol(math, rel, "\u2270", "\\nleq", true);
 defineSymbol(math, rel, "\u2270", "\\nleqq");
 defineSymbol(math, rel, "\u2270", "\\nleqslant");
+defineSymbol(math, rel, "\u2aeb", "\\Perp", true); //cmll package
 defineSymbol(math, spacing, "\u00a0", "\\ ");
 defineSymbol(math, spacing, "\u00a0", "\\space");
 // Ref: LaTeX Source 2e: \DeclareRobustCommand{\nobreakspace}{%
@@ -6895,9 +6902,12 @@ defineFunction({
     const color = (style.color && style.getColor()) || "black";
 
     const rule = new mathMLTree.MathNode("mspace");
-    rule.setAttribute("mathbackground", color);
+    if (width.number > 0 && height.number > 0) {
+      rule.setAttribute("mathbackground", color);
+    }
     rule.setAttribute("width", width.number + width.unit);
     rule.setAttribute("height", height.number + height.unit);
+    if (shift.number === 0) { return rule }
 
     const wrapper = new mathMLTree.MathNode("mpadded", [rule]);
     if (shift.number >= 0) {
@@ -8845,6 +8855,21 @@ defineMacro("\\upphi", "\\up@greek{\\phi}");
 defineMacro("\\upchi", "\\up@greek{\\chi}");
 defineMacro("\\uppsi", "\\up@greek{\\psi}");
 defineMacro("\\upomega", "\\up@greek{\\omega}");
+
+//////////////////////////////////////////////////////////////////////
+// cmll package
+defineMacro("\\invamp", '\\mathbin{\\char"214b}');
+defineMacro("\\parr", '\\mathbin{\\char"214b}');
+defineMacro("\\with", '\\mathbin{\\char"26}');
+defineMacro("\\multimapinv", '\\mathrel{\\char"27dc}');
+defineMacro("\\multimapboth", '\\mathrel{\\char"29df}');
+defineMacro("\\scoh", '{\\mkern5mu\\char"2322\\mkern5mu}');
+defineMacro("\\sincoh", '{\\mkern5mu\\char"2323\\mkern5mu}');
+defineMacro("\\coh", `{\\mkern5mu\\rule{}{0.7em}\\mathrlap{\\smash{\\raise2mu{\\char"2322}}}
+{\\smash{\\lower4mu{\\char"2323}}}\\mkern5mu}`);
+defineMacro("\\incoh", `{\\mkern5mu\\rule{}{0.7em}\\mathrlap{\\smash{\\raise2mu{\\char"2323}}}
+{\\smash{\\lower4mu{\\char"2322}}}\\mkern5mu}`);
+
 
 //////////////////////////////////////////////////////////////////////
 // chemstyle package
@@ -12711,7 +12736,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.6.4";
+const version = "0.6.5";
 
 function postProcess(block) {
   const labelMap = {};

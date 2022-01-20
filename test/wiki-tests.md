@@ -17,7 +17,7 @@
 
 # Wiki Test
 
-This page reproduces the math examples from \
+Rows 1 thru 261 on this page reproduce the math examples from \
 https://en.wikipedia.org/wiki/Help:Displaying\_a\_formula
 
 A few of the functions on this page require Temml’s _texvc_ extension.
@@ -908,6 +908,20 @@ in the Temml function support page.
 |     | v & = \tfrac{1}{\sqrt{2}}(x-y) \qquad & \     | v & = \tfrac{1}{\sqrt{2}}(x-y) \qquad &          |
 |     | y &= \tfrac{1}{\sqrt{2}}(u-v) \               | y &= \tfrac{1}{\sqrt{2}}(u-v)                    |
 |     | \end{align}                                   | \end{align}$$                                    |
++-----+-----------------------------------------------+--------------------------------------------------+
+
+That concludes the tests from Wikipedia. Now a few more tests.
+
+<br>
+
++-----+-----------------------------------------------+--------------------------------------------------+
+| **Linear Logic**                                                                                       |
++=====+===============================================+==================================================+
+| 242 | A \with B \parr C                             | $`A \with B \parr C`                             |
++-----+-----------------------------------------------+--------------------------------------------------+
+| 243 | a \coh \oc b \incoh \wn c \scoh d \sincoh e   | $`a \coh \oc b \incoh \wn c \scoh d \sincoh e`   |
++-----+-----------------------------------------------+--------------------------------------------------+
+| 244 | a \Perp \shpos b \multimapinv \shneg c        | $`a \Perp \shpos b \multimapinv \shneg c`        |
 +-----+-----------------------------------------------+--------------------------------------------------+
 
 <br>
