@@ -21,11 +21,11 @@ Temml will never work in Internet Explorer.
 
 # Installation
 
-You can download Temml files from the [dist folder][] of the Temml repository
-and serve them from your own site. The minimum browser  installation needs the
+You can download a zip file of Temml from the [releases page][] of the Temml repository
+and serve Temml files from your own site. The minimum browser installation needs the
 following files. The `css` file and font file must be in the same folder.
 
-[dist folder]: https://github.com/ronkok/Temml/tree/main/dist
+[releases page]: https://github.com/ronkok/Temml/releases
 
 * temml.min.js
 * Temml-Local.css
