@@ -31,7 +31,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
  * 4. Pipe tables as per GFM.
  * 5. Grid tables as per reStructuredText, with two exceptions:
  *    a. The top border contains ":" characters to indicate column justtification.
- *    b. Top & left borders contain "┴" & "┤" characters to indicate the location
+ *    b. Top & left borders contain "*" characters to indicate the location
  *       of a table column or rows boundary.
  * 6. Implicit reference links [title][] and implicit reference images ![alt][]
  *    ⋮
@@ -193,7 +193,7 @@ const TABLES = (function() {
     // Inspect ":" characters to set column justification.
     // Return class names that specify center or right justification on specific columns.
     source = source.replace(TABLE_ROW_SEPARATOR_TRIM, "");
-    const alignArr = source.trim().split(/[|+┴]/);
+    const alignArr = source.trim().split(/[|+*]/);
     let alignStr = "";
     for (let i = 0; i < alignArr.length; i++) {
       alignStr += TABLE_CENTER_ALIGN.test(alignArr[i])
@@ -306,15 +306,15 @@ const TABLES = (function() {
       const xCorners = [0];
       for (let j = 1; j < topBorder.length; j++) {
         const ch = topBorder.charAt(j);
-        // A "┴" character indicates a column border, but the top row
+        // A "*" character indicates a column border, but the top row
         // contains a merged cell, so the column border does not extend
         // all the way to the top of the table.
-        if (ch === "+" || ch === "┴") { xCorners.push(j); }
+        if (ch === "+" || ch === "*") { xCorners.push(j); }
       }
       const yCorners = [0];
       for (let i = 1; i < lines.length; i++) {
         const ch = lines[i].charAt(0);
-        if (ch === "+" || ch === "┤") { yCorners.push(i); }
+        if (ch === "+" || ch === "*") { yCorners.push(i); }
       }
 
       const numCols = xCorners.length - 1;
@@ -415,7 +415,7 @@ const TABLES = (function() {
     parsePipeTable: parsePipeTable(),
     PIPE_TABLE_REGEX: /^(\|.+)\n\|([-:]+[-| :]*)\n((?:\|.*(?:\n|$))*)(?:\{([^\n}]+)\}\n)?\n*/,
     parseGridTable: parseGridTable(),
-    GRID_TABLE_REGEX: /^((\+(?:[-:┴=]+\+)+)\n(?:[+|┤][^\n]+[+|]\n)+)(?:\{([^\n}]+)\}\n)?\n*/
+    GRID_TABLE_REGEX: /^((\+(?:[-:*=]+\+)+)\n(?:[+|*][^\n]+[+|]\n)+)(?:\{([^\n}]+)\}\n)?\n*/
   };
 })();
 
