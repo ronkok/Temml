@@ -2,7 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
-## [0.6.5] = 2022-01-10
+## [0.6.6] = 2022-01-28
+
+### Fixed
+
+- Workaround a Firefox bug. Prevent space around a \mathrm{} function with a one-character argument.
+
+## [0.6.5] = 2022-01-20
 
 ### Added
 

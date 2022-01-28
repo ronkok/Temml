@@ -171,6 +171,48 @@ var temml = (function () {
     return +n.toFixed(4);
   };
 
+  const consolidateText = mrow => {
+    // If possible, consolidate adjacent <mtext> elements into a single element.
+    if (mrow.type !== "mrow") { return mrow }
+    if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
+    const mtext = mrow.children[0];
+    if (!mtext.attributes || mtext.type !== "mtext") { return mrow }
+    const variant = mtext.attributes.mathvariant || "";
+    for (let i = 1; i < mrow.children.length; i++) {
+      // Check each child and, if possible, copy the character into child[0].
+      const localVariant = mrow.children[i].attributes.mathvariant || "";
+      if (mrow.children[i].type === "mrow") {
+        const childRow = mrow.children[i];
+        for (let j = 0; j < childRow.children.length; j++) {
+          // We'll also check the children of a mrow. One level only. No recursion.
+          const childVariant = childRow.children[j].attributes.mathvariant || "";
+          if (childVariant !== variant || childRow.children[j].type !== "mtext") {
+            return mrow // At least one element cannot be consolidated. Get out.
+          } else {
+            mtext.children[0].text += childRow.children[j].children[0].text;
+          }
+        }
+      } else if (localVariant !== variant || mrow.children[i].type !== "mtext") {
+        return mrow
+      } else {
+        mtext.children[0].text += mrow.children[i].children[0].text;
+      }
+    }
+    // Since we have gotten here, the text has been loaded into a single mtext node.
+    // Next, consolidate the children into a single <mtext> element.
+    mtext.children.splice(1, mtext.children.length - 1);
+    // Firefox does not render a space at either end of an <mtext> string.
+    // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
+    if (mtext.children[0].text.charAt(0) === " ") {
+      mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
+    }
+    const L = mtext.children[0].text.length;
+    if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
+      mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
+    }
+    return mtext
+  };
+
   var utils = {
     contains,
     deflt,
@@ -179,7 +221,8 @@ var temml = (function () {
     getBaseElem,
     isCharacterBox,
     protocolFromUrl,
-    round
+    round,
+    consolidateText
   };
 
   /**
@@ -475,7 +518,7 @@ var temml = (function () {
     }
   }
 
-  class TextNode {
+  class TextNode$1 {
     constructor(text) {
       this.text = text;
     }
@@ -656,7 +699,7 @@ var temml = (function () {
   /**
    * This node represents a piece of text.
    */
-  class TextNode$1 {
+  class TextNode {
     constructor(text) {
       this.text = text;
     }
@@ -700,7 +743,7 @@ var temml = (function () {
 
   var mathMLTree = {
     MathNode,
-    TextNode: TextNode$1,
+    TextNode,
     newDocumentFragment
   };
 
@@ -1883,121 +1926,6 @@ var temml = (function () {
     return mathMLTree.newDocumentFragment(mrows);
   }
 
-  const consolidateText = mrow => {
-    // If possible, consolidate adjacent <mtext> elements into a single element.
-    if (mrow.type !== "mrow") { return mrow }
-    if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
-    const mtext = mrow.children[0];
-    if (!mtext.attributes || mtext.type !== "mtext") { return mrow }
-    const variant = mtext.attributes.mathvariant || "";
-    for (let i = 1; i < mrow.children.length; i++) {
-      // Check each child and, if possible, copy the character into child[0].
-      const localVariant = mrow.children[i].attributes.mathvariant || "";
-      if (mrow.children[i].type === "mrow") {
-        const childRow = mrow.children[i];
-        for (let j = 0; j < childRow.children.length; j++) {
-          // We'll also check the children of a mrow. One level only. No recursion.
-          const childVariant = childRow.children[j].attributes.mathvariant || "";
-          if (childVariant !== variant || childRow.children[j].type !== "mtext") {
-            return mrow // At least one element cannot be consolidated. Get out.
-          } else {
-            mtext.children[0].text += childRow.children[j].children[0].text;
-          }
-        }
-      } else if (localVariant !== variant || mrow.children[i].type !== "mtext") {
-        return mrow
-      } else {
-        mtext.children[0].text += mrow.children[i].children[0].text;
-      }
-    }
-    // Since we have gotten here, the text has been loaded into a single mtext node.
-    // Next, consolidate the children into a single <mtext> element.
-    mtext.children.splice(1, mtext.children.length - 1);
-    // Firefox does not render a space at either end of an <mtext> string.
-    // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
-    if (mtext.children[0].text.charAt(0) === " ") {
-      mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
-    }
-    const L = mtext.children[0].text.length;
-    if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
-      mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
-    }
-    return mtext
-  };
-
-  // Non-mathy text, possibly in a font
-  const textFontFamilies = {
-    "\\text": undefined,
-    "\\textrm": "textrm",
-    "\\textsf": "textsf",
-    "\\texttt": "texttt",
-    "\\textnormal": "textrm",
-    "\\textsc": "textsc"      // small caps
-  };
-
-  const textFontWeights = {
-    "\\textbf": "textbf",
-    "\\textmd": "textmd"
-  };
-
-  const textFontShapes = {
-    "\\textit": "textit",
-    "\\textup": "textup"
-  };
-
-  const styleWithFont = (group, style) => {
-    const font = group.font;
-    // Checks if the argument is a font family or a font style.
-    if (!font) {
-      return style;
-    } else if (textFontFamilies[font]) {
-      return style.withTextFontFamily(textFontFamilies[font]);
-    } else if (textFontWeights[font]) {
-      return style.withTextFontWeight(textFontWeights[font]);
-    } else {
-      return style.withTextFontShape(textFontShapes[font]);
-    }
-  };
-
-  defineFunction({
-    type: "text",
-    names: [
-      // Font families
-      "\\text",
-      "\\textrm",
-      "\\textsf",
-      "\\texttt",
-      "\\textnormal",
-      "\\textsc",
-      // Font weights
-      "\\textbf",
-      "\\textmd",
-      // Font Shapes
-      "\\textit",
-      "\\textup"
-    ],
-    props: {
-      numArgs: 1,
-      argTypes: ["text"],
-      allowedInArgument: true,
-      allowedInText: true
-    },
-    handler({ parser, funcName }, args) {
-      const body = args[0];
-      return {
-        type: "text",
-        mode: parser.mode,
-        body: ordargument(body),
-        font: funcName
-      };
-    },
-    mathmlBuilder(group, style) {
-      const newStyle = styleWithFont(group, style);
-      const mrow = buildExpressionRow(group.body, newStyle);
-      return consolidateText(mrow)
-    }
-  });
-
   /**
    * This file converts a parse tree into a cooresponding MathML tree. The main
    * entry point is the `buildMathML` function, which takes a parse tree from the
@@ -2051,7 +1979,7 @@ var temml = (function () {
    */
   const buildExpression = function(expression, style, isOrdgroup) {
     if (expression.length === 1) {
-      const group = buildGroup(expression[0], style);
+      const group = buildGroup$1(expression[0], style);
       if (isOrdgroup && group instanceof MathNode && group.type === "mo") {
         // When TeX writers want to suppress spacing on an operator,
         // they often put the operator by itself inside braces.
@@ -2063,7 +1991,7 @@ var temml = (function () {
 
     const groups = [];
     for (let i = 0; i < expression.length; i++) {
-      const group = buildGroup(expression[i], style);
+      const group = buildGroup$1(expression[i], style);
       // Suppress spacing between adjacent relations
       if (i < expression.length - 1 && isRel(expression[i]) && isRel(expression[i + 1])) {
         group.setAttribute("rspace", "0em");
@@ -2088,7 +2016,7 @@ var temml = (function () {
    * Takes a group from the parser and calls the appropriate groupBuilders function
    * on it to produce a MathML node.
    */
-  const buildGroup = function(group, style) {
+  const buildGroup$1 = function(group, style) {
     if (!group) {
       return new mathMLTree.MathNode("mrow");
     }
@@ -2110,7 +2038,7 @@ var temml = (function () {
 
   const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
     tag = buildExpressionRow(tag[0].body, style);
-    tag = consolidateText(tag);
+    tag = utils.consolidateText(tag);
     tag.classes = ["tml-tag"];
     if (!preventTagLap) {
       tag = new mathMLTree.MathNode("mpadded", [tag]);
@@ -2178,7 +2106,7 @@ var temml = (function () {
     return math;
   }
 
-  const mathmlBuilder = (group, style) => {
+  const mathmlBuilder$a = (group, style) => {
     const accentNode = group.isStretchy
       ? stretchy.mathMLnode(group.label)
       : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
@@ -2188,7 +2116,7 @@ var temml = (function () {
     }
 
     const node = new mathMLTree.MathNode((group.label === "\\c" ? "munder" : "mover"),
-      [buildGroup(group.base, style), accentNode]
+      [buildGroup$1(group.base, style), accentNode]
     );
 
     node.setAttribute("accent", "true");
@@ -2267,7 +2195,7 @@ var temml = (function () {
         base: base
       };
     },
-    mathmlBuilder
+    mathmlBuilder: mathmlBuilder$a
   });
 
   // Text-mode accents
@@ -2299,7 +2227,7 @@ var temml = (function () {
         base: base
       };
     },
-    mathmlBuilder
+    mathmlBuilder: mathmlBuilder$a
   });
 
   defineFunction({
@@ -2327,7 +2255,7 @@ var temml = (function () {
     mathmlBuilder: (group, style) => {
       const accentNode = stretchy.mathMLnode(group.label);
       const node = new mathMLTree.MathNode("munder", [
-        buildGroup(group.base, style),
+        buildGroup$1(group.base, style),
         accentNode
       ]);
       node.setAttribute("accentunder", "true");
@@ -2478,13 +2406,13 @@ var temml = (function () {
     const upperNode = (body && body.body &&
       // \hphantom        visible content
       (body.body.body || body.body.length > 0))
-      ? paddedNode(buildGroup(body, labelStyle), widthAdder, lspace)
+      ? paddedNode(buildGroup$1(body, labelStyle), widthAdder, lspace)
         // Since Firefox does not recognize minsize set on the arrow,
         // create an upper node w/correct width.
       : paddedNode(null, emptyLabelWidth, "0");
     const lowerNode = (below && below.body &&
       (below.body.body || below.body.length > 0))
-      ? paddedNode(buildGroup(below, labelStyle), widthAdder, lspace)
+      ? paddedNode(buildGroup$1(below, labelStyle), widthAdder, lspace)
       : paddedNode(null, emptyLabelWidth, "0");
     const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
     return node
@@ -2645,7 +2573,7 @@ var temml = (function () {
     mathmlBuilder(group, style) {
       const value = new mathMLTree.MathNode(
         "mpadded",
-        [buildGroup(group.value, style)]
+        [buildGroup$1(group.value, style)]
       );
       value.setAttribute("depth", `-0.1em`);
       value.setAttribute("height", `+0.1em`);
@@ -2653,7 +2581,7 @@ var temml = (function () {
 
       const expression = new mathMLTree.MathNode(
         "menclose",
-        [buildGroup(group.expression, style)]
+        [buildGroup$1(group.expression, style)]
       );
       expression.setAttribute("notation", `updiagonalarrow`);
 
@@ -2920,7 +2848,7 @@ var temml = (function () {
       };
     },
     mathmlBuilder(group, style) {
-      let label = new mathMLTree.MathNode("mrow", [buildGroup(group.label, style)]);
+      let label = new mathMLTree.MathNode("mrow", [buildGroup$1(group.label, style)]);
       label = new mathMLTree.MathNode("mpadded", [label]);
       label.setAttribute("width", "0");
       if (group.side === "left") {
@@ -2950,7 +2878,7 @@ var temml = (function () {
       };
     },
     mathmlBuilder(group, style) {
-      return new mathMLTree.MathNode("mrow", [buildGroup(group.fragment, style)]);
+      return new mathMLTree.MathNode("mrow", [buildGroup$1(group.fragment, style)]);
     }
   });
 
@@ -3131,7 +3059,7 @@ var temml = (function () {
     return color
   };
 
-  const mathmlBuilder$1 = (group, style) => {
+  const mathmlBuilder$9 = (group, style) => {
     const inner = buildExpression(group.body, style.withColor(group.color));
     // Wrap with an <mstyle> element.
     const node = wrapWithMstyle(inner);
@@ -3166,7 +3094,7 @@ var temml = (function () {
         body: ordargument(body)
       }
     },
-    mathmlBuilder: mathmlBuilder$1
+    mathmlBuilder: mathmlBuilder$9
   });
 
   defineFunction({
@@ -3205,7 +3133,7 @@ var temml = (function () {
         body
       }
     },
-    mathmlBuilder: mathmlBuilder$1
+    mathmlBuilder: mathmlBuilder$9
   });
 
   defineFunction({
@@ -3765,10 +3693,10 @@ var temml = (function () {
     }
   });
 
-  const mathmlBuilder$2 = (group, style) => {
+  const mathmlBuilder$8 = (group, style) => {
     const node = new mathMLTree.MathNode(
       group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose",
-      [buildGroup(group.body, style)]
+      [buildGroup$1(group.body, style)]
     );
     switch (group.label) {
       case "\\cancel":
@@ -3844,7 +3772,7 @@ var temml = (function () {
         body
       };
     },
-    mathmlBuilder: mathmlBuilder$2
+    mathmlBuilder: mathmlBuilder$8
   });
 
   defineFunction({
@@ -3879,7 +3807,7 @@ var temml = (function () {
         body
       };
     },
-    mathmlBuilder: mathmlBuilder$2
+    mathmlBuilder: mathmlBuilder$8
   });
 
   defineFunction({
@@ -3915,7 +3843,7 @@ var temml = (function () {
         body
       };
     },
-    mathmlBuilder: mathmlBuilder$2
+    mathmlBuilder: mathmlBuilder$8
   });
 
   /**
@@ -4191,7 +4119,7 @@ var temml = (function () {
     r: "right "
   };
 
-  const mathmlBuilder$3 = function(group, style) {
+  const mathmlBuilder$7 = function(group, style) {
     const tbl = [];
     const numRows = group.body.length;
     let glue;
@@ -4214,7 +4142,7 @@ var temml = (function () {
       for (let j = 0; j < rw.length; j++) {
         const mtd = new mathMLTree.MathNode(
           "mtd",
-          [buildGroup(rw[j], style.withLevel(cellStyle))]
+          [buildGroup$1(rw[j], style.withLevel(cellStyle))]
         );
         if (group.colSeparationType === "multline") {
           const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center";
@@ -4498,7 +4426,7 @@ var temml = (function () {
       };
       return parseArray(context.parser, res, dCellStyle(context.envName));
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   // The matrix environments of amsmath builds on the array environment
@@ -4574,7 +4502,7 @@ var temml = (function () {
         }
         : res;
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   defineEnvironment({
@@ -4589,7 +4517,7 @@ var temml = (function () {
       res.colSeparationType = "small";
       return res;
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   defineEnvironment({
@@ -4629,7 +4557,7 @@ var temml = (function () {
       }
       return res;
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   // A cases environment (in amsmath.sty) is almost equivalent to
@@ -4668,7 +4596,7 @@ var temml = (function () {
         rightColor: undefined
       };
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   // In the align environment, one uses ampersands, &, to specify number of
@@ -4684,7 +4612,7 @@ var temml = (function () {
       numArgs: 0
     },
     handler: alignedHandler,
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   // A gathered environment is like an array environment with one centered
@@ -4715,7 +4643,7 @@ var temml = (function () {
       };
       return parseArray(context.parser, res, "display");
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   // alignat environment is like an align environment, but one must explicitly
@@ -4728,7 +4656,7 @@ var temml = (function () {
       numArgs: 1
     },
     handler: alignedHandler,
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   defineEnvironment({
@@ -4749,7 +4677,7 @@ var temml = (function () {
       };
       return parseArray(context.parser, res, "display");
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   defineEnvironment({
@@ -4768,7 +4696,7 @@ var temml = (function () {
       };
       return parseArray(context.parser, res, "display");
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   defineEnvironment({
@@ -4781,7 +4709,7 @@ var temml = (function () {
       validateAmsEnvironmentContext(context);
       return parseCD(context.parser);
     },
-    mathmlBuilder: mathmlBuilder$3
+    mathmlBuilder: mathmlBuilder$7
   });
 
   // Catch \hline outside array environment
@@ -4891,10 +4819,10 @@ var temml = (function () {
     }
   });
 
-  const mathmlBuilder$4 = (group, style) => {
+  const mathmlBuilder$6 = (group, style) => {
     const font = group.font;
     const newStyle = style.withFont(font);
-    const mathGroup = buildGroup(group.body, newStyle);
+    const mathGroup = buildGroup$1(group.body, newStyle);
 
     if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
     if (font === "boldsymbol" && ["mo", "mpadded"].includes(mathGroup.type)) {
@@ -4981,7 +4909,7 @@ var temml = (function () {
         body
       };
     },
-    mathmlBuilder: mathmlBuilder$4
+    mathmlBuilder: mathmlBuilder$6
   });
 
   // Old font changing functions
@@ -5008,7 +4936,7 @@ var temml = (function () {
         }
       };
     },
-    mathmlBuilder: mathmlBuilder$4
+    mathmlBuilder: mathmlBuilder$6
   });
 
   const stylArray = ["display", "text", "script", "scriptscript"];
@@ -5026,8 +4954,8 @@ var temml = (function () {
       : style.withLevel(StyleLevel.SCRIPTSCRIPT);
 
     let node = new mathMLTree.MathNode("mfrac", [
-      buildGroup(group.numer, childOptions),
-      buildGroup(group.denom, childOptions)
+      buildGroup$1(group.numer, childOptions),
+      buildGroup$1(group.denom, childOptions)
     ]);
 
     if (!group.hasBarLine) {
@@ -5337,10 +5265,10 @@ var temml = (function () {
     mathmlBuilder: mathmlBuilder$5
   });
 
-  const mathmlBuilder$6 = (group, style) => {
+  const mathmlBuilder$4 = (group, style) => {
     const accentNode = stretchy.mathMLnode(group.label);
     return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [
-      buildGroup(group.base, style),
+      buildGroup$1(group.base, style),
       accentNode
     ]);
   };
@@ -5361,7 +5289,7 @@ var temml = (function () {
         base: args[0]
       };
     },
-    mathmlBuilder: mathmlBuilder$6
+    mathmlBuilder: mathmlBuilder$4
   });
 
   defineFunction({
@@ -5789,7 +5717,7 @@ var temml = (function () {
     },
     mathmlBuilder: (group, style) => {
       // mathllap, mathrlap, mathclap
-      const node = new mathMLTree.MathNode("mpadded", [buildGroup(group.body, style)]);
+      const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, style)]);
 
       if (group.alignment === "rlap") {
         if (group.body.body.length > 0 && group.body.body[0].type === "genfrac") {
@@ -5883,7 +5811,7 @@ var temml = (function () {
 
   const textAtomTypes = ["text", "textord", "mathord", "atom"];
 
-  function mathmlBuilder$7(group, style) {
+  function mathmlBuilder$3(group, style) {
     let node;
     const inner = buildExpression(group.body, style);
 
@@ -5981,7 +5909,7 @@ var temml = (function () {
         mustPromote
       };
     },
-    mathmlBuilder: mathmlBuilder$7
+    mathmlBuilder: mathmlBuilder$3
   });
 
   const binrelClass = (arg) => {
@@ -6047,13 +5975,13 @@ var temml = (function () {
         sub: funcName === "\\underset" ? shiftedArg : null
       };
     },
-    mathmlBuilder: mathmlBuilder$7
+    mathmlBuilder: mathmlBuilder$3
   });
 
   // Helper function
-  const buildGroup$1 = (el, style, noneNode) => {
+  const buildGroup = (el, style, noneNode) => {
     if (!el) { return noneNode }
-    const node = buildGroup(el, style);
+    const node = buildGroup$1(el, style);
     if (node.type === "mrow" && node.children.length === 0) { return noneNode }
     return node
   };
@@ -6111,14 +6039,14 @@ var temml = (function () {
       }
     },
     mathmlBuilder(group, style) {
-      const base =  buildGroup(group.base, style);
+      const base =  buildGroup$1(group.base, style);
 
       const prescriptsNode = new mathMLTree.MathNode("mprescripts");
       const noneNode = new mathMLTree.MathNode("none");
       let children = [];
 
-      const preSub = buildGroup$1(group.prescripts.sub, style, noneNode);
-      const preSup = buildGroup$1(group.prescripts.sup, style, noneNode);
+      const preSub = buildGroup(group.prescripts.sub, style, noneNode);
+      const preSup = buildGroup(group.prescripts.sup, style, noneNode);
       if (group.isSideset) {
         // This seems silly, but LaTeX does this. Firefox ignores it, which does not make me sad.
         preSub.setAttribute("style", "text-align: left;");
@@ -6126,8 +6054,8 @@ var temml = (function () {
       }
 
       if (group.postscripts) {
-        const postSub = buildGroup$1(group.postscripts.sub, style, noneNode);
-        const postSup = buildGroup$1(group.postscripts.sup, style, noneNode);
+        const postSub = buildGroup(group.postscripts.sub, style, noneNode);
+        const postSup = buildGroup(group.postscripts.sup, style, noneNode);
         children = [base, postSub, postSup, prescriptsNode, preSub, preSup];
       } else {
         children = [base, prescriptsNode, preSub, preSup];
@@ -6198,7 +6126,7 @@ var temml = (function () {
   // NOTE: Unlike most `builders`s, this one handles not only "op", but also
   // "supsub" since some of them (like \int) can affect super/subscripting.
 
-  const mathmlBuilder$8 = (group, style) => {
+  const mathmlBuilder$2 = (group, style) => {
     let node;
 
     if (group.symbol) {
@@ -6214,7 +6142,7 @@ var temml = (function () {
       node = new MathNode("mo", buildExpression(group.body, style));
     } else {
       // This is a text operator. Add all of the characters from the operator's name.
-      node = new MathNode("mi", [new TextNode$1(group.name.slice(1))]);
+      node = new MathNode("mi", [new TextNode(group.name.slice(1))]);
 
       if (!group.parentIsSupSub) {
         // Append an invisible <mo>&ApplyFunction;</mo>.
@@ -6300,7 +6228,7 @@ var temml = (function () {
         name: fName
       };
     },
-    mathmlBuilder: mathmlBuilder$8
+    mathmlBuilder: mathmlBuilder$2
   });
 
   // Note: calling defineFunction with a type that's already been defined only
@@ -6330,7 +6258,7 @@ var temml = (function () {
         body: isSymbol ? null : ordargument(body)
       };
     },
-    mathmlBuilder: mathmlBuilder$8
+    mathmlBuilder: mathmlBuilder$2
   });
 
   // There are 2 flags for operators; whether they produce limits in
@@ -6416,7 +6344,7 @@ var temml = (function () {
         name: funcName
       };
     },
-    mathmlBuilder: mathmlBuilder$8
+    mathmlBuilder: mathmlBuilder$2
   });
 
   // Limits, not symbols
@@ -6441,7 +6369,7 @@ var temml = (function () {
         name: funcName
       };
     },
-    mathmlBuilder: mathmlBuilder$8
+    mathmlBuilder: mathmlBuilder$2
   });
 
   // No limits, symbols
@@ -6507,7 +6435,7 @@ var temml = (function () {
         name: fName
       };
     },
-    mathmlBuilder: mathmlBuilder$8
+    mathmlBuilder: mathmlBuilder$2
   });
 
   /**
@@ -6526,7 +6454,7 @@ var temml = (function () {
   // "operatorname", but also  "supsub" since \operatorname* can
   // affect super/subscripting.
 
-  const mathmlBuilder$9 = (group, style) => {
+  const mathmlBuilder$1 = (group, style) => {
     let expression = buildExpression(group.body, style.withFont("mathrm"));
 
     // Is expression a string or has it something like a fraction?
@@ -6636,7 +6564,7 @@ var temml = (function () {
         needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)
       };
     },
-    mathmlBuilder: mathmlBuilder$9
+    mathmlBuilder: mathmlBuilder$1
   });
 
   defineMacro("\\operatorname",
@@ -6669,7 +6597,7 @@ var temml = (function () {
 
       const node = new mathMLTree.MathNode(
         "mover",
-        [buildGroup(group.body, style), operator]
+        [buildGroup$1(group.body, style), operator]
       );
       node.setAttribute("accent", "true");
 
@@ -6779,9 +6707,9 @@ var temml = (function () {
 
   // \raise, \lower, and \raisebox
 
-  const mathmlBuilder$a = (group, style) => {
+  const mathmlBuilder = (group, style) => {
     const newStyle = style.withLevel(StyleLevel.TEXT);
-    const node = new mathMLTree.MathNode("mpadded", [buildGroup(group.body, newStyle)]);
+    const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, newStyle)]);
     const dy = calculateSize(group.dy, style);
     node.setAttribute("voffset", dy.number + dy.unit);
     const dyAbs = Math.abs(dy.number);
@@ -6809,7 +6737,7 @@ var temml = (function () {
         body
       };
     },
-    mathmlBuilder: mathmlBuilder$a
+    mathmlBuilder
   });
 
 
@@ -6831,7 +6759,7 @@ var temml = (function () {
         body
       };
     },
-    mathmlBuilder: mathmlBuilder$a
+    mathmlBuilder
   });
 
   defineFunction({
@@ -7029,7 +6957,7 @@ var temml = (function () {
       };
     },
     mathmlBuilder: (group, style) => {
-      const node = new mathMLTree.MathNode("mpadded", [buildGroup(group.body, style)]);
+      const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, style)]);
 
       if (group.smashHeight) {
         node.setAttribute("height", "0px");
@@ -7064,10 +6992,10 @@ var temml = (function () {
       const { body, index } = group;
       return index
         ? new mathMLTree.MathNode("mroot", [
-          buildGroup(body, style),
-          buildGroup(index, style.incrementLevel())
+          buildGroup$1(body, style),
+          buildGroup$1(index, style.incrementLevel())
         ])
-      : new mathMLTree.MathNode("msqrt", [buildGroup(body, style)]);
+      : new mathMLTree.MathNode("msqrt", [buildGroup$1(body, style)]);
     }
   });
 
@@ -7165,16 +7093,16 @@ var temml = (function () {
       }
 
       const children = group.base && group.base.stack
-        ? [buildGroup(group.base.body[0], style)]
-        : [buildGroup(group.base, style)];
+        ? [buildGroup$1(group.base.body[0], style)]
+        : [buildGroup$1(group.base, style)];
 
       const childStyle = style.inSubOrSup();
       if (group.sub) {
-        children.push(buildGroup(group.sub, childStyle));
+        children.push(buildGroup$1(group.sub, childStyle));
       }
 
       if (group.sup) {
-        children.push(buildGroup(group.sup, childStyle));
+        children.push(buildGroup$1(group.sup, childStyle));
       }
 
       let nodeType;
@@ -7624,7 +7552,7 @@ var temml = (function () {
   // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
   // src/symbols.js.
 
-  const numberRegEx = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in Parser.js
+  const numberRegEx$1 = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in Parser.js
 
   const latinRegEx = /[A-Ba-z]/;
 
@@ -7651,10 +7579,16 @@ var temml = (function () {
       } else if (variant !== "italic") {
         text.text = variantChar(text.text, variant);
       }
-      const node = new mathMLTree.MathNode("mi", [text]);
+      let node = new mathMLTree.MathNode("mi", [text]);
       // TODO: Handle U+1D49C - U+1D4CF per https://www.unicode.org/charts/PDF/U1D400.pdf
       if (variant === "normal") {
         node.setAttribute("mathvariant", "normal");
+        if (text.text.length === 1) {
+          // A Firefox bug will apply spacing here, but there should be none. Fix it.
+          node = new mathMLTree.MathNode("mpadded", [node]);
+          node.setAttribute("lspace", "0");
+          node.setAttribute("width", "+0em");
+        }
       }
       return node
     }
@@ -7677,7 +7611,7 @@ var temml = (function () {
       let node;
       if (group.mode === "text") {
         if (variant === "italic" || variant === "bold-italic") {
-          if (numberRegEx.test(group.text)) {
+          if (numberRegEx$1.test(group.text)) {
             return italicNumber(text, variant)
           }
         }
@@ -7685,7 +7619,7 @@ var temml = (function () {
           text.text = variantChar(text.text, variant);
         }
         node = new mathMLTree.MathNode("mtext", [text]);
-      } else if (numberRegEx.test(group.text)) {
+      } else if (numberRegEx$1.test(group.text)) {
         if (variant === "oldstylenums") {
           const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"]);
           node = new mathMLTree.MathNode("mn", [ms]);
@@ -7770,6 +7704,79 @@ var temml = (function () {
   // For a \tag, the work usually done in a mathmlBuilder is instead done in buildMathML.js.
   // That way, a \tag can be pulled out of the parse tree and wrapped around the outer node.
 
+  // Non-mathy text, possibly in a font
+  const textFontFamilies = {
+    "\\text": undefined,
+    "\\textrm": "textrm",
+    "\\textsf": "textsf",
+    "\\texttt": "texttt",
+    "\\textnormal": "textrm",
+    "\\textsc": "textsc"      // small caps
+  };
+
+  const textFontWeights = {
+    "\\textbf": "textbf",
+    "\\textmd": "textmd"
+  };
+
+  const textFontShapes = {
+    "\\textit": "textit",
+    "\\textup": "textup"
+  };
+
+  const styleWithFont = (group, style) => {
+    const font = group.font;
+    // Checks if the argument is a font family or a font style.
+    if (!font) {
+      return style;
+    } else if (textFontFamilies[font]) {
+      return style.withTextFontFamily(textFontFamilies[font]);
+    } else if (textFontWeights[font]) {
+      return style.withTextFontWeight(textFontWeights[font]);
+    } else {
+      return style.withTextFontShape(textFontShapes[font]);
+    }
+  };
+
+  defineFunction({
+    type: "text",
+    names: [
+      // Font families
+      "\\text",
+      "\\textrm",
+      "\\textsf",
+      "\\texttt",
+      "\\textnormal",
+      "\\textsc",
+      // Font weights
+      "\\textbf",
+      "\\textmd",
+      // Font Shapes
+      "\\textit",
+      "\\textup"
+    ],
+    props: {
+      numArgs: 1,
+      argTypes: ["text"],
+      allowedInArgument: true,
+      allowedInText: true
+    },
+    handler({ parser, funcName }, args) {
+      const body = args[0];
+      return {
+        type: "text",
+        mode: parser.mode,
+        body: ordargument(body),
+        font: funcName
+      };
+    },
+    mathmlBuilder(group, style) {
+      const newStyle = styleWithFont(group, style);
+      const mrow = buildExpressionRow(group.body, newStyle);
+      return utils.consolidateText(mrow)
+    }
+  });
+
   // Two functions included to enable migration from Mathjax.
 
   defineFunction({
@@ -7787,8 +7794,8 @@ var temml = (function () {
       };
     },
     mathmlBuilder: (group, style) => {
-      const math = buildGroup(group.body, style);
-      const tip = buildGroup(group.tip, style);
+      const math = buildGroup$1(group.body, style);
+      const tip = buildGroup$1(group.tip, style);
       // Browsers don't support the tooltip actiontype.
       // TODO: Come back and fix \mathtip when it can be done via CSS w/o a JS event.
       const node = new mathMLTree.MathNode("maction", [math, tip], ["tml-tip"]);
@@ -7813,8 +7820,8 @@ var temml = (function () {
       };
     },
     mathmlBuilder: (group, style) => {
-      const math = buildGroup(group.body, style);
-      const tip = buildGroup(group.tip, style);
+      const math = buildGroup$1(group.body, style);
+      const tip = buildGroup$1(group.tip, style);
       // args[1] only accepted text, so tip is a <mtext> element or a <mrow> of them.
       let str = "";
       if (tip.type === "mtext") {
@@ -7859,7 +7866,7 @@ var temml = (function () {
       operator.setAttribute("stretchy", "true");
 
       const node = new mathMLTree.MathNode("munder",
-        [buildGroup(group.body, style), operator]
+        [buildGroup$1(group.body, style), operator]
       );
       node.setAttribute("accentunder", "true");
 
@@ -9748,7 +9755,7 @@ var temml = (function () {
 
   /* eslint no-constant-condition:0 */
 
-  const numberRegEx$1 = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in symbolsOrd.js
+  const numberRegEx = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in symbolsOrd.js
 
   /**
    * This file contains the parser used to parse out a TeX expression from the
@@ -10600,7 +10607,7 @@ var temml = (function () {
           };
         }
         symbol = s;
-      } else if (!this.strict && numberRegEx$1.test(text)) {
+      } else if (!this.strict && numberRegEx.test(text)) {
         // A number. Wrap in a <mn>
         this.consume();
         return {
@@ -10837,7 +10844,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.6.5";
+  const version = "0.6.6";
 
   function postProcess(block) {
     const labelMap = {};
@@ -10961,7 +10968,7 @@ var temml = (function () {
     if (options.throwOnError || !(error instanceof ParseError)) {
       throw error;
     }
-    const node = new Span(["temml-error"], [new TextNode(expression + "\n" + error.toString())]);
+    const node = new Span(["temml-error"], [new TextNode$1(expression + "\n" + error.toString())]);
     node.style.color = options.errorColor;
     node.style.whiteSpace = "pre-line";
     return node;
@@ -11044,4 +11051,4 @@ var temml = (function () {
 
   return temml;
 
-}());
+})();

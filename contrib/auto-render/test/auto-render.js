@@ -117,9 +117,9 @@ var renderMathInElement = (function (temml) {
           if (optionsCopy.preProcess) {
             math = optionsCopy.preProcess(math);
           }
-          temml__default['default'].render(math, span, optionsCopy);
+          temml__default["default"].render(math, span, optionsCopy);
         } catch (e) {
-          if (!(e instanceof temml__default['default'].ParseError)) {
+          if (!(e instanceof temml__default["default"].ParseError)) {
             throw e;
           }
           optionsCopy.errorCallback(
@@ -209,9 +209,9 @@ var renderMathInElement = (function (temml) {
     optionsCopy.macros = optionsCopy.macros || {};
 
     renderElem(elem, optionsCopy);
-    temml__default['default'].postProcess(elem);
+    temml__default["default"].postProcess(elem);
   };
 
   return renderMathInElement;
 
-}(temml));
+})(temml);

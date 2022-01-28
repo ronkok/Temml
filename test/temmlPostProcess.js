@@ -2,7 +2,7 @@
   typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
   typeof define === 'function' && define.amd ? define(['exports'], factory) :
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, factory(global.temml = {}));
-}(this, (function (exports) { 'use strict';
+})(this, (function (exports) { 'use strict';
 
   /* Temml Post Process
    * Perform two tasks not done by Temml when it created each individual Temml <math> element.
@@ -14,7 +14,7 @@
    * https://mit-license.org/
    */
 
-  const version = "0.6.5";
+  const version = "0.6.6";
 
   function postProcess(block) {
     const labelMap = {};
@@ -67,4 +67,4 @@
 
   Object.defineProperty(exports, '__esModule', { value: true });
 
-})));
+}));
