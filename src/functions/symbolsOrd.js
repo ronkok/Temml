@@ -34,10 +34,16 @@ defineFunctionBuilders({
     } else if (variant !== "italic") {
       text.text = variantChar(text.text, variant)
     }
-    const node = new mathMLTree.MathNode("mi", [text])
+    let node = new mathMLTree.MathNode("mi", [text])
     // TODO: Handle U+1D49C - U+1D4CF per https://www.unicode.org/charts/PDF/U1D400.pdf
     if (variant === "normal") {
       node.setAttribute("mathvariant", "normal")
+      if (text.text.length === 1) {
+        // A Firefox bug will apply spacing here, but there should be none. Fix it.
+        node = new mathMLTree.MathNode("mpadded", [node])
+        node.setAttribute("lspace", "0")
+        node.setAttribute("width", "+0em")
+      }
     }
     return node
   }
