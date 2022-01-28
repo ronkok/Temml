@@ -10,7 +10,7 @@ import symbols, { ligatures } from "./symbols"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
 import { MathNode } from "./mathMLTree"
 import setLineBreaks from "./linebreaking"
-import { consolidateText } from "./functions/text"
+import utils from "./utils";
 
 /**
  * Takes a symbol and converts it into a MathML text node after performing
@@ -118,7 +118,7 @@ const glue = _ => {
 
 const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
   tag = buildExpressionRow(tag[0].body, style)
-  tag = consolidateText(tag)
+  tag = utils.consolidateText(tag)
   tag.classes = ["tml-tag"];
   if (!preventTagLap) {
     tag = new mathMLTree.MathNode("mpadded", [tag])
