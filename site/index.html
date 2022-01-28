@@ -41,7 +41,7 @@
       <label for="demoSource">Input:</label>
       <br/>
   
-      <textarea class="ioArea" id="demoSource" spellcheck="false" wrap="soft">\newcommand\d[0]{\operatorname{d}\!}
+      <textarea class="ioArea" id="demoSource" spellcheck="false" wrap="soft">\def\d{\mathrm{d}}
 
 \oint_C \vec{B}\circ \d\vec{l} = \mu_0 \left( I_{\text{enc}} + \varepsilon_0 \frac{\d}{\d t} \int_S \vec{E} \circ \hat{n}\; \d a \right)</textarea>
     </div>
@@ -52,79 +52,7 @@
   
       <div class="ioArea" id="demoRendering">
         <div id="math">
-          <math display="block">
-            <mrow>
-              <msub>
-                <mo movablelimits="false">∮</mo>
-                <mi>C</mi>
-              </msub>
-              <mover accent="true">
-                <mi>B</mi>
-                <mo>⃗</mo>
-              </mover>
-              <mo>∘</mo>
-            </mrow>
-            <mrow>
-              <mi mathvariant="normal">d</mi>
-              <mo>⁡</mo>
-              <mspace width="-0.1667em"></mspace>
-              <mover accent="true">
-                <mi>l</mi>
-                <mo>⃗</mo>
-              </mover>
-              <mo stretchy="false">=</mo>
-            </mrow>
-            <mrow>
-              <msub>
-                <mi>μ</mi>
-                <mn>0</mn>
-              </msub>
-              <mrow>
-                <mo fence="true" form="prefix">(</mo>
-                <msub>
-                  <mi>I</mi>
-                  <mtext>enc</mtext>
-                </msub>
-                <mo>+</mo>
-                <msub>
-                  <mi>ε</mi>
-                  <mn>0</mn>
-                </msub>
-                <mfrac>
-                  <mrow>
-                    <mi mathvariant="normal">d</mi>
-                    <mo>⁡</mo>
-                    <mspace width="-0.1667em"></mspace>
-                  </mrow>
-                  <mrow>
-                    <mi mathvariant="normal">d</mi>
-                    <mo>⁡</mo>
-                    <mspace width="-0.1667em"></mspace>
-                    <mi>t</mi>
-                  </mrow>
-                </mfrac>
-                <msub>
-                  <mo movablelimits="false">∫</mo>
-                  <mi>S</mi>
-                </msub>
-                <mover accent="true">
-                  <mi>E</mi>
-                  <mo>⃗</mo>
-                </mover>
-                <mo>∘</mo>
-                <mover accent="true">
-                  <mi>n</mi>
-                  <mo>^</mo>
-                </mover>
-                <mspace width="0.2778em"></mspace>
-                <mi mathvariant="normal">d</mi>
-                <mo>⁡</mo>
-                <mspace width="-0.1667em"></mspace>
-                <mi>a</mi>
-                <mo fence="true" form="postfix">)</mo>
-              </mrow>
-            </mrow>
-          </math>          
+          <math display="block"><mrow><msub><mo movablelimits="false">∮</mo><mi>C</mi></msub><mover accent="true"><mi>B</mi><mo stretchy="false">⃗</mo></mover><mo>∘</mo><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mover accent="true"><mi>l</mi><mo stretchy="false">⃗</mo></mover><mo>=</mo><msub><mi>μ</mi><mn>0</mn></msub><mrow><mo fence="true" form="prefix">(</mo><msub><mi>I</mi><mtext>enc</mtext></msub><mo>+</mo><msub><mi>ε</mi><mn>0</mn></msub><mfrac><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mrow><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mi>t</mi></mrow></mfrac><msub><mo movablelimits="false">∫</mo><mi>S</mi></msub><mover accent="true"><mi>E</mi><mo stretchy="false">⃗</mo></mover><mo>∘</mo><mover accent="true"><mi>n</mi><mo stretchy="false">^</mo></mover><mspace width="0.2778em"></mspace><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mi>a</mi><mo fence="true" form="postfix">)</mo></mrow></mrow></math>
         </div>
         <div id="notice"></div>
       </div>
@@ -224,7 +152,7 @@
   if (hash && hash.length > 1) {
     getHash()
   } else {
-    if (input.value !== `\\newcommand\\d[0]{\\operatorname{d}\\!}
+    if (input.value !== `\\def\\d{\\mathrm{d}}
 
 \\oint_C \\vec{B}\\circ \\d\\vec{l} = \\mu_0 \\left( I_{\\text{enc}} + \\varepsilon_0 \\frac{\\d}{\\d t} \\int_S \\vec{E} \\circ \\hat{n}\\; \\d a \\right)`) {
     }
