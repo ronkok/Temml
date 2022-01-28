@@ -1373,8 +1373,8 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $`\text{\textquotedblleft}`  | $`\triangle`            | $`\Bot` `\Bot`                     |
 |  `\text{\textquotedblleft}`  |  `\triangle`            |                                    |
 +------------------------------+-------------------------+------------------------------------+
-| $`"`  `"`                    | $`\triangledown`        |                                    |
-|                              |  `\triangledown`        | $`\$`  `\$`                        |
+| $`"`  `"`                    | $`\triangledown`        | $`\$`  `\$`                        |
+|                              |  `\triangledown`        |                                    |
 +------------------------------+-------------------------+------------------------------------+
 | $`\text{\textquotedblright}` | $`\triangleleft`        | $`\text{\textdollar}`              |
 |  `\text{\textquotedblright}` |  `\triangleleft`        |  `\text{\textdollar}`              |

@@ -358,7 +358,7 @@ const TABLES = (function() {
           for (let ii = yStart; ii < yEnd; ii++) {
             str += lines[ii].slice(xStart, xEnd).replace(/ +$/, "") + "\n";
           }
-          cell.blob = str.slice(0, -1);
+          cell.blob = str.slice(0, -1).replace(/^\n+/, "");
 
           cell.inHeader = (headerExists && yStart < headerSepLine);
 
