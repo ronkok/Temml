@@ -151,10 +151,10 @@ Available options are:
   - `{command: "\\url", url, protocol}`
   - `{command: "\\href", url, protocol}`
   - `{command: "\\includegraphics", url, protocol}`
-  - `{command: "\\htmlClass", class}`
-  - `{command: "\\htmlId", id}`
-  - `{command: "\\htmlStyle", style}`
-  - `{command: "\\htmlData", attributes}`
+  - `{command: "\\class", class}`
+  - `{command: "\\id", id}`
+  - `{command: "\\style", style}`
+  - `{command: "\\data", attributes}`
 
   Here are some sample trust settings:
 
