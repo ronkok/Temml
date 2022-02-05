@@ -13,7 +13,7 @@ When the [MathML-in-Chromium](https://mathml.igalia.com/news/) project is comple
 
 Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.13.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
 
-Temml's test [suite](https://temml.org/docs/en/supported.html) [includes](https://temml.org/tests/mozilla-tests.html) [many](https://temml.org/tests/wiki-tests.html) [rendered](https://temml.org/tests/mhchem-tests.html) [examples](https://temml.org/tests/LaTeXML-tests.html) that are available for viewing.
+Temml's [test](https://temml.org/docs/en/supported.html) suite [includes](https://temml.org/tests/mozilla-tests.html) many [rendered](https://temml.org/tests/wiki-tests.html) examples [that](https://temml.org/tests/mhchem-tests.html) are [available](https://temml.org/tests/LaTeXML-tests.html) for viewing.
 
 Temml's demonstration page is at https://temml.org/
 
