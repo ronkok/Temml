@@ -917,11 +917,11 @@ That concludes the tests from Wikipedia. Now a few more tests.
 +-----+-----------------------------------------------+--------------------------------------------------+
 | **Linear Logic**                                                                                       |
 +=====+===============================================+==================================================+
-| 242 | A \with B \parr C                             | $`A \with B \parr C`                             |
+| 262 | A \with B \parr C                             | $`A \with B \parr C`                             |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 243 | a \coh \oc b \incoh \wn c \scoh d \sincoh e   | $`a \coh \oc b \incoh \wn c \scoh d \sincoh e`   |
+| 263 | a \coh \oc b \incoh \wn c \scoh d \sincoh e   | $`a \coh \oc b \incoh \wn c \scoh d \sincoh e`   |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 244 | a \Perp \shpos b \multimapinv \shneg c        | $`a \Perp \shpos b \multimapinv \shneg c`        |
+| 264 | a \Perp \shpos b \multimapinv \shneg c        | $`a \Perp \shpos b \multimapinv \shneg c`        |
 +-----+-----------------------------------------------+--------------------------------------------------+
 
 <br>
