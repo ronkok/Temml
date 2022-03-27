@@ -98,7 +98,7 @@ defineFunction({
     return {
       type: "mclass",
       mode: parser.mode,
-      mclass: "m" + funcName.substr(5),
+      mclass: "m" + funcName.slice(5),
       body: ordargument(mustPromote ? mord : body),
       isCharacterBox,
       mustPromote

@@ -24,8 +24,8 @@ export const makeText = function(text, mode, style) {
     !(
       Object.prototype.hasOwnProperty.call(ligatures, text) &&
       style &&
-      ((style.fontFamily && style.fontFamily.substr(4, 2) === "tt") ||
-        (style.font && style.font.substr(4, 2) === "tt"))
+      ((style.fontFamily && style.fontFamily.slice(4, 6) === "tt") ||
+        (style.font && style.font.slice(4, 6) === "tt"))
     )
   ) {
     text = symbols[mode][text].replace;

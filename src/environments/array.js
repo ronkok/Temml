@@ -240,7 +240,7 @@ function parseArray(
 // Decides on a scriptLevel for cells in an array according to whether the given
 // environment name starts with the letter 'd'.
 function dCellStyle(envName) {
-  return envName.substr(0, 1) === "d" ? "display" : "text"
+  return envName.slice(0, 1) === "d" ? "display" : "text"
 }
 
 const alignMap = {
