@@ -26,6 +26,7 @@ class Style {
     // See: https://tex.stackexchange.com/questions/22350/difference-between-textrm-and-mathrm
     this.font = data.font || "";                // string
     this.fontFamily = data.fontFamily || "";    // string
+    this.fontSize = data.fontSize || 1.0;       // number
     this.fontWeight = data.fontWeight || "";
     this.fontShape = data.fontShape || "";
     this.maxSize = data.maxSize;                // [number, number]
@@ -41,6 +42,7 @@ class Style {
       color: this.color,
       font: this.font,
       fontFamily: this.fontFamily,
+      fontSize: this.fontSize,
       fontWeight: this.fontWeight,
       fontShape: this.fontShape,
       maxSize: this.maxSize
@@ -99,6 +101,15 @@ class Style {
     return this.extend({
       fontFamily,
       font: ""
+    });
+  }
+
+  /**
+   * Creates a new style object with the given font size
+   */
+  withFontSize(num) {
+    return this.extend({
+      fontSize: num
     });
   }
 

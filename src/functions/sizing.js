@@ -53,10 +53,12 @@ defineFunction({
     };
   },
   mathmlBuilder: (group, style) => {
-    const inner = mml.buildExpression(group.body, style);
+    const newStyle = style.withFontSize(sizeMap[group.funcName]);
+    const inner = mml.buildExpression(group.body, newStyle);
     // Wrap with an <mstyle> element.
     const node = wrapWithMstyle(inner)
-    node.setAttribute("mathsize", sizeMap[group.funcName] + "em");
+    const factor = (sizeMap[group.funcName] / style.fontSize).toFixed(4)
+    node.setAttribute("mathsize", factor + "em");
     return node;
   }
 });
