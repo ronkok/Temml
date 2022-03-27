@@ -1161,6 +1161,8 @@ If you know the shape of a character, but not its name,
 |\stareq|$`\stareq`|| stix |
 |\Stigma|$`\Stigma`|||
 |\stigma|$`\stigma`|||
+|\strictif|$`\strictif`|| txfonts/pxfonts |
+|\strictfi|$`\strictfi`|| txfonts/pxfonts |
 |\strut|(Not supported)|||
 |\style|(Not supported)|Non standard||
 |\sub|$`\sub`|| texvc extension |

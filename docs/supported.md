@@ -594,6 +594,9 @@ include `strict: true`.
 +------------------------+----------------------+-----------------------------+------------------------------+
 | $`\notni` `\notni`     | $`\neg` `\neg`       | $`\Set{ x | x<\frac 1 2 }`\ | $`\set{x|x<5 }`\             |
 |                        | or `\lnot`           |  `\Set{ x | x<\frac 1 2 }`  |  `\set{x|x<5}`               |
++------------------------+----------------------+                             |                              |
+| $`\strictif`           | $`\strictfi`         |                             |                              |
+| `\strictif`            | `\strictfi`          |                             |                              |
 +------------------------+----------------------+-----------------------------+------------------------------+
 
 Linear Logic (from the `cmll` package):
@@ -616,7 +619,8 @@ Equivalents in the _texvc_ extension
 | $`\exist` `\exist` | $`\isin` `\isin` | $`\empty` `\empty` | $`\sub` `\sub` |
 +--------------------+------------------+--------------------+----------------+
 
-Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ ∧ ∨ ↦ → ← ↔ ∅ ⟹ ⟺ ¬ ↯ ℂ ℍ ℕ ℙ ℚ ℝ</span>
+Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ ∧ ∨ ↦ → ← ↔ ∅ ⟹ ⟺ ¬ ↯ ⥼ ⥽</span>\
+<span class="direct">ℂ ℍ ℕ ℙ ℚ ℝ</span>
 
 ## Macros
 

@@ -403,6 +403,8 @@ defineSymbol(math, bin, "\u22b3", "\\rhd");
 defineSymbol(math, rel, "\u2242", "\\eqsim", true);
 defineSymbol(math, rel, "\u22c8", "\\Join");
 defineSymbol(math, rel, "\u2251", "\\Doteq", true);
+defineSymbol(math, rel, "\u297d", "\\strictif", true);
+defineSymbol(math, rel, "\u297c", "\\strictfi", true);
 
 // AMS Binary Operators
 defineSymbol(math, bin, "\u2214", "\\dotplus", true);
