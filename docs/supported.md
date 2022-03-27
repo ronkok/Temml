@@ -753,7 +753,7 @@ Direct Input: <span class="direct">∫ ∬ ∭ ⨌ ∮ ∯ ∰ ⨖ ∲ ∏ ∐ �
 
 The _texvc_ extension provides $`\plusmn` `\plusmn`.
 
-Direct Input: <span class="direct">+ - / * ⋅ ± × ÷ ∓ ∔ ∧ ∨ ∩ ∪ ≀ ⊎ ⊓ ⊔ ⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ⊝ ◯</span>
+Direct Input: <span class="direct">+ - / ∖ * ⋅ ∘ ± × ÷ ∓ ∔ ∧ ∨ ∩ ∪ ≀ ⊎ ⊓ ⊔ ⊕ ⊖ ⊗ ⊘ ⊙ ⊚ ⊛ ⊝ ◯</span>
 
 ### Fractions and Binomials
 

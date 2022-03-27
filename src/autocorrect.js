@@ -1,5 +1,4 @@
 
-
 const autoCorrections = {
   "\\alpha": "α",
   "\\beta": "β",
