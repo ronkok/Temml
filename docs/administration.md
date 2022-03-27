@@ -186,7 +186,13 @@ If you use the [auto-render extension][https://github.com/ronkok/Temml/tree/main
 
 Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.
 
-**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`. Sadly, Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.
+**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`. Sadly, Cambria Math radicals are sometimes too tall for their content.
+
+<details><summary>More…</summary>
+
+You can mitigate the radical problem. It occurs because the font expects a cramped subscript when under a radical and Firefox does not perform that cramp. You can create your own cramp with braces. The expression `f{_c'}` will render just fine when `f_c'` renders poorly.
+
+</details>
 
 **Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
