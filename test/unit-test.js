@@ -614,6 +614,8 @@ const test = () => {
   new Expect(r`a b\, \; \! \: \> ~ \thinspace \medspace \quad \ `).toBuild();
   new Expect(r`\enspace \thickspace \qquad \space \nobreakspace`).toBuild();
   new Expect(r`\text{\textellipsis !}`).toParseLike(r`\text{\textellipsis!}`);
+  new Expect(r`\:_*`).toParse();
+  new Expect(r`\:_*`).toBuild();
 
   assertion = `A texvc builder should not fail`
   new Expect(r`\lang\N\darr\R\dArr\Z\Darr\alef\rang`).toParse();
@@ -2013,8 +2015,8 @@ const test = () => {
   new Expect(`←↑→↓↔↕↖↗↘↙↚↛↞↠↢↣↦↩↪↫↬↭↮↰↱↶↷↼↽↾↾↿⇀⇁⇂⇃⇄⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇚⇛⇝⟵⟶⟷⟸⟹⟺⟼`).toParse()
   new Expect(`←↑→↓↔↕↖↗↘↙↚↛↞↠↢↣↦↩↪↫↬↭↮↰↱↶↷↼↽↾↾↿⇀⇁⇂⇃⇄⇆⇇⇈⇉⇊⇋⇌⇍⇎⇏⇐⇑⇒⇓⇔⇕⇚⇛⇝⟵⟶⟷⟸⟹⟺⟼`).toBuild()
   assertion = "Temml should build Unicode binary operators"
-  new Expect(`±×÷∓∔∧∨∩∪≀⊎⊓⊔⊕⊖⊗⊘⊙⊚⊛⊝◯⊞⊟⊠⊡⊺⊻⊼⋇⋉⋊⋋⋌⋎⋏⋒⋓⩞\u22C5`).toParse()
-  new Expect(`±×÷∓∔∧∨∩∪≀⊎⊓⊔⊕⊖⊗⊘⊙⊚⊛⊝◯⊞⊟⊠⊡⊺⊻⊼⋇⋉⋊⋋⋌⋎⋏⋒⋓⩞\u22C5`).toBuild()
+  new Expect(`±×÷∓∔∧∨∩∪≀⊎⊓⊔⊕⊖⊗⊘⊙⊚⊛⊝◯⊞⊟⊠⊡⊺⊻⊼⋇⋉⋊⋋⋌⋎⋏⋒⋓⩞\u22C5\u2216\u2218\u2219`).toParse()
+  new Expect(`±×÷∓∔∧∨∩∪≀⊎⊓⊔⊕⊖⊗⊘⊙⊚⊛⊝◯⊞⊟⊠⊡⊺⊻⊼⋇⋉⋊⋋⋌⋎⋏⋒⋓⩞\u22C5\u2216\u2218\u2219`).toBuild()
   assertion = "Temml should build Unicode delimiters"
   new Expect("\\left\u230A\\frac{a}{b}\\right\u230B").toParse()
   new Expect("\\left\u2308\\frac{a}{b}\\right\u2308").toParse()

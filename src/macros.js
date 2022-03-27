@@ -399,32 +399,32 @@ defineMacro("\\DOTSX", "\\relax");
 defineMacro("\\tmspace", "\\TextOrMath{\\kern#1#3}{\\mskip#1#2}\\relax");
 // \renewcommand{\,}{\tmspace+\thinmuskip{.1667em}}
 // TODO: math mode should use \thinmuskip
-defineMacro("\\,", "\\tmspace+{3mu}{.1667em}");
+defineMacro("\\,", "{\\tmspace+{3mu}{.1667em}}");
 // \let\thinspace\,
 defineMacro("\\thinspace", "\\,");
 // \def\>{\mskip\medmuskip}
 // \renewcommand{\:}{\tmspace+\medmuskip{.2222em}}
 // TODO: \> and math mode of \: should use \medmuskip = 4mu plus 2mu minus 4mu
 defineMacro("\\>", "\\mskip{4mu}");
-defineMacro("\\:", "\\tmspace+{4mu}{.2222em}");
+defineMacro("\\:", "{\\tmspace+{4mu}{.2222em}}");
 // \let\medspace\:
 defineMacro("\\medspace", "\\:");
 // \renewcommand{\;}{\tmspace+\thickmuskip{.2777em}}
 // TODO: math mode should use \thickmuskip = 5mu plus 5mu
-defineMacro("\\;", "\\tmspace+{5mu}{.2777em}");
+defineMacro("\\;", "{\\tmspace+{5mu}{.2777em}}");
 // \let\thickspace\;
 defineMacro("\\thickspace", "\\;");
 // \renewcommand{\!}{\tmspace-\thinmuskip{.1667em}}
 // TODO: math mode should use \thinmuskip
-defineMacro("\\!", "\\tmspace-{3mu}{.1667em}");
+defineMacro("\\!", "{\\tmspace-{3mu}{.1667em}}");
 // \let\negthinspace\!
 defineMacro("\\negthinspace", "\\!");
 // \newcommand{\negmedspace}{\tmspace-\medmuskip{.2222em}}
 // TODO: math mode should use \medmuskip
-defineMacro("\\negmedspace", "\\tmspace-{4mu}{.2222em}");
+defineMacro("\\negmedspace", "{\\tmspace-{4mu}{.2222em}}");
 // \newcommand{\negthickspace}{\tmspace-\thickmuskip{.2777em}}
 // TODO: math mode should use \thickmuskip
-defineMacro("\\negthickspace", "\\tmspace-{5mu}{.277em}");
+defineMacro("\\negthickspace", "{\\tmspace-{5mu}{.277em}}");
 // \def\enspace{\kern.5em }
 defineMacro("\\enspace", "\\kern.5em ");
 // \def\enskip{\hskip.5em\relax}
