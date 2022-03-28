@@ -988,7 +988,7 @@ var temml = (function () {
   defineSymbol(math, bin, "\u2217", "\\ast");
   defineSymbol(math, bin, "\u2294", "\\sqcup", true);
   defineSymbol(math, bin, "\u25ef", "\\bigcirc", true);
-  defineSymbol(math, bin, "\u2219", "\\bullet");
+  defineSymbol(math, bin, "\u2219", "\\bullet", true);
   defineSymbol(math, bin, "\u2021", "\\ddagger");
   defineSymbol(math, bin, "\u2240", "\\wr", true);
   defineSymbol(math, bin, "\u2a3f", "\\amalg");
@@ -1216,6 +1216,8 @@ var temml = (function () {
   defineSymbol(math, rel, "\u2242", "\\eqsim", true);
   defineSymbol(math, rel, "\u22c8", "\\Join");
   defineSymbol(math, rel, "\u2251", "\\Doteq", true);
+  defineSymbol(math, rel, "\u297d", "\\strictif", true);
+  defineSymbol(math, rel, "\u297c", "\\strictfi", true);
 
   // AMS Binary Operators
   defineSymbol(math, bin, "\u2214", "\\dotplus", true);
@@ -1394,13 +1396,13 @@ var temml = (function () {
   defineSymbol(math, bin, "\u2044", "\u2044");
   defineSymbol(math, bin, "\u2212", "-", true);
   defineSymbol(math, bin, "\u22c5", "\\cdot", true);
-  defineSymbol(math, bin, "\u2218", "\\circ");
+  defineSymbol(math, bin, "\u2218", "\\circ", true);
   defineSymbol(math, bin, "\u00f7", "\\div", true);
   defineSymbol(math, bin, "\u00b1", "\\pm", true);
   defineSymbol(math, bin, "\u00d7", "\\times", true);
   defineSymbol(math, bin, "\u2229", "\\cap", true);
   defineSymbol(math, bin, "\u222a", "\\cup", true);
-  defineSymbol(math, bin, "\u2216", "\\setminus");
+  defineSymbol(math, bin, "\u2216", "\\setminus", true);
   defineSymbol(math, bin, "\u2227", "\\land");
   defineSymbol(math, bin, "\u2228", "\\lor");
   defineSymbol(math, bin, "\u2227", "\\wedge", true);
@@ -1571,7 +1573,7 @@ var temml = (function () {
   defineSymbol(math, accent, "\u20db", "\\dddot");
   defineSymbol(math, accent, "\u20dc", "\\ddddot");
   defineSymbol(math, accent, "\u007e", "\\tilde");
-  defineSymbol(math, accent, "\u2015", "\\bar");
+  defineSymbol(math, accent, "\u203e", "\\bar");
   defineSymbol(math, accent, "\u02d8", "\\breve");
   defineSymbol(math, accent, "\u02c7", "\\check");
   defineSymbol(math, accent, "\u005e", "\\hat");
@@ -1944,8 +1946,8 @@ var temml = (function () {
       !(
         Object.prototype.hasOwnProperty.call(ligatures, text) &&
         style &&
-        ((style.fontFamily && style.fontFamily.substr(4, 2) === "tt") ||
-          (style.font && style.font.substr(4, 2) === "tt"))
+        ((style.fontFamily && style.fontFamily.slice(4, 6) === "tt") ||
+          (style.font && style.font.slice(4, 6) === "tt"))
       )
     ) {
       text = symbols[mode][text].replace;
@@ -4110,7 +4112,7 @@ var temml = (function () {
   // Decides on a scriptLevel for cells in an array according to whether the given
   // environment name starts with the letter 'd'.
   function dCellStyle(envName) {
-    return envName.substr(0, 1) === "d" ? "display" : "text"
+    return envName.slice(0, 1) === "d" ? "display" : "text"
   }
 
   const alignMap = {
@@ -5903,7 +5905,7 @@ var temml = (function () {
       return {
         type: "mclass",
         mode: parser.mode,
-        mclass: "m" + funcName.substr(5),
+        mclass: "m" + funcName.slice(5),
         body: ordargument(mustPromote ? mord : body),
         isCharacterBox,
         mustPromote
@@ -6901,10 +6903,12 @@ var temml = (function () {
       };
     },
     mathmlBuilder: (group, style) => {
-      const inner = buildExpression(group.body, style);
+      const newStyle = style.withFontSize(sizeMap[group.funcName]);
+      const inner = buildExpression(group.body, newStyle);
       // Wrap with an <mstyle> element.
       const node = wrapWithMstyle(inner);
-      node.setAttribute("mathsize", sizeMap[group.funcName] + "em");
+      const factor = (sizeMap[group.funcName] / style.fontSize).toFixed(4);
+      node.setAttribute("mathsize", factor + "em");
       return node;
     }
   });
@@ -8492,7 +8496,7 @@ var temml = (function () {
     const next = context.expandAfterFuture().text;
     if (next in dotsByToken) {
       thedots = dotsByToken[next];
-    } else if (next.substr(0, 4) === "\\not") {
+    } else if (next.slice(0, 4) === "\\not") {
       thedots = "\\dotsb";
     } else if (next in symbols.math) {
       if (utils.contains(["bin", "rel"], symbols.math[next].group)) {
@@ -8578,32 +8582,32 @@ var temml = (function () {
   defineMacro("\\tmspace", "\\TextOrMath{\\kern#1#3}{\\mskip#1#2}\\relax");
   // \renewcommand{\,}{\tmspace+\thinmuskip{.1667em}}
   // TODO: math mode should use \thinmuskip
-  defineMacro("\\,", "\\tmspace+{3mu}{.1667em}");
+  defineMacro("\\,", "{\\tmspace+{3mu}{.1667em}}");
   // \let\thinspace\,
   defineMacro("\\thinspace", "\\,");
   // \def\>{\mskip\medmuskip}
   // \renewcommand{\:}{\tmspace+\medmuskip{.2222em}}
   // TODO: \> and math mode of \: should use \medmuskip = 4mu plus 2mu minus 4mu
   defineMacro("\\>", "\\mskip{4mu}");
-  defineMacro("\\:", "\\tmspace+{4mu}{.2222em}");
+  defineMacro("\\:", "{\\tmspace+{4mu}{.2222em}}");
   // \let\medspace\:
   defineMacro("\\medspace", "\\:");
   // \renewcommand{\;}{\tmspace+\thickmuskip{.2777em}}
   // TODO: math mode should use \thickmuskip = 5mu plus 5mu
-  defineMacro("\\;", "\\tmspace+{5mu}{.2777em}");
+  defineMacro("\\;", "{\\tmspace+{5mu}{.2777em}}");
   // \let\thickspace\;
   defineMacro("\\thickspace", "\\;");
   // \renewcommand{\!}{\tmspace-\thinmuskip{.1667em}}
   // TODO: math mode should use \thinmuskip
-  defineMacro("\\!", "\\tmspace-{3mu}{.1667em}");
+  defineMacro("\\!", "{\\tmspace-{3mu}{.1667em}}");
   // \let\negthinspace\!
   defineMacro("\\negthinspace", "\\!");
   // \newcommand{\negmedspace}{\tmspace-\medmuskip{.2222em}}
   // TODO: math mode should use \medmuskip
-  defineMacro("\\negmedspace", "\\tmspace-{4mu}{.2222em}");
+  defineMacro("\\negmedspace", "{\\tmspace-{4mu}{.2222em}}");
   // \newcommand{\negthickspace}{\tmspace-\thickmuskip{.2777em}}
   // TODO: math mode should use \thickmuskip
-  defineMacro("\\negthickspace", "\\tmspace-{5mu}{.277em}");
+  defineMacro("\\negthickspace", "{\\tmspace-{5mu}{.277em}}");
   // \def\enspace{\kern.5em }
   defineMacro("\\enspace", "\\kern.5em ");
   // \def\enskip{\hskip.5em\relax}
@@ -10571,7 +10575,7 @@ var temml = (function () {
             nucleus
           );
         }
-        text = unicodeSymbols[text[0]] + text.substr(1);
+        text = unicodeSymbols[text[0]] + text.slice(1);
       }
       // Strip off any combining characters
       const match = combiningDiacriticalMarksEndRegex.exec(text);
@@ -10730,6 +10734,7 @@ var temml = (function () {
       // See: https://tex.stackexchange.com/questions/22350/difference-between-textrm-and-mathrm
       this.font = data.font || "";                // string
       this.fontFamily = data.fontFamily || "";    // string
+      this.fontSize = data.fontSize || 1.0;       // number
       this.fontWeight = data.fontWeight || "";
       this.fontShape = data.fontShape || "";
       this.maxSize = data.maxSize;                // [number, number]
@@ -10745,6 +10750,7 @@ var temml = (function () {
         color: this.color,
         font: this.font,
         fontFamily: this.fontFamily,
+        fontSize: this.fontSize,
         fontWeight: this.fontWeight,
         fontShape: this.fontShape,
         maxSize: this.maxSize
@@ -10807,6 +10813,15 @@ var temml = (function () {
     }
 
     /**
+     * Creates a new style object with the given font size
+     */
+    withFontSize(num) {
+      return this.extend({
+        fontSize: num
+      });
+    }
+
+    /**
      * Creates a new style object with the given font weight
      */
     withTextFontWeight(fontWeight) {
@@ -10844,7 +10859,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.6.6";
+  const version = "0.6.7";
 
   function postProcess(block) {
     const labelMap = {};

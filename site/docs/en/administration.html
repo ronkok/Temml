@@ -116,7 +116,10 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <p>If you use the <a href='null' title='https://github.com/ronkok/Temml/tree/main/contrib/auto-render''>auto-render extension</a>, it includes the post-processor nuances.</p>
 <h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
-<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>. Sadly, Cambria Math radicals are sometimes too tall for their content. And its integration symbols are too tall for my taste. Otherwise, this would be a good choice.</p>
+<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>. Sadly, Cambria Math radicals are sometimes too tall for their content.</p>
+<details><summary>More…</summary>
+<p>You can mitigate the radical problem. It occurs because the font expects a cramped subscript when under a radical and Firefox does not perform that cramp. You can create your own cramp with braces. The expression <code>f{_c&#x27;}</code> will render just fine when <code>f_c&#x27;</code> renders poorly.</p>
+</details>
 <p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb <code>Temml.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
 <p><strong>Asana</strong>, <strong>STIX TWO</strong>, and <strong>XITS</strong> can be served without the <code>Temml.woff2</code> file.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
@@ -204,7 +207,7 @@ allowedClasses: [
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.44em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.6</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.7</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>

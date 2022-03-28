@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.7] = 2022-03-27
+
+### Fixed
+
+- Added operator spacing to Unicode characters ∖∘∙
+- Avoid error when a spacing function is the base of a subscript.
+- Fix nested font size changes
+- Replace string.substr() with string.slice()
+- Use Unicode U+203E, Overline, for \bar{}
+
+### Added
+
+- Support \strictif and \strictfi
+
+### Docs
+
+- Explain how to work around a Cambria Math radical size problem
+- Edit README for brevity
+
 ## [0.6.6] = 2022-01-28
 
 ### Fixed
