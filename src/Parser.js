@@ -865,11 +865,11 @@ export default class Parser {
       }
       symbol = s;
     } else if (!this.strict && numberRegEx.test(text)) {
-      // A number. Wrap in a <mn>
+      // A number. Wrap in a <mn> if in math mode; <mtext> otherwise.
       this.consume()
       return {
         type: "textord",
-        mode: "math",
+        mode: this.mode,
         loc: SourceLocation.range(nucleus),
         text
       }
