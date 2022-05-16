@@ -340,6 +340,11 @@ const test = () => {
   new Expect(`^3_2`).toBuild();
   new Expect(`_2^3`).toBuild();
 
+  assertion = "A subsup parser should work with Unicode (sub|super)script characters"
+  new Expect(`A² + B²⁺³ + ¹²C + E₂³ + F₂₊₃`).toParseLike("A^{2} + B^{2+3} + ^{12}C + E_{2}^{3} + F_{2+3}")
+  new Expect(r`\text{B²⁺³}`).toParse()
+  new Expect(r`\text{B²⁺³}`).toBuild()
+
   assertion = "A parser with limit controls should fail when the limit control is not preceded by an op node"
   new Expect(r`3\nolimits_2^2`).toNotParse();
   new Expect(r`\sqrt\limits_2^2`).toNotParse();

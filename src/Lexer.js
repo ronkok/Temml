@@ -25,6 +25,7 @@ import { Token } from "./Token";
  * - matches any BMP character except for those just described
  * - matches any valid Unicode surrogate pair
  * - mathches numerals
+ * - matches a run of Unicode subscript or superscript characters
  * - matches a backslash followed by one or more whitespace characters
  * - matches a backslash followed by one or more letters then whitespace
  * - matches a backslash followed by any BMP character
@@ -50,6 +51,8 @@ const tokenRegexString =
   `(${spaceRegexString}+)|` + // whitespace
   `${controlSpaceRegexString}|` +  // whitespace
   "(number" +         // numbers (in non-strict mode)
+  `|[₊₋₌₍₎₀₁₂₃₄₅₆₇₈₉ₐₑₒₓ]+` +    // Unicode subscripts
+  `|[⁺⁻⁼⁽⁾⁰¹²³⁴⁵⁶⁷⁸⁹ⁱⁿ]+` +      // Unicode superscripts
   "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
   `${combiningDiacriticalMarkString}*` + // ...plus accents
   "|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
@@ -57,7 +60,7 @@ const tokenRegexString =
   "|\\\\verb\\*([^]).*?\\4" + // \verb*
   "|\\\\verb([^*a-zA-Z]).*?\\5" + // \verb unstarred
   `|${controlWordWhitespaceRegexString}` + // \macroName + spaces
-  `|${controlSymbolRegexString})`; // \\, \', etc.
+  `|${controlSymbolRegexString})` // \\, \', etc.
 
 /** Main Lexer class */
 export default class Lexer {
