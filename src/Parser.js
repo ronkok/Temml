@@ -6,6 +6,7 @@ import { validUnit } from "./units";
 import { supportedCodepoint } from "./unicodeScripts";
 import ParseError from "./ParseError";
 import { combiningDiacriticalMarksEndRegex } from "./Lexer";
+import { uSubsAndSups, unicodeSubRegEx, SUB, SUPER } from "./unicodeSupOrSub"
 import SourceLocation from "./SourceLocation";
 
 // Pre-evaluate both modules as unicodeSymbols require String.normalize()
@@ -362,8 +363,32 @@ export default class Parser {
         }
         // Put everything into an ordgroup as the superscript
         superscript = { type: "ordgroup", mode: this.mode, body: primes };
+      } else if (uSubsAndSups[lex.text]) {
+        // A Unicode subscript or superscript character.
+        // We treat these similarly to the unicode-math package.
+        // So we render a string of Unicode (sub|super)scripts the
+        // same as a (sub|super)script of regular characters.
+        let unicode = lex.text
+        const scriptType = unicodeSubRegEx.test(unicode) ? SUB : SUPER
+        this.consume()
+        // Continue fetching tokens to fill out the string.
+        while (true) {
+          const lex = this.fetch()
+          if (!(uSubsAndSups[lex.text])) { break }
+          if (unicodeSubRegEx.test(lex.text) !== scriptType) { break }
+          this.consume()
+          unicode += uSubsAndSups[lex.text]
+        }
+        // Now convert to regular characters and create a (sub|super)script.
+        const str = unicode.split('').map(ch => uSubsAndSups[ch]).join('')
+        const body = (new Parser(str, this.settings)).parse()
+        if (scriptType === SUB) {
+          subscript = { type: "ordgroup", mode: "math", body }
+        } else {
+          superscript = { type: "ordgroup", mode: "math", body }
+        }
       } else {
-        // If it wasn't ^, _, or ', stop parsing super/subscripts
+        // If it wasn't ^, _, a Unicode (sub|super)script, or ', stop parsing super/subscripts
         break;
       }
     }
@@ -820,7 +845,7 @@ export default class Parser {
     }
     // At this point, we should have a symbol, possibly with accents.
     // First expand any accented base symbol according to unicodeSymbols.
-    if (Object.prototype.hasOwnProperty.call(unicodeSymbols, text[0] ) &&
+    if (Object.prototype.hasOwnProperty.call(unicodeSymbols, text[0]) &&
         !symbols[this.mode][text[0]]) {
       // This behavior is not strict (XeTeX-compatible) in math mode.
       if (this.settings.strict && this.mode === "math") {
