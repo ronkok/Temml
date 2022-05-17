@@ -368,19 +368,18 @@ export default class Parser {
         // We treat these similarly to the unicode-math package.
         // So we render a string of Unicode (sub|super)scripts the
         // same as a (sub|super)script of regular characters.
-        let unicode = lex.text
-        const scriptType = unicodeSubRegEx.test(unicode) ? SUB : SUPER
+        let str = uSubsAndSups[lex.text]
+        const scriptType = unicodeSubRegEx.test(lex.text) ? SUB : SUPER
         this.consume()
         // Continue fetching tokens to fill out the string.
         while (true) {
-          const lex = this.fetch()
-          if (!(uSubsAndSups[lex.text])) { break }
-          if (unicodeSubRegEx.test(lex.text) !== scriptType) { break }
+          const token = this.fetch().text
+          if (!(uSubsAndSups[token])) { break }
+          if (unicodeSubRegEx.test(token) !== scriptType) { break }
           this.consume()
-          unicode += uSubsAndSups[lex.text]
+          str += uSubsAndSups[token]
         }
         // Now convert to regular characters and create a (sub|super)script.
-        const str = unicode.split('').map(ch => uSubsAndSups[ch]).join('')
         const body = (new Parser(str, this.settings)).parse()
         if (scriptType === SUB) {
           subscript = { type: "ordgroup", mode: "math", body }

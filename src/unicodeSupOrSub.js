@@ -5,7 +5,7 @@ export const SUPER = false
 
 export const unicodeSubRegEx = /^[₊₋₌₍₎₀₁₂₃₄₅₆₇₈₉ₐₑₒₓ]/
 
-export const uSubsAndSups = {
+export const uSubsAndSups = Object.freeze({
   '₊': '+',
   '₋': '-',
   '₌': '=',
@@ -42,4 +42,4 @@ export const uSubsAndSups = {
   '⁹': '9',
   'ⁱ': 'i',
   'ⁿ': 'n'
-}
+})
