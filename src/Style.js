@@ -1,6 +1,6 @@
 /**
- * This file contains information about the style that the Parser carries
- * around with it while parsing. Data is held in an `Style` object, and when
+ * This file contains information about the style that the mathmlBuilder carries
+ * around with it. Data is held in an `Style` object, and when
  * recursing, a new `Style` object can be created with the `.with*` functions.
  */
 
