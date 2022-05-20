@@ -79,7 +79,7 @@ temml.__defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\
   var chemParse = function (tokens, stateMachine) {
     // Recreate the argument string from Temml's array of tokens.
     var str = "";
-    var expectedLoc = tokens.length === 0 ? 0 : tokens[tokens.length - 1].loc.start
+    var expectedLoc = tokens.length && tokens[tokens.length - 1].loc.start
     for (var i = tokens.length - 1; i >= 0; i--) {
       if(tokens[i].loc.start > expectedLoc) {
         // context.consumeArgs has eaten a space.
