@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.8] = 2022-05-20
+
+### Fixed
+
+- Avoid crash when mhchem \ce{} is empty
+- Numerals in text mode
+
+### Added
+
+- Support Unicode (sub|superscript) characters
+
 ## [0.6.7] = 2022-03-27
 
 ### Fixed

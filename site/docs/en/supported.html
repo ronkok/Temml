@@ -292,7 +292,7 @@ because Cambria Math has chancery in those code points and some other math fonts
 <p>Temml macros do not escape their group, so <code>\gdef</code>, <code>\xdef</code>, and<code>\global</code> are not supported. Temml has no <code>\par</code>, so <code>\long</code> is ignored.</p>
 <h2 id='numbers'>Numbers</h2>
 <p>Temml’s default mode will consolidate a string of numerals into a single MathML <code>&lt;mn&gt;</code> element. This applies to any string that begins and ends with a digit (0-9) and includes digits, commas, or dots. Example: <code>&lt;mn&gt;2,000.00&lt;/mn&gt;</code>.</p>
-<p>In strict mode, Temml acts like LaTeX and treats each digit individually. This is not as nice semantically, but it does maintain backwards compatibility for LaTeX macros. Say that a macro is defined as: <code>\def\foo#1#2{#1^4 #2}</code>. Then strict mode will expand <code>\foo 12 3</code> to: <code>1^4 2 3</code>. Default Temml will expand the same macro to <code>{12}^4 3</code> because it treats the string <code>12</code> as a single token.</p>
+<p>In strict mode, Temml acts like LaTeX and treats each digit individually. This is not as nice semantically, but it does maintain backwards compatibility for LaTeX macros.</p>
 <h2 id='operators'>Operators</h2>
 <h3 id='big-operators'>Big Operators</h3>
 <table><tr><td><math><mo movablelimits="false">∑</mo></math> <code>\sum</code></td><td><math><mo movablelimits="false">∏</mo></math> <code>\prod</code></td><td><math><mo movablelimits="false">⨂</mo></math> <code>\bigotimes</code></td><td><math><mo movablelimits="false">⋁</mo></math> <code>\bigvee</code></td></tr>
@@ -635,7 +635,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.7</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.8</p>
 <h3><a href="#top">Contents</a></h3>
 <ul class="toc">
 <li><a href="#accents">Accents</a></li>

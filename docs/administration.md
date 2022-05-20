@@ -339,7 +339,7 @@ allowedClasses: [
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.7
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.8
 
 <h3><a href="#top">Contents</a></h3>
 

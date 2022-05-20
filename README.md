@@ -2,7 +2,7 @@
 
 | Library       | Minified JavaScript + CSS |
 |:--------------|:-------------------------:|
-| Temml         |         140 KB            |
+| Temml         |         142 KB            |
 | MathJax 2.7.5 |         338 KB            |
 | KaTeX         |         280 KB            |
 | TeXZilla      |         168 KB            |
