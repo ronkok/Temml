@@ -473,7 +473,7 @@ Letters in the _texvc_ extension
 
 Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À Á Â Ã Ä Å Æ Ç È É Ê Ë
 Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö Ù Ú Û Ü Ý Þ ß à á â ã ä å ç è é ê ë ì í î ï ð ñ ò ó ô ö ù ú û ü ý þ ÿ
-₊ ₋ ₌ ₍ ₎ ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₐ ₑ ₒ ₓ ⁺ ⁻ ⁼ ⁽ ⁾ ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ⁱ ⁿ</span>
+ ₊ ₋ ₌ ₍ ₎ ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₐ ₑ ₕ ᵢ ⱼ ₖ ₗ ₘ ₙ ₒ ₚ ᵣ ₛ ₜ ᵤ ᵥ ₓ ᵦ ᵧ ᵨ ᵩ ᵪ ⁺ ⁻ ⁼ ⁽ ⁾ ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ᵃ ᵇ ᶜ ᵈ ᵉ ᵍ ʰ ⁱ ʲ ᵏ ˡ ᵐ ⁿ ᵒ ᵖ ʳ ˢ ᵗ ᵘ ʷ ˣ ʸ ᶻ ᵛ ᵝ ᵞ ᵟ ᵠ ᵡ</span>
 
 Math-mode Unicode (sub|super)script characters will render as if you had written regular 
 characters in a subscript or superscript. For instance, `A²⁺³` will render the same
@@ -671,10 +671,7 @@ Temml’s default mode will consolidate a string of numerals into a single MathM
 
 In strict mode, Temml acts like LaTeX and treats each digit individually. This
 is not as nice semantically, but it does maintain backwards compatibility for
-LaTeX macros. Say that a macro is defined as: `\def\foo#1#2{#1^4 #2}`. Then
-strict mode will expand `\foo 12 3` to: `1^4 2 3`. Default Temml will expand
-the same macro to `{12}^4 3` because it treats the string `12` as a single
-token.
+LaTeX macros.
 
 ## Operators
 
