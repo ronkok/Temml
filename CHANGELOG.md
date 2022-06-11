@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.6.9] = 2022-06-11
+
+### Fixed
+
+- Colors of lower-case color names
+- `\surd` vertical alignment when rendered in Latin Modern
+
 ## [0.6.8] = 2022-05-20
 
 ### Fixed
