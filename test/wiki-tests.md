@@ -116,13 +116,6 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 | 31  | \surd, \sqrt{2}, \sqrt[n]{2}, \            | $`\surd, \sqrt{2}, \sqrt[n]{2},                |
 |     | \sqrt[3]{\frac{x^3+y^3}{2}}                | \sqrt[3]{\frac{x^3+y^3}{2}}`                   |
 +-----+--------------------------------------------+------------------------------------------------+
-
-Note: The misplacement of `\surd`, above, occurs only in the Latin Modern font.\
-The other math fonts render it fine. Not much I can do about it.
-
-<br>
-
-+-----+--------------------------------------------+------------------------------------------------+
 |  **Operators**                                                                                    |
 +-----+--------------------------------------------+------------------------------------------------+
 | 32  | +, -, \pm, \mp, \dotplus                   | $`+, -, \pm, \mp, \dotplus`                    |

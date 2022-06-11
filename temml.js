@@ -174,4 +174,4 @@ export default {
    * adds a new macro to builtin macro list
    */
   __defineMacro: defineMacro
-};
+}

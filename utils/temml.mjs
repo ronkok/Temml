@@ -1404,7 +1404,6 @@ defineSymbol(math, bin, "\u2227", "\\land");
 defineSymbol(math, bin, "\u2228", "\\lor");
 defineSymbol(math, bin, "\u2227", "\\wedge", true);
 defineSymbol(math, bin, "\u2228", "\\vee", true);
-defineSymbol(math, textord, "\u221a", "\\surd");
 defineSymbol(math, open, "\u27e6", "\\llbracket", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u27e7", "\\rrbracket", true);
 defineSymbol(math, open, "\u27e8", "\\langle", true);
@@ -2936,14 +2935,14 @@ const xcolors = JSON.parse(`{
   "BlueGreen": "#08b4bc",
   "BlueViolet": "#503c94",
   "BrickRed": "#b8341c",
-  "brown": "#BF804",
+  "brown": "#BF8040",
   "Brown": "#802404",
   "BurntOrange": "#f8941c",
   "CadetBlue": "#78749c",
   "CarnationPink": "#f884b4",
   "Cerulean": "#08a4e4",
   "CornflowerBlue": "#40ace4",
-  "cyan": "#00FFF",
+  "cyan": "#00FFFF",
   "Cyan": "#08acec",
   "Dandelion": "#ffbc44",
   "darkgray": "#404040",
@@ -2952,17 +2951,17 @@ const xcolors = JSON.parse(`{
   "ForestGreen": "#089c54",
   "Fuchsia": "#90348c",
   "Goldenrod": "#ffdc44",
-  "gray": "#80808",
+  "gray": "#808080",
   "Gray": "#98949c",
-  "green": "#00FF0",
+  "green": "#00FF00",
   "Green": "#08a44c",
   "GreenYellow": "#e0e474",
   "JungleGreen": "#08ac9c",
   "Lavender": "#f89cc4",
-  "lightgray": "#BFBFB",
+  "lightgray": "#c0c0c0",
   "lime": "#BFFF00",
   "LimeGreen": "#90c43c",
-  "magenta": "#FF00F",
+  "magenta": "#FF00FF",
   "Magenta": "#f0048c",
   "Mahogany": "#b0341c",
   "Maroon": "#b03434",
@@ -2972,7 +2971,7 @@ const xcolors = JSON.parse(`{
   "NavyBlue": "#086cbc",
   "olive": "#7F7F00",
   "OliveGreen": "#407c34",
-  "orange": "#FF800",
+  "orange": "#FF8000",
   "Orange": "#f8843c",
   "OrangeRed": "#f0145c",
   "Orchid": "#b074ac",
@@ -8365,6 +8364,10 @@ defineMacro("\\char", function(context) {
   return `\\@char{${number}}`;
 });
 
+// The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
+// This macro provides a better rendering.
+defineMacro("\\surd", "\\sqrt{}");
+
 defineMacro("\\hbox", "\\text{#1}");
 
 // Per TeXbook p.122, "/" gets zero operator spacing.
@@ -12888,7 +12891,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.6.8";
+const version = "0.6.9";
 
 function postProcess(block) {
   const labelMap = {};
