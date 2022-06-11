@@ -185,6 +185,10 @@ defineMacro("\\char", function(context) {
   return `\\@char{${number}}`;
 });
 
+// The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
+// This macro provides a better rendering.
+defineMacro("\\surd", "\\sqrt{}")
+
 defineMacro("\\hbox", "\\text{#1}");
 
 // Per TeXbook p.122, "/" gets zero operator spacing.

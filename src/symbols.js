@@ -594,7 +594,6 @@ defineSymbol(math, bin, "\u2227", "\\land");
 defineSymbol(math, bin, "\u2228", "\\lor");
 defineSymbol(math, bin, "\u2227", "\\wedge", true);
 defineSymbol(math, bin, "\u2228", "\\vee", true);
-defineSymbol(math, textord, "\u221a", "\\surd");
 defineSymbol(math, open, "\u27e6", "\\llbracket", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u27e7", "\\rrbracket", true);
 defineSymbol(math, open, "\u27e8", "\\langle", true);
