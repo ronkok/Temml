@@ -1119,7 +1119,7 @@ const test = () => {
   let markup = temml.renderToString(r`\mathbb{R}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mi>ℝ</mi>');
   markup = temml.renderToString(r`\mathrm{R}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe('<mpadded lspace="0" width="+0em"><mi mathvariant="normal">R</mi></mpadded>');
+  new Expect(markup).toBe('<mrow><mi mathvariant="normal">R</mi></mrow>');
   markup = temml.renderToString(r`\mathcal{R}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mi class="mathcal">ℛ</mi>');
   markup = temml.renderToString(r`\mathfrak{R}`).replace(mathTagRegEx, "");

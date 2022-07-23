@@ -44,15 +44,19 @@ const mathmlBuilder = (group, style) => {
       // Append an invisible <mo>&ApplyFunction;</mo>.
       // ref: https://www.w3.org/TR/REC-MathML/chap3_2.html#sec3.2.4
       const operator = new mathMLTree.MathNode("mo", [mml.makeText("\u2061", "text")]);
-      node = new mathMLTree.MathNode("mpadded", [node, operator])
-      const lSpace = group.needsLeadingSpace ? 0.1667 : 0
-      const rSpace = group.isFollowedByDelimiter ? 0 : 0.1666
+      const row = [node, operator]
+      // Set spacing
       if (group.needsLeadingSpace) {
-        node.setAttribute("lspace", "0.1667em") // thin space.
+        const lead = new mathMLTree.MathNode("mspace")
+        lead.setAttribute("width", "0.1667em") // thin space.
+        row.unshift(lead)
       }
-      if ((lSpace + rSpace) > 0) {
-        node.setAttribute("width", `+${lSpace + rSpace}em`)
+      if (!group.isFollowedByDelimiter) {
+        const trail = new mathMLTree.MathNode("mspace")
+        trail.setAttribute("width", "0.1667em") // thin space.
+        row.push(trail)
       }
+      node = new mathMLTree.MathNode("mrow", row)
     }
   }
 
