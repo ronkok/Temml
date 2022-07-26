@@ -5,6 +5,7 @@ import * as mml from "../buildMathML";
 
 const mathmlBuilder = (group, style) => {
   const accentNode = stretchy.mathMLnode(group.label);
+  accentNode.style["math-depth"] = 0
   return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [
     mml.buildGroup(group.base, style),
     accentNode
