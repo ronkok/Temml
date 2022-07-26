@@ -177,8 +177,7 @@ defineFunction({
 
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
-    node.setAttribute("maxsize", sizeToMaxHeight[group.size] + "em");
-
+    // Don't set the maxsize attribute. It's broken in Chromium.
     return node;
   }
 });
@@ -287,6 +286,9 @@ defineFunction({
     const textNode = mml.makeText(group.delim, group.mode);
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("fence", "true");
+    // The next line is not semantically correct, but
+    // Chromium fails to stretch if it is not there.
+    middleNode.setAttribute("form", "prefix")
     // MathML gives 5/18em spacing to each <mo> element.
     // \middle should get delimiter spacing instead.
     middleNode.setAttribute("lspace", "0.05em");
