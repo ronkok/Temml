@@ -5,14 +5,22 @@ import { emScale } from "../units";
 import * as mml from "../buildMathML";
 
 // Helper functions
-const paddedNode = (group, width, lspace = "0.3em") => {
-  const node = new mathMLTree.MathNode("mpadded", group ? [group] : []);
-  node.setAttribute("width", width)
-  node.setAttribute("lspace", lspace)
-  return node;
+
+const padding = width => {
+  const node = new mathMLTree.MathNode("mspace")
+  node.setAttribute("width", width + "em")
+  return node
+}
+
+const paddedNode = (group, lspace = 0.3, rspace = 0) => {
+  if (group == null && rspace === 0) { return padding(lspace) }
+  const row = group ? [group] : [];
+  if (lspace !== 0)   { row.unshift(padding(lspace)) }
+  if (rspace > 0) { row.push(padding(rspace)) }
+  return new mathMLTree.MathNode("mrow", row)
 };
 
-const labelSize = (size, scriptLevel) =>  (size / emScale(scriptLevel)).toFixed(4) + "em"
+const labelSize = (size, scriptLevel) =>  (size / emScale(scriptLevel)).toFixed(4)
 
 const munderoverNode = (name, body, below, style) => {
   const arrowNode = stretchy.mathMLnode(name);
@@ -34,20 +42,19 @@ const munderoverNode = (name, body, below, style) => {
   const labelStyle = style.withLevel(style.level < 2 ? 2 : 3)
   const emptyLabelWidth = labelSize(minWidth, labelStyle.level)
   const lspace = labelSize((isEq ? 0 : 0.3), labelStyle.level)
-  let widthAdder = labelSize((isEq ? -0.4 : 0.6), labelStyle.level)
-  if (widthAdder.charAt(0) !== "-") { widthAdder = "+" + widthAdder }
+  const rspace = labelSize((isEq ? 0 : 0.3), labelStyle.level)
 
   const upperNode = (body && body.body &&
     // \hphantom        visible content
     (body.body.body || body.body.length > 0))
-    ? paddedNode(mml.buildGroup(body, labelStyle), widthAdder, lspace)
+    ? paddedNode(mml.buildGroup(body, labelStyle), lspace, rspace)
       // Since Firefox does not recognize minsize set on the arrow,
       // create an upper node w/correct width.
-    : paddedNode(null, emptyLabelWidth, "0")
+    : paddedNode(null, emptyLabelWidth, 0)
   const lowerNode = (below && below.body &&
     (below.body.body || below.body.length > 0))
-    ? paddedNode(mml.buildGroup(below, labelStyle), widthAdder, lspace)
-    : paddedNode(null, emptyLabelWidth, "0")
+    ? paddedNode(mml.buildGroup(below, labelStyle), lspace, rspace)
+    : paddedNode(null, emptyLabelWidth, 0)
   const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
   return node
 }
@@ -72,7 +79,7 @@ defineFunction({
     "\\xlongequal",
     "\\xtwoheadrightarrow",
     "\\xtwoheadleftarrow",
-    // The next 7 functions are here only to support mhchem
+    // The next 5 functions are here only to support mhchem
     "\\yields",
     "\\yieldsLeft",
     "\\mesomerism",
@@ -100,10 +107,10 @@ defineFunction({
     // Build the arrow and its labels.
     const node = munderoverNode(group.name, group.body, group.below, style)
     // Create operator spacing for a relation.
-    const wrapper  = new mathMLTree.MathNode("mpadded", [node])
-    wrapper.setAttribute("lspace", "0.2778em")
-    wrapper.setAttribute("width", "+0.5556em")
-    return wrapper
+    const row = [node]
+    row.unshift(padding(0.2778))
+    row.push(padding(0.2778))
+    return new mathMLTree.MathNode("mrow", row)
   }
 });
 
@@ -175,17 +182,21 @@ defineFunction({
     if (group.name === "\\equilibriumLeft") {
       const botNode =  new mathMLTree.MathNode("mpadded", [botArrow])
       botNode.setAttribute("width", "0.5em")
-      wrapper = new mathMLTree.MathNode("mpadded", [botNode, raiseNode])
+      wrapper = new mathMLTree.MathNode(
+        "mpadded",
+        [padding(0.2778), botNode, raiseNode, padding(0.2778)]
+      )
     } else {
       raiseNode.setAttribute("width", (group.name === "\\equilibriumRight" ? "0.5em" : "0"))
-      wrapper = new mathMLTree.MathNode("mpadded", [raiseNode, botArrow])
+      wrapper = new mathMLTree.MathNode(
+        "mpadded",
+        [padding(0.2778), raiseNode, botArrow, padding(0.2778)]
+      )
     }
 
     wrapper.setAttribute("voffset", "-0.18em")
-    wrapper.setAttribute("width", "+0.5556em")
     wrapper.setAttribute("height", "-0.18em")
     wrapper.setAttribute("depth", "+0.18em")
-    wrapper.setAttribute("lspace", "0.2778em")
     return wrapper
   }
 });
