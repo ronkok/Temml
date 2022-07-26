@@ -4,10 +4,15 @@ import mathMLTree from "../mathMLTree"
 import { spaceCharacter } from "./kern"
 import { ordTypes } from "./op"
 import utils from "../utils"
+import { delimiters, delimiterSizes } from "./delimsizing"
 
 import * as mml from "../buildMathML"
 
-// NOTE: Unlike most builders, this one handles not only
+const dels = ["}", "\\left", "\\middle", "\\right"]
+const isDelimiter = str => str.length > 0 &&
+  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str))
+
+  // NOTE: Unlike most builders, this one handles not only
 // "operatorname", but also  "supsub" since \operatorname* can
 // affect super/subscripting.
 
@@ -85,15 +90,20 @@ const mathmlBuilder = (group, style) => {
     // Append an <mo>&ApplyFunction;</mo>.
     // ref: https://www.w3.org/TR/REC-MathML/chap3_2.html#sec3.2.4
     const operator = new mathMLTree.MathNode("mo", [mml.makeText("\u2061", "text")])
+    const fragment = [wrapper, operator]
     if (group.needsLeadingSpace) {
       // LaTeX gives operator spacing, but a <mi> gets ord spacing.
       // So add a leading space.
       const space = new mathMLTree.MathNode("mspace")
       space.setAttribute("width", "0.1667em") // thin space.
-      return mathMLTree.newDocumentFragment([space, wrapper, operator])
-    } else {
-      return mathMLTree.newDocumentFragment([wrapper, operator])
+      fragment.unshift(space)
     }
+    if (!group.isFollowedByDelimiter) {
+      const trail = new mathMLTree.MathNode("mspace")
+      trail.setAttribute("width", "0.1667em") // thin space.
+      fragment.push(trail)
+    }
+    return mathMLTree.newDocumentFragment(fragment)
   }
 
   return wrapper
@@ -111,6 +121,7 @@ defineFunction({
   handler: ({ parser, funcName }, args) => {
     const body = args[0]
     const prevAtomType = parser.prevAtomType
+    const next = parser.gullet.future().text
     return {
       type: "operatorname",
       mode: parser.mode,
@@ -118,6 +129,7 @@ defineFunction({
       alwaysHandleSupSub: (funcName === "\\operatornamewithlimits"),
       limits: false,
       parentIsSupSub: false,
+      isFollowedByDelimiter: isDelimiter(next),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)
     };
   },
