@@ -42,30 +42,20 @@ const getTag = (group, style, rowNum) => {
       tag = mml.buildExpressionRow(tagContents.body, style)
       tag.classes = ["tml-tag"]
     } else {
-      // \notag. Return an empty cell.
-      tag = new mathMLTree.MathNode("mtd", [])
-      tag.setAttribute("style", "padding: 0; min-width:0")
+      // \notag. Return an empty span.
+      tag = new mathMLTree.MathNode("mtext", [], [])
       return tag
     }
   } else if (group.colSeparationType === "multline" &&
     ((group.leqno && rowNum !== 0) || (!group.leqno && rowNum !== group.body.length - 1))) {
     // A multiline that does not receive a tag. Return an empty cell.
-    tag = new mathMLTree.MathNode("mtd", [])
-    tag.setAttribute("style", "padding: 0; min-width:0")
+    tag = new mathMLTree.MathNode("mtext", [], [])
     return tag
   } else {
     // AMS automatcally numbered equaton.
     // Insert a class so the element can be populated by a post-processor.
     tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"])
   }
-  if (!group.preventTagLap) {
-    tag = new mathMLTree.MathNode("mpadded", [tag])
-    tag.setAttribute("style", "width:0;")
-    tag.setAttribute("width", "0")
-    if (!group.leqno) { tag.setAttribute("lspace", "-1width") }
-  }
-  tag = new mathMLTree.MathNode("mtd", [tag])
-  if (!group.preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0") }
   return tag
 }
 
@@ -232,8 +222,7 @@ function parseArray(
     addEqnNum,
     scriptLevel,
     tags,
-    leqno,
-    preventTagLap: parser.settings.preventTagLap
+    leqno
   };
 }
 
@@ -249,16 +238,19 @@ const alignMap = {
   r: "right "
 };
 
+const glue = group => {
+  const glueNode = new mathMLTree.MathNode("mtd", [])
+  glueNode.style = { padding: "0", width: "50%" }
+  if (group.colSeparationType === "multline") {
+    glueNode.style.width = "7.5%"
+  }
+  return glueNode
+}
+
 const mathmlBuilder = function(group, style) {
   const tbl = [];
   const numRows = group.body.length
-  let glue
-  if (group.addEqnNum) {
-    glue = new mathMLTree.MathNode("mtd", [], [])
-    const glueStyle = "padding: 0;width: " +
-      (group.colSeparationType === "multline" ? "7.5%" : "50%")
-    glue.setAttribute("style", glueStyle)
-  }
+  const hlines = group.hLinesBeforeRow;
 
   for (let i = 0; i < numRows; i++) {
     const rw = group.body[i];
@@ -274,26 +266,40 @@ const mathmlBuilder = function(group, style) {
         "mtd",
         [mml.buildGroup(rw[j], style.withLevel(cellStyle))]
       )
+
       if (group.colSeparationType === "multline") {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center"
         mtd.setAttribute("columnalign", align)
+        if (align !== "center") {
+          mtd.style.textAlign = "-webkit-" + align
+        }
       }
       row.push(mtd)
     }
     if (group.addEqnNum) {
-      row.unshift(glue);
-      row.push(glue);
+      row.unshift(glue(group));
+      row.push(glue(group));
       const tag = getTag(group, style.withLevel(cellStyle), i)
       if (group.leqno) {
-        row.unshift(tag)
+        row[0].children.push(tag)
+        row[0].style.textAlign = "-webkit-left"
       } else {
-        row.push(tag)
+        row[row.length - 1].children.push(tag)
+        row[row.length - 1].style.textAlign = "-webkit-right"
       }
     }
-    // If group.addEqnNum, insert a breadcrumb to be found by temmlPostProcess().
-    tbl.push(new mathMLTree.MathNode("mtr", row, group.addEqnNum ? ["tml-tageqn"] : [] ));
+    const mtr = new mathMLTree.MathNode("mtr", row, [])
+    // Write horizontal rules
+    if (i === 0 && hlines[0].length > 0) {
+      mtr.classes.push(hlines[0][0] ? "tml-top-dashed" : "tml-top-solid")
+    }
+    if (hlines[i + 1].length > 0) {
+      mtr.classes.push(hlines[i + 1][0] ? "hline-dashed" : "hline-solid")
+    }
+    tbl.push(mtr);
   }
   let table = new mathMLTree.MathNode("mtable", tbl);
+  if (!group.addEqnNum) { table.classes.push("tml-array") }
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true") }
 
   // Set column alignment, row spacing, column spacing, and
@@ -317,35 +323,54 @@ const mathmlBuilder = function(group, style) {
       : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
   table.setAttribute("rowspacing", utils.round(gap) + "em")
 
+  if (group.arraystretch > 1) {
+    const pad = `calc(${utils.round((group.arraystretch - 1) / 2)}em + 0.5ex) 0.4em`
+    for (const row of table.children) {
+      for (const cell of row.children) {
+        cell.style.padding = pad
+      }
+    }
+  }
+
   if (group.addEqnNum || group.colSeparationType === "multline") {
     table.setAttribute("width", "100%")
   }
 
-  // MathML table lines go only between cells.
-  // To place a line on an edge we'll use <menclose>, if necessary.
-  let menclose = "";
+  // Column separator lines and column alignment
   let align = "";
+  let columnLines = ""
 
   if (group.cols && group.cols.length > 0) {
-    // Find column alignment, column spacing, and  vertical lines.
     const cols = group.cols;
-    let columnLines = "";
     let prevTypeWasAlign = false;
     let iStart = 0;
     let iEnd = cols.length;
 
-    if (cols[0].type === "separator") {
-      menclose += "left ";
-      iStart = 1;
+    while (cols[iStart].type === "separator") {
+      iStart += 1
     }
-    if (cols[cols.length - 1].type === "separator") {
-      menclose += "right ";
-      iEnd -= 1;
+    while (cols[iEnd - 1].type === "separator") {
+      iEnd -= 1
     }
 
+    if (cols[0].type === "separator") {
+      for (const row of table.children) {
+        const sep = cols[0].separator === "|" ? "solid " : "dashed "
+        row.children[0].style.borderLeft = sep
+        row.children[0].style.paddingLeft = "0.4em"
+      }
+    }
+    let iCol = group.addEqnNum ? 0 : -1
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
-        align += alignMap[cols[i].align];
+        const colAlign = alignMap[cols[i].align];
+        align += colAlign
+        iCol += 1
+        for (const row of table.children) {
+          if (colAlign.trim() !== "center" && iCol < row.children.length) {
+            row.children[iCol].style.textAlign = "-webkit-" + colAlign.trim()
+          }
+        }
 
         if (prevTypeWasAlign) {
           columnLines += "none ";
@@ -355,21 +380,33 @@ const mathmlBuilder = function(group, style) {
         // MathML accepts only single lines between cells.
         // So we read only the first of consecutive separators.
         if (prevTypeWasAlign) {
-          columnLines += cols[i].separator === "|" ? "solid " : "dashed ";
-          prevTypeWasAlign = false;
+          const sep = cols[i].separator === "|" ? "0.06em solid" : "0.06em dashed"
+          columnLines += sep
+          for (const row of table.children) {
+            if (iCol < row.children.length) {
+              row.children[iCol].style.borderRight = sep
+            }
+          }
         }
       }
     }
-    if (group.addEqnNum) {
-      align = "left " + align + "right " // allow for glue cells on each side
-      align = group.leqno ? "left " + align : align += "right"  // eqn num cell
+    if (cols[cols.length - 1].type === "separator") {
+      for (const row of table.children) {
+        const sep = cols[cols.length - 1].separator === "|" ? "0.06em solid" : "0.06em dashed"
+        row.children[row.children.length - 1].style.borderRight = sep
+        row.children[row.children.length - 1].style.paddingRight = "0.4em"
+      }
     }
-
-    table.setAttribute("columnalign", align.trim());
-
-    if (/[sd]/.test(columnLines)) {
-      table.setAttribute("columnlines", columnLines.trim());
-    }
+  }
+  if (group.addEqnNum) {
+    align = "left " + align + "right " // allow for glue cells on each side
+    align = group.leqno ? "left " + align : align += "right"  // eqn num cell
+  }
+  if (align) {
+    table.setAttribute("columnalign", align.trim())
+  }
+  if (/[sd]/.test(columnLines)) {
+    table.setAttribute("columnlines", columnLines.trim())
   }
 
   // Set column spacing.
@@ -379,61 +416,41 @@ const mathmlBuilder = function(group, style) {
     case "alignedat":
     case "alignat":
     case "alignat*":
-      table.setAttribute("columnspacing", "0em");
+    case "split":
+      table.setAttribute("columnspacing", "0em")
+      table.classes.push("tml-gather")
       break
     case "small":
-      table.setAttribute("columnspacing", "0.2778em");
+      table.setAttribute("columnspacing", "0.2778em")
+      table.classes.push("tml-small")
       break
     case "CD":
-      table.setAttribute("columnspacing", "0.5em");
+      table.setAttribute("columnspacing", "0.5em")
+      table.classes.push("tml-gather")
       break
     case "align":
     case "align*": {
+      table.classes.push("tml-gather")
       const cols = group.cols || [];
       let spacing = group.addEqnNum ? "0em " : ""
       for (let i = 1; i < cols.length; i++) {
         spacing += i % 2 ? "0em " : "1em "
       }
       if (group.addEqnNum) { spacing += "0em" }
-      table.setAttribute("columnspacing", spacing.trim());
+      table.setAttribute("columnspacing", spacing.trim())
       break
     }
     default:
-      table.setAttribute("columnspacing", "1em");
-  }
-
-  // Address \hline and \hdashline
-  let rowLines = "";
-  const hlines = group.hLinesBeforeRow;
-
-  menclose += hlines[0].length > 0 ? "top " : "";
-  menclose += hlines[hlines.length - 1].length > 0 ? "bottom " : "";
-
-  for (let i = 1; i < hlines.length - 1; i++) {
-    rowLines +=
-      hlines[i].length === 0
-        ? "none "
-        : // MathML accepts only a single line between rows. Read one element.
-        hlines[i][0]
-        ? "dashed "
-        : "solid ";
-  }
-  if (/[sd]/.test(rowLines)) {
-    table.setAttribute("rowlines", rowLines.trim());
-  }
-
-  if (menclose !== "") {
-    table = new mathMLTree.MathNode("menclose", [table]);
-    table.setAttribute("notation", menclose.trim());
+      table.setAttribute("columnspacing", "1em")
   }
 
   if (!Number.isNaN(group.arraystretch) && group.arraystretch < 1) {
     // A small array. Wrap in scriptstyle so row gap is not too large.
-    table = new mathMLTree.MathNode("mstyle", [table]);
-    table.setAttribute("scriptlevel", "1");
+    table = new mathMLTree.MathNode("mstyle", [table])
+    table.setAttribute("scriptlevel", "1")
   }
 
-  return table;
+  return table
 };
 
 // Convenience function for align, align*, aligned, alignat, alignat*, alignedat.

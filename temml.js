@@ -15,8 +15,7 @@ import parseTree from "./src/parseTree";
 import buildMathML from "./src/buildMathML";
 import { StyleLevel } from "./src/constants";
 import Style from "./src/Style";
-import { Span } from "./src/domTree";
-import { TextNode } from "./src/domTree";
+import { Span, TextNode } from "./src/domTree";
 import { defineSymbol } from "./src/symbols";
 import defineMacro from "./src/defineMacro";
 import { postProcess, version } from "./src/postProcess";
@@ -28,7 +27,7 @@ import { postProcess, version } from "./src/postProcess";
 let render = function(expression, baseNode, options) {
   baseNode.textContent = "";
   const math = renderToMathMLTree(expression, options)
-  if (options.elementIsMath) {
+  if (baseNode.tagName === "MATH") {
     // The <math> element already exists. Populate it.
     baseNode.textContent = ""
     math.children.forEach(e => { baseNode.appendChild(e.toNode()) })

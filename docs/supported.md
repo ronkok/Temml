@@ -4,7 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
-   <link rel="stylesheet" href="../../assets/Temml-Local.css">
+   <link rel="stylesheet" href="../../assets/Temml-Latin-Modern.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../assets/temml.min.js"></script>
    <style>
@@ -22,7 +22,7 @@
 This page lists the TeX functions it supports, sorted into logical groups.
 
 To read this page, use a browser that supports MathML, such as Firefox or Safari.
-Chrome and Edge will support MathML [soon](https://www.igalia.com/2021/08/09/MathML-Progress.html).
+Chrome and Edge will support MathML [soon](https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html).
 
 There is a similar [Support Table](./support_table.html), sorted alphabetically,
 that lists both supported and some un-supported functions.
@@ -93,17 +93,14 @@ See also [letters](#letters)
 | $`\bcancel{5}` `\bcancel{5}`     | $`\underbrace{a+b+c}_{\text{note}}`                |
 |                                  |  `\underbrace{a+b+c}_{\text{note}}`                |
 +----------------------------------+----------------------------------------------------+
-| $`\xcancel{ABC}` `\xcancel{ABC}` | $`\cancelto{0}{x+1}`                               |
-|                                  |  `\cancelto{0}{x+1}`                               |
-+----------------------------------+----------------------------------------------------+
-| $`\sout{abc}` `\sout{abc}`       | $`\boxed{\pi=\frac c d}`                           |
+| $`\xcancel{ABC}` `\xcancel{ABC}` | $`\boxed{\pi=\frac c d}`                           |
 |                                  |  `\boxed{\pi=\frac c d}`                           |
 +----------------------------------+----------------------------------------------------+
-| $`\ref{tag1}` `\ref{tag1}`       | $`\texttip{\text{hover here}}{This is a tooltip.}` |
-|                                  |`\texttip{\text{hover here}}{This is a tooltip.}`   |
+| $`\sout{abc}` `\sout{abc}`       |                                                    |
+|                                  |                                                    |
 +----------------------------------+----------------------------------------------------+
-|                                  | $`\toggle{\text{Click me}}{Hey!}{Ow!}\endtoggle`   |
-|                                  |  `\toggle{\text{Click me}}{Hey!}{Ow!}\endtoggle`   |
+| $`\ref{tag1}` `\ref{tag1}`       |                                                    |
+|                                  |                                                    |
 +----------------------------------+----------------------------------------------------+
 | $$                               | `\tag{hi} x+y^{2x} \label{tag1}`                   |
 | \tag{hi} x+y^{2x} \label{tag1}   |                                                    |
@@ -261,25 +258,25 @@ $`( \big( \Big( \bigg( \Bigg(` `( \big( \Big( \bigg( \Bigg(`
 
 +:---------------------:+:---------------------------+:--------------------------:+:-----------------------------+
 | $`\begin{matrix}      | `\begin{matrix}`\          | $`\begin{array}{cc}        | `\begin{array}{cc}`\         |
-|  a & b \\             |    `a & b \\`\             |    a & b \\                |    `a & b \\`\               |
-|  c & d                |    `c & d`\                |    c & d                   |    `c & d`\                  |
-|  \end{matrix}`        | `\end{matrix}`             |  \end{array}`              | `\end{array}`                |
+|  a & b \\             |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
+|  c & d                |    `c & d`\                | c & d                      |    `c & d`\                  |
+|  \end{matrix}`        | `\end{matrix}`             | \end{array}`               | `\end{array}`                |
 +-----------------------+---------------------------+----------------------------+------------------------------+
 | $`\begin{pmatrix}     | `\begin{pmatrix}`\         | $`\begin{bmatrix}          | `\begin{bmatrix}`\           |
-| a & b \\              |    `a & b \\`\             |    a & b \\                |    `a & b \\`\               |
-| c & d                 |    `c & d`\                |    c & d                   |    `c & d`\                  |
+| a & b \\              |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
+| c & d                 |    `c & d`\                | c & d                      |    `c & d`\                  |
 | \end{pmatrix}`        | `\end{pmatrix}`            | \end{bmatrix}`             | `\end{matrix}`               |
 +-----------------------+----------------------------+----------------------------+------------------------------+
 | $`\begin{vmatrix}     | `\begin{vmatrix}`\         | $`\begin{Vmatrix}          | `\begin{Vmatrix}`\           |
-|    a & b \\           |    `a & b \\`\             |    a & b \\                |    `a & b \\`\               |
-|    c & d              |    `c & d`\                |    c & d                   |    `c & d`\                  |
+|    a & b \\           |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
+|    c & d              |    `c & d`\                | c & d                      |    `c & d`\                  |
 | \end{vmatrix}`        | `\end{vmatrix}`            | \end{Vmatrix}`             | `\end{Vmatrix}`              |
 +-----------------------+----------------------------+----------------------------+------------------------------+
 | $`\begin{Bmatrix}     | `\begin{Bmatrix}`\         | $`\def\arraystretch{1.5}   | `\def\arraystretch{1.5}`\    |
 |  a & b \\             |    `a & b \\`\             | \begin{array}{c|c:c}       | `\begin{array}{c|c:c}`\      |
-|  c & d                |    `c & d`\                |   a & b & c \\ \hline      |    `a & b & c \\ \hline`\    |
-| \end{Bmatrix}`        | `\end{Bmatrix}`            |   d & e & f \\ \hdashline  |    `d & e & f \\`\           |
-|                       |                            |   g & h & i                |    `\hdashline`\             |
+|  c & d                |    `c & d`\                | a & b & c \\ \hline        |    `a & b & c \\ \hline`\    |
+| \end{Bmatrix}`        | `\end{Bmatrix}`            | d & e & f \\ \hdashline    |    `d & e & f \\`\           |
+|                       |                            | g & h & i                  |    `\hdashline`\             |
 |                       |                            | \end{array}`               |    `g & h & i`\              |
 |                       |                            |                            | `\end{array}`                |
 +-----------------------+----------------------------+----------------------------+------------------------------+
@@ -304,7 +301,7 @@ are not inside math delimiters such as `$$…$$`. They are display-mode only.
 | $$               | `\begin{equation}`\    | $$                 | `\begin{align}`\          |
 | \begin{equation} | `\begin{split}`\       | \begin{align}      |    `a&=b+c \\`\           |
 | \begin{split}    |    `a &=b+c\\`\        |    a&=b+c \\       |    `d+e&=f`\              |
-|   a &=b+c\\      |    `&=e+f`\            |    d+e&=f          | `\endalign`               |
+|   a &=b+c\\      |    `&=e+f`\            |    d+e&=f          | `\end{align}`             |
 |   &=e+f          | `\end{split}`\         | \end{align}        |                           |
 | \end{split}      | `\end{equation}`       | $$                 |                           |
 | \end{equation}   |                        |                    |                           |
@@ -543,7 +540,7 @@ contain math if the math is nested within `$…$` delimiters, as in
 +------------------------------------------+------------------------------------------------------------+
 
 +:------------------------------------------+:----------------------------------------------+
-| $$                                        | `\sum\_{\mathclap{1\le i\le j\le n}} x\_{ij}` |
+| $$                                        | `\sum_{\mathclap{1\le i\le j\le n}} x_{ij}`   |
 | \sum_{\mathclap{1\le i\le j\le n}} x_{ij} |                                               |
 | $$                                        |                                               |
 +-------------------------------------------+-----------------------------------------------+
@@ -770,7 +767,7 @@ Direct Input: <span class="direct">+ - / ∖ * ⋅ ∘ ± × ÷ ∓ ∔ ∧ ∨ 
 | $`{a \over b}`  | $`\dfrac{a}{b}`  | $`{a \above{2pt} b+1}`         |
 |  `{a \over b}`  |  `\dfrac{a}{b}`  |  `{a \above{2pt} b+1}`         |
 +-----------------+------------------+--------------------------------+
-| $`a/b` `a/b`    |                  | $`\cfrac{a}{1 + \cfrac{1}{b}}` |
+| $`a/b`  `a/b`   |                  | $`\cfrac{a}{1 + \cfrac{1}{b}}` |
 |                 |                  |  `\cfrac{a}{1 + \cfrac{1}{b}}` |
 +-----------------+------------------+--------------------------------+
 
@@ -825,13 +822,11 @@ Functions in the bottom five rows of this table can take `\limits`.
 
 ### Enclosing Operators
 
-+:-------------------------------+:-----------------------------------------------------+
-| $`\sqrt{x}` `\sqrt{x}`         | $`\longdiv{3x^2 + 2x + 5}` `\longdiv{3x^2 + 2x + 5}` |
-+--------------------------------+------------------------------------------------------+
-| $`\sqrt[3]{x}` `\sqrt[3]{x}`   | $`\phase{-78^\circ}` `\phase{-78^\circ}`             |
-+--------------------------------+------------------------------------------------------+
-| $`a_{\angl n}`   `a_{\angl n}` | $`a_\angln`   `a_\angln`                             |
-+--------------------------------+------------------------------------------------------+
++:-------------------------------+:-------------------------------+
+| $`\sqrt{x}` `\sqrt{x}`         | $`a_{\angl n}`   `a_{\angl n}` |
++--------------------------------+--------------------------------+
+| $`\sqrt[3]{x}` `\sqrt[3]{x}`   | $`a_\angln`   `a_\angln`       |
++--------------------------------+--------------------------------+
 
 ## Physics and Chemistry
 
@@ -1496,7 +1491,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.9
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.7.0
 
 <h3><a href="#top">Contents</a></h3>
 
@@ -1549,8 +1544,8 @@ $`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.9
 </ul>
 
 <p>Render math with<br><select id="MathFont" onchange="updateMathFont()">
-  <option value="Local">Local font</option>
   <option value="Latin-Modern">Latin Modern</option>
+  <option value="Local">Local font</option>
   <option value="Asana">Asana</option>
   <option value="STIX2">STIX TWO</option>
   <option value="XITS">XITS</option>

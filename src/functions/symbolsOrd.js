@@ -8,7 +8,6 @@ import * as mml from "../buildMathML"
 // src/symbols.js.
 
 const numberRegEx = /^\d(?:[\d,.]*\d)?$/  // Keep in sync with numberRegEx in Parser.js
-
 const latinRegEx = /[A-Ba-z]/
 
 const italicNumber = (text, variant) => {
@@ -86,6 +85,9 @@ defineFunctionBuilders({
       }
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text])
+      // TODO: If/when Chromium fixes primes, remove the next line.
+      node.style.transform = "translateY(0.3em)"
+      node.setAttribute("height", "0")
     } else {
       const origText = text.text
       if (variant !== "italic") {

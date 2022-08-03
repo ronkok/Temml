@@ -4,7 +4,7 @@
     <meta charset="utf-8"/>
     <title>Comparison of TeX Coverage</title>
     
-    <link rel="stylesheet" href="../../assets/Temml-Local.css">
+    <link rel="stylesheet" href="../../assets/Temml-Latin-Modern.css">
     <link rel="stylesheet" href="../katex.css">
     <link rel="stylesheet" href="../docStyles.css">
     <script src="../../assets/temml.min.js"></script>
@@ -25,7 +25,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.6.9, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.7.0, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -66,10 +66,10 @@
           </tr>
           <tr>
             <td>\!</td>
-            <td>₮a!b₮</td>
-            <td>\(a!b\)</td>
-            <td>₭a!b₭</td>
-            <td>₸a!b₸</td>
+            <td>₮a\!b₮</td>
+            <td>\(a\!b\)</td>
+            <td>₭a\!b₭</td>
+            <td>₸a\!b₸</td>
             <td><code>a\!b</code></td>
           </tr>
           <tr>
@@ -2670,7 +2670,7 @@
           </tr>
           <tr>
             <td>\enclose</td>
-            <td><span class="no-sup">Not supported<br>See \longdiv,<br> \angl, \phase</span></td>
+            <td><span class="no-sup">Not supported<br>See \angl</span></td>
             <td>\(\enclose{longdiv}{500}\)<br>\(\enclose{actuarial}{500}\)<br>\(\enclose{phasorangle}{500}\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -4483,14 +4483,6 @@ y &=& (x-1)^2 \\
             <td>₭\lneqq₭</td>
             <td>₸\lneqq₸</td>
             <td></td>
-          </tr>
-          <tr>
-            <td>\longdiv</td>
-            <td>₮\longdiv{45.2}₮</td>
-            <td><span class="no-sup">Not supported</span><br>See \enclose</td>
-            <td>₭\longdiv{45.2}₭</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><code>\longdiv{45.2}</code></td>
           </tr>
           <tr>
             <td>\lnot</td>

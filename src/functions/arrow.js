@@ -56,6 +56,7 @@ const munderoverNode = (name, body, below, style) => {
     ? paddedNode(mml.buildGroup(below, labelStyle), lspace, rspace)
     : paddedNode(null, emptyLabelWidth, 0)
   const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
+  if (minWidth === "3.0") { node.style.height = "1em" }
   return node
 }
 

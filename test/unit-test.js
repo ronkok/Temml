@@ -675,7 +675,7 @@ const test = () => {
   const overline = r`\overline{x}`;
   new Expect(overline).toParse();
   node = parse(overline)[0];
-  new Expect(node.type).toBe("overline");
+  new Expect(node.type).toBe("enclose");
 
   assertion = "A lap parser should work"
   new Expect(r`\rlap{\,/}{=}`).toParse();
@@ -1301,7 +1301,7 @@ const test = () => {
   assertion = "An extensible arrow parser should be grouped more tightly than supsubs"
   new Expect(parse(r`\xrightarrow x^2`)[0].type).toBe("supsub")
   assertion = "An extensible arrow builder should produce munderover"
-  new Expect(build(r`\xrightarrow [under]{over}`)[0].children[0].type).toBe("munderover")
+  new Expect(build(r`\xrightarrow [under]{over}`)[0].children[1].type).toBe("munderover")
 
   assertion = "A horizontal brace builder should work"
   new Expect(r`\overbrace{x}`).toParse()
@@ -1928,7 +1928,7 @@ const test = () => {
   assertion = "\\tag support should add tml-tageqn class"
   new Expect(temml.renderToString(r`\tag{hi}x+y`, displayMode())).toContain("tml-tageqn")
   assertion = "leqno rendering option should differ from default"
-  new Expect(temml.renderToString(r`\tag{hi}x+y`, new Settings({ displayMode: true, leqno: true }))).toContain("rspace")
+  new Expect(temml.renderToString(r`\tag{hi}x+y`, new Settings({ displayMode: true, leqno: true }))).toContain("text-align:-webkit-left")
   new Expect(temml.renderToString(r`\tag{hi}x+y`,displayMode())).toNotContain("rspace")
 
   assertion = "\\@binrel automatic bin/rel/ord should generate proper class"

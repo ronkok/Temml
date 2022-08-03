@@ -47,7 +47,8 @@ for (let aSpan of [...mathSpans]) {
 temml.postProcess(document.body);</code></pre><p>Below, we examine the parts of that code.</p>
 <h3 id='in-browser'>In-Browser</h3>
 <p>To render math in one DOM element, call <code>temml.render</code> with a TeX expression and a DOM element to render into:</p>
-<pre><code>temml.render(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;, element);</code></pre><h3 id='server-side'>Server-Side</h3>
+<pre><code>temml.render(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;, element);</code></pre><p>If the element you provide is a <code>&lt;math&gt;</code> element, Temml will populate it. Otherwise, it will create a new <code>&lt;math&gt;</code> element and make it a child of the element you provide.</p>
+<h3 id='server-side'>Server-Side</h3>
 <p>To generate MathML on the server or to generate an MathML string of the rendered math, you can use <code>temml.renderToString</code>:</p>
 <pre><code>const temml = require(&#x27;./temml.cjs&#x27;);  // if in Node.js
 const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</code></pre><h3 id='preamble'>Preamble</h3>
@@ -70,11 +71,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </li>
 <li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, Temml will include an <code>&lt;annotation&gt;</code> element that contains the input TeX string. Note: this will defeat <a href='./supported.html#line-breaks'>soft line breaks</a> in Firefox. (default: <code>false</code>)</p>
 </li>
-<li><p><code>elementIsMath</code>: <code>boolean</code>. When you call the <code>temml.render()</code> function, you pass an <code>element</code> as an argument to the function. If that <code>element</code> is a span, then allow <code>elementIsMath</code> to remain <code>false</code> (the default), and Temml will create a new <code>&lt;math&gt;</code> element inside the span. It you pass a <code>&lt;math&gt;</code> element as the argument, then set <code>elementIsMath</code> to <code>true</code>. Then Temml will populate it with math contents.</p>
-</li>
 <li><p><code>leqno</code>: <code>boolean</code>. If <code>true</code>, display math has <code>\tag</code>s rendered on the left instead of the right, like <code>\usepackage[leqno]{amsmath}</code> in LaTeX. (default: <code>false</code>)</p>
-</li>
-<li><p><code>preventTagLap</code>: <code>boolean</code>. This option affects the horizontal alignment of <code>displayMode</code> math and <code>\tag</code>s. The default (<code>false</code>) acts in the LaTeX manner and centers the math. That’s good in a wide container, but if the container is narrow, the tag will overlap the math. The <code>preventTagLap: true</code> option acts differently. It will first place the tag and then center the math in the remainder of the container, with no overlap. If you are targeting mobile, <code>preventTagLap: true</code> is probably a good choice .</p>
 </li>
 <li><p><code>colorIsTextColor</code>: <code>boolean</code>. In LaTeX, <code>\color</code> is a switch, but in early versions of MathJax and KaTeX, <code>\color</code> applied its color to a second argument, the way that LaTeX <code>\textcolor</code> works. Set option <code>colorIsTextColor</code> to <code>true</code> if you want <code>\color</code> to work like early MathJax or KaTeX. (default: <code>false</code>)</p>
 </li>
@@ -113,13 +110,10 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <p>The main Temml functions, <code>temml.render</code> and <code>temml.renderToString</code>, each operate on only one element at a time. In contrast, the <code>postProcess</code> function makes two passes through the entire document. If you choose not to support <code>\ref</code>, <code>postProcess</code> can be omitted.</p>
 <p>If Temml is used server-side, <code>\ref</code> and <code>\label</code> are still implemented at runtime with client-side JavaScript. A small file, <code>temmlPostProcess.js</code>, is provided to be installed in place of <code>temml.min.js</code>. It exposes one function:</p>
 <pre><code>temml.postProcess(document.body)</code></pre><p>If you do not provide a runtime <code>postProcess</code>, everthing in Temml will work except <code>\ref</code>.</p>
-<p>If you use the <a href='null' title='https://github.com/ronkok/Temml/tree/main/contrib/auto-render''>auto-render extension</a>, it includes the post-processor nuances.</p>
+<p>If you use the <a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render extension</a>, it includes the post-processor nuances.</p>
 <h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
-<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>. Sadly, Cambria Math radicals are sometimes too tall for their content.</p>
-<details><summary>More…</summary>
-<p>You can mitigate the radical problem. It occurs because the font expects a cramped subscript when under a radical and Firefox does not perform that cramp. You can create your own cramp with braces. The expression <code>f{_c&#x27;}</code> will render just fine when <code>f_c&#x27;</code> renders poorly.</p>
-</details>
+<p><strong>Cambria Math</strong> comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>. Sadly, Cambria Math rendering has a couple of flaws. In Firefox, square root radicals are sometimes oddly sized. Chromium is better at radicals, but it fails to stretch three stretchy accents and several extensible arrows.</p>
 <p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb <code>Temml.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
 <p><strong>Asana</strong>, <strong>STIX TWO</strong>, and <strong>XITS</strong> can be served without the <code>Temml.woff2</code> file.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
@@ -145,7 +139,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <ul><li><a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render</a>: Find and render all math in a running HTML page.</li>
 <li><a href='https://github.com/ronkok/Temml/tree/main/contrib/mhchem'>mhchem</a>: Write beautiful chemical equations easily.</li>
 <li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>physics</a>: Implement much of the LaTeX <code>physics</code> package.</li>
-<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Provide functions used in wikimedia.</li>
+<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Support functions used in wikimedia.</li>
 </ul>
 <p>To install extensions for browser use, include the appropriate file from the <code>contrib</code> folder of the Temml repository. Then reference the file in the <code>&lt;head&gt;</code> of the HTML page. As in this <code>mhchem</code> example:</p>
 <pre><code>  &lt;head&gt;
@@ -166,7 +160,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <details><summary>More…</summary>
 <pre><code>allowedTags: [
   &#x27;span&#x27;, &#x27;img&#x27;, &#x27;math&#x27;, &#x27;annotation&#x27;, &#x27;semantics&#x27;,
-  &#x27;maction&#x27;, &#x27;menclose&#x27;, &#x27;mfrac&#x27;, &#x27;mi&#x27;, &#x27;mmultiscripts&#x27;,
+  &#x27;menclose&#x27;, &#x27;mfrac&#x27;, &#x27;mi&#x27;, &#x27;mmultiscripts&#x27;,
   &#x27;mn&#x27;, &#x27;mo&#x27;, &#x27;mover&#x27;, &#x27;mpadded&#x27;, &#x27;mphantom&#x27;, &#x27;mroot&#x27;,
   &#x27;mrow&#x27;, &#x27;mspace&#x27;, &#x27;msub&#x27;, &#x27;msup&#x27;, &#x27;msubsup&#x27;, &#x27;msqrt&#x27;, &#x27;mstyle&#x27;, &#x27;mtable&#x27;,
   &#x27;mtd&#x27;, &#x27;mtext&#x27;, &#x27;mtr&#x27;, &#x27;munder&#x27;, &#x27;munderover&#x27;
@@ -176,7 +170,6 @@ allowedAttributes: {
   img: [&#x27;src&#x27;, &#x27;alt&#x27;, &#x27;width&#x27;, &#x27;height&#x27;],
   math: [&#x27;xmlns&#x27;, &#x27;display&#x27;],
   annotation: [&#x27;encoding&#x27;],
-  maction: [&#x27;actiontype&#x27;],
   menclose: [&#x27;notation&#x27;, &#x27;mathbackground&#x27;],
   mfrac: [&#x27;linethickness&#x27;],
   mi: [&#x27;mathvariant&#x27;, &#x27;style&#x27;],
@@ -207,7 +200,7 @@ allowedClasses: [
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.6.9</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.7.0</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>

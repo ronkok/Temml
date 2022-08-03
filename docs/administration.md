@@ -84,6 +84,10 @@ and a DOM element to render into:
 temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
 ```
 
+If the element you provide is a `<math>` element, Temml will populate it.
+Otherwise, it will create a new `<math>` element and make it a child
+of the element you provide.
+
 ### Server-Side
 
 To generate MathML on the server or to generate an MathML string of the
@@ -129,11 +133,7 @@ Available options are:
 
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox. (default: `false`)
 
-- `elementIsMath`: `boolean`. When you call the `temml.render()` function, you pass an `element` as an argument to the function. If that `element` is a span, then allow `elementIsMath` to remain `false` (the default), and Temml will create a new `<math>` element inside the span. It you pass a `<math>` element as the argument, then set `elementIsMath` to `true`. Then Temml will populate it with math contents.
-
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
-
-- `preventTagLap`: `boolean`. This option affects the horizontal alignment of `displayMode` math and `\tag`s. The default (`false`) acts in the LaTeX manner and centers the math. That’s good in a wide container, but if the container is narrow, the tag will overlap the math. The `preventTagLap: true` option acts differently. It will first place the tag and then center the math in the remainder of the container, with no overlap. If you are targeting mobile, `preventTagLap: true` is probably a good choice .
 
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
 
@@ -168,11 +168,17 @@ Available options are:
 
 ## Post Process
 
-The `postProcess` function implements the AMS functions `\ref` and `\label`. It should be called outside of any loop.
+The `postProcess` function implements the AMS functions `\ref` and `\label`.
+It should be called outside of any loop.
 
-The main Temml functions, `temml.render` and `temml.renderToString`, each operate on only one element at a time. In contrast, the `postProcess` function makes two passes through the entire document. If you choose not to support `\ref`, `postProcess` can be omitted.
+The main Temml functions, `temml.render` and `temml.renderToString`, each
+operate on only one element at a time. In contrast, the `postProcess` function
+makes two passes through the entire document. If you choose not to support
+`\ref`, `postProcess` can be omitted.
 
-If Temml is used server-side, `\ref` and `\label` are still implemented at runtime with client-side JavaScript. A small file, `temmlPostProcess.js`, is provided to be installed in place of `temml.min.js`. It exposes one function:
+If Temml is used server-side, `\ref` and `\label` are still implemented at
+runtime with client-side JavaScript. A small file, `temmlPostProcess.js`, is
+provided to be installed in place of `temml.min.js`. It exposes one function:
 
 ```
 temml.postProcess(document.body)
@@ -180,35 +186,44 @@ temml.postProcess(document.body)
 
 If you do not provide a runtime `postProcess`, everthing in Temml will work except `\ref`.
 
-If you use the [auto-render extension][https://github.com/ronkok/Temml/tree/main/contrib/auto-render], it includes the post-processor nuances.
+If you use the [auto-render extension][], it includes the post-processor nuances.
+
+[auto-render extension]: https://github.com/ronkok/Temml/tree/main/contrib/auto-render
 
 # Fonts
 
-Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.
+Temml has several different pre-written CSS files. You should use only one and
+by that choice, you also choose a math font. There are several math fonts
+available and each has different advantages.
 
-**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the light-weight option. Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`. Sadly, Cambria Math radicals are sometimes too tall for their content.
+**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the
+light-weight option. Cambria Math lacks roundhand glyphs, so you still have to
+serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`.
+Sadly, Cambria Math rendering has a couple of flaws. In Firefox, square root
+radicals are sometimes oddly sized. Chromium is better at radicals, but it
+fails to stretch three stretchy accents and several extensible arrows.
 
-<details><summary>More…</summary>
-
-You can mitigate the radical problem. It occurs because the font expects a cramped subscript when under a radical and Firefox does not perform that cramp. You can create your own cramp with braces. The expression `f{_c'}` will render just fine when `f_c'` renders poorly.
-
-</details>
-
-**Latin Modern** is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
+**Latin Modern** is a clone of Computer Modern and so is very home-like for
+readers accustomed to LaTeX documents. Rendering is excellent except that some
+line thicknesses may be too thin for some screens. This option also needs that
+additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
 **Asana**, **STIX TWO**, and **XITS** can be served without the `Temml.woff2` file.
 
-Several other math fonts exist and you can try them out at Frédéric Wang’s [Mathematical OpenType Fonts][].
+Several other math fonts exist and you can try them out at Frédéric Wang’s
+[Mathematical OpenType Fonts][].
 
 Where to find font files:
 
 - Temml.woff2 can be found in the Temml [dist folder][].
-- STIXTwoMath-Regular.woff2 is located at the STIX [repository](https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2).
+- STIXTwoMath-Regular.woff2 is located at the STIX [repository][].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
+[repository]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
-If you want a different math font size, you can add a rule to your own page's CSS, like this example:
+If you want a different math font size, you can add a rule to your own page's
+CSS, like this example:
 
 ```css
 math { font-size: 125%; }
@@ -216,7 +231,8 @@ math { font-size: 125%; }
 
 # Equation numbering
 
-In order to place automatic equation numbering in certain AMS environments, Temml contains these CSS rules:
+In order to place automatic equation numbering in certain AMS environments,
+Temml contains these CSS rules:
 
 ```
 .tml-eqn::before {
@@ -248,14 +264,16 @@ More Temml functionality can be added via the following extensions:
 * [auto-render][]: Find and render all math in a running HTML page.
 * [mhchem][]: Write beautiful chemical equations easily.
 * [physics][]: Implement much of the LaTeX `physics` package.
-* [texvc][]: Provide functions used in wikimedia.
+* [texvc][]: Support functions used in wikimedia.
 
 [auto-render]: https://github.com/ronkok/Temml/tree/main/contrib/auto-render
 [mhchem]: https://github.com/ronkok/Temml/tree/main/contrib/mhchem
 [physics]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
 [texvc]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
 
-To install extensions for browser use, include the appropriate file from the `contrib` folder of the Temml repository. Then reference the file in the `<head>` of the HTML page. As in this `mhchem` example:
+To install extensions for browser use, include the appropriate file from the
+`contrib` folder of the Temml repository. Then reference the file in the
+`<head>` of the HTML page. As in this `mhchem` example:
 
 ```html
   <head>
@@ -268,7 +286,8 @@ To install extensions for browser use, include the appropriate file from the `co
 
 The extension reference must come after the reference to `temml.min.js`.
 
-For server-side use, just use `temml.cjs` instead of `temml.min.js`. `temml.cjs` includes `mhchem`, `physics`, and `texvc`.
+For server-side use, just use `temml.cjs` instead of `temml.min.js`.
+`temml.cjs` includes `mhchem`, `physics`, and `texvc`.
 
 # Security
 
@@ -290,7 +309,7 @@ of Temml tags and attributes below the fold.
 ```
 allowedTags: [
   'span', 'img', 'math', 'annotation', 'semantics',
-  'maction', 'menclose', 'mfrac', 'mi', 'mmultiscripts',
+  'menclose', 'mfrac', 'mi', 'mmultiscripts',
   'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot',
   'mrow', 'mspace', 'msub', 'msup', 'msubsup', 'msqrt', 'mstyle', 'mtable',
   'mtd', 'mtext', 'mtr', 'munder', 'munderover'
@@ -300,7 +319,6 @@ allowedAttributes: {
   img: ['src', 'alt', 'width', 'height'],
   math: ['xmlns', 'display'],
   annotation: ['encoding'],
-  maction: ['actiontype'],
   menclose: ['notation', 'mathbackground'],
   mfrac: ['linethickness'],
   mi: ['mathvariant', 'style'],
@@ -339,7 +357,7 @@ allowedClasses: [
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.9
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.7.0
 
 <h3><a href="#top">Contents</a></h3>
 

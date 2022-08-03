@@ -52,6 +52,9 @@ defineFunction({
     } else {
       const node = new mathMLTree.MathNode("mspace");
       node.setAttribute("width", dimension.number + dimension.unit);
+      if (dimension.number < 0) {
+        node.style.marginLeft = dimension.number + dimension.unit
+      }
       return node;
     }
   }

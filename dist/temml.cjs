@@ -238,10 +238,8 @@ class Settings {
     options = options || {};
     this.displayMode = utils.deflt(options.displayMode, false);    // boolean
     this.annotate = utils.deflt(options.annotate, false);           // boolean
-    this.elementIsMath = utils.deflt(options.elementIsMath, false); // boolean
     this.leqno = utils.deflt(options.leqno, false);                // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
-    this.preventTagLap = utils.deflt(options.preventTagLap, false); // boolean
     this.macros = options.macros || {};
     this.xml = utils.deflt(options.xml, false);                     // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
@@ -1568,14 +1566,14 @@ defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
 defineSymbol(math, accent, "\u02ca", "\\acute");
 defineSymbol(math, accent, "\u0060", "\\grave");
 defineSymbol(math, accent, "\u00a8", "\\ddot");
-defineSymbol(math, accent, "\u20db", "\\dddot");
-defineSymbol(math, accent, "\u20dc", "\\ddddot");
+defineSymbol(math, accent, "\u2026", "\\dddot");
+defineSymbol(math, accent, "\u2026\u002e", "\\ddddot");
 defineSymbol(math, accent, "\u007e", "\\tilde");
 defineSymbol(math, accent, "\u203e", "\\bar");
 defineSymbol(math, accent, "\u02d8", "\\breve");
 defineSymbol(math, accent, "\u02c7", "\\check");
 defineSymbol(math, accent, "\u005e", "\\hat");
-defineSymbol(math, accent, "\u20d7", "\\vec");
+defineSymbol(math, accent, "\u2192", "\\vec");
 defineSymbol(math, accent, "\u02d9", "\\dot");
 defineSymbol(math, accent, "\u02da", "\\mathring");
 defineSymbol(math, mathord, "\u0131", "\\imath", true);
@@ -2030,29 +2028,24 @@ const buildGroup$1 = function(group, style) {
   }
 };
 
-const glue = _ => {
-  const glueNode = new mathMLTree.MathNode("mtd", []);
-  glueNode.setAttribute("style", "padding: 0;width: 50%;");
-  return glueNode
+const glue$1 = _ => {
+  return new mathMLTree.MathNode("mtd", [], [], { padding: "0", width: "50%" })
 };
 
-const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
+const taggedExpression = (expression, tag, style, leqno) => {
   tag = buildExpressionRow(tag[0].body, style);
   tag = utils.consolidateText(tag);
-  tag.classes = ["tml-tag"];
-  if (!preventTagLap) {
-    tag = new mathMLTree.MathNode("mpadded", [tag]);
-    tag.setAttribute("style", "width:0;");
-    tag.setAttribute("width", "0");
-    tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width");
-  }
-  tag = new mathMLTree.MathNode("mtd", [tag]);
-  if (!preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0"); }
+  tag.classes.push("tml-tag");
 
   expression = new mathMLTree.MathNode("mtd", [expression]);
-  const rowArray = leqno
-    ? [tag, glue(), expression, glue()]
-    : [glue(), expression, glue(), tag];
+  const rowArray = [glue$1(), expression, glue$1()];
+  if (leqno) {
+    rowArray[0].children.push(tag);
+    rowArray[0].style.textAlign = "-webkit-left";
+  } else {
+    rowArray[2].children.push(tag);
+    rowArray[2].style.textAlign = "-webkit-right";
+  }
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
   const table = new mathMLTree.MathNode("mtable", [mtr]);
   table.setAttribute("width", "100%");
@@ -2081,7 +2074,7 @@ function buildMathML(tree, texExpression, style, settings) {
       : setLineBreaks(expression, settings.displayMode, settings.annotate);
 
   if (tag) {
-    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.preventTagLap);
+    wrapper = taggedExpression(wrapper, tag, style, settings.leqno);
   }
 
   let semantics;
@@ -2111,6 +2104,12 @@ const mathmlBuilder$a = (group, style) => {
     ? stretchy.mathMLnode(group.label)
     : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
 
+  if (group.label === "\\vec") {
+    accentNode.style.transform = "scale(0.75) translate(10%, 30%)";
+  } else {
+    accentNode.style.mathStyle = "normal";
+    accentNode.style.mathDepth = "0";
+  }
   if (!group.isStretchy) {
     accentNode.setAttribute("stretchy", "false");
   }
@@ -2119,7 +2118,6 @@ const mathmlBuilder$a = (group, style) => {
     [buildGroup$1(group.base, style), accentNode]
   );
 
-  node.setAttribute("accent", "true");
   return node;
 };
 
@@ -2254,11 +2252,11 @@ defineFunction({
   },
   mathmlBuilder: (group, style) => {
     const accentNode = stretchy.mathMLnode(group.label);
+    accentNode.style["math-depth"] = 0;
     const node = new mathMLTree.MathNode("munder", [
       buildGroup$1(group.base, style),
       accentNode
     ]);
-    node.setAttribute("accentunder", "true");
     return node;
   }
 });
@@ -2371,14 +2369,22 @@ const calculateSize = function(sizeValue, style) {
 };
 
 // Helper functions
-const paddedNode = (group, width, lspace = "0.3em") => {
-  const node = new mathMLTree.MathNode("mpadded", group ? [group] : []);
-  node.setAttribute("width", width);
-  node.setAttribute("lspace", lspace);
-  return node;
+
+const padding$1 = width => {
+  const node = new mathMLTree.MathNode("mspace");
+  node.setAttribute("width", width + "em");
+  return node
 };
 
-const labelSize = (size, scriptLevel) =>  (size / emScale(scriptLevel)).toFixed(4) + "em";
+const paddedNode = (group, lspace = 0.3, rspace = 0) => {
+  if (group == null && rspace === 0) { return padding$1(lspace) }
+  const row = group ? [group] : [];
+  if (lspace !== 0)   { row.unshift(padding$1(lspace)); }
+  if (rspace > 0) { row.push(padding$1(rspace)); }
+  return new mathMLTree.MathNode("mrow", row)
+};
+
+const labelSize = (size, scriptLevel) =>  (size / emScale(scriptLevel)).toFixed(4);
 
 const munderoverNode = (name, body, below, style) => {
   const arrowNode = stretchy.mathMLnode(name);
@@ -2400,21 +2406,21 @@ const munderoverNode = (name, body, below, style) => {
   const labelStyle = style.withLevel(style.level < 2 ? 2 : 3);
   const emptyLabelWidth = labelSize(minWidth, labelStyle.level);
   const lspace = labelSize((isEq ? 0 : 0.3), labelStyle.level);
-  let widthAdder = labelSize((isEq ? -0.4 : 0.6), labelStyle.level);
-  if (widthAdder.charAt(0) !== "-") { widthAdder = "+" + widthAdder; }
+  const rspace = labelSize((isEq ? 0 : 0.3), labelStyle.level);
 
   const upperNode = (body && body.body &&
     // \hphantom        visible content
     (body.body.body || body.body.length > 0))
-    ? paddedNode(buildGroup$1(body, labelStyle), widthAdder, lspace)
+    ? paddedNode(buildGroup$1(body, labelStyle), lspace, rspace)
       // Since Firefox does not recognize minsize set on the arrow,
       // create an upper node w/correct width.
-    : paddedNode(null, emptyLabelWidth, "0");
+    : paddedNode(null, emptyLabelWidth, 0);
   const lowerNode = (below && below.body &&
     (below.body.body || below.body.length > 0))
-    ? paddedNode(buildGroup$1(below, labelStyle), widthAdder, lspace)
-    : paddedNode(null, emptyLabelWidth, "0");
+    ? paddedNode(buildGroup$1(below, labelStyle), lspace, rspace)
+    : paddedNode(null, emptyLabelWidth, 0);
   const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
+  if (minWidth === "3.0") { node.style.height = "1em"; }
   return node
 };
 
@@ -2438,7 +2444,7 @@ defineFunction({
     "\\xlongequal",
     "\\xtwoheadrightarrow",
     "\\xtwoheadleftarrow",
-    // The next 7 functions are here only to support mhchem
+    // The next 5 functions are here only to support mhchem
     "\\yields",
     "\\yieldsLeft",
     "\\mesomerism",
@@ -2466,10 +2472,10 @@ defineFunction({
     // Build the arrow and its labels.
     const node = munderoverNode(group.name, group.body, group.below, style);
     // Create operator spacing for a relation.
-    const wrapper  = new mathMLTree.MathNode("mpadded", [node]);
-    wrapper.setAttribute("lspace", "0.2778em");
-    wrapper.setAttribute("width", "+0.5556em");
-    return wrapper
+    const row = [node];
+    row.unshift(padding$1(0.2778));
+    row.push(padding$1(0.2778));
+    return new mathMLTree.MathNode("mrow", row)
   }
 });
 
@@ -2541,51 +2547,22 @@ defineFunction({
     if (group.name === "\\equilibriumLeft") {
       const botNode =  new mathMLTree.MathNode("mpadded", [botArrow]);
       botNode.setAttribute("width", "0.5em");
-      wrapper = new mathMLTree.MathNode("mpadded", [botNode, raiseNode]);
+      wrapper = new mathMLTree.MathNode(
+        "mpadded",
+        [padding$1(0.2778), botNode, raiseNode, padding$1(0.2778)]
+      );
     } else {
       raiseNode.setAttribute("width", (group.name === "\\equilibriumRight" ? "0.5em" : "0"));
-      wrapper = new mathMLTree.MathNode("mpadded", [raiseNode, botArrow]);
+      wrapper = new mathMLTree.MathNode(
+        "mpadded",
+        [padding$1(0.2778), raiseNode, botArrow, padding$1(0.2778)]
+      );
     }
 
     wrapper.setAttribute("voffset", "-0.18em");
-    wrapper.setAttribute("width", "+0.5556em");
     wrapper.setAttribute("height", "-0.18em");
     wrapper.setAttribute("depth", "+0.18em");
-    wrapper.setAttribute("lspace", "0.2778em");
     return wrapper
-  }
-});
-
-defineFunction({
-  type: "cancelto",
-  names: ["\\cancelto"],
-  props: {
-    numArgs: 2
-  },
-  handler({ parser }, args) {
-    return {
-      type: "cancelto",
-      mode: parser.mode,
-      value: args[0],
-      expression: args[1]
-    };
-  },
-  mathmlBuilder(group, style) {
-    const value = new mathMLTree.MathNode(
-      "mpadded",
-      [buildGroup$1(group.value, style)]
-    );
-    value.setAttribute("depth", `-0.1em`);
-    value.setAttribute("height", `+0.1em`);
-    value.setAttribute("voffset", `0.1em`);
-
-    const expression = new mathMLTree.MathNode(
-      "menclose",
-      [buildGroup$1(group.expression, style)]
-    );
-    expression.setAttribute("notation", `updiagonalarrow`);
-
-    return new mathMLTree.MathNode("msup", [expression, value])
   }
 });
 
@@ -2801,6 +2778,7 @@ function parseCD(parser) {
     row = [];
     body.push(row);
   }
+  body.pop();
 
   // End row group
   parser.gullet.endGroup();
@@ -3575,8 +3553,7 @@ defineFunction({
 
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
-    node.setAttribute("maxsize", sizeToMaxHeight[group.size] + "em");
-
+    // Don't set the maxsize attribute. It's broken in Chromium.
     return node;
   }
 });
@@ -3685,6 +3662,9 @@ defineFunction({
     const textNode = makeText(group.delim, group.mode);
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("fence", "true");
+    // The next line is not semantically correct, but
+    // Chromium fails to stretch if it is not there.
+    middleNode.setAttribute("form", "prefix");
     // MathML gives 5/18em spacing to each <mo> element.
     // \middle should get delimiter spacing instead.
     middleNode.setAttribute("lspace", "0.05em");
@@ -3693,51 +3673,85 @@ defineFunction({
   }
 });
 
+const padding = _ => {
+  const node = new mathMLTree.MathNode("mspace");
+  node.setAttribute("width", "3pt");
+  return node
+};
+
 const mathmlBuilder$8 = (group, style) => {
-  const node = new mathMLTree.MathNode(
-    group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose",
-    [buildGroup$1(group.body, style)]
-  );
+  let node;
+  if (group.label.indexOf("colorbox") > -1) {
+    // Chrome mpadded +width attribute is broken. Insert <mspace>
+    node = new mathMLTree.MathNode("mpadded", [
+      padding(),
+      buildGroup$1(group.body, style),
+      padding()
+    ]);
+  } else {
+    node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
+  }
   switch (group.label) {
+    case "\\overline":
+      node.setAttribute("notation", "top");
+      node.style.padding = "0.1em 0 0 0";
+      node.style.borderTop = "0.065em solid";
+      break
+    case "\\underline":
+      node.setAttribute("notation", "bottom");
+      node.style.padding = "0 0 0.1em 0";
+      node.style.borderBottom = "0.065em solid";
+      break
     case "\\cancel":
       node.setAttribute("notation", "updiagonalstrike");
-      break;
+      node.classes.push("cancel");
+      break
     case "\\bcancel":
       node.setAttribute("notation", "downdiagonalstrike");
-      break;
+      node.classes.push("bcancel");
+      break
+    /*
     case "\\longdiv":
       node.setAttribute("notation", "longdiv");
-      break;
+      break
     case "\\phase":
       node.setAttribute("notation", "phasorangle");
-      break;
-    case "\\sout":
-      node.setAttribute("notation", "horizontalstrike");
-      break;
-    case "\\fbox":
-      node.setAttribute("notation", "box");
-      break;
+      break */
     case "\\angl":
       node.setAttribute("notation", "actuarial");
-      break;
+      node.style.padding = "0.03889em 0.03889em 0 0.03889em";
+      node.style.borderTop = "0.049em solid";
+      node.style.borderRight = "0.049em solid";
+      node.style.marginRight = "0.03889em";
+      break
+    case "\\sout":
+      node.setAttribute("notation", "horizontalstrike");
+      node.style["text-decoration"] = "line-through 0.08em solid";
+      break
+    case "\\fbox":
+      node.setAttribute("notation", "box");
+      node.style = { padding: "3pt", border: "1px solid" };
+      break
     case "\\fcolorbox":
     case "\\colorbox": {
       // <menclose> doesn't have a good notation option for \colorbox.
       // So use <mpadded> instead. Set some attributes that come
       // included with <menclose>.
-      const fboxsep = 3; // 3 pt from LaTeX source2e
-      node.setAttribute("width", `+${2 * fboxsep}pt`);
-      node.setAttribute("height", `+${2 * fboxsep}pt`);
-      node.setAttribute("lspace", `${fboxsep}pt`); //
-      node.setAttribute("voffset", `${fboxsep}pt`);
+      //const fboxsep = 3; // 3 pt from LaTeX source2e
+      //node.setAttribute("height", `+${2 * fboxsep}pt`)
+      //node.setAttribute("voffset", `${fboxsep}pt`)
+      const style = { padding: "3pt 0 3pt 0" };
+
       if (group.label === "\\fcolorbox") {
-        node.setAttribute("style", "border: 0.06em solid " + String(group.borderColor));
+        style.border = "0.06em solid " + String(group.borderColor);
       }
-      break;
+      node.style = style;
+      break
     }
     case "\\xcancel":
       node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
-      break;
+      node.classes.push("xcancel");
+      break
   }
   if (group.backgroundColor) {
     node.setAttribute("mathbackground", group.backgroundColor);
@@ -3830,7 +3844,8 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\angl", "\\phase", "\\longdiv"],
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\underline"],
+   // , "\\phase", "\\longdiv"
   props: {
     numArgs: 1
   },
@@ -3912,30 +3927,20 @@ const getTag = (group, style, rowNum) => {
       tag = buildExpressionRow(tagContents.body, style);
       tag.classes = ["tml-tag"];
     } else {
-      // \notag. Return an empty cell.
-      tag = new mathMLTree.MathNode("mtd", []);
-      tag.setAttribute("style", "padding: 0; min-width:0");
+      // \notag. Return an empty span.
+      tag = new mathMLTree.MathNode("mtext", [], []);
       return tag
     }
   } else if (group.colSeparationType === "multline" &&
     ((group.leqno && rowNum !== 0) || (!group.leqno && rowNum !== group.body.length - 1))) {
     // A multiline that does not receive a tag. Return an empty cell.
-    tag = new mathMLTree.MathNode("mtd", []);
-    tag.setAttribute("style", "padding: 0; min-width:0");
+    tag = new mathMLTree.MathNode("mtext", [], []);
     return tag
   } else {
     // AMS automatcally numbered equaton.
     // Insert a class so the element can be populated by a post-processor.
     tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"]);
   }
-  if (!group.preventTagLap) {
-    tag = new mathMLTree.MathNode("mpadded", [tag]);
-    tag.setAttribute("style", "width:0;");
-    tag.setAttribute("width", "0");
-    if (!group.leqno) { tag.setAttribute("lspace", "-1width"); }
-  }
-  tag = new mathMLTree.MathNode("mtd", [tag]);
-  if (!group.preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0"); }
   return tag
 };
 
@@ -4102,8 +4107,7 @@ function parseArray(
     addEqnNum,
     scriptLevel,
     tags,
-    leqno,
-    preventTagLap: parser.settings.preventTagLap
+    leqno
   };
 }
 
@@ -4119,16 +4123,19 @@ const alignMap = {
   r: "right "
 };
 
+const glue = group => {
+  const glueNode = new mathMLTree.MathNode("mtd", []);
+  glueNode.style = { padding: "0", width: "50%" };
+  if (group.colSeparationType === "multline") {
+    glueNode.style.width = "7.5%";
+  }
+  return glueNode
+};
+
 const mathmlBuilder$7 = function(group, style) {
   const tbl = [];
   const numRows = group.body.length;
-  let glue;
-  if (group.addEqnNum) {
-    glue = new mathMLTree.MathNode("mtd", [], []);
-    const glueStyle = "padding: 0;width: " +
-      (group.colSeparationType === "multline" ? "7.5%" : "50%");
-    glue.setAttribute("style", glueStyle);
-  }
+  const hlines = group.hLinesBeforeRow;
 
   for (let i = 0; i < numRows; i++) {
     const rw = group.body[i];
@@ -4144,26 +4151,40 @@ const mathmlBuilder$7 = function(group, style) {
         "mtd",
         [buildGroup$1(rw[j], style.withLevel(cellStyle))]
       );
+
       if (group.colSeparationType === "multline") {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center";
         mtd.setAttribute("columnalign", align);
+        if (align !== "center") {
+          mtd.style.textAlign = "-webkit-" + align;
+        }
       }
       row.push(mtd);
     }
     if (group.addEqnNum) {
-      row.unshift(glue);
-      row.push(glue);
+      row.unshift(glue(group));
+      row.push(glue(group));
       const tag = getTag(group, style.withLevel(cellStyle), i);
       if (group.leqno) {
-        row.unshift(tag);
+        row[0].children.push(tag);
+        row[0].style.textAlign = "-webkit-left";
       } else {
-        row.push(tag);
+        row[row.length - 1].children.push(tag);
+        row[row.length - 1].style.textAlign = "-webkit-right";
       }
     }
-    // If group.addEqnNum, insert a breadcrumb to be found by temmlPostProcess().
-    tbl.push(new mathMLTree.MathNode("mtr", row, group.addEqnNum ? ["tml-tageqn"] : [] ));
+    const mtr = new mathMLTree.MathNode("mtr", row, []);
+    // Write horizontal rules
+    if (i === 0 && hlines[0].length > 0) {
+      mtr.classes.push(hlines[0][0] ? "tml-top-dashed" : "tml-top-solid");
+    }
+    if (hlines[i + 1].length > 0) {
+      mtr.classes.push(hlines[i + 1][0] ? "hline-dashed" : "hline-solid");
+    }
+    tbl.push(mtr);
   }
   let table = new mathMLTree.MathNode("mtable", tbl);
+  if (!group.addEqnNum) { table.classes.push("tml-array"); }
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true"); }
 
   // Set column alignment, row spacing, column spacing, and
@@ -4187,35 +4208,54 @@ const mathmlBuilder$7 = function(group, style) {
       : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
   table.setAttribute("rowspacing", utils.round(gap) + "em");
 
+  if (group.arraystretch > 1) {
+    const pad = `calc(${utils.round((group.arraystretch - 1) / 2)}em + 0.5ex) 0.4em`;
+    for (const row of table.children) {
+      for (const cell of row.children) {
+        cell.style.padding = pad;
+      }
+    }
+  }
+
   if (group.addEqnNum || group.colSeparationType === "multline") {
     table.setAttribute("width", "100%");
   }
 
-  // MathML table lines go only between cells.
-  // To place a line on an edge we'll use <menclose>, if necessary.
-  let menclose = "";
+  // Column separator lines and column alignment
   let align = "";
+  let columnLines = "";
 
   if (group.cols && group.cols.length > 0) {
-    // Find column alignment, column spacing, and  vertical lines.
     const cols = group.cols;
-    let columnLines = "";
     let prevTypeWasAlign = false;
     let iStart = 0;
     let iEnd = cols.length;
 
-    if (cols[0].type === "separator") {
-      menclose += "left ";
-      iStart = 1;
+    while (cols[iStart].type === "separator") {
+      iStart += 1;
     }
-    if (cols[cols.length - 1].type === "separator") {
-      menclose += "right ";
+    while (cols[iEnd - 1].type === "separator") {
       iEnd -= 1;
     }
 
+    if (cols[0].type === "separator") {
+      for (const row of table.children) {
+        const sep = cols[0].separator === "|" ? "solid " : "dashed ";
+        row.children[0].style.borderLeft = sep;
+        row.children[0].style.paddingLeft = "0.4em";
+      }
+    }
+    let iCol = group.addEqnNum ? 0 : -1;
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
-        align += alignMap[cols[i].align];
+        const colAlign = alignMap[cols[i].align];
+        align += colAlign;
+        iCol += 1;
+        for (const row of table.children) {
+          if (colAlign.trim() !== "center" && iCol < row.children.length) {
+            row.children[iCol].style.textAlign = "-webkit-" + colAlign.trim();
+          }
+        }
 
         if (prevTypeWasAlign) {
           columnLines += "none ";
@@ -4225,21 +4265,33 @@ const mathmlBuilder$7 = function(group, style) {
         // MathML accepts only single lines between cells.
         // So we read only the first of consecutive separators.
         if (prevTypeWasAlign) {
-          columnLines += cols[i].separator === "|" ? "solid " : "dashed ";
-          prevTypeWasAlign = false;
+          const sep = cols[i].separator === "|" ? "0.06em solid" : "0.06em dashed";
+          columnLines += sep;
+          for (const row of table.children) {
+            if (iCol < row.children.length) {
+              row.children[iCol].style.borderRight = sep;
+            }
+          }
         }
       }
     }
-    if (group.addEqnNum) {
-      align = "left " + align + "right "; // allow for glue cells on each side
-      align = group.leqno ? "left " + align : align += "right";  // eqn num cell
+    if (cols[cols.length - 1].type === "separator") {
+      for (const row of table.children) {
+        const sep = cols[cols.length - 1].separator === "|" ? "0.06em solid" : "0.06em dashed";
+        row.children[row.children.length - 1].style.borderRight = sep;
+        row.children[row.children.length - 1].style.paddingRight = "0.4em";
+      }
     }
-
+  }
+  if (group.addEqnNum) {
+    align = "left " + align + "right "; // allow for glue cells on each side
+    align = group.leqno ? "left " + align : align += "right";  // eqn num cell
+  }
+  if (align) {
     table.setAttribute("columnalign", align.trim());
-
-    if (/[sd]/.test(columnLines)) {
-      table.setAttribute("columnlines", columnLines.trim());
-    }
+  }
+  if (/[sd]/.test(columnLines)) {
+    table.setAttribute("columnlines", columnLines.trim());
   }
 
   // Set column spacing.
@@ -4249,16 +4301,21 @@ const mathmlBuilder$7 = function(group, style) {
     case "alignedat":
     case "alignat":
     case "alignat*":
+    case "split":
       table.setAttribute("columnspacing", "0em");
+      table.classes.push("tml-gather");
       break
     case "small":
       table.setAttribute("columnspacing", "0.2778em");
+      table.classes.push("tml-small");
       break
     case "CD":
       table.setAttribute("columnspacing", "0.5em");
+      table.classes.push("tml-gather");
       break
     case "align":
     case "align*": {
+      table.classes.push("tml-gather");
       const cols = group.cols || [];
       let spacing = group.addEqnNum ? "0em " : "";
       for (let i = 1; i < cols.length; i++) {
@@ -4272,38 +4329,13 @@ const mathmlBuilder$7 = function(group, style) {
       table.setAttribute("columnspacing", "1em");
   }
 
-  // Address \hline and \hdashline
-  let rowLines = "";
-  const hlines = group.hLinesBeforeRow;
-
-  menclose += hlines[0].length > 0 ? "top " : "";
-  menclose += hlines[hlines.length - 1].length > 0 ? "bottom " : "";
-
-  for (let i = 1; i < hlines.length - 1; i++) {
-    rowLines +=
-      hlines[i].length === 0
-        ? "none "
-        : // MathML accepts only a single line between rows. Read one element.
-        hlines[i][0]
-        ? "dashed "
-        : "solid ";
-  }
-  if (/[sd]/.test(rowLines)) {
-    table.setAttribute("rowlines", rowLines.trim());
-  }
-
-  if (menclose !== "") {
-    table = new mathMLTree.MathNode("menclose", [table]);
-    table.setAttribute("notation", menclose.trim());
-  }
-
   if (!Number.isNaN(group.arraystretch) && group.arraystretch < 1) {
     // A small array. Wrap in scriptstyle so row gap is not too large.
     table = new mathMLTree.MathNode("mstyle", [table]);
     table.setAttribute("scriptlevel", "1");
   }
 
-  return table;
+  return table
 };
 
 // Convenience function for align, align*, aligned, alignat, alignat*, alignedat.
@@ -5267,6 +5299,7 @@ defineFunction({
 
 const mathmlBuilder$4 = (group, style) => {
   const accentNode = stretchy.mathMLnode(group.label);
+  accentNode.style["math-depth"] = 0;
   return new mathMLTree.MathNode(group.isOver ? "mover" : "munder", [
     buildGroup$1(group.base, style),
     accentNode
@@ -5640,6 +5673,9 @@ defineFunction({
     } else {
       const node = new mathMLTree.MathNode("mspace");
       node.setAttribute("width", dimension.number + dimension.unit);
+      if (dimension.number < 0) {
+        node.style.marginLeft = dimension.number + dimension.unit;
+      }
       return node;
     }
   }
@@ -5717,7 +5753,26 @@ defineFunction({
   },
   mathmlBuilder: (group, style) => {
     // mathllap, mathrlap, mathclap
-    const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, style)]);
+    let strut;
+    if (group.alignment === "llap") {
+      // We need an invisible strut with the same depth as the group.
+      // We can't just read the depth, so we use \vphantom methods.
+      const phantomInner = buildExpression(ordargument(group.body), style);
+      const phantom = new mathMLTree.MathNode("mphantom", phantomInner);
+      strut = new mathMLTree.MathNode("mpadded", [phantom]);
+      strut.setAttribute("width", "0px");
+    }
+
+    const inner = buildGroup$1(group.body, style);
+    let node;
+    if (group.alignment === "llap") {
+      inner.style.position = "absolute";
+      inner.style.right = "0";
+      inner.style.bottom = `0`; // If we could have read the ink depth, it would go here.
+      node = new mathMLTree.MathNode("mpadded", [strut, inner]);
+    } else {
+      node = new mathMLTree.MathNode("mpadded", [inner]);
+    }
 
     if (group.alignment === "rlap") {
       if (group.body.body.length > 0 && group.body.body[0].type === "genfrac") {
@@ -5727,6 +5782,12 @@ defineFunction({
     } else {
       const offset = group.alignment === "llap" ? "-1" : "-0.5";
       node.setAttribute("lspace", offset + "width");
+      if (group.alignment === "llap") {
+        node.style.position = "relative";
+      } else {
+        node.style.display = "flex";
+        node.style.justifyContent = "center";
+      }
     }
     node.setAttribute("width", "0px");
     return node
@@ -6119,9 +6180,9 @@ const noSuccessor = ["\\smallint"];
 // Math operators (e.g. \sin) need a space between these types and themselves:
 const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"];
 
-const dels = ["}", "\\left", "\\middle", "\\right"];
-const isDelimiter = str => str.length > 0 &&
-  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str));
+const dels$1 = ["}", "\\left", "\\middle", "\\right"];
+const isDelimiter$1 = str => str.length > 0 &&
+  (delimiters.includes(str) || delimiterSizes[str] || dels$1.includes(str));
 
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
@@ -6148,15 +6209,19 @@ const mathmlBuilder$2 = (group, style) => {
       // Append an invisible <mo>&ApplyFunction;</mo>.
       // ref: https://www.w3.org/TR/REC-MathML/chap3_2.html#sec3.2.4
       const operator = new MathNode("mo", [makeText("\u2061", "text")]);
-      node = new MathNode("mpadded", [node, operator]);
-      const lSpace = group.needsLeadingSpace ? 0.1667 : 0;
-      const rSpace = group.isFollowedByDelimiter ? 0 : 0.1666;
+      const row = [node, operator];
+      // Set spacing
       if (group.needsLeadingSpace) {
-        node.setAttribute("lspace", "0.1667em"); // thin space.
+        const lead = new MathNode("mspace");
+        lead.setAttribute("width", "0.1667em"); // thin space.
+        row.unshift(lead);
       }
-      if ((lSpace + rSpace) > 0) {
-        node.setAttribute("width", `+${lSpace + rSpace}em`);
+      if (!group.isFollowedByDelimiter) {
+        const trail = new MathNode("mspace");
+        trail.setAttribute("width", "0.1667em"); // thin space.
+        row.push(trail);
       }
+      node = new MathNode("mrow", row);
     }
   }
 
@@ -6339,7 +6404,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      isFollowedByDelimiter: isDelimiter(next),
+      isFollowedByDelimiter: isDelimiter$1(next),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
       name: funcName
     };
@@ -6364,7 +6429,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      isFollowedByDelimiter: isDelimiter(next),
+      isFollowedByDelimiter: isDelimiter$1(next),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
       name: funcName
     };
@@ -6450,7 +6515,11 @@ function defineMacro(name, body) {
   _macros[name] = body;
 }
 
-// NOTE: Unlike most builders, this one handles not only
+const dels = ["}", "\\left", "\\middle", "\\right"];
+const isDelimiter = str => str.length > 0 &&
+  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str));
+
+  // NOTE: Unlike most builders, this one handles not only
 // "operatorname", but also  "supsub" since \operatorname* can
 // affect super/subscripting.
 
@@ -6528,15 +6597,20 @@ const mathmlBuilder$1 = (group, style) => {
     // Append an <mo>&ApplyFunction;</mo>.
     // ref: https://www.w3.org/TR/REC-MathML/chap3_2.html#sec3.2.4
     const operator = new mathMLTree.MathNode("mo", [makeText("\u2061", "text")]);
+    const fragment = [wrapper, operator];
     if (group.needsLeadingSpace) {
       // LaTeX gives operator spacing, but a <mi> gets ord spacing.
       // So add a leading space.
       const space = new mathMLTree.MathNode("mspace");
       space.setAttribute("width", "0.1667em"); // thin space.
-      return mathMLTree.newDocumentFragment([space, wrapper, operator])
-    } else {
-      return mathMLTree.newDocumentFragment([wrapper, operator])
+      fragment.unshift(space);
     }
+    if (!group.isFollowedByDelimiter) {
+      const trail = new mathMLTree.MathNode("mspace");
+      trail.setAttribute("width", "0.1667em"); // thin space.
+      fragment.push(trail);
+    }
+    return mathMLTree.newDocumentFragment(fragment)
   }
 
   return wrapper
@@ -6554,6 +6628,7 @@ defineFunction({
   handler: ({ parser, funcName }, args) => {
     const body = args[0];
     const prevAtomType = parser.prevAtomType;
+    const next = parser.gullet.future().text;
     return {
       type: "operatorname",
       mode: parser.mode,
@@ -6561,6 +6636,7 @@ defineFunction({
       alwaysHandleSupSub: (funcName === "\\operatornamewithlimits"),
       limits: false,
       parentIsSupSub: false,
+      isFollowedByDelimiter: isDelimiter(next),
       needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)
     };
   },
@@ -6574,34 +6650,6 @@ defineFunctionBuilders({
   type: "ordgroup",
   mathmlBuilder(group, style) {
     return buildExpressionRow(group.body, style, true);
-  }
-});
-
-defineFunction({
-  type: "overline",
-  names: ["\\overline"],
-  props: {
-    numArgs: 1
-  },
-  handler({ parser }, args) {
-    const body = args[0];
-    return {
-      type: "overline",
-      mode: parser.mode,
-      body
-    };
-  },
-  mathmlBuilder(group, style) {
-    const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u005F")]);
-    operator.setAttribute("stretchy", "true");
-
-    const node = new mathMLTree.MathNode(
-      "mover",
-      [buildGroup$1(group.body, style), operator]
-    );
-    node.setAttribute("accent", "true");
-
-    return node;
   }
 });
 
@@ -7555,7 +7603,6 @@ const smallCaps = Object.freeze({
 // src/symbols.js.
 
 const numberRegEx$1 = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in Parser.js
-
 const latinRegEx = /[A-Ba-z]/;
 
 const italicNumber = (text, variant) => {
@@ -7587,9 +7634,7 @@ defineFunctionBuilders({
       node.setAttribute("mathvariant", "normal");
       if (text.text.length === 1) {
         // A Firefox bug will apply spacing here, but there should be none. Fix it.
-        node = new mathMLTree.MathNode("mpadded", [node]);
-        node.setAttribute("lspace", "0");
-        node.setAttribute("width", "+0em");
+        node = new mathMLTree.MathNode("mrow", [node]);
       }
     }
     return node
@@ -7635,6 +7680,9 @@ defineFunctionBuilders({
       }
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text]);
+      // TODO: If/when Chromium fixes primes, remove the next line.
+      node.style.transform = "translateY(0.3em)";
+      node.setAttribute("height", "0");
     } else {
       const origText = text.text;
       if (variant !== "italic") {
@@ -7776,103 +7824,6 @@ defineFunction({
     const newStyle = styleWithFont(group, style);
     const mrow = buildExpressionRow(group.body, newStyle);
     return utils.consolidateText(mrow)
-  }
-});
-
-// Two functions included to enable migration from Mathjax.
-
-defineFunction({
-  type: "tip",
-  names: ["\\mathtip"],
-  props: {
-    numArgs: 2
-  },
-  handler({ parser }, args) {
-    return {
-      type: "tip",
-      mode: parser.mode,
-      body: args[0],
-      tip: args[1]
-    };
-  },
-  mathmlBuilder: (group, style) => {
-    const math = buildGroup$1(group.body, style);
-    const tip = buildGroup$1(group.tip, style);
-    // Browsers don't support the tooltip actiontype.
-    // TODO: Come back and fix \mathtip when it can be done via CSS w/o a JS event.
-    const node = new mathMLTree.MathNode("maction", [math, tip], ["tml-tip"]);
-    node.setAttribute("actiontype", "tooltip");
-    return node
-  }
-});
-
-defineFunction({
-  type: "tip",
-  names: ["\\texttip"],
-  props: {
-    numArgs: 2,
-    argTypes: ["math", "text"]
-  },
-  handler({ parser }, args) {
-    return {
-      type: "tip",
-      mode: parser.mode,
-      body: args[0],
-      tip: args[1]
-    };
-  },
-  mathmlBuilder: (group, style) => {
-    const math = buildGroup$1(group.body, style);
-    const tip = buildGroup$1(group.tip, style);
-    // args[1] only accepted text, so tip is a <mtext> element or a <mrow> of them.
-    let str = "";
-    if (tip.type === "mtext") {
-      str = tip.children[0].text;
-    } else {
-      for (const child of tip.children) {
-        str += child.children[0].text;
-      }
-    }
-    // Implement \texttip via a title attribute.
-    math.setAttribute("title", str);
-    return math
-  }
-});
-
-defineFunctionBuilders({
-  type: "toggle",
-  mathmlBuilder(group, style) {
-    const expression = buildExpression(group.body, style);
-    const node = new mathMLTree.MathNode("maction", expression, [], { cursor: "default" });
-    node.setAttribute("actiontype", "toggle");
-    return node
-  }
-});
-
-defineFunction({
-  type: "underline",
-  names: ["\\underline"],
-  props: {
-    numArgs: 1,
-    allowedInText: true
-  },
-  handler({ parser }, args) {
-    return {
-      type: "underline",
-      mode: parser.mode,
-      body: args[0]
-    };
-  },
-  mathmlBuilder(group, style) {
-    const operator = new mathMLTree.MathNode("mo", [new mathMLTree.TextNode("\u005f")]);
-    operator.setAttribute("stretchy", "true");
-
-    const node = new mathMLTree.MathNode("munder",
-      [buildGroup$1(group.body, style), operator]
-    );
-    node.setAttribute("accentunder", "true");
-
-    return node;
   }
 });
 
@@ -8368,7 +8319,7 @@ defineMacro("\\char", function(context) {
 
 // The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
 // This macro provides a better rendering.
-defineMacro("\\surd", "\\sqrt{}");
+defineMacro("\\surd", '\\sqrt{\\vphantom{|}}');
 
 defineMacro("\\hbox", "\\text{#1}");
 
@@ -12893,7 +12844,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.6.9";
+const version = "0.7.0";
 
 function postProcess(block) {
   const labelMap = {};
@@ -12950,7 +12901,7 @@ function postProcess(block) {
 let render = function(expression, baseNode, options) {
   baseNode.textContent = "";
   const math = renderToMathMLTree(expression, options);
-  if (options.elementIsMath) {
+  if (baseNode.tagName === "MATH") {
     // The <math> element already exists. Populate it.
     baseNode.textContent = "";
     math.children.forEach(e => { baseNode.appendChild(e.toNode()); });

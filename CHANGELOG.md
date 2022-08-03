@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.0] = 2022-08-03
+
+### Release Notes
+
+This release is all about Chromium. Ignalia has announced an [intent to ship](https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html) MathML in Chromium. In anticipation of that event, this version of Temml is written to support both Firefox and Chromium.
+
+Those two implementations are not written to the same specification. So Temml’s MathML must conform simultaneously to both [MathML 3]( https://www.w3.org/TR/MathML3/) (Firefox) and [MathML Core](https://w3c.github.io/mathml-core/) (Chromium). Given that challenge, I’m pretty happy with how well it has turned out. Temml emulates several hundred LaTeX functions and nearly all of them work very well.
+
+It’s not all perfect. In this version, Temml drops support for `\cancelto`, `\toggle`, `\texttip`, `\phase`, and `\longdiv`. I think that `\toggle` and `\texttip` are probably gone forever. The others I hope to restore someday after Chromium fully supports the `menclose` element.
+
+Also, Chromium’s implementation of MathML is new and not yet mature. It fails with some stretchy accents and extensible arrows. Chromium cannot yet print a page that contains MathML. I’m testing this in Chrome Canary and those issues may be worked out before MathML is shipped.
+
+### Added
+
+- Support for [MathML Core](https://w3c.github.io/mathml-core/) for rendering in Chromium
+
+### Removed
+
+- Support for `\cancelto`, `\toggle`, `\texttip`, `\phase`, and `\longdiv`
+
 ## [0.6.9] = 2022-06-11
 
 ### Fixed

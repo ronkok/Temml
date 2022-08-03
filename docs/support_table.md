@@ -4,7 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Support Table</title>
-   <link rel="stylesheet" href="../../assets/Temml-Local.css">
+   <link rel="stylesheet" href="../../assets/Temml-Latin-Modern.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../assets/temml.min.js"></script>
    <style>
@@ -28,7 +28,7 @@ supports and some functions that it does not support. There is a similar page,
 with functions [sorted by type](supported.html).
 
 To read this page, use a browser that supports MathML, such as Firefox or Safari.
-Chrome and Edge will support MathML [soon](https://www.igalia.com/2021/08/09/MathML-Progress.html).
+Chrome and Edge will support MathML [soon](https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html).
 
 Some functions are provided by an extension and are listed as such. They will
 be available only in pages that include the extension.
@@ -244,7 +244,6 @@ If you know the shape of a character, but not its name,
 |\c|$`\text{\c{c}}`|`\text{\c{c}}`||
 |\cal|$`{\cal AaBb}`|`{\cal AaBb}`||
 |\cancel|$`\cancel{5}`|`\cancel{5}`| cancel |
-|\cancelto|$`\cancelto{0}{x+1}`|`\cancelto{0}{x+1}`| cancel |
 |\Cap|$`\Cap`|| ams |
 |\cap|$`\cap`|||
 |{cases}|$$\begin{cases}a&\text{if }b\\c&\text{if }d\end{cases}$$|`\begin{cases}`<br>   `a &\text{if } b  \\`<br>   `c &\text{if } d`<br>`\end{cases}`| ams |
@@ -418,7 +417,7 @@ If you know the shape of a character, but not its name,
 |\emph|(Not supported)|||
 |\empty|$`\empty`|| texvc extension |
 |\emptyset|$`\emptyset`|||
-|\enclose|(Not supported)|Non standard.<br>See `\boxed`, `\cancel`, `\bcancel`,<br>`\xcancel`, `\sout`, `\longdiv`, `\angl`||
+|\enclose|(Not supported)|Non standard.<br>See `\boxed`, `\cancel`, `\bcancel`,<br>`\xcancel`, `\sout`, `\angl`||
 |\end|$`\begin{matrix} a & b\\ c & d\end{matrix}`|`\begin{matrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{matrix}`||
 |\endgroup|$`\begingroup a\endgroup`|`\begingroup a\endgroup`||
 |\enspace|$`a\enspace b`|`a\enspace b`||
@@ -695,7 +694,6 @@ If you know the shape of a character, but not its name,
 | \lnsim               | $`\lnsim`                  | | ams |
 | \log                 | $`\log`                    | | |
 | \long                |                           | | |
-| \longdiv             | $`\longdiv{3x^2 + 2x + 5}` | `\longdiv{3x^2 + 2x + 5}` | Temml |
 | \Longleftarrow       | $`\Longleftarrow`          | | |
 | \longleftarrow       | $`\longleftarrow`          | | |
 | \Longleftrightarrow  | $`\Longleftrightarrow`     | | |
@@ -939,7 +937,6 @@ If you know the shape of a character, but not its name,
 |\perp|$`\perp`|||
 |\Perp|$`\Perp`|| cmll |
 |\phantom|$`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`|`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`||
-|\phase|$`\phase{-78^\circ}`|`\phase{-78^\circ}`| steinmetz |
 |\Phi|$`\Phi`|||
 |\phi|$`\phi`|||
 |\Pi|$`\Pi`|||
@@ -1245,7 +1242,6 @@ If you know the shape of a character, but not its name,
 |\textsl|(Not supported)|||
 |\textsterling|$`\text{\textsterling}`|`\text{\textsterling}`||
 |\textstyle|$`\textstyle\sum_0^n`|`\textstyle\sum_0^n`||
-|\texttip|$`\texttip{\text{hover here}}{This is a tooltip.}`|`\texttip{\text{hover here}}`<br>`{This is a tooltip.}`|MathJax|
 |\texttt|$`\texttt{AaBb123}`|`\texttt{AaBb123}`||
 |\textunderscore|$`\text{\textunderscore}`|`\text{\textunderscore}`||
 |\textup|$`\textup{AaBb123}`|`\textup{AaBb123}`||
@@ -1266,7 +1262,6 @@ If you know the shape of a character, but not its name,
 |\Tiny|$`\Tiny Tiny`|`\Tiny Tiny`||
 |\tiny|$`\tiny tiny`|`\tiny tiny`||
 |\to|$`\to`|||
-|\toggle|$`\toggle{\text{Click me}}{Hey!}{Ow!}\endtoggle`|`\toggle{\text{Click me}}`<br>`{Hey!}{Ow!}\endtoggle`| MathJax |
 |\top|$`\top`|||
 |\Tr|$`\Tr\rho`|`\Tr\rho`| physics extension |
 |\tr|$`\tr\rho`|`\tr\rho`| physics extension |
@@ -1487,7 +1482,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.6.9
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.7.0
 
 <div style="height:0.5em;"></div>
 

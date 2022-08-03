@@ -14,10 +14,8 @@ export default class Settings {
     options = options || {};
     this.displayMode = utils.deflt(options.displayMode, false);    // boolean
     this.annotate = utils.deflt(options.annotate, false)           // boolean
-    this.elementIsMath = utils.deflt(options.elementIsMath, false) // boolean
     this.leqno = utils.deflt(options.leqno, false);                // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
-    this.preventTagLap = utils.deflt(options.preventTagLap, false); // boolean
     this.macros = options.macros || {};
     this.xml = utils.deflt(options.xml, false);                     // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean

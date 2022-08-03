@@ -187,7 +187,7 @@ defineMacro("\\char", function(context) {
 
 // The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
 // This macro provides a better rendering.
-defineMacro("\\surd", "\\sqrt{}")
+defineMacro("\\surd", '\\sqrt{\\vphantom{|}}')
 
 defineMacro("\\hbox", "\\text{#1}");
 

@@ -111,28 +111,23 @@ export const buildGroup = function(group, style) {
 };
 
 const glue = _ => {
-  const glueNode = new mathMLTree.MathNode("mtd", [])
-  glueNode.setAttribute("style", "padding: 0;width: 50%;")
-  return glueNode
+  return new mathMLTree.MathNode("mtd", [], [], { padding: "0", width: "50%" })
 }
 
-const taggedExpression = (expression, tag, style, leqno, preventTagLap) => {
+const taggedExpression = (expression, tag, style, leqno) => {
   tag = buildExpressionRow(tag[0].body, style)
   tag = utils.consolidateText(tag)
-  tag.classes = ["tml-tag"];
-  if (!preventTagLap) {
-    tag = new mathMLTree.MathNode("mpadded", [tag])
-    tag.setAttribute("style", "width:0;")
-    tag.setAttribute("width", "0")
-    tag.setAttribute((leqno ? "rspace" : "lspace"), "-1width")
-  }
-  tag = new mathMLTree.MathNode("mtd", [tag])
-  if (!preventTagLap) { tag.setAttribute("style", "padding: 0; min-width:0") }
+  tag.classes.push("tml-tag")
 
   expression = new mathMLTree.MathNode("mtd", [expression])
-  const rowArray = leqno
-    ? [tag, glue(), expression, glue()]
-    : [glue(), expression, glue(), tag];
+  const rowArray = [glue(), expression, glue()]
+  if (leqno) {
+    rowArray[0].children.push(tag)
+    rowArray[0].style.textAlign = "-webkit-left"
+  } else {
+    rowArray[2].children.push(tag)
+    rowArray[2].style.textAlign = "-webkit-right"
+  }
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"])
   const table = new mathMLTree.MathNode("mtable", [mtr])
   table.setAttribute("width", "100%")
@@ -161,7 +156,7 @@ export default function buildMathML(tree, texExpression, style, settings) {
       : setLineBreaks(expression, settings.displayMode, settings.annotate)
 
   if (tag) {
-    wrapper = taggedExpression(wrapper, tag, style, settings.leqno, settings.preventTagLap)
+    wrapper = taggedExpression(wrapper, tag, style, settings.leqno)
   }
 
   let semantics

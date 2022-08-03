@@ -4,51 +4,85 @@ import { assertNodeType } from "../parseNode";
 import { colorFromSpec, validateColor } from "./color"
 import * as mml from "../buildMathML";
 
+const padding = _ => {
+  const node = new mathMLTree.MathNode("mspace")
+  node.setAttribute("width", "3pt")
+  return node
+}
+
 const mathmlBuilder = (group, style) => {
-  const node = new mathMLTree.MathNode(
-    group.label.indexOf("colorbox") > -1 ? "mpadded" : "menclose",
-    [mml.buildGroup(group.body, style)]
-  );
+  let node
+  if (group.label.indexOf("colorbox") > -1) {
+    // Chrome mpadded +width attribute is broken. Insert <mspace>
+    node = new mathMLTree.MathNode("mpadded", [
+      padding(),
+      mml.buildGroup(group.body, style),
+      padding()
+    ])
+  } else {
+    node = new mathMLTree.MathNode("menclose", [mml.buildGroup(group.body, style)])
+  }
   switch (group.label) {
+    case "\\overline":
+      node.setAttribute("notation", "top")
+      node.style.padding = "0.1em 0 0 0"
+      node.style.borderTop = "0.065em solid"
+      break
+    case "\\underline":
+      node.setAttribute("notation", "bottom")
+      node.style.padding = "0 0 0.1em 0"
+      node.style.borderBottom = "0.065em solid"
+      break
     case "\\cancel":
       node.setAttribute("notation", "updiagonalstrike");
-      break;
+      node.classes.push("cancel")
+      break
     case "\\bcancel":
       node.setAttribute("notation", "downdiagonalstrike");
-      break;
+      node.classes.push("bcancel")
+      break
+    /*
     case "\\longdiv":
       node.setAttribute("notation", "longdiv");
-      break;
+      break
     case "\\phase":
       node.setAttribute("notation", "phasorangle");
-      break;
+      break */
+    case "\\angl":
+      node.setAttribute("notation", "actuarial")
+      node.style.padding = "0.03889em 0.03889em 0 0.03889em"
+      node.style.borderTop = "0.049em solid"
+      node.style.borderRight = "0.049em solid"
+      node.style.marginRight = "0.03889em"
+      break
     case "\\sout":
       node.setAttribute("notation", "horizontalstrike");
-      break;
+      node.style["text-decoration"] = "line-through 0.08em solid"
+      break
     case "\\fbox":
       node.setAttribute("notation", "box");
-      break;
-    case "\\angl":
-      node.setAttribute("notation", "actuarial");
-      break;
+      node.style = { padding: "3pt", border: "1px solid" }
+      break
     case "\\fcolorbox":
     case "\\colorbox": {
       // <menclose> doesn't have a good notation option for \colorbox.
       // So use <mpadded> instead. Set some attributes that come
       // included with <menclose>.
-      const fboxsep = 3; // 3 pt from LaTeX source2e
-      node.setAttribute("width", `+${2 * fboxsep}pt`);
-      node.setAttribute("height", `+${2 * fboxsep}pt`);
-      node.setAttribute("lspace", `${fboxsep}pt`); //
-      node.setAttribute("voffset", `${fboxsep}pt`);
+      //const fboxsep = 3; // 3 pt from LaTeX source2e
+      //node.setAttribute("height", `+${2 * fboxsep}pt`)
+      //node.setAttribute("voffset", `${fboxsep}pt`)
+      const style = { padding: "3pt 0 3pt 0" }
+
       if (group.label === "\\fcolorbox") {
-        node.setAttribute("style", "border: 0.06em solid " + String(group.borderColor));
+        style.border = "0.06em solid " + String(group.borderColor)
       }
-      break;
+      node.style = style
+      break
     }
     case "\\xcancel":
       node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
-      break;
+      node.classes.push("xcancel")
+      break
   }
   if (group.backgroundColor) {
     node.setAttribute("mathbackground", group.backgroundColor);
@@ -141,7 +175,8 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\angl", "\\phase", "\\longdiv"],
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\underline"],
+   // , "\\phase", "\\longdiv"
   props: {
     numArgs: 1
   },

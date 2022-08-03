@@ -8,6 +8,12 @@ const mathmlBuilder = (group, style) => {
     ? stretchy.mathMLnode(group.label)
     : new mathMLTree.MathNode("mo", [mml.makeText(group.label, group.mode)]);
 
+  if (group.label === "\\vec") {
+    accentNode.style.transform = "scale(0.75) translate(10%, 30%)"
+  } else {
+    accentNode.style.mathStyle = "normal"
+    accentNode.style.mathDepth = "0"
+  }
   if (!group.isStretchy) {
     accentNode.setAttribute("stretchy", "false")
   }
@@ -16,7 +22,6 @@ const mathmlBuilder = (group, style) => {
     [mml.buildGroup(group.base, style), accentNode]
   );
 
-  node.setAttribute("accent", "true");
   return node;
 };
 

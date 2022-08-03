@@ -178,6 +178,7 @@ export function parseCD(parser) {
     row = [];
     body.push(row);
   }
+  body.pop()
 
   // End row group
   parser.gullet.endGroup();
