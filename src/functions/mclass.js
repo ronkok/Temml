@@ -6,6 +6,12 @@ import * as mml from "../buildMathML";
 
 const textAtomTypes = ["text", "textord", "mathord", "atom"]
 
+const padding = width => {
+  const node = new mathMLTree.MathNode("mspace")
+  node.setAttribute("width", width + "em")
+  return node
+}
+
 function mathmlBuilder(group, style) {
   let node;
   const inner = mml.buildExpression(group.body, style);
@@ -20,6 +26,7 @@ function mathmlBuilder(group, style) {
       node = new mathMLTree.MathNode("mi", inner);
     }
   } else {
+    node = new mathMLTree.MathNode("mrow", inner)
     if (group.mustPromote) {
       node = inner[0];
       node.type = "mo";
@@ -27,30 +34,50 @@ function mathmlBuilder(group, style) {
         node.setAttribute("mathvariant", "italic")
       }
     } else {
-      node = new mathMLTree.MathNode("mo", inner);
+      node = new mathMLTree.MathNode("mrow", inner);
     }
 
     // Set spacing based on what is the most likely adjacent atom type.
     // See TeXbook p170.
     const doSpacing = style.level < 2 // Operator spacing is zero inside a (sub|super)script.
-    if (group.mclass === "mbin") {
-      // medium space
-      node.attributes.lspace = (doSpacing ? "0.2222em" : "0")
-      node.attributes.rspace = (doSpacing ? "0.2222em" : "0")
-    } else if (group.mclass === "mrel") {
-      // thickspace
-      node.attributes.lspace = (doSpacing ? "0.2778em" : "0")
-      node.attributes.rspace = (doSpacing ? "0.2778em" : "0")
-    } else if (group.mclass === "mpunct") {
-      node.attributes.lspace = "0em";
-      node.attributes.rspace = (doSpacing ? "0.1667em" : "0")
-    } else if (group.mclass === "mopen" || group.mclass === "mclose") {
-      node.attributes.lspace = "0em"
-      node.attributes.rspace = "0em"
-    } else if (group.mclass === "minner" && doSpacing) {
-      node.attributes.lspace = "0.0556em" // 1 mu is the most likely option
-      node.attributes.width = "+0.1111em"
+    if (node.type === "mrow") {
+      if (doSpacing ) {
+        if (group.mclass === "mbin") {
+          // medium space
+          node.children.unshift(padding(0.2222))
+          node.children.push(padding(0.2222))
+        } else if (group.mclass === "mrel") {
+          // thickspace
+          node.children.unshift(padding(0.2778))
+          node.children.push(padding(0.2778))
+        } else if (group.mclass === "mpunct") {
+          node.children.push(padding(0.1667))
+        } else if (group.mclass === "minner") {
+          node.children.unshift(padding(0.0556))  // 1 mu is the most likely option
+          node.children.push(padding(0.0556))
+        }
+      }
+    } else {
+      if (group.mclass === "mbin") {
+        // medium space
+        node.attributes.lspace = (doSpacing ? "0.2222em" : "0")
+        node.attributes.rspace = (doSpacing ? "0.2222em" : "0")
+      } else if (group.mclass === "mrel") {
+        // thickspace
+        node.attributes.lspace = (doSpacing ? "0.2778em" : "0")
+        node.attributes.rspace = (doSpacing ? "0.2778em" : "0")
+      } else if (group.mclass === "mpunct") {
+        node.attributes.lspace = "0em";
+        node.attributes.rspace = (doSpacing ? "0.1667em" : "0")
+      } else if (group.mclass === "mopen" || group.mclass === "mclose") {
+        node.attributes.lspace = "0em"
+        node.attributes.rspace = "0em"
+      } else if (group.mclass === "minner" && doSpacing) {
+        node.attributes.lspace = "0.0556em" // 1 mu is the most likely option
+        node.attributes.width = "+0.1111em"
+      }
     }
+
     if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
       delete node.attributes.stretchy
       delete node.attributes.form

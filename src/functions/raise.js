@@ -13,10 +13,11 @@ const mathmlBuilder = (group, style) => {
   const newStyle = style.withLevel(StyleLevel.TEXT)
   const node = new mathMLTree.MathNode("mpadded", [mml.buildGroup(group.body, newStyle)])
   const dy = calculateSize(group.dy, style)
-  node.setAttribute("voffset", dy.number + dy.unit)
+  node.style.transform = `translateY(${-1 * dy.number + dy.unit})`
+/*  node.setAttribute("voffset", dy.number + dy.unit)
   const dyAbs = Math.abs(dy.number)
   node.setAttribute("height", sign(dy.number) +  dyAbs + dy.unit)
-  node.setAttribute("depth", sign(-dy.number) +  dyAbs + dy.unit)
+  node.setAttribute("depth", sign(-dy.number) +  dyAbs + dy.unit)*/
   return node
 }
 
