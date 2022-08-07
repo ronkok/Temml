@@ -7,6 +7,12 @@ import * as mml from "../buildMathML";
 const short = ["\\shortmid", "\\nshortmid", "\\shortparallel",
   "\\nshortparallel", "\\smallsetminus"]
 
+const arrows = ["\\Rsh", "\\Lsh", "\\restriction"]
+
+const isArrow = str => {
+  return str.indexOf("arrow") > -1 || str.indexOf("harpoon") > -1 || arrows.includes(str)
+}
+
 defineFunctionBuilders({
   type: "atom",
   mathmlBuilder(group, style) {
@@ -28,6 +34,8 @@ defineFunctionBuilders({
       // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
       node.setAttribute("lspace", "0.22em") // medium space
       node.setAttribute("rspace", "0.22em")
+      node.setAttribute("stretchy", "false")
+    } else if (group.family === "rel" && isArrow(group.text)) {
       node.setAttribute("stretchy", "false")
     } else if (short.includes(group.text)) {
       node.setAttribute("mathsize", "70%")

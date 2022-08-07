@@ -169,7 +169,7 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (group.delim === "\u2216") {
+    if (group.delim === "\u2216" || group.delim.indexOf("arrow") > -1) {
       // \backslash is not in the operator dictionary,
       // so we have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true")
@@ -248,14 +248,18 @@ defineFunction({
     const leftNode = new mathMLTree.MathNode("mo", [mml.makeText(group.left, group.mode)]);
     leftNode.setAttribute("fence", "true")
     leftNode.setAttribute("form", "prefix")
-    if (group.left === "\u2216") { leftNode.setAttribute("stretchy", "true") }
+    if (group.left === "\u2216" || group.left.indexOf("arrow") > -1) {
+      leftNode.setAttribute("stretchy", "true")
+    }
     inner.unshift(leftNode)
 
     if (group.right === ".") { group.right = "" }
     const rightNode = new mathMLTree.MathNode("mo", [mml.makeText(group.right, group.mode)]);
     rightNode.setAttribute("fence", "true")
     rightNode.setAttribute("form", "postfix")
-    if (group.right === "\u2216") { rightNode.setAttribute("stretchy", "true") }
+    if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
+      rightNode.setAttribute("stretchy", "true")
+    }
     if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor) }
     inner.push(rightNode)
 
@@ -286,6 +290,9 @@ defineFunction({
     const textNode = mml.makeText(group.delim, group.mode);
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("fence", "true");
+    if (group.delim.indexOf("arrow") > -1) {
+      middleNode.setAttribute("stretchy", "true")
+    }
     // The next line is not semantically correct, but
     // Chromium fails to stretch if it is not there.
     middleNode.setAttribute("form", "prefix")

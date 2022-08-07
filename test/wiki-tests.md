@@ -580,7 +580,7 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 | 181 | \lfloor \bigl\lfloor \Bigl\lfloor \           | $`\lfloor \bigl\lfloor \Bigl\lfloor              |
 |     | \biggl\lfloor \Biggl\lfloor \dots \           | \biggl\lfloor \Biggl\lfloor \dots                |
 |     | \Biggr\rceil \biggr\rceil \Bigr\rceil \       | \Biggr\rceil \biggr\rceil \Bigr\rceil            |
-|     | \bigr\rceil \ceil                             | \bigr\rceil \rceil`                              |
+|     | \bigr\rceil \rceil                            | \bigr\rceil \rceil`                              |
 +-----+-----------------------------------------------+--------------------------------------------------+
 | 182 | \uparrow \big\uparrow \Big\uparrow \          | $`\uparrow \big\uparrow \Big\uparrow             |
 |     | \bigg\uparrow \Bigg\uparrow \dots \           | \bigg\uparrow \Bigg\uparrow \dots                |
@@ -719,9 +719,9 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 +-----+-----------------------------------------------+--------------------------------------------------+
 
 Unicode has special code points for bold Greek sans-serif, but no code points for\
-regular-weight Greek sans-serif. Since Chromium is not going to support the `math-variant`\
-attribute, these bold Greek sans-serif glyphs are the best approximation I can make to\
-sans-serif Greek.
+regular-weight Greek sans-serif. I know of no servable math font that has glyphs\
+for regular-weight Greek sans-serif. Consequently, these bold Greek sans-serif\
+glyphs are the best approximation I can make to sans-serif Greek.
 
 <br>
 
