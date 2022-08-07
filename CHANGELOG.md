@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.1] = 2022-08-07
+
+### Fixed
+
+- Vertical arrow heights in Chromium
+- mclass, e.g. \mathrel, in Chromium
+
 ## [0.7.0] = 2022-08-03
 
 ### Release Notes

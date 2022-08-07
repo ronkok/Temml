@@ -6794,9 +6794,10 @@ var temml = (function () {
     const newStyle = style.withLevel(StyleLevel.TEXT);
     const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, newStyle)]);
     const dy = calculateSize(group.dy, style);
-  //  node.style.transform = `translateY(${-1 * dy.number + dy.unit})`
     node.setAttribute("voffset", dy.number + dy.unit);
     const dyAbs = Math.abs(dy.number);
+    // The next two lines do not work in Chromium.
+    // TODO: Find some other way to adjust height and depth.
     node.setAttribute("height", sign(dy.number) +  dyAbs + dy.unit);
     node.setAttribute("depth", sign(-dy.number) +  dyAbs + dy.unit);
     return node
@@ -10988,7 +10989,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.7.0";
+  const version = "0.7.1";
 
   function postProcess(block) {
     const labelMap = {};

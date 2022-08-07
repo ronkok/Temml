@@ -2368,17 +2368,17 @@ const calculateSize = function(sizeValue, style) {
 
 // Helper functions
 
-const padding$1 = width => {
+const padding$2 = width => {
   const node = new mathMLTree.MathNode("mspace");
   node.setAttribute("width", width + "em");
   return node
 };
 
 const paddedNode = (group, lspace = 0.3, rspace = 0) => {
-  if (group == null && rspace === 0) { return padding$1(lspace) }
+  if (group == null && rspace === 0) { return padding$2(lspace) }
   const row = group ? [group] : [];
-  if (lspace !== 0)   { row.unshift(padding$1(lspace)); }
-  if (rspace > 0) { row.push(padding$1(rspace)); }
+  if (lspace !== 0)   { row.unshift(padding$2(lspace)); }
+  if (rspace > 0) { row.push(padding$2(rspace)); }
   return new mathMLTree.MathNode("mrow", row)
 };
 
@@ -2471,8 +2471,8 @@ defineFunction({
     const node = munderoverNode(group.name, group.body, group.below, style);
     // Create operator spacing for a relation.
     const row = [node];
-    row.unshift(padding$1(0.2778));
-    row.push(padding$1(0.2778));
+    row.unshift(padding$2(0.2778));
+    row.push(padding$2(0.2778));
     return new mathMLTree.MathNode("mrow", row)
   }
 });
@@ -2547,13 +2547,13 @@ defineFunction({
       botNode.setAttribute("width", "0.5em");
       wrapper = new mathMLTree.MathNode(
         "mpadded",
-        [padding$1(0.2778), botNode, raiseNode, padding$1(0.2778)]
+        [padding$2(0.2778), botNode, raiseNode, padding$2(0.2778)]
       );
     } else {
       raiseNode.setAttribute("width", (group.name === "\\equilibriumRight" ? "0.5em" : "0"));
       wrapper = new mathMLTree.MathNode(
         "mpadded",
-        [padding$1(0.2778), raiseNode, botArrow, padding$1(0.2778)]
+        [padding$2(0.2778), raiseNode, botArrow, padding$2(0.2778)]
       );
     }
 
@@ -3543,7 +3543,7 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (group.delim === "\u2216") {
+    if (group.delim === "\u2216" || group.delim.indexOf("arrow") > -1) {
       // \backslash is not in the operator dictionary,
       // so we have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true");
@@ -3622,14 +3622,18 @@ defineFunction({
     const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
     leftNode.setAttribute("fence", "true");
     leftNode.setAttribute("form", "prefix");
-    if (group.left === "\u2216") { leftNode.setAttribute("stretchy", "true"); }
+    if (group.left === "\u2216" || group.left.indexOf("arrow") > -1) {
+      leftNode.setAttribute("stretchy", "true");
+    }
     inner.unshift(leftNode);
 
     if (group.right === ".") { group.right = ""; }
     const rightNode = new mathMLTree.MathNode("mo", [makeText(group.right, group.mode)]);
     rightNode.setAttribute("fence", "true");
     rightNode.setAttribute("form", "postfix");
-    if (group.right === "\u2216") { rightNode.setAttribute("stretchy", "true"); }
+    if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
+      rightNode.setAttribute("stretchy", "true");
+    }
     if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor); }
     inner.push(rightNode);
 
@@ -3660,6 +3664,9 @@ defineFunction({
     const textNode = makeText(group.delim, group.mode);
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("fence", "true");
+    if (group.delim.indexOf("arrow") > -1) {
+      middleNode.setAttribute("stretchy", "true");
+    }
     // The next line is not semantically correct, but
     // Chromium fails to stretch if it is not there.
     middleNode.setAttribute("form", "prefix");
@@ -3671,7 +3678,7 @@ defineFunction({
   }
 });
 
-const padding = _ => {
+const padding$1 = _ => {
   const node = new mathMLTree.MathNode("mspace");
   node.setAttribute("width", "3pt");
   return node
@@ -3682,9 +3689,9 @@ const mathmlBuilder$8 = (group, style) => {
   if (group.label.indexOf("colorbox") > -1) {
     // Chrome mpadded +width attribute is broken. Insert <mspace>
     node = new mathMLTree.MathNode("mpadded", [
-      padding(),
+      padding$1(),
       buildGroup$1(group.body, style),
-      padding()
+      padding$1()
     ]);
   } else {
     node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
@@ -5870,6 +5877,12 @@ defineFunction({
 
 const textAtomTypes = ["text", "textord", "mathord", "atom"];
 
+const padding = width => {
+  const node = new mathMLTree.MathNode("mspace");
+  node.setAttribute("width", width + "em");
+  return node
+};
+
 function mathmlBuilder$3(group, style) {
   let node;
   const inner = buildExpression(group.body, style);
@@ -5884,6 +5897,7 @@ function mathmlBuilder$3(group, style) {
       node = new mathMLTree.MathNode("mi", inner);
     }
   } else {
+    node = new mathMLTree.MathNode("mrow", inner);
     if (group.mustPromote) {
       node = inner[0];
       node.type = "mo";
@@ -5891,30 +5905,50 @@ function mathmlBuilder$3(group, style) {
         node.setAttribute("mathvariant", "italic");
       }
     } else {
-      node = new mathMLTree.MathNode("mo", inner);
+      node = new mathMLTree.MathNode("mrow", inner);
     }
 
     // Set spacing based on what is the most likely adjacent atom type.
     // See TeXbook p170.
     const doSpacing = style.level < 2; // Operator spacing is zero inside a (sub|super)script.
-    if (group.mclass === "mbin") {
-      // medium space
-      node.attributes.lspace = (doSpacing ? "0.2222em" : "0");
-      node.attributes.rspace = (doSpacing ? "0.2222em" : "0");
-    } else if (group.mclass === "mrel") {
-      // thickspace
-      node.attributes.lspace = (doSpacing ? "0.2778em" : "0");
-      node.attributes.rspace = (doSpacing ? "0.2778em" : "0");
-    } else if (group.mclass === "mpunct") {
-      node.attributes.lspace = "0em";
-      node.attributes.rspace = (doSpacing ? "0.1667em" : "0");
-    } else if (group.mclass === "mopen" || group.mclass === "mclose") {
-      node.attributes.lspace = "0em";
-      node.attributes.rspace = "0em";
-    } else if (group.mclass === "minner" && doSpacing) {
-      node.attributes.lspace = "0.0556em"; // 1 mu is the most likely option
-      node.attributes.width = "+0.1111em";
+    if (node.type === "mrow") {
+      if (doSpacing ) {
+        if (group.mclass === "mbin") {
+          // medium space
+          node.children.unshift(padding(0.2222));
+          node.children.push(padding(0.2222));
+        } else if (group.mclass === "mrel") {
+          // thickspace
+          node.children.unshift(padding(0.2778));
+          node.children.push(padding(0.2778));
+        } else if (group.mclass === "mpunct") {
+          node.children.push(padding(0.1667));
+        } else if (group.mclass === "minner") {
+          node.children.unshift(padding(0.0556));  // 1 mu is the most likely option
+          node.children.push(padding(0.0556));
+        }
+      }
+    } else {
+      if (group.mclass === "mbin") {
+        // medium space
+        node.attributes.lspace = (doSpacing ? "0.2222em" : "0");
+        node.attributes.rspace = (doSpacing ? "0.2222em" : "0");
+      } else if (group.mclass === "mrel") {
+        // thickspace
+        node.attributes.lspace = (doSpacing ? "0.2778em" : "0");
+        node.attributes.rspace = (doSpacing ? "0.2778em" : "0");
+      } else if (group.mclass === "mpunct") {
+        node.attributes.lspace = "0em";
+        node.attributes.rspace = (doSpacing ? "0.1667em" : "0");
+      } else if (group.mclass === "mopen" || group.mclass === "mclose") {
+        node.attributes.lspace = "0em";
+        node.attributes.rspace = "0em";
+      } else if (group.mclass === "minner" && doSpacing) {
+        node.attributes.lspace = "0.0556em"; // 1 mu is the most likely option
+        node.attributes.width = "+0.1111em";
+      }
     }
+
     if (!(group.mclass === "mopen" || group.mclass === "mclose")) {
       delete node.attributes.stretchy;
       delete node.attributes.form;
@@ -6759,6 +6793,8 @@ const mathmlBuilder = (group, style) => {
   const dy = calculateSize(group.dy, style);
   node.setAttribute("voffset", dy.number + dy.unit);
   const dyAbs = Math.abs(dy.number);
+  // The next two lines do not work in Chromium.
+  // TODO: Find some other way to adjust height and depth.
   node.setAttribute("height", sign(dy.number) +  dyAbs + dy.unit);
   node.setAttribute("depth", sign(-dy.number) +  dyAbs + dy.unit);
   return node
@@ -7238,6 +7274,12 @@ defineFunctionBuilders({
 const short = ["\\shortmid", "\\nshortmid", "\\shortparallel",
   "\\nshortparallel", "\\smallsetminus"];
 
+const arrows = ["\\Rsh", "\\Lsh", "\\restriction"];
+
+const isArrow = str => {
+  return str.indexOf("arrow") > -1 || str.indexOf("harpoon") > -1 || arrows.includes(str)
+};
+
 defineFunctionBuilders({
   type: "atom",
   mathmlBuilder(group, style) {
@@ -7259,6 +7301,8 @@ defineFunctionBuilders({
       // Firefox messes up this spacing if at the end of an <mrow>. See it explicitly.
       node.setAttribute("lspace", "0.22em"); // medium space
       node.setAttribute("rspace", "0.22em");
+      node.setAttribute("stretchy", "false");
+    } else if (group.family === "rel" && isArrow(group.text)) {
       node.setAttribute("stretchy", "false");
     } else if (short.includes(group.text)) {
       node.setAttribute("mathsize", "70%");
@@ -12842,7 +12886,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.7.0";
+const version = "0.7.1";
 
 function postProcess(block) {
   const labelMap = {};
