@@ -105,48 +105,6 @@ const round = function(n) {
   return +n.toFixed(4);
 };
 
-const consolidateText = mrow => {
-  // If possible, consolidate adjacent <mtext> elements into a single element.
-  if (mrow.type !== "mrow") { return mrow }
-  if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
-  const mtext = mrow.children[0]
-  if (!mtext.attributes || mtext.type !== "mtext") { return mrow }
-  const variant = mtext.attributes.mathvariant || ""
-  for (let i = 1; i < mrow.children.length; i++) {
-    // Check each child and, if possible, copy the character into child[0].
-    const localVariant = mrow.children[i].attributes.mathvariant || ""
-    if (mrow.children[i].type === "mrow") {
-      const childRow = mrow.children[i]
-      for (let j = 0; j < childRow.children.length; j++) {
-        // We'll also check the children of a mrow. One level only. No recursion.
-        const childVariant = childRow.children[j].attributes.mathvariant || ""
-        if (childVariant !== variant || childRow.children[j].type !== "mtext") {
-          return mrow // At least one element cannot be consolidated. Get out.
-        } else {
-          mtext.children[0].text += childRow.children[j].children[0].text
-        }
-      }
-    } else if (localVariant !== variant || mrow.children[i].type !== "mtext") {
-      return mrow
-    } else {
-      mtext.children[0].text += mrow.children[i].children[0].text
-    }
-  }
-  // Since we have gotten here, the text has been loaded into a single mtext node.
-  // Next, consolidate the children into a single <mtext> element.
-  mtext.children.splice(1, mtext.children.length - 1)
-  // Firefox does not render a space at either end of an <mtext> string.
-  // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
-  if (mtext.children[0].text.charAt(0) === " ") {
-    mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1)
-  }
-  const L = mtext.children[0].text.length
-  if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
-    mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0"
-  }
-  return mtext
-}
-
 export default {
   contains,
   deflt,
@@ -155,6 +113,5 @@ export default {
   getBaseElem,
   isCharacterBox,
   protocolFromUrl,
-  round,
-  consolidateText
+  round
 };

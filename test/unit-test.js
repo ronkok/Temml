@@ -621,6 +621,9 @@ const test = () => {
   new Expect(r`\text{\textellipsis !}`).toParseLike(r`\text{\textellipsis!}`);
   new Expect(r`\:_*`).toParse();
   new Expect(r`\:_*`).toBuild();
+  // Check for duplication of text. Prevent reoccurence of issue #9.
+  node = parse(r`\text{MMö}`)[0];
+  new Expect(node.body[0].text).toBe("M")
 
   assertion = `A texvc builder should not fail`
   new Expect(r`\lang\N\darr\R\dArr\Z\Darr\alef\rang`).toParse();

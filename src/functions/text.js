@@ -1,6 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import * as mml from "../buildMathML";
-import utils from "../utils"
 
 // Non-mathy text, possibly in a font
 const textFontFamilies = {
@@ -71,6 +70,6 @@ defineFunction({
   mathmlBuilder(group, style) {
     const newStyle = styleWithFont(group, style)
     const mrow = mml.buildExpressionRow(group.body, newStyle)
-    return utils.consolidateText(mrow)
+    return mml.consolidateText(mrow)
   }
 });
