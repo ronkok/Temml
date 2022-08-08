@@ -63,9 +63,6 @@ export const consolidateText = mrow => {
       mtext.children[0].text += mrow.children[i].children[0].text
     }
   }
-  // Since we have gotten here, the text has been loaded into a single mtext node.
-  // Next, consolidate the children into a single <mtext> element.
-//  mtext.children.splice(1, mtext.children.length - 1)
   // Firefox does not render a space at either end of an <mtext> string.
   // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
   if (mtext.children[0].text.charAt(0) === " ") {
