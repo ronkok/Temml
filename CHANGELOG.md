@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.7.2] = 2022-08-08
+
+### Fixed
+
+- Consolidation of text into a <mtext> element
+
 ## [0.7.1] = 2022-08-07
 
 ### Fixed
