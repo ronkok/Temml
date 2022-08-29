@@ -7723,9 +7723,8 @@ defineFunctionBuilders({
       }
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text]);
-      // TODO: If/when Chromium fixes primes, remove the next line.
-      node.style.transform = "translateY(0.3em)";
-      node.setAttribute("height", "0");
+      // TODO: If/when Chromium uses ssty variant for prime, remove the next line.
+      node.style.fontFamily = "Temml";
     } else {
       const origText = text.text;
       if (variant !== "italic") {
@@ -12887,7 +12886,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.7.2";
+const version = "0.7.3";
 
 function postProcess(block) {
   const labelMap = {};

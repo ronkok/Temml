@@ -201,14 +201,15 @@ light-weight option. Cambria Math lacks roundhand glyphs, so you still have to
 serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`.
 Sadly, Cambria Math rendering has a couple of flaws. In Firefox, square root
 radicals are sometimes oddly sized. Chromium is better at radicals, but it
-fails to stretch three stretchy accents and several extensible arrows.
+fails to stretch five stretchy accents and several extensible arrows.
 
 **Latin Modern** is a clone of Computer Modern and so is very home-like for
 readers accustomed to LaTeX documents. Rendering is excellent except that some
 line thicknesses may be too thin for some screens. This option also needs that
 additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
-**Asana**, **STIX TWO**, and **XITS** can be served without the `Temml.woff2` file.
+**Asana**, **STIX TWO**, and **XITS** contain their own roundhand glyphs, but
+they need `Temml.woff2` in order for Chromium to render a prime at the correct height.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
@@ -357,7 +358,7 @@ allowedClasses: [
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.7.2
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.7.3
 
 <h3><a href="#top">Contents</a></h3>
 
