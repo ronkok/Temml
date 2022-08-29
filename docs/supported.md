@@ -30,12 +30,12 @@ that lists both supported and some un-supported functions.
 ## Accents
 
 +:-------------------------+:-------------------------+:-----------------------------------+
-| $`a'` `a'`               | $`\tilde{a}` `\tilde{a}` | $`\widetilde{ac}` `\widetilde{ac}` |
+| $`f'` `f'`               | $`\tilde{a}` `\tilde{a}` | $`\widetilde{ac}` `\widetilde{ac}` |
 +--------------------------+--------------------------+------------------------------------+
-| $`a''` `a''`             | $`\vec{F}` `\vec{F}`     | $`\utilde{AB}` `\utilde{AB}`       |
+| $`f''` `f''`             | $`\vec{F}` `\vec{F}`     | $`\utilde{AB}` `\utilde{AB}`       |
 +--------------------------+--------------------------+------------------------------------+
-| $`a^{\prime}`            | $`\overleftarrow{AB}`    | $`\overrightarrow{AB}`             |
-| `a^{\prime}`             |  `\overleftarrow{AB}`    | `\overrightarrow{AB}`              |
+| $`f^{\prime}`            | $`\overleftarrow{AB}`    | $`\overrightarrow{AB}`             |
+| `f^{\prime}`             |  `\overleftarrow{AB}`    | `\overrightarrow{AB}`              |
 +--------------------------+--------------------------+------------------------------------+
 | $`\acute{a}` `\acute{a}` | $`\underleftarrow{AB}`   | $`\underrightarrow{AB}`            |
 |                          |  `\underleftarrow{AB}`   |  `\underrightarrow{AB}`            |
