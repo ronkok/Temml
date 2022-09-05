@@ -504,10 +504,8 @@ because Cambria Math has chancery in those code points and some other math fonts
 
 Hard line breaks are `\\` and `\newline`.
 
-If the rendering options do not include annotations, Hurmet will write MathML
-with soft line breaks after relations and binary operators. These soft line
-breaks will appear only in Firefox. Chromium and Safari do not support soft
-line breaks.
+Temml does not insert soft line breaks by default. Soft line breaks can be
+added in the [rendering options](./administration.html#options).
 
 ### Vertical Layout
 

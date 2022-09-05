@@ -69,7 +69,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </li>
 <li><p><code>macros</code>: <code>object</code>. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: <code>macros: {&quot;\\R&quot;: &quot;\\mathbb{R}&quot;}</code>.</p>
 </li>
-<li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, Temml will include an <code>&lt;annotation&gt;</code> element that contains the input TeX string. Note: this will defeat <a href='./supported.html#line-breaks'>soft line breaks</a> in Firefox. (default: <code>false</code>)</p>
+<li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, Temml will include an <code>&lt;annotation&gt;</code> element that contains the input TeX string. (default: <code>false</code>)</p>
 </li>
 <li><p><code>wrap</code>: (<code>none</code> | <code>tex</code> | <code>=</code>).  A mode for soft line breaks in non-display mode math. It’s useful if you are targeting mobile. Chromium does not support soft line breaks, so Temml does this by breaking a math expression into multiple <code>&lt;math&gt;</code> elements. That’s not good semantically, so don’t use soft line breaks unless you really need them.</p>
 <p>The <code>tex</code> option sets a soft line break after every top-level relation and binary operator, per <em>The TeXbook</em>, page 173. The <code>=</code> option sets a soft line break before the second and subsequent top-level <code>=</code> signs. Option <code>none</code> (the default) sets no soft line breaks.</p>

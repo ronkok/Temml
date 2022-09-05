@@ -211,7 +211,7 @@ because Cambria Math has chancery in those code points and some other math fonts
 <h2 id='layout'>Layout</h2>
 <h3 id='line-breaks'>Line Breaks</h3>
 <p>Hard line breaks are <code>\\</code> and <code>\newline</code>.</p>
-<p>If the rendering options do not include annotations, Hurmet will write MathML with soft line breaks after relations and binary operators. These soft line breaks will appear only in Firefox. Chromium and Safari do not support soft line breaks.</p>
+<p>Temml does not insert soft line breaks by default. Soft line breaks can be added in the <a href='./administration.html#options'>rendering options</a>.</p>
 <h3 id='vertical-layout'>Vertical Layout</h3>
 <table><tr><td><math><msub><mi>x</mi><mi>n</mi></msub></math> <code>x_n</code></td><td><math><mrow><mover><mo>=</mo><mo form="postfix" stretchy="false" lspace="0em" rspace="0em">!</mo></mover></mrow></math> <code>\stackrel{!}{=}</code></td><td><math><mrow><mi>a</mi><mpadded voffset="0.25em" height="+0.25em" depth="-0.25em"><mstyle scriptlevel="0" displaystyle="false"><mtext>b</mtext></mstyle></mpadded><mi>c</mi></mrow></math> <code>a\raisebox{0.25em}{b}c</code></td></tr>
 <tr><td><math><msup><mi>e</mi><mi>x</mi></msup></math> <code>e^x</code></td><td><math><mrow><mover><mo>=</mo><mo form="postfix" stretchy="false" lspace="0em" rspace="0em">!</mo></mover></mrow></math> <code>\overset{!}{=}</code></td><td><math><mrow><mi>M</mi><mpadded voffset="2.9888pt" height="+2.9888pt" depth="-2.9888pt"><msup><mi>M</mi><mn>2</mn></msup></mpadded><mi>M</mi></mrow></math> <code>M\raise3pt{M^2}M</code></td></tr>
