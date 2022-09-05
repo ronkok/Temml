@@ -189,29 +189,41 @@ export default function buildMathML(tree, texExpression, style, settings) {
   }
 
   const expression = buildExpression(tree, style);
+  const wrap = (settings.displayMode || settings.annotate) ? "none" : settings.wrap
 
   const n1 = expression.length === 0 ? null : expression[0]
   let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
           && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
-      : setLineBreaks(expression, settings.displayMode, settings.annotate)
+      : expression.length > 1 && wrap === "none"
+      ? new mathMLTree.MathNode("mrow", expression)
+      : setLineBreaks(expression, wrap, settings.displayMode)
 
   if (tag) {
     wrapper = taggedExpression(wrapper, tag, style, settings.leqno)
   }
 
-  let semantics
   if (settings.annotate) {
     // Build a TeX annotation of the source
     const annotation = new mathMLTree.MathNode(
       "annotation", [new mathMLTree.TextNode(texExpression)]);
     annotation.setAttribute("encoding", "application/x-tex");
-    semantics = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
+    wrapper = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   }
 
-  const math = settings.annotate
-    ? new mathMLTree.MathNode("math", [semantics])
-    : new mathMLTree.MathNode("math", [wrapper])
+  if (wrap !== "none") {
+    const maths = []
+    for (let i = 0; i < wrapper.children.length; i++) {
+      const math = new mathMLTree.MathNode("math", [wrapper.children[i]])
+      if (settings.xml) {
+        math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
+      }
+      maths.push(math)
+    }
+    return mathMLTree.newDocumentFragment(maths)
+  }
+
+  const math = new mathMLTree.MathNode("math", [wrapper])
 
   if (settings.xml) {
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")

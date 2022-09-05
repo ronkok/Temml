@@ -23,18 +23,17 @@ import mathMLTree from "./mathMLTree"
  * much of this module.
  */
 
-export default function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined) {
-  if (color === undefined) {
+export default function setLineBreaks(expression, wrapMode, isDisplayMode, color) {
+  if (color === undefined && wrapMode !== "none") {
     // First, make one pass through the expression and split any color nodes.
     const upperLimit = expression.length - 1
     for (let i = upperLimit; i >= 0; i--) {
       const node = expression[i];
       if (node.type === "mstyle" && node.attributes.mathcolor) {
         const color = node.attributes.mathcolor
-        const fragment = setLineBreaks(node.children, isDisplayMode, isAnnotated, color)
+        const fragment = setLineBreaks(node.children, wrapMode, isDisplayMode, color)
         if (!(fragment.type && fragment.type !== "mtable")) {
           expression.splice(i, 1, ...fragment.children)
-
         }
       }
     }
@@ -45,12 +44,15 @@ export default function setLineBreaks(expression, isDisplayMode, isAnnotated, co
   const mtrs = [];
   let mrows = [];
   let block = [];
+  let numTopLevelEquals = 0
   let canBeBIN = false // The first node cannot be an infix binary operator.
   for (let i = 0; i < expression.length; i++) {
     const node = expression[i];
     if (node.type && node.type === "mstyle" && node.attributes.mathcolor) {
-      // Start a new block. (Insert a soft linebreak.)
-      mrows.push(new mathMLTree.MathNode(tagName, block))
+      if (block.length > 0) {
+        // Start a new block. (Insert a soft linebreak.)
+        mrows.push(new mathMLTree.MathNode(tagName, block))
+      }
       // Insert the mstyle
       mrows.push(node)
       block = [];
@@ -72,7 +74,19 @@ export default function setLineBreaks(expression, isDisplayMode, isAnnotated, co
       continue
     }
     block.push(node);
-    if (node.type && node.type === "mo" && !isDisplayMode && !isAnnotated) {
+    if (node.type && node.type === "mo" && wrapMode === "=") {
+      if (node.children.length === 1 && node.children[0].text === "=") {
+        numTopLevelEquals += 1
+        if (numTopLevelEquals > 1) {
+          block.pop()
+          // Start a new block. (Insert a soft linebreak.)
+          const element = new mathMLTree.MathNode(tagName, block)
+          if (color) { element.setAttribute("mathcolor", color) }
+          mrows.push(element)
+          block = [node];
+        }
+      }
+    } else if (node.type && node.type === "mo" && wrapMode === "tex") {
       // This may be a place for a soft line break.
       if (canBeBIN && !node.attributes.form) {
         // Check if the following node is a \nobreak text node, e.g. "~""

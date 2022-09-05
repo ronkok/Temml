@@ -2,7 +2,7 @@
 
 | Library       | Minified JavaScript + CSS |
 |:--------------|:-------------------------:|
-| Temml         |         143 KB            |
+| Temml         |         144 KB            |
 | MathJax 2.7.5 |         338 KB            |
 | KaTeX         |         280 KB            |
 | TeXZilla      |         168 KB            |
@@ -13,7 +13,7 @@ Temml’s MathML output conforms to both both [MathML 3](https://www.w3.org/TR/M
 
 Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.13.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
 
-Temml's [test](https://temml.org/docs/en/supported.html) suite [includes](https://temml.org/tests/mozilla-tests.html) many [rendered](https://temml.org/tests/wiki-tests.html) examples [that](https://temml.org/tests/mhchem-tests.html) are [available](https://temml.org/tests/LaTeXML-tests.html) for viewing.
+Temml's test suite include many rendered examples, including the Temml [supported functions page](https://temml.org/docs/en/supported.html) and tests from [Mozilla](https://temml.org/tests/mozilla-tests.html), [Wikipedia](https://temml.org/tests/wiki-tests.html), [mhchem](https://temml.org/tests/mhchem-tests.html), and [LaTeXML](https://temml.org/tests/LaTeXML-tests.html).
 
 Temml's demonstration page is at https://temml.org/
 

@@ -196,6 +196,7 @@ class Settings {
     this.leqno = utils.deflt(options.leqno, false);                // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
     this.macros = options.macros || {};
+    this.wrap = utils.deflt(options.wrap, "none");         // "none" | "tex" | "="
     this.xml = utils.deflt(options.xml, false);                     // boolean
     this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
     this.strict = utils.deflt(options.strict, false);    // boolean
@@ -1758,18 +1759,17 @@ for (let i = 0; i < 10; i++) {
  * much of this module.
  */
 
-function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined) {
-  if (color === undefined) {
+function setLineBreaks(expression, wrapMode, isDisplayMode, color) {
+  if (color === undefined && wrapMode !== "none") {
     // First, make one pass through the expression and split any color nodes.
     const upperLimit = expression.length - 1;
     for (let i = upperLimit; i >= 0; i--) {
       const node = expression[i];
       if (node.type === "mstyle" && node.attributes.mathcolor) {
         const color = node.attributes.mathcolor;
-        const fragment = setLineBreaks(node.children, isDisplayMode, isAnnotated, color);
+        const fragment = setLineBreaks(node.children, wrapMode, isDisplayMode, color);
         if (!(fragment.type && fragment.type !== "mtable")) {
           expression.splice(i, 1, ...fragment.children);
-
         }
       }
     }
@@ -1780,12 +1780,15 @@ function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined
   const mtrs = [];
   let mrows = [];
   let block = [];
+  let numTopLevelEquals = 0;
   let canBeBIN = false; // The first node cannot be an infix binary operator.
   for (let i = 0; i < expression.length; i++) {
     const node = expression[i];
     if (node.type && node.type === "mstyle" && node.attributes.mathcolor) {
-      // Start a new block. (Insert a soft linebreak.)
-      mrows.push(new mathMLTree.MathNode(tagName, block));
+      if (block.length > 0) {
+        // Start a new block. (Insert a soft linebreak.)
+        mrows.push(new mathMLTree.MathNode(tagName, block));
+      }
       // Insert the mstyle
       mrows.push(node);
       block = [];
@@ -1807,7 +1810,19 @@ function setLineBreaks(expression, isDisplayMode, isAnnotated, color = undefined
       continue
     }
     block.push(node);
-    if (node.type && node.type === "mo" && !isDisplayMode && !isAnnotated) {
+    if (node.type && node.type === "mo" && wrapMode === "=") {
+      if (node.children.length === 1 && node.children[0].text === "=") {
+        numTopLevelEquals += 1;
+        if (numTopLevelEquals > 1) {
+          block.pop();
+          // Start a new block. (Insert a soft linebreak.)
+          const element = new mathMLTree.MathNode(tagName, block);
+          if (color) { element.setAttribute("mathcolor", color); }
+          mrows.push(element);
+          block = [node];
+        }
+      }
+    } else if (node.type && node.type === "mo" && wrapMode === "tex") {
       // This may be a place for a soft line break.
       if (canBeBIN && !node.attributes.form) {
         // Check if the following node is a \nobreak text node, e.g. "~""
@@ -2063,29 +2078,41 @@ function buildMathML(tree, texExpression, style, settings) {
   }
 
   const expression = buildExpression(tree, style);
+  const wrap = (settings.displayMode || settings.annotate) ? "none" : settings.wrap;
 
   const n1 = expression.length === 0 ? null : expression[0];
   let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
           && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
-      : setLineBreaks(expression, settings.displayMode, settings.annotate);
+      : expression.length > 1 && wrap === "none"
+      ? new mathMLTree.MathNode("mrow", expression)
+      : setLineBreaks(expression, wrap, settings.displayMode);
 
   if (tag) {
     wrapper = taggedExpression(wrapper, tag, style, settings.leqno);
   }
 
-  let semantics;
   if (settings.annotate) {
     // Build a TeX annotation of the source
     const annotation = new mathMLTree.MathNode(
       "annotation", [new mathMLTree.TextNode(texExpression)]);
     annotation.setAttribute("encoding", "application/x-tex");
-    semantics = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
+    wrapper = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   }
 
-  const math = settings.annotate
-    ? new mathMLTree.MathNode("math", [semantics])
-    : new mathMLTree.MathNode("math", [wrapper]);
+  if (wrap !== "none") {
+    const maths = [];
+    for (let i = 0; i < wrapper.children.length; i++) {
+      const math = new mathMLTree.MathNode("math", [wrapper.children[i]]);
+      if (settings.xml) {
+        math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
+      }
+      maths.push(math);
+    }
+    return mathMLTree.newDocumentFragment(maths)
+  }
+
+  const math = new mathMLTree.MathNode("math", [wrapper]);
 
   if (settings.xml) {
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
@@ -3039,8 +3066,7 @@ const mathmlBuilder$9 = (group, style) => {
   // Wrap with an <mstyle> element.
   const node = wrapWithMstyle(inner);
   node.setAttribute("mathcolor", group.color);
-  // Wrap w/<mrow>. We get better operator spacing that way.
-  return new mathMLTree.MathNode("mrow", [node])
+  return node
 };
 
 defineFunction({
@@ -12876,7 +12902,7 @@ class Style {
 
 /* Temml Post Process
  * Perform two tasks not done by Temml when it created each individual Temml <math> element.
- * Given a block of block,
+ * Given a block,
  *   1. At each AMS auto-numbered environment, assign an id.
  *   2. Populate the text contents of each \ref & \eqref
  *
@@ -12884,7 +12910,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.7.3";
+const version = "0.8.0";
 
 function postProcess(block) {
   const labelMap = {};
@@ -12940,9 +12966,14 @@ function postProcess(block) {
  */
 let render = function(expression, baseNode, options) {
   baseNode.textContent = "";
+  const alreadyInMathElement = baseNode.tagName === "MATH";
+  if (alreadyInMathElement) { options.wrap = "none"; }
   const math = renderToMathMLTree(expression, options);
-  if (baseNode.tagName === "MATH") {
+  if (alreadyInMathElement) {
     // The <math> element already exists. Populate it.
+    baseNode.textContent = "";
+    math.children.forEach(e => { baseNode.appendChild(e.toNode()); });
+  } else if (math.children.length > 1) {
     baseNode.textContent = "";
     math.children.forEach(e => { baseNode.appendChild(e.toNode()); });
   } else {

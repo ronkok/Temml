@@ -22,6 +22,7 @@ const defaultSettings = _ => new Settings();
 const strictSettings = _ => new Settings({ strict: true });
 const displayMode = _ => new Settings({ displayMode: true });
 const trustSettings = _ => new Settings({ trust: true });
+const wrapSettings = str => new Settings({ wrap: str });
 const mathTagRegEx = /<\/?math>/g;
 
 // tagging literal
@@ -1155,9 +1156,9 @@ const test = () => {
   new Expect(markup).toBe('<mtext>𝚁</mtext>');
   assertion = "A font tree-builder should render a combination of font and color changes"
   markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe('<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>');
+  new Expect(markup).toBe('<mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle>');
   markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe('<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>');
+  new Expect(markup).toBe('<mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle>');
   assertion = "A font tree-builder should render wide characters with <mi> and with the correct font"
   markup = temml.renderToString("𝐀").replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mi>𝐀</mi>');
@@ -1212,13 +1213,6 @@ const test = () => {
   markup = temml.renderToString(r`\mathsf{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe(`<mrow><mi>𝖠</mi><mi>𝗑</mi><mn>𝟤</mn><mi>𝗄</mi><mi>𝞈</mi><mi>𝝮</mi><mi>ı</mi><mo>+</mo></mrow>`);
 
-  assertion = "A font tree-builder should render a combination of font and color changes"
-  markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>`);
-  // reverse the order of the commands
-  markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle></mrow>`);
-
   assertion = "A font tree-builder should render text as <mtext>"
   markup = temml.renderToString(r`\text{for }`);
   new Expect(markup).toContain("<mtext>for\u00a0</mtext>");
@@ -1239,7 +1233,7 @@ const test = () => {
   const html = r`\id{bar}{x}\class{foo}{x}\style{color: red;}{x}\data{foo=a, bar=b}{x}`;
   new Expect(html).toParse(trustSettings());
   new Expect(html).toBuild(trustSettings());
-  let built = build(html, trustSettings())[0].children[0].children;
+  let built = build(html, trustSettings())[0].children;
   new Expect(built[0].attributes.id).toBe("bar");
   new Expect(built[1].classes).toContain("foo");
   new Expect(built[2].attributes.style).toBe("color: red;");
@@ -2141,6 +2135,15 @@ const test = () => {
   new Expect(`é`).toNotParse(strictSettings())
   new Expect(`試`).toNotParse(strictSettings());
 
+  assertion = "Line-wrapping should work"
+  const wrapExpression = r`x = a + a + a = b + b + b`;
+  new Expect(wrapExpression).toParse()
+  new Expect(wrapExpression).toBuild();
+  new Expect(wrapExpression).toBuild(wrapSettings("none"));
+  new Expect(wrapExpression).toBuild(wrapSettings("tex"));
+  new Expect(wrapExpression).toBuild(wrapSettings("="));
+  new Expect(build(wrapExpression, wrapSettings("tex")).length).toBe(7)
+  new Expect(build(wrapExpression, wrapSettings("=")).length).toBe(2)
 
   console.log("Number of tests:    " + numTests)
   console.log("Number of failures: " + numFailures)

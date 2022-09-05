@@ -133,6 +133,23 @@ Available options are:
 
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: this will defeat [soft line breaks](./supported.html#line-breaks) in Firefox. (default: `false`)
 
+- `wrap`: (`none` | `tex` | `=`).  A mode for soft line breaks in non-display
+  mode math. It’s useful if you are targeting mobile. Chromium does not support
+  soft line breaks, so Temml does this by breaking a math expression into
+  multiple `<math>` elements. That’s not good semantically, so don’t use soft
+  line breaks unless you really need them.
+
+  The `tex` option sets a soft line break after every top-level relation and
+  binary operator, per _The TeXbook_, page 173. The `=` option sets a soft line
+  break before the second and subsequent top-level `=` signs. Option `none`
+  (the default) sets no soft line breaks.
+
+  Display mode math gets no soft line breaks. Annotated math gets no soft line
+  breaks. If a writer sets a hard line break via `\\` or `\cr`, then Temml will
+  not set any soft line breaks in that expression. Finally, no soft line breaks
+  will be set if the element you supply to `temml.render` is already a `<math>`
+  element.
+
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
 
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
@@ -358,7 +375,7 @@ allowedClasses: [
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.7.3
+$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.8.0
 
 <h3><a href="#top">Contents</a></h3>
 

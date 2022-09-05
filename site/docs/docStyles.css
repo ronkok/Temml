@@ -225,7 +225,7 @@ ul li {
   left: 1.8em;
 }
 
-ul li p {
+ul li p:first-child {
   margin-top: 0;
 }
 

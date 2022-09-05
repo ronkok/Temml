@@ -2,11 +2,19 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.8.0] = 2022-09-05
+
+### Breaking Change
+
+- Soft line breaks are now controlled by the `wrap` rendering option.
+  Temml does this by creating a series of `<math>` elements.
+
 ## [0.7.3] = 2022-08-29
 
-## Fixed
+### Fixed
 
 - Get (lowered) prime from Temml.woff2 font
+- Add a prime character to Temml.woff2
 
 ## [0.7.2] = 2022-08-08
 

@@ -26,9 +26,14 @@ import { postProcess, version } from "./src/postProcess";
  */
 let render = function(expression, baseNode, options) {
   baseNode.textContent = "";
+  const alreadyInMathElement = baseNode.tagName === "MATH"
+  if (alreadyInMathElement) { options.wrap = "none" }
   const math = renderToMathMLTree(expression, options)
-  if (baseNode.tagName === "MATH") {
+  if (alreadyInMathElement) {
     // The <math> element already exists. Populate it.
+    baseNode.textContent = ""
+    math.children.forEach(e => { baseNode.appendChild(e.toNode()) })
+  } else if (math.children.length > 1) {
     baseNode.textContent = ""
     math.children.forEach(e => { baseNode.appendChild(e.toNode()) })
   } else {

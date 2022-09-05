@@ -1,5 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import mathMLTree, { wrapWithMstyle } from "../mathMLTree"
+import { wrapWithMstyle } from "../mathMLTree"
 import { assertNodeType } from "../parseNode"
 import ParseError from "../ParseError"
 import * as mml from "../buildMathML"
@@ -156,8 +156,7 @@ const mathmlBuilder = (group, style) => {
   // Wrap with an <mstyle> element.
   const node = wrapWithMstyle(inner)
   node.setAttribute("mathcolor", group.color)
-  // Wrap w/<mrow>. We get better operator spacing that way.
-  return new mathMLTree.MathNode("mrow", [node])
+  return node
 }
 
 defineFunction({

@@ -199,7 +199,7 @@
 <tr><td>{Bmatrix*}</td><td><math><mrow><mo fence="true" form="prefix">{</mo><mtable rowspacing="0.16em" columnalign="right right" columnspacing="1em" class="tml-array"><mtr><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>1</mn></mrow></mtd><mtd style="text-align:-webkit-right;"><mn>3</mn></mtd></mtr><mtr><mtd style="text-align:-webkit-right;"><mn>2</mn></mtd><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>4</mn></mrow></mtd></mtr></mtable><mo fence="true" form="postfix">}</mo></mrow></math></td><td><code>\begin{Bmatrix*}[r]</code><br>   <code>-1 &amp; 3 \\</code><br>   <code>2 &amp; -4</code><br><code>\end{Bmatrix*}</code></td><td>mathtools </td></tr>
 <tr><td>{bmatrix}</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em" class="tml-array"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\begin{bmatrix}</code><br>   <code>a &amp; b \\</code><br>   <code>c &amp; d</code><br><code>\end{bmatrix}</code></td><td>ams </td></tr>
 <tr><td>{bmatrix*}</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mtable rowspacing="0.16em" columnalign="right right" columnspacing="1em" class="tml-array"><mtr><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>1</mn></mrow></mtd><mtd style="text-align:-webkit-right;"><mn>3</mn></mtd></mtr><mtr><mtd style="text-align:-webkit-right;"><mn>2</mn></mtd><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>4</mn></mrow></mtd></mtr></mtable><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\begin{bmatrix*}[r]</code><br>   <code>-1 &amp; 3 \\</code><br>   <code>2 &amp; -4</code><br><code>\end{bmatrix*}</code></td><td>mathtools </td></tr>
-<tr><td>\bmod</td><td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">mod</mo></mrow><mrow><mi>b</mi></mrow></math></td><td><code>a \bmod b</code></td><td></td></tr>
+<tr><td>\bmod</td><td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">mod</mo><mi>b</mi></mrow></math></td><td><code>a \bmod b</code></td><td></td></tr>
 <tr><td>\bold</td><td><math><mrow><mi>𝐀</mi><mi>𝐚</mi><mi>𝐁</mi><mi>𝐛</mi><mn>𝟏𝟐𝟑</mn></mrow></math></td><td><code>\bold{AaBb123}</code></td><td></td></tr>
 <tr><td>\boldsymbol</td><td><math><mrow><mi>𝑨</mi><mi>𝒂</mi><mi>𝑩</mi><mi>𝒃</mi></mrow></math></td><td><code>\boldsymbol{AaBb}</code></td><td>ams </td></tr>
 <tr><td>\bot</td><td><math><mi>⊥</mi></math></td><td></td><td></td></tr>
@@ -286,7 +286,7 @@
 <tr><td>\coloneqq</td><td><math><mo>≔</mo></math></td><td></td><td>mathtools </td></tr>
 <tr><td>\Colonsim</td><td><math><mrow><mspace width="0.2778em"></mspace><mpadded voffset="0.035em" height="+0.035em" depth="-0.035em"><mstyle scriptlevel="0" displaystyle="false"><mtext>:</mtext></mstyle></mpadded><mi>∼</mi><mspace width="0.2778em"></mspace></mrow></math></td><td></td><td>mathtools </td></tr>
 <tr><td>\colonsim</td><td><math><mrow><mspace width="0.2778em"></mspace><mpadded voffset="0.035em" height="+0.035em" depth="-0.035em"><mstyle scriptlevel="0" displaystyle="false"><mtext>:</mtext></mstyle></mpadded><mi>∼</mi><mspace width="0.2778em"></mspace></mrow></math></td><td></td><td>mathtools </td></tr>
-<tr><td>\color</td><td><math><mrow><mstyle mathcolor="#0000FF"><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi><mn>123</mn></mstyle></mrow></math></td><td><code>\color{#0000FF} AaBb123</code></td><td>color </td></tr>
+<tr><td>\color</td><td><math><mstyle mathcolor="#0000FF"><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi><mn>123</mn></mstyle></math></td><td><code>\color{#0000FF} AaBb123</code></td><td>color </td></tr>
 <tr><td>\colorbox</td><td><math><mpadded mathbackground="#ff0000" style="padding:3pt 0 3pt 0;"><mspace width="3pt"></mspace><mrow><mtext>B</mtext><mtext>l</mtext><mtext>a</mtext><mtext>c</mtext><mtext>k</mtext><mtext> </mtext><mtext>o</mtext><mtext>n</mtext><mtext> </mtext><mtext>r</mtext><mtext>e</mtext><mtext>d</mtext></mrow><mspace width="3pt"></mspace></mpadded></math></td><td><code>\colorbox{red}{Black on red}</code></td><td>color </td></tr>
 <tr><td>\comm</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\comm{A}{B}</code></td><td>physics extension </td></tr>
 <tr><td>\commutator</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\commutator{A}{B}</code></td><td>physics extension </td></tr>
@@ -349,8 +349,8 @@
 <tr><td>\ddot</td><td><math><mover><mi>x</mi><mo stretchy="false" style="math-style:normal;math-depth:0;">¨</mo></mover></math></td><td><code>\ddot x</code></td><td></td></tr>
 <tr><td>\ddots</td><td><math><mo>⋱</mo></math></td><td></td><td></td></tr>
 <tr><td>\DeclareMathOperator</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
-<tr><td>\def</td><td><math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup></mrow></math></td><td><code>\def\foo{x^2} \foo + \foo</code></td><td></td></tr>
-<tr><td>\definecolor</td><td><math><mrow><mstyle mathcolor="#808000"><mi>F</mi><mo>=</mo><mi>m</mi><mi>a</mi></mstyle></mrow></math></td><td><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code> <br> <code>\color{sortaGreen} F=ma</code></td><td>xcolor </td></tr>
+<tr><td>\def</td><td><math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></math></td><td><code>\def\foo{x^2} \foo + \foo</code></td><td></td></tr>
+<tr><td>\definecolor</td><td><math><mstyle mathcolor="#808000"><mi>F</mi><mo>=</mo><mi>m</mi><mi>a</mi></mstyle></math></td><td><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code> <br> <code>\color{sortaGreen} F=ma</code></td><td>xcolor </td></tr>
 <tr><td>\deg</td><td><math><mrow><mi>deg</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow></math></td><td></td><td></td></tr>
 <tr><td>\degree</td><td><math><mi>°</mi></math></td><td></td><td></td></tr>
 <tr><td>\delta</td><td><math><mi>δ</mi></math></td><td></td><td></td></tr>
@@ -380,11 +380,11 @@
 <tr><td>\doteqdot</td><td><math><mo>≑</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\dotplus</td><td><math><mo>∔</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\dotproduct</td><td><math><mrow><mspace width="0.2222em"></mspace><mo style="font-weight:bold;">⋅</mo><mspace width="0.2222em"></mspace></mrow></math></td><td><code>\dotproduct</code></td><td>physics extension </td></tr>
-<tr><td>\dots</td><td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo></mrow><mrow><mo>⋯</mo></mrow><mrow><mo>+</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td><td><code>x_1 + \dots + x_n</code></td><td></td></tr>
-<tr><td>\dotsb</td><td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo></mrow><mrow><mo>⋯</mo></mrow><mrow><mo>+</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td><td><code>x_1 +\dotsb + x_n</code></td><td>ams </td></tr>
-<tr><td>\dotsc</td><td><math><mrow><mi>x</mi><mo separator="true">,</mo></mrow><mrow><mo>…</mo><mo separator="true">,</mo></mrow><mrow><mi>y</mi></mrow></math></td><td><code>x,\dotsc,y</code></td><td>ams </td></tr>
+<tr><td>\dots</td><td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td><td><code>x_1 + \dots + x_n</code></td><td></td></tr>
+<tr><td>\dotsb</td><td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td><td><code>x_1 +\dotsb + x_n</code></td><td>ams </td></tr>
+<tr><td>\dotsc</td><td><math><mrow><mi>x</mi><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>y</mi></mrow></math></td><td><code>x,\dotsc,y</code></td><td>ams </td></tr>
 <tr><td>\dotsi</td><td><math display="block"><mrow><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>1</mn></msub></msub><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>2</mn></msub></msub><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow></math></td><td><code>\int_{A_1}\int_{A_2}\dotsi</code></td><td>ams </td></tr>
-<tr><td>\dotsm</td><td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>⋯</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td><td><code>$x_1 x_2 \dotsm x_n</code></td><td>ams </td></tr>
+<tr><td>\dotsm</td><td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>⋯</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td><td><code>$x_1 x_2 \dotsm x_n</code></td><td>ams </td></tr>
 <tr><td>\dotso</td><td><math><mo>…</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\doublebarwedge</td><td><math><mo>⩞</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\doublecap</td><td><math><mo>⋒</mo></math></td><td></td><td>ams </td></tr>
@@ -509,7 +509,7 @@
 <tr><td>\grad          </td><td><math><mi>𝛁</mi></math></td><td></td><td>physics extension </td></tr>
 <tr><td>\gradient      </td><td><math><mi>𝛁</mi></math></td><td></td><td>physics extension </td></tr>
 <tr><td>\grave         </td><td><math><mover><mrow><mi>e</mi><mi>u</mi></mrow><mo stretchy="false" style="math-style:normal;math-depth:0;">`</mo></mover></math></td><td><code>\grave{eu}</code></td><td></td></tr>
-<tr><td>\gt            </td><td><math><mrow><mi>a</mi><mo>&gt;</mo></mrow><mrow><mi>b</mi></mrow></math></td><td><code>a \gt b</code></td><td>MathJax </td></tr>
+<tr><td>\gt            </td><td><math><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow></math></td><td><code>a \gt b</code></td><td>MathJax </td></tr>
 <tr><td>\gtrapprox     </td><td><math><mo>⪆</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\gtrdot        </td><td><math><mo>⋗</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\gtreqless     </td><td><math><mo>⋛</mo></math></td><td></td><td>ams </td></tr>
@@ -560,10 +560,10 @@
 <th>Package          </th>
 </tr>
 <tr><td>\i               </td><td><math><mtext>ı</mtext></math></td><td><code>\text{\i}</code></td><td></td></tr>
-<tr><td>\idotsint        </td><td><math><mrow><mo movablelimits="false">∫</mo><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow><mrow><mo movablelimits="false">∫</mo></mrow></math></td><td><code>\int\idotsint\int</code></td><td>ams              </td></tr>
+<tr><td>\idotsint        </td><td><math><mrow><mo movablelimits="false">∫</mo><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo><mo movablelimits="false">∫</mo></mrow></math></td><td><code>\int\idotsint\int</code></td><td>ams              </td></tr>
 <tr><td>\iddots          </td><td><math><mo>⋰</mo></math></td><td></td><td></td></tr>
 <tr><td>\if              </td><td><span class="no-sup">Not supported</span>        </td><td></td><td></td></tr>
-<tr><td>\iff             </td><td><math><mrow><mi>A</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟺</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>B</mi></mrow></math></td><td><code>A\iff B</code></td><td></td></tr>
+<tr><td>\iff             </td><td><math><mrow><mi>A</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟺</mo><mspace width="0.2778em"></mspace><mi>B</mi></mrow></math></td><td><code>A\iff B</code></td><td></td></tr>
 <tr><td>\ifmode          </td><td><span class="no-sup">Not supported</span>        </td><td></td><td></td></tr>
 <tr><td>\ifx             </td><td><span class="no-sup">Not supported</span>        </td><td></td><td></td></tr>
 <tr><td>\iiiint          </td><td><math><mo movablelimits="false">⨌</mo></math></td><td></td><td>ams               </td></tr>
@@ -573,8 +573,8 @@
 <tr><td>\image           </td><td><math><mi>ℑ</mi></math></td><td></td><td>texvc extension   </td></tr>
 <tr><td>\imageof         </td><td><math><mo>⊷</mo></math></td><td></td><td>stix              </td></tr>
 <tr><td>\imath           </td><td><math><mi>ı</mi></math></td><td></td><td></td></tr>
-<tr><td>\impliedby       </td><td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟸</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>Q</mi></mrow></math></td><td><code>P\impliedby Q</code></td><td>ams               </td></tr>
-<tr><td>\implies         </td><td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟹</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>Q</mi></mrow></math></td><td><code>P\implies Q</code></td><td>ams               </td></tr>
+<tr><td>\impliedby       </td><td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟸</mo><mspace width="0.2778em"></mspace><mi>Q</mi></mrow></math></td><td><code>P\impliedby Q</code></td><td>ams               </td></tr>
+<tr><td>\implies         </td><td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟹</mo><mspace width="0.2778em"></mspace><mi>Q</mi></mrow></math></td><td><code>P\implies Q</code></td><td>ams               </td></tr>
 <tr><td>\in              </td><td><math><mo>∈</mo></math></td><td></td><td></td></tr>
 <tr><td>\includegraphics </td><td><math><mtext><img src='../sphere.jpg' alt='sphere' style="height:1.2em;width:1.2em;vertical-align:-0.19999999999999996em;"/></mtext></math></td><td><code>\includegraphics[height=1em,</code><br><code>totalheight=1.2em, width=1.2em,</code><br><code>alt=sphere]{../sphere.jpg}</code></td><td>graphicx </td></tr>
 <tr><td>\incoh            </td><td><math><mrow><mspace width="0.2778em"></mspace><mspace width="0pt" height="0.7em"></mspace><mpadded width="0px"><mpadded height="0px" depth="0px"><mpadded voffset="0.1111em" height="+0.1111em" depth="-0.1111em"><mi>⌣</mi></mpadded></mpadded></mpadded><mpadded height="0px" depth="0px"><mpadded voffset="-0.2222em" height="-0.2222em" depth="+0.2222em"><mi>⌢</mi></mpadded></mpadded><mspace width="0.2778em"></mspace></mrow></math></td><td></td><td>cmll              </td></tr>
@@ -736,11 +736,11 @@
 <tr><td>\mapsto</td><td><math><mo>↦</mo></math></td><td></td><td></td></tr>
 <tr><td>\mathbb</td><td><math><mrow><mi>𝔸</mi><mi>𝔹</mi></mrow></math></td><td><code>\mathbb{AB}</code></td><td>ams </td></tr>
 <tr><td>\mathbf</td><td><math><mrow><mi>𝐀</mi><mi>𝐚</mi><mi>𝐁</mi><mi>𝐛</mi><mn>𝟏𝟐𝟑</mn></mrow></math></td><td><code>\mathbf{AaBb123}</code></td><td></td></tr>
-<tr><td>\mathbin</td><td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">!</mo></mrow><mrow><mi>b</mi></mrow></math></td><td><code>a\mathbin{!}b</code></td><td></td></tr>
+<tr><td>\mathbin</td><td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">!</mo><mi>b</mi></mrow></math></td><td><code>a\mathbin{!}b</code></td><td></td></tr>
 <tr><td>\mathcal</td><td><math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">𝒶</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒷</mi></mrow></math></td><td><code>\mathcal{AaBb}</code></td><td></td></tr>
 <tr><td>\mathchoice</td><td><math><mrow><mi>a</mi><mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace></mrow><mi>b</mi></mrow></math></td><td><code>a\mathchoice{\,}{\,\,}{\,\,\,}{\,\,\,\,}b</code></td><td></td></tr>
 <tr><td>\mathclap</td><td><math><mstyle scriptlevel="0" displaystyle="true"><mrow><munder><mo movablelimits="false">∑</mo><mpadded lspace="-0.5width" width="0px" style="display:flex;justify-content:center;"><mrow><mn>1</mn><mo>≤</mo><mi>i</mi><mo>≤</mo><mi>n</mi></mrow></mpadded></munder></mrow><msub><mi>x</mi><mi>i</mi></msub></mstyle></math></td><td><code>\sum_{\mathclap{1\le i\le n}} x_{i}</code></td><td>mathtools </td></tr>
-<tr><td>\mathclose</td><td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>b</mi><mo mathvariant="italic" lspace="0em" rspace="0em">&gt;</mo></mrow><mrow><mo>+</mo></mrow><mrow><mi>c</mi></mrow></math></td><td><code>a + (b\mathclose\gt + c</code></td><td></td></tr>
+<tr><td>\mathclose</td><td><math><mrow><mi>a</mi><mo>+</mo><mo form="prefix" stretchy="false">(</mo><mi>b</mi><mo mathvariant="italic" lspace="0em" rspace="0em">&gt;</mo><mo>+</mo><mi>c</mi></mrow></math></td><td><code>a + (b\mathclose\gt + c</code></td><td></td></tr>
 <tr><td>\mathellipsis</td><td><math><mo>…</mo></math></td><td></td><td></td></tr>
 <tr><td>\mathfrak</td><td><math><mrow><mi>𝔄</mi><mi>𝔞</mi><mi>𝔅</mi><mi>𝔟</mi></mrow></math></td><td><code>\mathfrak{AaBb}</code></td><td>ams </td></tr>
 <tr><td>\mathinner</td><td><math><mrow><mi>a</mi><mi>b</mi><mpadded><mi>inside</mi></mpadded><mi>c</mi><mi>d</mi></mrow></math></td><td><code>ab\mathinner{\text{inside}}cd</code></td><td></td></tr>
@@ -748,10 +748,10 @@
 <tr><td>\mathllap</td><td><math><mrow><mo lspace="0em" rspace="0em">=</mo><mpadded lspace="-1width" width="0px" style="position:relative;"><mpadded width="0px"><mphantom><mo lspace="0em" rspace="0em">⁄</mo><mspace width="0.1667em"></mspace></mphantom></mpadded><mrow style="position:absolute;right:0;bottom:0;"><mo lspace="0em" rspace="0em">⁄</mo><mspace width="0.1667em"></mspace></mrow></mpadded></mrow></math></td><td><code>{=}\mathllap{/\,}</code></td><td>mathtools </td></tr>
 <tr><td>\mathnormal</td><td><math><mrow><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi></mrow></math></td><td><code>\mathnormal{AaBb}</code></td><td></td></tr>
 <tr><td>\mathop</td><td><math><msubsup><mo movablelimits="false">⋆</mo><mi>a</mi><mi>b</mi></msubsup></math></td><td><code>\mathop{\star}_a^b</code></td><td></td></tr>
-<tr><td>\mathopen</td><td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mo mathvariant="italic" lspace="0em" rspace="0em">&lt;</mo></mrow><mrow><mi>b</mi><mo form="postfix" stretchy="false">)</mo><mo>+</mo></mrow><mrow><mi>c</mi></mrow></math></td><td><code>a + \mathopen\lt b) + c</code></td><td></td></tr>
-<tr><td>\mathord</td><td><math><mrow><mn>1</mn><mi>,</mi><mn>234</mn><mo separator="true" lspace="0em" rspace="0em">,</mo></mrow><mrow><mn>567</mn></mrow></math></td><td><code>1\mathord{,}234{,}567</code></td><td></td></tr>
-<tr><td>\mathpunct</td><td><math><mrow><mi>A</mi><mo lspace="0em" rspace="0.1667em">−</mo></mrow><mrow><mi>B</mi></mrow></math></td><td><code>A\mathpunct{-}B</code></td><td></td></tr>
-<tr><td>\mathrel</td><td><math><mrow><mi>a</mi><mo lspace="0.2778em" rspace="0.2778em">#</mo></mrow><mrow><mi>b</mi></mrow></math></td><td><code>a \mathrel{\#} b</code></td><td></td></tr>
+<tr><td>\mathopen</td><td><math><mrow><mi>a</mi><mo>+</mo><mo mathvariant="italic" lspace="0em" rspace="0em">&lt;</mo><mi>b</mi><mo form="postfix" stretchy="false">)</mo><mo>+</mo><mi>c</mi></mrow></math></td><td><code>a + \mathopen\lt b) + c</code></td><td></td></tr>
+<tr><td>\mathord</td><td><math><mrow><mn>1</mn><mi>,</mi><mn>234</mn><mo separator="true" lspace="0em" rspace="0em">,</mo><mn>567</mn></mrow></math></td><td><code>1\mathord{,}234{,}567</code></td><td></td></tr>
+<tr><td>\mathpunct</td><td><math><mrow><mi>A</mi><mo lspace="0em" rspace="0.1667em">−</mo><mi>B</mi></mrow></math></td><td><code>A\mathpunct{-}B</code></td><td></td></tr>
+<tr><td>\mathrel</td><td><math><mrow><mi>a</mi><mo lspace="0.2778em" rspace="0.2778em">#</mo><mi>b</mi></mrow></math></td><td><code>a \mathrel{\#} b</code></td><td></td></tr>
 <tr><td>\mathrlap</td><td><math><mrow><mpadded width="0px"><mrow><mspace width="0.1667em"></mspace><mo lspace="0em" rspace="0em">⁄</mo></mrow></mpadded><mo lspace="0em" rspace="0em">=</mo></mrow></math></td><td><code>\mathrlap{\,/}{=}</code></td><td>mathtools </td></tr>
 <tr><td>\mathring</td><td><math><mover><mi>a</mi><mo stretchy="false" style="math-style:normal;math-depth:0;">˚</mo></mover></math></td><td><code>\mathring{a}</code></td><td>ams </td></tr>
 <tr><td>\mathrm</td><td><math><mrow><mrow><mi mathvariant="normal">A</mi></mrow><mrow><mi mathvariant="normal">a</mi></mrow><mrow><mi mathvariant="normal">B</mi></mrow><mrow><mi mathvariant="normal">b</mi></mrow><mn>12</mn></mrow></math></td><td><code>\mathrm{AaBb12}</code></td><td></td></tr>
@@ -775,7 +775,7 @@
 <tr><td>\measuredangle</td><td><math><mi>∡</mi></math></td><td></td><td>ams </td></tr>
 <tr><td>\medspace</td><td><math><mrow><mi>a</mi><mspace width="0.2222em"></mspace><mi>b</mi></mrow></math></td><td><code>a\medspace b</code></td><td>ams </td></tr>
 <tr><td>\mho</td><td><math><mi>℧</mi></math></td><td></td><td></td></tr>
-<tr><td>\mid</td><td><math><mrow><mo form="prefix" stretchy="false">{</mo><mi>x</mi><mo>∈</mo></mrow><mrow><mi>ℝ</mi><mo lspace="0.22em" rspace="0.22em" stretchy="false">|</mo></mrow><mrow><mi>x</mi><mo>&gt;</mo></mrow><mrow><mn>0</mn><mo form="postfix" stretchy="false">}</mo></mrow></math></td><td><code>\{x∈ℝ\mid x&gt;0\}</code></td><td></td></tr>
+<tr><td>\mid</td><td><math><mrow><mo form="prefix" stretchy="false">{</mo><mi>x</mi><mo>∈</mo><mi>ℝ</mi><mo lspace="0.22em" rspace="0.22em" stretchy="false">|</mo><mi>x</mi><mo>&gt;</mo><mn>0</mn><mo form="postfix" stretchy="false">}</mo></mrow></math></td><td><code>\{x∈ℝ\mid x&gt;0\}</code></td><td></td></tr>
 <tr><td>\middle</td><td><math><mrow><mi>P</mi><mrow><mo fence="true" form="prefix">(</mo><mi>A</mi><mo fence="true" form="prefix" lspace="0.05em" rspace="0.05em">|</mo><mi>B</mi><mo fence="true" form="postfix">)</mo></mrow></mrow></math></td><td><code>P\left(A\middle\vert B\right)</code></td><td></td></tr>
 <tr><td>\min</td><td><math><mrow><mi>min</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow></math></td><td></td><td></td></tr>
 <tr><td>\minuscolon</td><td><math><mo>∹</mo></math></td><td></td><td>colonequals </td></tr>
@@ -784,7 +784,7 @@
 <tr><td>\mit</td><td><span class="no-sup">Not supported</span></td><td>See <code>\mathit</code></td><td></td></tr>
 <tr><td>\mkern</td><td><math><mrow><mi>a</mi><mspace width="1em"></mspace><mi>b</mi></mrow></math></td><td><code>a\mkern18mu b</code></td><td></td></tr>
 <tr><td>\mmlToken</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
-<tr><td>\mod</td><td><math><mrow><mn>3</mn><mo>≡</mo></mrow><mrow><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace></mrow><mrow><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td><td><code>3\equiv 5 \mod 2</code></td><td>ams </td></tr>
+<tr><td>\mod</td><td><math><mrow><mn>3</mn><mo>≡</mo><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td><td><code>3\equiv 5 \mod 2</code></td><td>ams </td></tr>
 <tr><td>\models</td><td><math><mo>⊨</mo></math></td><td></td><td></td></tr>
 <tr><td>\moveleft</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\moveright</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
@@ -822,7 +822,7 @@
 <tr><td>\newcommand</td><td><math><mi>✓</mi></math></td><td><code>\newcommand\chk{\checkmark} \chk</code></td><td>newcommand </td></tr>
 <tr><td>\newenvironment</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\newextarrow</td><td><span class="no-sup">Not supported</span></td><td></td><td>extpfeil </td></tr>
-<tr><td>\newline</td><td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td><td><code>a\newline b</code></td><td></td></tr>
+<tr><td>\newline</td><td><math><mrow><mi>a</mi><mo linebreak="newline"></mo><mi>b</mi></mrow></math></td><td><code>a\newline b</code></td><td></td></tr>
 <tr><td>\nexists</td><td><math><mi>∄</mi></math></td><td></td><td>ams </td></tr>
 <tr><td>\ngeq</td><td><math><mo>≱</mo></math></td><td></td><td>ams </td></tr>
 <tr><td>\ngeqq</td><td><math><mo>≱</mo></math></td><td></td><td>ams </td></tr>
@@ -913,7 +913,7 @@
 <tr><td>\oslash</td><td><math><mo>⊘</mo></math></td><td></td><td></td></tr>
 <tr><td>\otimes</td><td><math><mo>⊗</mo></math></td><td></td><td></td></tr>
 <tr><td>\outerproduct</td><td><math><mrow><mrow><mo fence="true" form="prefix">|</mo><mi>a</mi><mo fence="true" form="postfix">⟩</mo></mrow><mrow><mo fence="true" form="prefix">⟨</mo><mi>b</mi><mo fence="true" form="postfix">|</mo></mrow></mrow></math></td><td><code>\outerproduct{a}{b}</code></td><td>physics extension </td></tr>
-<tr><td>\over</td><td><math><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>b</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>+</mo></mrow><mrow><mi>c</mi></mrow></math></td><td><code>{a+1 \over b+2}+c</code></td><td></td></tr>
+<tr><td>\over</td><td><math><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>b</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>+</mo><mi>c</mi></mrow></math></td><td><code>{a+1 \over b+2}+c</code></td><td></td></tr>
 <tr><td>\overbrace</td><td><math><mrow><mover><mover><mrow><mi>x</mi><mo>+</mo><mo>⋯</mo><mo>+</mo><mi>x</mi></mrow><mo stretchy="true" style="math-depth:0;">⏞</mo></mover><mrow><mi>n</mi><mtext> times</mtext></mrow></mover></mrow></math></td><td><code>\overbrace{x+⋯+x}^{n\text{ times}}</code></td><td></td></tr>
 <tr><td>\overbracket</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\overgroup</td><td><math><mover><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true" style="math-style:normal;math-depth:0;">⏠</mo></mover></math></td><td><code>\overgroup{AB}</code></td><td>MnSymbol </td></tr>
@@ -963,8 +963,8 @@
 <tr><td>{pmatrix}</td><td><math><mrow><mo fence="true" form="prefix">(</mo><mtable rowspacing="0.16em" columnalign="center center" columnspacing="1em" class="tml-array"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></math></td><td><code>\begin{pmatrix}</code><br>   <code>a &amp; b \\</code><br>   <code>c &amp; d</code><br><code>\end{pmatrix}</code></td><td>ams </td></tr>
 <tr><td>{pmatrix*}</td><td><math><mrow><mo fence="true" form="prefix">(</mo><mtable rowspacing="0.16em" columnalign="right right" columnspacing="1em" class="tml-array"><mtr><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>1</mn></mrow></mtd><mtd style="text-align:-webkit-right;"><mn>3</mn></mtd></mtr><mtr><mtd style="text-align:-webkit-right;"><mn>2</mn></mtd><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>4</mn></mrow></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></math></td><td><code>\begin{pmatrix*}[r]</code><br>   <code>-1 &amp; 3 \\</code><br>   <code>2 &amp; -4</code><br><code>\end{pmatrix*}</code></td><td>mathtools </td></tr>
 <tr><td>\pmb</td><td><math><mstyle style="text-shadow: 0.02em 0.01em 0.04px"><mi>μ</mi></mstyle></math></td><td><code>\pmb{\mu}</code></td><td>ams </td></tr>
-<tr><td>\pmod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x\pmod a</code></td><td></td></tr>
-<tr><td>\pod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x \pod a</code></td><td>ams </td></tr>
+<tr><td>\pmod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x\pmod a</code></td><td></td></tr>
+<tr><td>\pod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x \pod a</code></td><td>ams </td></tr>
 <tr><td>\pointint</td><td><math><mo movablelimits="false">⨕</mo></math></td><td></td><td></td></tr>
 <tr><td>\poissonbracket</td><td><math><mrow><mo fence="true" form="prefix">{</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo fence="true" form="postfix">}</mo></mrow></math></td><td><code>\poissonbracket{A}{B}</code></td><td>physics extension </td></tr>
 <tr><td>\pounds</td><td><math><mi>£</mi></math></td><td></td><td></td></tr>
@@ -1236,7 +1236,7 @@
 <tr><td>\textbraceright</td><td><math><mtext>}</mtext></math></td><td><code>\text{\textbraceright}</code></td><td></td></tr>
 <tr><td>\textbullet</td><td><math><mtext>•</mtext></math></td><td><code>\text{\textbullet}</code></td><td></td></tr>
 <tr><td>\textcircled</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
-<tr><td>\textcolor</td><td><math><mrow><mstyle mathcolor="#0000FF"><mi>F</mi><mo>=</mo><mi>m</mi><mi>a</mi></mstyle></mrow></math></td><td><code>\textcolor{blue}{F=ma}</code></td><td>color </td></tr>
+<tr><td>\textcolor</td><td><math><mstyle mathcolor="#0000FF"><mi>F</mi><mo>=</mo><mi>m</mi><mi>a</mi></mstyle></math></td><td><code>\textcolor{blue}{F=ma}</code></td><td>color </td></tr>
 <tr><td>\textdagger</td><td><math><mtext>†</mtext></math></td><td><code>\text{\textdagger}</code></td><td></td></tr>
 <tr><td>\textdaggerdbl</td><td><math><mtext>‡</mtext></math></td><td><code>\text{\textdaggerdbl}</code></td><td></td></tr>
 <tr><td>\textdegree</td><td><math><mtext>°</mtext></math></td><td><code>\text{\textdegree}</code></td><td></td></tr>
@@ -1505,7 +1505,7 @@
 </main>
 <nav>
 <div id="sidebar" class="narrow">
-<p><math><mrow href="https://temml.org/"><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></mrow></math>   v0.7.3</p>
+<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.8.0</p>
 <div style="height:0.5em;"></div>
 <ul><li><a href='#symbols'>Symbols</a></li>
 <li><a href='#a'>A</a></li>

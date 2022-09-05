@@ -1,6 +1,6 @@
 /* Temml Post Process
  * Perform two tasks not done by Temml when it created each individual Temml <math> element.
- * Given a block of block,
+ * Given a block,
  *   1. At each AMS auto-numbered environment, assign an id.
  *   2. Populate the text contents of each \ref & \eqref
  *
@@ -8,7 +8,7 @@
  * https://mit-license.org/
  */
 
-export const version = "0.7.3";
+export const version = "0.8.0";
 
 export function postProcess(block) {
   const labelMap = {}

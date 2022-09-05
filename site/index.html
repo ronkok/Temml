@@ -131,7 +131,7 @@
     hasMathML = (div.offsetHeight > div.offsetWidth);
   }
   if (!hasMathML) {
-    // As a backupt, insert the mathml.css style sheet.
+    // As a backup, insert the mathml.css style sheet.
     const notice = document.getElementById("notice");
     notice.textContent = "This browser does not support MathML. Try Firefox or Safari."
     link = document.createElement("link");
