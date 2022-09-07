@@ -82,18 +82,12 @@ defineFunction({
     const base = normalizeArgument(args[0]);
 
     const isStretchy = !NON_STRETCHY_ACCENT_REGEX.test(context.funcName);
-    const isShifty =
-      !isStretchy ||
-      context.funcName === "\\widehat" ||
-      context.funcName === "\\widetilde" ||
-      context.funcName === "\\widecheck";
 
     return {
       type: "accent",
       mode: context.parser.mode,
       label: context.funcName,
       isStretchy: isStretchy,
-      isShifty: isShifty,
       base: base
     };
   },
@@ -125,7 +119,6 @@ defineFunction({
       mode: mode,
       label: context.funcName,
       isStretchy: false,
-      isShifty: true,
       base: base
     };
   },
