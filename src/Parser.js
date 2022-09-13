@@ -379,6 +379,8 @@ export default class Parser {
           this.consume()
           str += uSubsAndSups[token]
         }
+        // Prevent recursive parser calls from over-expansion.
+        this.settings.maxExpand -= this.gullet.expansionCount
         // Now create a (sub|super)script.
         const body = (new Parser(str, this.settings)).parse()
         if (isSub) {
