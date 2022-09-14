@@ -8,6 +8,7 @@ import ParseError from "./ParseError";
 import { combiningDiacriticalMarksEndRegex } from "./Lexer";
 import { uSubsAndSups, unicodeSubRegEx } from "./unicodeSupOrSub"
 import SourceLocation from "./SourceLocation";
+import { Token } from "./Token";
 
 // Pre-evaluate both modules as unicodeSymbols require String.normalize()
 import unicodeAccents from /*preval*/ "./unicodeAccents";
@@ -368,21 +369,20 @@ export default class Parser {
         // We treat these similarly to the unicode-math package.
         // So we render a string of Unicode (sub|super)scripts the
         // same as a (sub|super)script of regular characters.
-        let str = uSubsAndSups[lex.text]
         const isSub = unicodeSubRegEx.test(lex.text)
+        const subsupTokens = [];
+        subsupTokens.push(new Token(uSubsAndSups[lex.text]))
         this.consume()
-        // Continue fetching tokens to fill out the string.
+        // Continue fetching tokens to fill out the group.
         while (true) {
           const token = this.fetch().text
           if (!(uSubsAndSups[token])) { break }
           if (unicodeSubRegEx.test(token) !== isSub) { break }
+          subsupTokens.unshift(new Token(uSubsAndSups[token]))
           this.consume()
-          str += uSubsAndSups[token]
         }
-        // Prevent recursive parser calls from over-expansion.
-        this.settings.maxExpand -= this.gullet.expansionCount
         // Now create a (sub|super)script.
-        const body = (new Parser(str, this.settings)).parse()
+        const body = this.subparse(subsupTokens)
         if (isSub) {
           subscript = { type: "ordgroup", mode: "math", body }
         } else {
