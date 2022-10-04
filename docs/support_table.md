@@ -725,6 +725,7 @@ If you know the shape of a character, but not its name,
 |----------------|-------------|-------------------|-----------|
 |\male|$`\male`|| stix |
 |\maltese|$`\maltese`|| ams |
+|\mapsfrom|$`\mapsfrom`|| stmaryrd |
 |\mapsto|$`\mapsto`|||
 |\mathbb|$`\mathbb{AB}`|`\mathbb{AB}`| ams |
 |\mathbf|$`\mathbf{AaBb123}`|`\mathbf{AaBb123}`||
