@@ -17,6 +17,11 @@ function getHLines(parser) {
   const hlineInfo = [];
   parser.consumeSpaces();
   let nxt = parser.fetch().text;
+  while (nxt === "\\relax") {
+    parser.consume();
+    parser.consumeSpaces();
+    nxt = parser.fetch().text;
+  }
   while (nxt === "\\hline" || nxt === "\\hdashline") {
     parser.consume();
     hlineInfo.push(nxt === "\\hdashline");
