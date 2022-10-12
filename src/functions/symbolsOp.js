@@ -10,6 +10,10 @@ const short = ["\\shortmid", "\\nshortmid", "\\shortparallel",
 const arrows = ["\\Rsh", "\\Lsh", "\\restriction"]
 
 const isArrow = str => {
+  if (str.length === 1) {
+    const codePoint = str.codePointAt(0)
+    return (0x218f < codePoint && codePoint < 0x2200)
+  }
   return str.indexOf("arrow") > -1 || str.indexOf("harpoon") > -1 || arrows.includes(str)
 }
 
