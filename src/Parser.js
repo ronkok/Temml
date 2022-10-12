@@ -586,8 +586,13 @@ export default class Parser {
    * Discard any space tokens, fetching the next non-space token.
    */
   consumeSpaces() {
-    while (this.fetch().text === " ") {
-      this.consume();
+    while (true) {
+      const ch = this.fetch().text
+      if (ch === " " || ch === "\ufe0e") {
+        this.consume()
+      } else {
+        break
+      }
     }
   }
 

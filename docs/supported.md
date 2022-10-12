@@ -493,7 +493,7 @@ Any character can be written with the `\char` function and the Unicode code in h
 <div>For chancery or roundhand characters, it’s probably best to use <code>\mathcal</code> and <code>\mathscr</code> instead of Unicode input.<details><summary>Why?</summary>
 <p>Unicode has historically accepted either chancery or roundhand glyphs in the range U+1D49C—U+1D4B5. That's confusing,
 because Cambria Math has chancery in those code points and some other math fonts have roundhand in the same code points.
-<a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14</a> has recently added code points that resolve the ambiguity. Both chancery and roundhand still occupy the same range, but each unambigous chancery character has a <code>\ufe00</code> appended to the code point and each unambigous roundhand character has a <code>\ufe01</code> appended to the code point.</p>
+<a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14</a> has recently added a method to resolve the ambiguity. Both chancery and roundhand still occupy the same range, but each unambigous chancery character has a <code>\ufe00</code> appended to the code point and each unambigous roundhand character has a <code>\ufe01</code> appended to the code point.</p>
 <p>Published fonts have not yet caught up to the new code point assignments. If you want your documents to not break in the future, it’s probably best to avoid Unicode input and stick with <code>\mathcal</code> and <code>\mathscr</code>.</p>
 </details>
 </div>
@@ -1204,7 +1204,7 @@ Arrows in the _texvc_ extension
 | $`\darr` `\darr` | $`\harr` `\harr` | $`\larr` `\larr` | $`\lrarr` `\lrarr` | $`\rarr` `\rarr` | $`\uarr` `\uarr` |
 +------------------+------------------+------------------+--------------------+------------------+------------------+
 
-Direct Input: <span class="direct">← ↑ → ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↚ ↛ ↞ ↠ ↢ ↣ ↦ ↩ ↪ ↫ ↬ ↭ ↮ ↰ ↱↶ ↷ ↺ ↻ ↼ ↽ ↾ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇄ ⇆ ⇇ ⇈ ⇉ ⇊ ⇋ ⇌⇍ ⇎ ⇏ ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇚ ⇛ ⇝ ⇠ ⇢ ⟵ ⟶ ⟷ ⟸ ⟹ ⟺ ⟼ ↽</span>
+Direct Input: <span class="direct">← ↑ → ↓ ↔ ↕ ↖&#xFE0E; ↗&#xFE0E; ↘&#xFE0E; ↙&#xFE0E; ↚  ↛  ↞ ↠ ↢ ↣ ↦ ↩&#xFE0E; ↪&#xFE0E; ↫ ↬ ↭ ↮ ↰ ↱↶ ↷ ↺ ↻ ↼ ↽ ↾ ↾ ↿ ⇀ ⇁ ⇂ ⇃ ⇄ ⇆ ⇇ ⇈ ⇉ ⇊ ⇋ ⇌⇍ ⇎ ⇏ ⇐ ⇑ ⇒ ⇓ ⇔ ⇕ ⇚ ⇛ ⇝ ⇠ ⇢ ⟵ ⟶ ⟷ ⟸ ⟹ ⟺ ⟼ ↽</span>
 
 ### Extensible Arrows
 
