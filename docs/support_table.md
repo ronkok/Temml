@@ -130,7 +130,7 @@ If you know the shape of a character, but not its name,
 |\argmin|$`\argmin`|| statmath |
 |{array}|$`\begin{array}{cc}a&b\\c&d\end{array}` | `\begin{array}{cc}`<br>   `a & b \\`<br>   `c & d`<br>`\end{array}`| LaTeX2ε |
 |\array|(Not supported)|See `{array}`||
-|\arraystretch|$`\def\arraystretch{1.5}\begin{array}{cc}a&b\\c&d\end{array}`|`\def\arraystretch{1.5}`<br>`\begin{array}{cc}`<br>   `a & b \\`<br>   `c & d`<br>`\end{array}`||
+|\arraystretch|(Not supported)|||
 |\Arrowvert|(Not supported)|see `\Vert`||
 |\arrowvert|(Not supported)|see `\vert`||
 |\ast|$`\ast`|||

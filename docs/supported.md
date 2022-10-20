@@ -272,13 +272,12 @@ $`( \big( \Big( \bigg( \Bigg(` `( \big( \Big( \bigg( \Bigg(`
 |    c & d              |    `c & d`\                | c & d                      |    `c & d`\                  |
 | \end{vmatrix}`        | `\end{vmatrix}`            | \end{Vmatrix}`             | `\end{Vmatrix}`              |
 +-----------------------+----------------------------+----------------------------+------------------------------+
-| $`\begin{Bmatrix}     | `\begin{Bmatrix}`\         | $`\def\arraystretch{1.5}   | `\def\arraystretch{1.5}`\    |
-|  a & b \\             |    `a & b \\`\             | \begin{array}{c|c:c}       | `\begin{array}{c|c:c}`\      |
-|  c & d                |    `c & d`\                | a & b & c \\ \hline        |    `a & b & c \\ \hline`\    |
-| \end{Bmatrix}`        | `\end{Bmatrix}`            | d & e & f \\ \hdashline    |    `d & e & f \\`\           |
-|                       |                            | g & h & i                  |    `\hdashline`\             |
+| $`\begin{Bmatrix}     | `\begin{Bmatrix}`\         | $`\begin{array}{c|c:c}     | `\begin{array}{c|c:c}`\      |
+|  a & b \\             |    `a & b \\`\             | a & b & c \\ \hline        |    `a & b & c \\ \hline`\    |
+|  c & d                |    `c & d`\                | d & e & f \\ \hdashline    |    `d & e & f \\`\           |
+| \end{Bmatrix}`        | `\end{Bmatrix}`            | g & h & i                  |    `\hdashline`\             |
 |                       |                            | \end{array}`               |    `g & h & i`\              |
-|                       |                            |                            | `\end{array}`                |
+|                       |                            |                            | `\end{array}`                |
 +-----------------------+----------------------------+----------------------------+------------------------------+
 | $`x = \begin{cases}   | `x = \begin{cases}`\       | $`\begin{rcases}           | `\begin{rcases}`\            |
 | a &\text{if } b \\    |    `a &\text{if } b \\`\   | a &\text{if } b \\         |    `a &\text{if } b  \\`\    |
