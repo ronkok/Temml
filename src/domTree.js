@@ -146,7 +146,7 @@ export class Img {
   }
 
   hasClass(className) {
-    return utils.contains(this.classes, className);
+    return this.classes.includes(className);
   }
 
   toNode() {

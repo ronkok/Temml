@@ -9,7 +9,6 @@ const macros = _macros;
 export default macros;
 
 import symbols from "./symbols";
-import utils from "./utils";
 import ParseError from "./ParseError";
 
 //////////////////////////////////////////////////////////////////////
@@ -320,7 +319,7 @@ defineMacro("\\dots", function(context) {
   } else if (next.slice(0, 4) === "\\not") {
     thedots = "\\dotsb";
   } else if (next in symbols.math) {
-    if (utils.contains(["bin", "rel"], symbols.math[next].group)) {
+    if (["bin", "rel"].includes(symbols.math[next].group)) {
       thedots = "\\dotsb";
     }
   }

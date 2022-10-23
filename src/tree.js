@@ -1,5 +1,3 @@
-import utils from "./utils";
-
 /**
  * This node represents a document fragment, which contains elements, but when
  * placed into the DOM doesn't have any representation itself. It only contains
@@ -13,7 +11,7 @@ export class DocumentFragment {
   }
 
   hasClass(className) {
-    return utils.contains(this.classes, className);
+    return this.classes.includes(className);
   }
 
   /** Convert the fragment into a node. */

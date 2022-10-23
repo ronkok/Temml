@@ -2,7 +2,6 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import * as mathMLTree from "../mathMLTree";
 import * as mml from "../buildMathML";
-import utils from "../utils";
 import { delimiters, delimiterSizes } from "./delimsizing"
 
 // Some helpers
@@ -28,7 +27,7 @@ const mathmlBuilder = (group, style) => {
   if (group.symbol) {
     // This is a symbol. Just add the symbol.
     node = new mathMLTree.MathNode("mo", [mml.makeText(group.name, group.mode)]);
-    if (utils.contains(noSuccessor, group.name)) {
+    if (noSuccessor.includes(group.name)) {
       node.setAttribute("largeop", "false")
     } else {
       node.setAttribute("movablelimits", "false")
@@ -240,7 +239,7 @@ defineFunction({
       symbol: false,
       stack: false,
       isFollowedByDelimiter: isDelimiter(next),
-      needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
+      needsLeadingSpace: prevAtomType.length > 0 && ordTypes.includes(prevAtomType),
       name: funcName
     };
   },
@@ -265,7 +264,7 @@ defineFunction({
       symbol: false,
       stack: false,
       isFollowedByDelimiter: isDelimiter(next),
-      needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType),
+      needsLeadingSpace: prevAtomType.length > 0 && ordTypes.includes(prevAtomType),
       name: funcName
     };
   },

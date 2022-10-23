@@ -3,7 +3,6 @@ import defineMacro from "../defineMacro";
 import mathMLTree from "../mathMLTree"
 import { spaceCharacter } from "./kern"
 import { ordTypes } from "./op"
-import utils from "../utils"
 import { delimiters, delimiterSizes } from "./delimsizing"
 
 import * as mml from "../buildMathML"
@@ -66,7 +65,7 @@ const mathmlBuilder = (group, style) => {
     expression = [new mathMLTree.TextNode(word)]
   } else if (
     expression.length === 1
-    && utils.contains(["mover", "munder"], expression[0].type) &&
+    && ["mover", "munder"].includes(expression[0].type) &&
     (expression[0].children[0].type === "mi" || expression[0].children[0].type === "mtext")
   ) {
     expression[0].children[0].type = "mi"
@@ -130,7 +129,7 @@ defineFunction({
       limits: false,
       parentIsSupSub: false,
       isFollowedByDelimiter: isDelimiter(next),
-      needsLeadingSpace: prevAtomType.length > 0 && utils.contains(ordTypes, prevAtomType)
+      needsLeadingSpace: prevAtomType.length > 0 && ordTypes.includes(prevAtomType)
     };
   },
   mathmlBuilder

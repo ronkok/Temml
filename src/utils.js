@@ -5,13 +5,6 @@
  */
 
 /**
- * Return whether an element is contained in a list
- */
-const contains = function(list, elem) {
-  return list.indexOf(elem) !== -1;
-};
-
-/**
  * Provide a default value if a setting is undefined
  */
 const deflt = function(setting, defaultIfUndefined) {
@@ -106,7 +99,6 @@ const round = function(n) {
 };
 
 export default {
-  contains,
   deflt,
   escape,
   hyphenate,

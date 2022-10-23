@@ -1,7 +1,6 @@
 import defineFunction from "../defineFunction";
 import mathMLTree from "../mathMLTree";
 import ParseError from "../ParseError";
-import utils from "../utils";
 import { assertNodeType, checkSymbolNodeType } from "../parseNode";
 
 import * as mml from "../buildMathML";
@@ -102,11 +101,11 @@ function checkDelimiter(delim, context) {
     delim = { type: "textord", text: "/", mode: "math" }
   }
   const symDelim = checkSymbolNodeType(delim)
-  if (symDelim && utils.contains(delimiters, symDelim.text)) {
+  if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
-    if (utils.contains(["<", "\\lt"], symDelim.text)) { symDelim.text = "⟨" }
-    if (utils.contains([">", "\\gt"], symDelim.text)) { symDelim.text = "⟩" }
+    if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨" }
+    if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩" }
     if (symDelim.text === "/") { symDelim.text = "\u2215" }
     if (symDelim.text === "\\backslash") { symDelim.text = "\u2216" }
     return symDelim;
