@@ -588,6 +588,7 @@ export default class Parser {
   consumeSpaces() {
     while (true) {
       const ch = this.fetch().text
+      // \ufe0e is the Unicode variation selector to supress emoji. Ignore it.
       if (ch === " " || ch === "\ufe0e") {
         this.consume()
       } else {
