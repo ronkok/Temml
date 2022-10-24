@@ -6,7 +6,6 @@ import { StyleLevel } from "../constants"
 import ParseError from "../ParseError";
 import { assertNodeType, assertSymbolNodeType } from "../parseNode";
 import { checkSymbolNodeType } from "../parseNode";
-import utils from "../utils";
 
 import * as mml from "../buildMathML";
 
@@ -17,7 +16,7 @@ function getHLines(parser) {
   const hlineInfo = [];
   parser.consumeSpaces();
   let nxt = parser.fetch().text;
-  while (nxt === "\\relax") {
+  if (nxt === "\\relax") {
     parser.consume();
     parser.consumeSpaces();
     nxt = parser.fetch().text;
@@ -51,7 +50,7 @@ const getTag = (group, style, rowNum) => {
       tag = new mathMLTree.MathNode("mtext", [], [])
       return tag
     }
-  } else if (group.colSeparationType === "multline" &&
+  } else if (group.envClasses.includes("multline") &&
     ((group.leqno && rowNum !== 0) || (!group.leqno && rowNum !== group.body.length - 1))) {
     // A multiline that does not receive a tag. Return an empty cell.
     tag = new mathMLTree.MathNode("mtext", [], [])
@@ -73,11 +72,8 @@ const getTag = (group, style, rowNum) => {
 function parseArray(
   parser,
   {
-    hskipBeforeAndAfter, // boolean
-    addJot, // boolean
     cols, // [{ type: string , align: l|c|r|null }]
-    arraystretch, // number
-    colSeparationType, // "align" | "alignat" | "gather" | "small" | "CD" | "multline"
+    envClasses, // align(ed|at|edat) | array | cases | cd | small | multline
     addEqnNum, // boolean
     singleRow, // boolean
     emptySingleRow, // boolean
@@ -96,20 +92,6 @@ function parseArray(
     parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
     parser.gullet.macros.set("\\notag", "\\env@notag");
     parser.gullet.macros.set("\\nonumber", "\\env@notag")
-  }
-
-  // Get current arraystretch if it's not set by the environment
-  if (arraystretch === undefined || Number.isNaN(arraystretch)) {
-    const stretch = parser.gullet.expandMacroAsText("\\arraystretch");
-    if (stretch == null) {
-      // Default \arraystretch from lttab.dtx
-      arraystretch = 1
-    } else {
-      arraystretch = parseFloat(stretch);
-      if (!arraystretch || arraystretch < 0) {
-        throw new ParseError(`Invalid \\arraystretch: ${stretch}`);
-      }
-    }
   }
 
   // Start group for first cell
@@ -154,14 +136,14 @@ function parseArray(
     const next = parser.fetch().text;
     if (next === "&") {
       if (maxNumCols && row.length === maxNumCols) {
-        if (colSeparationType === "split") {
-          throw new ParseError("The split environment accepts no more than two columns",
-            parser.nextToken);
-        } else if (colSeparationType === "array") {
+        if (envClasses.includes("array")) {
           if (parser.settings.strict) {
             throw new ParseError("Too few columns " + "specified in the {array} column argument.",
               parser.nextToken)
           }
+        } else if (maxNumCols === 2) {
+          throw new ParseError("The split environment accepts no more than two columns",
+            parser.nextToken);
         } else {
           throw new ParseError("The equation environment accepts only one column",
             parser.nextToken)
@@ -216,14 +198,11 @@ function parseArray(
   return {
     type: "array",
     mode: parser.mode,
-    addJot,
-    arraystretch,
     body,
     cols,
     rowGaps,
-    hskipBeforeAndAfter,
     hLinesBeforeRow,
-    colSeparationType,
+    envClasses,
     addEqnNum,
     scriptLevel,
     tags,
@@ -246,7 +225,7 @@ const alignMap = {
 const glue = group => {
   const glueNode = new mathMLTree.MathNode("mtd", [])
   glueNode.style = { padding: "0", width: "50%" }
-  if (group.colSeparationType === "multline") {
+  if (group.envClasses.includes("multline")) {
     glueNode.style.width = "7.5%"
   }
   return glueNode
@@ -260,19 +239,19 @@ const mathmlBuilder = function(group, style) {
   for (let i = 0; i < numRows; i++) {
     const rw = group.body[i];
     const row = [];
-    const cellStyle = group.scriptLevel === "text"
-    ? StyleLevel.TEXT
-    : group.scriptLevel === "script"
-    ? StyleLevel.SCRIPT
-    : StyleLevel.DISPLAY
+    const cellLevel = group.scriptLevel === "text"
+      ? StyleLevel.TEXT
+      : group.scriptLevel === "script"
+      ? StyleLevel.SCRIPT
+      : StyleLevel.DISPLAY
 
     for (let j = 0; j < rw.length; j++) {
       const mtd = new mathMLTree.MathNode(
         "mtd",
-        [mml.buildGroup(rw[j], style.withLevel(cellStyle))]
+        [mml.buildGroup(rw[j], style.withLevel(cellLevel))]
       )
 
-      if (group.colSeparationType === "multline") {
+      if (group.envClasses.includes("multline")) {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center"
         mtd.setAttribute("columnalign", align)
         if (align !== "center") {
@@ -284,7 +263,7 @@ const mathmlBuilder = function(group, style) {
     if (group.addEqnNum) {
       row.unshift(glue(group));
       row.push(glue(group));
-      const tag = getTag(group, style.withLevel(cellStyle), i)
+      const tag = getTag(group, style.withLevel(cellLevel), i)
       if (group.leqno) {
         row[0].children.push(tag)
         row[0].style.textAlign = "-webkit-left"
@@ -296,54 +275,33 @@ const mathmlBuilder = function(group, style) {
     const mtr = new mathMLTree.MathNode("mtr", row, [])
     // Write horizontal rules
     if (i === 0 && hlines[0].length > 0) {
-      mtr.classes.push(hlines[0][0] ? "tml-top-dashed" : "tml-top-solid")
+      if (hlines[0].length === 2) {
+        mtr.classes.push("tml-top-double")
+      } else {
+        mtr.classes.push(hlines[0][0] ? "tml-top-dashed" : "tml-top-solid")
+      }
     }
     if (hlines[i + 1].length > 0) {
-      mtr.classes.push(hlines[i + 1][0] ? "hline-dashed" : "hline-solid")
+      if (hlines[i + 1].length === 2) {
+        mtr.classes.push("tml-hline-double")
+      } else {
+        mtr.classes.push(hlines[i + 1][0] ? "tml-hline-dashed" : "tml-hline-solid")
+      }
     }
     tbl.push(mtr);
   }
-  let table = new mathMLTree.MathNode("mtable", tbl);
-  if (!group.addEqnNum) { table.classes.push("tml-array") }
+  let table = new mathMLTree.MathNode("mtable", tbl)
+  if (group.envClasses.length > 0) {
+    table.classes = group.envClasses.map(e => "tml-" + e)
+  }
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true") }
 
-  // Set column alignment, row spacing, column spacing, and
-  // array lines by setting attributes on the table element.
-
-  // Set the row spacing. In MathML, we specify a gap distance.
-  // We do not use rowGap[] because MathML automatically increases
-  // cell height with the height/depth of the element content.
-
-  // LaTeX \arraystretch multiplies the row baseline-to-baseline distance.
-  // We simulate this by adding (arraystretch - 1)em to the gap. This
-  // does a reasonable job of adjusting arrays containing 1 em tall content.
-
-  // The 0.16 and 0.09 values are found emprically. They produce an array
-  // similar to LaTeX and in which content does not interfere with \hines.
-  const gap =
-    group.arraystretch === 0
-      ? 0 // {subarray}
-      : group.arraystretch === 0.5
-      ? 0.1 // {smallmatrix}
-      : 0.16 + group.arraystretch - 1 + (group.addJot ? 0.09 : 0);
-  table.setAttribute("rowspacing", utils.round(gap) + "em")
-
-  if (group.arraystretch > 1) {
-    const pad = `calc(${utils.round((group.arraystretch - 1) / 2)}em + 0.5ex) 0.4em`
-    for (const row of table.children) {
-      for (const cell of row.children) {
-        cell.style.padding = pad
-      }
-    }
-  }
-
-  if (group.addEqnNum || group.colSeparationType === "multline") {
+  if (group.addEqnNum || group.envClasses.includes("multline")) {
     table.setAttribute("width", "100%")
   }
 
   // Column separator lines and column alignment
   let align = "";
-  let columnLines = ""
 
   if (group.cols && group.cols.length > 0) {
     const cols = group.cols;
@@ -359,10 +317,13 @@ const mathmlBuilder = function(group, style) {
     }
 
     if (cols[0].type === "separator") {
+      const sep = cols[1].type === "separator"
+        ? "0.15em double"
+        : cols[0].separator === "|"
+        ? "0.06em solid "
+        : "0.06em dashed "
       for (const row of table.children) {
-        const sep = cols[0].separator === "|" ? "solid " : "dashed "
         row.children[0].style.borderLeft = sep
-        row.children[0].style.paddingLeft = "0.4em"
       }
     }
     let iCol = group.addEqnNum ? 0 : -1
@@ -376,28 +337,32 @@ const mathmlBuilder = function(group, style) {
             row.children[iCol].style.textAlign = "-webkit-" + colAlign.trim()
           }
         }
-
-        if (prevTypeWasAlign) {
-          columnLines += "none ";
-        }
         prevTypeWasAlign = true;
       } else if (cols[i].type === "separator") {
         // MathML accepts only single lines between cells.
         // So we read only the first of consecutive separators.
         if (prevTypeWasAlign) {
-          const sep = cols[i].separator === "|" ? "0.06em solid" : "0.06em dashed"
-          columnLines += sep
+          const sep = cols[i + 1].type === "separator"
+            ? "0.15em double"
+            : cols[i].separator === "|"
+            ? "0.06em solid"
+            : "0.06em dashed"
           for (const row of table.children) {
             if (iCol < row.children.length) {
               row.children[iCol].style.borderRight = sep
             }
           }
         }
+        prevTypeWasAlign = false
       }
     }
     if (cols[cols.length - 1].type === "separator") {
+      const sep = cols[cols.length - 2].type === "separator"
+        ? "0.15em double"
+        : cols[cols.length - 1].separator === "|"
+        ? "0.06em solid"
+        : "0.06em dashed"
       for (const row of table.children) {
-        const sep = cols[cols.length - 1].separator === "|" ? "0.06em solid" : "0.06em dashed"
         row.children[row.children.length - 1].style.borderRight = sep
         row.children[row.children.length - 1].style.paddingRight = "0.4em"
       }
@@ -405,52 +370,13 @@ const mathmlBuilder = function(group, style) {
   }
   if (group.addEqnNum) {
     align = "left " + align + "right " // allow for glue cells on each side
-    align = group.leqno ? "left " + align : align += "right"  // eqn num cell
   }
   if (align) {
     table.setAttribute("columnalign", align.trim())
   }
-  if (/[sd]/.test(columnLines)) {
-    table.setAttribute("columnlines", columnLines.trim())
-  }
 
-  // Set column spacing.
-  switch (group.colSeparationType) {
-    case "gather":
-    case "gathered":
-    case "alignedat":
-    case "alignat":
-    case "alignat*":
-    case "split":
-      table.setAttribute("columnspacing", "0em")
-      table.classes.push("tml-gather")
-      break
-    case "small":
-      table.setAttribute("columnspacing", "0.2778em")
-      table.classes.push("tml-small")
-      break
-    case "CD":
-      table.setAttribute("columnspacing", "0.5em")
-      table.classes.push("tml-gather")
-      break
-    case "align":
-    case "align*": {
-      table.classes.push("tml-gather")
-      const cols = group.cols || [];
-      let spacing = group.addEqnNum ? "0em " : ""
-      for (let i = 1; i < cols.length; i++) {
-        spacing += i % 2 ? "0em " : "1em "
-      }
-      if (group.addEqnNum) { spacing += "0em" }
-      table.setAttribute("columnspacing", spacing.trim())
-      break
-    }
-    default:
-      table.setAttribute("columnspacing", "1em")
-  }
-
-  if (!Number.isNaN(group.arraystretch) && group.arraystretch < 1) {
-    // A small array. Wrap in scriptstyle so row gap is not too large.
+  if (group.envClasses.includes("small")) {
+    // A small array. Wrap in scriptstyle.
     table = new mathMLTree.MathNode("mstyle", [table])
     table.setAttribute("scriptlevel", "1")
   }
@@ -458,7 +384,7 @@ const mathmlBuilder = function(group, style) {
   return table
 };
 
-// Convenience function for align, align*, aligned, alignat, alignat*, alignedat.
+// Convenience function for align, align*, aligned, alignat, alignat*, alignedat, split.
 const alignedHandler = function(context, args) {
   if (context.envName.indexOf("ed") === -1) {
     validateAmsEnvironmentContext(context);
@@ -468,10 +394,9 @@ const alignedHandler = function(context, args) {
     context.parser,
     {
       cols,
-      addJot: true,
       addEqnNum: context.envName === "align" || context.envName === "alignat",
       emptySingleRow: true,
-      colSeparationType: context.envName,
+      envClasses: ["jot", "abut"], // set row spacing & provisional column spacing
       maxNumCols: context.envName === "split" ? 2 : undefined,
       leqno: context.parser.settings.leqno
     },
@@ -528,7 +453,15 @@ const alignedHandler = function(context, args) {
       align: align
     };
   }
-  res.colSeparationType = isAligned ? "align" : "alignat";
+  if (context.envName === "split") {
+    // Append no more classes
+  } else if (context.envName.indexOf("ed") > -1) {
+    res.envClasses.push("aligned") // Sets justification
+  } else if (isAligned) {
+    res.envClasses[1] = "align" // Sets column spacing & justification
+  } else {
+    res.envClasses.push("aligned") // Sets justification
+  }
   return res;
 };
 
@@ -572,8 +505,7 @@ defineEnvironment({
     });
     const res = {
       cols,
-      colSeparationType: "array",
-      hskipBeforeAndAfter: true, // \@preamble in lttab.dtx
+      envClasses: ["array"],
       maxNumCols: cols.length
     };
     return parseArray(context.parser, res, dCellStyle(context.envName));
@@ -616,9 +548,8 @@ defineEnvironment({
     // \hskip -\arraycolsep in amsmath
     let colAlign = "c";
     const payload = {
-      hskipBeforeAndAfter: false,
-      colSeparationType: "matrix",
-      cols: [{ type: "align", align: colAlign }]
+      envClasses: [],
+      cols: []
     };
     if (context.envName.charAt(context.envName.length - 1) === "*") {
       // It's one of the mathtools starred functions.
@@ -636,13 +567,11 @@ defineEnvironment({
         parser.consumeSpaces();
         parser.expect("]");
         parser.consume();
-        payload.cols = [{ type: "align", align: colAlign }];
+        payload.cols = [];
       }
     }
-    const res = parseArray(context.parser, payload, "text");
-    // Populate cols with the correct number of column alignment specs.
-    const numCols = Math.max(0, ...res.body.map((row) => row.length));
-    res.cols = new Array(numCols).fill({ type: "align", align: colAlign })
+    const res = parseArray(context.parser, payload, "text")
+    res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign })
     return delimiters
       ? {
         type: "leftright",
@@ -664,9 +593,9 @@ defineEnvironment({
     numArgs: 0
   },
   handler(context) {
-    const payload = { arraystretch: 0.5 };
+    const payload = { type: "small" };
     const res = parseArray(context.parser, payload, "script");
-    res.colSeparationType = "small";
+    res.envClasses = ["small"];
     return res;
   },
   mathmlBuilder
@@ -699,9 +628,7 @@ defineEnvironment({
     }
     let res = {
       cols,
-      hskipBeforeAndAfter: false,
-      colSeparationType: "array",
-      arraystretch: 0
+      envClasses: ["small"]
     };
     res = parseArray(context.parser, res, "script");
     if (res.body.length > 0 && res.body[0].length > 1) {
@@ -726,17 +653,8 @@ defineEnvironment({
   },
   handler(context) {
     const payload = {
-      cols: [
-        {
-          type: "align",
-          align: "l"
-        },
-        {
-          type: "align",
-          align: "l"
-        }
-      ],
-      colSeparationType: "cases"
+      cols: [],
+      envClasses: ["cases"]
     };
     const res = parseArray(context.parser, payload, dCellStyle(context.envName));
     return {
@@ -755,13 +673,23 @@ defineEnvironment({
 // columns in each row, and to locate spacing between each column.
 // align gets automatic numbering. align* and aligned do not.
 // The alignedat environment can be used in math mode.
-// Note that we assume \nomallineskiplimit to be zero,
-// so that \strut@ is the same as \strut.
 defineEnvironment({
   type: "array",
   names: ["align", "align*", "aligned", "split"],
   props: {
     numArgs: 0
+  },
+  handler: alignedHandler,
+  mathmlBuilder
+});
+
+// alignat environment is like an align environment, but one must explicitly
+// specify maximum number of columns in each row, and can adjust where spacing occurs.
+defineEnvironment({
+  type: "array",
+  names: ["alignat", "alignat*", "alignedat"],
+  props: {
+    numArgs: 1
   },
   handler: alignedHandler,
   mathmlBuilder
@@ -777,37 +705,18 @@ defineEnvironment({
     numArgs: 0
   },
   handler(context) {
-    if (utils.contains(["gather", "gather*"], context.envName)) {
+    if (context.envName !== "gathered") {
       validateAmsEnvironmentContext(context);
     }
     const res = {
-      cols: [
-        {
-          type: "align",
-          align: "c"
-        }
-      ],
-      addJot: true,
-      colSeparationType: "gather",
+      cols: [],
+      envClasses: ["jot", "abut"],
       addEqnNum: context.envName === "gather",
       emptySingleRow: true,
       leqno: context.parser.settings.leqno
     };
     return parseArray(context.parser, res, "display");
   },
-  mathmlBuilder
-});
-
-// alignat environment is like an align environment, but one must explicitly
-// specify maximum number of columns in each row, and can adjust spacing between
-// each columns.
-defineEnvironment({
-  type: "array",
-  names: ["alignat", "alignat*", "alignedat"],
-  props: {
-    numArgs: 1
-  },
-  handler: alignedHandler,
   mathmlBuilder
 });
 
@@ -824,7 +733,7 @@ defineEnvironment({
       emptySingleRow: true,
       singleRow: true,
       maxNumCols: 1,
-      colSeparationType: "gather",
+      envClasses: ["align"],
       leqno: context.parser.settings.leqno
     };
     return parseArray(context.parser, res, "display");
@@ -843,7 +752,7 @@ defineEnvironment({
     const res = {
       addEqnNum: context.envName === "multline",
       maxNumCols: 1,
-      colSeparationType: "multline",
+      envClasses: ["jot", "multline"],
       leqno: context.parser.settings.leqno
     };
     return parseArray(context.parser, res, "display");

@@ -119,6 +119,7 @@ defineFunction({
       mode: mode,
       label: context.funcName,
       isStretchy: false,
+      isShifty: true,
       base: base
     };
   },

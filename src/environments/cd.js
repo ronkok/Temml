@@ -185,21 +185,12 @@ export function parseCD(parser) {
   // End array group defining \\
   parser.gullet.endGroup();
 
-  // define column separation.
-  const cols = new Array(body[0].length).fill({
-    type: "align",
-    align: "c"
-  });
-
   return {
     type: "array",
     mode: "math",
     body,
-    arraystretch: 1,
-    addJot: true,
-    rowGaps: [null],
-    cols,
-    colSeparationType: "CD",
+    envClasses: ["jot", "cd"],
+    cols: [],
     hLinesBeforeRow: new Array(body.length + 1).fill([])
   };
 }
