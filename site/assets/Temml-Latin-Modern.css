@@ -48,6 +48,10 @@ math {
   font-family: Latin Modern Math;
 }
 
+.tml-prime {
+  font-feature-settings: 'ss04';
+}
+
 *.mathscr {
   font-family: "Temml";
 }

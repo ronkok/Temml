@@ -86,7 +86,7 @@ defineFunctionBuilders({
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text])
       // TODO: If/when Chromium uses ssty variant for prime, remove the next line.
-      node.style.fontFamily = "Temml"
+      node.style["font-feature-settings "] = 'ss04'
     } else {
       const origText = text.text
       if (variant !== "italic") {
