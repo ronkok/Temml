@@ -2,7 +2,8 @@
  * A `Namespace` refers to a space of nameable things like macros or lengths,
  * which can be `set` either globally or local to a nested group, using an
  * undo stack similar to how TeX implements this functionality.
- * Performance-wise, `get` and `set` take constant time.
+ * Performance-wise, `get` and local `set` take constant time, while global
+ * `set` takes time proportional to the depth of group nesting.
  */
 
 import ParseError from "./ParseError";
@@ -75,16 +76,31 @@ export default class Namespace {
   }
 
   /**
-   * Set the current value of a name, and adds an undo
-   * operation to the undo stack.
+   * Set the current value of a name, and optionally set it globally too.
+   * Local set() sets the current value and (when appropriate) adds an undo
+   * operation to the undo stack.  Global set() may change the undo
+   * operation at every level, so takes time linear in their number.
    */
-  set(name, value) {
-    // Undo this set at end of this group (possibly to `undefined`),
-    // unless an undo is already in place, in which case that older
-    // value is the correct one.
-    const top = this.undefStack[this.undefStack.length - 1];
-    if (top && !Object.prototype.hasOwnProperty.call(top, name )) {
-      top[name] = this.current[name];
+  set(name, value, global = false) {
+    if (global) {
+      // Global set is equivalent to setting in all groups.  Simulate this
+      // by destroying any undos currently scheduled for this name,
+      // and adding an undo with the *new* value (in case it later gets
+      // locally reset within this environment).
+      for (let i = 0; i < this.undefStack.length; i++) {
+        delete this.undefStack[i][name];
+      }
+      if (this.undefStack.length > 0) {
+        this.undefStack[this.undefStack.length - 1][name] = value;
+      }
+    } else {
+      // Undo this set at end of this group (possibly to `undefined`),
+      // unless an undo is already in place, in which case that older
+      // value is the correct one.
+      const top = this.undefStack[this.undefStack.length - 1];
+      if (top && !Object.prototype.hasOwnProperty.call(top, name )) {
+        top[name] = this.current[name];
+      }
     }
     this.current[name] = value;
   }

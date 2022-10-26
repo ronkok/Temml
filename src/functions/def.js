@@ -1,5 +1,18 @@
 import defineFunction from "../defineFunction";
 import ParseError from "../ParseError";
+import { assertNodeType } from "../parseNode";
+
+const globalMap = {
+  "\\global": "\\global",
+  "\\long": "\\\\globallong",
+  "\\\\globallong": "\\\\globallong",
+  "\\def": "\\gdef",
+  "\\gdef": "\\gdef",
+  "\\edef": "\\xdef",
+  "\\xdef": "\\xdef",
+  "\\let": "\\\\globallet",
+  "\\futurelet": "\\\\globalfuture"
+}
 
 const checkControlSequence = (tok) => {
   const name = tok.text;
@@ -22,7 +35,7 @@ const getRHS = (parser) => {
   return tok;
 };
 
-const letCommand = (parser, name, tok) => {
+const letCommand = (parser, name, tok, global) => {
   let macro = parser.gullet.macros.get(tok.text);
   if (macro == null) {
     // don't expand it later even if a macro with the same name is defined
@@ -35,15 +48,45 @@ const letCommand = (parser, name, tok) => {
       unexpandable: !parser.gullet.isExpandable(tok.text)
     };
   }
-  parser.gullet.macros.set(name, macro);
+  parser.gullet.macros.set(name, macro, global);
 };
 
-// Basic support for macro definitions: \def
+// <assignment> -> <non-macro assignment>|<macro assignment>
+// <non-macro assignment> -> <simple assignment>|\global<non-macro assignment>
+// <macro assignment> -> <definition>|<prefix><macro assignment>
+// <prefix> -> \global|\long|\outer
+defineFunction({
+  type: "internal",
+  names: [
+    "\\global",
+    "\\long",
+    "\\\\globallong" // can’t be entered directly
+  ],
+  props: {
+    numArgs: 0,
+    allowedInText: true
+  },
+  handler({ parser, funcName }) {
+    parser.consumeSpaces();
+    const token = parser.fetch();
+    if (globalMap[token.text]) {
+      // Temml doesn't have \par, so ignore \long
+      if (funcName === "\\global" || funcName === "\\\\globallong") {
+        token.text = globalMap[token.text];
+      }
+      return assertNodeType(parser.parseFunction(), "internal");
+    }
+    throw new ParseError(`Invalid token after macro prefix`, token);
+  }
+});
+
+// Basic support for macro definitions: \def, \gdef, \edef, \xdef
 // <definition> -> <def><control sequence><definition text>
+// <def> -> \def|\gdef|\edef|\xdef
 // <definition text> -> <parameter text><left brace><balanced text><right brace>
 defineFunction({
   type: "internal",
-  names: ["\\def", "\\edef"],
+  names: ["\\def", "\\gdef", "\\edef", "\\xdef"],
   props: {
     numArgs: 0,
     allowedInText: true,
@@ -96,12 +139,15 @@ defineFunction({
       tokens.unshift(insert);
     }
 
-    if (funcName === "\\edef") {
+    if (funcName === "\\edef" || funcName === "\\xdef") {
       tokens = parser.gullet.expandTokens(tokens);
       tokens.reverse(); // to fit in with stack order
     }
     // Final arg is the expansion of the macro
-    parser.gullet.macros.set(name, { tokens, numArgs, delimiters }
+    parser.gullet.macros.set(
+      name,
+      { tokens, numArgs, delimiters },
+      funcName === globalMap[funcName]
     );
     return { type: "internal", mode: parser.mode };
   }
@@ -113,7 +159,10 @@ defineFunction({
 // <equals> -> <optional spaces>|<optional spaces>=
 defineFunction({
   type: "internal",
-  names: ["\\let"],
+  names: [
+    "\\let",
+    "\\\\globallet" // can’t be entered directly
+  ],
   props: {
     numArgs: 0,
     allowedInText: true,
@@ -123,7 +172,7 @@ defineFunction({
     const name = checkControlSequence(parser.gullet.popToken());
     parser.gullet.consumeSpaces();
     const tok = getRHS(parser);
-    letCommand(parser, name, tok);
+    letCommand(parser, name, tok, funcName === "\\\\globallet");
     return { type: "internal", mode: parser.mode };
   }
 });
@@ -131,7 +180,10 @@ defineFunction({
 // ref: https://www.tug.org/TUGboat/tb09-3/tb22bechtolsheim.pdf
 defineFunction({
   type: "internal",
-  names: ["\\futurelet"],
+  names: [
+    "\\futurelet",
+    "\\\\globalfuture" // can’t be entered directly
+  ],
   props: {
     numArgs: 0,
     allowedInText: true,
@@ -141,7 +193,7 @@ defineFunction({
     const name = checkControlSequence(parser.gullet.popToken());
     const middle = parser.gullet.popToken();
     const tok = parser.gullet.popToken();
-    letCommand(parser, name, tok);
+    letCommand(parser, name, tok, funcName === "\\\\globalfuture");
     parser.gullet.pushToken(tok);
     parser.gullet.pushToken(middle);
     return { type: "internal", mode: parser.mode };
@@ -195,7 +247,11 @@ defineFunction({
     // replacement text, enclosed in '{' and '}' and properly nested
     const { tokens } = parser.gullet.consumeArg();
 
-    parser.gullet.macros.set(name, { tokens, numArgs })
+    parser.gullet.macros.set(
+      name,
+      { tokens, numArgs },
+      !parser.settings.strict
+    )
 
     return { type: "internal", mode: parser.mode };
 

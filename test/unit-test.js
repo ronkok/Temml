@@ -105,6 +105,11 @@ const test = () => {
       if (!this.input) { say(this.input + " is not truthy.") }
     }
 
+    toBeFalsy() {
+      numTests += 1
+      if (this.input) { say(this.input + " is truthy.") }
+    }
+
     toBeCloseTo(expected) {
       numTests += 1
       if (Math.abs(expected - this.input) >= 0.005) {
@@ -342,7 +347,7 @@ const test = () => {
   new Expect(`_2^3`).toBuild();
 
   assertion = "A subsup parser should work with Unicode (sub|super)script characters"
-  new Expect(`A² + B²⁺³ + ¹²C + E₂³ + F₂₊₃`).toBuildLike("A^{2} + B^{2+3} + ^{12}C + E_{2}^{3} + F_{2+3}")
+  new Expect(`A² + B²⁺³ + ²C + E₂³ + F₂₊₃`).toBuildLike("A^{2} + B^{2+3} + ^{2}C + E_{2}^{3} + F_{2+3}")
   new Expect(r`\text{B²⁺³}`).toParse()
   new Expect(r`\text{B²⁺³}`).toBuild()
 
@@ -1742,6 +1747,21 @@ const test = () => {
   new Expect(r`\def{\foo\bar}{}`).toNotParse()
   new Expect(r`\def{}{}`).toNotParse()
 
+  assertion = "In a macro expander, \\gdef defines macros"
+  new Expect(r`\gdef\foo{x^2}\foo+\foo`).toParseLike(`x^2+x^2`)
+  new Expect(r`\gdef\foo{hi}\foo+\text\foo`).toParseLike(r`hi+\text{hi}`)
+  new Expect(r`\gdef\foo#1{hi #1}\text{\foo{Alice}, \foo{Bob}}`).toParseLike(r`\text{hi Alice, hi Bob}`)
+  new Expect(r`\gdef\foo#1#2{(#1,#2)}\foo 1 2+\foo 3 4`).toParseLike(r`(1, 2)+(3, 4)`)
+  new Expect(r`\gdef\foo#a{}`).toNotParse()
+  new Expect(r`\gdef\foo#1#2#3#4#5#6#7#8#9{}`).toParse()
+  new Expect(r`\gdef\foo#2{}`).toNotParse()
+  new Expect(r`\gdef\foo#1#2#3#4#5#6#7#8#9#10{}`).toNotParse()
+  new Expect(r`\gdef\foo1`).toNotParse()
+  new Expect(r`\gdef{\foo}{}`).toNotParse()
+  new Expect(r`\gdef\foo\bar`).toNotParse()
+  new Expect(r`\gdef{\foo\bar}{}`).toNotParse()
+  new Expect(r`\gdef{}{}`).toNotParse()
+
   assertion = "In a macro expander, \\def defines macros with delimited parameter"
   new Expect(r`\def\foo|#1||{#1}\text{\foo| x y ||}`).toParseLike(r`\text{ x y }`)
   new Expect(r`\def\foo#1|#2{#1+#2}\foo a 2 |34`).toParseLike(r`a2+34`)
@@ -1749,6 +1769,14 @@ const test = () => {
   new Expect(r`\def\foo|{}\foo`).toNotParse()
   new Expect(r`\def\foo#1|{#1}\foo1`).toNotParse()
   new Expect(r`\def\foo#1|{#1}\foo1}|`).toNotParse()
+
+  assertion = "In a macro expander, \\gdef defines macros with delimited parameter"
+  new Expect(r`\gdef\foo|#1||{#1}\text{\foo| x y ||}`).toParseLike(r`\text{ x y }`)
+  new Expect(r`\gdef\foo#1|#2{#1+#2}\foo a 2 |34`).toParseLike(r`a2+34`)
+  new Expect(r`\gdef\foo#1#{#1}\foo1^{23}`).toParseLike(r`1^{23}`)
+  new Expect(r`\gdef\foo|{}\foo`).toNotParse()
+  new Expect(r`\gdef\foo#1|{#1}\foo1`).toNotParse()
+  new Expect(r`\gdef\foo#1|{#1}\foo1}|`).toNotParse()
 
   assertion = "In a macro expander, \\edef should expand definition"
   new Expect(r`\def\foo{a}\edef\bar{\foo}\def\foo{}\bar`).toParseLike(`a`)
@@ -1758,6 +1786,36 @@ const test = () => {
   new Expect(r`\def\foo{a}\edef\bar{\foo\noexpand\foo}\def\foo{b}\bar`).toParseLike(r`ab`)
   // \foo is not defined
   new Expect(r`\edef\bar{\foo}`).toNotParse(strictSettings())
+
+  assertion = "\\def should be handled in Parser"
+  new Expect(r`\gdef\foo{1}`).toParse(new Settings({maxExpand: 0}))
+  new Expect(r`2^\def\foo{1}2`).toNotParse()
+
+  assertion = "\\def works locally"
+  new Expect("\\def\\x{1}\\x{\\def\\x{2}\\x{\\def\\x{3}\\x}\\x}\\x").toParseLike(`1{2{3}2}1`)
+
+  assertion = "\\gdef overrides at all levels"
+  new Expect("\\def\\x{1}\\x{\\def\\x{2}\\x{\\gdef\\x{3}\\x}\\x}\\x").toParseLike(`1{2{3}3}3`)
+  new Expect("\\def\\x{1}\\x{\\def\\x{2}\\x{\\global\\def\\x{3}\\x}\\x}\\x").toParseLike(`1{2{3}3}3`)
+
+  assertion = "\\global needs to followed by macro prefixes, \\def or \\edef"
+  new Expect(r`\global\def\foo{}\foo`).toParseLike("")
+  new Expect(r`\global\edef\foo{}\foo`).toParseLike("")
+  new Expect(r`\def\DEF{\def}\global\DEF\foo{}\foo`).toParseLike("")
+  new Expect(r`\global\global\def\foo{}\foo`).toParseLike("")
+  new Expect(r`\global\long\def\foo{}\foo`).toParseLike("")
+  new Expect(r`\global\foo`).toNotParse()
+  new Expect(r`\global\bar x`).toNotParse()
+
+  assertion = "\\gdef changes settings.macros"
+  let macros = {};
+  new Expect(r`\gdef\foo{1}`).toParse(new Settings({macros}))
+  new Expect(macros["\\foo"]).toBeTruthy()
+
+  assertion = "\\def doesn't change settings.macros"
+  macros = {}
+  new Expect(r`\def\foo{1}`).toParse(new Settings({macros}))
+  new Expect(macros["\\foo"]).toBeFalsy()
 
   assertion = "In a macro expander, \\long needs to be followed by macro prefixes, \\def or \\edef"
   new Expect(r`\long\def\foo{}\foo`).toParseLike("")
@@ -1857,7 +1915,7 @@ const test = () => {
   new Expect(temml.renderToString("\xdef\foo{Nope}")).toContain("#b22222")
 
   assertion = "A preamble should capture viable macros and definecolor."
-  let macros = temml.definePreamble(r`\definecolor{sortaGreen}{RGB}{128,128,0}`)
+  macros = temml.definePreamble(r`\definecolor{sortaGreen}{RGB}{128,128,0}`)
   new Expect(r`\color{sortaGreen} F=ma`).toParse(new Settings({macros}))
   macros = temml.definePreamble(r`\def\foo{x^2}`)
   markup = temml.renderToString(r`\foo + \foo`, new Settings({macros}))
@@ -1950,7 +2008,7 @@ const test = () => {
   new Expect(new String(r`\frac 1 2`)).toParseLike(r`\frac 1 2`)
 
   assertion = "Unicode accents should parse Latin-1 letters in math mode"
-  new Expect(`ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ`).toParseLike(
+  new Expect(`ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ`).toBuildLike(
     r`\grave A\acute A\hat A\tilde A\ddot A\mathring A` +
     r`\grave E\acute E\hat E\ddot E` +
     r`\grave I\acute I\hat I\ddot I` +
@@ -1968,7 +2026,7 @@ const test = () => {
   )
     
   assertion = "Unicode accents should parse Latin-1 letters in text mode"
-  new Expect(`\\text{ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ}`).toParseLike(
+  new Expect(`\\text{ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ}`).toBuildLike(
     r`\text{\`A\'A\^A\~A\"A\r A` +
     r`\`E\'E\^E\"E` +
     r`\`I\'I\^I\"I` +
@@ -1986,15 +2044,15 @@ const test = () => {
   )
 
   assertion = "Unicode accents should parse combining characters"
-  new Expect("A\u0301C\u0301").toParseLike(r`Á\acute C`);
-  new Expect("\\text{A\u0301C\u0301}").toParseLike(r`\text{Á\'C}`, strictSettings());
+  new Expect("A\u0301C\u0301").toBuildLike(r`Á\acute C`);
+  new Expect("\\text{A\u0301C\u0301}").toBuildLike(r`\text{Á\'C}`, strictSettings());
 
   assertion = "Unicode accents should build multi-accented characters"
   new Expect(`ấā́ắ\text{ấā́ắ}`).toParse()
   new Expect(`ấā́ắ\text{ấā́ắ}`).toBuild()
 
   assertion = "Unicode accents should parse accented i's and j's"
-  new Expect(`íȷ́`).toParseLike(r`\acute ı\acute ȷ`);
+  new Expect(`íȷ́`).toBuildLike(r`\acute ı\acute ȷ`);
   new Expect(`ấā́ắ\text{ấā́ắ}`).toParse();
   new Expect(`ấā́ắ\text{ấā́ắ}`).toBuild();
 
