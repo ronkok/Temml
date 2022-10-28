@@ -62,47 +62,113 @@ body {
   counter-reset: tmlEqnNo;
 }
 
-/* CSS for Chromium */
-mtable.tml-gather mtd {
-  padding: calc(0.09em + 0.5ex) 0;
+/* Environment arrays */
+
+/* Environments that addjot to row spacing */
+mtable.tml-jot > mtr > mtd {
+  padding-top: calc(0.5ex + 0.09em);
+  padding-bottom: calc(0.5ex + 0.09em);
 }
 
-mtable.tml-small mtd {
-  padding: 0.5ex 0.1389em;
+/* Zero column gap for {alignat}, {split}, etc */
+mtable.tml-abut > mtr > mtd,
+mtable.tml-align > mtr > mtd:nth-child(odd) {
+  padding-left: 0em;
+  padding-right: 0em;
 }
 
-mtable.tml-array mtr > mtd:first-child {
-  padding-left: 1px;
+mtable.tml-align > mtr > mtd:nth-child(even),
+mtable.tml-align-star > mtr > mtd:nth-child(odd),
+mtable.tml-align-star > mtr > mtd:nth-child(even) {
+  padding-left: 1em;
+  padding-right: 0em;
+}
+
+mtable.tml-align > mtr > mtd:nth-child(1) {
+  padding-left: 0em;
+}
+
+mtable.tml-align > mtr > mtd:nth-child(odd),
+mtable.tml-alignat > mtr > mtd:nth-child(odd),
+mtable.tml-aligned > mtr > mtd:nth-child(even) {
+  text-align: -webkit-left;
+}
+
+mtable.tml-align > mtr > mtd:nth-child(even),
+mtable.tml-alignat > mtr > mtd:nth-child(even),
+mtable.tml-aligned > mtr > mtd:nth-child(odd) {
+  text-align: -webkit-right;
+}
+
+mtable.tml-cases > mtr > mtd {
+  padding-left: 0em;
+  padding-right: 0em;
+  text-align: -webkit-left;
+}
+
+mtable.tml-cases > mtr > mtd:nth-child(2) {
+  padding-left: 1em;
+}
+
+mtable.tml-small > mtr > mtd {
+  padding-top: 0.35ex;
+  padding-bottom: 0.35ex;
+  padding-left: 0.1389em;
+  padding-right: 0.1389em;
+}
+
+mtable.tml-subarray > mtr > mtd {
+  padding-top: 0em;
+  padding-left: 0em;
+}
+
+mtable.tml-cd > mtr > mtd {
+  padding-left: 0.25em;
+  padding-right: 0.25em;
+}
+
+mtable > mtr:first-child > mtr > mtd {
+  padding-top: 0em;
+}
+
+mtable > mtr:last-child > mtr > mtd {
+  padding-bottom: 0em;
+}
+
+mtable:not(.tml-array) > mtr > mtd:first-child {
+  padding-left: 0em;
+}
+
+mtable:not(.tml-array) > mtr > mtd:last-child {
+  padding-right: 0em;
 }
 
 mtr.tml-top-solid > mtd {
   border-top: 0.06em solid;
 }
 
+mtr.tml-top-double > mtd {
+  border-top: 0.15em double;
+}
+
 mtr.tml-top-dashed > mtd {
   border-top: 0.06em dashed;
 }
 
-mtr.hline-solid > mtd {
+mtr.tml-hline-solid > mtd {
   border-bottom: 0.06em solid;
 }
 
-mtr.hline-dashed > mtd {
+mtr.tml-hline-double > mtd {
+  border-bottom: 0.15em double;
+}
+
+mtr.tml-hline-dashed > mtd {
   border-bottom: 0.06em dashed;
 }
 
-mtable.tml-array mtr > mtd:last-child {
-  padding-right: 1px;
-}
-
-mtable.tml-array mtr:first-child mtd {
-  padding-top: 2px;
-}
-
-mtable.tml-array mtr:last-child mtd {
-  padding-bottom: 2px;
-}
-
+/* MathML-Core does not support <menclose> attributes.
+ * So Use background images for \cancel */
 menclose.cancel {
   background: 
       linear-gradient(to top left,

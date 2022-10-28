@@ -650,12 +650,11 @@ Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ �
 
 To create macros with document-wide scope, use `\gdef`, `\global\let`, or define a
 [preamble](./administration.html#preamble) in one of the Temml
-[rendering options](./administration.html#options). (Global macros may be disable for security reasons.)
+[rendering options](./administration.html#options). (Global macros may be disabled for security reasons.)
 
 Macros accept up to nine arguments: #1, #2, etc.
 
-Available functions include:
-
+Available functions include:\
 `\char` `\mathchoice` `\TextOrMath` `\@ifstar` `\@ifnextchar` `\@firstoftwo` `\@secondoftwo` `\relax` `\expandafter` `\noexpand`
 
 @ is a valid character for commands, as if `\makeatletter` were in effect.
@@ -1492,7 +1491,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.8.0
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.9.0
 
 <h3><a href="#top">Contents</a></h3>
 

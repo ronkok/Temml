@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.9.0] = 2022-10-28
+
+### Changed
+
+- Remove support for \arraystretch
+- Control soft line breaks with a rendering option
+- Array spacing via CSS, not attributes
+
+### Added
+
+- Support \gdef and \global\let
+- Support array double borders called by double \hline and {array}{c||c}
+- Support \mapsfrom
+
+### Fixed
+
+- Avoid unwanted stretch of harpoons
+- \hline after \cr
+- \prime vertical alignment in STIX TWO and Asana
+- Ignore emoji suppression character &#xFE0E;
+
+### Securtity
+
+- Avoid recursive call to parser which evaded limit on \def
+
 ## [0.8.0] = 2022-09-05
 
 ### Breaking Change

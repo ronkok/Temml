@@ -31,7 +31,29 @@
 &lt;/html&gt;</code></pre><h1 id='api'>API</h1>
 <h3 id='overview'>Overview</h3>
 <p>Say that you have an HTMLCollection of elements whose contents should be converted from TeX strings to math. And also say that you wish to define two macros and a color with document-wide scope. The code for such a conversion might look like this:</p>
-<pre><code>// Optional preamble.
+<p>Option 1: Macros do not persist between calls to Temml:</p>
+<pre><code>// Render all the math.
+for (let aSpan of [...mathSpans]) {
+    const tex = aSpan.textContent;
+    const displayMode = aSpan.classList.contains(&quot;display&quot;);
+    temml.render(tex, aSpan, { displayMode });
+}
+// Optional postProcess to render \ref{}
+temml.postProcess(document.body);</code></pre><details><summary>Option 2: Macros defined with <code>\gdef</code> <strong>do</strong> persist:</summary>
+<pre><code>const macros = {}
+// Render all the math.
+for (let aSpan of [...mathSpans]) {
+    const tex = aSpan.textContent;
+    const displayMode = aSpan.classList.contains(&quot;display&quot;);
+    // Notice the macros argument below.
+    // It carries macros that were defined with \gdef or \global\let
+    temml.render(tex, aSpan, { macros, displayMode });
+}
+// Optional postProcess to render \ref{}
+temml.postProcess(document.body);</code></pre><div class="indented"><p>Notice that you can choose when to stop macro persistence by redefining <code>macros</code>.</p>
+</div></details>
+<details><summary>Option 3: Macros persist and there are some predefined macros:</summary>
+<pre><code>// Optional preamble to pre-define macros.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}
@@ -44,7 +66,8 @@ for (let aSpan of [...mathSpans]) {
     temml.render(tex, aSpan, { macros, displayMode });
 }
 // Optional postProcess to render \ref{}
-temml.postProcess(document.body);</code></pre><p>Below, we examine the parts of that code.</p>
+temml.postProcess(document.body);</code></pre></details>
+<p>Below, we examine the parts of that code.</p>
 <h3 id='in-browser'>In-Browser</h3>
 <p>To render math in one DOM element, call <code>temml.render</code> with a TeX expression and a DOM element to render into:</p>
 <pre><code>temml.render(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;, element);</code></pre><p>If the element you provide is a <code>&lt;math&gt;</code> element, Temml will populate it. Otherwise, it will create a new <code>&lt;math&gt;</code> element and make it a child of the element you provide.</p>
@@ -204,7 +227,7 @@ allowedClasses: [
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.8.0</p>
+<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>    v0.9.0</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>
