@@ -48,10 +48,6 @@ math {
   font-family: Latin Modern Math;
 }
 
-.tml-prime {
-  font-feature-settings: 'ss04';
-}
-
 *.mathscr {
   font-family: "Temml";
 }
@@ -59,6 +55,10 @@ math {
 .oldstylenums {
   font-family: "Cambria Math", math;
   font-feature-settings: 'onum';
+}
+
+mo.tml-prime {
+  font-family: Temml;
 }
 
 /* AMS environment auto-numbering via CSS counter. */
@@ -81,12 +81,14 @@ mtable.tml-jot > mtr > mtd {
 
 /* Zero column gap for {alignat}, {split}, etc */
 mtable.tml-abut > mtr > mtd,
-mtable.tml-align > mtr > mtd:nth-child(even) {
+mtable.tml-align > mtr > mtd:nth-child(odd),
+mtable.tml-align-star > mtr > mtd:nth-child(even) {
   padding-left: 0em;
   padding-right: 0em;
 }
 
-mtable.tml-align > mtr > mtd:nth-child(even) {
+mtable.tml-align > mtr > mtd:nth-child(even),
+mtable.tml-align-star > mtr > mtd:nth-child(odd) {
   padding-left: 1em;
   padding-right: 0em;
 }
@@ -97,15 +99,14 @@ mtable.tml-align > mtr > mtd:nth-child(1) {
 
 mtable.tml-align > mtr > mtd:nth-child(odd),
 mtable.tml-alignat > mtr > mtd:nth-child(odd),
-mtable.tml-aligned > mtr > mtd:nth-child(even),
-mtable.tml-multline > mtr:nth-child(1) > mtd {
+mtable.tml-aligned > mtr > mtd:nth-child(even) {
   text-align: -webkit-left;
 }
 
 mtable.tml-align > mtr > mtd:nth-child(even),
 mtable.tml-alignat > mtr > mtd:nth-child(even),
 mtable.tml-aligned > mtr > mtd:nth-child(odd),
-mtable.tml-multline > mtr:nth-child(3) > mtd {
+mtable.tml-align-star > mtr > mtd:nth-child(odd) {
   text-align: -webkit-right;
 }
 
