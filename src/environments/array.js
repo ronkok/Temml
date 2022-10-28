@@ -297,7 +297,7 @@ const mathmlBuilder = function(group, style) {
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true") }
 
   if (group.addEqnNum || group.envClasses.includes("multline")) {
-    table.setAttribute("width", "100%")
+    table.style.width = "100%"
   }
 
   // Column separator lines and column alignment
@@ -369,7 +369,8 @@ const mathmlBuilder = function(group, style) {
     }
   }
   if (group.addEqnNum) {
-    align = "left " + align + "right " // allow for glue cells on each side
+     // allow for glue cells on each side
+    align = "left " + (align.length > 0 ? align : "center ") + "right "
   }
   if (align) {
     table.setAttribute("columnalign", align.trim())
@@ -458,7 +459,9 @@ const alignedHandler = function(context, args) {
   } else if (context.envName.indexOf("ed") > -1) {
     res.envClasses.push("aligned") // Sets justification
   } else if (isAligned) {
-    res.envClasses[1] = "align" // Sets column spacing & justification
+    res.envClasses[1] = context.envName === "align*"
+      ? "align-star"
+      : "align" // Sets column spacing & justification
   } else {
     res.envClasses.push("aligned") // Sets justification
   }
