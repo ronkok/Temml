@@ -61,8 +61,8 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 +-----+--------------------------------------------+------------------------------------------------+
 | 14  | \sinh k, \cosh l, \tanh m, \coth n         | $\sinh k, \cosh l, \tanh m, \coth n$           |
 +-----+--------------------------------------------+------------------------------------------------+
-| 15  | \operatorname{sh}k, \operatorname{ch}l, \  | $`\operatorname{sh}k, \operatorname{ch}l,      |
-|     | \operatorname{th}m, \operatorname{coth}n   | \operatorname{th}m, \operatorname{coth}n`      |
+| 15  | \operatorname{sh}k, \operatorname{ch}l, \  | $\operatorname{sh}k, \operatorname{ch}l,       |
+|     | \operatorname{th}m, \operatorname{coth}n   | \operatorname{th}m, \operatorname{coth}n$      |
 +-----+--------------------------------------------+------------------------------------------------+
 | 16  | \sgn r, \left\vert s \right\vert           | $\sgn r, \left\vert s \right\vert$             |
 +-----+--------------------------------------------+------------------------------------------------+
@@ -113,8 +113,8 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 +-----+--------------------------------------------+------------------------------------------------+
 |  **Radicals**                                                                                     |
 +-----+--------------------------------------------+------------------------------------------------+
-| 31  | \surd, \sqrt{2}, \sqrt[n]{2}, \            | $`\surd, \sqrt{2}, \sqrt[n]{2},                |
-|     | \sqrt[3]{\frac{x^3+y^3}{2}}                | \sqrt[3]{\frac{x^3+y^3}{2}}`                   |
+| 31  | \surd, \sqrt{2}, \sqrt[n]{2}, \            | $\surd, \sqrt{2}, \sqrt[n]{2},                 |
+|     | \sqrt[3]{\frac{x^3+y^3}{2}}                | \sqrt[3]{\frac{x^3+y^3}{2}}$                   |
 +-----+--------------------------------------------+------------------------------------------------+
 |  **Operators**                                                                                    |
 +-----+--------------------------------------------+------------------------------------------------+
