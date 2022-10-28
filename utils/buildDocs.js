@@ -7,18 +7,18 @@ const TeXZilla = require("./TeXZilla.js");
 // Build supported.html.
 let supported = fs.readFileSync('./docs/supported.md').toString('utf8')
 // convert Markdown to HTML
-supported = hurmetMark.hmd.md2html(supported, true)
+supported = hurmetMark.md2html(supported, true)
 fs.writeFileSync('./site/docs/en/supported.html', supported)
 
 let table = fs.readFileSync('./docs/support_table.md').toString('utf8')
 // convert Markdown to HTML
-table =  hurmetMark.hmd.md2html(table, true)
+table =  hurmetMark.md2html(table, true)
 table = table.replace(/\(Not supported\)/g, `<span class="no-sup">Not supported</span>`)
 fs.writeFileSync('./site/docs/en/support_table.html', table)
 
 let admin = fs.readFileSync('./docs/administration.md').toString('utf8')
 // convert Markdown to HTML
-admin =  hurmetMark.hmd.md2html(admin, true)
+admin =  hurmetMark.md2html(admin, true)
 fs.writeFileSync('./site/docs/en/administration.html', admin)
 
 // helper function for comparison page.

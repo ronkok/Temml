@@ -52,12 +52,48 @@ A server-side installation should include `temml.cjs` instead of `temml.min.js`.
 
 ### Overview
 
-Say that you have an HTMLCollection of elements whose contents should be converted from TeX
-strings to math. And also say that you wish to define two macros and a color with document-wide
-scope. The code for such a conversion might look like this:
+Say that you have an HTMLCollection of elements whose contents should be
+converted from TeX strings to math. And also say that you wish to define two
+macros and a color with document-wide scope. The code for such a conversion
+might look like this:
 
-```js
-// Optional preamble.
+Option 1: Macros do not persist between calls to Temml:
+
+```
+// Render all the math.
+for (let aSpan of [...mathSpans]) {
+    const tex = aSpan.textContent;
+    const displayMode = aSpan.classList.contains("display");
+    temml.render(tex, aSpan, { displayMode });
+}
+// Optional postProcess to render \ref{}
+temml.postProcess(document.body);
+```
+
+<details><summary>Option 2: Macros defined with <code>\gdef</code> <strong>do</strong> persist:</summary>
+
+```
+const macros = {}
+// Render all the math.
+for (let aSpan of [...mathSpans]) {
+    const tex = aSpan.textContent;
+    const displayMode = aSpan.classList.contains("display");
+    // Notice the macros argument below.
+    // It carries macros that were defined with \gdef or \global\let
+    temml.render(tex, aSpan, { macros, displayMode });
+}
+// Optional postProcess to render \ref{}
+temml.postProcess(document.body);
+```
+
+i> Notice that you can choose when to stop macro persistence by redefining `macros`.
+
+</details>
+
+<details><summary>Option 3: Macros persist and there are some predefined macros:</summary>
+
+```
+// Optional preamble to pre-define macros.
 const macros = temml.definePreamble(
     `\\newcommand\\d[0]{\\operatorname{d}\\!}
     \\def\\foo{x^2}
@@ -72,6 +108,8 @@ for (let aSpan of [...mathSpans]) {
 // Optional postProcess to render \ref{}
 temml.postProcess(document.body);
 ```
+
+</details>
 
 Below, we examine the parts of that code.
 
@@ -375,7 +413,7 @@ allowedClasses: [
 <nav>
 <div id="sidebar">
 
-$`\href{https://temml.org/}{\color{black}\Large\Temml}`   v0.8.0
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.8.0
 
 <h3><a href="#top">Contents</a></h3>
 
