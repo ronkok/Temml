@@ -2,12 +2,10 @@ import temml from "../utils/temml.cjs"; // includess mhchem & physics extensions
 import ParseError from "../src/ParseError";
 import parseTree from "../src/parseTree";
 import Settings from "../src/Settings";
-//import splitAtDelimiters from "../contrib/auto-render/splitAtDelimiters.js";
-// import renderMathInElement from "../contrib/auto-render/auto-render";
 
 /*
  * Unit tests for Temml.
- * This file contains more than 1000 tests of various Temml functions.
+ * This file contains more than 1200 tests of various Temml functions.
  *
  * Sidenote:
  * Temml aims to minimize dependency hell by minimizing dependencies.
