@@ -251,20 +251,26 @@ Temml has several different pre-written CSS files. You should use only one and
 by that choice, you also choose a math font. There are several math fonts
 available and each has different advantages.
 
-**Cambria Math** comes pre-installed in Windows, Macs, and iOS, so it is the
-light-weight option. Cambria Math lacks roundhand glyphs, so you still have to
-serve a small (12 kb) font, `Temml.woff2`, in order to support `\mathscr{…}`.
-Sadly, Cambria Math rendering has a couple of flaws. In Firefox, square root
+**Temml-Local.css** is the light-weight option. It calls two fonts: _Cambria
+Math_, which comes pre-installed in Windows, or _STIX TWO_, which comes
+pre-installed in iOS and MacOS (as of Safari 16). Cambria Math lacks roundhand
+glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2`, in
+order to support `\mathscr{…}`.\
+Android does not currently provide a font with a MATH table. They are
+considering [several options](https://github.com/notofonts/math/issues/14#issuecomment-1268851556).
+
+Sadly, native fonts render math with a couple of flaws. In Firefox, square root
 radicals are sometimes oddly sized. Chromium is better at radicals, but it
-fails to stretch five stretchy accents and several extensible arrows.
+fails to stretch five stretchy accents and some extensible arrows. Chromium also
+renders extensible arrows with notes placed too high.
 
 **Latin Modern** is a clone of Computer Modern and so is very home-like for
 readers accustomed to LaTeX documents. Rendering is excellent except that some
 line thicknesses may be too thin for some screens. This option also needs that
 additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
-**Asana**, **STIX TWO**, and **XITS** contain their own roundhand glyphs, but
-they need `Temml.woff2` in order for Chromium to render a prime at the correct height.
+**Asana** and **XITS** contain their own roundhand glyphs, but
+XITS needs `Temml.woff2` in order for Chromium to render a prime at the correct height.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
