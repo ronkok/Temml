@@ -184,44 +184,6 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><code>maxExpand</code> can prevent infinite macro loop attacks.</li>
 <li><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</li>
 </ul>
-<p>Of course, it’s never a bad idea to sanitize your HTML. If you so choose, there is a list of Temml tags and attributes below the fold.</p>
-<details><summary>More…</summary>
-<pre><code>allowedTags: [
-  &#x27;span&#x27;, &#x27;img&#x27;, &#x27;math&#x27;, &#x27;annotation&#x27;, &#x27;semantics&#x27;,
-  &#x27;menclose&#x27;, &#x27;mfrac&#x27;, &#x27;mi&#x27;, &#x27;mmultiscripts&#x27;,
-  &#x27;mn&#x27;, &#x27;mo&#x27;, &#x27;mover&#x27;, &#x27;mpadded&#x27;, &#x27;mphantom&#x27;, &#x27;mroot&#x27;,
-  &#x27;mrow&#x27;, &#x27;mspace&#x27;, &#x27;msub&#x27;, &#x27;msup&#x27;, &#x27;msubsup&#x27;, &#x27;msqrt&#x27;, &#x27;mstyle&#x27;, &#x27;mtable&#x27;,
-  &#x27;mtd&#x27;, &#x27;mtext&#x27;, &#x27;mtr&#x27;, &#x27;munder&#x27;, &#x27;munderover&#x27;
-],
-allowedAttributes: {
-  span: [&#x27;style&#x27;],
-  img: [&#x27;src&#x27;, &#x27;alt&#x27;, &#x27;width&#x27;, &#x27;height&#x27;],
-  math: [&#x27;xmlns&#x27;, &#x27;display&#x27;],
-  annotation: [&#x27;encoding&#x27;],
-  menclose: [&#x27;notation&#x27;, &#x27;mathbackground&#x27;],
-  mfrac: [&#x27;linethickness&#x27;],
-  mi: [&#x27;mathvariant&#x27;, &#x27;style&#x27;],
-  mn: [&#x27;mathvariant&#x27;, &#x27;style&#x27;],
-  mo: [&#x27;accent&#x27;, &#x27;fence&#x27;, &#x27;form&#x27;, &#x27;height&#x27;, &#x27;largeop&#x27;, &#x27;mathvariant&#x27;, &#x27;mathcolor&#x27;, &#x27;movablelimits&#x27;,
-       &#x27;separator&#x27;, &#x27;stretchy&#x27;, &#x27;linebreak&#x27;, &#x27;minsize&#x27;, &#x27;maxsize&#x27;, &#x27;lspace&#x27;, &#x27;rspace&#x27;],
-  mpadded: [&#x27;width&#x27;, &#x27;height&#x27;, &#x27;depth&#x27;, &#x27;lspace&#x27;, &#x27;rspace&#x27;, &#x27;voffset&#x27;, &#x27;mathbackground&#x27;, &#x27;style&#x27;],
-  mrow: [&#x27;data&#x27;, &#x27;href&#x27;, &#x27;id&#x27;], // See `trust` rendering option.
-  mspace: [&#x27;mathbackground&#x27;, &#x27;width&#x27;, &#x27;height&#x27;],
-  mstyle: [&#x27;displaystyle&#x27;, &#x27;mathcolor&#x27;, &#x27;mathsize&#x27;, &#x27;scriptlevel&#x27;, &#x27;style&#x27;],
-  mtable: [&#x27;columnalign&#x27;, &#x27;rowspacing&#x27;, &#x27;columnspacing&#x27;, &#x27;columnlines&#x27;, &#x27;rowlines&#x27;,
-           &#x27;width&#x27;, &#x27;scriptlevel&#x27;],
-  mtd: [&#x27;columnalign&#x27;, &#x27;style&#x27;],
-  mtext: [&#x27;mathvariant&#x27;],
-  munder: [&#x27;accentunder&#x27;],
-  mover: [&#x27;accent&#x27;]
-},
-allowedClasses: [
-  // Temml creates these classes:
-  &#x27;mathcal&#x27;, &#x27;mathscr&#x27;, &#x27;oldstylenums&#x27;, &#x27;temml-error&#x27;, &#x27;tml-eqn&#x27;, &#x27;tml-tageqn&#x27;, &#x27;tml-label&#x27;, &#x27;tml-tag&#x27;
-  // If the trust setting allows \class, then users can create their own classes.
-]
-// The \label function can create HTML ids. These ids can contain only the characters [A-Za-z_0-9-]
-// An \id function, if allowed by the trust settings, can create HTML ids with unrestricted contents.</code></pre></details>
 <br>
 <p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 <br>

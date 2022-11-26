@@ -363,52 +363,6 @@ refer to [Options](#options) for more details.
 - `trust` can allow certain commands that may load external resources or change
   HTML attributes and thus are not always safe (e.g., `\includegraphics` or `\class`)
 
-Of course, it’s never a bad idea to sanitize your HTML. If you so choose, there is a list
-of Temml tags and attributes below the fold.
-
-<details><summary>More…</summary>
-
-```
-allowedTags: [
-  'span', 'img', 'math', 'annotation', 'semantics',
-  'menclose', 'mfrac', 'mi', 'mmultiscripts',
-  'mn', 'mo', 'mover', 'mpadded', 'mphantom', 'mroot',
-  'mrow', 'mspace', 'msub', 'msup', 'msubsup', 'msqrt', 'mstyle', 'mtable',
-  'mtd', 'mtext', 'mtr', 'munder', 'munderover'
-],
-allowedAttributes: {
-  span: ['style'],
-  img: ['src', 'alt', 'width', 'height'],
-  math: ['xmlns', 'display'],
-  annotation: ['encoding'],
-  menclose: ['notation', 'mathbackground'],
-  mfrac: ['linethickness'],
-  mi: ['mathvariant', 'style'],
-  mn: ['mathvariant', 'style'],
-  mo: ['accent', 'fence', 'form', 'height', 'largeop', 'mathvariant', 'mathcolor', 'movablelimits',
-       'separator', 'stretchy', 'linebreak', 'minsize', 'maxsize', 'lspace', 'rspace'],
-  mpadded: ['width', 'height', 'depth', 'lspace', 'rspace', 'voffset', 'mathbackground', 'style'],
-  mrow: ['data', 'href', 'id'], // See `trust` rendering option.
-  mspace: ['mathbackground', 'width', 'height'],
-  mstyle: ['displaystyle', 'mathcolor', 'mathsize', 'scriptlevel', 'style'],
-  mtable: ['columnalign', 'rowspacing', 'columnspacing', 'columnlines', 'rowlines',
-           'width', 'scriptlevel'],
-  mtd: ['columnalign', 'style'],
-  mtext: ['mathvariant'],
-  munder: ['accentunder'],
-  mover: ['accent']
-},
-allowedClasses: [
-  // Temml creates these classes:
-  'mathcal', 'mathscr', 'oldstylenums', 'temml-error', 'tml-eqn', 'tml-tageqn', 'tml-label', 'tml-tag'
-  // If the trust setting allows \class, then users can create their own classes.
-]
-// The \label function can create HTML ids. These ids can contain only the characters [A-Za-z_0-9-]
-// An \id function, if allowed by the trust settings, can create HTML ids with unrestricted contents.
-```
-
-</details>
-
 <br>
 
 <p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
