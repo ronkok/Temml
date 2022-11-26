@@ -1548,7 +1548,7 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.9.0
   <option value="Local">Local font</option>
   <option value="Asana">Asana</option>
   <option value="STIX2">STIX TWO</option>
-  <option value="XITS">XITS</option>
+  <option value="Libertinus">Libertinus</option>
 </select>
 <script>
   function updateMathFont() {

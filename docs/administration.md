@@ -279,9 +279,11 @@ Where to find font files:
 
 - Temml.woff2 can be found in the Temml [dist folder][].
 - STIXTwoMath-Regular.woff2 is located at the STIX [repository][].
+- LibertinusMath-Regular.woff2 is located at the Libertinus [repository][Libertinus].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
 [repository]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
+[Libertinus]: https://github.com/alerque/libertinus
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
 If you want a different math font size, you can add a rule to your own page's

@@ -18,7 +18,7 @@ fs.copyFile('site/assets/Temml-STIX2.css', 'dist/Temml-STIX2.css', (err) => {
   if (err) { throw err }
 })
 
-fs.copyFile('site/assets/Temml-XITS.css', 'dist/Temml-XITS.css', (err) => {
+fs.copyFile('site/assets/Temml-Libertinus.css', 'dist/Temml-Libertinus.css', (err) => {
   if (err) { throw err }
 })
 
