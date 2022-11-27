@@ -9,11 +9,11 @@
 
 As a futher advantage, Temml can use local system fonts. The minimum Temml installation serves a font file that is only 12kb.
 
-Temml’s MathML output conforms to both both [MathML 3](https://www.w3.org/TR/MathML3/) (Firefox) and [MathML Core](https://w3c.github.io/mathml-core/) (Chromium). When the [MathML-in-Chromium](https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html) project is complete, all the major browsers will support MathML and Temml will become the most lightweight way to render math in a browser.
+Chromium will support MathML in release 109 [early in 2023](https://chromiumdash.appspot.com/schedule), At that point, all the major browsers will support MathML and Temml will become the most lightweight way to render math in a browser.
 
 Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.13.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
 
-Temml's test suite include many rendered examples, including the Temml [supported functions page](https://temml.org/docs/en/supported.html) and tests from [Mozilla](https://temml.org/tests/mozilla-tests.html), [Wikipedia](https://temml.org/tests/wiki-tests.html), [mhchem](https://temml.org/tests/mhchem-tests.html), and [LaTeXML](https://temml.org/tests/LaTeXML-tests.html).
+Temml's test suite includes many rendered examples, including the Temml [supported functions page](https://temml.org/docs/en/supported.html) and tests from [Mozilla](https://temml.org/tests/mozilla-tests.html), [Wikipedia](https://temml.org/tests/wiki-tests.html), [mhchem](https://temml.org/tests/mhchem-tests.html), and [LaTeXML](https://temml.org/tests/LaTeXML-tests.html).
 
 Temml's demonstration page is at https://temml.org/
 
