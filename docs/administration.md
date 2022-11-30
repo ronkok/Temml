@@ -14,9 +14,9 @@
 
 # Browser Support
 
-Temml works in browsers that support MathML. This includes Firefox and Safari.
-It will [soon](https://www.igalia.com/2021/08/09/MathML-Progress.html) include
-Chrome, Edge, Opera, Brave, and Vivaldi.\
+Temml works in browsers that support MathML. This currently includes Firefox and Safari.
+MathML will be supported in Chrome, Edge, Opera, Brave, and Vivaldi with adoption of
+Chromium [release 109](https://chromiumdash.appspot.com/schedule), early in 2023.\
 Temml will never work in Internet Explorer.
 
 # Installation
