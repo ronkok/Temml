@@ -136,18 +136,18 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <p>The <code>postProcess</code> function implements the AMS functions <code>\ref</code> and <code>\label</code>. It should be called outside of any loop.</p>
 <p>The main Temml functions, <code>temml.render</code> and <code>temml.renderToString</code>, each operate on only one element at a time. In contrast, the <code>postProcess</code> function makes two passes through the entire document. If you choose not to support <code>\ref</code>, <code>postProcess</code> can be omitted.</p>
 <p>If Temml is used server-side, <code>\ref</code> and <code>\label</code> are still implemented at runtime with client-side JavaScript. A small file, <code>temmlPostProcess.js</code>, is provided to be installed in place of <code>temml.min.js</code>. It exposes one function:</p>
-<pre><code>temml.postProcess(document.body)</code></pre><p>If you do not provide a runtime <code>postProcess</code>, everthing in Temml will work except <code>\ref</code>.</p>
+<pre><code>temml.postProcess(document.body)</code></pre><p>If you do not provide a runtime <code>postProcess</code>, everything in Temml will work except <code>\ref</code>.</p>
 <p>If you use the <a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render extension</a>, it includes the post-processor nuances.</p>
 <h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
 <p><strong>Temml-Local.css</strong> is the light-weight option. It calls two fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, or <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16). Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>.<br>Android does not currently provide a font with a MATH table. They are considering <a href='https://github.com/notofonts/math/issues/14#issuecomment-1268851556'>several options</a>.</p>
 <p>Sadly, native fonts render math with a couple of flaws. In Firefox, square root radicals are sometimes oddly sized. Chromium is better at radicals, but it fails to stretch five stretchy accents and some extensible arrows. Chromium also renders extensible arrows with notes placed too high.</p>
 <p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb <code>Temml.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
-<p><strong>Asana</strong> and <strong>XITS</strong> contain their own roundhand glyphs, but XITS needs <code>Temml.woff2</code> in order for Chromium to render a prime at the correct height.</p>
+<p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
 <ul><li>Temml.woff2 can be found in the Temml <a href='null'>dist folder</a>.</li>
-<li>STIXTwoMath-Regular.woff2 is located at the STIX <a href='https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2'>repository</a>.</li>
+<li>STIXTwoMath-Regular.woff2 is located at the STIX <a href='https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2' title='STIX''>repository</a>.</li>
 <li>LibertinusMath-Regular.woff2 is located at the Libertinus <a href='https://github.com/alerque/libertinus' title='Libertinus''>repository</a>.</li>
 <li>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</li>
 </ul>

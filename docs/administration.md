@@ -269,7 +269,8 @@ readers accustomed to LaTeX documents. Rendering is excellent except that some
 line thicknesses may be too thin for some screens. This option also needs that
 additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
-**Asana** and **Libertinus** contain their own roundhand glyphs.
+**Asana** and **Libertinus** have some of the same rendering problems as Cambria Math,
+although Asana does contain its own roundhand glyphs.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
@@ -277,7 +278,7 @@ Several other math fonts exist and you can try them out at Frédéric Wang’s
 Where to find font files:
 
 - Temml.woff2 can be found in the Temml [dist folder][].
-- STIXTwoMath-Regular.woff2 is located at the STIX [STIX][].
+- STIXTwoMath-Regular.woff2 is located at the STIX [repository][STIX].
 - LibertinusMath-Regular.woff2 is located at the Libertinus [repository][Libertinus].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
