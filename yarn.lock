@@ -1560,7 +1560,6 @@ __metadata:
     esm: ^3.2.25
     rollup: ^2.66.1
     terser: ^5.14.2
-    xml-formatter: ^2.4.0
   languageName: unknown
   linkType: soft
 
@@ -1673,22 +1672,6 @@ __metadata:
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
   checksum: 159da4805f7e84a3d003d8841557196034155008f817172d4e986bd591f74aa82aa7db55929a54222309e01079a65a92a9e6414da5a6aa4b01ee44a511ac3ee5
-  languageName: node
-  linkType: hard
-
-"xml-formatter@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "xml-formatter@npm:2.4.0"
-  dependencies:
-    xml-parser-xo: ^3.1.1
-  checksum: 1c09b9edeba65d25d61f13329cc3d797ab9808e104d2b3e6fbea32b878aa55cfc63b839bec7350f24f2edf1fbd6a866e3fdeb53e63a481ab3fa934eef5fd6bc9
-  languageName: node
-  linkType: hard
-
-"xml-parser-xo@npm:^3.1.1":
-  version: 3.1.1
-  resolution: "xml-parser-xo@npm:3.1.1"
-  checksum: 97cfed9ae19d909ed2851a2838189c8859220bf54f042977103401ac1776a5e94ac955c3f1f1822fc236e382361a107c52d0f39f9fc7451278224c79ec35f13d
   languageName: node
   linkType: hard
 
