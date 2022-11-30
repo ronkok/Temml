@@ -269,8 +269,7 @@ readers accustomed to LaTeX documents. Rendering is excellent except that some
 line thicknesses may be too thin for some screens. This option also needs that
 additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
 
-**Asana** and **XITS** contain their own roundhand glyphs, but
-XITS needs `Temml.woff2` in order for Chromium to render a prime at the correct height.
+**Asana** and **Libertinus** contain their own roundhand glyphs.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
@@ -278,11 +277,11 @@ Several other math fonts exist and you can try them out at Frédéric Wang’s
 Where to find font files:
 
 - Temml.woff2 can be found in the Temml [dist folder][].
-- STIXTwoMath-Regular.woff2 is located at the STIX [repository][].
+- STIXTwoMath-Regular.woff2 is located at the STIX [STIX][].
 - LibertinusMath-Regular.woff2 is located at the Libertinus [repository][Libertinus].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
-[repository]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
+[STIX]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
 [Libertinus]: https://github.com/alerque/libertinus
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
