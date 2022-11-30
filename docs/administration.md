@@ -239,7 +239,7 @@ provided to be installed in place of `temml.min.js`. It exposes one function:
 temml.postProcess(document.body)
 ```
 
-If you do not provide a runtime `postProcess`, everthing in Temml will work except `\ref`.
+If you do not provide a runtime `postProcess`, everything in Temml will work except `\ref`.
 
 If you use the [auto-render extension][], it includes the post-processor nuances.
 
