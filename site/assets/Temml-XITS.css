@@ -92,18 +92,21 @@ mtable.tml-align > mtr > mtd:nth-child(odd),
 mtable.tml-alignat > mtr > mtd:nth-child(odd),
 mtable.tml-aligned > mtr > mtd:nth-child(even) {
   text-align: -webkit-left;
+  text-align: -moz-left;
 }
 
 mtable.tml-align > mtr > mtd:nth-child(even),
 mtable.tml-alignat > mtr > mtd:nth-child(even),
 mtable.tml-aligned > mtr > mtd:nth-child(odd) {
   text-align: -webkit-right;
+  text-align: -moz-right;
 }
 
 mtable.tml-cases > mtr > mtd {
   padding-left: 0em;
   padding-right: 0em;
   text-align: -webkit-left;
+  text-align: -moz-left;
 }
 
 mtable.tml-cases > mtr > mtd:nth-child(2) {
