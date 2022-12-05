@@ -175,10 +175,29 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\underline"],
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline"],
    // , "\\phase", "\\longdiv"
   props: {
     numArgs: 1
+  },
+  handler({ parser, funcName }, args) {
+    const body = args[0];
+    return {
+      type: "enclose",
+      mode: parser.mode,
+      label: funcName,
+      body
+    };
+  },
+  mathmlBuilder
+});
+
+defineFunction({
+  type: "enclose",
+  names: ["\\underline"],
+  props: {
+    numArgs: 1,
+    allowedInText: true
   },
   handler({ parser, funcName }, args) {
     const body = args[0];
