@@ -530,7 +530,7 @@ If you know the shape of a character, but not its name,
 | \harr           | $\harr$                   | | texvc extension |
 | \hat            | $\hat{\theta}$            | `\hat{\theta}`| |
 | \hbar           | $\hbar$                   | | |
-| \hbox           | $\hbox{\$x^2\$}$          | `\hbox{$x^2$}`| |
+| \hbox           | $\hbox{$x^2$}$            | `\hbox{$x^2$}`| |
 | \hbox to        |  (Not supported)          | | |
 | \hdashline      | $\begin{matrix}a&b\\ \hdashline c &d\end{matrix}$| `\begin{matrix}`<br>   `a & b \\`<br>   `\hdashline`<br>   `c & d`<br>`\end{matrix}`|  arydshln |
 | \hearts         | $\hearts$                 | | texvc extension |
@@ -938,6 +938,7 @@ If you know the shape of a character, but not its name,
 |\perp|$\perp$ |||
 |\Perp|$\Perp$ || cmll |
 |\phantom|$\Gamma^{\phantom{i}j}_{i\phantom{j}k}$ |`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`||
+|\phase|(Not supported)|||
 |\Phi|$\Phi$ |||
 |\phi|$\phi$ |||
 |\Pi|$\Pi$ |||
