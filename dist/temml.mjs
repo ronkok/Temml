@@ -2077,8 +2077,6 @@ function buildMathML(tree, texExpression, style, settings) {
   let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
           && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
-      : expression.length > 1 && wrap === "none"
-      ? new mathMLTree.MathNode("mrow", expression)
       : setLineBreaks(expression, wrap, settings.displayMode);
 
   if (tag) {
@@ -2093,7 +2091,7 @@ function buildMathML(tree, texExpression, style, settings) {
     wrapper = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   }
 
-  if (wrap !== "none") {
+  if (wrap !== "none" && wrapper.children.length > 1) {
     const maths = [];
     for (let i = 0; i < wrapper.children.length; i++) {
       const math = new mathMLTree.MathNode("math", [wrapper.children[i]]);
@@ -3907,10 +3905,29 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\underline"],
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline"],
    // , "\\phase", "\\longdiv"
   props: {
     numArgs: 1
+  },
+  handler({ parser, funcName }, args) {
+    const body = args[0];
+    return {
+      type: "enclose",
+      mode: parser.mode,
+      label: funcName,
+      body
+    };
+  },
+  mathmlBuilder: mathmlBuilder$8
+});
+
+defineFunction({
+  type: "enclose",
+  names: ["\\underline"],
+  props: {
+    numArgs: 1,
+    allowedInText: true
   },
   handler({ parser, funcName }, args) {
     const body = args[0];
@@ -6729,10 +6746,9 @@ defineFunction({
   }
 });
 
-// \pmb is a simulation of bold font.
+// In LaTeX, \pmb is a simulation of bold font.
 // The version of \pmb in ambsy.sty works by typesetting three copies of the argument
-// with small offsets. We use CSS text-shadow.
-// It's a hack. Not as good as a real bold font. Better than nothing.
+// with small offsets. We use CSS font-weight:bold.
 
 defineFunction({
   type: "pmb",
@@ -6752,7 +6768,7 @@ defineFunction({
     const inner = buildExpression(group.body, style);
     // Wrap with an <mstyle> element.
     const node = wrapWithMstyle(inner);
-    node.setAttribute("style", "text-shadow: 0.02em 0.01em 0.04px");
+    node.setAttribute("style", "font-weight:bold");
     return node
   }
 });
@@ -7625,8 +7641,8 @@ const smallCaps = Object.freeze({
 const numberRegEx$1 = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in Parser.js
 const latinRegEx = /[A-Ba-z]/;
 
-const italicNumber = (text, variant) => {
-  const mn = new mathMLTree.MathNode("mn", [text]);
+const italicNumber = (text, variant, tag) => {
+  const mn = new mathMLTree.MathNode(tag, [text]);
   const wrapper = new mathMLTree.MathNode("mstyle", [mn]);
   wrapper.style["font-style"] = "italic";
   wrapper.style["font-family"] = "Cambria, 'Times New Roman', serif";
@@ -7676,28 +7692,24 @@ defineFunctionBuilders({
     const variant = getVariant(group, style) || "normal";
 
     let node;
-    if (group.mode === "text") {
-      if (variant === "italic" || variant === "bold-italic") {
-        if (numberRegEx$1.test(group.text)) {
-          return italicNumber(text, variant)
-        }
-      }
-      if (variant !== "normal") {
-        text.text = variantChar(text.text, variant);
-      }
-      node = new mathMLTree.MathNode("mtext", [text]);
-    } else if (numberRegEx$1.test(group.text)) {
+    if (numberRegEx$1.test(group.text)) {
+      const tag = group.mode === "text" ? "mtext" : "mn";
       if (variant === "oldstylenums") {
         const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"]);
-        node = new mathMLTree.MathNode("mn", [ms]);
+        node = new mathMLTree.MathNode(tag, [ms]);
       } else if (variant === "italic" || variant === "bold-italic") {
-        return italicNumber(text, variant)
+        return italicNumber(text, variant, tag)
       } else {
         if (variant !== "normal") {
           text.text = text.text.split("").map(c => variantChar(c, variant)).join("");
         }
-        node = new mathMLTree.MathNode("mn", [text]);
+        node = new mathMLTree.MathNode(tag, [text]);
       }
+    } else if (group.mode === "text") {
+      if (variant !== "normal") {
+        text.text = variantChar(text.text, variant);
+      }
+      node = new mathMLTree.MathNode("mtext", [text]);
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text]);
       // TODO: If/when Chromium uses ssty variant for prime, remove the next line.
@@ -8396,7 +8408,7 @@ defineMacro("\\underbar", "\\underline{\\text{#1}}");
 // \kern6\p@\hbox{.}\hbox{.}\hbox{.}}}
 // We'll call \varvdots, which gets a glyph from symbols.js.
 // The zero-width rule gets us an equivalent to the vertical 6pt kern.
-defineMacro("\\vdots", "\\mathord{\\varvdots\\rule{0pt}{15pt}}");
+defineMacro("\\vdots", "{\\varvdots\\rule{0pt}{15pt}}");
 defineMacro("\u22ee", "\\vdots");
 
 //////////////////////////////////////////////////////////////////////
@@ -12907,7 +12919,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.9.1";
+const version = "0.9.2";
 
 function postProcess(block) {
   const labelMap = {};

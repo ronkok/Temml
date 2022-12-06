@@ -823,7 +823,7 @@
 <tr><td>\newcommand</td><td><math><mi>✓</mi></math></td><td><code>\newcommand\chk{\checkmark} \chk</code></td><td>newcommand</td></tr>
 <tr><td>\newenvironment</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\newextarrow</td><td><span class="no-sup">Not supported</span></td><td></td><td>extpfeil</td></tr>
-<tr><td>\newline</td><td><math><mrow><mi>a</mi><mo linebreak="newline"></mo><mi>b</mi></mrow></math></td><td><code>a\newline b</code></td><td></td></tr>
+<tr><td>\newline</td><td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td><td><code>a\newline b</code></td><td></td></tr>
 <tr><td>\nexists</td><td><math><mi>∄</mi></math></td><td></td><td>ams</td></tr>
 <tr><td>\ngeq</td><td><math><mo>≱</mo></math></td><td></td><td>ams</td></tr>
 <tr><td>\ngeqq</td><td><math><mo>≱</mo></math></td><td></td><td>ams</td></tr>
@@ -951,6 +951,7 @@
 <tr><td>\perp</td><td><math><mo>⟂</mo></math></td><td></td><td></td></tr>
 <tr><td>\Perp</td><td><math><mo>⫫</mo></math></td><td></td><td>cmll</td></tr>
 <tr><td>\phantom</td><td><math><msubsup><mrow><mi mathvariant="normal">Γ</mi></mrow><mrow><mi>i</mi><mphantom><mi>j</mi></mphantom><mi>k</mi></mrow><mrow><mphantom><mi>i</mi></mphantom><mi>j</mi></mrow></msubsup></math></td><td><code>\Gamma^{\phantom{i}j}_{i\phantom{j}k}</code></td><td></td></tr>
+<tr><td>\phase</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\Phi</td><td><math><mrow><mi mathvariant="normal">Φ</mi></mrow></math></td><td></td><td></td></tr>
 <tr><td>\phi</td><td><math><mi>ϕ</mi></math></td><td></td><td></td></tr>
 <tr><td>\Pi</td><td><math><mrow><mi mathvariant="normal">Π</mi></mrow></math></td><td></td><td></td></tr>
@@ -963,7 +964,7 @@
 <tr><td>\pmatrix</td><td><span class="no-sup">Not supported</span></td><td>See<code>{pmatrix}</code></td><td></td></tr>
 <tr><td>{pmatrix}</td><td><math><mrow><mo fence="true" form="prefix">(</mo><mtable columnalign="center center"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></math></td><td><code>\begin{pmatrix}</code><br><code>a &amp; b \\</code><br><code>c &amp; d</code><br><code>\end{pmatrix}</code></td><td>ams</td></tr>
 <tr><td>{pmatrix*}</td><td><math><mrow><mo fence="true" form="prefix">(</mo><mtable columnalign="right right"><mtr><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>1</mn></mrow></mtd><mtd style="text-align:-webkit-right;"><mn>3</mn></mtd></mtr><mtr><mtd style="text-align:-webkit-right;"><mn>2</mn></mtd><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>4</mn></mrow></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></math></td><td><code>\begin{pmatrix*}[r]</code><br><code>-1 &amp; 3 \\</code><br><code>2 &amp; -4</code><br><code>\end{pmatrix*}</code></td><td>mathtools</td></tr>
-<tr><td>\pmb</td><td><math><mstyle style="text-shadow: 0.02em 0.01em 0.04px"><mi>μ</mi></mstyle></math></td><td><code>\pmb{\mu}</code></td><td>ams</td></tr>
+<tr><td>\pmb</td><td><math><mstyle style="font-weight:bold"><mi>μ</mi></mstyle></math></td><td><code>\pmb{\mu}</code></td><td>ams</td></tr>
 <tr><td>\pmod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x\pmod a</code></td><td></td></tr>
 <tr><td>\pod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x \pod a</code></td><td>ams</td></tr>
 <tr><td>\pointint</td><td><math><mo movablelimits="false">⨕</mo></math></td><td></td><td></td></tr>
@@ -1232,7 +1233,7 @@
 <tr><td>\textbackslash</td><td><math><mtext>\</mtext></math></td><td><code>\text{\textbackslash}</code></td><td></td></tr>
 <tr><td>\textbar</td><td><math><mtext>|</mtext></math></td><td><code>\text{\textbar}</code></td><td></td></tr>
 <tr><td>\textbardbl</td><td><math><mtext>‖</mtext></math></td><td><code>\text{\textbardbl}</code></td><td></td></tr>
-<tr><td>\textbf</td><td><math><mtext>𝐀𝐚𝐁𝐛𝟏</mtext></math></td><td><code>\textbf{AaBb123}</code></td><td></td></tr>
+<tr><td>\textbf</td><td><math><mtext>𝐀𝐚𝐁𝐛𝟏𝟐𝟑</mtext></math></td><td><code>\textbf{AaBb123}</code></td><td></td></tr>
 <tr><td>\textbraceleft</td><td><math><mtext>{</mtext></math></td><td><code>\text{\textbraceleft}</code></td><td></td></tr>
 <tr><td>\textbraceright</td><td><math><mtext>}</mtext></math></td><td><code>\text{\textbraceright}</code></td><td></td></tr>
 <tr><td>\textbullet</td><td><math><mtext>•</mtext></math></td><td><code>\text{\textbullet}</code></td><td></td></tr>
@@ -1258,11 +1259,11 @@
 <tr><td>\textregistered</td><td><math><mtext>®</mtext></math></td><td><code>\text{\textregistered}</code></td><td></td></tr>
 <tr><td>\textrm</td><td><math><mtext>AaBb123</mtext></math></td><td><code>\textrm{AaBb123}</code></td><td></td></tr>
 <tr><td>\textsc</td><td><math><mtext>ʜᴇʏ</mtext></math></td><td><code>\textsc{hey}</code></td><td></td></tr>
-<tr><td>\textsf</td><td><math><mtext>𝖠𝖺𝖡𝖻𝟣</mtext></math></td><td><code>\textsf{AaBb123}</code></td><td></td></tr>
+<tr><td>\textsf</td><td><math><mtext>𝖠𝖺𝖡𝖻𝟣𝟤𝟥</mtext></math></td><td><code>\textsf{AaBb123}</code></td><td></td></tr>
 <tr><td>\textsl</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\textsterling</td><td><math><mtext>£</mtext></math></td><td><code>\text{\textsterling}</code></td><td></td></tr>
 <tr><td>\textstyle</td><td><math><mstyle scriptlevel="0" displaystyle="false"><msubsup><mo movablelimits="false">∑</mo><mn>0</mn><mi>n</mi></msubsup></mstyle></math></td><td><code>\textstyle\sum_0^n</code></td><td></td></tr>
-<tr><td>\texttt</td><td><math><mtext>𝙰𝚊𝙱𝚋𝟷</mtext></math></td><td><code>\texttt{AaBb123}</code></td><td></td></tr>
+<tr><td>\texttt</td><td><math><mtext>𝙰𝚊𝙱𝚋𝟷𝟸𝟹</mtext></math></td><td><code>\texttt{AaBb123}</code></td><td></td></tr>
 <tr><td>\textunderscore</td><td><math><mtext>_</mtext></math></td><td><code>\text{\textunderscore}</code></td><td></td></tr>
 <tr><td>\textup</td><td><math><mtext>AaBb123</mtext></math></td><td><code>\textup{AaBb123}</code></td><td></td></tr>
 <tr><td>\textvisiblespace</td><td><math><mtext>␣</mtext></math></td><td><code>\text{\textvisiblespace}</code></td><td></td></tr>
@@ -1418,7 +1419,7 @@
 <tr><td>\vDash</td><td><math><mo>⊨</mo></math></td><td></td><td>ams</td></tr>
 <tr><td>\vdash</td><td><math><mo>⊢</mo></math></td><td></td><td></td></tr>
 <tr><td>\vdot</td><td><math><mo lspace="0em" rspace="0em" style="font-weight:bold;">⋅</mo></math></td><td></td><td>physics extension</td></tr>
-<tr><td>\vdots</td><td><math><mi><mi>⋮</mi><mspace width="0pt" height="14.944pt"></mspace></mi></math></td><td></td><td></td></tr>
+<tr><td>\vdots</td><td><math><mrow><mi>⋮</mi><mspace width="0pt" height="14.944pt"></mspace></mrow></math></td><td></td><td></td></tr>
 <tr><td>\vec</td><td><math><mover><mi>F</mi><mo stretchy="false" style="transform:scale(0.75) translate(10%, 30%);">→</mo></mover></math></td><td><code>\vec{F}</code></td><td></td></tr>
 <tr><td>\vectorarrow</td><td><math><mover><mi>𝒂</mi><mo stretchy="false" style="transform:scale(0.75) translate(10%, 30%);">→</mo></mover></math></td><td><code>\vectorarrow{a}</code></td><td>physics extension</td></tr>
 <tr><td>\vectorbold</td><td><math><mi>𝒂</mi></math></td><td><code>\vectorbold{a}</code></td><td>physics extension</td></tr>
@@ -1506,7 +1507,7 @@
 </main>
 <nav>
 <div id="sidebar" class="narrow">
-<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>    v0.9.1</p>
+<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>    v0.9.2</p>
 <div style="height:0.5em;"></div>
 <ul><li><a href='#symbols'>Symbols</a></li>
 <li><a href='#a'>A</a></li>

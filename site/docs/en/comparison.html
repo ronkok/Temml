@@ -25,7 +25,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.9.1, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.9.2, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -354,7 +354,7 @@
           </tr>
           <tr>
             <td>\\</td>
-            <td><math><mrow><mi>x</mi><mo linebreak="newline"></mo><mi>y</mi></mrow></math></td>
+            <td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>x</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>y</mi></mrow></mtd></mtr></mtable></math></td>
             <td>\(x \\ y\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mspace linebreak="newline"></mspace><mi>y</mi></mrow><annotation encoding="application/x-tex">x \\ y</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -5358,7 +5358,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\newline</td>
-            <td><math><mrow><mi>a</mi><mo linebreak="newline"></mo><mi>b</mi></mrow></math></td>
+            <td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mspace linebreak="newline"></mspace><mi>b</mi></mrow><annotation encoding="application/x-tex">a\newline b</annotation></semantics></math></span></td>
             <td data-tex="a\newline b"><span class="no-sup">Not supported</span></td>
@@ -6318,7 +6318,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\pmb</td>
-            <td><math><mstyle style="text-shadow: 0.02em 0.01em 0.04px"><mi>μ</mi></mstyle></math></td>
+            <td><math><mstyle style="font-weight:bold"><mi>μ</mi></mstyle></math></td>
             <td>\(\pmb{\mu}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="bold">μ</mi></mrow><annotation encoding="application/x-tex">\pmb{\mu}</annotation></semantics></math></span></td>
             <td data-tex="\pmb{\mu}"><span class="no-sup">Not supported</span></td>
@@ -6958,7 +6958,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\rule</td>
-            <td><math><mrow><mi>x</mi><mstyle mathcolor="#0000FF"><mpadded height="+5.9776pt" voffset="5.9776pt"><mspace mathbackground="#0000FF" width="0.862em" height="0.431em"></mspace></mpadded><mi>x</mi></mstyle></mrow></math></td>
+            <td><math><mrow><mi>x</mi></mrow><mstyle mathcolor="#0000FF"><mpadded height="+5.9776pt" voffset="5.9776pt"><mspace mathbackground="#0000FF" width="0.862em" height="0.431em"></mspace></mpadded><mi>x</mi></mstyle></math></td>
             <td>\(x\color{blue}\rule[6pt]{2ex}{1ex}x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mstyle mathcolor="blue"><mpadded height="+0.6000000000000001em" voffset="0.6000000000000001em"><mspace mathbackground="blue" width="0.862em" height="0.431em"></mspace></mpadded><mi>x</mi></mstyle></mrow><annotation encoding="application/x-tex">x\color{blue}\rule[6pt]{2ex}{1ex}x</annotation></semantics></math></span></td>
             <td data-tex="x\rule[6pt]{2ex}{1ex}x"><span class="no-sup">Not supported</span></td>
@@ -7952,7 +7952,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\textbf</td>
-            <td><math><mtext>𝐀𝐚𝐁𝐛𝟏</mtext></math></td>
+            <td><math><mtext>𝐀𝐚𝐁𝐛𝟏𝟐𝟑</mtext></math></td>
             <td>\(\textbf{AaBb123}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="bold">AaBb123</mtext></mrow><annotation encoding="application/x-tex">\textbf{AaBb123}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -8136,7 +8136,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\textsf</td>
-            <td><math><mtext>𝖠𝖺𝖡𝖻𝟣</mtext></math></td>
+            <td><math><mtext>𝖠𝖺𝖡𝖻𝟣𝟤𝟥</mtext></math></td>
             <td>\(\textsf{AaBb123}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="sans-serif">AaBb123</mtext></mrow><annotation encoding="application/x-tex">\textsf{AaBb123}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -8168,7 +8168,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\texttt</td>
-            <td><math><mtext>𝙰𝚊𝙱𝚋𝟷</mtext></math></td>
+            <td><math><mtext>𝙰𝚊𝙱𝚋𝟷𝟸𝟹</mtext></math></td>
             <td>\(\texttt{AaBb123}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="monospace">AaBb123</mtext></mrow><annotation encoding="application/x-tex">\texttt{AaBb123}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9216,7 +9216,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\vdots</td>
-            <td><math><mi><mi>⋮</mi><mspace width="0pt" height="14.944pt"></mspace></mi></math></td>
+            <td><math><mrow><mi>⋮</mi><mspace width="0pt" height="14.944pt"></mspace></mrow></math></td>
             <td>\(\vdots\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi><mi mathvariant="normal">⋮</mi><mpadded height="+0em" voffset="0em"><mspace mathbackground="black" width="0em" height="1.5em"></mspace></mpadded></mi></mrow><annotation encoding="application/x-tex">\vdots</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mo>⋮</mo><annotation encoding="TeX">\vdots</annotation></semantics></math></td>
