@@ -25,7 +25,7 @@ defineFunction({
     const inner = mml.buildExpression(group.body, style)
     // Wrap with an <mstyle> element.
     const node = wrapWithMstyle(inner)
-    node.setAttribute("style", "text-shadow: 0.02em 0.01em 0.04px")
+    node.setAttribute("style", "font-weight:bold")
     return node
   }
 })
