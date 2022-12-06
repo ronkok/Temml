@@ -10,8 +10,8 @@ import * as mml from "../buildMathML"
 const numberRegEx = /^\d(?:[\d,.]*\d)?$/  // Keep in sync with numberRegEx in Parser.js
 const latinRegEx = /[A-Ba-z]/
 
-const italicNumber = (text, variant) => {
-  const mn = new mathMLTree.MathNode("mn", [text])
+const italicNumber = (text, variant, tag) => {
+  const mn = new mathMLTree.MathNode(tag, [text])
   const wrapper = new mathMLTree.MathNode("mstyle", [mn])
   wrapper.style["font-style"] = "italic"
   wrapper.style["font-family"] = "Cambria, 'Times New Roman', serif"
@@ -61,28 +61,24 @@ defineFunctionBuilders({
     const variant = getVariant(group, style) || "normal"
 
     let node
-    if (group.mode === "text") {
-      if (variant === "italic" || variant === "bold-italic") {
-        if (numberRegEx.test(group.text)) {
-          return italicNumber(text, variant)
-        }
-      }
-      if (variant !== "normal") {
-        text.text = variantChar(text.text, variant)
-      }
-      node = new mathMLTree.MathNode("mtext", [text])
-    } else if (numberRegEx.test(group.text)) {
+    if (numberRegEx.test(group.text)) {
+      const tag = group.mode === "text" ? "mtext" : "mn"
       if (variant === "oldstylenums") {
         const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"])
-        node = new mathMLTree.MathNode("mn", [ms])
+        node = new mathMLTree.MathNode(tag, [ms])
       } else if (variant === "italic" || variant === "bold-italic") {
-        return italicNumber(text, variant)
+        return italicNumber(text, variant, tag)
       } else {
         if (variant !== "normal") {
           text.text = text.text.split("").map(c => variantChar(c, variant)).join("")
         }
-        node = new mathMLTree.MathNode("mn", [text])
+        node = new mathMLTree.MathNode(tag, [text])
       }
+    } else if (group.mode === "text") {
+      if (variant !== "normal") {
+        text.text = variantChar(text.text, variant)
+      }
+      node = new mathMLTree.MathNode("mtext", [text])
     } else if (group.text === "\\prime") {
       node = new mathMLTree.MathNode("mo", [text])
       // TODO: If/when Chromium uses ssty variant for prime, remove the next line.
