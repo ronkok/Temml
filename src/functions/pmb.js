@@ -2,10 +2,9 @@ import defineFunction, { ordargument } from "../defineFunction"
 import { wrapWithMstyle } from "../mathMLTree"
 import * as mml from "../buildMathML"
 
-// \pmb is a simulation of bold font.
+// In LaTeX, \pmb is a simulation of bold font.
 // The version of \pmb in ambsy.sty works by typesetting three copies of the argument
-// with small offsets. We use CSS text-shadow.
-// It's a hack. Not as good as a real bold font. Better than nothing.
+// with small offsets. We use CSS font-weight:bold.
 
 defineFunction({
   type: "pmb",
