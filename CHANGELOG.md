@@ -6,7 +6,11 @@ All notable changes to this project will be documented in this file. This CHANGE
 
 ### Fixed
 
-- Avoid unwanted stretch of harpoons
+- \underline inside \text{}
+- Align-left in {cases} in Firefox
+- Hard line breaks
+- Wrap \vdots in `<mrow>`, not `<mi>`
+- Use CSS style='font-weight:bold;' for \pmb
 
 ## [0.9.1] = 2022-11-27
 
