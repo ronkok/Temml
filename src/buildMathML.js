@@ -195,8 +195,6 @@ export default function buildMathML(tree, texExpression, style, settings) {
   let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
           && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
-      : expression.length > 1 && wrap === "none"
-      ? new mathMLTree.MathNode("mrow", expression)
       : setLineBreaks(expression, wrap, settings.displayMode)
 
   if (tag) {
@@ -211,7 +209,7 @@ export default function buildMathML(tree, texExpression, style, settings) {
     wrapper = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   }
 
-  if (wrap !== "none") {
+  if (wrap !== "none" && wrapper.children.length > 1) {
     const maths = []
     for (let i = 0; i < wrapper.children.length; i++) {
       const math = new mathMLTree.MathNode("math", [wrapper.children[i]])
