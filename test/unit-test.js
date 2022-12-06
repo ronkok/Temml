@@ -1236,7 +1236,7 @@ const test = () => {
   const html = r`\id{bar}{x}\class{foo}{x}\style{color: red;}{x}\data{foo=a, bar=b}{x}`;
   new Expect(html).toParse(trustSettings());
   new Expect(html).toBuild(trustSettings());
-  let built = build(html, trustSettings())[0].children;
+  let built = build(html, trustSettings())[0].children[0].children;
   new Expect(built[0].attributes.id).toBe("bar");
   new Expect(built[1].classes).toContain("foo");
   new Expect(built[2].attributes.style).toBe("color: red;");
