@@ -11,13 +11,12 @@ defineFunction({
   names: ["\\\\"],
   props: {
     numArgs: 0,
-    numOptionalArgs: 1,
-    argTypes: ["size"],
+    numOptionalArgs: 0,
     allowedInText: true
   },
 
   handler({ parser }, args, optArgs) {
-    const size = optArgs[0];
+    const size = parser.gullet.future().text === "[" ? parser.parseSizeGroup(true) : null;
     const newLine = !parser.settings.displayMode;
     return {
       type: "cr",
