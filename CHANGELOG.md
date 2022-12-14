@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.0] = 2022-12-14
+
+### Fixed
+
+- A space prevents an optional argument to \\
+
+### Added
+
+- \cent
+- Unicode input for chancery and roundhand (script) letters.
+
+### Removed
+
+- Support for \oldstylenums
+
 ## [0.9.2] = 2022-12-06
 
 ### Fixed

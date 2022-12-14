@@ -43,10 +43,6 @@ mo.tml-prime {
   font-feature-settings: 'salt';
 }
 
-.oldstylenums {
-  font-feature-settings: 'onum';
-}
-
 /* AMS environment auto-numbering via CSS counter. */
 .tml-eqn::before {
   counter-increment: tmlEqnNo;

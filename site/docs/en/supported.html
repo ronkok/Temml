@@ -198,14 +198,13 @@
 <tr><td>Bold Italic</td><td><math><mtext>𝑨-𝒁 𝒂-𝒛</mtext></math></td><td>Sans serif bold</td><td><math><mtext>𝗔-𝗭 𝗮-𝘇 𝟬-𝟵</mtext></math></td></tr>
 <tr><td>Fractur</td><td><math><mrow><mtext>𝔄-ℨ</mtext><mtext>𝔞-𝔷</mtext></mrow></math></td><td>Sans serif italic</td><td><math><mtext>𝘈-𝘡 𝘢-𝘻</mtext></math></td></tr>
 <tr><td>Monospace</td><td><math><mtext>𝙰-𝚉 𝚊-𝚣 𝟶-𝟿</mtext></math></td><td>Sans serif bold italic</td><td><math><mtext>𝘼-𝙕 𝙖-𝙯</mtext></math></td></tr>
+<tr><td>Script</td><td><math><mrow><mi class="mathcal">𝒜</mi><mtext>-</mtext><mi class="mathcal">𝒵</mi><mtext> </mtext><mtext>𝒶</mtext><mtext>-</mtext><mtext>𝓏</mtext></mrow></math></td><td></td><td></td></tr>
 </table>
 <p>Any character can be written with the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math><mi>☺</mi></math> .</p>
 <br>
-<div>For chancery or roundhand characters, it’s probably best to use <code>\mathcal</code> and <code>\mathscr</code> instead of Unicode input.<details><summary>Why?</summary>
-<p>Unicode has historically accepted either chancery or roundhand glyphs in the range U+1D49C—U+1D4B5. That's confusing,
-because Cambria Math has chancery in those code points and some other math fonts have roundhand in the same code points.
-<a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14</a> has recently added a method to resolve the ambiguity. Both chancery and roundhand still occupy the same range, but each unambigous chancery character has a <code>\ufe00</code> appended to the code point and each unambigous roundhand character has a <code>\ufe01</code> appended to the code point.</p>
-<p>Published fonts have not yet caught up to the new code point assignments. If you want your documents to not break in the future, it’s probably best to avoid Unicode input and stick with <code>\mathcal</code> and <code>\mathscr</code>.</p>
+<div><details><summary>More about Unicode script…</summary>
+<p>The Unicode range U+1D49C - U+1D4B5, Mathematical Script, has been ambiguous. Some fonts put chancery glyphs (<math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒞</mi></mrow></math>) at those code points and some fonts use roundhand glyphs (<math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi><mi class="mathscr">𝒞</mi></mrow></math>). Temml’s default for code points in this range is chancery, which matches the fonts Cambria Math and STIX TWO. It also matches the TeX function <code>\mathcal{…}</code>.</p>
+<p>Per Unicode 14+, Temml will return a roundhand glyph if you append a <code>\ufe01</code> to a character in the range <math><mrow><mi class="mathcal">𝒜</mi><mtext>-</mtext><mi class="mathcal">𝒵</mi></mrow></math>.</p>
 </details>
 </div>
 <h2 id='layout'>Layout</h2>
@@ -533,7 +532,7 @@ a</code></td></tr>
 <tr><td><math><mtext>𝖠𝖻𝟢</mtext></math>  <code>\textsf{Ab0}</code></td><td><math><mrow><mi>𝙰</mi><mi>𝚋</mi><mn>𝟶</mn></mrow></math>  <code>\mathtt{Ab0}</code></td><td><math><mrow><mi>𝔄</mi><mi>𝔟</mi></mrow></math>  <code>\mathfrak{Ab}</code></td></tr>
 <tr><td><math><mrow><mi>𝖠</mi><mi>𝖻</mi><mn>𝟢</mn></mrow></math>  <code>{\sf Ab0}</code></td><td><math><mtext>𝙰𝚋𝟶</mtext></math>  <code>\texttt{Ab0}</code></td><td><math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi></mrow></math>  <code>\mathcal{AB}</code></td></tr>
 <tr><td><math><mtext>ʜᴇʏ</mtext></math>  <code>\textsc{hey}</code></td><td><math><mrow><mi>𝙰</mi><mi>𝚋</mi><mn>𝟶</mn></mrow></math>  <code>{\tt Ab0 }</code></td><td><math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi></mrow></math>  <code>{\cal AB}</code></td></tr>
-<tr><td><math><mn><mstyle class="oldstylenums">123</mstyle></mn></math>  <code>\oldstylenums{123}</code></td><td></td><td><math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi></mrow></math>  <code>\mathscr{AB}</code> </td></tr>
+<tr><td></td><td></td><td><math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi></mrow></math>  <code>\mathscr{AB}</code> </td></tr>
 </table>
 <p>The <code>\textXX</code> versions can stack font family, font weight, and font shape. So <code>\textsf{\textbf{H}}</code> will produce <math><mtext>𝗛</mtext></math>. The other versions do not stack, e.g., <code>\mathsf{\mathbf{H}}</code> will produce <math><mi>𝐇</mi></math>.</p>
 <p>In cases where math fonts do not have a bold glyph, <code>\pmb</code> can simulate one. For example, <code>\pmb{\vartheta}</code> renders as : <math><mstyle style="font-weight:bold"><mi>ϑ</mi></mstyle></math></p>
@@ -575,8 +574,8 @@ a</code></td></tr>
 <tr><td><math><mtext>’</mtext></math>  <code>\text{\textquoteright}</code></td><td><math><mi>□</mi></math>  <code>\square</code> </td><td><math><mi>⊤</mi></math>  <code>\top</code> </td></tr>
 <tr><td><math><msup><mrow></mrow><mo lspace="0em" rspace="0em" class="tml-prime">′</mo></msup></math>  <code>\rq</code> </td><td><math><mi>■</mi></math>  <code>\blacksquare</code></td><td><math><mi>⊥</mi></math>  <code>\bot</code> </td></tr>
 <tr><td><math><mtext>“</mtext></math>  <code>\text{\textquotedblleft}</code></td><td><math><mi>△</mi></math>  <code>\triangle</code></td><td><math><mi>⫫</mi></math>  <code>\Bot</code> </td></tr>
-<tr><td><math><mi>&quot;</mi></math>   <code>&quot;</code> </td><td><math><mi>▽</mi></math>  <code>\triangledown</code></td><td><math><mo linebreak="newline"></mo></math>$   <code>\$</code> </td></tr>
-<tr><td><math><mtext>”</mtext></math>  <code>\text{\textquotedblright}</code></td><td><math><mo>◃</mo></math>  <code>\triangleleft</code></td><td><math><mtext>$</mtext></math>  <code>\text{\textdollar}</code></td></tr>
+<tr><td><math><mi>&quot;</mi></math>   <code>&quot;</code> </td><td><math><mi>▽</mi></math>  <code>\triangledown</code></td><td><math><mo linebreak="newline"></mo></math>$ <code>\$</code> or <code>\text{\textdollar}</code> </td></tr>
+<tr><td><math><mtext>”</mtext></math>  <code>\text{\textquotedblright}</code></td><td><math><mo>◃</mo></math>  <code>\triangleleft</code></td><td><math><mi>¢</mi></math>  <code>\cent</code> </td></tr>
 <tr><td><math><mo lspace="0em" rspace="0.1667em">:</mo></math>  <code>\colon</code> </td><td><math><mo>▹</mo></math>  <code>\triangleright</code></td><td><math><mi>£</mi></math>  <code>\pounds</code> </td></tr>
 <tr><td><math><mi>‵</mi></math>  <code>\backprime</code> </td><td><math><mo>▽</mo></math>  <code>\bigtriangledown</code></td><td><math><mi>£</mi></math>  <code>\mathsterling</code> </td></tr>
 <tr><td><math><mo class="tml-prime">′</mo></math>  <code>\prime</code> </td><td><math><mo>△</mo></math>  <code>\bigtriangleup</code></td><td><math><mtext>£</mtext></math>  <code>\text{\textsterling}</code></td></tr>
@@ -638,7 +637,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.9.2</p>
+<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>   v0.10.0</p>
 <h3><a href="#top">Contents</a></h3>
 <ul class="toc">
 <li><a href="#accents">Accents</a></li>

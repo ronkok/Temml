@@ -254,6 +254,7 @@ If you know the shape of a character, but not its name,
 |\cdots|$\cdots$|||
 |\ce |${\mathrm{C}{\vphantom{X}}_{\smash[t]{6}}\mathrm{H}{\vphantom{X}}_{\smash[t]{5}}{-}\mathrm{CHO}}$|`\ce{C6H5-CHO}` | mhchem extension |
 |\cee|(Not supported)|Deprecated<br>Use `\ce` instead. | mhchem |
+|\cent|$\cent$|| wasysym | 
 |\centerdot|$\centerdot$|| ams |
 |\cf|(Not supported)|Deprecated<br>Use `\ce` instead.| mhchem |
 |\cfrac|$\cfrac{2}{1+\cfrac{2}{1}}$|`\cfrac{2}{1+\cfrac{2}{1}}`| ams |
@@ -885,8 +886,8 @@ If you know the shape of a character, but not its name,
 |\oiiint|$\oiiint$ |||
 |\oiint|$\oiint$ |||
 |\oint|$\oint$ |||
-|\oldstyle|(Not supported)| See `\oldstylenums`||
-|\oldstylenums|$\oldstylenums{123}$ |`\oldstylenums{123}`| LaTeX2ε |
+|\oldstyle|(Not supported)|||
+|\oldstylenums|(Not supported)|||
 |\omega|$\omega$ |||
 |\Omega|$\Omega$ |||
 |\Omicron|$\Omicron$ |||
@@ -1484,7 +1485,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.9.2
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.0
 
 <div style="height:0.5em;"></div>
 

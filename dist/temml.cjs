@@ -1234,6 +1234,8 @@ defineSymbol(math, textord, "\u2018", "`");
 defineSymbol(math, textord, "$", "\\$");
 defineSymbol(text, textord, "$", "\\$");
 defineSymbol(text, textord, "$", "\\textdollar");
+defineSymbol(math, textord, "¢", "\\cent");
+defineSymbol(text, textord, "¢", "\\cent");
 defineSymbol(math, textord, "%", "\\%");
 defineSymbol(text, textord, "%", "\\%");
 defineSymbol(math, textord, "_", "\\_");
@@ -3148,13 +3150,12 @@ defineFunction({
   names: ["\\\\"],
   props: {
     numArgs: 0,
-    numOptionalArgs: 1,
-    argTypes: ["size"],
+    numOptionalArgs: 0,
     allowedInText: true
   },
 
   handler({ parser }, args, optArgs) {
-    const size = optArgs[0];
+    const size = parser.gullet.future().text === "[" ? parser.parseSizeGroup(true) : null;
     const newLine = !parser.settings.displayMode;
     return {
       type: "cr",
@@ -4914,7 +4915,6 @@ defineFunction({
     "\\mathscr",
     "\\mathsf",
     "\\mathtt",
-    "\\oldstylenums",
 
     // aliases
     "\\Bbb",
@@ -7328,8 +7328,7 @@ const fontMap = {
   mathfrak: "fraktur",
   mathscr: "script",
   mathsf: "sans-serif",
-  mathtt: "monospace",
-  oldstylenums: "oldstylenums"
+  mathtt: "monospace"
 };
 
 /**
@@ -7399,8 +7398,6 @@ const getVariant = function(group, style) {
       return "sans-serif"
     case "mathtt":
       return "monospace"
-    case "oldstylenums":
-      return "oldstylenums"
   }
 
   let text = group.text;
@@ -7696,10 +7693,7 @@ defineFunctionBuilders({
     let node;
     if (numberRegEx$1.test(group.text)) {
       const tag = group.mode === "text" ? "mtext" : "mn";
-      if (variant === "oldstylenums") {
-        const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"]);
-        node = new mathMLTree.MathNode(tag, [ms]);
-      } else if (variant === "italic" || variant === "bold-italic") {
+      if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant, tag)
       } else {
         if (variant !== "normal") {
@@ -11430,6 +11424,36 @@ const uSubsAndSups = Object.freeze({
   '\u1DBF': 'θ'
 });
 
+// Used for Unicode input of calligraphic and script letters
+const asciiFromScript = Object.freeze({
+  "\ud835\udc9c": "A",
+  "\u212c": "B",
+  "\ud835\udc9e": "C",
+  "\ud835\udc9f": "D",
+  "\u2130": "E",
+  "\u2131": "F",
+  "\ud835\udca2": "G",
+  "\u210B": "H",
+  "\u2110": "I",
+  "\ud835\udca5": "J",
+  "\ud835\udca6": "K",
+  "\u2112": "L",
+  "\u2113": "M",
+  "\ud835\udca9": "N",
+  "\ud835\udcaa": "O",
+  "\ud835\udcab": "P",
+  "\ud835\udcac": "Q",
+  "\u211B": "R",
+  "\ud835\udcae": "S",
+  "\ud835\udcaf": "T",
+  "\ud835\udcb0": "U",
+  "\ud835\udcb1": "V",
+  "\ud835\udcb2": "W",
+  "\ud835\udcb3": "X",
+  "\ud835\udcb4": "Y",
+  "\ud835\udcb5": "Z"
+});
+
 // Mapping of Unicode accent characters to their LaTeX equivalent in text and
 // math mode (when they exist).
 var unicodeAccents = {
@@ -12665,6 +12689,22 @@ class Parser {
           text
         };
       } else {
+        if (asciiFromScript[text]) {
+          // Unicode 14 disambiguates chancery from roundhand.
+          // See https://www.unicode.org/charts/PDF/U1D400.pdf
+          this.consume();
+          const nextCode = this.fetch().text.charCodeAt(0);
+          // mathcal is Temml default. Use mathscript if called for.
+          const font = nextCode === 0xfe01 ? "mathscr" : "mathcal";
+          if (nextCode === 0xfe00 || nextCode === 0xfe01) { this.consume(); }
+          return {
+            type: "font",
+            mode: "math",
+            font,
+            body: { type: "mathord", mode: "math", loc, text: asciiFromScript[text] }
+          }
+        }
+        // Default ord character. No disambiguation necessary.
         s = {
           type: group,
           mode: this.mode,
@@ -12921,7 +12961,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.9.2";
+const version = "0.10.0";
 
 function postProcess(block) {
   const labelMap = {};
