@@ -7,6 +7,7 @@ import { supportedCodepoint } from "./unicodeScripts";
 import ParseError from "./ParseError";
 import { combiningDiacriticalMarksEndRegex } from "./Lexer";
 import { uSubsAndSups, unicodeSubRegEx } from "./unicodeSupOrSub"
+import { asciiFromScript } from "./asciiFromScript"
 import SourceLocation from "./SourceLocation";
 import { Token } from "./Token";
 
@@ -909,6 +910,22 @@ export default class Parser {
           text
         };
       } else {
+        if (asciiFromScript[text]) {
+          // Unicode 14 disambiguates chancery from roundhand.
+          // See https://www.unicode.org/charts/PDF/U1D400.pdf
+          this.consume()
+          const nextCode = this.fetch().text.charCodeAt(0)
+          // mathcal is Temml default. Use mathscript if called for.
+          const font = nextCode === 0xfe01 ? "mathscr" : "mathcal";
+          if (nextCode === 0xfe00 || nextCode === 0xfe01) { this.consume() }
+          return {
+            type: "font",
+            mode: "math",
+            font,
+            body: { type: "mathord", mode: "math", loc, text: asciiFromScript[text] }
+          }
+        }
+        // Default ord character. No disambiguation necessary.
         s = {
           type: group,
           mode: this.mode,

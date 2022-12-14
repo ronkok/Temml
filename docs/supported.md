@@ -482,16 +482,23 @@ as `A^{2+3}`.
 | Bold Italic  | $\text{𝑨-𝒁 𝒂-𝒛}$       | Sans serif bold   | $\text{𝗔-𝗭 𝗮-𝘇 𝟬-𝟵}$  |
 | Fractur      | $\text{𝔄-ℨ}\text{𝔞-𝔷}$ | Sans serif italic | $\text{𝘈-𝘡 𝘢-𝘻}$      |
 | Monospace    | $\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}$   | Sans serif bold italic | $\text{𝘼-𝙕 𝙖-𝙯}$  |
+| Script       | $\text{𝒜-𝒵 𝒶-𝓏}$       |                   |                       |
 
 Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$ .
 
 <br>
 
-<div>For chancery or roundhand characters, it’s probably best to use <code>\mathcal</code> and <code>\mathscr</code> instead of Unicode input.<details><summary>Why?</summary>
-<p>Unicode has historically accepted either chancery or roundhand glyphs in the range U+1D49C—U+1D4B5. That's confusing,
-because Cambria Math has chancery in those code points and some other math fonts have roundhand in the same code points.
-<a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14</a> has recently added a method to resolve the ambiguity. Both chancery and roundhand still occupy the same range, but each unambigous chancery character has a <code>\ufe00</code> appended to the code point and each unambigous roundhand character has a <code>\ufe01</code> appended to the code point.</p>
-<p>Published fonts have not yet caught up to the new code point assignments. If you want your documents to not break in the future, it’s probably best to avoid Unicode input and stick with <code>\mathcal</code> and <code>\mathscr</code>.</p>
+<div><details><summary>More about Unicode script…</summary>
+
+The Unicode range U+1D49C - U+1D4B5, Mathematical Script, has been ambiguous.
+Some fonts put chancery glyphs ($\mathcal{ABC}$) at those code points and some
+fonts use roundhand glyphs ($\mathscr{ABC}$). Temml’s default for code points
+in this range is chancery, which matches the fonts Cambria Math and STIX TWO.
+It also matches the TeX function `\mathcal{…}`.
+
+Per Unicode 14+, Temml will return a roundhand glyph if you append a `\ufe01`
+to a character in the range $\text{𝒜-𝒵}$.
+
 </details>
 </div>
 
@@ -1374,11 +1381,11 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\text{\textquotedblleft}$   | $\triangle$             | $\Bot$  `\Bot`                     |
 |  `\text{\textquotedblleft}`  |  `\triangle`            |                                    |
 +------------------------------+-------------------------+------------------------------------+
-| $"$   `"`                    | $\triangledown$         | $\\$$   `\$`                       |
+| $"$   `"`                    | $\triangledown$         | $\\$$ `\$` or `\text{\textdollar}` |
 |                              |  `\triangledown`        |                                    |
 +------------------------------+-------------------------+------------------------------------+
-| $\text{\textquotedblright}$  | $\triangleleft$         | $\text{\textdollar}$               |
-|  `\text{\textquotedblright}` |  `\triangleleft`        |  `\text{\textdollar}`              |
+| $\text{\textquotedblright}$  | $\triangleleft$         | $\cent$  `\cent`                   |
+|  `\text{\textquotedblright}` |  `\triangleleft`        |                                    |
 +------------------------------+-------------------------+------------------------------------+
 | $\colon$  `\colon`           | $\triangleright$        | $\pounds$  `\pounds`               |
 |                              |  `\triangleright`       |                                    |

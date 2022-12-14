@@ -861,6 +861,8 @@ const test = () => {
   new Expect(r`\begin{Vmatrix*}[r] a & -1 \\ -1 & d \end{Vmatrix*}`).toBuild();
   new Expect(r`\begin{matrix*} a & -1 \\ -1 & d \end{matrix*}`).toBuild();
   new Expect(r`\begin{matrix*}[] a & -1 \\ -1 & d \end{matrix*}`).toNotParse();
+  new Expect(r`\begin{matrix}a&b\\ [c]&d\end{matrix}`).toParse()
+  new Expect(r`a\\ [b]`).toParse()
 
   assertion = "A sqrt parser should work"
   const sqrt = r`\sqrt{x}`;
@@ -2130,6 +2132,13 @@ const test = () => {
   wideCharText += "}";
   new Expect(wideCharText).toParse(strictSettings());
   new Expect(wideCharText).toBuild(strictSettings());
+  assertion = "Unicode script characters should parse correctly."
+  wideCharText = String.fromCharCode(0xD835, 0xdcaa); // Script O
+  markup = temml.renderToString(wideCharText)
+  new Expect(markup).toContain('class="mathcal"')
+  wideCharText = String.fromCharCode(0xD835, 0xdcaa, 0xfe01); // Trailing U_FE01 per Unicode 14
+  markup = temml.renderToString(wideCharText)
+  new Expect(markup).toContain('class="mathscr"')
 
   assertion = "The maxSize setting should clamp size when set"
   const rule = r`\rule{999em}{999em}`
