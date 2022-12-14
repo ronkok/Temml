@@ -32,10 +32,6 @@ math .mathscr {
   font-family: "Temml";
 }
 
-math .oldstylenums {
-  font-feature-settings: 'onum';
-}
-
 mo.tml-prime {
   font-family: Temml;
 }

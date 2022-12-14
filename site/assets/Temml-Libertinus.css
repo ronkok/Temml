@@ -50,11 +50,6 @@ math {
   font-family: "Cambria Math", 'STIXTwoMath-Regular', "Times New Roman", math;
 }
 
-.oldstylenums {
-  font-family: "Cambria Math", math;
-  font-feature-settings: 'onum';
-}
-
 mo.tml-prime {
   font-feature-settings: 'ssty';
 }

@@ -1284,8 +1284,8 @@ See also [\operatorname](#math-operators).
 +--------------------------------+----------------------------------+----------------------------------+
 | $\textsc{hey}$  `\textsc{hey}` | ${\tt Ab0}$  `{\tt Ab0 }`        | ${\cal AB}$  `{\cal AB}`         |
 +--------------------------------+----------------------------------+----------------------------------+
-| $\oldstylenums{123}$           |                                  | $\mathscr{AB}$  `\mathscr{AB}`   |
-|  `\oldstylenums{123}`          |                                  |                                  |
+|                                |                                  | $\mathscr{AB}$  `\mathscr{AB}`   |
+|                                |                                  |                                  |
 +--------------------------------+----------------------------------+----------------------------------+
 
 The `\textXX` versions can stack font family, font weight, and font shape. So `\textsf{\textbf{H}}` will produce $\textsf{\textbf{H}}$. The other versions do not stack, e.g., `\mathsf{\mathbf{H}}` will produce $\mathsf{\mathbf{H}}$.

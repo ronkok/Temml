@@ -63,10 +63,7 @@ defineFunctionBuilders({
     let node
     if (numberRegEx.test(group.text)) {
       const tag = group.mode === "text" ? "mtext" : "mn"
-      if (variant === "oldstylenums") {
-        const ms = new mathMLTree.MathNode("mstyle", [text], ["oldstylenums"])
-        node = new mathMLTree.MathNode(tag, [ms])
-      } else if (variant === "italic" || variant === "bold-italic") {
+      if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant, tag)
       } else {
         if (variant !== "normal") {

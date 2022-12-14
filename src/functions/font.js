@@ -67,7 +67,6 @@ defineFunction({
     "\\mathscr",
     "\\mathsf",
     "\\mathtt",
-    "\\oldstylenums",
 
     // aliases
     "\\Bbb",

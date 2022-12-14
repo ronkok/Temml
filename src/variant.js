@@ -17,8 +17,7 @@ const fontMap = {
   mathfrak: "fraktur",
   mathscr: "script",
   mathsf: "sans-serif",
-  mathtt: "monospace",
-  oldstylenums: "oldstylenums"
+  mathtt: "monospace"
 }
 
 /**
@@ -88,8 +87,6 @@ export const getVariant = function(group, style) {
       return "sans-serif"
     case "mathtt":
       return "monospace"
-    case "oldstylenums":
-      return "oldstylenums"
     default:
       break
   }

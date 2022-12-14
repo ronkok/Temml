@@ -52,11 +52,6 @@ math {
   font-family: "Temml";
 }
 
-.oldstylenums {
-  font-family: "Cambria Math", math;
-  font-feature-settings: 'onum';
-}
-
 mo.tml-prime {
   font-family: Temml;
 }
