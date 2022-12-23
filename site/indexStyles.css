@@ -157,6 +157,8 @@ math {
     width: 93%
   }
   #why ul { padding-inline-start: 0; }
+  #wide + label,
+  #wide { visibility: hidden; }
 }
 
 #copyright {
