@@ -1,5 +1,5 @@
 ﻿/* eslint-disable */
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
+/* -*- Mode: JavaScript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
 /* vim: set ts=2 et sw=2 tw=80: */
 
 /*************************************************************
@@ -1696,7 +1696,7 @@ temml.__defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\
   };
 
   //
-  // Helpers for code anaylsis
+  // Helpers for code analysis
   // Will show type error at calling position
   //
   /** @param {number} a */

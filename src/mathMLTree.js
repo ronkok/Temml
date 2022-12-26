@@ -148,7 +148,7 @@ export class TextNode {
 
   /**
    * Converts the text node into a string
-   * (representing the text iteself).
+   * (representing the text itself).
    */
   toText() {
     return this.text;
