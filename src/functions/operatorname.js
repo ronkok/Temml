@@ -21,8 +21,12 @@ const mathmlBuilder = (group, style) => {
   // Is expression a string or has it something like a fraction?
   let isAllString = true; // default
   for (let i = 0; i < expression.length; i++) {
-    const node = expression[i]
+    let node = expression[i]
     if (node instanceof mathMLTree.MathNode) {
+      if (node.type === "mrow" && node.children.length === 1 &&
+          node.children[0] instanceof mathMLTree.MathNode) {
+        node = node.children[0]
+      }
       switch (node.type) {
         case "mi":
         case "mn":
