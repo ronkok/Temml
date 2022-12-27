@@ -10,6 +10,7 @@ import { uSubsAndSups, unicodeSubRegEx } from "./unicodeSupOrSub"
 import { asciiFromScript } from "./asciiFromScript"
 import SourceLocation from "./SourceLocation";
 import { Token } from "./Token";
+import { isDelimiter } from "./functions/delimsizing"
 
 // Pre-evaluate both modules as unicodeSymbols require String.normalize()
 import unicodeAccents from /*preval*/ "./unicodeAccents";
@@ -424,12 +425,16 @@ export default class Parser {
         return base
       } else {
         // We got either a superscript or subscript, create a supsub
+        const isFollowedByDelimiter = (!base || base.type !== "op" && base.type !== "operatorname")
+          ? false
+          : isDelimiter(this.nextToken.text);
         return {
           type: "supsub",
           mode: this.mode,
           base: base,
           sup: superscript,
-          sub: subscript
+          sub: subscript,
+          isFollowedByDelimiter
         }
       }
     } else {

@@ -1544,8 +1544,7 @@ const test = () => {
   new Expect(r`\operatorname*{x*Π∑\Pi\sum\frac a b}_2`).toBuild()
   new Expect(r`\operatorname*{x*Π∑\Pi\sum\frac a b}\limits_2`).toBuild()
   assertion = "operatorname should consolidate contents when possible"
-  markup = temml.renderToString(r`\operatorname{Max}`)
-  new Expect(markup).toContain(`<mi mathvariant="normal">Max</mi>`)
+  new Expect(temml.renderToString(r`\operatorname{Max}`)).toContain("<mi>Max</mi>")
 
   assertion = "href and url commands should build their input"
   new Expect(r`\href{http://example.com/}{\sin}`).toParse(trustSettings())

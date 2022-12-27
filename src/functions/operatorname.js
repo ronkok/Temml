@@ -3,15 +3,11 @@ import defineMacro from "../defineMacro";
 import mathMLTree from "../mathMLTree"
 import { spaceCharacter } from "./kern"
 import { ordTypes } from "./op"
-import { delimiters, delimiterSizes } from "./delimsizing"
+import { isDelimiter } from "./delimsizing"
 
 import * as mml from "../buildMathML"
 
-const dels = ["}", "\\left", "\\middle", "\\right"]
-const isDelimiter = str => str.length > 0 &&
-  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str))
-
-  // NOTE: Unlike most builders, this one handles not only
+// NOTE: Unlike most builders, this one handles not only
 // "operatorname", but also  "supsub" since \operatorname* can
 // affect super/subscripting.
 
@@ -84,7 +80,9 @@ const mathmlBuilder = (group, style) => {
   let wrapper;
   if (isAllString) {
     wrapper = new mathMLTree.MathNode("mi", expression)
-    wrapper.setAttribute("mathvariant", "normal")
+    if (expression[0].text.length === 1) {
+      wrapper.setAttribute("mathvariant", "normal")
+    }
   } else {
     wrapper = new mathMLTree.MathNode("mrow", expression)
   }

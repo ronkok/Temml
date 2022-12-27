@@ -89,6 +89,11 @@ export const delimiters = [
   "."
 ];
 
+// Export isDelimiter for benefit of parser.
+const dels = ["}", "\\left", "\\middle", "\\right"]
+export const isDelimiter = str => str.length > 0 &&
+  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str))
+
 // Metrics of the different sizes. Found by looking at TeX's output of
 // $\bigl| // \Bigl| \biggl| \Biggl| \showlists$
 // Used to create stacked delimiters of appropriate sizes in makeSizedDelim.

@@ -24,6 +24,7 @@ defineFunctionBuilders({
     let isOver
     let isSup
     let appendApplyFunction = false
+    let appendSpace = false
     let needsLeadingSpace = false
 
     if (group.base && group.base.type === "horizBrace") {
@@ -38,6 +39,7 @@ defineFunctionBuilders({
       (group.base.type === "op" || group.base.type === "operatorname")) {
       group.base.parentIsSupSub = true
       appendApplyFunction = !group.base.symbol
+      appendSpace = appendApplyFunction && !group.isFollowedByDelimiter
       needsLeadingSpace = group.base.needsLeadingSpace
     }
 
@@ -124,6 +126,11 @@ defineFunctionBuilders({
         node = mathMLTree.newDocumentFragment([space, node, operator])
       } else {
         node = mathMLTree.newDocumentFragment([node, operator])
+      }
+      if (appendSpace) {
+        const space = new mathMLTree.MathNode("mspace")
+        space.setAttribute("width", "0.1667em") // thin space.
+        node.children.push(space)
       }
     } else if (symbolRegEx.test(nodeType)) {
       // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not stretch to include limits.
