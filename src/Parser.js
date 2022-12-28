@@ -426,7 +426,7 @@ export default class Parser {
       } else {
         // We got either a superscript or subscript, create a supsub
         const isFollowedByDelimiter = (!base || base.type !== "op" && base.type !== "operatorname")
-          ? false
+          ? undefined
           : isDelimiter(this.nextToken.text);
         return {
           type: "supsub",
