@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.1] = 2022-12-29
+
+### Fixed
+
+- Consolidate contents of \operatorname when possible
+- Insert space after a subsup whose base is an op
+- Spelling errors
+
 ## [0.10.0] = 2022-12-14
 
 ### Fixed

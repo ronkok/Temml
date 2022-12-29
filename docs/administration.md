@@ -53,8 +53,7 @@ A server-side installation should include `temml.cjs` instead of `temml.min.js`.
 ### Overview
 
 Say that you have an HTMLCollection of elements whose contents should be
-converted from TeX strings to math. And also say that you wish to define two
-macros and a color with document-wide scope. The code for such a conversion
+converted from TeX strings to math. The code for such a conversion
 might look like this:
 
 Option 1: Macros do not persist between calls to Temml:
@@ -73,6 +72,7 @@ temml.postProcess(document.body);
 <details><summary>Option 2: Macros defined with <code>\gdef</code> <strong>do</strong> persist:</summary>
 
 ```
+// Optional macros object to hold macros that persist between calls to Temml.
 const macros = {}
 // Render all the math.
 for (let aSpan of [...mathSpans]) {
@@ -88,9 +88,13 @@ temml.postProcess(document.body);
 
 i> Notice that you can choose when to stop macro persistence by redefining `macros`.
 
+<br>
+
 </details>
 
 <details><summary>Option 3: Macros persist and there are some predefined macros:</summary>
+
+Now say that you wish to pre-define two macros and a color with document-wide scope.
 
 ```
 // Optional preamble to pre-define macros.
@@ -375,7 +379,7 @@ refer to [Options](#options) for more details.
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.0
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.1
 
 <h3><a href="#top">Contents</a></h3>
 

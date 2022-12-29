@@ -666,7 +666,7 @@ class TextNode {
 
   /**
    * Converts the text node into a string
-   * (representing the text iteself).
+   * (representing the text itself).
    */
   toText() {
     return this.text;
@@ -1890,7 +1890,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode, color) {
 }
 
 /**
- * This file converts a parse tree into a cooresponding MathML tree. The main
+ * This file converts a parse tree into a corresponding MathML tree. The main
  * entry point is the `buildMathML` function, which takes a parse tree from the
  * parser.
  */
@@ -3520,6 +3520,11 @@ const delimiters = [
   "\\Updownarrow",
   "."
 ];
+
+// Export isDelimiter for benefit of parser.
+const dels = ["}", "\\left", "\\middle", "\\right"];
+const isDelimiter = str => str.length > 0 &&
+  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str));
 
 // Metrics of the different sizes. Found by looking at TeX's output of
 // $\bigl| // \Bigl| \biggl| \Biggl| \showlists$
@@ -6203,10 +6208,6 @@ const noSuccessor = ["\\smallint"];
 // Math operators (e.g. \sin) need a space between these types and themselves:
 const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"];
 
-const dels$1 = ["}", "\\left", "\\middle", "\\right"];
-const isDelimiter$1 = str => str.length > 0 &&
-  (delimiters.includes(str) || delimiterSizes[str] || dels$1.includes(str));
-
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
 
@@ -6427,7 +6428,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      isFollowedByDelimiter: isDelimiter$1(next),
+      isFollowedByDelimiter: isDelimiter(next),
       needsLeadingSpace: prevAtomType.length > 0 && ordTypes.includes(prevAtomType),
       name: funcName
     };
@@ -6452,7 +6453,7 @@ defineFunction({
       parentIsSupSub: false,
       symbol: false,
       stack: false,
-      isFollowedByDelimiter: isDelimiter$1(next),
+      isFollowedByDelimiter: isDelimiter(next),
       needsLeadingSpace: prevAtomType.length > 0 && ordTypes.includes(prevAtomType),
       name: funcName
     };
@@ -6538,11 +6539,7 @@ function defineMacro(name, body) {
   _macros[name] = body;
 }
 
-const dels = ["}", "\\left", "\\middle", "\\right"];
-const isDelimiter = str => str.length > 0 &&
-  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str));
-
-  // NOTE: Unlike most builders, this one handles not only
+// NOTE: Unlike most builders, this one handles not only
 // "operatorname", but also  "supsub" since \operatorname* can
 // affect super/subscripting.
 
@@ -6552,8 +6549,12 @@ const mathmlBuilder$1 = (group, style) => {
   // Is expression a string or has it something like a fraction?
   let isAllString = true; // default
   for (let i = 0; i < expression.length; i++) {
-    const node = expression[i];
+    let node = expression[i];
     if (node instanceof mathMLTree.MathNode) {
+      if (node.type === "mrow" && node.children.length === 1 &&
+          node.children[0] instanceof mathMLTree.MathNode) {
+        node = node.children[0];
+      }
       switch (node.type) {
         case "mi":
         case "mn":
@@ -6611,7 +6612,9 @@ const mathmlBuilder$1 = (group, style) => {
   let wrapper;
   if (isAllString) {
     wrapper = new mathMLTree.MathNode("mi", expression);
-    wrapper.setAttribute("mathvariant", "normal");
+    if (expression[0].text.length === 1) {
+      wrapper.setAttribute("mathvariant", "normal");
+    }
   } else {
     wrapper = new mathMLTree.MathNode("mrow", expression);
   }
@@ -7149,6 +7152,7 @@ defineFunctionBuilders({
     let isOver;
     let isSup;
     let appendApplyFunction = false;
+    let appendSpace = false;
     let needsLeadingSpace = false;
 
     if (group.base && group.base.type === "horizBrace") {
@@ -7163,6 +7167,7 @@ defineFunctionBuilders({
       (group.base.type === "op" || group.base.type === "operatorname")) {
       group.base.parentIsSupSub = true;
       appendApplyFunction = !group.base.symbol;
+      appendSpace = appendApplyFunction && !group.isFollowedByDelimiter;
       needsLeadingSpace = group.base.needsLeadingSpace;
     }
 
@@ -7249,6 +7254,11 @@ defineFunctionBuilders({
         node = mathMLTree.newDocumentFragment([space, node, operator]);
       } else {
         node = mathMLTree.newDocumentFragment([node, operator]);
+      }
+      if (appendSpace) {
+        const space = new mathMLTree.MathNode("mspace");
+        space.setAttribute("width", "0.1667em"); // thin space.
+        node.children.push(space);
       }
     } else if (symbolRegEx.test(nodeType)) {
       // Wrap in a <mrow>. Otherwise Firefox stretchy parens will not stretch to include limits.
@@ -8882,7 +8892,7 @@ defineMacro("\\incoh", `{\\mkern5mu\\rule{}{0.7em}\\mathrlap{\\smash{\\raise2mu{
 defineMacro("\\standardstate", "\\text{\\tiny\\char`⦵}");
 
 ﻿/* eslint-disable */
-/* -*- Mode: Javascript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
+/* -*- Mode: JavaScript; indent-tabs-mode:nil; js-indent-level: 2 -*- */
 /* vim: set ts=2 et sw=2 tw=80: */
 
 /*************************************************************
@@ -10579,7 +10589,7 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
   };
 
   //
-  // Helpers for code anaylsis
+  // Helpers for code analysis
   // Will show type error at calling position
   //
   /** @param {number} a */
@@ -11004,15 +11014,15 @@ class MacroExpander {
    * Expand the next token only once if possible.
    *
    * If the token is expanded, the resulting tokens will be pushed onto
-   * the stack in reverse order and will be returned as an array,
-   * also in reverse order.
+   * the stack in reverse order, and the number of such tokens will be
+   * returned.  This number might be zero or positive.
    *
-   * If not, the next token will be returned without removing it
-   * from the stack.  This case can be detected by a `Token` return value
-   * instead of an `Array` return value.
+   * If not, the return value is `false`, and the next token remains at the
+   * top of the stack.
    *
    * In either case, the next token will be on the top of the stack,
-   * or the stack will be empty.
+   * or the stack will be empty (in case of empty expansion
+   * and no other tokens).
    *
    * Used to implement `expandAfterFuture` and `expandNextToken`.
    *
@@ -11028,7 +11038,7 @@ class MacroExpander {
         throw new ParseError("Undefined control sequence: " + name);
       }
       this.pushToken(topToken);
-      return topToken;
+      return false;
     }
     this.expansionCount++;
     if (this.expansionCount > this.settings.maxExpand) {
@@ -11062,7 +11072,7 @@ class MacroExpander {
     }
     // Concatenate expansion onto top of stack.
     this.pushTokens(tokens);
-    return tokens;
+    return tokens.length;
   }
 
   /**
@@ -11081,14 +11091,13 @@ class MacroExpander {
    */
   expandNextToken() {
     for (;;) {
-      const expanded = this.expandOnce();
-      // expandOnce returns Token if and only if it's fully expanded.
-      if (expanded instanceof Token) {
+      if (this.expandOnce() === false) { // fully expanded
+        const token = this.stack.pop();
         // The token after \noexpand is interpreted as if its meaning were ‘\relax’
-        if (expanded.treatAsRelax) {
-          expanded.text = "\\relax";
+        if (token.treatAsRelax) {
+          token.text = "\\relax";
         }
-        return this.stack.pop(); // === expanded
+        return token
       }
     }
 
@@ -11114,15 +11123,15 @@ class MacroExpander {
     const oldStackLength = this.stack.length;
     this.pushTokens(tokens);
     while (this.stack.length > oldStackLength) {
-      const expanded = this.expandOnce(true); // expand only expandable tokens
-      // expandOnce returns Token if and only if it's fully expanded.
-      if (expanded instanceof Token) {
-        if (expanded.treatAsRelax) {
+      // Expand only expandable tokens
+      if (this.expandOnce(true) === false) {  // fully expanded
+        const token = this.stack.pop();
+        if (token.treatAsRelax) {
           // the expansion of \noexpand is the token itself
-          expanded.noexpand = false;
-          expanded.treatAsRelax = false;
+          token.noexpand = false;
+          token.treatAsRelax = false;
         }
-        output.push(this.stack.pop());
+        output.push(token);
       }
     }
     return output;
@@ -11950,7 +11959,7 @@ class Parser {
    * Parses an "expression", which is a list of atoms.
    *
    * `breakOnInfix`: Should the parsing stop when we hit infix nodes? This
-   *                 happens when functions have higher precendence han infix
+   *                 happens when functions have higher precedence han infix
    *                 nodes in implicit parses.
    *
    * `breakOnTokenText`: The text of the token that the expression should end
@@ -12201,12 +12210,16 @@ class Parser {
         return base
       } else {
         // We got either a superscript or subscript, create a supsub
+        const isFollowedByDelimiter = (!base || base.type !== "op" && base.type !== "operatorname")
+          ? undefined
+          : isDelimiter(this.nextToken.text);
         return {
           type: "supsub",
           mode: this.mode,
           base: base,
           sup: superscript,
-          sub: subscript
+          sub: subscript,
+          isFollowedByDelimiter
         }
       }
     } else {
@@ -12959,7 +12972,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.0";
+const version = "0.10.1";
 
 function postProcess(block) {
   const labelMap = {};
