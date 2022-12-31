@@ -595,7 +595,7 @@ export default class Parser {
     while (true) {
       const ch = this.fetch().text
       // \ufe0e is the Unicode variation selector to supress emoji. Ignore it.
-      if (ch === " " || ch === "\ufe0e") {
+      if (ch === " " || ch === "\u00a0" || ch === "\ufe0e") {
         this.consume()
       } else {
         break
