@@ -474,6 +474,7 @@ If you know the shape of a character, but not its name,
 | \frac                 | $\frac a b$                    | `\frac a b`                  | ams               |
 | \frak                 | $\frak{AaBb}$                  | `\frak{AaBb}`                |                   |
 | \frown                | $\frown$                       |                              |                   |
+| \fullouterjoin        | $\fullouterjoin$               |                              | stix              |
 | \functionalderivative | $\functionalderivative{x}{y}$  | `\functionalderivative{x}{y}`| physics extension |
 | \futurelet            |                                |                              |                   |
 
@@ -652,6 +653,7 @@ If you know the shape of a character, but not its name,
 | \leftharpoondown     | $\leftharpoondown$         | | |
 | \leftharpoonup       | $\leftharpoonup$           | | |
 | \leftleftarrows      | $\leftleftarrows$          | | ams |
+| \leftouterjoin       | $\leftouterjoin$           | | stix |
 | \Leftrightarrow      | $\Leftrightarrow$          | | |
 | \leftrightarrow      | $\leftrightarrow$          | | |
 | \leftrightarrows     | $\leftrightarrows$         | | ams |
@@ -1060,6 +1062,7 @@ If you know the shape of a character, but not its name,
 | \rightharpoonup    | $\rightharpoonup$| | |
 | \rightleftarrows   | $\rightleftarrows$| | ams |
 | \rightleftharpoons | $\rightleftharpoons$| | ams |
+| \rightouterjoin    | $\rightouterjoin$ | | stix |
 | \rightrightarrows  | $\rightrightarrows$| | ams |
 | \rightsquigarrow   | $\rightsquigarrow$| | ams |
 | \rightthreetimes   | $\rightthreetimes$| | ams |
