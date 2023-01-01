@@ -228,6 +228,7 @@ const test = () => {
   assertion = "Parser should ignore whitespace"
   new Expect(`    x    y    `).toParseLike("xy")
   new Expect(`    x   ^ y    `).toParseLike("x^y")
+  new Expect("\u00a0\ufe0e" + `x   ^ y    `).toParseLike("x^y")
 
   assertion = "Parser should build a list of ords"
   const ords = parse("1234|@.`abcdefgzABCDEFGZ");
