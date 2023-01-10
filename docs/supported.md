@@ -9,7 +9,7 @@
    <script src="../../assets/temml.min.js"></script>
    <style>
       #env + table tr td:nth-child(1) { min-width: 9em }
-      #env + table tr td:nth-child(3) { min-width: 11em }
+      #env + table tr td:nth-child(3) { min-width: 11em; max-width: 13em; }
     </style>
 </head>
 
@@ -1495,7 +1495,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.1
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.2
 
 <h3><a href="#top">Contents</a></h3>
 

@@ -845,7 +845,6 @@ defineSymbol(math, rel, "\u226a", "\\ll", true);
 defineSymbol(math, rel, "\u226b", "\\gg", true);
 defineSymbol(math, rel, "\u224d", "\\asymp", true);
 defineSymbol(math, rel, "\u2225", "\\parallel");
-defineSymbol(math, rel, "\u22c8", "\\bowtie", true);
 defineSymbol(math, rel, "\u2323", "\\smile", true);
 defineSymbol(math, rel, "\u2291", "\\sqsubseteq", true);
 defineSymbol(math, rel, "\u2292", "\\sqsupseteq", true);
@@ -1162,7 +1161,6 @@ defineSymbol(math, rel, "\u22d9", "\\gggtr");
 defineSymbol(math, bin, "\u22b2", "\\lhd");
 defineSymbol(math, bin, "\u22b3", "\\rhd");
 defineSymbol(math, rel, "\u2242", "\\eqsim", true);
-defineSymbol(math, rel, "\u22c8", "\\Join");
 defineSymbol(math, rel, "\u2251", "\\Doteq", true);
 defineSymbol(math, rel, "\u297d", "\\strictif", true);
 defineSymbol(math, rel, "\u297c", "\\strictfi", true);
@@ -1188,6 +1186,11 @@ defineSymbol(math, bin, "\u22ba", "\\intercal", true);
 defineSymbol(math, bin, "\u22d2", "\\doublecap");
 defineSymbol(math, bin, "\u22d3", "\\doublecup");
 defineSymbol(math, bin, "\u22a0", "\\boxtimes", true);
+defineSymbol(math, bin, "\u22c8", "\\bowtie", true);
+defineSymbol(math, bin, "\u22c8", "\\Join");
+defineSymbol(math, bin, "\u27d5", "\\leftouterjoin", true);
+defineSymbol(math, bin, "\u27d6", "\\rightouterjoin", true);
+defineSymbol(math, bin, "\u27d7", "\\fullouterjoin", true);
 
 // AMS Arrows
 // Note: unicode-math maps \u21e2 to their own function \rightdasharrow.
@@ -12382,7 +12385,7 @@ class Parser {
     while (true) {
       const ch = this.fetch().text;
       // \ufe0e is the Unicode variation selector to supress emoji. Ignore it.
-      if (ch === " " || ch === "\ufe0e") {
+      if (ch === " " || ch === "\u00a0" || ch === "\ufe0e") {
         this.consume();
       } else {
         break
@@ -12974,7 +12977,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.1";
+const version = "0.10.2";
 
 function postProcess(block) {
   const labelMap = {};

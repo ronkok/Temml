@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.2] = 2023-01-09
+
+### Fixed
+
+- consumeSpaces() to consume non-breaking space
+
+### Added
+
+- Support \leftouterjoin, \rightouterjoin, \fullouterjoin
+
 ## [0.10.1] = 2022-12-29
 
 ### Fixed
