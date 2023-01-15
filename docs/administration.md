@@ -371,7 +371,7 @@ refer to [Options](#options) for more details.
 
 <br>
 
-<p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p class="reduced">Copyright © 2021-2023 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
 </main>
