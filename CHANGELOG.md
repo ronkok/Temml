@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.3] = 2023-01-17
+
+### Fixed
+
+- Soft lines breaks via CSS flex-wrap
+
 ## [0.10.2] = 2023-01-09
 
 ### Fixed
