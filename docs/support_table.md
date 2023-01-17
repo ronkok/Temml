@@ -27,9 +27,6 @@ This page provides an alphabetically sorted list of TeX functions that Temml
 supports and some functions that it does not support. There is a similar page,
 with functions [sorted by type](supported.html).
 
-To read this page, use a browser that supports MathML, such as Firefox or Safari.
-Chrome and Edge will support MathML [soon](https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html).
-
 Some functions are provided by an extension and are listed as such. They will
 be available only in pages that include the extension.
 
@@ -1547,24 +1544,6 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.2
 <script>
   // Assign id's to auto-numbered equations and populate \ref's
   temml.postProcess(document.getElementById("main"))
-
-  let hasMathML = false;
-  if (document.createElement) {
-    var div = document.createElement("div");
-    div.style.position = "absolute"; div.style.top = div.style.left = 0;
-    div.style.visibility = "hidden"; div.style.width = div.style.height = "auto";
-    div.style.fontFamily = "serif"; div.style.lineheight = "normal";
-    div.innerHTML = "<math><mfrac><mi>xx</mi><mi>yy</mi></mfrac></math>";
-    document.body.appendChild(div);
-    hasMathML = (div.offsetHeight > div.offsetWidth);
-  }
-  if (!hasMathML) {
-    // Insert the mathml.css stylesheet.
-    link = document.createElement("link");
-    link.href = "../../mathml.css";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-  }
 </script>
 
 </body>

@@ -13,9 +13,11 @@ import mathMLTree from "./mathMLTree"
  * Then the top level of a <math> element can be occupied by <mrow> elements, and the browser
  * will break after a <mrow> if the expression extends beyond the container limit.
  *
- * We want the expression to render with soft line breaks after each top-level binary or
+ * The default is for soft line breaks after each top-level binary or
  * relational operator, per TeXbook p. 173. So we gather the expression into <mrow>s so that
  * each <mrow> ends in a binary or relational operator.
+ *
+ * An option is for soft line breaks before an "=" sign. That changes the <mrow>s.
  *
  * Soft line breaks will not work in Chromium and Safari, only Firefox.
  *

@@ -191,7 +191,7 @@ var temml = (function () {
       this.leqno = utils.deflt(options.leqno, false);                // boolean
       this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
       this.macros = options.macros || {};
-      this.wrap = utils.deflt(options.wrap, "none");         // "none" | "tex" | "="
+      this.wrap = utils.deflt(options.wrap, "tex");                    // "tex" | "="
       this.xml = utils.deflt(options.xml, false);                     // boolean
       this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
       this.strict = utils.deflt(options.strict, false);    // boolean
@@ -1750,9 +1750,11 @@ var temml = (function () {
    * Then the top level of a <math> element can be occupied by <mrow> elements, and the browser
    * will break after a <mrow> if the expression extends beyond the container limit.
    *
-   * We want the expression to render with soft line breaks after each top-level binary or
+   * The default is for soft line breaks after each top-level binary or
    * relational operator, per TeXbook p. 173. So we gather the expression into <mrow>s so that
    * each <mrow> ends in a binary or relational operator.
+   *
+   * An option is for soft line breaks before an "=" sign. That changes the <mrow>s.
    *
    * Soft line breaks will not work in Chromium and Safari, only Firefox.
    *
@@ -2099,18 +2101,6 @@ var temml = (function () {
       wrapper = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
     }
 
-    if (wrap !== "none" && wrapper.children.length > 1) {
-      const maths = [];
-      for (let i = 0; i < wrapper.children.length; i++) {
-        const math = new mathMLTree.MathNode("math", [wrapper.children[i]]);
-        if (settings.xml) {
-          math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
-        }
-        maths.push(math);
-      }
-      return mathMLTree.newDocumentFragment(maths)
-    }
-
     const math = new mathMLTree.MathNode("math", [wrapper]);
 
     if (settings.xml) {
@@ -2118,6 +2108,9 @@ var temml = (function () {
     }
     if (settings.displayMode) {
       math.setAttribute("display", "block");
+      math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
+        ? "inline"
+        : "inline-block";
     }
     return math;
   }

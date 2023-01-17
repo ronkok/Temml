@@ -54,7 +54,6 @@
         <div id="math">
           <math display="block"><mrow><msub><mo movablelimits="false">∮</mo><mi>C</mi></msub><mover accent="true"><mi>B</mi><mo stretchy="false">⃗</mo></mover><mo>∘</mo><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mover accent="true"><mi>l</mi><mo stretchy="false">⃗</mo></mover><mo>=</mo><msub><mi>μ</mi><mn>0</mn></msub><mrow><mo fence="true" form="prefix">(</mo><msub><mi>I</mi><mtext>enc</mtext></msub><mo>+</mo><msub><mi>ε</mi><mn>0</mn></msub><mfrac><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mrow><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mi>t</mi></mrow></mfrac><msub><mo movablelimits="false">∫</mo><mi>S</mi></msub><mover accent="true"><mi>E</mi><mo stretchy="false">⃗</mo></mover><mo>∘</mo><mover accent="true"><mi>n</mi><mo stretchy="false">^</mo></mover><mspace width="0.2778em"></mspace><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mi>a</mi><mo fence="true" form="postfix">)</mo></mrow></mrow></math>
         </div>
-        <div id="notice"></div>
       </div>
       
     </div>
@@ -107,8 +106,8 @@
     <li>Works in browser or server-side with Node.js</li>
     <li>No dependencies</li>
     <li>Use any math font</li>
-    <li>MathML is supported by Firefox and partly supported by Safari.<br>
-      Chrome and Edge will support MathML with adoption of release branch 109, <a href="https://chromiumdash.appspot.com/schedule">early in 2023</a>.</li>
+    <li>MathML is now supported by Chrome, Edge, Firefox, and Safari.<br>
+      (Safari has some rendering bugs.)</li>
   </ul>
 </div>
 <br>
@@ -118,27 +117,6 @@
 <div id="copyright">Copyright © 2021-2023 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></div>
 
 <script>
-  // Find out if the browser supports MathML.
-  let hasMathML = false;
-  if (document.createElement) {
-    var div = document.createElement("div");
-    div.style.position = "absolute"; div.style.top = div.style.left = 0;
-    div.style.visibility = "hidden"; div.style.width = div.style.height = "auto";
-    div.style.fontFamily = "serif"; div.style.lineheight = "normal";
-    div.innerHTML = "<math><mfrac><mi>xx</mi><mi>yy</mi></mfrac></math>";
-    document.body.appendChild(div);
-    hasMathML = (div.offsetHeight > div.offsetWidth);
-  }
-  if (!hasMathML) {
-    // As a backup, insert the mathml.css style sheet.
-    const notice = document.getElementById("notice");
-    notice.textContent = "This browser does not support MathML. Try Firefox or Safari."
-    link = document.createElement("link");
-    link.href = "./mathml.css";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-  }
-
   const input = document.getElementById("demoSource");
   const math = document.getElementById("math");
   const mode = document.querySelector('input[id="displayMode"]');
@@ -158,7 +136,6 @@
     }
     reprocess()
   }
-
 
   input.addEventListener("input", reprocess, false);
   mode.addEventListener('change', () => { reprocess() });

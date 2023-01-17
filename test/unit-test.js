@@ -1,7 +1,4 @@
-import temml from "../utils/temml.cjs"; // includess mhchem & physics extensions
-import ParseError from "../src/ParseError";
-import parseTree from "../src/parseTree";
-import Settings from "../src/Settings";
+const temml = require("../utils/temml.cjs")
 
 /*
  * Unit tests for Temml.
@@ -26,6 +23,49 @@ const mathTagRegEx = /<\/?math>/g;
 // tagging literal
 const r = x => x != null && Object.prototype.hasOwnProperty.call(x, 'raw') ? x.raw[0] : x;
 
+class ParseError {
+  constructor(message = "", token = {}) {
+    this.message = message
+    this.token = token
+  }
+}
+
+const deflt = function(setting, defaultIfUndefined) {
+  return setting === undefined ? defaultIfUndefined : setting;
+}
+
+class Settings {
+  constructor(options) {
+    // allow null options
+    options = options || {};
+    this.displayMode = deflt(options.displayMode, false);    // boolean
+    this.annotate = deflt(options.annotate, false)           // boolean
+    this.leqno = deflt(options.leqno, false);                // boolean
+    this.errorColor = deflt(options.errorColor, "#b22222");  // string
+    this.macros = options.macros || {};
+    this.wrap = deflt(options.wrap, "tex")                    // "tex" | "="
+    this.xml = deflt(options.xml, false);                     // boolean
+    this.colorIsTextColor = deflt(options.colorIsTextColor, false);  // booelean
+    this.strict = deflt(options.strict, false);    // boolean
+    this.trust = deflt(options.trust, false);  // trust context. See html.js.
+    this.maxSize = (options.maxSize === undefined
+      ? [Infinity, Infinity]
+      : Array.isArray(options.maxSize)
+      ? options.maxSize
+      : [Infinity, Infinity]
+    )
+    this.maxExpand = Math.max(0, deflt(options.maxExpand, 1000)); // number
+  }
+
+  isTrusted(context) {
+    if (context.url && !context.protocol) {
+      context.protocol = utils.protocolFromUrl(context.url);
+    }
+    const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
+    return Boolean(trust);
+  }
+}
+
 // Strip positions from ParseNodes.
 const stripPositions = expr => {
   if (typeof expr !== "object" || expr === null) { return expr }
@@ -35,7 +75,7 @@ const stripPositions = expr => {
 };
 
 const parse = (expr, settings = defaultSettings()) => {
-  const tree = parseTree(expr, settings)
+  const tree = temml.__parse(expr, settings)
   return stripPositions(tree)
 }
 
@@ -2210,8 +2250,8 @@ const test = () => {
   new Expect(wrapExpression).toBuild(wrapSettings("none"));
   new Expect(wrapExpression).toBuild(wrapSettings("tex"));
   new Expect(wrapExpression).toBuild(wrapSettings("="));
-  new Expect(build(wrapExpression, wrapSettings("tex")).length).toBe(7)
-  new Expect(build(wrapExpression, wrapSettings("=")).length).toBe(2)
+  new Expect(build(wrapExpression, wrapSettings("tex"))[0].children.length).toBe(7)
+  new Expect(build(wrapExpression, wrapSettings("="))[0].children.length).toBe(2)
 
   console.log("Number of tests:    " + numTests)
   console.log("Number of failures: " + numFailures)

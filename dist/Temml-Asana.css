@@ -35,12 +35,28 @@ mtext {
 }
 
 math {
-  font-family: Asana Math;
+  font-family: Asana Math, math;
 }
 
 *.mathcal,
 mo.tml-prime {
   font-feature-settings: 'salt';
+}
+
+/* flex-wrap for line-breaking in Chromium */
+math {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+math > mrow {
+  padding: 0.5ex 0ex;
+}
+
+/* Avoid flex-wrap in Firefox */
+@supports (-moz-appearance:meterbar) and (display:flex) {
+  math { display: inline; }
+  math > mrow { padding: 0 }
 }
 
 /* AMS environment auto-numbering via CSS counter. */

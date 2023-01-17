@@ -10,7 +10,7 @@
 <main id="main" class="latin-modern">
 <h1 id='temml-administration'>Temml Administration</h1>
 <h1 id='browser-support'>Browser Support</h1>
-<p>Temml works in browsers that support MathML. This currently includes Firefox and Safari. MathML will be supported in Chrome, Edge, Opera, Brave, and Vivaldi with adoption of Chromium <a href='https://chromiumdash.appspot.com/schedule'>release 109</a>, early in 2023.<br>Temml will never work in Internet Explorer.</p>
+<p>Temml works in browsers that support MathML. This includes Chrome, Edge, Firefox, and Safari. Temml will never work in Internet Explorer.</p>
 <h1 id='installation'>Installation</h1>
 <p>You can download a zip file of Temml from the <a href='https://github.com/ronkok/Temml/releases'>releases page</a> of the Temml repository and serve Temml files from your own site. The minimum browser installation needs the following files. The <code>css</code> file and font file must be in the same folder.</p>
 <ul><li>temml.min.js</li>
@@ -97,9 +97,8 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </li>
 <li><p><code>annotate</code>: <code>boolean</code>. If <code>true</code>, Temml will include an <code>&lt;annotation&gt;</code> element that contains the input TeX string. (default: <code>false</code>)</p>
 </li>
-<li><p><code>wrap</code>: (<code>none</code> | <code>tex</code> | <code>=</code>).  A mode for soft line breaks in non-display mode math. It’s useful if you are targeting mobile. Chromium does not support soft line breaks, so Temml does this by breaking a math expression into multiple <code>&lt;math&gt;</code> elements. That’s not good semantically, so don’t use soft line breaks unless you really need them.</p>
-<p>The <code>tex</code> option sets a soft line break after every top-level relation and binary operator, per <em>The TeXbook</em>, page 173. The <code>=</code> option sets a soft line break before the second and subsequent top-level <code>=</code> signs. Option <code>none</code> (the default) sets no soft line breaks.</p>
-<p>Display mode math gets no soft line breaks. Annotated math gets no soft line breaks. If a writer sets a hard line break via <code>\\</code> or <code>\cr</code>, then Temml will not set any soft line breaks in that expression. Finally, no soft line breaks will be set if the element you supply to <code>temml.render</code> is already a <code>&lt;math&gt;</code> element.</p>
+<li><p><code>wrap</code>: (<code>&quot;tex&quot;</code> | <code>&quot;=&quot;</code>).  A mode for soft line breaks in non-display mode math. The <code>tex</code> option sets a soft line break after every top-level relation and binary operator, per <em>The TeXbook</em>, page 173. The <code>=</code> option sets a soft line break before the second and subsequent top-level <code>=</code> signs. <code>tex</code> is the default.</p>
+<p>Caveats: Soft line breaks work in Chromium and Firefox, but do not work in WebKit or Safari. Display mode math gets no soft line breaks. Annotated math gets no soft line breaks. If a writer sets a hard line break via <code>\\</code> or <code>\cr</code>, then Temml will not set any soft line breaks in that expression.</p>
 </li>
 <li><p><code>leqno</code>: <code>boolean</code>. If <code>true</code>, display math has <code>\tag</code>s rendered on the left instead of the right, like <code>\usepackage[leqno]{amsmath}</code> in LaTeX. (default: <code>false</code>)</p>
 </li>
@@ -189,12 +188,12 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</li>
 </ul>
 <br>
-<p class="reduced">Copyright © 2021, 2022 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p class="reduced">Copyright © 2021-2023 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 <br>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mstyle mathcolor="black" href="https://temml.org/"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>    v0.10.2</p>
+<p><math><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>    v0.10.2</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>

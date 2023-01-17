@@ -14,9 +14,7 @@
 
 # Browser Support
 
-Temml works in browsers that support MathML. This currently includes Firefox and Safari.
-MathML will be supported in Chrome, Edge, Opera, Brave, and Vivaldi with adoption of
-Chromium [release 109](https://chromiumdash.appspot.com/schedule), early in 2023.\
+Temml works in browsers that support MathML. This includes Chrome, Edge, Firefox, and Safari.
 Temml will never work in Internet Explorer.
 
 # Installation
@@ -175,22 +173,15 @@ Available options are:
 
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. (default: `false`)
 
-- `wrap`: (`none` | `tex` | `=`).  A mode for soft line breaks in non-display
-  mode math. It’s useful if you are targeting mobile. Chromium does not support
-  soft line breaks, so Temml does this by breaking a math expression into
-  multiple `<math>` elements. That’s not good semantically, so don’t use soft
-  line breaks unless you really need them.
-
-  The `tex` option sets a soft line break after every top-level relation and
+- `wrap`: (`"tex"` | `"="`).  A mode for soft line breaks in non-display
+  mode math. The `tex` option sets a soft line break after every top-level relation and
   binary operator, per _The TeXbook_, page 173. The `=` option sets a soft line
-  break before the second and subsequent top-level `=` signs. Option `none`
-  (the default) sets no soft line breaks.
+  break before the second and subsequent top-level `=` signs. `tex` is the default.
 
+  Caveats: Soft line breaks work in Chromium and Firefox, but do not work in WebKit or Safari.
   Display mode math gets no soft line breaks. Annotated math gets no soft line
   breaks. If a writer sets a hard line break via `\\` or `\cr`, then Temml will
-  not set any soft line breaks in that expression. Finally, no soft line breaks
-  will be set if the element you supply to `temml.render` is already a `<math>`
-  element.
+  not set any soft line breaks in that expression.
 
 - `leqno`: `boolean`. If `true`, display math has `\tag`s rendered on the left instead of the right, like `\usepackage[leqno]{amsmath}` in LaTeX. (default: `false`)
 

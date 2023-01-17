@@ -7,11 +7,10 @@
 | KaTeX         |         280 KB            |
 | TeXZilla      |         168 KB            |
 
-As a futher advantage, Temml can use local system fonts. The minimum Temml installation serves a font file that is only 12kb.
+As a futher advantage, Temml can use local system fonts. The minimum Temml installation serves a font file that is only 12kb. Sadly, Chromium has some rendering bugs when using system fonts. It
+work better with the Latin Modern font, a 380 KB file.
 
-Chromium will support MathML in release 109 [early in 2023](https://chromiumdash.appspot.com/schedule), At that point, all the major browsers will support MathML and Temml will become the most lightweight way to render math in a browser.
-
-Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.13.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
+Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.16.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
 
 Temml's test suite includes many rendered examples, including the Temml [supported functions page](https://temml.org/docs/en/supported.html) and tests from [Mozilla](https://temml.org/tests/mozilla-tests.html), [Wikipedia](https://temml.org/tests/wiki-tests.html), [mhchem](https://temml.org/tests/mhchem-tests.html), and [LaTeXML](https://temml.org/tests/LaTeXML-tests.html).
 

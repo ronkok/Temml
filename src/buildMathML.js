@@ -209,18 +209,6 @@ export default function buildMathML(tree, texExpression, style, settings) {
     wrapper = new mathMLTree.MathNode("semantics", [wrapper, annotation]);
   }
 
-  if (wrap !== "none" && wrapper.children.length > 1) {
-    const maths = []
-    for (let i = 0; i < wrapper.children.length; i++) {
-      const math = new mathMLTree.MathNode("math", [wrapper.children[i]])
-      if (settings.xml) {
-        math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML")
-      }
-      maths.push(math)
-    }
-    return mathMLTree.newDocumentFragment(maths)
-  }
-
   const math = new mathMLTree.MathNode("math", [wrapper])
 
   if (settings.xml) {
@@ -228,6 +216,9 @@ export default function buildMathML(tree, texExpression, style, settings) {
   }
   if (settings.displayMode) {
     math.setAttribute("display", "block");
+    math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
+      ? "inline"
+      : "inline-block"
   }
   return math;
 }

@@ -21,9 +21,6 @@
 **Temml** is a JavaScript library that converts TeX math-mode functions to MathML.
 This page lists the TeX functions it supports, sorted into logical groups.
 
-To read this page, use a browser that supports MathML, such as Firefox or Safari.
-Chrome and Edge will support MathML [soon](https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html).
-
 There is a similar [Support Table](./support_table.html), sorted alphabetically,
 that lists both supported and some un-supported functions.
 
@@ -508,8 +505,9 @@ to a character in the range $\text{𝒜-𝒵}$.
 
 Hard line breaks are `\\` and `\newline`.
 
-Temml does not insert soft line breaks by default. Soft line breaks can be
-added in the [rendering options](./administration.html#options).
+Temml inserts soft line breaks per TeXbook p. 173 if not in display mode and
+no hard line breaks are employed. They work in Chromium and Firefox, but not
+in Safari.
 
 ### Vertical Layout
 
@@ -1598,24 +1596,6 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.2
 <script>
   // Assign id's to auto-numbered equations and populate \ref's
   temml.postProcess(document.getElementById("main"))
-
-  let hasMathML = false;
-  if (document.createElement) {
-    var div = document.createElement("div");
-    div.style.position = "absolute"; div.style.top = div.style.left = 0;
-    div.style.visibility = "hidden"; div.style.width = div.style.height = "auto";
-    div.style.fontFamily = "serif"; div.style.lineheight = "normal";
-    div.innerHTML = "<math><mfrac><mi>xx</mi><mi>yy</mi></mfrac></math>";
-    document.body.appendChild(div);
-    hasMathML = (div.offsetHeight > div.offsetWidth);
-  }
-  if (!hasMathML) {
-    // Insert the mathml.css stylesheet.
-    link = document.createElement("link");
-    link.href = "../../mathml.css";
-    link.rel = "stylesheet";
-    document.head.appendChild(link);
-  }
 </script>
 
 </body>
