@@ -477,9 +477,9 @@ as `A^{2+3}`.
 | Bold         | $\text{𝐀-𝐙 𝐚-𝐳 𝟎-𝟗}$   | Double-struck     | $\text{𝔸-ℤ 𝕒-𝕫 𝟘-𝟡}$  |
 | Italic       | $\text{𝐴-𝑍 𝑎-𝑧}$       | Sans serif        | $\text{𝖠-𝖹 𝖺-𝗓 𝟢-𝟫}$   |
 | Bold Italic  | $\text{𝑨-𝒁 𝒂-𝒛}$       | Sans serif bold   | $\text{𝗔-𝗭 𝗮-𝘇 𝟬-𝟵}$  |
-| Fractur      | $\text{𝔄-ℨ}\text{𝔞-𝔷}$ | Sans serif italic | $\text{𝘈-𝘡 𝘢-𝘻}$      |
-| Monospace    | $\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}$   | Sans serif bold italic | $\text{𝘼-𝙕 𝙖-𝙯}$  |
-| Script       | $\text{𝒜-𝒵 𝒶-𝓏}$       |                   |                       |
+| Monospace    | $\text{𝙰-𝚉 𝚊-𝚣 𝟶-𝟿}$   | Sans serif italic | $\text{𝘈-𝘡 𝘢-𝘻}$      |
+| Script       | $\text{𝒜-𝒵 𝒶-𝓏}$      | Sans serif bold italic | $\text{𝘼-𝙕 𝙖-𝙯}$  |
+| Fraktur      | $\text{𝔄-ℨ}\text{𝔞-𝔷}$ | Bold Fraktur    | $\text{𝕬-𝖅}\text{𝖆-𝖟}$ |
 
 Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$ .
 
