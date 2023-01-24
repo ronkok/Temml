@@ -110,7 +110,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 </li>
 <li><p><code>maxExpand</code>: <code>number</code>. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. If set to <code>Infinity</code>, the macro expander will try to fully expand as in LaTeX. (default: 1000)</p>
 </li>
-<li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default: <code>false</code>)</p>
+<li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. Also, in <code>strict</code> mode, numbers are handled numeral by numeral, as in TeX. In <code>strict</code> mode, typing &quot;123&quot; returns <code>&lt;mn&gt;1&lt;/mn&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mn&gt;3&lt;/mn&gt;</code> while in non-strict mode, the same input returns <code>&lt;mn&gt;123&lt;/mn&gt;</code>. (default: <code>false</code>)</p>
 </li>
 <li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, Temml will write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. Such a namespace is unnecessary for modern browsers but may be helpful for other user agents. (default: <code>false</code>)</p>
 </li>
