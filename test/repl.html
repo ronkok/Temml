@@ -13,6 +13,8 @@
         <script type="module" type="text/javascript">
             const input = document.getElementById("input");
             const math = document.getElementById("math");
+            const mode = document.querySelector('input[id="displayMode"]');
+            const strict = document.querySelector('input[id="strictMode"]');
             const macros = temml.definePreamble(
                 `\\newcommand\\d[0]{\\operatorname{d}\\!}
                 \\def\\foo{x^2}
@@ -27,10 +29,10 @@
                     input.value,
                     math, 
                     {
-                        displayMode: document.querySelector('input[id="displayMode"]').checked,
+                        displayMode: mode.checked,
                         maxSize: [5, 360],
                         leqno: true,
-                        strict: document.querySelector('input[id="strictMode"]').checked,
+                        strict: strict.checked,
                         preventTagLap: true,
                         fleqn: true,
                         trust: true,
