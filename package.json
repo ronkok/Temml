@@ -3,6 +3,12 @@
   "version": "0.10.3",
   "description": "TeX to MathML conversion in JavaScript.",
   "main": "dist/temml.js",
+  "exports": {
+    ".": {
+      "require": "./dist/temml.cjs"
+    },
+    "./*": "./*"
+  },
   "homepage": "https://temml.org",
   "repository": {
     "type": "git",
