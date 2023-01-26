@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file. This CHANGE
 
 ### Fixed
 
-- Number parsing
+- Number parsing. Resolves issue #13.
 
 ## [0.10.3] = 2023-01-17
 
