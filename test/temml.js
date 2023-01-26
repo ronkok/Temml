@@ -1969,7 +1969,8 @@ var temml = (function () {
 
   const numberRegEx$1 = /^[0-9]$/;
   const isCommaOrDot = node => {
-    return (node.type === "atom" && node.text === ",") || (node.type === "textord" && node.text === ".")
+    return (node.type === "atom" && node.text === ",") ||
+           (node.type === "textord" && node.text === ".")
   };
   const consolidateNumbers = expression => {
     // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
@@ -1984,15 +1985,15 @@ var temml = (function () {
         if (!inNum) { nums.push({ start: i }); }
         inNum = true;
       } else {
-        if (inNum) { nums[nums.length-1].end = i - 1; }
+        if (inNum) { nums[nums.length - 1].end = i - 1; }
         inNum = false;
       }
     }
-    if (inNum) { nums[nums.length-1].end = expression.length -1; }
+    if (inNum) { nums[nums.length - 1].end = expression.length - 1; }
 
     // Determine if numeral groups are separated by a comma or dot.
     for (let i = nums.length - 1; i > 0; i--) {
-      if (nums[i - 1].end === nums[i].start -2 && isCommaOrDot(expression[nums[i].start - 1])) {
+      if (nums[i - 1].end === nums[i].start - 2 && isCommaOrDot(expression[nums[i].start - 1])) {
         // Merge the two groups.
         nums[i - 1].end = nums[i].end;
         nums.splice(i, 1);
@@ -11097,7 +11098,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.3";
+  const version = "0.10.4";
 
   function postProcess(block) {
     const labelMap = {};

@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.4] = 2023-01-25
+
+### Fixed
+
+- Number parsing
+
 ## [0.10.3] = 2023-01-17
 
 ### Fixed

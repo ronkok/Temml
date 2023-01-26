@@ -1966,6 +1966,48 @@ const consolidateText = mrow => {
   return mtext
 };
 
+const numberRegEx$1 = /^[0-9]$/;
+const isCommaOrDot = node => {
+  return (node.type === "atom" && node.text === ",") ||
+         (node.type === "textord" && node.text === ".")
+};
+const consolidateNumbers = expression => {
+  // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
+  // not <mn>1</mn><mo>,</mo><mn>5</mn><mn>0</mn><mn>6</mn><mi>.</mi><mn>3</mn>
+  if (expression.length < 2) { return }
+  const nums = [];
+  let inNum = false;
+  // Find adjacent numerals
+  for (let i = 0; i < expression.length; i++) {
+    const node = expression[i];
+    if (node.type === "textord" && numberRegEx$1.test(node.text)) {
+      if (!inNum) { nums.push({ start: i }); }
+      inNum = true;
+    } else {
+      if (inNum) { nums[nums.length - 1].end = i - 1; }
+      inNum = false;
+    }
+  }
+  if (inNum) { nums[nums.length - 1].end = expression.length - 1; }
+
+  // Determine if numeral groups are separated by a comma or dot.
+  for (let i = nums.length - 1; i > 0; i--) {
+    if (nums[i - 1].end === nums[i].start - 2 && isCommaOrDot(expression[nums[i].start - 1])) {
+      // Merge the two groups.
+      nums[i - 1].end = nums[i].end;
+      nums.splice(i, 1);
+    }
+  }
+
+  // Consolidate the number nodes
+  for (let i = nums.length - 1; i >= 0; i--) {
+    for (let j = nums[i].start + 1; j <= nums[i].end; j++) {
+      expression[nums[i].start].text += expression[j].text;
+    }
+    expression.splice(nums[i].start + 1, nums[i].end - nums[i].start);
+  }
+};
+
 /**
  * Wrap the given array of nodes in an <mrow> node if needed, i.e.,
  * unless the array has length 1.  Always returns a single node.
@@ -2000,6 +2042,8 @@ const buildExpression = function(expression, style, isOrdgroup) {
     }
     return [group];
   }
+
+  consolidateNumbers(expression);
 
   const groups = [];
   for (let i = 0; i < expression.length; i++) {
@@ -7643,7 +7687,7 @@ const smallCaps = Object.freeze({
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
 // src/symbols.js.
 
-const numberRegEx$1 = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in Parser.js
+const numberRegEx = /^\d(?:[\d,.]*\d)?$/;
 const latinRegEx = /[A-Ba-z]/;
 
 const italicNumber = (text, variant, tag) => {
@@ -7697,7 +7741,7 @@ defineFunctionBuilders({
     const variant = getVariant(group, style) || "normal";
 
     let node;
-    if (numberRegEx$1.test(group.text)) {
+    if (numberRegEx.test(group.text)) {
       const tag = group.mode === "text" ? "mtext" : "mn";
       if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant, tag)
@@ -8010,8 +8054,7 @@ const combiningDiacriticalMarksEndRegex = new RegExp(`${combiningDiacriticalMark
 const tokenRegexString =
   `(${spaceRegexString}+)|` + // whitespace
   `${controlSpaceRegexString}|` +  // whitespace
-  "(number" +         // numbers (in non-strict mode)
-  "|[!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
+  "([!-\\[\\]-\u2027\u202A-\uD7FF\uF900-\uFFFF]" + // single codepoint
   `${combiningDiacriticalMarkString}*` + // ...plus accents
   "|[\uD800-\uDBFF][\uDC00-\uDFFF]" + // surrogate pair
   `${combiningDiacriticalMarkString}*` + // ...plus accents
@@ -8026,12 +8069,7 @@ class Lexer {
     // Separate accents from characters
     this.input = input;
     this.settings = settings;
-    this.tokenRegex = new RegExp(
-      // Strict Temml, like TeX, lexes one numeral at a time.
-      // Default Temml lexes contiguous numerals into a single <mn> element.
-      tokenRegexString.replace("number|", settings.strict ? "" : "\\d(?:[\\d,.]*\\d)?|"),
-      "g"
-    );
+    this.tokenRegex = new RegExp(tokenRegexString, 'g');
     // Category codes. The lexer only supports comment characters (14) for now.
     // MacroExpander additionally distinguishes active (13).
     this.catcodes = {
@@ -11799,8 +11837,6 @@ var unicodeSymbols = {
 
 /* eslint no-constant-condition:0 */
 
-const numberRegEx = /^\d(?:[\d,.]*\d)?$/;  // Keep in sync with numberRegEx in symbolsOrd.js
-
 /**
  * This file contains the parser used to parse out a TeX expression from the
  * input. Since TeX isn't context-free, standard parsers don't work particularly
@@ -12722,15 +12758,6 @@ class Parser {
         };
       }
       symbol = s;
-    } else if (!this.strict && numberRegEx.test(text)) {
-      // A number. Wrap in a <mn> if in math mode; <mtext> otherwise.
-      this.consume();
-      return {
-        type: "textord",
-        mode: this.mode,
-        loc: SourceLocation.range(nucleus),
-        text
-      }
     } else if (text.charCodeAt(0) >= 0x80) {
       // no symbol for e.g. ^
       if (this.settings.strict) {
@@ -12970,7 +12997,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.3";
+const version = "0.10.4";
 
 function postProcess(block) {
   const labelMap = {};
