@@ -273,11 +273,12 @@ Several other math fonts exist and you can try them out at Frédéric Wang’s
 
 Where to find font files:
 
-- Temml.woff2 can be found in the Temml [dist folder][].
+- Temml.woff2 can be downloaded with the latest Temml [release][].
 - STIXTwoMath-Regular.woff2 is located at the STIX [repository][STIX].
 - LibertinusMath-Regular.woff2 is located at the Libertinus [repository][Libertinus].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
+[release]: https://github.com/ronkok/Temml/releases
 [STIX]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
 [Libertinus]: https://github.com/alerque/libertinus
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
