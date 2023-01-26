@@ -16,8 +16,6 @@ import { isDelimiter } from "./functions/delimsizing"
 import unicodeAccents from /*preval*/ "./unicodeAccents";
 import unicodeSymbols from /*preval*/ "./unicodeSymbols";
 
-const numberRegEx = /^\d(?:[\d,.]*\d)?$/  // Keep in sync with numberRegEx in symbolsOrd.js
-
 /**
  * This file contains the parser used to parse out a TeX expression from the
  * input. Since TeX isn't context-free, standard parsers don't work particularly
@@ -939,15 +937,6 @@ export default class Parser {
         };
       }
       symbol = s;
-    } else if (!this.strict && numberRegEx.test(text)) {
-      // A number. Wrap in a <mn> if in math mode; <mtext> otherwise.
-      this.consume()
-      return {
-        type: "textord",
-        mode: this.mode,
-        loc: SourceLocation.range(nucleus),
-        text
-      }
     } else if (text.charCodeAt(0) >= 0x80) {
       // no symbol for e.g. ^
       if (this.settings.strict) {

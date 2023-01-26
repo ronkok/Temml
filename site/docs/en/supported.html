@@ -292,9 +292,6 @@
 <p>Available functions include:<br><code>\char</code> <code>\mathchoice</code> <code>\TextOrMath</code> <code>\@ifstar</code> <code>\@ifnextchar</code> <code>\@firstoftwo</code> <code>\@secondoftwo</code> <code>\relax</code> <code>\expandafter</code> <code>\noexpand</code></p>
 <p>@ is a valid character for commands, as if <code>\makeatletter</code> were in effect.</p>
 <p>Temml has no <code>\par</code>, so <code>\long</code> is ignored.</p>
-<h2 id='numbers'>Numbers</h2>
-<p>Temml’s default mode will consolidate a string of numerals into a single MathML <code>&lt;mn&gt;</code> element. This applies to any string that begins and ends with a digit (0-9) and includes digits, commas, or dots. Example: <code>&lt;mn&gt;2,000.00&lt;/mn&gt;</code>.</p>
-<p>In strict mode, Temml acts like LaTeX and treats each digit individually. This is not as nice semantically, but it does maintain backwards compatibility for LaTeX macros.</p>
 <h2 id='operators'>Operators</h2>
 <h3 id='big-operators'>Big Operators</h3>
 <table><tr><td><math><mo movablelimits="false">∑</mo></math>  <code>\sum</code></td><td><math><mo movablelimits="false">∏</mo></math>  <code>\prod</code></td><td><math><mo movablelimits="false">⨂</mo></math>  <code>\bigotimes</code></td><td><math><mo movablelimits="false">⋁</mo></math>  <code>\bigvee</code></td></tr>
@@ -657,8 +654,6 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </li>
 <li><a href="#logic-and-set-theory">Logic and Set Theory</a></li>
 <li><a href="#macros">Macros</a></li>
-<li>
-<li><a href="#numbers">Numbers</a></li>
 <li>
 <details><summary>Operators</summary>
 <ul><li><a href='#big-operators'>Big Operators</a></li>

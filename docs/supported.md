@@ -666,16 +666,6 @@ Available functions include:\
 
 Temml has no `\par`, so `\long` is ignored.
 
-## Numbers
-
-Temml’s default mode will consolidate a string of numerals into a single MathML
-`<mn>` element. This applies to any string that begins and ends with a digit
-(0-9) and includes digits, commas, or dots. Example: `<mn>2,000.00</mn>`.
-
-In strict mode, Temml acts like LaTeX and treats each digit individually. This
-is not as nice semantically, but it does maintain backwards compatibility for
-LaTeX macros.
-
 ## Operators
 
 ### Big Operators
@@ -1516,8 +1506,6 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.3
 </li>
 <li><a href="#logic-and-set-theory">Logic and Set Theory</a></li>
 <li><a href="#macros">Macros</a></li>
-<li>
-<li><a href="#numbers">Numbers</a></li>
 <li>
 <details><summary>Operators</summary>
 

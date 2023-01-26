@@ -457,7 +457,7 @@ const test = () => {
   new Expect(r`\frac`).toNotParse();
   new Expect(r`\frac 1`).toNotParse();
   new Expect(parse(r`\tildex`)[0].color).toBe("#b22222");
-  new Expect(r`\frac12`).toParse(strictSettings());
+  new Expect(r`\frac12`).toParse();
   new Expect(r`\;x`).toParse();
 
   assertion = "A frac parser should work"
@@ -987,7 +987,7 @@ const test = () => {
   new Expect(r`\frac^234`).toNotParse();
   new Expect(r`\frac2^34`).toNotParse();
   new Expect(r`\sqrt2^3`).toParse();
-  new Expect(r`\frac23^4`).toParse(strictSettings());
+  new Expect(r`\frac23^4`).toParse();
   new Expect(r`\sqrt \frac x y`).toParse();
   new Expect(r`\sqrt \text x`).toParse();
   new Expect(r`x^\frac x y`).toParse();
@@ -1115,7 +1115,7 @@ const test = () => {
   new Expect(r`\bf xyz`).toParseLike(r`\mathbf{xyz}`);
   new Expect(r`\it xyz`).toParseLike(r`\mathit{xyz}`);
   new Expect(r`\cal xyz`).toParseLike(r`\mathcal{xyz}`);
-  new Expect(r`\uptheta\varDelta`).toParse(strictSettings)
+  new Expect(r`\uptheta\varDelta`).toParse(strictSettings())
   new Expect(r`\uptheta\varDelta`).toBuild()
 
   assertion = "A \\pmb builder should work"

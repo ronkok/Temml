@@ -30,7 +30,7 @@
   },
   "scripts": {
     "lint": "eslint temml.js src",
-    "unit-test": "node -r esm ./test/unit-test.js",
+    "unit-test": "node ./test/unit-test.cjs",
     "visual-test": "node utils/buildTests.js",
     "test": "yarn lint && node utils/buildTests.js && yarn unit-test",
     "minify": "terser test/temml.js -o site/assets/temml.min.js -c -m && terser contrib/mhchem/mhchem.js -o site/assets/mhchem.min.js -c -m",
