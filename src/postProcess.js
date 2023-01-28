@@ -8,7 +8,7 @@
  * https://mit-license.org/
  */
 
-export const version = "0.10.4";
+export const version = "0.10.5";
 
 export function postProcess(block) {
   const labelMap = {}

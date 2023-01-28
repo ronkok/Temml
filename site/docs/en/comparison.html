@@ -25,7 +25,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.10.4, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.10.5, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -354,7 +354,7 @@
           </tr>
           <tr>
             <td>\\</td>
-            <td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>x</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>y</mi></mrow></mtd></mtr></mtable></math></td>
+            <td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd style="text-align:left;"><mrow><mi>x</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>y</mi></mrow></mtd></mtr></mtable></math></td>
             <td>\(x \\ y\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mspace linebreak="newline"></mspace><mi>y</mi></mrow><annotation encoding="application/x-tex">x \\ y</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -1892,7 +1892,7 @@
           </tr>
           <tr>
             <td>\color</td>
-            <td><math><mstyle mathcolor="#0000FF"><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi><mn>123</mn></mstyle></math></td>
+            <td><math><mrow><mi style="color:#0000FF;">A</mi><mi style="color:#0000FF;">a</mi><mi style="color:#0000FF;">B</mi><mi style="color:#0000FF;">b</mi><mn style="color:#0000FF;">123</mn></mrow></math></td>
             <td>\(\color{#0000FF} AaBb123\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mstyle mathcolor="#0000FF"><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi><mn>123</mn></mstyle></mrow><annotation encoding="application/x-tex">\color{#0000FF} AaBb123</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mstyle mathcolor="#0000FF"><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi><mn>123</mn></mstyle><annotation encoding="TeX">\color{#0000FF} AaBb123</annotation></semantics></math></td>
@@ -2311,7 +2311,7 @@
           </tr>
           <tr>
             <td>\definecolor</td>
-            <td><math><mstyle mathcolor="#808000"><mi>F</mi><mo>=</mo></mstyle><mstyle mathcolor="#808000"><mi>m</mi><mi>a</mi></mstyle></math></td>
+            <td><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo></mrow><mrow><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -3918,7 +3918,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mod</td>
-            <td><math><mrow><mn>3</mn><mo>≡</mo></mrow><mrow><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace></mrow><mrow><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td>
+            <td><math><mrow><mn>3</mn><mo>≡</mo></mrow><mrow><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td>
             <td>\(3\equiv 5 \mod 2\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>≡</mo><mn>5</mn><mspace></mspace><mspace width="0.6666666666666666em"/><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mtext> </mtext><mtext> </mtext><mn>2</mn></mrow><annotation encoding="application/x-tex">3\equiv 5 \mod 2</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -4190,7 +4190,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\newline</td>
-            <td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td>
+            <td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd style="text-align:left;"><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mspace linebreak="newline"></mspace><mi>b</mi></mrow><annotation encoding="application/x-tex">a\newline b</annotation></semantics></math></span></td>
             <td data-tex="a\newline b"><span class="no-sup">Not supported</span></td>
@@ -4766,7 +4766,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\operatorname</td>
-            <td><math><mrow><mi>asin</mi><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
+            <td><math><mrow><mi>asin</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
             <td>\(\operatorname{asin} x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">asin</mi><mo>⁡</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">\operatorname{asin} x</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo lspace="0em" rspace="0.16666666666666666em">asin</mo><mi>x</mi></mrow><annotation encoding="TeX">\operatorname{asin} x</annotation></semantics></math></td>
@@ -5158,7 +5158,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\pmod</td>
-            <td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td>
+            <td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td>
             <td>\(x\pmod a\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mspace></mspace><mspace width="0.4444444444444444em"/><mo stretchy="false">(</mo><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mspace width="0.3333333333333333em"/><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x\pmod a</annotation></semantics></math></span></td>
             <td data-tex="x\pmod a"><span class="no-sup">Not supported</span></td>
@@ -5166,7 +5166,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\pod</td>
-            <td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td>
+            <td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td>
             <td>\(x \pod a\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mspace></mspace><mspace width="0.4444444444444444em"/><mo stretchy="false">(</mo><mi>a</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">x \pod a</annotation></semantics></math></span></td>
             <td data-tex="x \pod a"><span class="no-sup">Not supported</span></td>
@@ -5278,7 +5278,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\projlim</td>
-            <td><math><mrow><msub><mi>proj lim</mi><mi>n</mi></msub><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
+            <td><math><mrow><msub><mi>proj lim</mi><mi>n</mi></msub><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
             <td>\(\projlim_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">proj lim</mi><mo>⁡</mo></mrow><mi>n</mi></msub><mi>x</mi></mrow><annotation encoding="application/x-tex">\projlim_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>

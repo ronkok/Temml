@@ -286,7 +286,7 @@
 <tr><td>\coloneqq</td><td><math><mo>≔</mo></math></td><td></td><td>mathtools</td></tr>
 <tr><td>\Colonsim</td><td><math><mrow><mspace width="0.2778em"></mspace><mpadded voffset="0.035em" height="+0.035em" depth="-0.035em"><mstyle scriptlevel="0" displaystyle="false"><mtext>:</mtext></mstyle></mpadded><mi>∼</mi><mspace width="0.2778em"></mspace></mrow></math></td><td></td><td>mathtools</td></tr>
 <tr><td>\colonsim</td><td><math><mrow><mspace width="0.2778em"></mspace><mpadded voffset="0.035em" height="+0.035em" depth="-0.035em"><mstyle scriptlevel="0" displaystyle="false"><mtext>:</mtext></mstyle></mpadded><mi>∼</mi><mspace width="0.2778em"></mspace></mrow></math></td><td></td><td>mathtools</td></tr>
-<tr><td>\color</td><td><math><mstyle mathcolor="#0000FF"><mi>A</mi><mi>a</mi><mi>B</mi><mi>b</mi><mn>123</mn></mstyle></math></td><td><code>\color{#0000FF} AaBb123</code></td><td>color</td></tr>
+<tr><td>\color</td><td><math><mrow><mi style="color:#0000FF;">A</mi><mi style="color:#0000FF;">a</mi><mi style="color:#0000FF;">B</mi><mi style="color:#0000FF;">b</mi><mn style="color:#0000FF;">123</mn></mrow></math></td><td><code>\color{#0000FF} AaBb123</code></td><td>color</td></tr>
 <tr><td>\colorbox</td><td><math><mpadded mathbackground="#ff0000" style="padding:3pt 0 3pt 0;"><mspace width="3pt"></mspace><mrow><mtext>B</mtext><mtext>l</mtext><mtext>a</mtext><mtext>c</mtext><mtext>k</mtext><mtext> </mtext><mtext>o</mtext><mtext>n</mtext><mtext> </mtext><mtext>r</mtext><mtext>e</mtext><mtext>d</mtext></mrow><mspace width="3pt"></mspace></mpadded></math></td><td><code>\colorbox{red}{Black on red}</code></td><td>color</td></tr>
 <tr><td>\comm</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\comm{A}{B}</code></td><td>physics extension</td></tr>
 <tr><td>\commutator</td><td><math><mrow><mo fence="true" form="prefix">[</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo fence="true" form="postfix">]</mo></mrow></math></td><td><code>\commutator{A}{B}</code></td><td>physics extension</td></tr>
@@ -350,7 +350,7 @@
 <tr><td>\ddots</td><td><math><mo>⋱</mo></math></td><td></td><td></td></tr>
 <tr><td>\DeclareMathOperator</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\def</td><td><math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>x</mi><mn>2</mn></msup></mrow></math></td><td><code>\def\foo{x^2} \foo + \foo</code></td><td></td></tr>
-<tr><td>\definecolor</td><td><math><mstyle mathcolor="#808000"><mi>F</mi><mo>=</mo></mstyle><mstyle mathcolor="#808000"><mi>m</mi><mi>a</mi></mstyle></math></td><td><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code><br><code>\color{sortaGreen} F=ma</code></td><td>xcolor</td></tr>
+<tr><td>\definecolor</td><td><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo></mrow><mrow><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></td><td><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code><br><code>\color{sortaGreen} F=ma</code></td><td>xcolor</td></tr>
 <tr><td>\deg</td><td><math><mrow><mi>deg</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow></math></td><td></td><td></td></tr>
 <tr><td>\degree</td><td><math><mi>°</mi></math></td><td></td><td></td></tr>
 <tr><td>\delta</td><td><math><mi>δ</mi></math></td><td></td><td></td></tr>
@@ -436,7 +436,7 @@
 <tr><td>\eqslantgtr</td><td><math><mo>⪖</mo></math></td><td></td><td>ams</td></tr>
 <tr><td>\eqslantless</td><td><math><mo>⪕</mo></math></td><td></td><td>ams</td></tr>
 <tr><td>\equiv</td><td><math><mo>≡</mo></math></td><td></td><td></td></tr>
-<tr><td>\erf</td><td><math><mrow><mi>erf</mi><mo>⁡</mo><mo form="prefix" stretchy="false">(</mo><mi>x</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>\erf(x)</code></td><td>physics extension</td><td></td></tr>
+<tr><td>\erf</td><td><math><mrow><mi>erf</mi><mo>⁡</mo></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>x</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>\erf(x)</code></td><td>physics extension</td><td></td></tr>
 <tr><td>\Eta</td><td><math><mrow><mi mathvariant="normal">Η</mi></mrow></math></td><td></td><td></td></tr>
 <tr><td>\eta</td><td><math><mi>η</mi></math></td><td></td><td></td></tr>
 <tr><td>\eth</td><td><math><mi>ð</mi></math></td><td></td><td>ams</td></tr>
@@ -787,7 +787,7 @@
 <tr><td>\mit</td><td><span class="no-sup">Not supported</span></td><td>See<code>\mathit</code></td><td></td></tr>
 <tr><td>\mkern</td><td><math><mrow><mi>a</mi><mspace width="1em"></mspace><mi>b</mi></mrow></math></td><td><code>a\mkern18mu b</code></td><td></td></tr>
 <tr><td>\mmlToken</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
-<tr><td>\mod</td><td><math><mrow><mn>3</mn><mo>≡</mo></mrow><mrow><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace></mrow><mrow><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td><td><code>3\equiv 5 \mod 2</code></td><td>ams</td></tr>
+<tr><td>\mod</td><td><math><mrow><mn>3</mn><mo>≡</mo></mrow><mrow><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td><td><code>3\equiv 5 \mod 2</code></td><td>ams</td></tr>
 <tr><td>\models</td><td><math><mo>⊨</mo></math></td><td></td><td></td></tr>
 <tr><td>\moveleft</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\moveright</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
@@ -825,7 +825,7 @@
 <tr><td>\newcommand</td><td><math><mi>✓</mi></math></td><td><code>\newcommand\chk{\checkmark} \chk</code></td><td>newcommand</td></tr>
 <tr><td>\newenvironment</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\newextarrow</td><td><span class="no-sup">Not supported</span></td><td></td><td>extpfeil</td></tr>
-<tr><td>\newline</td><td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td><td><code>a\newline b</code></td><td></td></tr>
+<tr><td>\newline</td><td><math><mtable columnalign="left" rowspacing="0em"><mtr><mtd style="text-align:left;"><mrow><mi>a</mi></mrow><mo linebreak="newline"></mo></mtd></mtr><mtr><mtd><mrow><mi>b</mi></mrow></mtd></mtr></mtable></math></td><td><code>a\newline b</code></td><td></td></tr>
 <tr><td>\nexists</td><td><math><mi>∄</mi></math></td><td></td><td>ams</td></tr>
 <tr><td>\ngeq</td><td><math><mo>≱</mo></math></td><td></td><td>ams</td></tr>
 <tr><td>\ngeqq</td><td><math><mo>≱</mo></math></td><td></td><td>ams</td></tr>
@@ -906,9 +906,9 @@
 <tr><td>\omicron</td><td><math><mi>ο</mi></math></td><td></td><td></td></tr>
 <tr><td>\ominus</td><td><math><mo>⊖</mo></math></td><td></td><td></td></tr>
 <tr><td>\op</td><td><math><mrow><mrow><mo fence="true" form="prefix">|</mo><mi>a</mi><mo fence="true" form="postfix">⟩</mo></mrow><mrow><mo fence="true" form="prefix">⟨</mo><mi>b</mi><mo fence="true" form="postfix">|</mo></mrow></mrow></math></td><td><code>\op{a}{b}</code></td><td>physics extension</td></tr>
-<tr><td>\operatorname</td><td><math><mrow><mi>asin</mi><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td><td>\operatorname{asin} x</td><td>ams</td></tr>
-<tr><td>\operatorname*</td><td><math><mrow><munder><mi>asin</mi><mi>y</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td><td><code>\operatorname*{asin}\limits_y x</code></td><td>ams</td></tr>
-<tr><td>\operatornamewithlimits</td><td><math><mrow><munder><mi>asin</mi><mi>y</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td><td><code>\operatornamewithlimits{asin}\limits_y x</code></td><td></td></tr>
+<tr><td>\operatorname</td><td><math><mrow><mi>asin</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td><td>\operatorname{asin} x</td><td>ams</td></tr>
+<tr><td>\operatorname*</td><td><math><mrow><munder><mi>asin</mi><mi>y</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td><td><code>\operatorname*{asin}\limits_y x</code></td><td>ams</td></tr>
+<tr><td>\operatornamewithlimits</td><td><math><mrow><munder><mi>asin</mi><mi>y</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td><td><code>\operatornamewithlimits{asin}\limits_y x</code></td><td></td></tr>
 <tr><td>\oplus</td><td><math><mo>⊕</mo></math></td><td></td><td></td></tr>
 <tr><td>\or</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\order</td><td><math><mrow><mi class="mathcal">𝒪</mi><mrow><mo fence="true" form="prefix">(</mo><msup><mi>x</mi><mn>2</mn></msup><mo fence="true" form="postfix">)</mo></mrow></mrow></math></td><td><code>\order{x^2}</code></td><td>physics extension</td></tr>
@@ -967,8 +967,8 @@
 <tr><td>{pmatrix}</td><td><math><mrow><mo fence="true" form="prefix">(</mo><mtable columnalign="center center"><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></math></td><td><code>\begin{pmatrix}</code><br><code>a &amp; b \\</code><br><code>c &amp; d</code><br><code>\end{pmatrix}</code></td><td>ams</td></tr>
 <tr><td>{pmatrix*}</td><td><math><mrow><mo fence="true" form="prefix">(</mo><mtable columnalign="right right"><mtr><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>1</mn></mrow></mtd><mtd style="text-align:-webkit-right;"><mn>3</mn></mtd></mtr><mtr><mtd style="text-align:-webkit-right;"><mn>2</mn></mtd><mtd style="text-align:-webkit-right;"><mrow><mo>−</mo><mn>4</mn></mrow></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></math></td><td><code>\begin{pmatrix*}[r]</code><br><code>-1 &amp; 3 \\</code><br><code>2 &amp; -4</code><br><code>\end{pmatrix*}</code></td><td>mathtools</td></tr>
 <tr><td>\pmb</td><td><math><mstyle style="font-weight:bold"><mi>μ</mi></mstyle></math></td><td><code>\pmb{\mu}</code></td><td>ams</td></tr>
-<tr><td>\pmod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x\pmod a</code></td><td></td></tr>
-<tr><td>\pod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x \pod a</code></td><td>ams</td></tr>
+<tr><td>\pmod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mrow><mrow><mi mathvariant="normal">m</mi></mrow><mrow><mi mathvariant="normal">o</mi></mrow><mrow><mi mathvariant="normal">d</mi></mrow></mrow><mspace width="0.3333em"></mspace><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x\pmod a</code></td><td></td></tr>
+<tr><td>\pod</td><td><math><mrow><mi>x</mi><mo></mo><mspace width="0.4444em"></mspace><mo form="prefix" stretchy="false">(</mo><mi>a</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>x \pod a</code></td><td>ams</td></tr>
 <tr><td>\pointint</td><td><math><mo movablelimits="false">⨕</mo></math></td><td></td><td></td></tr>
 <tr><td>\poissonbracket</td><td><math><mrow><mo fence="true" form="prefix">{</mo><mi>A</mi><mo separator="true">,</mo><mi>B</mi><mo fence="true" form="postfix">}</mo></mrow></math></td><td><code>\poissonbracket{A}{B}</code></td><td>physics extension</td></tr>
 <tr><td>\pounds</td><td><math><mi>£</mi></math></td><td></td><td></td></tr>
@@ -986,7 +986,7 @@
 <tr><td>\prime</td><td><math><mo class="tml-prime">′</mo></math></td><td></td><td></td></tr>
 <tr><td>\principalvalue</td><td><math><mi class="mathcal">𝒫</mi></math></td><td></td><td>physics extension</td></tr>
 <tr><td>\pv</td><td><math><mi class="mathcal">𝒫</mi></math></td><td></td><td>physics extension</td></tr>
-<tr><td>\PV</td><td><math><mrow><mi>P.V.</mi><mo>⁡</mo><mo form="prefix" stretchy="false">(</mo><mi>x</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>\PV(x)</code></td><td>physics extension</td></tr>
+<tr><td>\PV</td><td><math><mrow><mi>P.V.</mi><mo>⁡</mo></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>x</mi><mo form="postfix" stretchy="false">)</mo></mrow></math></td><td><code>\PV(x)</code></td><td>physics extension</td></tr>
 <tr><td>\prod</td><td><math><mo movablelimits="false">∏</mo></math></td><td></td><td></td></tr>
 <tr><td>\projlim</td><td><math><mrow><mi>proj lim</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow></math></td><td><code>\projlim</code></td><td>ams</td></tr>
 <tr><td>\propto</td><td><math><mo>∝</mo></math></td><td></td><td></td></tr>
@@ -1044,7 +1044,7 @@
 <tr><td>\raisebox</td><td><math><mrow><mi>h</mi><mpadded voffset="1.9925pt" height="+1.9925pt" depth="-1.9925pt"><mstyle scriptlevel="0" displaystyle="false"><mtext>i</mtext><mtext>g</mtext><mtext>h</mtext><mtext>e</mtext></mstyle></mpadded><mi>r</mi></mrow></math></td><td><code>h\raisebox{2pt}{ighe}r</code></td><td></td></tr>
 <tr><td>\rang</td><td><math><mrow><mo form="prefix" stretchy="false">⟨</mo><mi>A</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td><td><code>\langle A\rang</code></td><td>texvc extension</td></tr>
 <tr><td>\rangle</td><td><math><mrow><mo form="prefix" stretchy="false">⟨</mo><mi>A</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td><td><code>\langle A\rangle</code></td><td></td></tr>
-<tr><td>\rank</td><td><math><mrow><mi>rank</mi><mo>⁡</mo><mi>M</mi></mrow></math></td><td><code>\rank M</code></td><td>physics extension</td></tr>
+<tr><td>\rank</td><td><math><mrow><mi>rank</mi><mo>⁡</mo></mrow><mrow><mi>M</mi></mrow></math></td><td><code>\rank M</code></td><td>physics extension</td></tr>
 <tr><td>\Rarr</td><td><math><mo stretchy="false">⇒</mo></math></td><td></td><td>texvc extension</td></tr>
 <tr><td>\rArr</td><td><math><mo stretchy="false">⇒</mo></math></td><td></td><td>texvc extension</td></tr>
 <tr><td>\rarr</td><td><math><mo stretchy="false">→</mo></math></td><td></td><td>texvc extension</td></tr>
@@ -1063,7 +1063,7 @@
 <tr><td>\renewcommand</td><td><math><mtext>Ahoy!</mtext></math></td><td><code>\def\hail{Hi!}</code><br><code>\renewcommand\hail{\text{Ahoy!}}</code><br><code>\hail</code></td><td>newcommand</td></tr>
 <tr><td>\renewenvironment</td><td><span class="no-sup">Not supported</span></td><td></td><td>newcommand</td></tr>
 <tr><td>\require</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
-<tr><td>\Res</td><td><math><mrow><mi>Res</mi><mo>⁡</mo><mo form="prefix" stretchy="false">[</mo><mi>f</mi><mo form="prefix" stretchy="false">(</mo><mi>z</mi><mo form="postfix" stretchy="false">)</mo><mo form="postfix" stretchy="false">]</mo></mrow></math></td><td><code>\Res[f(z)]</code></td><td>physics extension</td></tr>
+<tr><td>\Res</td><td><math><mrow><mi>Res</mi><mo>⁡</mo></mrow><mrow><mo form="prefix" stretchy="false">[</mo><mi>f</mi><mo form="prefix" stretchy="false">(</mo><mi>z</mi><mo form="postfix" stretchy="false">)</mo><mo form="postfix" stretchy="false">]</mo></mrow></math></td><td><code>\Res[f(z)]</code></td><td>physics extension</td></tr>
 <tr><td>\restriction</td><td><math><mo stretchy="false">↾</mo></math></td><td></td><td>ams</td></tr>
 <tr><td>\rfloor</td><td><math><mo form="postfix" stretchy="false">⌋</mo></math></td><td></td><td></td></tr>
 <tr><td>\rgroup</td><td><math><mo form="postfix" stretchy="false">⟯</mo></math></td><td></td><td></td></tr>
@@ -1241,7 +1241,7 @@
 <tr><td>\textbraceright</td><td><math><mtext>}</mtext></math></td><td><code>\text{\textbraceright}</code></td><td></td></tr>
 <tr><td>\textbullet</td><td><math><mtext>•</mtext></math></td><td><code>\text{\textbullet}</code></td><td></td></tr>
 <tr><td>\textcircled</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
-<tr><td>\textcolor</td><td><math><mstyle mathcolor="#0000FF"><mi>F</mi><mo>=</mo></mstyle><mstyle mathcolor="#0000FF"><mi>m</mi><mi>a</mi></mstyle></math></td><td><code>\textcolor{blue}{F=ma}</code></td><td>color</td></tr>
+<tr><td>\textcolor</td><td><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></td><td><code>\textcolor{blue}{F=ma}</code></td><td>color</td></tr>
 <tr><td>\textdagger</td><td><math><mtext>†</mtext></math></td><td><code>\text{\textdagger}</code></td><td></td></tr>
 <tr><td>\textdaggerdbl</td><td><math><mtext>‡</mtext></math></td><td><code>\text{\textdaggerdbl}</code></td><td></td></tr>
 <tr><td>\textdegree</td><td><math><mtext>°</mtext></math></td><td><code>\text{\textdegree}</code></td><td></td></tr>
@@ -1287,8 +1287,8 @@
 <tr><td>\tiny</td><td><math><mstyle mathsize="0.5000em"><mi>t</mi><mi>i</mi><mi>n</mi><mi>y</mi></mstyle></math></td><td><code>\tiny tiny</code></td><td></td></tr>
 <tr><td>\to</td><td><math><mo>→</mo></math></td><td></td><td></td></tr>
 <tr><td>\top</td><td><math><mi>⊤</mi></math></td><td></td><td></td></tr>
-<tr><td>\Tr</td><td><math><mrow><mi>Tr</mi><mo>⁡</mo><mi>ρ</mi></mrow></math></td><td><code>\Tr\rho</code></td><td>physics extension</td></tr>
-<tr><td>\tr</td><td><math><mrow><mi>tr</mi><mo>⁡</mo><mi>ρ</mi></mrow></math></td><td><code>\tr\rho</code></td><td>physics extension</td></tr>
+<tr><td>\Tr</td><td><math><mrow><mi>Tr</mi><mo>⁡</mo></mrow><mrow><mi>ρ</mi></mrow></math></td><td><code>\Tr\rho</code></td><td>physics extension</td></tr>
+<tr><td>\tr</td><td><math><mrow><mi>tr</mi><mo>⁡</mo></mrow><mrow><mi>ρ</mi></mrow></math></td><td><code>\tr\rho</code></td><td>physics extension</td></tr>
 <tr><td>\triangle</td><td><math><mi>△</mi></math></td><td></td><td></td></tr>
 <tr><td>\triangledown</td><td><math><mi>▽</mi></math></td><td></td><td>ams</td></tr>
 <tr><td>\triangleleft</td><td><math><mo>◃</mo></math></td><td></td><td></td></tr>
@@ -1510,7 +1510,7 @@
 </main>
 <nav>
 <div id="sidebar" class="narrow">
-<p><math><mstyle mathcolor="black"><mstyle mathsize="1.4400em"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mstyle></math>    v0.10.4</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math>    v0.10.5</p>
 <div style="height:0.5em;"></div>
 <ul><li><a href='#symbols'>Symbols</a></li>
 <li><a href='#a'>A</a></li>
