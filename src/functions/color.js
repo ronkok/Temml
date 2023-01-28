@@ -1,5 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import { wrapWithMstyle } from "../mathMLTree"
+import mathMLTree from "../mathMLTree"
 import { assertNodeType } from "../parseNode"
 import ParseError from "../ParseError"
 import * as mml from "../buildMathML"
@@ -152,11 +152,15 @@ export const validateColor = (color, macros, token) => {
 }
 
 const mathmlBuilder = (group, style) => {
-  const inner = mml.buildExpression(group.body, style.withColor(group.color))
-  // Wrap with an <mstyle> element.
-  const node = wrapWithMstyle(inner)
-  node.setAttribute("mathcolor", group.color)
-  return node
+  // In LaTeX, color is not supposed to change the spacing of any node.
+  // So instead of wrapping the group in an <mstyle>, we apply
+  // the color individually to each node and return a document fragment.
+  let expr = mml.buildExpression(group.body, style.withColor(group.color))
+  expr = expr.map(e => {
+    e.style.color = group.color
+    return e
+  })
+  return mathMLTree.newDocumentFragment(expr)
 }
 
 defineFunction({

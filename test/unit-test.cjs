@@ -1202,9 +1202,9 @@ const test = () => {
   new Expect(markup).toBe('<mtext>𝚁</mtext>');
   assertion = "A font tree-builder should render a combination of font and color changes"
   markup = temml.renderToString(r`\textcolor{blue}{\mathbb R}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe('<mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle>');
+  new Expect(markup).toBe('<mrow><mi style="color:#0000FF;">ℝ</mi></mrow>');
   markup = temml.renderToString(r`\mathbb{\textcolor{blue}{R}}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe('<mstyle mathcolor="#0000FF"><mi>ℝ</mi></mstyle>');
+  new Expect(markup).toBe('<mrow><mi style="color:#0000FF;">ℝ</mi></mrow>');
   assertion = "A font tree-builder should render wide characters with <mi> and with the correct font"
   markup = temml.renderToString("𝐀").replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mi>𝐀</mi>');
@@ -2244,12 +2244,14 @@ const test = () => {
   new Expect(`試`).toNotParse(strictSettings());
 
   assertion = "Line-wrapping should work"
-  const wrapExpression = r`x = a + a + a = b + b + b`;
+  const wrapExpression = r`x = a + {\color{blue} a + a =} b + b + b`;
   new Expect(wrapExpression).toParse()
   new Expect(wrapExpression).toBuild();
   new Expect(wrapExpression).toBuild(wrapSettings("none"));
   new Expect(wrapExpression).toBuild(wrapSettings("tex"));
   new Expect(wrapExpression).toBuild(wrapSettings("="));
+  // Line wrapping works by creating a series of <mrow> elements.
+  // We check for regression by counting the number of elements.
   new Expect(build(wrapExpression, wrapSettings("tex"))[0].children.length).toBe(7)
   new Expect(build(wrapExpression, wrapSettings("="))[0].children.length).toBe(2)
 
