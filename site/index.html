@@ -71,8 +71,8 @@
       <div style="display: inline-block; width:35%">
         <input type="checkbox" id="displayMode" name="displayMode" checked>
         <label for="displayMode">Display Mode</label>&nbsp;<br>
-        <input type="checkbox" id="strictMode" name="strictMode">
-        <label for="strictMode">Strict</label>&nbsp;
+        <input type="checkbox" id="annotate" name="annotate">
+        <label for="annotate">Annotate</label>&nbsp;
       </div>
       <div style="display: block; width: 64%; float: right;">
       <div style="display: flex; justify-content: space-around; align-items: center;">
@@ -128,7 +128,7 @@
   const input = document.getElementById("demoSource");
   const math = document.getElementById("math");
   const mode = document.querySelector('input[id="displayMode"]');
-  const strict = document.querySelector('input[id="strictMode"]');
+  const annotate = document.querySelector('input[id="annotate"]');
   const output = document.getElementById("OutputType")
 
   const wide = document.getElementById("wide");
@@ -148,14 +148,14 @@
 
   input.addEventListener("input", reprocess, false);
   mode.addEventListener('change', () => { reprocess() });
-  strict.addEventListener('change', () => { reprocess() });
+  annotate.addEventListener('change', () => { reprocess() });
   window.addEventListener('hashchange', () => { getHash() }, false)
 
   function reprocess() {
     if (output.value === "Math") {
       temml.render(input.value, math, {
         displayMode: mode.checked,
-        strict: strict.checked
+        annotate: annotate.checked
       });
       temml.postProcess(math)
     } else {
@@ -163,7 +163,7 @@
       math.appendChild(document.createElement("pre"))
       let mml = temml.renderToString(input.value, {
         displayMode: mode.checked,
-        strict: strict.checked
+        annotate: annotate.checked
       })
       if (output.value === "MathML") {
         const format = require('xml-formatter');
@@ -185,7 +185,7 @@
   }
 
   function copyMathML() {
-    let mml = temml.renderToString(input.value, {displayMode: mode.checked})
+    let mml = temml.renderToString(input.value, {displayMode: mode.checked, annotate: annotate.checked})
     if (output.value !== "Flat MML") {
       const format = require('xml-formatter');
       mml = format(mml, { indentation: '  ', collapseContent: true, lineSeparator: '\n' })
