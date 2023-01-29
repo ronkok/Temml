@@ -294,7 +294,7 @@ const ordargument = function(arg) {
  * placed into the DOM doesn't have any representation itself. It only contains
  * children and doesn't have any DOM node properties.
  */
-class DocumentFragment$1 {
+class DocumentFragment {
   constructor(children) {
     this.children = children;
     this.classes = [];
@@ -528,7 +528,7 @@ class Img {
 //
 
 function newDocumentFragment(children) {
-  return new DocumentFragment$1(children);
+  return new DocumentFragment(children);
 }
 
 /**
@@ -1767,7 +1767,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
   let canBeBIN = false; // The first node cannot be an infix binary operator.
   let i = 0;
   while (i < expression.length) {
-    while (expression[i] instanceof DocumentFragment$1) {
+    while (expression[i] instanceof DocumentFragment) {
       expression.splice(i, 1, ...expression[i].children); // Expand the fragment.
     }
     const node = expression[i];
@@ -3031,7 +3031,7 @@ const colorFromSpec = (model, spec) => {
     spec.split(",").map(e => {
       const num = Number(e.trim());
       if (num > 1) { throw new ParseError("Color rgb input must be < 1.") }
-      color += toHex((num * 255));
+      color += toHex(Number((num * 255).toFixed(0)));
     });
   }
   if (color.charAt(0) !== "#") { color = "#" + color; }

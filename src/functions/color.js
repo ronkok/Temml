@@ -125,7 +125,7 @@ export const colorFromSpec = (model, spec) => {
     spec.split(",").map(e => {
       const num = Number(e.trim())
       if (num > 1) { throw new ParseError("Color rgb input must be < 1.") }
-      color += toHex((num * 255))
+      color += toHex(Number((num * 255).toFixed(0)))
     })
   }
   if (color.charAt(0) !== "#") { color = "#" + color }
