@@ -9,6 +9,7 @@ import ParseError from "./ParseError"
 import symbols, { ligatures } from "./symbols"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
 import { MathNode } from "./mathMLTree"
+import { DocumentFragment } from "./tree"
 import setLineBreaks from "./linebreaking"
 
 /**
