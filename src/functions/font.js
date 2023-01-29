@@ -29,7 +29,6 @@ const mathmlBuilder = (group, style) => {
   for (let i = 1; i < mathGroup.children.length; i++) {
     mi.children.push(mathGroup.children[i].children[0])
   }
-  if (mathGroup.attributes.mathcolor) { mi.attributes.mathcolor = mathGroup.attributes.mathcolor }
   if (mi.attributes.mathvariant && mi.attributes.mathvariant === "normal") {
     // Workaround for a Firefox bug that renders spurious space around
     // a <mi mathvariant="normal">

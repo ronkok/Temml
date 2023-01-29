@@ -264,7 +264,7 @@ defineFunction({
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true")
     }
-    if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor) }
+    if (group.rightColor) { rightNode.style.color =  group.rightColor }
     inner.push(rightNode)
 
     return mml.makeRow(inner);

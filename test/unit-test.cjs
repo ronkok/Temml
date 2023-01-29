@@ -1399,6 +1399,9 @@ const test = () => {
   assertion = "An fcolorbox parser should not fail, given a text argument"
   new Expect(r`\fcolorbox{red}{yellow}{a b}`).toParse()
 
+  assertion = "\\color should work properly on right parens"
+  new Expect(temml.renderToString(r`\color{red}\left(a\right)`)).toContain('form="postfix" style="color:#ff0000;"');
+
   assertion = "A strike-through builder should work"
   new Expect(r`\cancel{x}`).toParse()
   new Expect(r`\cancel{x^2}`).toParse()

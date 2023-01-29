@@ -2106,7 +2106,6 @@ var temml = (function () {
 
     const n1 = expression.length === 0 ? null : expression[0];
     let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
-            && !(n1.type === "mstyle" && n1.attributes.mathcolor)
         ? expression[0]
         : setLineBreaks(expression, wrap, settings.displayMode);
 
@@ -3720,7 +3719,7 @@ var temml = (function () {
       if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
         rightNode.setAttribute("stretchy", "true");
       }
-      if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor); }
+      if (group.rightColor) { rightNode.style.color =  group.rightColor; }
       inner.push(rightNode);
 
       return makeRow(inner);
@@ -4904,7 +4903,6 @@ var temml = (function () {
     for (let i = 1; i < mathGroup.children.length; i++) {
       mi.children.push(mathGroup.children[i].children[0]);
     }
-    if (mathGroup.attributes.mathcolor) { mi.attributes.mathcolor = mathGroup.attributes.mathcolor; }
     if (mi.attributes.mathvariant && mi.attributes.mathvariant === "normal") {
       // Workaround for a Firefox bug that renders spurious space around
       // a <mi mathvariant="normal">

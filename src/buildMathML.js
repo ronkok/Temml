@@ -237,7 +237,6 @@ export default function buildMathML(tree, texExpression, style, settings) {
 
   const n1 = expression.length === 0 ? null : expression[0]
   let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
-          && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
       : setLineBreaks(expression, wrap, settings.displayMode)
 
