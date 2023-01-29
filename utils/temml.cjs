@@ -296,7 +296,7 @@ const ordargument = function(arg) {
  * placed into the DOM doesn't have any representation itself. It only contains
  * children and doesn't have any DOM node properties.
  */
-class DocumentFragment {
+class DocumentFragment$1 {
   constructor(children) {
     this.children = children;
     this.classes = [];
@@ -530,7 +530,7 @@ class Img {
 //
 
 function newDocumentFragment(children) {
-  return new DocumentFragment(children);
+  return new DocumentFragment$1(children);
 }
 
 /**
@@ -1769,7 +1769,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
   let canBeBIN = false; // The first node cannot be an infix binary operator.
   let i = 0;
   while (i < expression.length) {
-    while (expression[i] instanceof DocumentFragment) {
+    while (expression[i] instanceof DocumentFragment$1) {
       expression.splice(i, 1, ...expression[i].children); // Expand the fragment.
     }
     const node = expression[i];
@@ -1991,7 +1991,9 @@ const consolidateNumbers = expression => {
  */
 const makeRow = function(body) {
   if (body.length === 1) {
-    return body[0];
+    return body[0] instanceof DocumentFragment
+      ? body[0]
+      : new mathMLTree.MathNode("mrow", body);
   } else {
     return new mathMLTree.MathNode("mrow", body);
   }

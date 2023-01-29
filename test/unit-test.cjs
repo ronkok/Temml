@@ -375,6 +375,9 @@ const test = () => {
   new Expect(`x_{x^x}`).toParse();
   new Expect(`x_{x_x}`).toParse();
 
+  assertion = "A row buider should work when given a document fragment"
+  new Expect((build(`{\color{red}{hello}}`))[0].children.length).toBe(1)
+
   assertion = "A subscript and superscript tree-builder should not fail when there is no nucleus"
   new Expect(`^3`).toParse();
   new Expect(`_2`).toParse();

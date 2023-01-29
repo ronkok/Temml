@@ -123,7 +123,9 @@ const consolidateNumbers = expression => {
  */
 export const makeRow = function(body) {
   if (body.length === 1) {
-    return body[0];
+    return body[0] instanceof DocumentFragment
+      ? body[0]
+      : new mathMLTree.MathNode("mrow", body);
   } else {
     return new mathMLTree.MathNode("mrow", body);
   }
