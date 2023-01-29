@@ -1989,7 +1989,9 @@ const consolidateNumbers = expression => {
  */
 const makeRow = function(body) {
   if (body.length === 1) {
-    return body[0];
+    return body[0] instanceof DocumentFragment
+      ? body[0]
+      : new mathMLTree.MathNode("mrow", body);
   } else {
     return new mathMLTree.MathNode("mrow", body);
   }
@@ -2103,7 +2105,6 @@ function buildMathML(tree, texExpression, style, settings) {
 
   const n1 = expression.length === 0 ? null : expression[0];
   let wrapper = expression.length === 1 && tag === null && (n1 instanceof MathNode)
-          && !(n1.type === "mstyle" && n1.attributes.mathcolor)
       ? expression[0]
       : setLineBreaks(expression, wrap, settings.displayMode);
 
@@ -3030,7 +3031,7 @@ const colorFromSpec = (model, spec) => {
     spec.split(",").map(e => {
       const num = Number(e.trim());
       if (num > 1) { throw new ParseError("Color rgb input must be < 1.") }
-      color += toHex((num * 255));
+      color += toHex(Number((num * 255).toFixed(0)));
     });
   }
   if (color.charAt(0) !== "#") { color = "#" + color; }
@@ -3717,7 +3718,7 @@ defineFunction({
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true");
     }
-    if (group.rightColor) { rightNode.setAttribute("mathcolor", group.rightColor); }
+    if (group.rightColor) { rightNode.style.color =  group.rightColor; }
     inner.push(rightNode);
 
     return makeRow(inner);
@@ -4901,7 +4902,6 @@ const mathmlBuilder$6 = (group, style) => {
   for (let i = 1; i < mathGroup.children.length; i++) {
     mi.children.push(mathGroup.children[i].children[0]);
   }
-  if (mathGroup.attributes.mathcolor) { mi.attributes.mathcolor = mathGroup.attributes.mathcolor; }
   if (mi.attributes.mathvariant && mi.attributes.mathvariant === "normal") {
     // Workaround for a Firefox bug that renders spurious space around
     // a <mi mathvariant="normal">
@@ -12976,7 +12976,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.5";
+const version = "0.10.6";
 
 function postProcess(block) {
   const labelMap = {};

@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.6] = 2023-01-29
+
+### Fixed
+
+- Remove `mathcolor` property
+- <mrow> containing a document fragment
+- \definecolor with lower case rgb
+
 ## [0.10.5] = 2023-01-28
 
 ### Fixed

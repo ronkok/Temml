@@ -12976,7 +12976,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.5";
+const version = "0.10.6";
 
 function postProcess(block) {
   const labelMap = {};
