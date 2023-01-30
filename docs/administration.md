@@ -19,17 +19,21 @@ Temml will never work in Internet Explorer.
 
 # Installation
 
-You can download a zip file of Temml from the [releases page][] of the Temml repository
-and serve Temml files from your own site. The minimum browser installation needs the
-following files. The `css` file and font file must be in the same folder.
+For use in the browser, you can download a zip file of Temml from the
+[releases page][] of the Temml repository. For server-side use, you can obtain
+Temml via CLI commands `npm install temml` or `yarn add temml`.
 
-[releases page]: https://github.com/ronkok/Temml/releases
+The minimum browser installation needs the following files. The `css` file and
+font file must be in the same folder.
 
 * temml.min.js
 * Temml-Local.css
 * Temml.woff2
 
-A server-side installation should include `temml.cjs` instead of `temml.min.js`.
+A server-side installation should use `temml.cjs` or `temml.mjs` instead
+of `temml.min.js`.
+
+[releases page]: https://github.com/ronkok/Temml/releases
 
 #### Starter template
 

@@ -12,12 +12,13 @@
 <h1 id='browser-support'>Browser Support</h1>
 <p>Temml works in browsers that support MathML. This includes Chrome, Edge, Firefox, and Safari. Temml will never work in Internet Explorer.</p>
 <h1 id='installation'>Installation</h1>
-<p>You can download a zip file of Temml from the <a href='https://github.com/ronkok/Temml/releases'>releases page</a> of the Temml repository and serve Temml files from your own site. The minimum browser installation needs the following files. The <code>css</code> file and font file must be in the same folder.</p>
+<p>For use in the browser, you can download a zip file of Temml from the <a href='https://github.com/ronkok/Temml/releases'>releases page</a> of the Temml repository. For server-side use, you can obtain Temml via CLI commands <code>npm install temml</code> or <code>yarn add temml</code>.</p>
+<p>The minimum browser installation needs the following files. The <code>css</code> file and font file must be in the same folder.</p>
 <ul><li>temml.min.js</li>
 <li>Temml-Local.css</li>
 <li>Temml.woff2</li>
 </ul>
-<p>A server-side installation should include <code>temml.cjs</code> instead of <code>temml.min.js</code>.</p>
+<p>A server-side installation should use <code>temml.cjs</code> or <code>temml.mjs</code> instead of <code>temml.min.js</code>.</p>
 <h4 id='starter-template'>Starter template</h4>
 <pre><code>&lt;!DOCTYPE html&gt;
 &lt;!-- Temml requires the use of the HTML5 doctype. --&gt;
