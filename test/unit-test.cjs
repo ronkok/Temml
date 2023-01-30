@@ -2261,7 +2261,6 @@ const test = () => {
   // We check for regression by counting the number of elements.
   new Expect(build(wrapExpression, wrapSettings("tex"))[0].children.length).toBe(7)
   new Expect(build(wrapExpression, wrapSettings("="))[0].children.length).toBe(2)
-  console.log(build(r`x^{\textcolor{red}{-yz}}`)[0])
   new Expect(build(r`x^{\textcolor{red}{-yz}}`)[0].children.length).toBe(2)
 
   console.log("Number of tests:    " + numTests)
