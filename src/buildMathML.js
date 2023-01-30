@@ -123,10 +123,8 @@ const consolidateNumbers = expression => {
  * unless the array has length 1.  Always returns a single node.
  */
 export const makeRow = function(body) {
-  if (body.length === 1) {
-    return body[0] instanceof DocumentFragment
-      ? body[0]
-      : new mathMLTree.MathNode("mrow", body);
+  if (body.length === 1 && !(body[0] instanceof DocumentFragment)) {
+    return body[0];
   } else {
     return new mathMLTree.MathNode("mrow", body);
   }

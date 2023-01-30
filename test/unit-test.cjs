@@ -2251,7 +2251,7 @@ const test = () => {
   new Expect(`試`).toNotParse(strictSettings());
 
   assertion = "Line-wrapping should work"
-  const wrapExpression = r`x = a + {\color{blue} a + a =} b + b + b`;
+  const wrapExpression = r`x = a \textcolor{blue}{+ a + a} = b + b + b`;
   new Expect(wrapExpression).toParse()
   new Expect(wrapExpression).toBuild();
   new Expect(wrapExpression).toBuild(wrapSettings("none"));
@@ -2261,6 +2261,8 @@ const test = () => {
   // We check for regression by counting the number of elements.
   new Expect(build(wrapExpression, wrapSettings("tex"))[0].children.length).toBe(7)
   new Expect(build(wrapExpression, wrapSettings("="))[0].children.length).toBe(2)
+  console.log(build(r`x^{\textcolor{red}{-yz}}`)[0])
+  new Expect(build(r`x^{\textcolor{red}{-yz}}`)[0].children.length).toBe(2)
 
   console.log("Number of tests:    " + numTests)
   console.log("Number of failures: " + numFailures)
