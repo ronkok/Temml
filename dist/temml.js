@@ -1862,6 +1862,7 @@ var temml = (function () {
     }
     if (mtrs.length > 0) {
       const mtd = new mathMLTree.MathNode("mtd", mrows);
+      mtd.style.textAlign = "left";
       const mtr = new mathMLTree.MathNode("mtr", [mtd]);
       mtrs.push(mtr);
       const mtable = new mathMLTree.MathNode("mtable", mtrs);
@@ -11077,7 +11078,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.7";
+  const version = "0.10.8";
 
   function postProcess(block) {
     const labelMap = {};

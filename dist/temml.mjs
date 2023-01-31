@@ -1859,6 +1859,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
   }
   if (mtrs.length > 0) {
     const mtd = new mathMLTree.MathNode("mtd", mrows);
+    mtd.style.textAlign = "left";
     const mtr = new mathMLTree.MathNode("mtr", [mtd]);
     mtrs.push(mtr);
     const mtable = new mathMLTree.MathNode("mtable", mtrs);
@@ -12974,7 +12975,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.7";
+const version = "0.10.8";
 
 function postProcess(block) {
   const labelMap = {};

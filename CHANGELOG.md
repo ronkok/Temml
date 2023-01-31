@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.8] = 2023-01-31
+
+### Fixed
+
+- Left-justify after a newline
+
 ## [0.10.7] = 2023-01-30
 
 ### Fixed
