@@ -126,6 +126,7 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
   }
   if (mtrs.length > 0) {
     const mtd = new mathMLTree.MathNode("mtd", mrows)
+    mtd.style.textAlign = "left"
     const mtr = new mathMLTree.MathNode("mtr", [mtd])
     mtrs.push(mtr)
     const mtable = new mathMLTree.MathNode("mtable", mtrs)

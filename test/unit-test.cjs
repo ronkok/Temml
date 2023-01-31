@@ -2232,6 +2232,9 @@ const test = () => {
   assertion = "Newlines via \\\\ and \\newline: \\\\ causes newline, even after mrel and mop"
   markup = temml.renderToString(r`M = \\ a + \\ b \\ c`)
   new Expect(markup).toMatch(/=.+mo linebreak.+\+.+mo linebreak.+b.+mo linebreak/)
+  assertion = "Newlines should cause left-justified lines."
+  markup = temml.renderToString(r`a + b \\ c + d`)
+  new Expect([...markup.matchAll(/text-align:left/g)].length).toBe(2)
 
   assertion = "Symbols should build"
   new Expect(r`\text{\i\j}`).toParse(strictSettings())
