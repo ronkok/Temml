@@ -2118,6 +2118,7 @@ const test = () => {
   assertion = "Temml should build Unicode symbols"
   new Expect(`£¥ℂℍℑℎℓℕ℘ℙℚℜℝℤℲℵðℶℷℸ⅁∀∁∂∃∇∞∠∡∢♠♡♢♣♭♮♯✓°¬‼⋮\u00B7\u00A9\\text{£¥ℂℍℎ\u00A9\u00AE\uFE0F}`).toParse()
   new Expect(`£¥ℂℍℑℎℓℕ℘ℙℚℜℝℤℲℵðℶℷℸ⅁∀∁∂∃∇∞∠∡∢♠♡♢♣♭♮♯✓°¬‼⋮\u00B7\u00A9\\text{£¥ℂℍℎ\u00A9\u00AE\uFE0F}`).toBuild()
+  new Expect(temml.renderToString("ℓ")).toContain("ℓ")
   assertion = "Temml should build capital Greek letters"
   new Expect(`\u0391\u0392\u0395\u0396\u0397\u0399\u039A\u039C\u039D\u039F\u03A1\u03A4\u03A7\u03DD`).toParse(strictSettings())
   new Expect(`\u0391\u0392\u0395\u0396\u0397\u0399\u039A\u039C\u039D\u039F\u03A1\u03A4\u03A7\u03DD`).toBuild(strictSettings())
