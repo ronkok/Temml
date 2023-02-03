@@ -11459,7 +11459,7 @@ const asciiFromScript = Object.freeze({
   "\ud835\udca5": "J",
   "\ud835\udca6": "K",
   "\u2112": "L",
-  "\u2113": "M",
+  "\u2133": "M",
   "\ud835\udca9": "N",
   "\ud835\udcaa": "O",
   "\ud835\udcab": "P",
@@ -12975,7 +12975,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.8";
+const version = "0.10.9";
 
 function postProcess(block) {
   const labelMap = {};

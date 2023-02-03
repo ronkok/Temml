@@ -376,7 +376,7 @@ refer to [Options](#options) for more details.
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.8
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.9
 
 <h3><a href="#top">Contents</a></h3>
 

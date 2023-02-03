@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.9] = 2023-02-03
+
+### Fixed
+
+- Unicode ℓ
+
 ## [0.10.8] = 2023-01-31
 
 ### Fixed
