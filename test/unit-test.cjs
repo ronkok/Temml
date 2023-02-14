@@ -2250,9 +2250,13 @@ const test = () => {
   new Expect(`é`).toParse()
   new Expect(`試`).toParse()
 
-  assertion = "Settings should forbid unicode text when strict"
+  assertion = "Settings should forbid math-mode unicode text when strict"
   new Expect(`é`).toNotParse(strictSettings())
   new Expect(`試`).toNotParse(strictSettings());
+
+  assertion = "Unicode characters inside \\text{} should parse"
+  new Expect(`\text{é}`).toParse()
+  new Expect(`\text{試}`).toParse()
 
   assertion = "Line-wrapping should work"
   const wrapExpression = r`x = a \textcolor{blue}{+ a + a} = b + b + b`;

@@ -481,7 +481,10 @@ as `A^{2+3}`.
 | Script       | $\text{𝒜-𝒵 𝒶-𝓏}$      | Sans serif bold italic | $\text{𝘼-𝙕 𝙖-𝙯}$  |
 | Fraktur      | $\text{𝔄-ℨ}\text{𝔞-𝔷}$ | Bold Fraktur    | $\text{𝕬-𝖅}\text{𝖆-𝖟}$ |
 
-Any character can be written with the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$ .
+There are two methods that will render any Unicode charater:
+
+1. Use the `\char` function and the Unicode code in hex. For example `\char"263a` will render as $\char"263a$ .
+2. Write the character inside `\text{…}`. For example, `\text{☺}` will render as $\text{☺}$.
 
 <br>
 
@@ -1483,7 +1486,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.9
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.10
 
 <h3><a href="#top">Contents</a></h3>
 

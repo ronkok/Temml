@@ -199,7 +199,10 @@
 <tr><td>Script</td><td><math><mrow><mi class="mathcal">𝒜</mi><mtext>-</mtext><mi class="mathcal">𝒵</mi><mtext> </mtext><mtext>𝒶</mtext><mtext>-</mtext><mtext>𝓏</mtext></mrow></math></td><td>Sans serif bold italic</td><td><math><mtext>𝘼-𝙕 𝙖-𝙯</mtext></math></td></tr>
 <tr><td>Fraktur</td><td><math><mrow><mtext>𝔄-ℨ</mtext><mtext>𝔞-𝔷</mtext></mrow></math></td><td>Bold Fraktur</td><td><math><mrow><mtext>𝕬-𝖅</mtext><mtext>𝖆-𝖟</mtext></mrow></math></td></tr>
 </table>
-<p>Any character can be written with the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math><mi>☺</mi></math> .</p>
+<p>There are two methods that will render any Unicode charater:</p>
+<ol><li>Use the <code>\char</code> function and the Unicode code in hex. For example <code>\char&quot;263a</code> will render as <math><mi>☺</mi></math> .</li>
+<li>Write the character inside <code>\text{…}</code>. For example, <code>\text{☺}</code> will render as <math><mtext>☺</mtext></math>.</li>
+</ol>
 <br>
 <div><details><summary>More about Unicode script…</summary>
 <p>The Unicode range U+1D49C - U+1D4B5, Mathematical Script, has been ambiguous. Some fonts put chancery glyphs (<math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒞</mi></mrow></math>) at those code points and some fonts use roundhand glyphs (<math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi><mi class="mathscr">𝒞</mi></mrow></math>). Temml’s default for code points in this range is chancery, which matches the fonts Cambria Math and STIX TWO. It also matches the TeX function <code>\mathcal{…}</code>.</p>
@@ -634,7 +637,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math>   v0.10.9</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math>   v0.10.10</p>
 <h3><a href="#top">Contents</a></h3>
 <ul class="toc">
 <li><a href="#accents">Accents</a></li>

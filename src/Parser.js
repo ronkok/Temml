@@ -3,7 +3,6 @@ import functions from "./functions";
 import MacroExpander, { implicitCommands } from "./MacroExpander";
 import symbols, { ATOMS } from "./symbols";
 import { validUnit } from "./units";
-import { supportedCodepoint } from "./unicodeScripts";
 import ParseError from "./ParseError";
 import { combiningDiacriticalMarksEndRegex } from "./Lexer";
 import { uSubsAndSups, unicodeSubRegEx } from "./unicodeSupOrSub"
@@ -939,13 +938,8 @@ export default class Parser {
       symbol = s;
     } else if (text.charCodeAt(0) >= 0x80) {
       // no symbol for e.g. ^
-      if (this.settings.strict) {
-        if (!supportedCodepoint(text.charCodeAt(0))) {
-          throw new ParseError(`Unrecognized Unicode character "${text[0]}"` +
-          ` (${text.charCodeAt(0)})`, nucleus);
-        } else if (this.mode === "math") {
-          throw new ParseError(`Unicode text character "${text[0]}" used in math mode`, nucleus)
-        }
+      if (this.settings.strict && this.mode === "math") {
+        throw new ParseError(`Unicode text character "${text[0]}" used in math mode`, nucleus)
       }
       // All nonmathematical Unicode characters are rendered as if they
       // are in text mode (wrapped in \text) because that's what it
