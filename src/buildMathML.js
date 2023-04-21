@@ -262,7 +262,7 @@ export default function buildMathML(tree, texExpression, style, settings) {
     math.setAttribute("display", "block");
     math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
       ? "inline"
-      : "inline-block"
+      : "block math"
   }
   return math;
 }
