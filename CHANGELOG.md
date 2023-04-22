@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.11] = 2023-04-22
+
+### Fixed
+
+- Center display mode math
+- \bin{symbols}
+
+### Added
+
+- Support `throwOnError` rendering option
+- Support  `\eqeq` and `\eqeqeq`
+
 ## [0.10.10] = 2023-02-14
 
 ### Fixed

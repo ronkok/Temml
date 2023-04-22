@@ -427,7 +427,7 @@ If you know the shape of a character, but not its name,
 |\Eqcolon|$\Eqcolon$|| mathtools |
 |\eqcolon|$\eqcolon$|| mathtools |
 |\eqeq|$\eqeq$|| unicodemath |
-|\eqeqeq|$eqeqeq$|| unicodemath |
+|\eqeqeq|$\eqeqeq$|| unicodemath |
 |\equalscolon|$\equalscolon$|| colonequals |
 |\equalscoloncolon|$\equalscoloncolon$|| colonequals |
 |{equation}|$$\begin{equation}a = b + c\end{equation}$$|`\begin{equation}`<br>   `a = b + c`<br>`\end{equation}`| ams |
@@ -1487,7 +1487,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.10
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.11
 
 <div style="height:0.5em;"></div>
 

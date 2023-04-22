@@ -107,7 +107,7 @@ defineSymbol(math, rel, "\u2260", "\\ne", true);
 defineSymbol(math, rel, "\u2260", "\\neq");
 // unicodemath
 defineSymbol(math, rel, "\u2a75", "\\eqeq", true);
-defineSymbol(math, rel, "\u2276", "\\eqeqeq", true);
+defineSymbol(math, rel, "\u2a76", "\\eqeqeq", true);
 // mathtools.sty
 defineSymbol(math, rel, "\u2237", "\\dblcolon", true);
 defineSymbol(math, rel, "\u2254", "\\coloneqq", true);

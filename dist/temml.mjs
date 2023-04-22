@@ -186,6 +186,7 @@ class Settings {
     this.displayMode = utils.deflt(options.displayMode, false);    // boolean
     this.annotate = utils.deflt(options.annotate, false);           // boolean
     this.leqno = utils.deflt(options.leqno, false);                // boolean
+    this.throwOnError = utils.deflt(options.throwOnError, false);  // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
     this.macros = options.macros || {};
     this.wrap = utils.deflt(options.wrap, "tex");                    // "tex" | "="
@@ -863,6 +864,9 @@ defineSymbol(math, rel, "\u225e", "\\measeq", true);
 defineSymbol(math, rel, "\u225f", "\\questeq", true);
 defineSymbol(math, rel, "\u2260", "\\ne", true);
 defineSymbol(math, rel, "\u2260", "\\neq");
+// unicodemath
+defineSymbol(math, rel, "\u2a75", "\\eqeq", true);
+defineSymbol(math, rel, "\u2a76", "\\eqeqeq", true);
 // mathtools.sty
 defineSymbol(math, rel, "\u2237", "\\dblcolon", true);
 defineSymbol(math, rel, "\u2254", "\\coloneqq", true);
@@ -2128,7 +2132,7 @@ function buildMathML(tree, texExpression, style, settings) {
     math.setAttribute("display", "block");
     math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
       ? "inline"
-      : "inline-block";
+      : "block math";
   }
   return math;
 }
@@ -5999,7 +6003,9 @@ defineFunction({
     const arr = (body.body) ? body.body : [body];
     for (const arg of arr) {
       if (textAtomTypes.includes(arg.type)) {
-        if (arg.text) {
+        if (symbols[parser.mode][arg.text]) {
+          mord.text += symbols[parser.mode][arg.text].replace;
+        } else if (arg.text) {
           mord.text += arg.text;
         } else if (arg.body) {
           arg.body.map(e => { mord.text += e.text; });
@@ -12867,7 +12873,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.10";
+const version = "0.10.11";
 
 function postProcess(block) {
   const labelMap = {};
