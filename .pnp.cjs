@@ -30,7 +30,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "packageDependencies": [\
             ["eslint", "npm:8.7.0"],\
             ["esm", "npm:3.2.25"],\
-            ["node", "npm:18.15.0"],\
             ["rollup", "npm:2.66.1"],\
             ["terser", "npm:5.14.2"]\
           ],\
@@ -1425,25 +1424,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
           "linkType": "HARD"\
         }]\
       ]],\
-      ["node", [\
-        ["npm:18.15.0", {\
-          "packageLocation": "./.yarn/unplugged/node-npm-18.15.0-5606a7a4ae/node_modules/node/",\
-          "packageDependencies": [\
-            ["node", "npm:18.15.0"],\
-            ["node-bin-setup", "npm:1.1.3"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
-      ["node-bin-setup", [\
-        ["npm:1.1.3", {\
-          "packageLocation": "./.yarn/cache/node-bin-setup-npm-1.1.3-e2630416da-ae09c036dd.zip/node_modules/node-bin-setup/",\
-          "packageDependencies": [\
-            ["node-bin-setup", "npm:1.1.3"]\
-          ],\
-          "linkType": "HARD"\
-        }]\
-      ]],\
       ["node-gyp", [\
         ["npm:9.1.0", {\
           "packageLocation": "./.yarn/unplugged/node-gyp-npm-9.1.0-2091059b31/node_modules/node-gyp/",\
@@ -1859,7 +1839,6 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["temml", "workspace:."],\
             ["eslint", "npm:8.7.0"],\
             ["esm", "npm:3.2.25"],\
-            ["node", "npm:18.15.0"],\
             ["rollup", "npm:2.66.1"],\
             ["terser", "npm:5.14.2"]\
           ],\
