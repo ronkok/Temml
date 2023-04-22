@@ -25,6 +25,7 @@
   "devDependencies": {
     "eslint": "^8.7.0",
     "esm": "^3.2.25",
+    "node": "^18.13.0",
     "rollup": "^2.66.1",
     "terser": "^5.14.2"
   },
