@@ -15,6 +15,7 @@ export default class Settings {
     this.displayMode = utils.deflt(options.displayMode, false);    // boolean
     this.annotate = utils.deflt(options.annotate, false)           // boolean
     this.leqno = utils.deflt(options.leqno, false);                // boolean
+    this.throwOnError = utils.deflt(options.throwOnError, false);  // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
     this.macros = options.macros || {};
     this.wrap = utils.deflt(options.wrap, "tex")                    // "tex" | "="
