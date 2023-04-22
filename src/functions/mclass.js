@@ -1,4 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction";
+import symbols from "../symbols";
 import mathMLTree from "../mathMLTree";
 import utils from "../utils";
 
@@ -112,7 +113,9 @@ defineFunction({
     const arr = (body.body) ? body.body : [body];
     for (const arg of arr) {
       if (textAtomTypes.includes(arg.type)) {
-        if (arg.text) {
+        if (symbols[parser.mode][arg.text]) {
+          mord.text += symbols[parser.mode][arg.text].replace
+        } else if (arg.text) {
           mord.text += arg.text
         } else if (arg.body) {
           arg.body.map(e => { mord.text += e.text })
