@@ -1051,13 +1051,13 @@ $\stackrel{!}{=}\vphantom{\frac a b}$ `\stackrel{!}{=}`
 | $ \doteqdot $ `\doteqdot` | $ \lesseqgtr $            | $ \sincoh $  `\sincoh`    | $ \veeeq $  `\veeeq`      |
 |                           | `\lesseqgtr`              |                           |                           |
 +---------------------------+---------------------------+---------------------------+---------------------------+
-|                           |                           | $ \smallfrown $           | $ \wedgeq $  `\wedgeq`    |
+| $ \eqeq $  `\eqeq`        |                           | $ \smallfrown $           | $ \wedgeq $  `\wedgeq`    |
 |                           |                           | `\smallfrown`             |                           |
 +---------------------------+---------------------------+---------------------------+---------------------------+
 
 The _texvc_ extension provides $\sub$ `\sub`, $\sube$ `\sube`, and $\supe$ `\supe`.
 
-Direct Input: <span class="direct">= &lt; &gt; : ∈ ∋ ∝ ∼ ∽ ≂ ≃ ≅ ≈ ≊ ≍ ≎ ≏ ≐ ≑ ≒ ≓ ≖
+Direct Input: <span class="direct">= &lt; &gt; : ∈ ∋ ∝ ∼ ∽ ≂ ≃ ≅ ≈ ≊ ≍ ≎ ≏ ≐ ≑ ≒ ≓ ⩵ ≖
 ≗ ≜ ≡ ≤ ≥ ≦ ≧ ≫ ≬ ≳ ≷ ≺ ≻ ≼ ≽ ≾ ≿ ⊂ ⊃ ⊆ ⊇ ⊏ ⊐ ⊑ ⊒ ⊢ ⊣ ⊩ ⊪ ⊸ ⋍ ⋐ ⋑ ⋔ ⋙
 ⋛ ⋞ ⋟ ⌢ ⌣ ⩾ ⪆ ⪌ ⪕ ⪖ ⪯ ⪰ ⪷ ⪸ ⫅ ⫆ ≲ ⩽ ⪅ ≶ ⋚ ⪋ ⟂ ⊨ ≔ ≕ ⩴ ⊷ ⊶</span>
 

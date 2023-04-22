@@ -426,6 +426,8 @@ If you know the shape of a character, but not its name,
 |\eqcirc|$\eqcirc$|| ams |
 |\Eqcolon|$\Eqcolon$|| mathtools |
 |\eqcolon|$\eqcolon$|| mathtools |
+|\eqeq|$\eqeq$|| unicodemath |
+|\eqeqeq|$eqeqeq$|| unicodemath |
 |\equalscolon|$\equalscolon$|| colonequals |
 |\equalscoloncolon|$\equalscoloncolon$|| colonequals |
 |{equation}|$$\begin{equation}a = b + c\end{equation}$$|`\begin{equation}`<br>   `a = b + c`<br>`\end{equation}`| ams |
