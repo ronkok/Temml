@@ -7755,6 +7755,8 @@ var temml = (function () {
         node = new mathMLTree.MathNode("mi", [text]);
         if (text.text === origText && latinRegEx.test(origText)) {
           node.setAttribute("mathvariant", "italic");
+        } else if (text.text === "∇" && variant === "normal") {
+          node.setAttribute("mathvariant", "normal");
         }
       }
       return node
@@ -10976,7 +10978,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.11";
+  const version = "0.10.12";
 
   function postProcess(block) {
     const labelMap = {};
