@@ -3,6 +3,9 @@
   "version": "0.10.12",
   "description": "TeX to MathML conversion in JavaScript.",
   "main": "dist/temml.js",
+  "engines": {
+    "node": ">=18.13.0"
+  },
   "exports": {
     ".": {
       "require": "./dist/temml.cjs"
