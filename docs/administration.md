@@ -368,6 +368,58 @@ refer to [Options](#options) for more details.
 - `trust` can allow certain commands that may load external resources or change
   HTML attributes and thus are not always safe (e.g., `\includegraphics` or `\class`)
 
+# Browser Issues
+
+If you are deciding whether to render math in MathMl, know that all the major
+browser engines now support MathML. If you want to revel in the sight of over
+a thousand LaTeX functions rendered well in MathML, head on over to the
+Temml [function support page](https://temml.org/docs/en/supported.html).
+
+The rest of you, stay here. This section identifies functions that browsers render
+poorly.
+
+| Item                     | Chromium         | Firefox | Webkit (Safari)   |
+|:-------------------------|:----------------:|:-------:|:-----------------:|
+| Accents                  | ✓                | ✓       | bad<sup>1</sup>   |
+| Wide accents, in general | ✓                | ✓       | bad<sup>2</sup>   |
+| \\widehat, \\widetilde   | poor<sup>3</sup> | ✓       | ✓                 |
+| Prime                    | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   |
+| Integral, ∫, in display mode  | poor<sup>5</sup> | ✓  | ✓                 |
+| \\left( x \\right)       | poor<sup>6</sup> | ✓       | ✓                 |
+| \\big(, \\bigg(, etc     | poor<sup>7</sup> | ✓       | ✓                 |
+| \\cancel, \\bcancel, \\xcancel | meh<sup>8</sup> | meh<sup>8</sup>  | meh<sup>8</sup>   |
+| \\boxed, \\colorbox      | ✓                | ✓       | poor<sup>9</sup>  |
+| {Vmatrix} environment    | ✓                | ✓       | poor<sup>10</sup> |
+| {align} environment      | ✓                | ✓       | bad<sup>11</sup>  |
+| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>12</sup>  |
+| Extensible arrows        | bad<sup>13</sup> | ✓       | poor<sup>14</sup> |
+
+Notes:
+
+1.  Webkit renders normal accents too high. (Extensible accents are set at the correct height.)
+2.  Webkit fails to stretch many wide accents.
+3.  Chromium does not stretch \\widehat or \\widetilde.
+4.  Chromium and Webkit fail to properly address italic correction. So _f_ ′ overlaps.
+5.  Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.
+6.  Chromium slightly stretches \\left( \\right) when they should not stretch.
+7.  Chromium over-stretches \\bigg( and \\Bigg(.
+8.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print well.
+9.  Webkit places boxes at the wrong vertical alignment.
+10. Webkit does not stretch the delimiters for {Vmatrix}.
+11. Webkit renders the {align} environment remarkably poorly.
+12. Webkit does not render laps properly.
+13. Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
+14. Webkit fails to stretch most extensible arrows.
+
+Another issue if you are targeting mobile: Android has not provided a math
+system font. They are planning to add a MATH table to the Noto Sans font. I
+don’t know if it has shipped.
+
+You can view all these issues for yourself at the Temml [function support
+page](https://temml.org/docs/en/supported.html).
+
+You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
+
 <br>
 
 <p class="reduced">Copyright © 2021-2023 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
@@ -397,6 +449,7 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.12
 * [Equation numbering](#equation-numbering)
 * [Extensions](#extensions)
 * [Security](#security)
+* [Browser Issues](#browser-issues)
 
 ### Elsewhere
 

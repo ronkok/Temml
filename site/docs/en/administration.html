@@ -190,6 +190,47 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><code>maxExpand</code> can prevent infinite macro loop attacks.</li>
 <li><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</li>
 </ul>
+<h1 id='browser-issues'>Browser Issues</h1>
+<p>If you are deciding whether to render math in MathMl, know that all the major browser engines now support MathML. If you want to revel in the sight of over a thousand LaTeX functions rendered well in MathML, head on over to the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
+<p>The rest of you, stay here. This section identifies functions that browsers render poorly.</p>
+<table class="c2c c3c c4c"><tr><th>Item</th>
+<th>Chromium</th>
+<th>Firefox</th>
+<th>Webkit (Safari)</th>
+</tr>
+<tr><td>Accents</td><td>✓</td><td>✓</td><td>bad<sup>1</sup></td></tr>
+<tr><td>Wide accents, in general</td><td>✓</td><td>✓</td><td>bad<sup>2</sup></td></tr>
+<tr><td>\widehat, \widetilde</td><td>poor<sup>3</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>Prime</td><td>meh<sup>4</sup></td><td>✓</td><td>meh<sup>4</sup></td></tr>
+<tr><td>Integral, ∫, in display mode</td><td>poor<sup>5</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>\left( x \right)</td><td>poor<sup>6</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>\big(, \bigg(, etc</td><td>poor<sup>7</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>8</sup></td><td>meh<sup>8</sup></td><td>meh<sup>8</sup></td></tr>
+<tr><td>\boxed, \colorbox</td><td>✓</td><td>✓</td><td>poor<sup>9</sup></td></tr>
+<tr><td>{Vmatrix} environment</td><td>✓</td><td>✓</td><td>poor<sup>10</sup></td></tr>
+<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
+<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr>
+<tr><td>Extensible arrows</td><td>bad<sup>13</sup></td><td>✓</td><td>poor<sup>14</sup></td></tr>
+</table>
+<p>Notes:</p>
+<ol><li>Webkit renders normal accents too high. (Extensible accents are set at the correct height.)</li>
+<li>Webkit fails to stretch many wide accents.</li>
+<li>Chromium does not stretch \widehat or \widetilde.</li>
+<li>Chromium and Webkit fail to properly address italic correction. So <em>f</em> ′ overlaps.</li>
+<li>Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.</li>
+<li>Chromium slightly stretches \left( \right) when they should not stretch.</li>
+<li>Chromium over-stretches \bigg( and \Bigg(.</li>
+<li>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print well.</li>
+<li>Webkit places boxes at the wrong vertical alignment.</li>
+<li>Webkit does not stretch the delimiters for {Vmatrix}.</li>
+<li>Webkit renders the {align} environment remarkably poorly.</li>
+<li>Webkit does not render laps properly.</li>
+<li>Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
+<li>Webkit fails to stretch most extensible arrows.</li>
+</ol>
+<p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t know if it has shipped.</p>
+<p>You can view all these issues for yourself at the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
+<p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
 <p class="reduced">Copyright © 2021-2023 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 <br>
@@ -218,6 +259,8 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p><a href='#extensions'>Extensions</a></p>
 </li>
 <li><p><a href='#security'>Security</a></p>
+</li>
+<li><p><a href='#browser-issues'>Browser Issues</a></p>
 </li>
 </ul>
 <h3 id='elsewhere'>Elsewhere</h3>
