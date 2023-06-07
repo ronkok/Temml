@@ -594,8 +594,7 @@ include `strict: true`.
 +------------------------+----------------------+-----------------------------+------------------------------+
 | $\ni$  `\ni`           | $\land$  `\land`     | $\gets$  `\gets`            | $\iff$  `\iff`               |
 +------------------------+----------------------+-----------------------------+------------------------------+
-| $\notin$  `\notin`     | $\lor$  `\lor`       | $\leftrightarrow$           | $\lightning$  `\lightning`   |
-|                        |                      |  `\leftrightarrow`          |                              |
+| $\notin$  `\notin`     | $\lor$  `\lor`       | $\QED$  `\QED`              | $\lightning$  `\lightning`   |
 +------------------------+----------------------+-----------------------------+------------------------------+
 | $\notni$  `\notni`     | $\neg$  `\neg`       | $\Set{ x | x<\frac 1 2 }$ \ | $\set{x|x<5 }$ \             |
 |                        | or `\lnot`           |  `\Set{ x | x<\frac 1 2 }`  |  `\set{x|x<5}`               |
@@ -1369,8 +1368,8 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\text{\textquotedblleft}$   | $\triangle$             | $\Bot$  `\Bot`                     |
 |  `\text{\textquotedblleft}`  |  `\triangle`            |                                    |
 +------------------------------+-------------------------+------------------------------------+
-| $"$   `"`                    | $\triangledown$         | $\\$$ `\$` or `\text{\textdollar}` |
-|                              |  `\triangledown`        |                                    |
+| $"$   `"`                    | $\triangledown$         | $\text{\textdollar}$ `\$` or       |
+|                              |  `\triangledown`        | `\text{\textdollar}`               |
 +------------------------------+-------------------------+------------------------------------+
 | $\text{\textquotedblright}$  | $\triangleleft$         | $\cent$  `\cent`                   |
 |  `\text{\textquotedblright}` |  `\triangleleft`        |                                    |
@@ -1432,6 +1431,8 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 +------------------------------+-------------------------+------------------------------------+
 | $\standardstate$             | $\lightning$            | $\permil$  `\permil`               |
 |  `\standardstate`            |  `\lightning`           |                                    |
++------------------------------+-------------------------+------------------------------------+
+|                              | $\QED$  `\QED`          |                                    |
 +------------------------------+-------------------------+------------------------------------+
 
 Symbols in the _texvc_ extension

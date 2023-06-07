@@ -209,6 +209,7 @@ defineSymbol(math, rel, "\u21c1", "\\rightharpoondown", true);
 defineSymbol(math, rel, "\u2196", "\\nwarrow", true);
 defineSymbol(math, rel, "\u21cc", "\\rightleftharpoons", true);
 defineSymbol(math, mathord, "\u21af", "\\lightning", true);
+defineSymbol(math, mathord, "\u220E", "\\QED", true);
 defineSymbol(math, mathord, "\u2030", "\\permil", true);
 defineSymbol(text, textord, "\u2030", "\\permil");
 

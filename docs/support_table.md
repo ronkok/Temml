@@ -994,6 +994,7 @@ If you know the shape of a character, but not its name,
 | \qc         | $\qc$                    |                         | physics extension |
 | \qcc        | $\qcc$                   |                         | physics extension |
 | \qcomma     | $\qcomma$                |                         | physics extension |
+| \QED        | $\QED$                   |                         | stix              |
 | \qelse      | $\qelse$                 |                         | physics extension |
 | \qeven      | $\qeven$                 |                         | physics extension |
 | \qfor       | $\qfor$                  |                         | physics extension |
