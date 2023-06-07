@@ -146,6 +146,10 @@ math {
   color:rgb(182, 32, 32);
 }
 
+.active-button {
+  background: #888;
+}
+
 @media (max-width: 799px){
   nav {
     width: 90%;
