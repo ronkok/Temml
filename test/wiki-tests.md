@@ -923,6 +923,15 @@ That concludes the tests from Wikipedia. Now a few more tests.
 | 265 | \mathrm{f{\large f{\normalsize f{\tiny f}}}} | $\mathrm{f{\large f{\normalsize f{\tiny f}}}}$  |
 +-----+----------------------------------------------+-------------------------------------------------+
 
+The next line tests the length of an extensible arrow. Since Firefox does not\
+support the `minsize` attribute, Temml has a workaround. The middle arrow\
+should be as long at the bar between C & D.
+
++=====+====================================+====================================+
+| 266 | A \rightarrow B \xrightarrow{i} C\ | $A \rightarrow B \xrightarrow{i} C |
+|     | \rule[0.3em]{1.75em}{0.05em} D     | \rule[0.3em]{1.75em}{0.05em} D$    |
++-----+------------------------------------+------------------------------------+
+
 <br>
 </body>
 </html>
