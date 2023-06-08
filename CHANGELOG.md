@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.13] = 2023-06-08
+
+### Changed
+
+- Simplify code for extensible arrows
+
+### Added
+
+- \QED
+
 ## [0.10.12] = 2023-05-21
 
 ### Fixed

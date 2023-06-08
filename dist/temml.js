@@ -971,6 +971,7 @@ var temml = (function () {
   defineSymbol(math, rel, "\u2196", "\\nwarrow", true);
   defineSymbol(math, rel, "\u21cc", "\\rightleftharpoons", true);
   defineSymbol(math, mathord, "\u21af", "\\lightning", true);
+  defineSymbol(math, mathord, "\u220E", "\\QED", true);
   defineSymbol(math, mathord, "\u2030", "\\permil", true);
   defineSymbol(text, textord, "\u2030", "\\permil");
 
@@ -2419,43 +2420,69 @@ var temml = (function () {
     return new mathMLTree.MathNode("mrow", row)
   };
 
-  const labelSize = (size, scriptLevel) =>  (size / emScale(scriptLevel)).toFixed(4);
+  const labelSize = (size, scriptLevel) =>  Number(size) / emScale(scriptLevel);
 
-  const munderoverNode = (name, body, below, style) => {
-    const arrowNode = stretchy.mathMLnode(name);
+  const munderoverNode = (fName, body, below, style) => {
+    const arrowNode = stretchy.mathMLnode(fName);
     // Is this the short part of a mhchem equilibrium arrow?
-    const isEq = name.slice(1, 3) === "eq";
-    const minWidth = name.charAt(1) === "x"
-      ? "1.75"  // mathtools extensible arrows are 1.75em long
-      : name.slice(2, 4) === "cd"
+    const isEq = fName.slice(1, 3) === "eq";
+    const minWidth = fName.charAt(1) === "x"
+      ? "1.75"  // mathtools extensible arrows are ≥ 1.75em long
+      : fName.slice(2, 4) === "cd"
       ? "3.0"  // cd package arrows
       : isEq
       ? "1.0"  // The shorter harpoon of a mhchem equilibrium arrow
       : "2.0"; // other mhchem arrows
-    arrowNode.setAttribute("minsize", String(minWidth) + "em");
+    // TODO: When Firefox supports minsize, use the next line.
+    //arrowNode.setAttribute("minsize", String(minWidth) + "em")
     arrowNode.setAttribute("lspace", "0");
     arrowNode.setAttribute("rspace", (isEq ? "0.5em" : "0"));
 
     // <munderover> upper and lower labels are set to scriptlevel by MathML
-    // So we have to adjust our dimensions accordingly.
+    // So we have to adjust our label dimensions accordingly.
     const labelStyle = style.withLevel(style.level < 2 ? 2 : 3);
-    const emptyLabelWidth = labelSize(minWidth, labelStyle.level);
-    const lspace = labelSize((isEq ? 0 : 0.3), labelStyle.level);
-    const rspace = labelSize((isEq ? 0 : 0.3), labelStyle.level);
+    const minArrowWidth = labelSize(minWidth, labelStyle.level);
+    // The dummyNode will be inside a <mover> inside a <mover>
+    // So it will be at scriptlevel 3
+    const dummyWidth = labelSize(minWidth, 3);
+    const emptyLabel = paddedNode(null, minArrowWidth.toFixed(4), 0);
+    const dummyNode = paddedNode(null, dummyWidth.toFixed(4), 0);
+    // The arrow is a little longer than the label. Set a spacer length.
+    const space = labelSize((isEq ? 0 : 0.3), labelStyle.level).toFixed(4);
+    let upperNode;
+    let lowerNode;
 
-    const upperNode = (body && body.body &&
+    const gotUpper = (body && body.body &&
       // \hphantom        visible content
-      (body.body.body || body.body.length > 0))
-      ? paddedNode(buildGroup$1(body, labelStyle), lspace, rspace)
-        // Since Firefox does not recognize minsize set on the arrow,
-        // create an upper node w/correct width.
-      : paddedNode(null, emptyLabelWidth, 0);
-    const lowerNode = (below && below.body &&
-      (below.body.body || below.body.length > 0))
-      ? paddedNode(buildGroup$1(below, labelStyle), lspace, rspace)
-      : paddedNode(null, emptyLabelWidth, 0);
-    const node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
-    if (minWidth === "3.0") { node.style.height = "1em"; }
+      (body.body.body || body.body.length > 0));
+    if (gotUpper) {
+      let label =  buildGroup$1(body, labelStyle);
+      label = paddedNode(label, space, space);
+      // Since Firefox does not support minsize, stack a invisible node
+      // on top of the label. Its width will serve as a min-width.
+      // TODO: Refactor this after Firefox supports minsize.
+      upperNode = new mathMLTree.MathNode("mover", [label, dummyNode]);
+    }
+    const gotLower = (below && below.body &&
+      (below.body.body || below.body.length > 0));
+    if (gotLower) {
+      let label =  buildGroup$1(below, labelStyle);
+      label = paddedNode(label, space, space);
+      lowerNode = new mathMLTree.MathNode("munder", [label, dummyNode]);
+    }
+
+    let node;
+    if (!gotUpper && !gotLower) {
+      node = new mathMLTree.MathNode("mover", [arrowNode, emptyLabel]);
+    } else if (gotUpper && gotLower) {
+      node = new mathMLTree.MathNode("munderover", [arrowNode, lowerNode, upperNode]);
+    } else if (gotUpper) {
+      node = new mathMLTree.MathNode("mover", [arrowNode, upperNode]);
+    } else {
+      node = new mathMLTree.MathNode("munder", [arrowNode, lowerNode]);
+    }
+    if (minWidth === "3.0") { node.style.height = "1em"; } // CD environment
+    node.setAttribute("accent", "false"); // Necessary for MS Word
     return node
   };
 
@@ -2534,7 +2561,7 @@ var temml = (function () {
       "\\xleftrightharpoons",   // mathtools
       "\\xrightleftharpoons",   // mathtools
       "\\yieldsLeftRight",      // mhchem
-      "\\equilibrium",           // mhchem
+      "\\equilibrium",          // mhchem
       "\\equilibriumRight",
       "\\equilibriumLeft"
     ],
@@ -10978,7 +11005,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.12";
+  const version = "0.10.13";
 
   function postProcess(block) {
     const labelMap = {};
