@@ -43,7 +43,7 @@
   
       <textarea class="ioArea" id="demoSource" spellcheck="false" wrap="soft">\def\d{\mathrm{d}}
 
-\oint_C \vec{B}\circ \d\vec{l} = \mu_0 \left( I_{\text{enc}} + \varepsilon_0 \frac{\d}{\d t} \int_S \vec{E} \circ \hat{n}\; \d a \right)</textarea>
+\oint_C {\vec{B}\circ} \d\vec{l} = \mu_0 \left( I_{\text{enc}} + \varepsilon_0 \frac{\d}{\d t} \int_S {\vec{E} \circ \hat{n}}\; \d a \right)</textarea>
     </div>
     <div id="spacer"></div>
     <div id="output">
@@ -131,6 +131,7 @@
   const math = document.getElementById("math");
   const mode = document.querySelector('input[id="displayMode"]');
   const annotate = document.querySelector('input[id="annotate"]');
+  const xml = document.querySelector('input[id="xml"]');
   const output = document.getElementById("OutputType")
 
   const wide = document.getElementById("wide");
@@ -151,6 +152,7 @@
   input.addEventListener("input", reprocess, false);
   mode.addEventListener('change', () => { reprocess() });
   annotate.addEventListener('change', () => { reprocess() });
+  xml.addEventListener('change', () => { reprocess() });
   window.addEventListener('hashchange', () => { getHash() }, false)
 
   function reprocess() {
@@ -205,7 +207,7 @@
       mml = format(mml, { indentation: '  ', collapseContent: true, lineSeparator: '\n' })
     }
     navigator.clipboard.writeText(mml)
-    sleep(500).then(() => {
+    sleep(300).then(() => {
       btn.classList.remove("active-button")
     });
   }
