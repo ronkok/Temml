@@ -191,7 +191,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</li>
 </ul>
 <h1 id='browser-issues'>Browser Issues</h1>
-<p>If you are deciding whether to render math in MathMl, know that all the major browser engines now support MathML. If you want to revel in the sight of over a thousand LaTeX functions rendered well in MathML, head on over to the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
+<p>If you are deciding whether to render math in MathML, know that all the major browser engines now support MathML. If you want to revel in the sight of over a thousand LaTeX functions rendered well in MathML, head on over to the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
 <p>The rest of you, stay here. This section identifies functions that browsers render poorly.</p>
 <table class="c2c c3c c4c"><tr><th>Item</th>
 <th>Chromium</th>
@@ -230,7 +230,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li>Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
 <li>Webkit fails to stretch most extensible arrows.</li>
 <li>Firefox sometimes selects radicals that are too tall.</li>
-<li>When not in display mode, automatic linebreaking works in Chromiumn and Firefox. Not in Webkit.</li>
+<li>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in Webkit.</li>
 </ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t know if it has shipped.</p>
 <p>You can view all these issues for yourself at the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>

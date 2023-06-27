@@ -370,7 +370,7 @@ refer to [Options](#options) for more details.
 
 # Browser Issues
 
-If you are deciding whether to render math in MathMl, know that all the major
+If you are deciding whether to render math in MathML, know that all the major
 browser engines now support MathML. If you want to revel in the sight of over
 a thousand LaTeX functions rendered well in MathML, head on over to the
 Temml [function support page](https://temml.org/docs/en/supported.html).
@@ -413,7 +413,7 @@ Notes:
 13. Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
 14. Webkit fails to stretch most extensible arrows.
 15. Firefox sometimes selects radicals that are too tall.
-16. When not in display mode, automatic linebreaking works in Chromiumn and Firefox. Not in Webkit.
+16. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in Webkit.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
