@@ -393,6 +393,8 @@ poorly.
 | {align} environment      | ✓                | ✓       | bad<sup>11</sup>  |
 | \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>12</sup>  |
 | Extensible arrows        | bad<sup>13</sup> | ✓       | poor<sup>14</sup> |
+| Square root radicals     | ✓                | meh<sup>15</sup> | ✓        |
+| Line-breaking            | ✓                | ✓       | bad<sup>16</sup>  |
 
 Notes:
 
@@ -410,6 +412,8 @@ Notes:
 12. Webkit does not render laps properly.
 13. Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
 14. Webkit fails to stretch most extensible arrows.
+15. Firefox sometimes selects radicals that are too tall.
+16. When not in display mode, automatic linebreaking works in Chromiumn and Firefox. Not in Webkit.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I

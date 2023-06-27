@@ -211,6 +211,8 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
 <tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr>
 <tr><td>Extensible arrows</td><td>bad<sup>13</sup></td><td>✓</td><td>poor<sup>14</sup></td></tr>
+<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>15</sup></td><td>✓</td></tr>
+<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>16</sup></td></tr>
 </table>
 <p>Notes:</p>
 <ol><li>Webkit renders normal accents too high. (Extensible accents are set at the correct height.)</li>
@@ -227,6 +229,8 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li>Webkit does not render laps properly.</li>
 <li>Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
 <li>Webkit fails to stretch most extensible arrows.</li>
+<li>Firefox sometimes selects radicals that are too tall.</li>
+<li>When not in display mode, automatic linebreaking works in Chromiumn and Firefox. Not in Webkit.</li>
 </ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t know if it has shipped.</p>
 <p>You can view all these issues for yourself at the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
