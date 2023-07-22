@@ -356,6 +356,7 @@ defineSymbol(math, rel, "\u2ab7", "\\precapprox", true);
 defineSymbol(math, rel, "\u22b2", "\\vartriangleleft");
 defineSymbol(math, rel, "\u22b4", "\\trianglelefteq");
 defineSymbol(math, rel, "\u22a8", "\\vDash", true);
+defineSymbol(math, rel, "\u22ab", "\\VDash", true);
 defineSymbol(math, rel, "\u22aa", "\\Vvdash", true);
 defineSymbol(math, rel, "\u2323", "\\smallsmile");
 defineSymbol(math, rel, "\u2322", "\\smallfrown");
