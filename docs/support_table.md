@@ -1397,6 +1397,7 @@ If you know the shape of a character, but not its name,
 |\vcentcolon|$\vcentcolon$ |||
 |\vcenter|(Not supported)|||
 |\Vdash|$\Vdash$ || ams |
+|\VDash|$\VDash$ || MnSymbol |
 |\vDash|$\vDash$ || ams |
 |\vdash|$\vdash$ |||
 |\vdot|$\vdot$ || physics extension |
