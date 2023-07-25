@@ -73,8 +73,8 @@ Images from LaTeX are also included for comparison.
 | 14 | \bigg(\frac{\partial^2} \    | $$\bigg(\frac{\partial^2}    | ![ex14][] | TeXbook p147 |
 |    | {\partial x^2} + \frac \     | {\partial x^2} + \frac       |           |              |
 |    | {\partial^2}{\partial y^2}\  | {\partial^2}{\partial y^2}   |           |              |
-|    | \bigg) \big\lvert\varphi \   | \bigg) \big\lvert\varphi     |           |              |
-|    | (x+iy)\big\rvert^2           | (x+iy)\big\rvert^2$$         |           |              |
+|    | \bigg){\big\lvert\varphi \   | \bigg){\big\lvert\varphi     |           |              |
+|    | (x+iy)\big\rvert}^2          | (x+iy)\big\rvert}^2$$        |           |              |
 +----+------------------------------+------------------------------+-----------+--------------+
 | 15 | 2^{2^{2^x}}                  | $$2^{2^{2^x}}$$              | ![ex15][] | TeXbook p128 |
 +----+------------------------------+------------------------------+-----------+--------------+
