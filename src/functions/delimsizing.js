@@ -179,7 +179,6 @@ defineFunction({
       node.setAttribute("stretchy", "true")
     }
 
-    node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
     // Don't set the maxsize attribute. It's broken in Chromium.
     return node;
