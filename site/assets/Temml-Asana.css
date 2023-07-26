@@ -38,6 +38,10 @@ math {
   font-family: Asana Math, math;
 }
 
+/* Next line is active in Firefox and Safari.
+ * Not in Chromium, which recognizes display: "block math" written inline. */
+math.tml-display { display: block; }
+
 *.mathcal,
 mo.tml-prime {
   font-feature-settings: 'salt';
@@ -54,7 +58,7 @@ math > mrow {
 }
 
 /* Avoid flex-wrap in Firefox */
-@supports (-moz-appearance:meterbar) and (display:flex) {
+@-moz-document url-prefix() {
   math { display: inline; }
   math > mrow { padding: 0 }
 }

@@ -61,11 +61,6 @@ math {
 math > mrow {
   padding: 0.5ex 0ex;
 }
-
-/* Avoid flex-wrap in Firefox */
-@supports (-moz-appearance:meterbar) and (display:flex) {
-  math { display: inline; }
-  math > mrow { padding: 0 }
 }
 
 /* AMS environment auto-numbering via CSS counter. */

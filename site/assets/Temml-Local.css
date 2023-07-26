@@ -28,6 +28,10 @@ math * {
   border-color: currentColor;
 }
 
+/* Next line is active in Firefox and Safari.
+ * Not in Chromium, which recognizes display: "block math" written inline. */
+math.tml-display { display: block; }
+
 math .mathscr {
   font-family: "Temml";
 }
@@ -47,7 +51,7 @@ math > mrow {
 }
 
 /* Avoid flex-wrap in Firefox */
-@supports (-moz-appearance:meterbar) and (display:flex) {
+@-moz-document url-prefix() {
   math { display: inline; }
   math > mrow { padding: 0 }
 }
