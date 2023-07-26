@@ -133,7 +133,7 @@ Images from LaTeX are also included for comparison.
 +----+------------------------------+------------------------------+-----------+--------------+
 | 29 | \lim\_{n\rightarrow+\infty}\ | $$\lim_{n\rightarrow+\infty} | ![ex29][] |              |
 |    | {\sqrt{2\pi n}\over n!} \    | {\sqrt{2\pi n}\over n!}      |           |              |
-|    | {\binom{n}{e}}^n = 1         | {\binom{n}{e}}^n = 1$$       |           |              |
+|    | \genfrac (){}{}n{e}^n = 1    | \genfrac (){}{}n{e}^n = 1$$  |           |              |
 +----+------------------------------+------------------------------+-----------+--------------+
 | 30 | \det(A) = \sum\_{\sigma \    | $$\det(A) = \sum_{\sigma     | ![ex30][] |              |
 |    | \in S_n} \epsilon(\sigma) \  | \in S_n} \epsilon(\sigma)    |           |              |
