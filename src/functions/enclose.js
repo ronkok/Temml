@@ -13,32 +13,32 @@ const padding = _ => {
 const mathmlBuilder = (group, style) => {
   let node
   if (group.label.indexOf("colorbox") > -1) {
-    // Chrome mpadded +width attribute is broken. Insert <mspace>
-    node = new mathMLTree.MathNode("mpadded", [
+    // MathML core does not support +width attribute in <mpadded>. Insert <mspace>
+    node = new mathMLTree.MathNode("mrow", [
       padding(),
       mml.buildGroup(group.body, style),
       padding()
     ])
   } else {
-    node = new mathMLTree.MathNode("menclose", [mml.buildGroup(group.body, style)])
+    node = new mathMLTree.MathNode("mrow", [mml.buildGroup(group.body, style)])
   }
   switch (group.label) {
     case "\\overline":
-      node.setAttribute("notation", "top")
+//      node.setAttribute("notation", "top")
       node.style.padding = "0.1em 0 0 0"
       node.style.borderTop = "0.065em solid"
       break
     case "\\underline":
-      node.setAttribute("notation", "bottom")
+//      node.setAttribute("notation", "bottom")
       node.style.padding = "0 0 0.1em 0"
       node.style.borderBottom = "0.065em solid"
       break
     case "\\cancel":
-      node.setAttribute("notation", "updiagonalstrike");
+//      node.setAttribute("notation", "updiagonalstrike");
       node.classes.push("cancel")
       break
     case "\\bcancel":
-      node.setAttribute("notation", "downdiagonalstrike");
+//      node.setAttribute("notation", "downdiagonalstrike");
       node.classes.push("bcancel")
       break
     /*
@@ -49,18 +49,18 @@ const mathmlBuilder = (group, style) => {
       node.setAttribute("notation", "phasorangle");
       break */
     case "\\angl":
-      node.setAttribute("notation", "actuarial")
+//      node.setAttribute("notation", "actuarial")
       node.style.padding = "0.03889em 0.03889em 0 0.03889em"
       node.style.borderTop = "0.049em solid"
       node.style.borderRight = "0.049em solid"
       node.style.marginRight = "0.03889em"
       break
     case "\\sout":
-      node.setAttribute("notation", "horizontalstrike");
+//      node.setAttribute("notation", "horizontalstrike");
       node.style["text-decoration"] = "line-through 0.08em solid"
       break
     case "\\fbox":
-      node.setAttribute("notation", "box");
+//      node.setAttribute("notation", "box");
       node.style = { padding: "3pt", border: "1px solid" }
       break
     case "\\fcolorbox":
@@ -80,7 +80,7 @@ const mathmlBuilder = (group, style) => {
       break
     }
     case "\\xcancel":
-      node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
+//      node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
       node.classes.push("xcancel")
       break
   }

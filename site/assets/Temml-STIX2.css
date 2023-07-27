@@ -184,7 +184,7 @@ mtr.tml-hline-dashed > mtd {
 
 /* MathML-Core does not support <menclose> attributes.
  * So Use background images for \cancel */
-menclose.cancel {
+mrow.cancel {
   background: 
       linear-gradient(to top left,
           rgba(0,0,0,0) 0%,
@@ -194,7 +194,7 @@ menclose.cancel {
           rgba(0,0,0,0) 100%);
 }
 
-menclose.bcancel {
+mrow.bcancel {
   background: 
       linear-gradient(to top right,
           rgba(0,0,0,0) 0%,
@@ -204,7 +204,7 @@ menclose.bcancel {
           rgba(0,0,0,0) 100%);
 }
 
-menclose.xcancel {
+mrow.xcancel {
   background: 
       linear-gradient(to top left,
           rgba(0,0,0,0) 0%,
