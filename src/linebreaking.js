@@ -26,13 +26,16 @@ import { DocumentFragment } from "./tree"
  * much of this module.
  */
 
+const openDelims = "([{⌊⌈⟨⟮⎰⟦⦃"
+const closeDelims = ")]}⌋⌉⟩⟯⎱⟦⦄"
+
 export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
   const mtrs = [];
   let mrows = [];
   let block = [];
   let numTopLevelEquals = 0
-  let canBeBIN = false // The first node cannot be an infix binary operator.
   let i = 0
+  let level = 0
   while (i < expression.length) {
     while (expression[i] instanceof DocumentFragment) {
       expression.splice(i, 1, ...expression[i].children) // Expand the fragment.
@@ -55,7 +58,12 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
     }
     block.push(node);
     if (node.type && node.type === "mo" && node.children.length === 1) {
-      if (wrapMode === "=" && node.children[0].text === "=") {
+      const ch = node.children[0].text
+      if (openDelims.indexOf(ch) > -1) {
+        level += 1
+      } else if (closeDelims.indexOf(ch) > -1) {
+        level -= 1
+      } else if (level === 0 && wrapMode === "=" && ch === "=") {
         numTopLevelEquals += 1
         if (numTopLevelEquals > 1) {
           block.pop()
@@ -64,59 +72,48 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
           mrows.push(element)
           block = [node];
         }
-      } else if (wrapMode === "tex") {
-        // This may be a place for a soft line break.
-        if (canBeBIN && !node.attributes.form) {
-          // Check if the following node is a \nobreak text node, e.g. "~""
-          const next = i < expression.length - 1 ? expression[i + 1] : null;
-          let glueIsFreeOfNobreak = true;
-          if (
-            !(
-              next &&
-              next.type === "mtext" &&
-              next.attributes.linebreak &&
-              next.attributes.linebreak === "nobreak"
-            )
-          ) {
-            // We may need to start a new block.
-            // First, put any post-operator glue on same line as operator.
-            for (let j = i + 1; j < expression.length; j++) {
-              const nd = expression[j];
+      } else if (level === 0 && wrapMode === "tex") {
+        // Check if the following node is a \nobreak text node, e.g. "~""
+        const next = i < expression.length - 1 ? expression[i + 1] : null;
+        let glueIsFreeOfNobreak = true;
+        if (
+          !(
+            next &&
+            next.type === "mtext" &&
+            next.attributes.linebreak &&
+            next.attributes.linebreak === "nobreak"
+          )
+        ) {
+          // We may need to start a new block.
+          // First, put any post-operator glue on same line as operator.
+          for (let j = i + 1; j < expression.length; j++) {
+            const nd = expression[j];
+            if (
+              nd.type &&
+              nd.type === "mspace" &&
+              !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
+            ) {
+              block.push(nd);
+              i += 1;
               if (
-                nd.type &&
-                nd.type === "mspace" &&
-                !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
+                nd.attributes &&
+                nd.attributes.linebreak &&
+                nd.attributes.linebreak === "nobreak"
               ) {
-                block.push(nd);
-                i += 1;
-                if (
-                  nd.attributes &&
-                  nd.attributes.linebreak &&
-                  nd.attributes.linebreak === "nobreak"
-                ) {
-                  glueIsFreeOfNobreak = false;
-                }
-              } else {
-                break;
+                glueIsFreeOfNobreak = false;
               }
+            } else {
+              break;
             }
           }
-          if (glueIsFreeOfNobreak) {
-            // Start a new block. (Insert a soft linebreak.)
-            const element = new mathMLTree.MathNode("mrow", block)
-            mrows.push(element)
-            block = [];
-          }
-          canBeBIN = false
         }
-        const isOpenDelimiter = node.attributes.form && node.attributes.form === "prefix"
-        // Any operator that follows an open delimiter is unary.
-        canBeBIN = !(node.attributes.separator || isOpenDelimiter);
-      } else {
-        canBeBIN = true
+        if (glueIsFreeOfNobreak) {
+          // Start a new block. (Insert a soft linebreak.)
+          const element = new mathMLTree.MathNode("mrow", block)
+          mrows.push(element)
+          block = [];
+        }
       }
-    } else {
-      canBeBIN = true
     }
     i += 1
   }
