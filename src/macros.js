@@ -238,9 +238,6 @@ defineMacro("\u22ee", "\\vdots");
 //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
 
-// \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
-defineMacro("\\boxed", "\\fbox{$\\displaystyle{#1}$}");
-
 // \def\iff{\DOTSB\;\Longleftrightarrow\;}
 // \def\implies{\DOTSB\;\Longrightarrow\;}
 // \def\impliedby{\DOTSB\;\Longleftarrow\;}
