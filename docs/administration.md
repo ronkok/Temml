@@ -378,7 +378,7 @@ Temml [function support page](https://temml.org/docs/en/supported.html).
 The rest of you, stay here. This section identifies functions that browsers render
 poorly.
 
-| Item                     | Chromium         | Firefox | Webkit (Safari)   |
+| Item                     | Chromium         | Firefox | WebKit (Safari)   |
 |:-------------------------|:----------------:|:-------:|:-----------------:|
 | Accents                  | ✓                | ✓       | bad<sup>1</sup>   |
 | Wide accents, in general | ✓                | ✓       | bad<sup>2</sup>   |
@@ -386,34 +386,30 @@ poorly.
 | Prime                    | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   |
 | Integral, ∫, in display mode  | poor<sup>5</sup> | ✓  | ✓                 |
 | \\left( x \\right)       | poor<sup>6</sup> | ✓       | ✓                 |
-| \\big(, \\bigg(, etc     | poor<sup>7</sup> | ✓       | ✓                 |
-| \\cancel, \\bcancel, \\xcancel | meh<sup>8</sup> | meh<sup>8</sup>  | meh<sup>8</sup>   |
-| \\boxed, \\colorbox      | ✓                | ✓       | poor<sup>9</sup>  |
-| {Vmatrix} environment    | ✓                | ✓       | poor<sup>10</sup> |
-| {align} environment      | ✓                | ✓       | bad<sup>11</sup>  |
-| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>12</sup>  |
-| Extensible arrows        | bad<sup>13</sup> | ✓       | poor<sup>14</sup> |
-| Square root radicals     | ✓                | meh<sup>15</sup> | ✓        |
-| Line-breaking            | ✓                | ✓       | bad<sup>16</sup>  |
+| \\cancel, \\bcancel, \\xcancel | meh<sup>7</sup> | meh<sup>7</sup>  | meh<sup>7</sup>   |
+| {Vmatrix} environment    | ✓                | ✓       | poor<sup>8</sup>  |
+| {align} environment      | ✓                | ✓       | bad<sup>9</sup>   |
+| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>10</sup>  |
+| Extensible arrows        | bad<sup>13</sup> | ✓       | poor<sup>11</sup> |
+| Square root radicals     | ✓                | meh<sup>13</sup> | ✓        |
+| Line-breaking            | ✓                | ✓       | bad<sup>14</sup>  |
 
 Notes:
 
-1.  Webkit renders normal accents too high. (Extensible accents are set at the correct height.)
-2.  Webkit fails to stretch many wide accents.
+1.  WebKit renders normal accents too high. (Extensible accents are set at the correct height.)
+2.  WebKit fails to stretch many wide accents.
 3.  Chromium does not stretch \\widehat or \\widetilde.
-4.  Chromium and Webkit fail to properly address italic correction. So _f_ ′ overlaps.
+4.  Chromium and WebKit fail to properly address italic correction. So _f_ ′ overlaps.
 5.  Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.
 6.  Chromium slightly stretches \\left( \\right) when they should not stretch.
-7.  Chromium over-stretches \\bigg( and \\Bigg(.
-8.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print well.
-9.  Webkit places boxes at the wrong vertical alignment.
-10. Webkit does not stretch the delimiters for {Vmatrix}.
-11. Webkit renders the {align} environment remarkably poorly.
-12. Webkit does not render laps properly.
+7.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print well.
+8.  WebKit does not stretch the delimiters for {Vmatrix}.
+9.  WebKit renders the {align} environment remarkably poorly.
+12. WebKit does not render laps properly.
 13. Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
-14. Webkit fails to stretch most extensible arrows.
+14. WebKit fails to stretch most extensible arrows.
 15. Firefox sometimes selects radicals that are too tall.
-16. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in Webkit.
+16. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
