@@ -13,7 +13,9 @@ const padding = _ => {
 const mathmlBuilder = (group, style) => {
   let node
   if (group.label.indexOf("colorbox") > -1 || group.label === "\\boxed") {
-    // MathML core does not support +width attribute in <mpadded>. Insert <mspace>
+    // MathML core does not support +width attribute in <mpadded>.
+    // Firefox does not reliably add side padding.
+    // Insert <mspace>
     node = new mathMLTree.MathNode("mrow", [
       padding(),
       mml.buildGroup(group.body, style),
