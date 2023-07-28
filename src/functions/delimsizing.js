@@ -179,8 +179,8 @@ defineFunction({
       node.setAttribute("stretchy", "true")
     }
 
-    node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
-    // Don't set the maxsize attribute. It's broken in Chromium.
+    node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em")
+    node.setAttribute("maxsize", sizeToMaxHeight[group.size] + "em")
     return node;
   }
 });
