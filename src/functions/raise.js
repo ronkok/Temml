@@ -5,8 +5,6 @@ import { assertNodeType } from "../parseNode"
 import { calculateSize } from "../units"
 import * as mml from "../buildMathML"
 
-const sign = num => num >= 0 ? "+" : "-"
-
 // \raise, \lower, and \raisebox
 
 const mathmlBuilder = (group, style) => {
@@ -14,11 +12,13 @@ const mathmlBuilder = (group, style) => {
   const node = new mathMLTree.MathNode("mpadded", [mml.buildGroup(group.body, newStyle)])
   const dy = calculateSize(group.dy, style)
   node.setAttribute("voffset", dy.number + dy.unit)
-  const dyAbs = Math.abs(dy.number)
-  // The next two lines do not work in Chromium.
-  // TODO: Find some other way to adjust height and depth.
-  node.setAttribute("height", sign(dy.number) +  dyAbs + dy.unit)
-  node.setAttribute("depth", sign(-dy.number) +  dyAbs + dy.unit)
+  // Add padding, which acts to increase height in Chromium.
+  // TODO: Figure out some way to change height in Firefox w/o breaking Chromium.
+  if (dy.number > 0) {
+    node.style.padding = dy.number + dy.unit + " 0 0 0"
+  } else {
+    node.style.padding = "0 0 " + Math.abs(dy.number) + dy.unit + " 0"
+  }
   return node
 }
 
