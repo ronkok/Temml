@@ -386,13 +386,14 @@ poorly.
 | Prime                    | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   |
 | Integral, ∫, in display mode  | poor<sup>5</sup> | ✓  | ✓                 |
 | \\left( x \\right)       | poor<sup>6</sup> | ✓       | ✓                 |
-| \\cancel, \\bcancel, \\xcancel | meh<sup>7</sup> | meh<sup>7</sup>  | meh<sup>7</sup>   |
-| {Vmatrix} environment    | ✓                | ✓       | poor<sup>8</sup>  |
-| {align} environment      | ✓                | ✓       | bad<sup>9</sup>   |
-| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>10</sup>  |
-| Extensible arrows        | bad<sup>13</sup> | ✓       | poor<sup>11</sup> |
-| Square root radicals     | ✓                | meh<sup>13</sup> | ✓        |
-| Line-breaking            | ✓                | ✓       | bad<sup>14</sup>  |
+| \\bigg(, \\Bigg(, etc.   | meh<sup>7</sup>  | ✓       | ✓                 |
+| \\cancel, \\bcancel, \\xcancel | meh<sup>8</sup> | meh<sup>8</sup>  | meh<sup>8</sup>   |
+| {Vmatrix} environment    | ✓                | ✓       | poor<sup>9</sup>  |
+| {align} environment      | ✓                | ✓       | bad<sup>10</sup>   |
+| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>11</sup>  |
+| Extensible arrows        | bad<sup>12</sup> | ✓       | poor<sup>13</sup> |
+| Square root radicals     | ✓                | meh<sup>14</sup> | ✓        |
+| Line-breaking            | ✓                | ✓       | bad<sup>15</sup>  |
 
 Notes:
 
@@ -402,18 +403,19 @@ Notes:
 4.  Chromium and WebKit fail to properly address italic correction. So _f_ ′ overlaps.
 5.  Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.
 6.  Chromium slightly stretches \\left( \\right) when they should not stretch.
-7.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print well.
-8.  WebKit does not stretch the delimiters for {Vmatrix}.
-9.  WebKit renders the {align} environment remarkably poorly.
-12. WebKit does not render laps properly.
-13. Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
-14. WebKit fails to stretch most extensible arrows.
-15. Firefox sometimes selects radicals that are too tall.
-16. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+7.  Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.
+8.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
+9.  WebKit does not stretch the delimiters for {Vmatrix}.
+10. WebKit renders the {align} environment remarkably poorly.
+11. WebKit does not render laps properly.
+12. Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
+13. WebKit fails to stretch most extensible arrows.
+14. Firefox sometimes selects radicals that are too tall.
+15. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
-don’t know if it has shipped.
+don’t think it has shipped.
 
 You can view all these issues for yourself at the Temml [function support
 page](https://temml.org/docs/en/supported.html).
