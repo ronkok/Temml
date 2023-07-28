@@ -486,7 +486,7 @@ defineMacro(
 defineMacro(
   "\\Temml",
   // eslint-disable-next-line max-len
-  "\\textrm{T}\\kern-0.2em\\lower{0.2em}\\textrm{E}\\kern-0.08em{\\textrm{M}\\kern-0.08em\\raise{0.2em}\\textrm{M}\\kern-0.08em\\textrm{L}}"
+  "\\textrm{T}\\kern-0.2em\\lower{0.2em}{\\textrm{E}}\\kern-0.08em{\\textrm{M}\\kern-0.08em\\raise{0.2em}\\textrm{M}\\kern-0.08em\\textrm{L}}"
 );
 
 // \DeclareRobustCommand\hspace{\@ifstar\@hspacer\@hspace}
