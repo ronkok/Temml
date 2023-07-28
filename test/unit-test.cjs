@@ -1381,8 +1381,8 @@ const test = () => {
   new Expect(r`\boxed x`).toBuild()
   assertion = "A boxed parser should produce enclose"
   new Expect(parse(r`\boxed{x^2}`)[0].type).toBe("enclose")
-  assertion = "A boxed builder should produce menclose"
-  new Expect(build(r`\boxed{x^2}`)[0].type).toBe("menclose")
+  assertion = "A boxed builder should produce mrow"
+  new Expect(build(r`\boxed{x^2}`)[0].type).toBe("mrow")
 
   assertion = "An fbox parser, unlike a boxed parser, should fail when given math"
   new Expect(r`\fbox{\frac a b}`).toNotParse(strictSettings())
