@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.14] = 2023-07-28
+
+### Fixed
+
+- Center display math in Firefox & WebKit.
+- Spurious line-breaking on delimiters.
+- `\bigg(\Bigg(` sizes in Chromium.
+- \boxed & \colorbox in WebKit
+- \lower in WebKit
+- \raise, \raisebox, & \lower all adjust height & depth in Chromium. (Alas, not in Firefox).
+
+### Changed
+
+- Use <mrow> instead of <menclose> (to comply with MathML-Core).
+
+### Added
+
+- Support \VDash
+
+
 ## [0.10.13] = 2023-06-08
 
 ### Changed

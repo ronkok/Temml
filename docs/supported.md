@@ -145,8 +145,8 @@ If the color model is omitted, Temml color functions will accept:
 
 - `#rrggbb`, `#rgb`, or `rrggbb`.
 - A color name previously created by `\definecolor`.
-- Any color from the following `xcolor` table.
 - Any of the standard HTML [predefined color names](https://www.w3schools.com/colors/colors_names.asp).
+- Any color from the following `xcolor` table.
 
 <br>
 
@@ -1494,7 +1494,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.13
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.14
 
 <h3><a href="#top">Contents</a></h3>
 

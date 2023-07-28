@@ -44,6 +44,10 @@ math {
   font-family: "Latin Modern Math", "Times New Roman", math;
 }
 
+/* Next line is active in Firefox and Safari.
+ * Not in Chromium, which recognizes display: "block math" written inline. */
+math.tml-display { display: block; }
+
 *.mathscr {
   font-family: "Temml";
 }
@@ -61,6 +65,11 @@ math {
 math > mrow {
   padding: 0.5ex 0ex;
 }
+
+/* Avoid flex-wrap in Firefox */
+@-moz-document url-prefix() {
+  math { display: inline; }
+  math > mrow { padding: 0 }
 }
 
 /* AMS environment auto-numbering via CSS counter. */
@@ -184,7 +193,7 @@ mtr.tml-hline-dashed > mtd {
 
 /* MathML-Core does not support <menclose> attributes.
  * So Use background images for \cancel */
-menclose.cancel {
+mrow.cancel {
   background: 
       linear-gradient(to top left,
           rgba(0,0,0,0) 0%,
@@ -194,7 +203,7 @@ menclose.cancel {
           rgba(0,0,0,0) 100%);
 }
 
-menclose.bcancel {
+mrow.bcancel {
   background: 
       linear-gradient(to top right,
           rgba(0,0,0,0) 0%,
@@ -204,7 +213,7 @@ menclose.bcancel {
           rgba(0,0,0,0) 100%);
 }
 
-menclose.xcancel {
+mrow.xcancel {
   background: 
       linear-gradient(to top left,
           rgba(0,0,0,0) 0%,

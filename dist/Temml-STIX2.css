@@ -28,6 +28,10 @@ math * {
   border-color: currentColor;
 }
 
+/* Next line is active in Firefox and Safari.
+ * Not in Chromium, which recognizes display: "block math" written inline. */
+math.tml-display { display: block; }
+
 mtext {
   font-family: STIX2;
 }
@@ -55,7 +59,7 @@ math > mrow {
 }
 
 /* Avoid flex-wrap in Firefox */
-@supports (-moz-appearance:meterbar) and (display:flex) {
+@-moz-document url-prefix() {
   math { display: inline; }
   math > mrow { padding: 0 }
 }
@@ -180,7 +184,7 @@ mtr.tml-hline-dashed > mtd {
 
 /* MathML-Core does not support <menclose> attributes.
  * So Use background images for \cancel */
-menclose.cancel {
+mrow.cancel {
   background: 
       linear-gradient(to top left,
           rgba(0,0,0,0) 0%,
@@ -190,7 +194,7 @@ menclose.cancel {
           rgba(0,0,0,0) 100%);
 }
 
-menclose.bcancel {
+mrow.bcancel {
   background: 
       linear-gradient(to top right,
           rgba(0,0,0,0) 0%,
@@ -200,7 +204,7 @@ menclose.bcancel {
           rgba(0,0,0,0) 100%);
 }
 
-menclose.xcancel {
+mrow.xcancel {
   background: 
       linear-gradient(to top left,
           rgba(0,0,0,0) 0%,
