@@ -1117,6 +1117,7 @@ defineSymbol(math, rel, "\u2ab7", "\\precapprox", true);
 defineSymbol(math, rel, "\u22b2", "\\vartriangleleft");
 defineSymbol(math, rel, "\u22b4", "\\trianglelefteq");
 defineSymbol(math, rel, "\u22a8", "\\vDash", true);
+defineSymbol(math, rel, "\u22ab", "\\VDash", true);
 defineSymbol(math, rel, "\u22aa", "\\Vvdash", true);
 defineSymbol(math, rel, "\u2323", "\\smallsmile");
 defineSymbol(math, rel, "\u2322", "\\smallfrown");
@@ -1766,13 +1767,16 @@ for (let i = 0; i < 10; i++) {
  * much of this module.
  */
 
+const openDelims = "([{⌊⌈⟨⟮⎰⟦⦃";
+const closeDelims = ")]}⌋⌉⟩⟯⎱⟦⦄";
+
 function setLineBreaks(expression, wrapMode, isDisplayMode) {
   const mtrs = [];
   let mrows = [];
   let block = [];
   let numTopLevelEquals = 0;
-  let canBeBIN = false; // The first node cannot be an infix binary operator.
   let i = 0;
+  let level = 0;
   while (i < expression.length) {
     while (expression[i] instanceof DocumentFragment) {
       expression.splice(i, 1, ...expression[i].children); // Expand the fragment.
@@ -1795,7 +1799,12 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
     }
     block.push(node);
     if (node.type && node.type === "mo" && node.children.length === 1) {
-      if (wrapMode === "=" && node.children[0].text === "=") {
+      const ch = node.children[0].text;
+      if (openDelims.indexOf(ch) > -1) {
+        level += 1;
+      } else if (closeDelims.indexOf(ch) > -1) {
+        level -= 1;
+      } else if (level === 0 && wrapMode === "=" && ch === "=") {
         numTopLevelEquals += 1;
         if (numTopLevelEquals > 1) {
           block.pop();
@@ -1804,59 +1813,48 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
           mrows.push(element);
           block = [node];
         }
-      } else if (wrapMode === "tex") {
-        // This may be a place for a soft line break.
-        if (canBeBIN && !node.attributes.form) {
-          // Check if the following node is a \nobreak text node, e.g. "~""
-          const next = i < expression.length - 1 ? expression[i + 1] : null;
-          let glueIsFreeOfNobreak = true;
-          if (
-            !(
-              next &&
-              next.type === "mtext" &&
-              next.attributes.linebreak &&
-              next.attributes.linebreak === "nobreak"
-            )
-          ) {
-            // We may need to start a new block.
-            // First, put any post-operator glue on same line as operator.
-            for (let j = i + 1; j < expression.length; j++) {
-              const nd = expression[j];
+      } else if (level === 0 && wrapMode === "tex") {
+        // Check if the following node is a \nobreak text node, e.g. "~""
+        const next = i < expression.length - 1 ? expression[i + 1] : null;
+        let glueIsFreeOfNobreak = true;
+        if (
+          !(
+            next &&
+            next.type === "mtext" &&
+            next.attributes.linebreak &&
+            next.attributes.linebreak === "nobreak"
+          )
+        ) {
+          // We may need to start a new block.
+          // First, put any post-operator glue on same line as operator.
+          for (let j = i + 1; j < expression.length; j++) {
+            const nd = expression[j];
+            if (
+              nd.type &&
+              nd.type === "mspace" &&
+              !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
+            ) {
+              block.push(nd);
+              i += 1;
               if (
-                nd.type &&
-                nd.type === "mspace" &&
-                !(nd.attributes.linebreak && nd.attributes.linebreak === "newline")
+                nd.attributes &&
+                nd.attributes.linebreak &&
+                nd.attributes.linebreak === "nobreak"
               ) {
-                block.push(nd);
-                i += 1;
-                if (
-                  nd.attributes &&
-                  nd.attributes.linebreak &&
-                  nd.attributes.linebreak === "nobreak"
-                ) {
-                  glueIsFreeOfNobreak = false;
-                }
-              } else {
-                break;
+                glueIsFreeOfNobreak = false;
               }
+            } else {
+              break;
             }
           }
-          if (glueIsFreeOfNobreak) {
-            // Start a new block. (Insert a soft linebreak.)
-            const element = new mathMLTree.MathNode("mrow", block);
-            mrows.push(element);
-            block = [];
-          }
-          canBeBIN = false;
         }
-        const isOpenDelimiter = node.attributes.form && node.attributes.form === "prefix";
-        // Any operator that follows an open delimiter is unary.
-        canBeBIN = !(node.attributes.separator || isOpenDelimiter);
-      } else {
-        canBeBIN = true;
+        if (glueIsFreeOfNobreak) {
+          // Start a new block. (Insert a soft linebreak.)
+          const element = new mathMLTree.MathNode("mrow", block);
+          mrows.push(element);
+          block = [];
+        }
       }
-    } else {
-      canBeBIN = true;
     }
     i += 1;
   }
@@ -2135,7 +2133,10 @@ function buildMathML(tree, texExpression, style, settings) {
     math.setAttribute("display", "block");
     math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
       ? "inline"
-      : "block math";
+      : "block math"; // necessary in Chromium.
+    // Firefox and Safari do not recognize display: "block math".
+    // Set a class so that the CSS file can set display: block.
+    math.classes = ["tml-display"];
   }
   return math;
 }
@@ -3664,10 +3665,9 @@ defineFunction({
       // so we have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true");
     }
-
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
     node.setAttribute("minsize", sizeToMaxHeight[group.size] + "em");
-    // Don't set the maxsize attribute. It's broken in Chromium.
+    node.setAttribute("maxsize", sizeToMaxHeight[group.size] + "em");
     return node;
   }
 });
@@ -3802,33 +3802,31 @@ const padding$1 = _ => {
 
 const mathmlBuilder$8 = (group, style) => {
   let node;
-  if (group.label.indexOf("colorbox") > -1) {
-    // Chrome mpadded +width attribute is broken. Insert <mspace>
-    node = new mathMLTree.MathNode("mpadded", [
+  if (group.label.indexOf("colorbox") > -1 || group.label === "\\boxed") {
+    // MathML core does not support +width attribute in <mpadded>.
+    // Firefox does not reliably add side padding.
+    // Insert <mspace>
+    node = new mathMLTree.MathNode("mrow", [
       padding$1(),
       buildGroup$1(group.body, style),
       padding$1()
     ]);
   } else {
-    node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
+    node = new mathMLTree.MathNode("mrow", [buildGroup$1(group.body, style)]);
   }
   switch (group.label) {
     case "\\overline":
-      node.setAttribute("notation", "top");
       node.style.padding = "0.1em 0 0 0";
       node.style.borderTop = "0.065em solid";
       break
     case "\\underline":
-      node.setAttribute("notation", "bottom");
       node.style.padding = "0 0 0.1em 0";
       node.style.borderBottom = "0.065em solid";
       break
     case "\\cancel":
-      node.setAttribute("notation", "updiagonalstrike");
       node.classes.push("cancel");
       break
     case "\\bcancel":
-      node.setAttribute("notation", "downdiagonalstrike");
       node.classes.push("bcancel");
       break
     /*
@@ -3839,18 +3837,21 @@ const mathmlBuilder$8 = (group, style) => {
       node.setAttribute("notation", "phasorangle");
       break */
     case "\\angl":
-      node.setAttribute("notation", "actuarial");
       node.style.padding = "0.03889em 0.03889em 0 0.03889em";
       node.style.borderTop = "0.049em solid";
       node.style.borderRight = "0.049em solid";
       node.style.marginRight = "0.03889em";
       break
     case "\\sout":
-      node.setAttribute("notation", "horizontalstrike");
       node.style["text-decoration"] = "line-through 0.08em solid";
       break
+    case "\\boxed":
+      // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
+      node.style = { padding: "3pt 0 3pt 0", border: "1px solid" };
+      node.setAttribute("scriptlevel", "0");
+      node.setAttribute("displaystyle", "true");
+      break
     case "\\fbox":
-      node.setAttribute("notation", "box");
       node.style = { padding: "3pt", border: "1px solid" };
       break
     case "\\fcolorbox":
@@ -3870,7 +3871,6 @@ const mathmlBuilder$8 = (group, style) => {
       break
     }
     case "\\xcancel":
-      node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
       node.classes.push("xcancel");
       break
   }
@@ -3965,7 +3965,7 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline"],
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\boxed"],
    // , "\\phase", "\\longdiv"
   props: {
     numArgs: 1
@@ -6831,8 +6831,6 @@ defineFunction({
   }
 });
 
-const sign = num => num >= 0 ? "+" : "-";
-
 // \raise, \lower, and \raisebox
 
 const mathmlBuilder = (group, style) => {
@@ -6840,11 +6838,13 @@ const mathmlBuilder = (group, style) => {
   const node = new mathMLTree.MathNode("mpadded", [buildGroup$1(group.body, newStyle)]);
   const dy = calculateSize(group.dy, style);
   node.setAttribute("voffset", dy.number + dy.unit);
-  const dyAbs = Math.abs(dy.number);
-  // The next two lines do not work in Chromium.
-  // TODO: Find some other way to adjust height and depth.
-  node.setAttribute("height", sign(dy.number) +  dyAbs + dy.unit);
-  node.setAttribute("depth", sign(-dy.number) +  dyAbs + dy.unit);
+  // Add padding, which acts to increase height in Chromium.
+  // TODO: Figure out some way to change height in Firefox w/o breaking Chromium.
+  if (dy.number > 0) {
+    node.style.padding = dy.number + dy.unit + " 0 0 0";
+  } else {
+    node.style.padding = "0 0 " + Math.abs(dy.number) + dy.unit + " 0";
+  }
   return node
 };
 
@@ -8473,9 +8473,6 @@ defineMacro("\u22ee", "\\vdots");
 //\newcommand{\substack}[1]{\subarray{c}#1\endsubarray}
 defineMacro("\\substack", "\\begin{subarray}{c}#1\\end{subarray}");
 
-// \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}}
-defineMacro("\\boxed", "\\fbox{$\\displaystyle{#1}$}");
-
 // \def\iff{\DOTSB\;\Longleftrightarrow\;}
 // \def\implies{\DOTSB\;\Longrightarrow\;}
 // \def\impliedby{\DOTSB\;\Longleftarrow\;}
@@ -8724,7 +8721,7 @@ defineMacro(
 defineMacro(
   "\\Temml",
   // eslint-disable-next-line max-len
-  "\\textrm{T}\\kern-0.2em\\lower{0.2em}\\textrm{E}\\kern-0.08em{\\textrm{M}\\kern-0.08em\\raise{0.2em}\\textrm{M}\\kern-0.08em\\textrm{L}}"
+  "\\textrm{T}\\kern-0.2em\\lower{0.2em}{\\textrm{E}}\\kern-0.08em{\\textrm{M}\\kern-0.08em\\raise{0.2em}\\textrm{M}\\kern-0.08em\\textrm{L}}"
 );
 
 // \DeclareRobustCommand\hspace{\@ifstar\@hspacer\@hspace}
@@ -12904,7 +12901,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.13";
+const version = "0.10.14";
 
 function postProcess(block) {
   const labelMap = {};

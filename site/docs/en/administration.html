@@ -196,7 +196,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <table class="c2c c3c c4c"><tr><th>Item</th>
 <th>Chromium</th>
 <th>Firefox</th>
-<th>Webkit (Safari)</th>
+<th>WebKit (Safari)</th>
 </tr>
 <tr><td>Accents</td><td>✓</td><td>✓</td><td>bad<sup>1</sup></td></tr>
 <tr><td>Wide accents, in general</td><td>✓</td><td>✓</td><td>bad<sup>2</sup></td></tr>
@@ -204,35 +204,33 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>Prime</td><td>meh<sup>4</sup></td><td>✓</td><td>meh<sup>4</sup></td></tr>
 <tr><td>Integral, ∫, in display mode</td><td>poor<sup>5</sup></td><td>✓</td><td>✓</td></tr>
 <tr><td>\left( x \right)</td><td>poor<sup>6</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>\big(, \bigg(, etc</td><td>poor<sup>7</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>\bigg(, \Bigg(, etc.</td><td>meh<sup>7</sup></td><td>✓</td><td>✓</td></tr>
 <tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>8</sup></td><td>meh<sup>8</sup></td><td>meh<sup>8</sup></td></tr>
-<tr><td>\boxed, \colorbox</td><td>✓</td><td>✓</td><td>poor<sup>9</sup></td></tr>
-<tr><td>{Vmatrix} environment</td><td>✓</td><td>✓</td><td>poor<sup>10</sup></td></tr>
-<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
-<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr>
-<tr><td>Extensible arrows</td><td>bad<sup>13</sup></td><td>✓</td><td>poor<sup>14</sup></td></tr>
-<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>15</sup></td><td>✓</td></tr>
-<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>16</sup></td></tr>
+<tr><td>{Vmatrix} environment</td><td>✓</td><td>✓</td><td>poor<sup>9</sup></td></tr>
+<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>10</sup></td></tr>
+<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
+<tr><td>Extensible arrows</td><td>bad<sup>12</sup></td><td>✓</td><td>poor<sup>13</sup></td></tr>
+<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>14</sup></td><td>✓</td></tr>
+<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>15</sup></td></tr>
 </table>
 <p>Notes:</p>
-<ol><li>Webkit renders normal accents too high. (Extensible accents are set at the correct height.)</li>
-<li>Webkit fails to stretch many wide accents.</li>
+<ol><li>WebKit renders normal accents too high. (Extensible accents are set at the correct height.)</li>
+<li>WebKit fails to stretch many wide accents.</li>
 <li>Chromium does not stretch \widehat or \widetilde.</li>
-<li>Chromium and Webkit fail to properly address italic correction. So <em>f</em> ′ overlaps.</li>
+<li>Chromium and WebKit fail to properly address italic correction. So <em>f</em> ′ overlaps.</li>
 <li>Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.</li>
 <li>Chromium slightly stretches \left( \right) when they should not stretch.</li>
-<li>Chromium over-stretches \bigg( and \Bigg(.</li>
-<li>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print well.</li>
-<li>Webkit places boxes at the wrong vertical alignment.</li>
-<li>Webkit does not stretch the delimiters for {Vmatrix}.</li>
-<li>Webkit renders the {align} environment remarkably poorly.</li>
-<li>Webkit does not render laps properly.</li>
+<li>Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.</li>
+<li>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print properly.</li>
+<li>WebKit does not stretch the delimiters for {Vmatrix}.</li>
+<li>WebKit renders the {align} environment remarkably poorly.</li>
+<li>WebKit does not render laps properly.</li>
 <li>Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
-<li>Webkit fails to stretch most extensible arrows.</li>
+<li>WebKit fails to stretch most extensible arrows.</li>
 <li>Firefox sometimes selects radicals that are too tall.</li>
-<li>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in Webkit.</li>
+<li>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</li>
 </ol>
-<p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t know if it has shipped.</p>
+<p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can view all these issues for yourself at the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
@@ -241,7 +239,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" height="-0.2em" depth="+0.2em"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" height="+0.2em" depth="-0.2em"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math>    v0.10.13</p>
+<p><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math>    v0.10.14</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>
