@@ -198,34 +198,35 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <th>Firefox</th>
 <th>WebKit (Safari)</th>
 </tr>
-<tr><td>Accents</td><td>✓</td><td>✓</td><td>bad<sup>1</sup></td></tr>
-<tr><td>Wide accents, in general</td><td>✓</td><td>✓</td><td>bad<sup>2</sup></td></tr>
-<tr><td>\widehat, \widetilde</td><td>poor<sup>3</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>Prime</td><td>meh<sup>4</sup></td><td>✓</td><td>meh<sup>4</sup></td></tr>
-<tr><td>Integral, ∫, in display mode</td><td>poor<sup>5</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>\left( x \right)</td><td>poor<sup>6</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>\bigg(, \Bigg(, etc.</td><td>meh<sup>7</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>8</sup></td><td>meh<sup>8</sup></td><td>meh<sup>8</sup></td></tr>
-<tr><td>{Vmatrix} environment</td><td>✓</td><td>✓</td><td>poor<sup>9</sup></td></tr>
-<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>10</sup></td></tr>
-<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
-<tr><td>Extensible arrows</td><td>bad<sup>12</sup></td><td>✓</td><td>poor<sup>13</sup></td></tr>
-<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>14</sup></td><td>✓</td></tr>
-<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>15</sup></td></tr>
+<tr><td>Accents</td><td>✓</td><td>✓</td><td>bad<sup>1, 2</sup></td></tr>
+<tr><td>Wide accents, in general</td><td>✓</td><td>✓</td><td>bad<sup>3</sup></td></tr>
+<tr><td>\widehat, \widetilde</td><td>poor<sup>4</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>Prime</td><td>meh<sup>5</sup></td><td>✓</td><td>meh<sup>5</sup></td></tr>
+<tr><td>Integral, ∫, in display mode</td><td>poor<sup>6</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>\left( x \right)</td><td>meh<sup>7</sup></td><td>✓</td><td>meh<sup>7</sup></td></tr>
+<tr><td>\bigg(, \Bigg(, etc.</td><td>meh<sup>8</sup></td><td>✓</td><td>meh<sup>8</sup></td></tr>
+<tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>9</sup></td><td>meh<sup>9</sup></td><td>meh<sup>9</sup></td></tr>
+<tr><td>{Vmatrix} environment</td><td>✓</td><td>✓</td><td>poor<sup>10</sup></td></tr>
+<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
+<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr>
+<tr><td>Extensible arrows</td><td>bad<sup>13</sup></td><td>✓</td><td>bad<sup>13, 14</sup></td></tr>
+<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>15</sup></td><td>✓</td></tr>
+<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>16</sup></td></tr>
 </table>
 <p>Notes:</p>
 <ol><li>WebKit renders normal accents too high. (Extensible accents are set at the correct height.)</li>
+<li>WebKit fails to make a italic correction on accents. Many are set too far left.</li>
 <li>WebKit fails to stretch many wide accents.</li>
 <li>Chromium does not stretch \widehat or \widetilde.</li>
-<li>Chromium and WebKit fail to properly address italic correction. So <em>f</em> ′ overlaps.</li>
+<li>Chromium and WebKit fail to properly address italic correction on prime. So <em>f</em> ′ overlaps.</li>
 <li>Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.</li>
-<li>Chromium slightly stretches \left( \right) when they should not stretch.</li>
-<li>Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.</li>
+<li>Chromium and WebKit set parentheses too high for \left( x \right).</li>
+<li>Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.</li>
 <li>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print properly.</li>
 <li>WebKit does not stretch the delimiters for {Vmatrix}.</li>
 <li>WebKit renders the {align} environment remarkably poorly.</li>
 <li>WebKit does not render laps properly.</li>
-<li>Chromium system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
+<li>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
 <li>WebKit fails to stretch most extensible arrows.</li>
 <li>Firefox sometimes selects radicals that are too tall.</li>
 <li>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</li>
