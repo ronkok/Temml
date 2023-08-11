@@ -8,7 +8,9 @@
   },
   "exports": {
     ".": {
-      "require": "./dist/temml.cjs"
+      "require": "./dist/temml.cjs",
+      "import": "./dist/temml.mjs",
+      "types": "./dist/temml.d.ts"
     },
     "./*": "./*"
   },
