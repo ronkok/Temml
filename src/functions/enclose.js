@@ -34,10 +34,20 @@ const mathmlBuilder = (group, style) => {
       node.style.borderBottom = "0.065em solid"
       break
     case "\\cancel":
-      node.classes.push("cancel")
+      node.style.background = `linear-gradient(to top left,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`
       break
     case "\\bcancel":
-      node.classes.push("bcancel")
+      node.style.background = `linear-gradient(to top right,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`
       break
     /*
     case "\\longdiv":
@@ -81,7 +91,18 @@ const mathmlBuilder = (group, style) => {
       break
     }
     case "\\xcancel":
-      node.classes.push("xcancel")
+      node.style.background = `linear-gradient(to top left,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%),
+linear-gradient(to top right,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`
       break
   }
   if (group.backgroundColor) {
