@@ -54,7 +54,7 @@ Ref: https://mhchem.github.io/MathJax-mhchem/
 | `\ce{0.5 H2O}`  | $\ce{0.5 H2O}$     |
 | `\ce{1/2 H2O}`  | $\ce{1/2 H2O}$     |
 | `\ce{(1/2) H2O}` | $\ce{(1/2) H2O}$  |
-| `\ce{$n$ H2O}`   | $\ce{$n$ H2O}$    |
+| `\ce{$n$ H2O}`   | $\ce{ $n $ H2O}$    |
 
 ## Isotopes
 
@@ -85,7 +85,7 @@ Ref: https://mhchem.github.io/MathJax-mhchem/
 | `\ce{A <<=> B}`  | $\ce{A <<=> B}$  |
 | `\ce{A ->[H2O] B}` | $\ce{A ->[H2O] B}$  |
 | `\ce{A ->[{text above}][{text below}] B}` | $\ce{A ->[{text above}][{text below}] B}$  |
-| `\ce{A ->[$x$][$x_i$] B}` | $\ce{A ->[$x$][$x_i$] B}$  |
+| `\ce{A ->[$x$][$x_i$] B}` | $\ce{A ->[ $x $][ $x_i $] B}$  |
 
 ## Parentheses, Brackets, Braces
 
@@ -107,8 +107,8 @@ Ref: https://mhchem.github.io/MathJax-mhchem/
 
 | Source             |  Temml               |
 |--------------------|----------------------|
-| `\ce{ZnS($c$)}`    | $\ce{ZnS($c$)}$    |
-| `\ce{ZnS(\ca$c$)}` | $\ce{ZnS(\ca$c$)}$ |
+| `\ce{ZnS($c$)}`    | $\ce{ZnS( $c $)}$    |
+| `\ce{ZnS(\ca$c$)}` | $\ce{ZnS(\ca $c $)}$ |
 
 ## Variables
 
@@ -136,17 +136,17 @@ Ref: https://mhchem.github.io/MathJax-mhchem/
 
 | Source                        |  Temml           |
 |-------------------------------|------------------|
-| `\ce{NaOH(aq,$\infty$)}`      | $\ce{NaOH(aq,$\infty$)}$  |
-| `\ce{Fe(CN)_{$\frac{6}{2}$}}` | $\ce{Fe(CN)_{{$\frac{6}{2}$}}}$  |
-| `\ce{X_{$i$}^{$x$}}`          | $\ce{X_{$i$}^{$x$}}$ |
-| `\ce{X_$i$^$x$}`              | $\ce{X_{$i$}^{$x$}}$ |
+| `\ce{NaOH(aq,$\infty$)}`      | $\ce{NaOH(aq, $\infty $)}$  |
+| `\ce{Fe(CN)_{$\frac{6}{2}$}}` | $\ce{Fe(CN)_{{ $\frac{6}{2} $}}}$  |
+| `\ce{X_{$i$}^{$x$}}`          | $\ce{X_{ $i $}^{ $x $}}$ |
+| `\ce{X_$i$^$x$}`              | $\ce{X_{ $i $}^{ $x $}}$ |
 
 ## Italic Text
 
 | Source                        |  Temml           |
 |-------------------------------|------------------|
-| `\ce{$cis${-}[PtCl2(NH3)2]}`  | $\ce{$cis${-}[PtCl2(NH3)2]}$ |
-| `\ce{CuS($hP12$)}`            | $\ce{CuS($hP12$)}$ |
+| `\ce{$cis${-}[PtCl2(NH3)2]}`  | $\ce{ $cis ${-}[PtCl2(NH3)2]}$ |
+| `\ce{CuS($hP12$)}`            | $\ce{CuS( $hP12 $)}$ |
 
 ## Upright Text, Escape Parsing
 
@@ -196,7 +196,7 @@ Ref: https://mhchem.github.io/MathJax-mhchem/
 | Source                             |  Temml                                   |
 +====================================+==========================================+
 | `\ce{Li^x_{Li,1-2x}Mg^._{Li,x}` \  | $\ce{Li^x_{Li,1-2x}Mg^._{Li,x}           |
-| ``$V$'_{Li,x}Cl^x_{Cl}}``          | $V$'_{Li,x}Cl^x_{Cl}}$                   |
+| ``$V$'_{Li,x}Cl^x_{Cl}}``          | $V $'_{Li,x}Cl^x_{Cl}}$                  |
 +------------------------------------+------------------------------------------+
 | ```\ce{O''_{i,x}}```               | $\ce{O''_{i,x}}$                         |
 +------------------------------------+------------------------------------------+

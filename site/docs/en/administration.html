@@ -14,9 +14,12 @@
 <h1 id='installation'>Installation</h1>
 <p>For use in the browser, you can download a zip file of Temml from the <a href='https://github.com/ronkok/Temml/releases'>releases page</a> of the Temml repository. For server-side use, you can obtain Temml via CLI commands <code>npm install temml</code> or <code>yarn add temml</code>.</p>
 <p>The minimum browser installation needs the following files. The <code>css</code> file and font file must be in the same folder.</p>
-<ul><li>temml.min.js</li>
-<li>Temml-Local.css</li>
-<li>Temml.woff2</li>
+<ul><li class="tight"><p>temml.min.js</p>
+</li>
+<li class="tight"><p>Temml-Local.css</p>
+</li>
+<li class="tight"><p>Temml.woff2</p>
+</li>
 </ul>
 <p>A server-side installation should use <code>temml.cjs</code> or <code>temml.mjs</code> instead of <code>temml.min.js</code>.</p>
 <h4 id='starter-template'>Starter template</h4>
@@ -52,8 +55,8 @@ for (let aSpan of [...mathSpans]) {
     temml.render(tex, aSpan, { macros, displayMode });
 }
 // Optional postProcess to render \ref{}
-temml.postProcess(document.body);</code></pre><div class="indented"><p>Notice that you can choose when to stop macro persistence by redefining <code>macros</code>.</p>
-</div><br>
+temml.postProcess(document.body);</code></pre><p>i&gt; Notice that you can choose when to stop macro persistence by redefining <code>macros</code>.</p>
+<br>
 </details>
 <details><summary>Option 3: Macros persist and there are some predefined macros:</summary>
 <p>Now say that you wish to pre-define two macros and a color with document-wide scope.</p>
@@ -118,22 +121,36 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, Temml will write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. Such a namespace is unnecessary for modern browsers but can be helpful for other user agents, such as Microsoft Word. (default: <code>false</code>)</p>
 </li>
 <li><p><code>trust</code>: <code>boolean</code> or <code>function</code> (default: <code>false</code>). If <code>false</code> (do not trust input), prevent any commands like <code>\includegraphics</code> that could enable adverse behavior, rendering them instead in <code>errorColor</code>. If <code>true</code> (trust input), allow all such commands. Provide a custom function <code>handler(context)</code> to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:</p>
-<ul><li><code>{command: &quot;\\url&quot;, url, protocol}</code></li>
-<li><code>{command: &quot;\\href&quot;, url, protocol}</code></li>
-<li><code>{command: &quot;\\includegraphics&quot;, url, protocol}</code></li>
-<li><code>{command: &quot;\\class&quot;, class}</code></li>
-<li><code>{command: &quot;\\id&quot;, id}</code></li>
-<li><code>{command: &quot;\\style&quot;, style}</code></li>
-<li><code>{command: &quot;\\data&quot;, attributes}</code></li>
+<ul><li class="tight"><p><code>{command: &quot;\\url&quot;, url, protocol}</code></p>
+</li>
+<li class="tight"><p><code>{command: &quot;\\href&quot;, url, protocol}</code></p>
+</li>
+<li class="tight"><p><code>{command: &quot;\\includegraphics&quot;, url, protocol}</code></p>
+</li>
+<li class="tight"><p><code>{command: &quot;\\class&quot;, class}</code></p>
+</li>
+<li class="tight"><p><code>{command: &quot;\\id&quot;, id}</code></p>
+</li>
+<li class="tight"><p><code>{command: &quot;\\style&quot;, style}</code></p>
+</li>
+<li class="tight"><p><code>{command: &quot;\\data&quot;, attributes}</code></p>
+</li>
 </ul>
 <p>Here are some sample trust settings:</p>
-<ul><li>Forbid specific command: <code>trust: (context) =&gt; context.command !== &#x27;\\includegraphics&#x27;</code></li>
-<li>Allow specific command: <code>trust: (context) =&gt; context.command === &#x27;\\url&#x27;</code></li>
-<li>Allow multiple specific commands: <code>trust: (context) =&gt; [&#x27;\\url&#x27;, &#x27;\\href&#x27;].includes(context.command)</code></li>
-<li>Allow all commands with a specific protocol: <code>trust: (context) =&gt; context.protocol === &#x27;http&#x27;</code></li>
-<li>Allow all commands with specific protocols: <code>trust: (context) =&gt; [&#x27;http&#x27;, &#x27;https&#x27;, &#x27;_relative&#x27;].includes(context.protocol)</code></li>
-<li>Allow all commands but forbid specific protocol: <code>trust: (context) =&gt; context.protocol !== &#x27;file&#x27;</code></li>
-<li>Allow certain commands with specific protocols: <code>trust: (context) =&gt; [&#x27;\\url&#x27;, &#x27;\\href&#x27;].includes(context.command) &amp;&amp; [&#x27;http&#x27;, &#x27;https&#x27;, &#x27;_relative&#x27;].includes(context.protocol)</code></li>
+<ul><li class="tight"><p>Forbid specific command: <code>trust: (context) =&gt; context.command !== &#x27;\\includegraphics&#x27;</code></p>
+</li>
+<li class="tight"><p>Allow specific command: <code>trust: (context) =&gt; context.command === &#x27;\\url&#x27;</code></p>
+</li>
+<li class="tight"><p>Allow multiple specific commands: <code>trust: (context) =&gt; [&#x27;\\url&#x27;, &#x27;\\href&#x27;].includes(context.command)</code></p>
+</li>
+<li class="tight"><p>Allow all commands with a specific protocol: <code>trust: (context) =&gt; context.protocol === &#x27;http&#x27;</code></p>
+</li>
+<li class="tight"><p>Allow all commands with specific protocols: <code>trust: (context) =&gt; [&#x27;http&#x27;, &#x27;https&#x27;, &#x27;_relative&#x27;].includes(context.protocol)</code></p>
+</li>
+<li class="tight"><p>Allow all commands but forbid specific protocol: <code>trust: (context) =&gt; context.protocol !== &#x27;file&#x27;</code></p>
+</li>
+<li class="tight"><p>Allow certain commands with specific protocols: <code>trust: (context) =&gt; [&#x27;\\url&#x27;, &#x27;\\href&#x27;].includes(context.command) &amp;&amp; [&#x27;http&#x27;, &#x27;https&#x27;, &#x27;_relative&#x27;].includes(context.protocol)</code></p>
+</li>
 </ul>
 </li>
 </ul>
@@ -151,10 +168,14 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
-<ul><li>Temml.woff2 can be downloaded with the latest Temml <a href='https://github.com/ronkok/Temml/releases'>release</a>.</li>
-<li>STIXTwoMath-Regular.woff2 is located at the STIX <a href='https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2' title='STIX''>repository</a>.</li>
-<li>LibertinusMath-Regular.woff2 is located at the Libertinus <a href='https://github.com/alerque/libertinus' title='Libertinus''>repository</a>.</li>
-<li>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</li>
+<ul><li class="tight"><p>Temml.woff2 can be downloaded with the latest Temml <a href='https://github.com/ronkok/Temml/releases'>release</a>.</p>
+</li>
+<li class="tight"><p>STIXTwoMath-Regular.woff2 is located at the STIX <a href='https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2'>repository</a>.</p>
+</li>
+<li class="tight"><p>LibertinusMath-Regular.woff2 is located at the Libertinus <a href='https://github.com/alerque/libertinus'>repository</a>.</p>
+</li>
+<li class="tight"><p>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
+</li>
 </ul>
 <p>If you want a different math font size, you can add a rule to your own page&#x27;s CSS, like this example:</p>
 <pre><code>math { font-size: 125%; }</code></pre><h1 id='equation-numbering'>Equation numbering</h1>
@@ -170,10 +191,14 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <p>If your site does not render automatic numbering properly, check if your other CSS has overwritten the Temml counter-reset.</p>
 <h1 id='extensions'>Extensions</h1>
 <p>More Temml functionality can be added via the following extensions:</p>
-<ul><li><a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render</a>: Find and render all math in a running HTML page.</li>
-<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/mhchem'>mhchem</a>: Write beautiful chemical equations easily.</li>
-<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>physics</a>: Implement much of the LaTeX <code>physics</code> package.</li>
-<li><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Support functions used in wikimedia.</li>
+<ul><li class="tight"><p><a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render</a>: Find and render all math in a running HTML page.</p>
+</li>
+<li class="tight"><p><a href='https://github.com/ronkok/Temml/tree/main/contrib/mhchem'>mhchem</a>: Write beautiful chemical equations easily.</p>
+</li>
+<li class="tight"><p><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>physics</a>: Implement much of the LaTeX <code>physics</code> package.</p>
+</li>
+<li class="tight"><p><a href='https://github.com/ronkok/Temml/tree/main/contrib/texvc'>texvc</a>: Support functions used in wikimedia.</p>
+</li>
 </ul>
 <p>To install extensions for browser use, include the appropriate file from the <code>contrib</code> folder of the Temml repository. Then reference the file in the <code>&lt;head&gt;</code> of the HTML page. As in this <code>mhchem</code> example:</p>
 <pre><code>  &lt;head&gt;
@@ -186,9 +211,12 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <h1 id='security'>Security</h1>
 <p>Any HTML generated by Temml should be safe from <code>&lt;script&gt;</code> or other code injection attacks.</p>
 <p>A variety of options give finer control over the security of Temml with untrusted inputs; refer to <a href='#options'>Options</a> for more details.</p>
-<ul><li><code>maxSize</code> can prevent large width/height visual affronts.</li>
-<li><code>maxExpand</code> can prevent infinite macro loop attacks.</li>
-<li><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</li>
+<ul><li class="tight"><p><code>maxSize</code> can prevent large width/height visual affronts.</p>
+</li>
+<li class="tight"><p><code>maxExpand</code> can prevent infinite macro loop attacks.</p>
+</li>
+<li class="tight"><p><code>trust</code> can allow certain commands that may load external resources or change HTML attributes and thus are not always safe (e.g., <code>\includegraphics</code> or <code>\class</code>)</p>
+</li>
 </ul>
 <h1 id='browser-issues'>Browser Issues</h1>
 <p>If you are deciding whether to render math in MathML, know that all the major browser engines now support MathML. If you want to revel in the sight of over a thousand LaTeX functions rendered well in MathML, head on over to the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
@@ -214,22 +242,38 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>16</sup></td></tr>
 </table>
 <p>Notes:</p>
-<ol><li>WebKit renders normal accents too high. (Extensible accents are set at the correct height.)</li>
-<li>WebKit fails to make a italic correction on accents. Many are set too far left.</li>
-<li>WebKit fails to stretch many wide accents.</li>
-<li>Chromium does not stretch \widehat or \widetilde.</li>
-<li>Chromium and WebKit fail to properly address italic correction on prime. So <em>f</em> ′ overlaps.</li>
-<li>Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.</li>
-<li>Chromium and WebKit set parentheses too high for \left( x \right).</li>
-<li>Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.</li>
-<li>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print properly.</li>
-<li>WebKit does not stretch the delimiters for {Vmatrix}.</li>
-<li>WebKit renders the {align} environment remarkably poorly.</li>
-<li>WebKit does not render laps properly.</li>
-<li>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</li>
-<li>WebKit fails to stretch most extensible arrows.</li>
-<li>Firefox sometimes selects radicals that are too tall.</li>
-<li>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</li>
+<ol><li class="tight"><p>WebKit renders normal accents too high. (Extensible accents are set at the correct height.)</p>
+</li>
+<li class="tight"><p>WebKit fails to make a italic correction on accents. Many are set too far left.</p>
+</li>
+<li class="tight"><p>WebKit fails to stretch many wide accents.</p>
+</li>
+<li class="tight"><p>Chromium does not stretch \widehat or \widetilde.</p>
+</li>
+<li class="tight"><p>Chromium and WebKit fail to properly address italic correction on prime. So <em>f</em> ′ overlaps.</p>
+</li>
+<li class="tight"><p>Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.</p>
+</li>
+<li class="tight"><p>Chromium and WebKit set parentheses too high for \left( x \right).</p>
+</li>
+<li class="tight"><p>Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.</p>
+</li>
+<li class="tight"><p>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print properly.</p>
+</li>
+<li class="tight"><p>WebKit does not stretch the delimiters for {Vmatrix}.</p>
+</li>
+<li class="tight"><p>WebKit renders the {align} environment remarkably poorly.</p>
+</li>
+<li class="tight"><p>WebKit does not render laps properly.</p>
+</li>
+<li class="tight"><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</p>
+</li>
+<li class="tight"><p>WebKit fails to stretch most extensible arrows.</p>
+</li>
+<li class="tight"><p>Firefox sometimes selects radicals that are too tall.</p>
+</li>
+<li class="tight"><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p>
+</li>
 </ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can view all these issues for yourself at the Temml <a href='https://temml.org/docs/en/supported.html'>function support page</a>.</p>
@@ -240,19 +284,25 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math>    v0.10.14</p>
+<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></span>    v0.10.14</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p>
 </li>
 <li><p><a href='#installation'>Installation</a></p>
 </li>
 <li><p><a href='#api'>API</a></p>
-<ul><li><a href='#overview'>Overview</a></li>
-<li><a href='#in-browser'>In Browser</a></li>
-<li><a href='#server-side'>Server Side</a></li>
-<li><a href='#preamble'>Preamble</a></li>
-<li><a href='#options'>Options</a></li>
-<li><a href='#post-process'>Post Process</a></li>
+<ul><li><p><a href='#overview'>Overview</a></p>
+</li>
+<li><p><a href='#in-browser'>In Browser</a></p>
+</li>
+<li><p><a href='#server-side'>Server Side</a></p>
+</li>
+<li><p><a href='#preamble'>Preamble</a></p>
+</li>
+<li><p><a href='#options'>Options</a></p>
+</li>
+<li><p><a href='#post-process'>Post Process</a></p>
+</li>
 </ul>
 </li>
 <li><p><a href='#fonts'>Fonts</a></p>
@@ -266,24 +316,17 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p><a href='#browser-issues'>Browser Issues</a></p>
 </li>
 </ul>
-<h3 id='elsewhere'>Elsewhere</h3>
-<ul><li><a href='supported.html'>Supported Functions</a></li>
-<li><a href='support_table.html'>Support Table</a></li>
-<li><a href='../../index.html'>Home</a></li>
+<h3>Elsewhere</h3>
+<ul><li class="tight"><p><a href='supported.html'>Supported Functions</a></p>
+</li>
+<li class="tight"><p><a href='support_table.html'>Support Table</a></p>
+</li>
+<li class="tight"><p><a href='../../index.html'>Home</a></p>
+</li>
 </ul>
 </div>  <!-- sidebar -->
 </nav>
 <div id="mobile-nav">
-  <!--On very small screens, the sidebar TOC is replaced by a button with a drop-down menu. -->
-  <input type="checkbox" id="checkbox_toggle">
-  <label for="checkbox_toggle"><svg xmlns="http://www.w3.org/2000/svg" width="25.6" height="25.6"><path d="M4.8 12.05h16v1.6h-16zM4.8 7.25h16v1.6h-16zM4.8 16.85h16v1.6h-16z"/></svg></label>
-  <ul>
-    <li><a href="#browser-support">Browser Support</a></li>
-    <li><a href="#installation">Installation</a></li>
-    <li><a href="#api">API</a></li>
-    <li><a href="#fonts">Fonts</a></li>
-    <li><a href="../../index.html">Home</a></li>
-  </ul>
-</div>
+<p>  &lt;input type=&quot;checkbox&quot; id=&quot;checkbox<em>toggle&quot;&gt;   &lt;label for=&quot;checkbox</em>toggle&quot;&gt;&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;25.6&quot; height=&quot;25.6&quot;&gt;&lt;path d=&quot;M4.8 12.05h16v1.6h-16zM4.8 7.25h16v1.6h-16zM4.8 16.85h16v1.6h-16z&quot;/&gt;&lt;/svg&gt;&lt;/label&gt;   &lt;ul&gt;     &lt;li&gt;&lt;a href=&quot;#browser-support&quot;&gt;Browser Support&lt;/a&gt;&lt;/li&gt;     &lt;li&gt;&lt;a href=&quot;#installation&quot;&gt;Installation&lt;/a&gt;&lt;/li&gt;     &lt;li&gt;&lt;a href=&quot;#api&quot;&gt;API&lt;/a&gt;&lt;/li&gt;     &lt;li&gt;&lt;a href=&quot;#fonts&quot;&gt;Fonts&lt;/a&gt;&lt;/li&gt;     &lt;li&gt;&lt;a href=&quot;../../index.html&quot;&gt;Home&lt;/a&gt;&lt;/li&gt;   &lt;/ul&gt; &lt;/div&gt;</p>
 </body>
 </html>

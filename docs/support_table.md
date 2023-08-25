@@ -48,11 +48,11 @@ If you know the shape of a character, but not its name,
 |\\&|$\&$|||
 |'|$'$|||
 |\\\'|$\text{\'{a}}$|`\text{\'{a}}`||
-|(|$($|||
-|)|$)$|||
+|\(| $($ |||
+|\)| $)$ |||
 |\\ |$a\ b$|`a\ b`||
 |\\"|$\text{\"{a}}$|`\text{\"{a}}`||
-|\$ | $\text{\textdollar}$|||
+|\\\$ | $\text{\textdollar}$|||
 |\\,|$a\,\,{b}$|`a\,\,{b}`||
 |\\.|$\text{\.{a}}$|`\text{\.{a}}`||
 |\\:|$a\:\:{b}$|`a\:\:{b}`||
@@ -60,10 +60,10 @@ If you know the shape of a character, but not its name,
 | \_ | $x_i$ | `x_i` ||
 |\\_|$\_$|||
 |\\`` ` ``| $\text{\`{a}}$ | ``\text{\'{a}}`` ||
-|$<$|$<$|||
+|\<|$<$|||
 |\\=|$\text{\={a}}$|`\text{\={a}}`||
 | >|$>$|||
-|\\>|$a\>\>{b}$|`a\>\>{b}`||
+|\\\>|$a\>\>{b}$|`a\>\>{b}`||
 |\[|$[$|||
 |\]|$]$|||
 |{|${a}$|`{a}`||
@@ -74,7 +74,7 @@ If you know the shape of a character, but not its name,
 | \\\| |$\Vert$|||
 |\~|$\text{no~no~no~breaks}$|`\text{no~no~no~breaks}`||
 |\\~|$\text{\~{a}}$|`\text{\~{a}}`||
-|\\\\|$\begin{matrix} a & b\\ c & d\end{matrix}$|`\begin{matrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{matrix}`||
+| \\\\ |$\begin{matrix} a & b\\ c & d\end{matrix}$|`\begin{matrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{matrix}`||
 |^|$x^i$|`x^i`||
 |\\^|$\text{\^{a}}$|`\text{\^{a}}`||
 
@@ -97,12 +97,12 @@ If you know the shape of a character, but not its name,
 |\alef|$\alef$|| texvc extension |
 |\alefsym|$\alefsym$|| texvc extension |
 |\aleph|$\aleph$|||
-|{align}|$$\begin{align}a&=b+c\\d+e&=f\end{align}$$|`\begin{align}`<br>   `a&=b+c \\`<br>   `d+e&=f`<br>`\end{align}` | ams |
-|{align\*}|$$\begin{align*}a&=b+c\\d+e&=f\end{align*}$$|`\begin{align*}`<br>   `a&=b+c \\`<br>   `d+e&=f`<br>`\end{align*}` | ams |
-|{aligned}|$$\begin{aligned}a&=b+c\\d+e&=f\end{aligned}$$|`\begin{aligned}`<br>   `a&=b+c \\`<br>   `d+e&=f`<br>`\end{aligned}`| ams |
-|{alignat}|$$\begin{alignat}{2}10&x+&3&y=2\\3&x+&13&y=4\end{alignat}$$|`\begin{alignat}{2}`<br>   `10&x+ &3&y = 2 \\`<br>   ` 3&x+&13&y = 4`<br>`\end{alignat}` | ams |
-|{alignat\*}|$$\begin{alignat*}{2}10&x+&3&y=2\\3&x+&13&y=4\end{alignat*}$$|`\begin{alignat*}{2}`<br>   `10&x+ &3&y = 2 \\`<br>   ` 3&x+&13&y = 4`<br>`\end{alignat*}` | ams |
-|{alignedat}|$$\begin{alignedat}{2}10&x+&3&y=2\\3&x+&13&y=4\end{alignedat}$$|`\begin{alignedat}{2}`<br>   `10&x+ &3&y = 2 \\`<br>   ` 3&x+&13&y = 4`<br>`\end{alignedat}` | ams |
+|{align}| $$\begin{align}a&=b+c\\d+e&=f\end{align}$$ |`\begin{align}`<br>   `a&=b+c \\`<br>   `d+e&=f`<br>`\end{align}` | ams |
+|{align\*}| $$\begin{align*}a&=b+c\\d+e&=f\end{align*}$$ |`\begin{align*}`<br>   `a&=b+c \\`<br>   `d+e&=f`<br>`\end{align*}` | ams |
+|{aligned}| $$\begin{aligned}a&=b+c\\d+e&=f\end{aligned}$$ |`\begin{aligned}`<br>   `a&=b+c \\`<br>   `d+e&=f`<br>`\end{aligned}`| ams |
+|{alignat}| $$\begin{alignat}{2}10&x+&3&y=2\\3&x+&13&y=4\end{alignat}$$ |`\begin{alignat}{2}`<br>   `10&x+ &3&y = 2 \\`<br>   ` 3&x+&13&y = 4`<br>`\end{alignat}` | ams |
+|{alignat\*}| $$\begin{alignat*}{2}10&x+&3&y=2\\3&x+&13&y=4\end{alignat*}$$ |`\begin{alignat*}{2}`<br>   `10&x+ &3&y = 2 \\`<br>   ` 3&x+&13&y = 4`<br>`\end{alignat*}` | ams |
+|{alignedat}| $$\begin{alignedat}{2}10&x+&3&y=2\\3&x+&13&y=4\end{alignedat}$$ |`\begin{alignedat}{2}`<br>   `10&x+ &3&y = 2 \\`<br>   ` 3&x+&13&y = 4`<br>`\end{alignedat}` | ams |
 |\allowbreak||||
 |\Alpha|$\Alpha$|||
 |\alpha|$\alpha$|||
@@ -137,101 +137,211 @@ If you know the shape of a character, but not its name,
 
 ## B
 
-| Function       |  Rendered   | Source or Comment|  Package
-|----------------|-------------|------------------|-----------|
-|\backcong|$\backcong$|| MnSymbol |
-|\backepsilon|$\backepsilon$|| ams |
-|\backprime|$\backprime$|| ams |
-|\backsim|$\backsim$|| ams |
-|\backsimeq|$\backsimeq$|| ams |
-|\backslash|$\backslash$|||
-|\bar|$\bar{y}$|`\bar{y}`||
-|\barwedge|$\barwedge$|| ams |
-|\ballotx|$\ballotx$|| arev |
-|\Bbb|$\Bbb{ABC}$|`\Bbb{ABC}`||
-|\Bbbk|$\Bbbk$|||
-|\bbox|(Not supported)|||
-|\bcancel|$\bcancel{5}$|`\bcancel{5}`| cancel |
-|\because|$\because$|| ams |
-|\begin|$\begin{matrix} a & b\\ c & d\end{matrix}$|`\begin{matrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{matrix}`| ams |
-|\begingroup|$\begingroup a\endgroup$|`\begingroup a\endgroup`||
-|\Beta|$\Beta$|||
-|\beta|$\beta$|||
-|\beth|$\beth$|| ams |
-|\between|$\between$|| ams |
-|\bf|${\bf AaBb12}$|`{\bf AaBb12}`||
-|\bfseries|(Not supported)|||
-|\big|$\big(\big)$|`\big(\big)`||
-|\Big|$\Big(\Big)$|`\Big(\Big)`||
-|\bigcap|$\bigcap$|||
-|\bigcirc|$\bigcirc$|||
-|\bigcup|$\bigcup$|||
-|\bigg|$\bigg(\bigg)$|`\bigg(\bigg)`||
-|\Bigg|$\Bigg(\Bigg)$|`\Bigg(\Bigg)`||
-|\biggl|$\biggl($|`\biggl(`||
-|\Biggl|$\Biggl($|`\Biggl(`||
-|\biggm|$\biggm\vert$|`\biggm\vert`||
-|\Biggm|$\Biggm\vert$|`\Biggm\vert`||
-|\biggr|$\biggr)$|`\biggr)`||
-|\Biggr|$\Biggr)$|`\Biggr)`||
-|\bigl|$\bigl($|`\bigl(`||
-|\Bigl|$\Bigl($|`\Bigl(`||
-|\bigm|$\bigm\vert$|`\bigm\vert`||
-|\Bigm|$\Bigm\vert$|`\Bigm\vert`||
-|\bigodot|$\bigodot$|||
-|\bigominus|(Not supported)|||
-|\bigoplus|$\bigoplus$|||
-|\bigoslash|(Not supported)|||
-|\bigotimes|$\bigotimes$|||
-|\bigr|$\bigr)$|`\bigr)`||
-|\Bigr|$\Bigr)$|`\Bigr)`||
-|\bigsqcap|$\bigsqcap$|||
-|\bigsqcup|$\bigsqcup$|||
-|\bigstar|$\bigstar$|| ams |
-|\bigtriangledown|$\bigtriangledown$|||
-|\bigtriangleup|$\bigtriangleup$|||
-|\biguplus|$\biguplus$|||
-|\bigvee|$\bigvee$|||
-|\bigwedge|$\bigwedge$|||
-|\binom|$\binom n k$|`\binom n k`| ams |
-|\blacklozenge|$\blacklozenge$|| ams |
-|\blacksquare|$\blacksquare$|| ams |
-|\blacktriangle|$\blacktriangle$|| ams |
-|\blacktriangledown|$\blacktriangledown$|| ams |
-|\blacktriangleleft|$\blacktriangleleft$|| ams |
-|\blacktriangleright|$\blacktriangleright$|| ams |
-|\bm|$\bm{AaBb}$|`\bm{AaBb}`| bm |
-|{Bmatrix}|$\begin{Bmatrix}a&b\\c&d\end{Bmatrix}$|`\begin{Bmatrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{Bmatrix}`| ams |
-|{Bmatrix*}|$\begin{Bmatrix*}[r] -1 & 3\\ 2 & -4 \end{Bmatrix*}$|`\begin{Bmatrix*}[r]`<br>   `-1 & 3 \\`<br>   `2 & -4`<br>`\end{Bmatrix*}`| mathtools |
-|{bmatrix}|$\begin{bmatrix}a&b\\c&d\end{bmatrix}$|`\begin{bmatrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{bmatrix}`| ams |
-|{bmatrix*}|$\begin{bmatrix*}[r] -1 & 3\\ 2 & -4 \end{bmatrix*}$|`\begin{bmatrix*}[r]`<br>   `-1 & 3 \\`<br>   `2 & -4`<br>`\end{bmatrix*}`| mathtools |
-|\bmod|$a \bmod b$|`a \bmod b`||
-|\bold|$\bold{AaBb123}$|`\bold{AaBb123}`||
-|\boldsymbol|$\boldsymbol{AaBb}$|`\boldsymbol{AaBb}`| ams |
-|\bot|$\bot$|||
-|\Bot|$\Bot$|| cmll |
-|\bowtie|$\bowtie$|||
-|\Box|$\Box$|| ams |
-|\boxdot|$\boxdot$|| ams |
-|\boxed|$\boxed{ab}$|`\boxed{ab}`| ams |
-|\boxminus|$\boxminus$|| ams |
-|\boxplus|$\boxplus$|| ams |
-|\boxtimes|$\boxtimes$|| ams |
-|\Bqty|$\Bqty{5 \text{mm}}$|`\Bqty{5 \text{mm}}`| physics extension |
-|\bqty|$\bqty{5 \text{mm}}$|`\bqty{5 \text{mm}}`| physics extension |
-|\Bra|$\left\langle\psi\right|$|`\Bra{\psi}`| braket |
-|\bra|$\mathinner{\langle{\psi}|}$|`\bra{\psi}`| braket |
-|\braket|$\mathinner{\langle{\phi | \psi}\rangle}$|`\braket{\phi\|\psi}`| braket |
-|\Braket|$\Braket{ \phi \| \frac{\partial^2}{\partial t^2} \| \psi }$|`\Braket{ϕ\|\frac{∂^2}{∂ t^2}\|ψ}`| braket
-|\brace|${n\brace k}$|`{n\brace k}`||
-|\bracevert|(Not supported)|||
-|\brack|${n\brack k}$|`{n\brack k}`||
-|\breve|$\breve{eu}$|`\breve{eu}`||
-|\buildrel|(Not supported)|||
-|\bull|$\bull$|| texvc extension |
-|\bullet|$\bullet$|||
-|\Bumpeq|$\Bumpeq$|| ams |
-|\bumpeq|$\bumpeq$|| ams |
++---------------------+--------------------------+--------------------------+-------------------+
+| Function            | Rendered                 | Source or Comment        | Package           |
++=====================+==========================+==========================+===================+
+| \backcong           | $\backcong$              |                          | MnSymbol          |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backepsilon        | $\backepsilon$           |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backprime          | $\backprime$             |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backsim            | $\backsim$               |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backsimeq          | $\backsimeq$             |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backslash          | $\backslash$             |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bar                | $\bar{y}$                | `\bar{y}`                |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \barwedge           | $\barwedge$              |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \ballotx            | $\ballotx$               |                          | arev              |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bbb                | $\Bbb{ABC}$              | `\Bbb{ABC}`              |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bbbk               | $\Bbbk$                  |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bbox               | Not supported            |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bcancel            | $\bcancel{5}$            | `\bcancel{5}`            | cancel            |
++---------------------+--------------------------+--------------------------+-------------------+
+| \because            | $\because$               |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \begin              | $\begin{matrix}          | `\begin{matrix}`\        | ams               |
+|                     |  a & b \\                | `a & b \\`\              |                   |
+|                     |  c & d                   | `c & d`\                 |                   |
+|                     | \end{matrix}$            | `\end{matrix}`           |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \begingroup         | $\begingroup a\endgroup$ | `\begingroup a\endgroup` |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Beta               | $\Beta$                  |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \beta               | $\beta$                  |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \beth               | $\beth$                  |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \between            | $\between$               |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bf                 | ${\bf AaBb12}$           | `{\bf AaBb12}`           |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bfseries           | Not supported            |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \big                | $\big(\big)$             | `\big(\big)`             |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Big                | $\Big(\Big)$             | `\Big(\Big)`             |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigcap             | $\bigcap$                |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigcirc            | $\bigcirc$               |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigcup             | $\bigcup$                |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigg               | $\bigg(\bigg)$           | `\bigg(\bigg)`           |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bigg               | $\Bigg(\Bigg)$           | `\Bigg(\Bigg)`           |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \biggl              | $\biggl($                | `\biggl(`                |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Biggl              | $\Biggl($                | `\Biggl(`                |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \biggm              | $\biggm\vert$            | `\biggm\vert`            |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Biggm              | $\Biggm\vert$            | `\Biggm\vert`            |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \biggr              | $\biggr)$                | `\biggr)`                |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Biggr              | $\Biggr)$                | `\Biggr)`                |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigl               | $\bigl($                 | `\bigl(`                 |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bigl               | $\Bigl($                 | `\Bigl(`                 |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigm               | $\bigm\vert$             | `\bigm\vert`             |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bigm               | $\Bigm\vert$             | `\Bigm\vert`             |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigodot            | $\bigodot$               |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigominus          | Not supported            |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigoplus           | $\bigoplus$              |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigoslash          | Not supported            |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigotimes          | $\bigotimes$             |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigr               | $\bigr)$                 | `\bigr)`                 |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bigr               | $\Bigr)$                 | `\Bigr)`                 |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigsqcap           | $\bigsqcap$              |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigsqcup           | $\bigsqcup$              |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigstar            | $\bigstar$               |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigtriangledown    | $\bigtriangledown$       |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigtriangleup      | $\bigtriangleup$         |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \biguplus           | $\biguplus$              |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigvee             | $\bigvee$                |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bigwedge           | $\bigwedge$              |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \binom              | $\binom n k$             | `\binom n k`             | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \blacklozenge       | $\blacklozenge$          |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \blacksquare        | $\blacksquare$           |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \blacktriangle      | $\blacktriangle$         |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \blacktriangledown  | $\blacktriangledown$     |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \blacktriangleleft  | $\blacktriangleleft$     |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \blacktriangleright | $\blacktriangleright$    |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bm                 | $\bm{AaBb}$              | `\bm{AaBb}`              | bm                |
++---------------------+--------------------------+--------------------------+-------------------+
+| {Bmatrix}           | $\begin{Bmatrix}         | `\begin{Bmatrix}`\       | ams               |
+|                     |   a & b \\               | `a & b \\`\              |                   |
+|                     |   c & d                  | `c & d`\                 |                   |
+|                     |  \end{Bmatrix}$          | `\end{Bmatrix}`          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| {Bmatrix\*}         | $\begin{Bmatrix*}[r]     | `\begin{Bmatrix*}[r]`\   | mathtools         |
+|                     |  -1 & 3 \\               | `-1 & 3 \\`\             |                   |
+|                     |  2 & -4                  | `2 & -4`\                |                   |
+|                     |  \end{Bmatrix*}$         | `\end{Bmatrix*}`         |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| {bmatrix}           | $\begin{bmatrix}         | `\begin{bmatrix}`\       | ams               |
+|                     |   a & b \\               | `a & b \\`\              |                   |
+|                     |   c & d                  | `c & d`\                 |                   |
+|                     |  \end{bmatrix}$          | `\end{bmatrix}`          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| {bmatrix\*}         | $\begin{bmatrix*}[r]     | `\begin{bmatrix*}[r]`\   | mathtools         |
+|                     |  -1 & 3 \\               | `-1 & 3 \\`\             |                   |
+|                     |  2 & -4                  | `2 & -4`\                |                   |
+|                     |   \end{bmatrix*}$        | `\end{bmatrix*}`         |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bmod               | $a \bmod b$              | `a \bmod b`              |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bold               | $\bold{AaBb123}$         | `\bold{AaBb123}`         |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boldsymbol         | $\boldsymbol{AaBb}$      | `\boldsymbol{AaBb}`      | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bot                | $\bot$                   |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bot                | $\Bot$                   |                          | cmll              |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bowtie             | $\bowtie$                |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Box                | $\Box$                   |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxdot             | $\boxdot$                |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxed              | $\boxed{ab}$             | `\boxed{ab}`             | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxminus           | $\boxminus$              |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxplus            | $\boxplus$               |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxtimes           | $\boxtimes$              |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bqty               | $\Bqty{5 \text{mm}}$     | `\Bqty{5 \text{mm}}`     | physics extension |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bqty               | $\bqty{5 \text{mm}}$     | `\bqty{5 \text{mm}}`     | physics extension |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bra                | $\Bra{\psi}$             | `\Bra{\psi}`             | braket            |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bra                | $\bra{\psi}$             | `\bra{\psi}`             | braket            |
++---------------------+--------------------------+--------------------------+-------------------+
+| \braket             | $\braket{\phi|\psi}$     | `\braket{\phi|\psi}`     | braket            |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Braket             | $\Braket{ϕ|\frac{∂^2}{∂  | `\Braket{ϕ|\frac{∂^2}{∂  | braket            |
+|                     |  t^2}|ψ}$                |  t^2}|ψ}`                |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \brace              | ${n\brace k}$            | `{n\brace k}`            |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bracevert          | Not supported            |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \brack              | ${n\brack k}$            | `{n\brack k}`            |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \breve              | $\breve{eu}$             | `\breve{eu}`             |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \buildrel           | Not supported            |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bull               | $\bull$                  |                          | texvc extension   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bullet             | $\bullet$                |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \Bumpeq             | $\Bumpeq$                |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \bumpeq             | $\bumpeq$                |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
 
 ## C
 
@@ -531,7 +641,7 @@ If you know the shape of a character, but not its name,
 | \harr           | $\harr$                   | | texvc extension |
 | \hat            | $\hat{\theta}$            | `\hat{\theta}`| |
 | \hbar           | $\hbar$                   | | |
-| \hbox           | $\hbox{$x^2$}$            | `\hbox{$x^2$}`| |
+| \hbox           | $\hbox{ $x^2 $}$            | `\hbox{$x^2$}`| |
 | \hbox to        |  (Not supported)          | | |
 | \hdashline      | $\begin{matrix}a&b\\ \hdashline c &d\end{matrix}$| `\begin{matrix}`<br>   `a & b \\`<br>   `\hdashline`<br>   `c & d`<br>`\end{matrix}`|  arydshln |
 | \hearts         | $\hearts$                 | | texvc extension |
@@ -601,20 +711,20 @@ If you know the shape of a character, but not its name,
 
 ## JK
 
-| Function |  Rendered                       | Source or Comment |  Package          |
-|----------|---------------------------------|-------------------|-------------------|
-| \j       | $\text{\j}$                     | `\text{\j}`       |                   |
-| \jmath   | $\jmath$                        |                   |                   |
-| \Join    | $\Join$                         |                   | ams               |
-| \Kappa   | $\Kappa$                        |                   |                   |
-| \kappa   | $\kappa$                        |                   |                   |
-| \ker     | $\ker$                          |                   |                   |
-| \kern    | $I\kern-2.5pt R$                | `I\kern-2.5pt R`  |                   |
-| \Ket     | $\left| \psi\right\rangle$      | `\Ket{\psi}`      | braket            |
-| \ket     | $\mathinner{| {\psi}\rangle}$   | `\ket{\psi}`      | braket            |
-| \ketbra  | $\ketbra{a}{b}$                 | `\ketbra{a}{b}`   | physics extension |
-| \Koppa   | $\Koppa$                        |                   |                   |
-| \koppa   | $\koppa$                        |                   |                   |
+| Function |  Rendered        | Source or Comment |  Package          |
+|----------|------------------|-------------------|-------------------|
+| \j       | $\text{\j}$      | `\text{\j}`       |                   |
+| \jmath   | $\jmath$         |                   |                   |
+| \Join    | $\Join$          |                   | ams               |
+| \Kappa   | $\Kappa$         |                   |                   |
+| \kappa   | $\kappa$         |                   |                   |
+| \ker     | $\ker$           |                   |                   |
+| \kern    | $I\kern-2.5pt R$ | `I\kern-2.5pt R`  |                   |
+| \Ket     | $\Ket{\psi}$     | `\Ket{\psi}`      | braket            |
+| \ket     | $\ket{\psi}$     | `\ket{\psi}`      | braket            |
+| \ketbra  | $\ketbra{a}{b}$  | `\ketbra{a}{b}`   | physics extension |
+| \Koppa   | $\Koppa$         |                   |                   |
+| \koppa   | $\koppa$         |                   |                   |
 
 ## L
 
@@ -675,8 +785,8 @@ If you know the shape of a character, but not its name,
 | \lg                  | $\lg$                      | | |
 | \lgroup              | $\lgroup$                  | | |
 | \lhd                 | $\lhd$                     | | ams |
-| \lightning           | $\lightning$               | |
-| \lim                 | $\lim$                     | |
+| \lightning           | $\lightning$               | | |
+| \lim                 | $\lim$                     | | |
 | \liminf              | $\liminf$                  | | |
 | \limits              | $\lim\limits_x$            | `\lim\limits_x`| |
 | \limsup              | $\limsup$                  | | |
