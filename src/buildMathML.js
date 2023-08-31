@@ -260,9 +260,7 @@ export default function buildMathML(tree, texExpression, style, settings) {
   }
   if (settings.displayMode) {
     math.setAttribute("display", "block");
-    math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
-      ? "inline"
-      : "block math" // necessary in Chromium.
+    math.style.display = "block math" // necessary in Chromium.
     // Firefox and Safari do not recognize display: "block math".
     // Set a class so that the CSS file can set display: block.
     math.classes = ["tml-display"]

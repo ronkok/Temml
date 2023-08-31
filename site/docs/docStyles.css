@@ -114,6 +114,8 @@ p {
   text-align: justify;
 }
 
+td > p:first-child { margin-top: 0em; }
+
 hr {
   margin: 1em;
 }

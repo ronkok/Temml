@@ -2132,9 +2132,7 @@ var temml = (function () {
     }
     if (settings.displayMode) {
       math.setAttribute("display", "block");
-      math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
-        ? "inline"
-        : "block math"; // necessary in Chromium.
+      math.style.display = "block math"; // necessary in Chromium.
       // Firefox and Safari do not recognize display: "block math".
       // Set a class so that the CSS file can set display: block.
       math.classes = ["tml-display"];
@@ -3825,10 +3823,20 @@ var temml = (function () {
         node.style.borderBottom = "0.065em solid";
         break
       case "\\cancel":
-        node.classes.push("cancel");
+        node.style.background = `linear-gradient(to top left,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`;
         break
       case "\\bcancel":
-        node.classes.push("bcancel");
+        node.style.background = `linear-gradient(to top right,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`;
         break
       /*
       case "\\longdiv":
@@ -3872,7 +3880,18 @@ var temml = (function () {
         break
       }
       case "\\xcancel":
-        node.classes.push("xcancel");
+        node.style.background = `linear-gradient(to top left,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%),
+linear-gradient(to top right,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`;
         break
     }
     if (group.backgroundColor) {
@@ -4303,24 +4322,94 @@ var temml = (function () {
       // Write horizontal rules
       if (i === 0 && hlines[0].length > 0) {
         if (hlines[0].length === 2) {
-          mtr.classes.push("tml-top-double");
+          mtr.children.forEach(cell => { cell.style.borderTop = "0.15em double"; });
         } else {
-          mtr.classes.push(hlines[0][0] ? "tml-top-dashed" : "tml-top-solid");
+          mtr.children.forEach(cell => {
+            cell.style.borderTop = hlines[0][0] ? "0.06em dashed" : "0.06em solid";
+          });
         }
       }
       if (hlines[i + 1].length > 0) {
         if (hlines[i + 1].length === 2) {
-          mtr.classes.push("tml-hline-double");
+          mtr.children.forEach(cell => { cell.style.borderBottom = "0.15em double"; });
         } else {
-          mtr.classes.push(hlines[i + 1][0] ? "tml-hline-dashed" : "tml-hline-solid");
+          mtr.children.forEach(cell => {
+            cell.style.borderBottom = hlines[i + 1][0] ? "0.06em dashed" : "0.06em solid";
+          });
         }
       }
       tbl.push(mtr);
     }
-    let table = new mathMLTree.MathNode("mtable", tbl);
+
     if (group.envClasses.length > 0) {
-      table.classes = group.envClasses.map(e => "tml-" + e);
+      const pad = group.envClasses.includes("jot")
+        ? "0.7" // 0.5ex + 0.09em top & bot padding
+        : group.envClasses.includes("small")
+        ? "0.35"
+        : "0.5"; // 0.5ex default top & bot padding
+      const sidePadding = group.envClasses.includes("abut")
+        ? "0"
+        : group.envClasses.includes("cases")
+        ? "0"
+        : group.envClasses.includes("small")
+        ? "0.1389"
+        : group.envClasses.includes("cd")
+        ? "0.25"
+        : "0.4"; // default side padding
+
+      const numCols = tbl.length === 0 ? 0 : tbl[0].children.length;
+
+      const sidePad = (j, hand) => {
+        if (j === 0 && hand === 0) { return "0" }
+        if (j === numCols - 1 && hand === 1) { return "0" }
+        if (group.envClasses[0] !== "align") { return sidePadding }
+        if (hand === 1) { return "0" }
+        if (group.addEqnNum) {
+          return (j % 2) ? "1" : "0"
+        } else {
+          return (j % 2) ? "0" : "1"
+        }
+      };
+
+      // Padding
+      for (let i = 0; i < tbl.length; i++) {
+        for (let j = 0; j < tbl[i].children.length; j++) {
+          tbl[i].children[j].style.padding = `${pad}ex ${sidePad(j, 1)}em ${pad}ex ${sidePad(j, 0)}em`;
+        }
+      }
+
+      // Justification
+      const align = group.envClasses.includes("align") || group.envClasses.includes("alignat");
+      for (let i = 0; i < tbl.length; i++) {
+        const row = tbl[i];
+        if (align) {
+          for (let j = 0; j < row.children.length; j++) {
+            // Chromium does not recognize text-align: left. Use -webkit-
+            // TODO: Remove -webkit- when Chromium no longer needs it.
+            row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right");
+          }
+        }
+        if (row.children.length > 1 && group.envClasses.includes("cases")) {
+          row.children[1].style.padding = row.children[1].style.padding.replace(/0em$/, "1em");
+        }
+
+        if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
+          for (const cell of row.children) {
+            cell.style.textAlign = "-webkit-" + "left";
+          }
+        }
+      }
+    } else {
+      // Set zero padding on side of the matrix
+      for (let i = 0; i < tbl.length; i++) {
+        tbl[i].children[0].style.paddingLeft = "0em";
+        if (tbl[i].children.length === tbl[0].children.length) {
+          tbl[i].children[tbl[i].children.length - 1].style.paddingRight = "0em";
+        }
+      }
     }
+
+    let table = new mathMLTree.MathNode("mtable", tbl);
     if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true"); }
 
     if (group.addEqnNum || group.envClasses.includes("multline")) {
@@ -4400,6 +4489,8 @@ var temml = (function () {
       align = "left " + (align.length > 0 ? align : "center ") + "right ";
     }
     if (align) {
+      // Firefox reads this attribute, not the -webkit-left|right written above.
+      // TODO: When Chrome no longer needs "-webkit-", use CSS and delete the next line.
       table.setAttribute("columnalign", align.trim());
     }
 
@@ -4424,7 +4515,7 @@ var temml = (function () {
         cols,
         addEqnNum: context.envName === "align" || context.envName === "alignat",
         emptySingleRow: true,
-        envClasses: ["jot", "abut"], // set row spacing & provisional column spacing
+        envClasses: ["abut", "jot"], // set row spacing & provisional column spacing
         maxNumCols: context.envName === "split" ? 2 : undefined,
         leqno: context.parser.settings.leqno
       },
@@ -4442,18 +4533,22 @@ var temml = (function () {
     // binary.  This behavior is implemented in amsmath's \start@aligned.
     let numMaths;
     let numCols = 0;
-    if (args[0] && args[0].type === "ordgroup") {
+    const isAlignedAt = context.envName.indexOf("at") > -1;
+    if (args[0] && isAlignedAt) {
+      // alignat environment takes an argument w/ number of columns
       let arg0 = "";
       for (let i = 0; i < args[0].body.length; i++) {
         const textord = assertNodeType(args[0].body[i], "textord");
         arg0 += textord.text;
       }
+      if (isNaN(arg0)) {
+        throw new ParseError("The alignat enviroment requires a numeric first argument.")
+      }
       numMaths = Number(arg0);
       numCols = numMaths * 2;
     }
-    const isAligned = !numCols;
     res.body.forEach(function(row) {
-      if (!isAligned) {
+      if (isAlignedAt) {
         // Case 1
         const curMaths = row.length / 2;
         if (numMaths < curMaths) {
@@ -4481,14 +4576,10 @@ var temml = (function () {
         align: align
       };
     }
-    if (context.envName === "split") ; else if (context.envName.indexOf("ed") > -1) {
-      res.envClasses.push("aligned"); // Sets justification
-    } else if (isAligned) {
-      res.envClasses[1] = context.envName === "align*"
-        ? "align-star"
-        : "align"; // Sets column spacing & justification
+    if (context.envName === "split") ; else if (isAlignedAt) {
+      res.envClasses.push("alignat"); // Sets justification
     } else {
-      res.envClasses.push("aligned"); // Sets justification
+      res.envClasses[0] = "align"; // Sets column spacing & justification
     }
     return res;
   };
@@ -4738,7 +4829,7 @@ var temml = (function () {
       }
       const res = {
         cols: [],
-        envClasses: ["jot", "abut"],
+        envClasses: ["abut", "jot"],
         addEqnNum: context.envName === "gather",
         emptySingleRow: true,
         leqno: context.parser.settings.leqno

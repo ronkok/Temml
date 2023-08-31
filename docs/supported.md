@@ -260,7 +260,7 @@ $( \big( \Big( \bigg( \Bigg($ `( \big( \Big( \bigg( \Bigg(`
 | $\begin{pmatrix}      | `\begin{pmatrix}`\         | $\begin{bmatrix}           | `\begin{bmatrix}`\           |
 | a & b \\              |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
 | c & d                 |    `c & d`\                | c & d                      |    `c & d`\                  |
-| \end{pmatrix}$        | `\end{pmatrix}`            | \end{bmatrix}$             | `\end{matrix}`               |
+| \end{pmatrix}$        | `\end{pmatrix}`            | \end{bmatrix}$             | `\end{bmatrix}`              |
 +-----------------------+----------------------------+----------------------------+------------------------------+
 | $\begin{vmatrix}      | `\begin{vmatrix}`\         | $\begin{Vmatrix}           | `\begin{Vmatrix}`\           |
 |    a & b \\           |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |

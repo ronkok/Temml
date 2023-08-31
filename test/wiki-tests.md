@@ -518,7 +518,7 @@ A few of the functions on this page require Temml’s _texvc_ extension.
 |     | && g    && \\;\mapsto\\; && g^2              | && g    && \;\mapsto\; && g^2                  |
 |     | \end{alignat}                                | \end{alignat}$$                                |
 +-----+----------------------------------------------+------------------------------------------------+
-| 164 | `f(x) \,\!`  `\sum_{n=0}^\infty a_n x^n` \   | $f(x) \,\!$  $ = \sum_{n=0}^\infty a_n x^n$    |
+| 164 | `f(x) \,\!` `=\sum_{n=0}^\infty a_n x^n` \   | $f(x) \,\!$  $= \sum_{n=0}^\infty a_n x^n$     |
 |     | `= a_0+a_1x+a_2x^2+\cdots`                   | $= a_0+a_1x+a_2x^2+\cdots$                     |
 +-----+----------------------------------------------+------------------------------------------------+
 | 165 | \begin{array}{|c|c|c|} \                     | $\begin{array}{|c|c|c|}                        |

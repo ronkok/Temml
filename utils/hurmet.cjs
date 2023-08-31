@@ -1103,11 +1103,11 @@ const unitTable = Object.freeze(JSON.parse(`{
 "£":["1","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "'":["0.3048","1","0","0",[1,0,0,0,0,0,0,0]],
 "A":["1","1","0","siSymbol",[0,0,0,1,0,0,0,0]],
-"AUD":["1.6850","1","0","AUD",[0,0,0,0,0,0,0,1]],
+"AUD":["1.6809","1","0","AUD",[0,0,0,0,0,0,0,1]],
 "Adobe point":["0.0254","72","0","0",[1,0,0,0,0,0,0,0]],
 "At":["1","1","0","siSymbol",[0,0,0,0,1,0,1,0]],
 "Australian dollar":["1","1","0","AUD",[0,0,0,0,0,0,0,1]],
-"BRL":["5.3656","1","0","BRL",[0,0,0,0,0,0,0,1]],
+"BRL":["5.2524","1","0","BRL",[0,0,0,0,0,0,0,1]],
 "BTU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "BThU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Bq":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
@@ -1116,10 +1116,10 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Btu":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "C":["1","1","0","siSymbol",[0,0,1,1,0,0,0,0]],
 "C$":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
-"CAD":["1.4791","1","0","CAD",[0,0,0,0,0,0,0,1]],
+"CAD":["1.4672","1","0","CAD",[0,0,0,0,0,0,0,1]],
 "CCF":["1","1","0","0",[3,0,0,0,0,0,0,0]],
-"CHF":["0.9617","1","0","CHF",[0,0,0,0,0,0,0,1]],
-"CNY":["7.9584","1","0","CNY",[0,0,0,0,0,0,0,1]],
+"CHF":["0.9564","1","0","CHF",[0,0,0,0,0,0,0,1]],
+"CNY":["7.8783","1","0","CNY",[0,0,0,0,0,0,0,1]],
 "CY":["0.764554857984","1","0","0",[3,0,0,0,0,0,0,0]],
 "Calorie":["4186.8","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Canadian dollar":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
@@ -1139,7 +1139,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Fahrenheit":["5","9","459","0",[0,0,0,0,1,0,0,0]],
 "G":["0.0001","1","0","siSymbol",[-2,-2,-2,-1,0,0,0,0]],
 "GB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
-"GBP":["0.86415","1","0","GBP",[0,0,0,0,0,0,0,1]],
+"GBP":["0.85643","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "Gal":["0.01","1","0","siSymbol",[1,0,-2,0,0,0,0,0]],
 "Gi":["10","12.5663706143592","0","siWord",[0,0,0,0,1,0,1,0]],
 "GiB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1147,23 +1147,23 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Gy":["1","1","0","siSymbol",[2,0,-2,0,0,0,0,0]],
 "H":["1","1","0","siSymbol",[2,1,-2,-2,0,0,0,0]],
 "HK$":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
-"HKD":["8.6007","1","0","HKD",[0,0,0,0,0,0,0,1]],
+"HKD":["8.4770","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "HP":["745.69987158227","1","0","0",[2,1,-3,0,0,0,0,0]],
 "Hong Kong dollar":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "Hz":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
-"ILS":["4.0994","1","0","ILS",[0,0,0,0,0,0,0,1]],
-"INR":["91.0970","1","0","INR",[0,0,0,0,0,0,0,1]],
+"ILS":["4.0998","1","0","ILS",[0,0,0,0,0,0,0,1]],
+"INR":["89.3040","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Indian Rupee":["1","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Israeli New Shekel":["1","1","0","ILS",[0,0,0,0,0,0,0,1]],
 "J":["1","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
-"JPY":["158.97","1","0","JPY",[0,0,0,0,0,0,0,1]],
+"JPY":["157.75","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Japanese Yen":["1","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Joule":["1","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Julian year":["31557600","1","0","0",[0,0,1,0,0,0,0,0]],
 "Jy":["1e-26","1","0","siSymbol",[0,1,-2,0,0,0,0,0]],
 "K":["1","1","0","0",[0,0,0,0,1,0,0,0]],
 "KiB":["8192","1","0","0",[0,0,0,0,0,1,0,0]],
-"KRW":["1459.31","1","0","KRW",[0,0,0,0,0,0,0,1]],
+"KRW":["1430.58","1","0","KRW",[0,0,0,0,0,0,0,1]],
 "L":["0.001","1","0","siSymbol",[3,0,0,0,0,0,0,0]],
 "Lego stud":["0.008","1","0","siSymbol",[1,0,0,0,0,0,0,0]],
 "MB":["8388608","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1174,7 +1174,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "MMscf":["28316.846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "MMscfd":["0.32774128","1","0","0",[3,0,0,0,0,0,0,0]],
 "MT":["1000","1","0","0",[0,1,0,0,0,0,0,0]],
-"MXN":["18.7092","1","0","MXN",[0,0,0,0,0,0,0,1]],
+"MXN":["18.1243","1","0","MXN",[0,0,0,0,0,0,0,1]],
 "Mach":["331.6","1","0","0",[1,0,-1,0,0,0,0,0]],
 "Mbbl":["158.987294928","1","0","0",[3,0,0,0,0,0,0,0]],
 "Mexican Peso":["1","1","0","MXN",[0,0,0,0,0,0,0,1]],
@@ -1204,7 +1204,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "TeX point":["0.0003515","1","0","0",[1,0,0,0,0,0,0,0]],
 "TiB":["8796093022208","1","0","0",[0,0,0,0,0,1,0,0]],
 "US$":["1","1","0","USD",[0,0,0,0,0,0,0,1]],
-"USD":["1.1004","1","0","USD",[0,0,0,0,0,0,0,1]],
+"USD":["1.0808","1","0","USD",[0,0,0,0,0,0,0,1]],
 "V":["1","1","0","siSymbol",[2,1,-3,-1,0,0,0,0]],
 "VA":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
 "W":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
@@ -9241,6 +9241,16 @@ const TABLES = (function() {
       };
       if (myID) { table.attrs.id = myID; }
       if (myClass) { table.attrs.class = myClass; }
+      if (colWidths && state.inHtml) {
+        let sum = 0;
+        colWidths.forEach(el => { sum += Number(el); } );
+        table.attrs.style = `width: ${sum}px`;
+        const colGroup = { type: "colGroup", content: [] };
+        for (const width of colWidths) {
+          colGroup.content.push({ type: "col", attrs: [{ style: `width: ${width}px` }] });
+        }
+        table.content.push(colGroup);
+      }
       if (!/^\|+$/.test(capture[1])) {
         table.content.push(parsePipeTableRow(capture[1], parse$1, state, colWidths, true));
       }
@@ -9390,6 +9400,16 @@ const TABLES = (function() {
       };
       if (myID) { table.attrs.id = myID; }
       if (myClass) { table.attrs.class = myClass; }
+      if (colWidths && state.inHtml) {
+        let sum = 0;
+        colWidths.forEach(el => { sum += Number(el); } );
+        table.attrs.style = `width: ${sum}px`;
+        const colGroup = { type: "colGroup", attrs: null, content: [] };
+        for (const width of colWidths) {
+          colGroup.content.push({ type: "col", attrs: [{ style: `width: ${width}px` }] });
+        }
+        table.content.push(colGroup);
+      }
       for (let i = 0; i < numRows; i++) {
         table.content.push({ type: "table_row", content: [] } );
         for (let j = 0; j < numCols; j++) {
@@ -18372,9 +18392,7 @@ function buildMathML(tree, texExpression, style, settings) {
   }
   if (settings.displayMode) {
     math.setAttribute("display", "block");
-    math.style.display = math.children.length === 1 && math.children[0].type === "mtable"
-      ? "inline"
-      : "block math"; // necessary in Chromium.
+    math.style.display = "block math"; // necessary in Chromium.
     // Firefox and Safari do not recognize display: "block math".
     // Set a class so that the CSS file can set display: block.
     math.classes = ["tml-display"];
@@ -20065,10 +20083,20 @@ const mathmlBuilder$8 = (group, style) => {
       node.style.borderBottom = "0.065em solid";
       break
     case "\\cancel":
-      node.classes.push("cancel");
+      node.style.background = `linear-gradient(to top left,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`;
       break
     case "\\bcancel":
-      node.classes.push("bcancel");
+      node.style.background = `linear-gradient(to top right,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`;
       break
     /*
     case "\\longdiv":
@@ -20112,7 +20140,18 @@ const mathmlBuilder$8 = (group, style) => {
       break
     }
     case "\\xcancel":
-      node.classes.push("xcancel");
+      node.style.background = `linear-gradient(to top left,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%),
+linear-gradient(to top right,
+rgba(0,0,0,0) 0%,
+rgba(0,0,0,0) calc(50% - 0.06em),
+rgba(0,0,0,1) 50%,
+rgba(0,0,0,0) calc(50% + 0.06em),
+rgba(0,0,0,0) 100%);`;
       break
   }
   if (group.backgroundColor) {
@@ -20543,24 +20582,94 @@ const mathmlBuilder$7 = function(group, style) {
     // Write horizontal rules
     if (i === 0 && hlines[0].length > 0) {
       if (hlines[0].length === 2) {
-        mtr.classes.push("tml-top-double");
+        mtr.children.forEach(cell => { cell.style.borderTop = "0.15em double"; });
       } else {
-        mtr.classes.push(hlines[0][0] ? "tml-top-dashed" : "tml-top-solid");
+        mtr.children.forEach(cell => {
+          cell.style.borderTop = hlines[0][0] ? "0.06em dashed" : "0.06em solid";
+        });
       }
     }
     if (hlines[i + 1].length > 0) {
       if (hlines[i + 1].length === 2) {
-        mtr.classes.push("tml-hline-double");
+        mtr.children.forEach(cell => { cell.style.borderBottom = "0.15em double"; });
       } else {
-        mtr.classes.push(hlines[i + 1][0] ? "tml-hline-dashed" : "tml-hline-solid");
+        mtr.children.forEach(cell => {
+          cell.style.borderBottom = hlines[i + 1][0] ? "0.06em dashed" : "0.06em solid";
+        });
       }
     }
     tbl.push(mtr);
   }
-  let table = new mathMLTree.MathNode("mtable", tbl);
+
   if (group.envClasses.length > 0) {
-    table.classes = group.envClasses.map(e => "tml-" + e);
+    const pad = group.envClasses.includes("jot")
+      ? "0.7" // 0.5ex + 0.09em top & bot padding
+      : group.envClasses.includes("small")
+      ? "0.35"
+      : "0.5"; // 0.5ex default top & bot padding
+    const sidePadding = group.envClasses.includes("abut")
+      ? "0"
+      : group.envClasses.includes("cases")
+      ? "0"
+      : group.envClasses.includes("small")
+      ? "0.1389"
+      : group.envClasses.includes("cd")
+      ? "0.25"
+      : "0.4"; // default side padding
+
+    const numCols = tbl.length === 0 ? 0 : tbl[0].children.length;
+
+    const sidePad = (j, hand) => {
+      if (j === 0 && hand === 0) { return "0" }
+      if (j === numCols - 1 && hand === 1) { return "0" }
+      if (group.envClasses[0] !== "align") { return sidePadding }
+      if (hand === 1) { return "0" }
+      if (group.addEqnNum) {
+        return (j % 2) ? "1" : "0"
+      } else {
+        return (j % 2) ? "0" : "1"
+      }
+    };
+
+    // Padding
+    for (let i = 0; i < tbl.length; i++) {
+      for (let j = 0; j < tbl[i].children.length; j++) {
+        tbl[i].children[j].style.padding = `${pad}ex ${sidePad(j, 1)}em ${pad}ex ${sidePad(j, 0)}em`;
+      }
+    }
+
+    // Justification
+    const align = group.envClasses.includes("align") || group.envClasses.includes("alignat");
+    for (let i = 0; i < tbl.length; i++) {
+      const row = tbl[i];
+      if (align) {
+        for (let j = 0; j < row.children.length; j++) {
+          // Chromium does not recognize text-align: left. Use -webkit-
+          // TODO: Remove -webkit- when Chromium no longer needs it.
+          row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right");
+        }
+      }
+      if (row.children.length > 1 && group.envClasses.includes("cases")) {
+        row.children[1].style.padding = row.children[1].style.padding.replace(/0em$/, "1em");
+      }
+
+      if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
+        for (const cell of row.children) {
+          cell.style.textAlign = "-webkit-" + "left";
+        }
+      }
+    }
+  } else {
+    // Set zero padding on side of the matrix
+    for (let i = 0; i < tbl.length; i++) {
+      tbl[i].children[0].style.paddingLeft = "0em";
+      if (tbl[i].children.length === tbl[0].children.length) {
+        tbl[i].children[tbl[i].children.length - 1].style.paddingRight = "0em";
+      }
+    }
   }
+
+  let table = new mathMLTree.MathNode("mtable", tbl);
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true"); }
 
   if (group.addEqnNum || group.envClasses.includes("multline")) {
@@ -20640,6 +20749,8 @@ const mathmlBuilder$7 = function(group, style) {
     align = "left " + (align.length > 0 ? align : "center ") + "right ";
   }
   if (align) {
+    // Firefox reads this attribute, not the -webkit-left|right written above.
+    // TODO: When Chrome no longer needs "-webkit-", use CSS and delete the next line.
     table.setAttribute("columnalign", align.trim());
   }
 
@@ -20664,7 +20775,7 @@ const alignedHandler = function(context, args) {
       cols,
       addEqnNum: context.envName === "align" || context.envName === "alignat",
       emptySingleRow: true,
-      envClasses: ["jot", "abut"], // set row spacing & provisional column spacing
+      envClasses: ["abut", "jot"], // set row spacing & provisional column spacing
       maxNumCols: context.envName === "split" ? 2 : undefined,
       leqno: context.parser.settings.leqno
     },
@@ -20682,18 +20793,22 @@ const alignedHandler = function(context, args) {
   // binary.  This behavior is implemented in amsmath's \start@aligned.
   let numMaths;
   let numCols = 0;
-  if (args[0] && args[0].type === "ordgroup") {
+  const isAlignedAt = context.envName.indexOf("at") > -1;
+  if (args[0] && isAlignedAt) {
+    // alignat environment takes an argument w/ number of columns
     let arg0 = "";
     for (let i = 0; i < args[0].body.length; i++) {
       const textord = assertNodeType(args[0].body[i], "textord");
       arg0 += textord.text;
     }
+    if (isNaN(arg0)) {
+      throw new ParseError("The alignat enviroment requires a numeric first argument.")
+    }
     numMaths = Number(arg0);
     numCols = numMaths * 2;
   }
-  const isAligned = !numCols;
   res.body.forEach(function(row) {
-    if (!isAligned) {
+    if (isAlignedAt) {
       // Case 1
       const curMaths = row.length / 2;
       if (numMaths < curMaths) {
@@ -20721,14 +20836,10 @@ const alignedHandler = function(context, args) {
       align: align
     };
   }
-  if (context.envName === "split") ; else if (context.envName.indexOf("ed") > -1) {
-    res.envClasses.push("aligned"); // Sets justification
-  } else if (isAligned) {
-    res.envClasses[1] = context.envName === "align*"
-      ? "align-star"
-      : "align"; // Sets column spacing & justification
+  if (context.envName === "split") ; else if (isAlignedAt) {
+    res.envClasses.push("alignat"); // Sets justification
   } else {
-    res.envClasses.push("aligned"); // Sets justification
+    res.envClasses[0] = "align"; // Sets column spacing & justification
   }
   return res;
 };
@@ -20978,7 +21089,7 @@ defineEnvironment({
     }
     const res = {
       cols: [],
-      envClasses: ["jot", "abut"],
+      envClasses: ["abut", "jot"],
       addEqnNum: context.envName === "gather",
       emptySingleRow: true,
       leqno: context.parser.settings.leqno
@@ -29953,6 +30064,8 @@ const writeSVG = dwg => {
         }
         svg += `>${sanitizeText(child.text)}</tspan>`;
       });
+    } else if (el.tag === "defs") {
+      svg += `<style>${sanitizeText(el.style)}</style>`;
     } else if (el.tag === "title") {
       svg += sanitizeText(el.attrs.text);
     }
@@ -30017,23 +30130,19 @@ const nodes = {
     return htmlTag("li", ast2html(node.content), { class: "tight" }) + "\n"
   },
   table(node)        { return htmlTag("table", ast2html(node.content), node.attrs) + "\n" },
+  colGroup(node)     { return htmlTag("colgroup", ast2html(node.content), node.attrs) + "\n" },
+  col(node)          { return htmlTag("col", "", node.attrs[0], true) + "\n" },
   table_row(node)    { return htmlTag("tr", ast2html(node.content)) + "\n" },
   table_header(node) {
     const attributes = {};
     if (node.attrs.colspan !== 1) { attributes.colspan = node.attrs.colspan; }
     if (node.attrs.rowspan !== 1) { attributes.rowspan = node.attrs.rowspan; }
-    if (node.attrs.colwidth !== null && !isNaN(node.attrs.colwidth) ) {
-      attributes.style = `width: ${node.attrs.colwidth}px`;
-    }
     return htmlTag("th", ast2html(node.content), attributes) + "\n"
   },
   table_cell(node) {
     const attributes = {};
     if (node.attrs.colspan !== 1) { attributes.colspan = node.attrs.colspan; }
     if (node.attrs.rowspan !== 1) { attributes.rowspan = node.attrs.rowspan; }
-    if (node.attrs.colwidth !== null && !isNaN(node.attrs.colwidth) ) {
-      attributes.style = `width: ${node.attrs.colwidth}px`;
-    }
     return htmlTag("td", ast2html(node.content), attributes)
   },
   link(node) {
@@ -30059,8 +30168,10 @@ const nodes = {
   },
   calculation(node) {
     if (node.attrs.dtype && node.attrs.dtype === dt.DRAWING) {
-      return `<span class='hurmet-calc' data-entry=${dataStr(node.attrs.entry)}>` +
-        `${writeSVG(node.attrs.resultdisplay)}</span>`
+      const svg = writeSVG(node.attrs.resultdisplay);
+      const style = svg.indexOf('float="right"' > -1) ? " style='float: right;'" : "";
+      return `<span class='hurmet-calc' data-entry=${dataStr(node.attrs.entry)}${style}>` +
+        `${svg}</span>`
     } else {
       const tex = node.attrs.tex ? node.attrs.tex : parse(node.attrs.entry);
       const mathML = temml.renderToString(
