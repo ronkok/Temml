@@ -54,3 +54,8 @@ fs.copyFile('contrib/auto-render/test/auto-render.js', 'contrib/auto-render/dist
 (err) => {
   if (err) { throw err }
 })
+
+fs.copyFile('temml.d.ts', 'dist/temml.d.ts',
+(err) => {
+  if (err) { throw err }
+})
