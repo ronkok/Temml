@@ -11144,6 +11144,7 @@ rgba(0,0,0,0) 100%);`;
   /* eslint no-console:0 */
 
   /**
+   * @type {import('./temml').render}
    * Parse and build an expression, and place that expression in the DOM node
    * given.
    */
@@ -11181,6 +11182,7 @@ rgba(0,0,0,0) 100%);`;
   }
 
   /**
+   * @type {import('./temml').renderToString}
    * Parse and build an expression, and return the markup for that.
    */
   const renderToString = function(expression, options) {
@@ -11189,6 +11191,7 @@ rgba(0,0,0,0) 100%);`;
   };
 
   /**
+   * @type {import('./temml').generateParseTree}
    * Parse an expression and return the parse tree.
    */
   const generateParseTree = function(expression, options) {
@@ -11197,6 +11200,7 @@ rgba(0,0,0,0) 100%);`;
   };
 
   /**
+   * @type {import('./temml').definePreamble}
    * Take an expression which contains a preamble.
    * Parse it and return the macros.
    */
@@ -11229,6 +11233,7 @@ rgba(0,0,0,0) 100%);`;
   };
 
   /**
+   * @type {import('./temml').renderToMathMLTree}
    * Generates and returns the Temml build tree. This is used for advanced
    * use cases (like rendering to custom output).
    */
@@ -11246,6 +11251,7 @@ rgba(0,0,0,0) 100%);`;
     }
   };
 
+  /** @type {import('./temml').default} */
   var temml = {
     /**
      * Current Temml version

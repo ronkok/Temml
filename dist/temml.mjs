@@ -13041,6 +13041,7 @@ function postProcess(block) {
 /* eslint no-console:0 */
 
 /**
+ * @type {import('./temml').render}
  * Parse and build an expression, and place that expression in the DOM node
  * given.
  */
@@ -13078,6 +13079,7 @@ if (typeof document !== "undefined") {
 }
 
 /**
+ * @type {import('./temml').renderToString}
  * Parse and build an expression, and return the markup for that.
  */
 const renderToString = function(expression, options) {
@@ -13086,6 +13088,7 @@ const renderToString = function(expression, options) {
 };
 
 /**
+ * @type {import('./temml').generateParseTree}
  * Parse an expression and return the parse tree.
  */
 const generateParseTree = function(expression, options) {
@@ -13094,6 +13097,7 @@ const generateParseTree = function(expression, options) {
 };
 
 /**
+ * @type {import('./temml').definePreamble}
  * Take an expression which contains a preamble.
  * Parse it and return the macros.
  */
@@ -13126,6 +13130,7 @@ const renderError = function(error, expression, options) {
 };
 
 /**
+ * @type {import('./temml').renderToMathMLTree}
  * Generates and returns the Temml build tree. This is used for advanced
  * use cases (like rendering to custom output).
  */
@@ -13143,6 +13148,7 @@ const renderToMathMLTree = function(expression, options) {
   }
 };
 
+/** @type {import('./temml').default} */
 var temml = {
   /**
    * Current Temml version
