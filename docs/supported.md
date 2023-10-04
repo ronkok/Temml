@@ -133,6 +133,7 @@ make two passes through the entire document. Some sites may choose not to do thi
 | $\fcolorbox{red}{aqua}{A}$   |  `{\color{sortaGreen} F=ma}`                |
 |  `\fcolorbox{red}{aqua}{A}`  |                                             |
 +------------------------------+---------------------------------------------+
+{colWidths="300 370"}
 
 `\definecolor` functions can be included in a [preamble](administration.html#preamble).
 If so, their color definitions will have document-wide scope.
@@ -227,7 +228,7 @@ If the color model is omitted, Temml color functions will accept:
 | $~~~~$  `\rvert` | $~~~~~$  `\rVert`  |              |                            |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
 |                  | $\lt\gt$  `\lt`\   | $⟦~⟧$  `⟦ ⟧` | $\llbracket~\rrbracket$    | $\lBrace~\rBrace$   |
-|                  | $~~~~~~~~~~$       |              | `\llbracket`\              | `\lBrace \rBrace`   |
+|                  | $~~~~~$            |              | `\llbracket`\              | `\lBrace \rBrace`   |
 |                  | `\gt`              |              | $~~~~$  `\rrbracket`       |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
 
@@ -1496,7 +1497,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.14
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.15
 
 <h3><a href="#top">Contents</a></h3>
 

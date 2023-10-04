@@ -974,6 +974,10 @@ var temml = (function () {
   defineSymbol(math, mathord, "\u220E", "\\QED", true);
   defineSymbol(math, mathord, "\u2030", "\\permil", true);
   defineSymbol(text, textord, "\u2030", "\\permil");
+  defineSymbol(math, mathord, "\u2609", "\\astrosun", true);
+  defineSymbol(math, mathord, "\u263c", "\\sun", true);
+  defineSymbol(math, mathord, "\u263e", "\\leftmoon", true);
+  defineSymbol(math, mathord, "\u263d", "\\rightmoon", true);
 
   // AMS Negated Binary Relations
   defineSymbol(math, rel, "\u226e", "\\nless", true);
@@ -11093,7 +11097,7 @@ rgba(0,0,0,0) 100%);`;
    * https://mit-license.org/
    */
 
-  const version = "0.10.14";
+  const version = "0.10.15";
 
   function postProcess(block) {
     const labelMap = {};

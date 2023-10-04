@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.15] = 2023-10-4
+
+### Changed
+
+- Move environment CSS from external file to inline
+
+### Added
+
+- Support TypeScript modules
+- Support stix astronomy symbols
+
 ## [0.10.14] = 2023-07-28
 
 ### Fixed

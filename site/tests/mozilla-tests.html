@@ -19,13 +19,11 @@
 <p>This page reproduces the tests from <br>https://www-archive.mozilla.org/projects/mathml/demo/texvsmml.xhtml and <br>https://fred-wang.github.io/MathFonts/mozilla_mathml_test/</p>
 <p>Images from LaTeX are also included for comparison.</p>
 <br>
-<table><tr><th><p></p>
-</th>
+<table><tr><th><p></p></th>
 <th>Source</th>
 <th>Temml</th>
 <th>LaTeX</th>
-<th>Comment</th>
-</tr>
+<th>Comment</th></tr>
 <tr><td>1</td><td>x^2y^2</td><td><p class='hurmet-tex' data-entry='x^2y^2'><math display="block" class="tml-display" style="display:block math;"><mrow><msup><mi>x</mi><mn>2</mn></msup><msup><mi>y</mi><mn>2</mn></msup></mrow></math></p></td><td><img src="images/ex1.gif" alt="ex1"></td><td>TeXbook p128</td></tr>
 <tr><td>2</td><td>_2F_3</td><td><p class='hurmet-tex' data-entry='_2F_3'><math display="block" class="tml-display" style="display:block math;"><mrow><msub><mrow></mrow><mn>2</mn></msub><msub><mi>F</mi><mn>3</mn></msub></mrow></math></p></td><td><img src="images/ex2.gif" alt="ex2"></td><td>TeXbook p128</td></tr>
 <tr><td>3</td><td>x+y^2\over k+1</td><td><p class='hurmet-tex' data-entry='x+y^2\over k+1'><math display="block" class="tml-display" style="display:block math;"><mfrac><mrow><mi>x</mi><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></mfrac></math></p></td><td><img src="images/ex3.gif" alt="ex3"></td><td>TeXbook p139</td></tr>
@@ -40,10 +38,7 @@ a_2+{1\over a_3+
 {1\over a_4}}}}'><math display="block" class="tml-display" style="display:block math;"><mrow><msub><mi>a</mi><mn>0</mn></msub><mo>+</mo><mfrac><mn>1</mn><mrow><msub><mi>a</mi><mn>1</mn></msub><mo>+</mo><mfrac><mn>1</mn><mrow><msub><mi>a</mi><mn>2</mn></msub><mo>+</mo><mfrac><mn>1</mn><mrow><msub><mi>a</mi><mn>3</mn></msub><mo>+</mo><mfrac><mn>1</mn><msub><mi>a</mi><mn>4</mn></msub></mfrac></mrow></mfrac></mrow></mfrac></mrow></mfrac></mrow></math></p></td><td><img src="images/ex7.gif" alt="ex7"></td><td>TeXbook p142</td></tr>
 <tr><td>8</td><td>n\choose {k / 2}</td><td><p class='hurmet-tex' data-entry='n\choose {k / 2}'><math display="block" class="tml-display" style="display:block math;"><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mi>n</mi><mrow><mi>k</mi><mo lspace="0em" rspace="0em">⁄</mo><mn>2</mn></mrow></mfrac><mo fence="true">)</mo></mrow></math></p></td><td><img src="images/ex8.gif" alt="ex8"></td><td>TeXbook p143</td></tr>
 <tr><td>9</td><td><p>{p \choose 2} x^2 y^{p-2} <br></p>
-<ul><li class="tight"><p>{1\over{1-x}} <br>{1\over{1-x^2}}</p>
-</li>
-</ul>
-</td><td><p class='hurmet-tex' data-entry='{p \choose 2} x^2 y^{p-2}
+<ul><li class="tight"><p>{1\over{1-x}} <br>{1\over{1-x^2}}</p></li></ul></td><td><p class='hurmet-tex' data-entry='{p \choose 2} x^2 y^{p-2}
 - {1\over{1-x}}
 {1\over{1-x^2}}'><math display="block" class="tml-display" style="display:block math;"><mrow><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mi>p</mi><mn>2</mn></mfrac><mo fence="true">)</mo></mrow><msup><mi>x</mi><mn>2</mn></msup><msup><mi>y</mi><mrow><mi>p</mi><mo>−</mo><mn>2</mn></mrow></msup><mo>−</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><mi>x</mi></mrow></mfrac><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></mfrac></mrow></math></p></td><td><img src="images/ex9.gif" alt="ex9"></td><td>TeXbook p143</td></tr>
 <tr><td>10</td><td>\sum_{\scriptstyle 0 \le<br>i \le m \atop \scriptstyle<br>0 &lt; j &lt; n} P(i, j)</td><td><p class='hurmet-tex' data-entry='\sum_{\scriptstyle 0 \le
@@ -104,13 +99,10 @@ c_{n+1}\\ c_2 & c_3 & c_4
 <tr><td>28</td><td>y_3&#x27;&#x27;&#x27;</td><td><p class='hurmet-tex' data-entry="y_3'''"><math display="block" class="tml-display" style="display:block math;"><msubsup><mi>y</mi><mn>3</mn><mrow><mo class="tml-prime">′</mo><mo class="tml-prime">′</mo><mo class="tml-prime">′</mo></mrow></msubsup></math></p></td><td><img src="images/ex28.gif" alt="ex28"></td><td>TeXbook p130</td></tr>
 <tr><td>29</td><td>\lim_{n\rightarrow+\infty}<br>{\sqrt{2\pi n}\over n!} <br>\genfrac (){}{}n{e}^n = 1</td><td><p class='hurmet-tex' data-entry='\lim_{n\rightarrow+\infty}
 {\sqrt{2\pi n}\over n!}
-\genfrac (){}{}n{e}^n = 1'><math display="block" class="tml-display" style="display:block math;"><mrow><munder><mi>lim</mi><mrow><mi>n</mi><mo stretchy="false">→</mo><mo>+</mo><mi>∞</mi></mrow></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mfrac><msqrt><mrow><mn>2</mn><mi>π</mi><mi>n</mi></mrow></msqrt><mrow><mi>n</mi><mo form="postfix" stretchy="false">!</mo></mrow></mfrac><msup><mrow><mo fence="true">(</mo><mfrac><mi>n</mi><mi>e</mi></mfrac><mo fence="true">)</mo></mrow><mi>n</mi></msup><mo>=</mo><mn>1</mn></mrow></math></p></td><td><img src="images/ex29.png" alt="ex29"></td><td><p></p>
-</td></tr>
+\genfrac (){}{}n{e}^n = 1'><math display="block" class="tml-display" style="display:block math;"><mrow><munder><mi>lim</mi><mrow><mi>n</mi><mo stretchy="false">→</mo><mo>+</mo><mi>∞</mi></mrow></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mfrac><msqrt><mrow><mn>2</mn><mi>π</mi><mi>n</mi></mrow></msqrt><mrow><mi>n</mi><mo form="postfix" stretchy="false">!</mo></mrow></mfrac><msup><mrow><mo fence="true">(</mo><mfrac><mi>n</mi><mi>e</mi></mfrac><mo fence="true">)</mo></mrow><mi>n</mi></msup><mo>=</mo><mn>1</mn></mrow></math></p></td><td><img src="images/ex29.png" alt="ex29"></td><td><p></p></td></tr>
 <tr><td>30</td><td>\det(A) = \sum_{\sigma <br>\in S_n} \epsilon(\sigma) <br>\prod_{i=1}^n <br>a_{i, \sigma_i}</td><td><p class='hurmet-tex' data-entry='\det(A) = \sum_{\sigma
 \in S_n} \epsilon(\sigma)
 \prod_{i=1}^n
-a_{i, \sigma_i}'><math display="block" class="tml-display" style="display:block math;"><mrow><mrow><mi>det</mi><mo>⁡</mo></mrow><mo form="prefix" stretchy="false">(</mo><mi>A</mi><mo form="postfix" stretchy="false">)</mo><mo>=</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>σ</mi><mo>∈</mo><msub><mi>S</mi><mi>n</mi></msub></mrow></munder></mrow><mi>ϵ</mi><mo form="prefix" stretchy="false">(</mo><mi>σ</mi><mo form="postfix" stretchy="false">)</mo><mrow><munderover><mo movablelimits="false">∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover></mrow><msub><mi>a</mi><mrow><mi>i</mi><mo separator="true">,</mo><msub><mi>σ</mi><mi>i</mi></msub></mrow></msub></mrow></math></p></td><td><img src="images/ex30.png" alt="ex30"></td><td><p></p>
-</td></tr>
-</table>
+a_{i, \sigma_i}'><math display="block" class="tml-display" style="display:block math;"><mrow><mrow><mi>det</mi><mo>⁡</mo></mrow><mo form="prefix" stretchy="false">(</mo><mi>A</mi><mo form="postfix" stretchy="false">)</mo><mo>=</mo><mrow><munder><mo movablelimits="false">∑</mo><mrow><mi>σ</mi><mo>∈</mo><msub><mi>S</mi><mi>n</mi></msub></mrow></munder></mrow><mi>ϵ</mi><mo form="prefix" stretchy="false">(</mo><mi>σ</mi><mo form="postfix" stretchy="false">)</mo><mrow><munderover><mo movablelimits="false">∏</mo><mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow><mi>n</mi></munderover></mrow><msub><mi>a</mi><mrow><mi>i</mi><mo separator="true">,</mo><msub><mi>σ</mi><mi>i</mi></msub></mrow></msub></mrow></math></p></td><td><img src="images/ex30.png" alt="ex30"></td><td><p></p></td></tr></table>
 </body>
 </html>
