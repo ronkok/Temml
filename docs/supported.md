@@ -1436,10 +1436,12 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 +------------------------------+-------------------------+------------------------------------+
 | $\smiley$  `\smiley`         | $\female$  `\female`    | $\male$  `\male`                   |
 +------------------------------+-------------------------+------------------------------------+
-| $\standardstate$             | $\lightning$            | $\permil$  `\permil`               |
-|  `\standardstate`            |  `\lightning`           |                                    |
+| $\standardstate$             | $\QED$  `\QED`          | $\lightning$ `\lightning`          |
+|  `\standardstate`            |                         |                                    |
 +------------------------------+-------------------------+------------------------------------+
-|                              | $\QED$  `\QED`          |                                    |
+| $\permil$  `\permil`         | $\astrosun$ `\astrosun` | $\sun$  `\sun`                     |
++------------------------------+-------------------------+------------------------------------+
+|                              | $\leftmoon$ `\leftmoon` | $\rightmoon$ `\rightmoon`          |
 +------------------------------+-------------------------+------------------------------------+
 
 Symbols in the _texvc_ extension
@@ -1452,7 +1454,7 @@ Symbols in the _texvc_ extension
 | $\bull$  `\bull`         | $\text{\sect}$  `\text{\sect}` | $\Dagger$  `\Dagger` |
 +--------------------------+--------------------------------+----------------------+
 
-Direct Input: <span class="direct">§ ¶ £ ¥ € ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ © ® ☺ ✓ ↯ ∎ …  ⋮  ⋯  ⋱  ! ‼</span>
+Direct Input: <span class="direct">§ ¶ £ ¥ € ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ © ® ☺ ✓ ↯ ∎ …  ⋮  ⋯  ⋱  ! ‼ ☉</span>
 
 ## Units
 

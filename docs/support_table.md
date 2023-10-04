@@ -131,6 +131,7 @@ If you know the shape of a character, but not its name,
 |\Arrowvert|(Not supported)|see `\Vert`||
 |\arrowvert|(Not supported)|see `\vert`||
 |\ast|$\ast$|||
+|\astrosun|$\astrosun$|| stix |
 |\asymp|$\asymp$|||
 |\atop|${a \atop b}$|`{a \atop b}`||
 |\atopwithdelims|(Not supported)|||
@@ -762,6 +763,7 @@ If you know the shape of a character, but not its name,
 | \leftharpoondown     | $\leftharpoondown$         | | |
 | \leftharpoonup       | $\leftharpoonup$           | | |
 | \leftleftarrows      | $\leftleftarrows$          | | ams |
+| \leftmoon            | $\leftmoon$                | | stix |
 | \leftouterjoin       | $\leftouterjoin$           | | stix |
 | \Leftrightarrow      | $\Leftrightarrow$          | | |
 | \leftrightarrow      | $\leftrightarrow$          | | |
@@ -1172,6 +1174,7 @@ If you know the shape of a character, but not its name,
 | \rightharpoonup    | $\rightharpoonup$| | |
 | \rightleftarrows   | $\rightleftarrows$| | ams |
 | \rightleftharpoons | $\rightleftharpoons$| | ams |
+| \rightmoon         | $\rightmoon$      | | stix |
 | \rightouterjoin    | $\rightouterjoin$ | | stix |
 | \rightrightarrows  | $\rightrightarrows$| | ams |
 | \rightsquigarrow   | $\rightsquigarrow$| | ams |
@@ -1297,6 +1300,7 @@ If you know the shape of a character, but not its name,
 |\succnsim|$\succnsim$|| ams |
 |\succsim|$\succsim$|| ams |
 |\sum|$\sum$|||
+|\sun|$\sun$|| stix |
 |\sup|$\sup$|||
 |\supe|$\supe$|| texvc extension |
 |\Supset|$\Supset$|| ams |

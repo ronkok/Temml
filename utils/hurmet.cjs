@@ -85,7 +85,7 @@ const textAccent = {
 };
 
 const escapeRegEx = /[#$&%_~^]/g;
-const accentRegEx = /[\u0300-\u0308\u030A\u030c]/g;
+const accentRegEx$2 = /[\u0300-\u0308\u030A\u030c]/g;
 
 const addTextEscapes = str => {
   // Insert escapes for # $ & % _ ~ ^ \ { }
@@ -112,7 +112,7 @@ const addTextEscapes = str => {
         }
       }
     }
-    matches = arrayOfRegExMatches(accentRegEx, str);
+    matches = arrayOfRegExMatches(accentRegEx$2, str);
     L = matches.length;
     if (L > 0) {
       for (let i = L - 1; i >= 0; i--) {
@@ -147,10 +147,10 @@ const numeralFromSuperScript = ch => {
 };
 
 // Trim spaces except for tabs. This is used to read tab-separated values (TSV).
-const leadingSpaceRegEx = /^[ \r\n\f]+/;
-const trailingSpaceRegEx = /[ \r\n\f]+$/;
+const leadingSpaceRegEx$3 = /^[ \r\n\f]+/;
+const trailingSpaceRegEx$1 = /[ \r\n\f]+$/;
 const tablessTrim = str => {
-  return str.replace(leadingSpaceRegEx, "").replace(trailingSpaceRegEx, "")
+  return str.replace(leadingSpaceRegEx$3, "").replace(trailingSpaceRegEx$1, "")
 };
 
 const midDotRegEx = /^(\*|·|\.|-[A-Za-z])/;
@@ -357,11 +357,11 @@ const e$1 = [BigInt(2718281828459045235360287471352662497757247093699959574966),
 const hbar = [BigInt(1054571817),
   BigInt(10000000000000000000000000000000000000000000)];
 
-const intAbs = i => i >= iZero ? i : BigInt(-1) * i;  // absolute value of a BigInt
+const intAbs$1 = i => i >= iZero ? i : BigInt(-1) * i;  // absolute value of a BigInt
 
 // eslint-disable-next-line max-len
 const numberPattern = "^(-?)(?:(0x[0-9A-Fa-f]+)|([0-9]+)(?: ([0-9]+)\\/([0-9]+)|(?:\\.([0-9]+))?(?:e([+-]?[0-9]+)|(%))?))";
-const numberRegEx = new RegExp(numberPattern);
+const numberRegEx$6 = new RegExp(numberPattern);
 // Capturing groups:
 //    [1] sign
 //    [2] hexadecimal integer
@@ -377,7 +377,7 @@ const fromNumber = num => {
   if (Number.isInteger(num)) {
     return [BigInt(num), iOne]
   } else {
-    const parts = num.toExponential().match(numberRegEx);
+    const parts = num.toExponential().match(numberRegEx$6);
     const decimalFrac = parts[6] || "";
     const exp = BigInt(parts[7]) - BigInt(decimalFrac.length);
     if (exp < 0) {
@@ -394,7 +394,7 @@ const fromNumber = num => {
 
 const fromString = str => {
   // Convert an author's input string to a number.
-  const parts = str.match(numberRegEx);
+  const parts = str.match(numberRegEx$6);
   let r;
   if (parts[5]) {
     // mixed fraction
@@ -419,14 +419,14 @@ const fromString = str => {
       ? [numerator, BigInt(10) ** -exp]
       : normalize([numerator * BigInt(10) ** exp, iOne]);
   }
-  if (parts[1]) { r = negate(r); }
+  if (parts[1]) { r = negate$1(r); }
   return r
 };
 
 const gcdi = (a, b) => {
   // Greatest common divisor of two big integers
-  a = intAbs(a);
-  b = intAbs(b);
+  a = intAbs$1(a);
+  b = intAbs$1(b);
   while (b !== iZero) {
     const remainder = a % b;
     a = b;
@@ -459,18 +459,18 @@ const isZero = r => r[0] === iZero;
 
 const isNegative = r => r[0] < iZero;
 const isPositive = r => r[0] > iZero;
-const sign = r => isPositive(r) ? one : isZero(r) ? zero : negate(one);
+const sign = r => isPositive(r) ? one : isZero(r) ? zero : negate$1(one);
 
-const negate = r => [BigInt(-1) * r[0], r[1]];
+const negate$1 = r => [BigInt(-1) * r[0], r[1]];
 
-const abs = r => {
+const abs$1 = r => {
   const numerator = r[0] < iZero ? BigInt(-1) * r[0] : r[0];
   return [numerator, r[1]]
 };
 
-const increment = r => [r[0] + r[1], r[1]];
+const increment$1 = r => [r[0] + r[1], r[1]];
 
-const decrement = r => [r[0] - r[1], r[1]];
+const decrement$1 = r => [r[0] - r[1], r[1]];
 
 const floor = r => {
   if (r[0] % r[1] === iZero) { return [r[0] / r[1], iOne] }
@@ -486,21 +486,21 @@ const ceil = r => {
     : [r[0] / r[1], iOne]
 };
 
-const add = (a, b) => {
+const add$1 = (a, b) => {
   return a[1] === b[1]
     ? [a[0] + b[0], a[1]]
     : normalize([a[0] * b[1] + b[0] * a[1], a[1] * b[1]])
 };
 
-const subtract = (a, b) => {
+const subtract$1 = (a, b) => {
   return (a[1] === b[1])
     ? [a[0] - b[0], a[1]]
     : normalize([a[0] * b[1] - b[0] * a[1], a[1] * b[1]])
 };
 
-const multiply = (a, b) => [a[0] * b[0], a[1] * b[1]];
+const multiply$1 = (a, b) => [a[0] * b[0], a[1] * b[1]];
 
-const divide = (a, b) => {
+const divide$1 = (a, b) => {
   let numerator = a[0] * b[1];
   let denominator = a[1] * b[0];
   if (denominator < 0) {
@@ -511,7 +511,7 @@ const divide = (a, b) => {
   return [numerator, denominator]
 };
 
-const power = (a, b) => {
+const power$1 = (a, b) => {
   if (b[0] === iZero) {
     return [iOne, iOne]
   } else {
@@ -522,7 +522,7 @@ const power = (a, b) => {
         ? [a[1] ** (BigInt(-1) * b[0]), a[0] ** (BigInt(-1) * b[0])]
         : isInteger(b)
         ? [a[0] ** b[0], a[1] ** b[0]]
-        : isPositive(a) || greaterThan(b, one) || lessThan(b, negate(one))
+        : isPositive(a) || greaterThan(b, one) || lessThan(b, negate$1(one))
         ? fromNumber(toNumber(a) ** toNumber(b))
         : areEqual(mod(b, two), one)
         ? fromNumber(-1 * (-1 * toNumber(a)) ** toNumber(b))
@@ -534,9 +534,9 @@ const power = (a, b) => {
   }
 };
 
-const sqrt = r => fromNumber(Math.sqrt(toNumber(r)));
+const sqrt$1 = r => fromNumber(Math.sqrt(toNumber(r)));
 
-const exp = r => fromNumber(Math.exp(toNumber(r)));
+const exp$1 = r => fromNumber(Math.exp(toNumber(r)));
 
 const reciprocal = r => {
   let numerator = r[1];
@@ -550,21 +550,21 @@ const reciprocal = r => {
 
 const hypot = (a, b) => {
   // Ref: https://www.johndcook.com/blog/2010/06/02/whats-so-hard-about-finding-a-hypotenuse/
-  const absA = abs(a);
-  const absB = abs(b);
+  const absA = abs$1(a);
+  const absB = abs$1(b);
   const maximum = max(absA, absB);
   const minimum = min(absA, absB);
   const r = Rnl.divide(minimum, maximum);
-  return Rnl.multiply(maximum, sqrt(Rnl.increment(Rnl.multiply(r, r))))
+  return Rnl.multiply(maximum, sqrt$1(Rnl.increment(Rnl.multiply(r, r))))
 };
 
 const mod = (a, b) => {
-  const quotient = divide(normalize(a), normalize(b));
-  return [intAbs(quotient[0] % quotient[1]), iOne]
+  const quotient = divide$1(normalize(a), normalize(b));
+  return [intAbs$1(quotient[0] % quotient[1]), iOne]
 };
 
 const rem = (a, b) => {
-  const quotient = divide(normalize(a), normalize(b));
+  const quotient = divide$1(normalize(a), normalize(b));
   return [quotient[0] % quotient[1], iOne]
 };
 
@@ -577,13 +577,13 @@ const areEqual = (a, b) => {
 const lessThan = (a, b) => {
   return (isNegative(a) !== isNegative(b))
     ? isNegative(a)
-    : isNegative(subtract(a, b))
+    : isNegative(subtract$1(a, b))
 };
 
 const greaterThan = (a, b) => {
   return (isPositive(a) !== isPositive(b))
     ? isPositive(a)
-    : isPositive(subtract(a, b))
+    : isPositive(subtract$1(a, b))
 };
 
 const lessThanOrEqualTo = (a, b) => lessThan(a, b) || areEqual(a, b);
@@ -594,16 +594,16 @@ const max = (a, b) => greaterThan(a, b) ? [a[0], a[1]] : [b[0], b[1]];
 
 const min = (a, b) => lessThan(a, b) ? [a[0], a[1]] : [b[0], b[1]];
 
-const cos = x => {
-  return areEqual(x, divide(pi$1, two))
+const cos$1 = x => {
+  return areEqual(x, divide$1(pi$1, two))
     ? zero
     : fromNumber(Math.cos(toNumber(x)))
 };
 
-const sin = x => fromNumber(Math.sin(toNumber(x)));
+const sin$1 = x => fromNumber(Math.sin(toNumber(x)));
 
 const tan = x => {
-  if (areEqual(x, divide(pi$1, two))) {
+  if (areEqual(x, divide$1(pi$1, two))) {
     return errorOprnd("TAN90", "π/2")
   }
   return fromNumber(Math.tan(toNumber(x)))
@@ -642,11 +642,11 @@ const toStringSignificant = (r, numSignificantDigits) => {
   if (isZero(r)) {
     return "0"
   } else {
-    const quotient = intAbs(r[0] / r[1]);
+    const quotient = intAbs$1(r[0] / r[1]);
     if (quotient > 0) {
       return toString(r, numSignificantDigits - String(quotient).length)
     } else {
-      const inverseQuotientLength = String(intAbs(r[1] / r[0])).length;
+      const inverseQuotientLength = String(intAbs$1(r[1] / r[0])).length;
       return toString(r, inverseQuotientLength + numSignificantDigits - 1)
     }
   }
@@ -658,7 +658,7 @@ const toString = (r, numDigitsAfterDecimal) => {
     return "0"
   } else if (numDigitsAfterDecimal < 0) {
     const N = -numDigitsAfterDecimal;
-    const significand = toString(divide(r, [BigInt(10) ** BigInt(N), iOne]), 0);
+    const significand = toString(divide$1(r, [BigInt(10) ** BigInt(N), iOne]), 0);
     return significand + "0".repeat(N)
   } else {
     const [numerator, denominator] = normalize(r);
@@ -668,16 +668,16 @@ const toString = (r, numDigitsAfterDecimal) => {
     if (remainder === iZero && numDigitsAfterDecimal > 0) {
       result += "." + "0".repeat(numDigitsAfterDecimal);
     } else if (remainder !== iZero) {
-      remainder = intAbs(remainder);
+      remainder = intAbs$1(remainder);
       const newNumerator = remainder * (BigInt(10) ** BigInt(numDigitsAfterDecimal));
       let fractus = newNumerator / denominator;
       const residue = newNumerator % denominator;
       if (numDigitsAfterDecimal === 0) {
-        return (intAbs(iTwo * residue) >= intAbs(denominator))
+        return (intAbs$1(iTwo * residue) >= intAbs$1(denominator))
           ? String(quotient + iOne)
           : result
       }
-      if (intAbs(iTwo * residue) >= intAbs(denominator)) {
+      if (intAbs$1(iTwo * residue) >= intAbs$1(denominator)) {
         fractus = fractus + iOne;
       }
       result += "." + String(fractus).padStart(numDigitsAfterDecimal, "0");
@@ -688,24 +688,38 @@ const toString = (r, numDigitsAfterDecimal) => {
 
 // eslint-disable-next-line max-len
 const preComputedFactorials = ["1", "1", "2", "6", "24", "120", "720", "5040", "40320", "362880", "3628800", "39916800", "479001600", "6227020800", "87178291200", "1307674368000", "20922789888000", "355687428096000", "6402373705728000", "121645100408832000", "2432902008176640000", "51090942171709440000", "1124000727777607680000", "25852016738884976640000", "620448401733239439360000", "15511210043330985984000000", "403291461126605635584000000", "10888869450418352160768000000", "304888344611713860501504000000", "8841761993739701954543616000000", "265252859812191058636308480000000", "8222838654177922817725562880000000", "263130836933693530167218012160000000", "8683317618811886495518194401280000000", "295232799039604140847618609643520000000", "10333147966386144929666651337523200000000", "371993326789901217467999448150835200000000", "13763753091226345046315979581580902400000000", "523022617466601111760007224100074291200000000", "20397882081197443358640281739902897356800000000", "815915283247897734345611269596115894272000000000", "33452526613163807108170062053440751665152000000000", "1405006117752879898543142606244511569936384000000000", "60415263063373835637355132068513997507264512000000000", "2658271574788448768043625811014615890319638528000000000", "119622220865480194561963161495657715064383733760000000000", "5502622159812088949850305428800254892961651752960000000000", "258623241511168180642964355153611979969197632389120000000000", "12413915592536072670862289047373375038521486354677760000000000", "608281864034267560872252163321295376887552831379210240000000000", "30414093201713378043612608166064768844377641568960512000000000000", "1551118753287382280224243016469303211063259720016986112000000000000", "80658175170943878571660636856403766975289505440883277824000000000000", "4274883284060025564298013753389399649690343788366813724672000000000000", "230843697339241380472092742683027581083278564571807941132288000000000000", "12696403353658275925965100847566516959580321051449436762275840000000000000", "710998587804863451854045647463724949736497978881168458687447040000000000000", "40526919504877216755680601905432322134980384796226602145184481280000000000000", "2350561331282878571829474910515074683828862318181142924420699914240000000000000", "138683118545689835737939019720389406345902876772687432540821294940160000000000000", "8320987112741390144276341183223364380754172606361245952449277696409600000000000000", "507580213877224798800856812176625227226004528988036003099405939480985600000000000000", "31469973260387937525653122354950764088012280797258232192163168247821107200000000000000", "1982608315404440064116146708361898137544773690227268628106279599612729753600000000000000", "126886932185884164103433389335161480802865516174545192198801894375214704230400000000000000", "8247650592082470666723170306785496252186258551345437492922123134388955774976000000000000000", "544344939077443064003729240247842752644293064388798874532860126869671081148416000000000000000", "36471110918188685288249859096605464427167635314049524593701628500267962436943872000000000000000", "2480035542436830599600990418569171581047399201355367672371710738018221445712183296000000000000000", "171122452428141311372468338881272839092270544893520369393648040923257279754140647424000000000000000", "11978571669969891796072783721689098736458938142546425857555362864628009582789845319680000000000000000", "850478588567862317521167644239926010288584608120796235886430763388588680378079017697280000000000000000", "61234458376886086861524070385274672740778091784697328983823014963978384987221689274204160000000000000000", "4470115461512684340891257138125051110076800700282905015819080092370422104067183317016903680000000000000000", "330788544151938641225953028221253782145683251820934971170611926835411235700971565459250872320000000000000000", "24809140811395398091946477116594033660926243886570122837795894512655842677572867409443815424000000000000000000", "1885494701666050254987932260861146558230394535379329335672487982961844043495537923117729972224000000000000000000", "145183092028285869634070784086308284983740379224208358846781574688061991349156420080065207861248000000000000000000", "11324281178206297831457521158732046228731749579488251990048962825668835325234200766245086213177344000000000000000000", "894618213078297528685144171539831652069808216779571907213868063227837990693501860533361810841010176000000000000000000", "71569457046263802294811533723186532165584657342365752577109445058227039255480148842668944867280814080000000000000000000", "5797126020747367985879734231578109105412357244731625958745865049716390179693892056256184534249745940480000000000000000000", "475364333701284174842138206989404946643813294067993328617160934076743994734899148613007131808479167119360000000000000000000", "39455239697206586511897471180120610571436503407643446275224357528369751562996629334879591940103770870906880000000000000000000", "3314240134565353266999387579130131288000666286242049487118846032383059131291716864129885722968716753156177920000000000000000000", "281710411438055027694947944226061159480056634330574206405101912752560026159795933451040286452340924018275123200000000000000000000", "24227095383672732381765523203441259715284870552429381750838764496720162249742450276789464634901319465571660595200000000000000000000", "2107757298379527717213600518699389595229783738061356212322972511214654115727593174080683423236414793504734471782400000000000000000000", "185482642257398439114796845645546284380220968949399346684421580986889562184028199319100141244804501828416633516851200000000000000000000", "16507955160908461081216919262453619309839666236496541854913520707833171034378509739399912570787600662729080382999756800000000000000000000", "1485715964481761497309522733620825737885569961284688766942216863704985393094065876545992131370884059645617234469978112000000000000000000000", "135200152767840296255166568759495142147586866476906677791741734597153670771559994765685283954750449427751168336768008192000000000000000000000", "12438414054641307255475324325873553077577991715875414356840239582938137710983519518443046123837041347353107486982656753664000000000000000000000", "1156772507081641574759205162306240436214753229576413535186142281213246807121467315215203289516844845303838996289387078090752000000000000000000000", "108736615665674308027365285256786601004186803580182872307497374434045199869417927630229109214583415458560865651202385340530688000000000000000000000", "10329978488239059262599702099394727095397746340117372869212250571234293987594703124871765375385424468563282236864226607350415360000000000000000000000", "991677934870949689209571401541893801158183648651267795444376054838492222809091499987689476037000748982075094738965754305639874560000000000000000000000", "96192759682482119853328425949563698712343813919172976158104477319333745612481875498805879175589072651261284189679678167647067832320000000000000000000000", "9426890448883247745626185743057242473809693764078951663494238777294707070023223798882976159207729119823605850588608460429412647567360000000000000000000000", "933262154439441526816992388562667004907159682643816214685929638952175999932299156089414639761565182862536979208272237582511852109168640000000000000000000000", "93326215443944152681699238856266700490715968264381621468592963895217599993229915608941463976156518286253697920827223758251185210916864000000000000000000000000"];
+// eslint-disable-next-line max-len
+const preComputedDoubleFactorials = ["1", "1", "2", "3", "8", "15", "48", "105", "384", "945", "3840", "10395", "46080", "135135", "645120", "2027025", "10321920", "34459425", "185794560", "654729075", "3715891200", "13749310575", "81749606400", "316234143225", "1961990553600", "7905853580625", "51011754393600", "213458046676875", "1428329123020800"];
 
 const factorial = (n) => {
   if (lessThan(n, [BigInt(101), iOne])) {
     return fromString(preComputedFactorials[toNumber(n)])
   } else {
-    return lanczos(increment(n))
+    return lanczos$1(increment$1(n))
   }
 };
 
-const lanczos = xPlusOne => {
+const doubleFactorial = n => {
+  if (lessThan(n, [BigInt(29), iOne])) {
+    return fromString(preComputedDoubleFactorials[toNumber(n)])
+  } else {
+    let r = n;
+    for (let i = Rnl.toNumber(n) - 2; i > 0; i -= 2) {
+      r = multiply$1(r, fromNumber(i));
+    }
+    return r
+  }
+};
+
+const lanczos$1 = xPlusOne => {
   // Lanczos approximation of Gamma function.
   // Coefficients are from 2004 PhD thesis by Glendon Pugh.
   // *An Analysis of the Lanczos Gamma Approximation*
   // The following equation is from p. 116 of the Pugh thesis:
   // Γ(x+1) ≈ 2 * √(e / π) * ((x + 10.900511 + 0.5) / e) ^ (x + 0.5) * sum
-  const x = subtract(xPlusOne, one);
-  const term1 = multiply(two, sqrt(divide(e$1, pi$1)));
-  const term2 = power(divide(add(x, fromNumber(11.400511)), e$1), add(x, [iOne, iTwo]));
+  const x = subtract$1(xPlusOne, one);
+  const term1 = multiply$1(two, sqrt$1(divide$1(e$1, pi$1)));
+  const term2 = power$1(divide$1(add$1(x, fromNumber(11.400511)), e$1), add$1(x, [iOne, iTwo]));
 
   // Coefficients from Pugh, Table 8.5
   const d = ["2.48574089138753565546e-5", "1.05142378581721974210",
@@ -717,10 +731,10 @@ const lanczos = xPlusOne => {
   // sum = d_0 + ∑_(k=1)^10 d_k/(x+k)
   let sum = fromString(d[0]);
   for (let k = 1; k <= 10; k++) {
-    sum = add(sum, divide(fromString(d[k]), add(x, fromNumber(k))));
+    sum = add$1(sum, divide$1(fromString(d[k]), add$1(x, fromNumber(k))));
   }
 
-  return multiply(multiply(term1, term2), sum)
+  return multiply$1(multiply$1(term1, term2), sum)
 };
 
 const Rnl = Object.freeze({
@@ -733,17 +747,17 @@ const Rnl = Object.freeze({
   isNegative,
   isPositive,
   sign,
-  negate,
-  abs,
-  increment,
-  decrement,
-  exp,
+  negate: negate$1,
+  abs: abs$1,
+  increment: increment$1,
+  decrement: decrement$1,
+  exp: exp$1,
   floor,
   ceil,
-  add,
-  subtract,
-  multiply,
-  divide,
+  add: add$1,
+  subtract: subtract$1,
+  multiply: multiply$1,
+  divide: divide$1,
   reciprocal,
   gcd,
   hbar,
@@ -752,11 +766,11 @@ const Rnl = Object.freeze({
   hypot,
   one,
   pi: pi$1,
-  power,
-  sqrt,
+  power: power$1,
+  sqrt: sqrt$1,
   two,
-  cos,
-  sin,
+  cos: cos$1,
+  sin: sin$1,
   tan,
   cosh,
   sinh,
@@ -767,7 +781,8 @@ const Rnl = Object.freeze({
   lessThanOrEqualTo,
   greaterThanOrEqualTo,
   factorial,
-  lanczos,
+  doubleFactorial,
+  lanczos: lanczos$1,
   max,
   min,
   numberPattern,
@@ -785,7 +800,7 @@ const groupByFourRegEx = /\B(?=(\d{4})+$)/g;  // use sometimes in China
 // Grouping as common in south Asia: 10,10,000
 const groupByLakhCroreRegEx = /(\d)(?=(\d\d)+\d$)/g;
 
-const formatRegEx = /^([beEfhkmprsStx%])?(-?[\d]+)?([i∠°])?$/;
+const formatRegEx = /^([beEfhkmprsStx%])?(-?[\d]+)?([∠°]{0,2})?$/;
 
 const superscript = str => {
   // Convert a numeral string to Unicode superscript characters.
@@ -820,7 +835,7 @@ const texFromMixedFraction = (numParts) => {
     superscript(numParts[4]) + "\u2044" + subscript(numParts[5]) + "}}"
 };
 
-const intAbs$1 = i => i >= BigInt(0) ? i : BigInt(-1) * i;  // absolute value of a BigInt
+const intAbs = i => i >= BigInt(0) ? i : BigInt(-1) * i;  // absolute value of a BigInt
 
 const roundedString = (r, spec) => {
   // Return a string rounded to the correct number of digits
@@ -862,7 +877,7 @@ const roundedString = (r, spec) => {
     default: {
       r = Rnl.normalize(r);
       const sign =  Rnl.isNegative(r) ? "-" : "";
-      const numerator = intAbs$1(r[0]);
+      const numerator = intAbs(r[0]);
       const denominator = r[1];
 
       switch (spec.ftype) {
@@ -939,7 +954,7 @@ const parseFormatSpec = str => {
   //    T = type, [bEefhkmNnprSstx%], default: "h"
   //    n = number of digits, [0-9]+, default: 15
   //
-  //    Possible future additions: complex number format [√∠°]
+  //    Possible future additions: complex number format [∠°]
 
   const match = formatRegEx.exec(str);
   if (!match) {
@@ -974,11 +989,13 @@ const parseFormatSpec = str => {
   return [str, undefined, dt.STRING, "\\text{" + ftype + String(N) + ctype + "}" ]
 };
 
+const angleRegEx = /[∠°]+$/;
+
 const format = (num, specStr = "h3", decimalFormat = "1,000,000.") => {
   if (Rnl.isZero(num)) { return "0" }
 
   const spec = { ftype: specStr.charAt(0) };
-  if (/[i∠°]$/.test(specStr)) { specStr = specStr.slice(0, -1); }
+  specStr = specStr.replace(angleRegEx, "");
   if (specStr.length > 1) { spec.numDigits = Number(specStr.slice(1)); }
 
   if (spec.ftype === "%" || spec.ftype === "p") { num[0] = num[0] * BigInt(100); }
@@ -1103,11 +1120,11 @@ const unitTable = Object.freeze(JSON.parse(`{
 "£":["1","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "'":["0.3048","1","0","0",[1,0,0,0,0,0,0,0]],
 "A":["1","1","0","siSymbol",[0,0,0,1,0,0,0,0]],
-"AUD":["1.6809","1","0","AUD",[0,0,0,0,0,0,0,1]],
+"AUD":["1.6339","1","0","AUD",[0,0,0,0,0,0,0,1]],
 "Adobe point":["0.0254","72","0","0",[1,0,0,0,0,0,0,0]],
 "At":["1","1","0","siSymbol",[0,0,0,0,1,0,1,0]],
 "Australian dollar":["1","1","0","AUD",[0,0,0,0,0,0,0,1]],
-"BRL":["5.2524","1","0","BRL",[0,0,0,0,0,0,0,1]],
+"BRL":["5.3065","1","0","BRL",[0,0,0,0,0,0,0,1]],
 "BTU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "BThU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Bq":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
@@ -1116,10 +1133,10 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Btu":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "C":["1","1","0","siSymbol",[0,0,1,1,0,0,0,0]],
 "C$":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
-"CAD":["1.4672","1","0","CAD",[0,0,0,0,0,0,0,1]],
+"CAD":["1.4227","1","0","CAD",[0,0,0,0,0,0,0,1]],
 "CCF":["1","1","0","0",[3,0,0,0,0,0,0,0]],
-"CHF":["0.9564","1","0","CHF",[0,0,0,0,0,0,0,1]],
-"CNY":["7.8783","1","0","CNY",[0,0,0,0,0,0,0,1]],
+"CHF":["0.9669","1","0","CHF",[0,0,0,0,0,0,0,1]],
+"CNY":["7.7352","1","0","CNY",[0,0,0,0,0,0,0,1]],
 "CY":["0.764554857984","1","0","0",[3,0,0,0,0,0,0,0]],
 "Calorie":["4186.8","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Canadian dollar":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
@@ -1139,7 +1156,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Fahrenheit":["5","9","459","0",[0,0,0,0,1,0,0,0]],
 "G":["0.0001","1","0","siSymbol",[-2,-2,-2,-1,0,0,0,0]],
 "GB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
-"GBP":["0.85643","1","0","GBP",[0,0,0,0,0,0,0,1]],
+"GBP":["0.86458","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "Gal":["0.01","1","0","siSymbol",[1,0,-2,0,0,0,0,0]],
 "Gi":["10","12.5663706143592","0","siWord",[0,0,0,0,1,0,1,0]],
 "GiB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1147,23 +1164,23 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Gy":["1","1","0","siSymbol",[2,0,-2,0,0,0,0,0]],
 "H":["1","1","0","siSymbol",[2,1,-2,-2,0,0,0,0]],
 "HK$":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
-"HKD":["8.4770","1","0","HKD",[0,0,0,0,0,0,0,1]],
+"HKD":["8.2959","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "HP":["745.69987158227","1","0","0",[2,1,-3,0,0,0,0,0]],
 "Hong Kong dollar":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "Hz":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
-"ILS":["4.0998","1","0","ILS",[0,0,0,0,0,0,0,1]],
-"INR":["89.3040","1","0","INR",[0,0,0,0,0,0,0,1]],
+"ILS":["4.0472","1","0","ILS",[0,0,0,0,0,0,0,1]],
+"INR":["88.0165","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Indian Rupee":["1","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Israeli New Shekel":["1","1","0","ILS",[0,0,0,0,0,0,0,1]],
 "J":["1","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
-"JPY":["157.75","1","0","JPY",[0,0,0,0,0,0,0,1]],
+"JPY":["158.10","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Japanese Yen":["1","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Joule":["1","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Julian year":["31557600","1","0","0",[0,0,1,0,0,0,0,0]],
 "Jy":["1e-26","1","0","siSymbol",[0,1,-2,0,0,0,0,0]],
 "K":["1","1","0","0",[0,0,0,0,1,0,0,0]],
 "KiB":["8192","1","0","0",[0,0,0,0,0,1,0,0]],
-"KRW":["1430.58","1","0","KRW",[0,0,0,0,0,0,0,1]],
+"KRW":["1425.26","1","0","KRW",[0,0,0,0,0,0,0,1]],
 "L":["0.001","1","0","siSymbol",[3,0,0,0,0,0,0,0]],
 "Lego stud":["0.008","1","0","siSymbol",[1,0,0,0,0,0,0,0]],
 "MB":["8388608","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1174,7 +1191,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "MMscf":["28316.846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "MMscfd":["0.32774128","1","0","0",[3,0,0,0,0,0,0,0]],
 "MT":["1000","1","0","0",[0,1,0,0,0,0,0,0]],
-"MXN":["18.1243","1","0","MXN",[0,0,0,0,0,0,0,1]],
+"MXN":["18.5030","1","0","MXN",[0,0,0,0,0,0,0,1]],
 "Mach":["331.6","1","0","0",[1,0,-1,0,0,0,0,0]],
 "Mbbl":["158.987294928","1","0","0",[3,0,0,0,0,0,0,0]],
 "Mexican Peso":["1","1","0","MXN",[0,0,0,0,0,0,0,1]],
@@ -1204,7 +1221,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "TeX point":["0.0003515","1","0","0",[1,0,0,0,0,0,0,0]],
 "TiB":["8796093022208","1","0","0",[0,0,0,0,0,1,0,0]],
 "US$":["1","1","0","USD",[0,0,0,0,0,0,0,1]],
-"USD":["1.0808","1","0","USD",[0,0,0,0,0,0,0,1]],
+"USD":["1.0594","1","0","USD",[0,0,0,0,0,0,0,1]],
 "V":["1","1","0","siSymbol",[2,1,-3,-1,0,0,0,0]],
 "VA":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
 "W":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
@@ -1985,7 +2002,7 @@ const unitFromUnitName = (inputStr) => {
  * This module is a work in progress.
  */
 
-const im = [Rnl.zero, Rnl.one];
+const j = [Rnl.zero, Rnl.one];
 
 const isComplex = a => {
   return Array.isArray(a) && a.length === 2
@@ -1994,8 +2011,8 @@ const isComplex = a => {
 
 const real = z => z[0];
 const imag = z => z[1];
-const abs$1 = z => Rnl.hypot(z[0], z[1]);
-const negate$1 = z => [Rnl.negate(z[0]), Rnl.negate(z[1])];
+const abs = z => Rnl.hypot(z[0], z[1]);
+const negate = z => [Rnl.negate(z[0]), Rnl.negate(z[1])];
 const conjugate = z => [z[0], Rnl.negate(z[1])];
 
 const angle = (z) => {
@@ -2015,17 +2032,17 @@ const angle = (z) => {
   }
 };
 
-const add$1 = (x, y) => [Rnl.add(x[0], y[0]), Rnl.add(x[1], y[1])];
-const subtract$1 = (x, y) => [Rnl.subtract(x[0], y[0]), Rnl.subtract(x[1], y[1])];
+const add = (x, y) => [Rnl.add(x[0], y[0]), Rnl.add(x[1], y[1])];
+const subtract = (x, y) => [Rnl.subtract(x[0], y[0]), Rnl.subtract(x[1], y[1])];
 
-const multiply$1 = (x, y) => {
+const multiply = (x, y) => {
   return [
     Rnl.subtract(Rnl.multiply(x[0], y[0]), Rnl.multiply(x[1], y[1])),
     Rnl.add(Rnl.multiply(x[0], y[1]), Rnl.multiply(x[1], y[0]))
   ]
 };
 
-const divide$1 = (x, y) => {
+const divide = (x, y) => {
   if (!Rnl.isZero(x[1]) && !Rnl.isZero(y[1])) {
     if (Rnl.lessThan(Rnl.abs(y[1]), Rnl.abs(y[0]))) {
       const ratio = Rnl.divide(y[1], y[0]);
@@ -2074,8 +2091,8 @@ const divide$1 = (x, y) => {
   }
 };
 
-const increment$1 = z => [Rnl.increment(z[0]), z[1]];
-const decrement$1 = z => [Rnl.decrement(z[0]), z[1]];
+const increment = z => [Rnl.increment(z[0]), z[1]];
+const decrement = z => [Rnl.decrement(z[0]), z[1]];
 
 const inverse = z => {
   // Complex inverse 1 / z
@@ -2083,17 +2100,17 @@ const inverse = z => {
     if (Rnl.isZero((z[0]))) { return errorOprnd("DIV") }
     return [Rnl.inverse(z[0]), 0]
   } else {
-    return divide$1([Rnl.one, Rnl.zero], z)
+    return divide([Rnl.one, Rnl.zero], z)
   }
 };
 
-const cos$1 = z => {
+const cos = z => {
   const real = Rnl.multiply(Rnl.cos(z[0]), Rnl.cosh(z[1]));
   const imPart = Rnl.multiply(Rnl.negate(Rnl.sin(z[0])), Rnl.sinh(z[1]));
   return [real, imPart]
 };
 
-const sin$1 = z => {
+const sin = z => {
   const real = Rnl.multiply(Rnl.sin(z[0]), Rnl.cosh(z[1]));
   const imPart = Rnl.multiply(Rnl.cos(z[0]), Rnl.sinh(z[1]));
   return [real, imPart]
@@ -2113,7 +2130,7 @@ const log = x => {
 
 const isSmall = x => Rnl.lessThan(Rnl.abs(x), [BigInt(1), BigInt(100000000000000)]);
 
-const exp$1 = x => {
+const exp = x => {
   // Complex exponentiation
   let z = [Rnl.zero, Rnl.zero];
   if (isSmall(x[1])) {
@@ -2134,7 +2151,7 @@ const exp$1 = x => {
   return z
 };
 
-const power$1 = (x, y) =>{
+const power = (x, y) =>{
   let z = [Rnl.zero, Rnl.zero];
   // powers: z = e^(log(x) × y)
   if (!isComplex(y)) {
@@ -2155,7 +2172,7 @@ const power$1 = (x, y) =>{
     z[1] = Rnl.add(Rnl.multiply(x[1], y[0]), Rnl.multiply(x[0], y[1]));
   }
   
-  z = exp$1(z);
+  z = exp(z);
   if (isSmall(z[1])) { z[1] = Rnl.zero; }
   if (isSmall(z[0])) { z[0] = Rnl.zero; }
   return z
@@ -2163,51 +2180,51 @@ const power$1 = (x, y) =>{
 
 const acosh = z => {
   // acosh(z) = log( z + √(z - 1) × √(z + 1) )
-  return log(add$1(z, multiply$1(sqrt$1(decrement$1(z)), sqrt$1(increment$1(z)))))
+  return log(add(z, multiply(sqrt(decrement(z)), sqrt(increment(z)))))
 };
 
 const asinh = z => {
   // Log(z + Sqrt(z * z + 1))
-  const s = sqrt$1(add$1(multiply$1(z, z), [Rnl.one, Rnl.zero]));
-  return log(add$1(z, s))
+  const s = sqrt(add(multiply(z, z), [Rnl.one, Rnl.zero]));
+  return log(add(z, s))
 };
 
 const atanh = z => {
   // atanh(z) = [ log(1+z) - log(1-z) ] / 2
-  return divide$1(subtract$1(log(increment$1(z)), log(subtract$1([Rnl.one, Rnl.zero], z))), [Rnl.two, Rnl.zero])
+  return divide(subtract(log(increment(z)), log(subtract([Rnl.one, Rnl.zero], z))), [Rnl.two, Rnl.zero])
 };
 
 const asin = z => {
   // arcsinh (i * z) / i
-  return divide$1(asinh(multiply$1(im, z)), im)
+  return divide(asinh(multiply(j, z)), j)
 };
 
 const atan = z => {
   // (Log(1 + iz) - Log(1 - iz)) / (2 * i)  cf Kahan
-  const term1 = log(increment$1(multiply$1(im, z)));
-  const term2 = log(subtract$1([Rnl.one, Rnl.zero],(multiply$1(im, z))));
-  return divide$1(subtract$1(term1, term2), [Rnl.zero, Rnl.two])  
+  const term1 = log(increment(multiply(j, z)));
+  const term2 = log(subtract([Rnl.one, Rnl.zero],(multiply(j, z))));
+  return divide(subtract(term1, term2), [Rnl.zero, Rnl.two])  
 };
 
-const sqrt$1 = x => {
+const sqrt = x => {
   const z = log(x);
   z[0] = Rnl.divide(z[0], Rnl.two);
   z[1] = Rnl.divide(z[1], Rnl.two);
-  return exp$1(z)
+  return exp(z)
 };
 
-const lanczos$1 = zPlusOne => {
+const lanczos = zPlusOne => {
   // Lanczos approximation of Gamma function.
   // Coefficients are from 2004 PhD thesis by Glendon Pugh.
   // *An Analysis of the Lanczos Gamma Approximation*
   // The following equation is from p. 116 of the Pugh thesis:
   // Γ(z+1) ≈ 2 * √(e / π) * ((z + 10.900511 + 0.5) / e) ^ (z + 0.5) * sum
-  const z = subtract$1(zPlusOne, [Rnl.one, Rnl.zero]);
+  const z = subtract(zPlusOne, [Rnl.one, Rnl.zero]);
   const sqr = Rnl.sqrt(Rnl.divide(e, pi));
-  const term1 = multiply$1([Rnl.two, Rnl.zero], [sqr, Rnl.zero]);
+  const term1 = multiply([Rnl.two, Rnl.zero], [sqr, Rnl.zero]);
   const k = Rnl.fromNumber(11.400511);
   const oneHalf = [[BigInt(1), BigInt(2)], Rnl.zero];
-  const term2 = power$1(divide$1(add$1(z, [k, Rnl.zero]), [e, Rnl.zero]), add$1(z, oneHalf));
+  const term2 = power(divide(add(z, [k, Rnl.zero]), [e, Rnl.zero]), add(z, oneHalf));
 
   // Coefficients from Pugh, Table 8.5
   const d = ["2.48574089138753565546e-5", "1.05142378581721974210",
@@ -2221,69 +2238,69 @@ const lanczos$1 = zPlusOne => {
   for (let k = 1; k <= 10; k++) {
     const d = [Rnl.fromString(d[k]), Rnl.zero];
     const complexK = [Rnl.fromNumber(k), Rnl.zero];
-    sum = add$1(sum, divide$1(d, add$1(z, complexK)));
+    sum = add(sum, divide(d, add(z, complexK)));
   }
 
-  return multiply$1(multiply$1(term1, term2), sum)
+  return multiply(multiply(term1, term2), sum)
 };
 
-const display = (z, formatSpec, decimalFormat) => {
-  const complexSpec = /[i∠°]/.test(formatSpec) ? formatSpec.slice(-1) : "i";
+const display$3 = (z, formatSpec, decimalFormat) => {
+  const complexSpec = /[∠°]/.test(formatSpec) ? formatSpec.slice(-1) : "j";
   let resultDisplay = "";
   let altResultDisplay = "";
-  if (complexSpec === "i") {
+  if (complexSpec === "j") {
     const real = format(z[0], formatSpec, decimalFormat);
     let imPart = format(z[1], formatSpec, decimalFormat);
     if (imPart.charAt(0) === "-") {
-      resultDisplay = real + " - " + -imPart + "\\,\\mathord{\\mathrm{im}}";
-      altResultDisplay = real + " - " + -imPart + " im";
+      resultDisplay = real + " - j\\," + -imPart;
+      altResultDisplay = real + " - j " + -imPart;
     } else {
-      resultDisplay = real + " + " + imPart + " \\,\\mathord{\\mathrm{im}}";
-      altResultDisplay = real + " + " + imPart + " im";
+      resultDisplay = real + " + j\\, " + imPart;
+      altResultDisplay = real + " + j " + imPart;
     }
   } else {
     const mag = Rnl.hypot(z[0], z[1]);
-    let angle = Cpx.angle(result.value);
-    if (complexSpec === "°") {
+    let angle = Cpx.angle(z);
+    const inDegrees = complexSpec.indexOf("°") > -1;
+    if (inDegrees) {
       angle = Rnl.divide(Rnl.multiply(angle, Rnl.fromNumber(180)), Rnl.pi);
     }
     resultDisplay = format(mag, formatSpec, decimalFormat) + "∠" +
-                    format(angle, formatSpec, decimalFormat) +
-                    (complexSpec === "°" ? "°" : "");
+                    format(angle, formatSpec, decimalFormat) + (inDegrees ? "°" : "");
     altResultDisplay = resultDisplay;
   }
   return [resultDisplay, altResultDisplay]
 };
 
 const Cpx = Object.freeze({
-  im,
+  j,
   real,
   imag,
-  abs: abs$1,
+  abs,
   conjugate,
   angle,
   inverse,
-  increment: increment$1,
-  decrement: decrement$1,
+  increment,
+  decrement,
   isComplex,
-  add: add$1,
-  subtract: subtract$1,
-  divide: divide$1,
-  multiply: multiply$1,
-  negate: negate$1,
-  power: power$1,
-  exp: exp$1,
+  add,
+  subtract,
+  divide,
+  multiply,
+  negate,
+  power,
+  exp,
   log,
-  sqrt: sqrt$1,
-  sin: sin$1,
-  cos: cos$1,
+  sqrt,
+  sin,
+  cos,
   asin,
   atan,
   acosh,
   asinh,
   atanh,
-  lanczos: lanczos$1,
-  display
+  lanczos,
+  display: display$3
 });
 
 // Two helper functions
@@ -2313,7 +2330,7 @@ const transpose = oprnd => {
   return result
 };
 
-const convertFromBaseUnits = (oprnd, gauge, factor) => {
+const convertFromBaseUnits$1 = (oprnd, gauge, factor) => {
   let conversion = (isVector(oprnd))
     ? oprnd.value.map((e) => Rnl.divide(e, factor))
     : oprnd.value.map(row => row.map(e => Rnl.divide(e, factor)));
@@ -2325,7 +2342,7 @@ const convertFromBaseUnits = (oprnd, gauge, factor) => {
   return Object.freeze(conversion)
 };
 
-const convertToBaseUnits = (oprnd, gauge, factor) => {
+const convertToBaseUnits$1 = (oprnd, gauge, factor) => {
   let conversion = clone(oprnd.value);
   if (!Rnl.isZero(gauge)) {
     conversion = (isVector(oprnd))
@@ -2354,7 +2371,7 @@ const elementDisplay = (value, dtype, formatSpec, decimalFormat, isAlt = false) 
   return display
 };
 
-const display$1 = (m, formatSpec, decimalFormat) => {
+const display$2 = (m, formatSpec, decimalFormat) => {
   let str = "";
   if (m.dtype & dt.MATRIX) {
     str += "\\begin{pmatrix}";
@@ -2392,7 +2409,7 @@ const display$1 = (m, formatSpec, decimalFormat) => {
   return str
 };
 
-const displayAlt = (m, formatSpec, decimalFormat) => {
+const displayAlt$2 = (m, formatSpec, decimalFormat) => {
   let str = "";
   if (m.dtype & dt.MATRIX) {
     str += "(";
@@ -2427,7 +2444,7 @@ const displayAlt = (m, formatSpec, decimalFormat) => {
   return str
 };
 
-const findfirst = (el, array) => {
+const findfirst$1 = (el, array) => {
   if (!isVector(array)) { return errorOprnd("NOT_VECTOR", "findfirst") }
   const isNumeric = Rnl.isRational(el);
   for (let i = 0; i < array.value.length; i++) {
@@ -2791,12 +2808,12 @@ const zeros = (m, n) => {
 };
 
 const Matrix = Object.freeze({
-  convertFromBaseUnits,
-  convertToBaseUnits,
-  display: display$1,
-  displayAlt,
+  convertFromBaseUnits: convertFromBaseUnits$1,
+  convertToBaseUnits: convertToBaseUnits$1,
+  display: display$2,
+  displayAlt: displayAlt$2,
   elementDisplay,
-  findfirst,
+  findfirst: findfirst$1,
   identity,
   invert,
   multResultType,
@@ -2821,7 +2838,7 @@ const valueFromDatum = datum => {
   ? true
   : datum === "false"
   ? false
-  : numberRegEx$1.test(datum)
+  : numberRegEx$5.test(datum)
   ? Rnl.fromString(datum)
   : datum === ""
   ? undefined
@@ -2833,7 +2850,7 @@ const datumFromValue = (value, dtype, formatSpec) => {
     ? "true"
     : value === false
     ? "false"
-    : value =  (dtype === dt.RATIONAL)
+    : value = (dtype === dt.RATIONAL)
     ? format(value, formatSpec, "1000000.")
     : value
 };
@@ -2920,7 +2937,7 @@ const identifyRange = (df, args) => {
   return [rowList, columnList, iStart, iEnd]
 };
 
-const range = (df, args, unitAware) => {
+const range$1 = (df, args, unitAware) => {
   let unit = Object.create(null);
   const [rowList, columnList, iStart, iEnd] = identifyRange(df, args);
   if (rowList.length === 0 && iStart === iEnd && columnList.length === 1) {
@@ -3001,7 +3018,7 @@ const range = (df, args, unitAware) => {
 };
 
 // const numberRegEx = new RegExp(Rnl.numberPattern + "$")
-const numberRegEx$1 = new RegExp("^(?:=|" + Rnl.numberPattern.slice(1) + "$)");
+const numberRegEx$5 = new RegExp("^(?:=|" + Rnl.numberPattern.slice(1) + "$)");
 const mixedFractionRegEx = /^-?(?:[0-9]+(?: [0-9]+\/[0-9]+))$/;
 const escRegEx = /^\\#/;
 
@@ -3026,11 +3043,11 @@ const dataFrameFromTSV = (str) => {
     // Determine if there is a row for unit names.
     let gotAnswer = false;
     for (let iCol = 0; iCol < data.length; iCol++) {
-      if (numberRegEx$1.test(data[iCol][0])) { gotAnswer = true; break }
+      if (numberRegEx$5.test(data[iCol][0])) { gotAnswer = true; break }
     }
     if (!gotAnswer) {
       for (let iCol = 0; iCol < data.length; iCol++) {
-        if (numberRegEx$1.test(data[iCol][1])) { gotUnits = true; break }
+        if (numberRegEx$5.test(data[iCol][1])) { gotUnits = true; break }
       }
     }
     if (gotUnits) {
@@ -3112,7 +3129,7 @@ const dataFrameFromTSV = (str) => {
       const datum = data[j][i];
       if (datum === "") { continue } // undefined datum.
       dtype.push(
-        numberRegEx$1.test(datum)
+        numberRegEx$5.test(datum)
         ? dt.RATIONAL + ((units.length > 0 && units[j].length > 0) ? dt.QUANTITY : 0)
         : (datum === "true" || datum === "false")
         ? dt.BOOLEAN
@@ -3240,7 +3257,7 @@ const matrix2table = (matrix, headings, rowHeadings) => {
   }
 };
 
-const append = (o1, o2, formatSpec, unitAware) => {
+const append$1 = (o1, o2, formatSpec, unitAware) => {
   // Append a vector or single value to a dataframe.
   // We use copy-on-write for dataframes, so copy it here.
   const oprnd = o1.dtype === dt.DATAFRAME ? clone(o1) : clone(o2);
@@ -3343,12 +3360,12 @@ const quickDisplay = str => {
     let gotUnits = false;
     let gotAnswer = false;
     for (let j = 0; j < cells[1].length; j++) {
-      if (numberRegEx$1.test(cells[1][j])) { gotAnswer = true; break }
+      if (numberRegEx$5.test(cells[1][j])) { gotAnswer = true; break }
     }
     if (!gotAnswer) {
       // line[1] had no numbers. If any numbers are in line[2] then line[1] is units.
       for (let j = 0; j < cells[2].length; j++) {
-        if (numberRegEx$1.test(cells[2][j])) { gotUnits = true; break }
+        if (numberRegEx$5.test(cells[2][j])) { gotUnits = true; break }
       }
     }
 
@@ -3366,10 +3383,10 @@ const quickDisplay = str => {
 };
 
 // The next 40 lines contain helper functions for display().
-const isValidIdentifier = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
+const isValidIdentifier$2 = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
 const accentRegEx$1 = /^([^\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]+)([\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1])(.+)?/;
 const subscriptRegEx = /([^_]+)(_[^']+)?(.*)?/;
-const accentFromChar = Object.freeze({
+const accentFromChar$1 = Object.freeze({
   "\u0300": "\\grave",
   "\u0301": "\\acute",
   "\u0302": "\\hat",
@@ -3390,14 +3407,14 @@ const accentFromChar = Object.freeze({
 const formatColumnName = str => {
   // We can't call parse(str) because that would be a circular dependency.
   // So this module needs its own function to format dataframe column names.
-  if (!isValidIdentifier.test(str)) {
+  if (!isValidIdentifier$2.test(str)) {
     return "\\text{" + addTextEscapes(str) + "}"
   } else {
     // Format it like a Hurmet identifier.
     str = str.replace(/′/g, "'"); // primes
     let parts = str.match(accentRegEx$1);
     if (parts) {
-      str = accentFromChar[parts[2]] + "{" + parts[1] + "}";
+      str = accentFromChar$1[parts[2]] + "{" + parts[1] + "}";
       return str + (parts[3] ? parts[3] : "")
     } else {
       parts = str.match(subscriptRegEx);
@@ -3463,7 +3480,7 @@ const displayNum = (datum, colInfo, cellInfo, decimalFormat) => {
 
 const totalRegEx = /^(?:total|sum)/i;
 
-const display$2 = (df, formatSpec = "h3", decimalFormat = "1,000,000.", omitHeading = false) => {
+const display$1 = (df, formatSpec = "h3", decimalFormat = "1,000,000.", omitHeading = false) => {
   const data = df.data.plain ? df.data.plain : df.data;
   if (data.length === 0) { return "" }
   const numRows = data[0].length;
@@ -3532,7 +3549,7 @@ const display$2 = (df, formatSpec = "h3", decimalFormat = "1,000,000.", omitHead
       } else {
         str += mixedFractionRegEx.test(datum)
           ? format(Rnl.fromString(datum), formatSpec, decimalFormat) + "&"
-          : numberRegEx$1.test(datum)
+          : numberRegEx$5.test(datum)
           ? displayNum(datum, colInfo[j], cellInfo[j][i], decimalFormat) + "&"
           : datum === ""
           ? "&"
@@ -3608,14 +3625,14 @@ const displayAlt$1 = (df, formatSpec = "h3", decimalFormat = "1,000,000.",
 };
 
 const DataFrame = Object.freeze({
-  append,
+  append: append$1,
   dataFrameFromTSV,
   dataFrameFromVectors,
   matrix2table,
-  display: display$2,
+  display: display$1,
   displayAlt: displayAlt$1,
   quickDisplay,
-  range
+  range: range$1
 });
 
 /*
@@ -3643,7 +3660,7 @@ const tt = Object.freeze({
   LONGVAR: 13,
   LEFTBRACKET: 14,
   RIGHTBRACKET: 15,
-  UNDEROVER: 16,
+  BIG_OPERATOR: 16,
   LEFTRIGHT: 17, //   |
   STRING: 18,
   UNIT: 19, //    unit-of-measure, e.g., 'meters' or °
@@ -3671,7 +3688,7 @@ const tt = Object.freeze({
 });
 
 const minusRegEx = /^-(?![-=<>:])/;
-const numberRegEx$2 = new RegExp(Rnl.numberPattern);
+const numberRegEx$4 = new RegExp(Rnl.numberPattern);
 const unitRegEx = /^(?:'[^']+'|[°ΩÅK])/;
 
 const texFromNumStr = (numParts, decimalFormat) => {
@@ -3726,7 +3743,6 @@ const words = Object.freeze({
   //       input,    tex output,               type, closeDelim
   "true": ["true", "\\mathord{\\text{true}}", tt.BOOLEAN, ""],
   "false": ["false", "\\mathord{\\text{false}}", tt.BOOLEAN, ""],
-  im: ["im", "im", tt.LONGVAR, ""],
   cos: ["cos", "\\cos", tt.FUNCTION, ""],
   cosd: ["cosd", "\\operatorname{\\cos_d}", tt.FUNCTION, ""],
   if: ["if", "\\mathrel{\\mathrm{if}}", tt.LOGIC, ""],
@@ -3870,10 +3886,10 @@ const miscSymbols = Object.freeze({
   "¬": ["¬", "¬", tt.UNARY, ""], // logical not
   "&&": ["&&", "{\\;\\&\\&\\;}", tt.LOGIC, ""],
 
-  "\u222B": ["\u222B", "\u222B", tt.UNDEROVER, ""], // \int
-  "\u222C": ["\u222C", "\u222C", tt.UNDEROVER, ""], // \iint
-  "\u222E": ["\u222E", "\u222E", tt.UNDEROVER, ""], // \oint
-  "\u2211": ["\u2211", "\u2211", tt.UNDEROVER, ""], // \sum
+  "\u222B": ["\u222B", "\\displaystyle\u222B", tt.BIG_OPERATOR, ""], // \int
+  "\u222C": ["\u222C", "\\displaystyle\u222C", tt.BIG_OPERATOR, ""], // \iint
+  "\u222E": ["\u222E", "\\displaystyle\u222E", tt.BIG_OPERATOR, ""], // \oint
+  "\u2211": ["\u2211", "\\displaystyle\u2211", tt.BIG_OPERATOR, ""], // \sum
 
   "(": ["(", "(", tt.LEFTBRACKET, ")"],
   "[": ["[", "[", tt.LEFTBRACKET, "]"],
@@ -3976,15 +3992,15 @@ const texFunctions = Object.freeze({
   "\\mod": ["\\mod", "\\mod", tt.BIN, ""],
   "\\diamond": ["\\diamond", "\\diamond", tt.ORD, ""],
   "\\square": ["\\square", "\\square", tt.ORD, ""],
-  "\\int": ["\\int", "\\int", tt.UNDEROVER, ""],
-  "\\iint": ["\\iint", "\\iint", tt.UNDEROVER, ""],
-  "\\iiint": ["\\iiint", "\\iiint", tt.UNDEROVER, ""],
-  "\\oint": ["\\oint", "\\oint", tt.UNDEROVER, ""],
-  "\\oiint": ["\\oiint", "\\oiint", tt.UNDEROVER, ""],
-  "\\oiiint": ["\\oiiint", "\\oiiint", tt.UNDEROVER, ""],
+  "\\int": ["\\int", "\\displaystyle\\int", tt.BIG_OPERATOR, ""],
+  "\\iint": ["\\iint", "\\displaystyle\\iint", tt.BIG_OPERATOR, ""],
+  "\\iiint": ["\\iiint", "\\displaystyle\\iiint", tt.BIG_OPERATOR, ""],
+  "\\oint": ["\\oint", "\\displaystyle\\oint", tt.BIG_OPERATOR, ""],
+  "\\oiint": ["\\oiint", "\\displaystyle\\oiint", tt.BIG_OPERATOR, ""],
+  "\\oiiint": ["\\oiiint", "\\displaystyle\\oiiint", tt.BIG_OPERATOR, ""],
   "\\over": ["\\over", "\\dfrac{", tt.DIV],
-  "\\sum": ["\\sum", "\\sum", tt.UNDEROVER, ""],
-  "\\prod": ["\\prod", "\\prod", tt.UNDEROVER, ""],
+  "\\sum": ["\\sum", "\\displaystyle\\sum", tt.BIG_OPERATOR, ""],
+  "\\prod": ["\\prod", "\\displaystyle\\prod", tt.BIG_OPERATOR, ""],
   "\\quad": ["\\quad", "\\quad", tt.SPACE, ""],
   "\\qquad": ["\\qquad", "\\qquad", tt.SPACE, ""]
 });
@@ -4188,9 +4204,9 @@ const texREL = new Set([
 
 const superRegEx = /^⁻?[²³¹⁰⁴⁵⁶⁷⁸⁹]+/;
 
-const cloneToken = tkn => [tkn[0], tkn[1], tkn[2], tkn[3]];
+const cloneToken$1 = tkn => [tkn[0], tkn[1], tkn[2], tkn[3]];
 
-const accentFromChar$1 = Object.freeze({
+const accentFromChar = Object.freeze({
   "\u0300": "\\grave",
   "\u0301": "\\acute",
   "\u0302": "\\hat",
@@ -4240,11 +4256,11 @@ const checkForTrailingAccent = word => {
   if (/[\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]/.test(ch)) {
     word = word.slice(0, -1);
     return word === "i"
-      ? accentFromChar$1[ch] + "{ı}"  // dotless i
+      ? accentFromChar[ch] + "{ı}"  // dotless i
       : word === "j"
-      ? accentFromChar$1[ch] + "{ȷ}"  // dotless j
+      ? accentFromChar[ch] + "{ȷ}"  // dotless j
       : word.length === 1
-      ? accentFromChar$1[ch] + "{" + word + "}"
+      ? accentFromChar[ch] + "{" + word + "}"
       : wideAccentFromChar[ch] + "{" + word + "}"
   } else {
     return word
@@ -4413,7 +4429,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     }
     const texFunc = texFunctions[match];
     if (texFunc) {
-      return cloneToken(texFunc)
+      return cloneToken$1(texFunc)
     }
     // default case is a mathord. So I have not enumerated any ORDs
     return [match, match, tt.ORD, ""]
@@ -4422,7 +4438,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
   if (minusRegEx.test(str)) {
     if (isUnary(prevToken)) {
       // Check if the unary minus is part of a number
-      const numParts = str.match(numberRegEx$2);
+      const numParts = str.match(numberRegEx$4);
       if (numParts) {
         // numbers
         st = texFromNumStr(numParts, decimalFormat);
@@ -4432,7 +4448,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     return ["-", "-", tt.ADD, ""]
   }
 
-  const numParts = str.match(numberRegEx$2);
+  const numParts = str.match(numberRegEx$4);
   if (numParts) {
     // numbers
     st = texFromNumStr(numParts, decimalFormat);
@@ -4445,7 +4461,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
   }
 
   const word = lexOneWord(str, prevToken);
-  if (word) { return cloneToken(word) }
+  if (word) { return cloneToken$1(word) }
 
   const nums = superRegEx.exec(str);
   if (nums) {
@@ -4458,7 +4474,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     const match = matchObj[0];
     for (let i = match.length; i >= 1; i--) {
       st = match.substr(0, i);
-      if (miscSymbols[st]) { return cloneToken(miscSymbols[st]) }
+      if (miscSymbols[st]) { return cloneToken$1(miscSymbols[st]) }
     }
   }
 
@@ -4553,7 +4569,7 @@ const numFromSupChars = str => {
 };
 
 const colorSpecRegEx = /^(#([a-f0-9]{6}|[a-f0-9]{3})|[a-z]+|\([^)]+\))/i;
-const accentRegEx$2 = /^(?:.|\uD835.)[\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]_/;
+const accentRegEx = /^(?:.|\uD835.)[\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]_/;
 
 const factors = /^[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133\uD835[({√∛∜]/;
 
@@ -4572,7 +4588,7 @@ const setUpIf = (rpn, tokenInput, exprStack, delim) => {
 
 const functionExpoRegEx = /^[\^⁻⁰¹²³\u2074-\u2079]/;
 
-const openParenRegEx = /^ *\(/;
+const openParenRegEx$1 = /^ *\(/;
 
 const exponentOfFunction = (str, decimalFormat, isCalc) => {
   // As in: sin²()
@@ -4580,7 +4596,7 @@ const exponentOfFunction = (str, decimalFormat, isCalc) => {
   if (str.charAt(0) !== "^") {
     expoInput = /^⁻?[⁰¹²³\u2074-\u2079⁻]+/.exec(str)[0];
     expoInput = expoInput.split("").map(ch => numeralFromSuperScript(ch)).join("");
-  } else if (!openParenRegEx.test(str.slice(1))) {
+  } else if (!openParenRegEx$1.test(str.slice(1))) {
     expoInput = lex(str.slice(1), decimalFormat, { input: "", output: "", ttype: 50 })[0];
   } else {
     // The exponent is in parens. Find its extent.
@@ -4607,10 +4623,10 @@ const exponentOfFunction = (str, decimalFormat, isCalc) => {
     : expoInput;
 
   if (isCalc) {
-    const expoOutput = parse(parseInput, decimalFormat, true);
+    const expoOutput = parse$1(parseInput, decimalFormat, true);
     return [expoInput, "{" + expoOutput[0] + "}", expoOutput[1]]
   } else {
-    const expoTex = parse(parseInput, decimalFormat, false);
+    const expoTex = parse$1(parseInput, decimalFormat, false);
     return [expoInput, "{" + expoTex + "}", ""]
   }
 };
@@ -4667,7 +4683,7 @@ const testForImplicitMult = (prevToken, texStack, str) => {
 };
 
 const multiplicands = new Set([tt.ORD, tt.VAR, tt.NUM, tt.LONGVAR, tt.RIGHTBRACKET,
-  tt.CURRENCY, tt.SUPCHAR]);
+  tt.CURRENCY, tt.SUPCHAR, tt.BIG_OPERATOR]);
 
 const nextCharIsFactor = (str, tokenType) => {
   const st = str.replace(leadingLaTeXSpaceRegEx, "");
@@ -4675,7 +4691,7 @@ const nextCharIsFactor = (str, tokenType) => {
 
   let fcMeetsTest = false;
   if (st.length > 0) {
-    if (fc === "|" || fc === "‖") ; else if (/^[({[√∛∜0-9]/.test(st) && multiplicands.has(tokenType)) {
+    if (fc === "|" || fc === "‖") ; else if (/^[({[√∛∜∑0-9]/.test(st) && multiplicands.has(tokenType)) {
       return true
     } else {
       if (factors.test(fc)) {
@@ -4686,7 +4702,7 @@ const nextCharIsFactor = (str, tokenType) => {
   return fcMeetsTest
 };
 
-const cloneToken$1 = token => {
+const cloneToken = token => {
   return {
     input: token.input,
     output: token.output,
@@ -4699,18 +4715,19 @@ const endOfOrd = new Set([tt.ORD, tt.VAR, tt.NUM, tt.LONGVAR, tt.RIGHTBRACKET, t
 
 // The RegEx below is equal to /^\s+/ except it omits \n, \t, and the no-break space \xa0.
 // I use \xa0 to precede the combining arrow accent character \u20D7.
-const leadingSpaceRegEx$1 = /^[ \f\r\v\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+/;
+const leadingSpaceRegEx$2 = /^[ \f\r\v\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+/;
 const leadingLaTeXSpaceRegEx = /^(˽|\\quad|\\qquad)+/;
+const sumRegEx = /\\∑_¿([^\xa0]+)([^=]+)\xa0=(\xa0[^^]+)\xa0\^\xa0([^∑]+)\xa0∑/;
 
 /* eslint-disable indent-legacy */
 const rpnPrecFromType = [
-  12, 12, 15, 13, 16, 10,
-       7, 10, 12, -1, -1,
+  13, 13, 16, 14, 17, 10,
+       8, 10, 13, -1, -1,
       -1,  1, -1,  0,  0,
-      -1,  0, -1, 14,  0,
-       6,  7,  5,  4,  1,
-      -1, 16, 15, -1, 14,
-      13,  9,  3,  2, 10,
+       7,  0, -1, 15,  0,
+       6,  8,  5,  4,  1,
+      13, 17, 16, -1, 15,
+      14, 10,  3,  2, 11,
       -1, -1,  4,  3, -1,
       -1, -1
 ];
@@ -4719,7 +4736,7 @@ const texPrecFromType = [
   12, 12, 15, 13, 16, 10,
        2, 10, 12,  2,  2,
        2,  1,  2,  2,  0,
-       1,  1,  2, 14,  1,
+       2,  1,  2, 14,  1,
        2,  2,  1,  1,  1,
        2, -1, 15,  2, 14,
       13,  9, -1,  1, -1,
@@ -4737,14 +4754,15 @@ TeX  RPN
   1    4    if ∧ ∨       logical operators, return
   1    5    < > ≤ ≥      comparisons
   2    6    + -          addition and subtraction
-  2    7    * (x)(y) /   multiplication, division
-  9    9    ∠            \angle. Used as a separator for complex numbers in polar notation
- 10   10    -            unary minus
- 12   12    sqrt sin     unary functions, math functions, and binary functions (e.g. root 3 x)
- 13   13    ^            superscript, i.e. exponent
- 14   14    ! % ‰ °      factorial, percent, permil, degree
- 15   15    _ ' .        subscript, prime, dot notation property accessor
- 16   16    hat bb       accent and font
+  2    7    ∑            big operators
+  2    8    * (x)(y) /   multiplication, division
+  9   10    ∠            \angle. Used as a separator for complex numbers in polar notation
+ 10   11    -            unary minus
+ 12   13    sqrt sin     unary functions, math functions, and binary functions (e.g. root 3 x)
+ 13   14    ^            superscript, i.e. exponent
+ 14   15    ! % ‰ °      factorial, percent, permil, degree
+ 15   16    _ ' .        subscript, prime, dot notation property accessor
+ 16   17    hat bb       accent and font
 */
 
 // Delimiter types
@@ -4760,7 +4778,7 @@ const dBINOMIAL = 8;
 const dSUBSCRIPT = 9; //       Parens around a subscript do not get converted into matrices.
 const dDISTRIB = 10; //         A probability distribution defined by a confidence interval.
 
-const parse = (
+const parse$1 = (
   str,
   decimalFormat = "1,000,000.",
   isCalc = false,     // true when parsing the blue echo of an expression
@@ -4790,7 +4808,8 @@ const parse = (
   let tokenSep = "\xa0"; // no break space
   let rpnPrec = -1;
   const exprStack = []; // Use for lazy evalulation of ternary (If) expressions
-  let numFreeCommas = 0; // # of itens in a tuple
+  let numFreeCommas = 0; // # of items in a tuple
+  let posArrow = 0;
 
   // This function, parse(), is the main function for this module.
   // Before we get to the start line, we write two enclosed functions,
@@ -4804,7 +4823,13 @@ const parse = (
         const topPrec = rpnStack[rpnStack.length - 1].prec;
         //                         exponents, from right to left.
         if (topPrec < rpnPrec || (topPrec === 13 && rpnPrec === 13)) { break }
-        rpn += rpnStack.pop().symbol + tokenSep;
+        const symbol = rpnStack.pop().symbol;
+        if (symbol === "→") {
+          rpn = rpn.slice(0, posArrow + 1) + '"'
+            + rpn.slice(posArrow + 1, -1).replace(/\u00a0/g, "§") + '"' + tokenSep;
+          posArrow = 0;
+        }
+        rpn += symbol + tokenSep;
       }
     }
   };
@@ -4926,7 +4951,7 @@ const parse = (
   };
 
   // With the closed functions out of the way, execute the main parse loop.
-  str = str.replace(leadingSpaceRegEx$1, ""); //       trim leading white space from string
+  str = str.replace(leadingSpaceRegEx$2, ""); //       trim leading white space from string
   str = str.replace(/\s+$/, ""); //                  trim trailing white space
 
   while (str.length > 0) {
@@ -4955,7 +4980,17 @@ const parse = (
     mustLex = true; // default
 
     isImplicitMult = isPrecededBySpace && okToAppend &&
-      testForImplicitMult(prevToken, texStack, str);
+                     testForImplicitMult(prevToken, texStack, str);
+    if (isCalc) {
+      if (prevToken.input === "⌧" && rpnStack.length > 1
+            && rpnStack[rpnStack.length - 2].symbol === "∑"
+            && rpn.charAt(rpn.length - 2) === "^"
+      ) {
+        // This is the space after a ∑_(i=0)^n symbol. Do not treat as implicit multiplication.
+        rpnStack.pop();
+      }
+    }
+
     if (isImplicitMult) {
       const prevType = prevToken.ttype;
       token = {
@@ -4972,9 +5007,9 @@ const parse = (
       const tkn = lex(str, decimalFormat, prevToken, inRealTime);
       token = { input: tkn[0], output: tkn[1], ttype: tkn[2], closeDelim: tkn[3] };
       str = str.substring(token.input.length);
-      isFollowedBySpace = leadingSpaceRegEx$1.test(str) || /^(˽|\\quad|\\qquad)+/.test(str);
+      isFollowedBySpace = leadingSpaceRegEx$2.test(str) || /^(˽|\\quad|\\qquad)+/.test(str);
       isFollowedBySpaceOrNewline = /^[ \n]/.test(str);
-      str = str.replace(leadingSpaceRegEx$1, "");
+      str = str.replace(leadingSpaceRegEx$2, "");
       followedByFactor = nextCharIsFactor(str, token.ttype);
     }
 
@@ -4989,16 +5024,25 @@ const parse = (
       case tt.BIN: //        infix math operators that render but don't calc, e.g. \bowtie
       case tt.ADD: //        infix add/subtract operators, + -
       case tt.MULT: //       infix mult/divide operators, × * · // ÷
-      case tt.REL: //        relational operators, e.g  < →
-      case tt.UNDEROVER: { // int, sum, lim, etc
+      case tt.REL: //        relational operators, e.g  < == →
+      case tt.BIG_OPERATOR: { // int, sum, lim, etc
         if (token.output.length > 0 && "- +".indexOf(token.output) > -1) {
           token = checkForUnaryMinus(token, prevToken);
         }
 
+        if (isCalc && token.output === "→") {
+          // This arrow is used for anonymous functions, e.g., x → cos x.
+          rpn = rpn.replace(/¿([^\u00a0]+)$/, '"$1"');
+          posArrow = rpn.length;
+          const posBracket = tex.lastIndexOf("〖");
+          tex = tex.slice(0, posBracket) + tex.slice(posBracket + 1);
+        }
+
         if (isCalc && token.ttype !== tt.SPACE) {
-          if (token.output !== "\\text{-}") { rpn += tokenSep; }
-          rpnPrec = rpnPrecFromType[token.ttype];
-          popRpnTokens(rpnPrec);
+          if (token.output !== "\\text{-}" && token.ttype !== tt.BIG_OPERATOR) {
+            rpn += tokenSep;
+          }
+          popRpnTokens(rpnPrecFromType[token.ttype === tt.BIG_OPERATOR ? tt.VAR : token.ttype]);
         }
 
         const texPrec = texPrecFromType[token.ttype];
@@ -5006,10 +5050,15 @@ const parse = (
         tex += token.output + " ";
         posOfPrevRun = tex.length;
 
-        if (token.ttype === tt.UNDEROVER && delims.length > 1) {
+        if (token.ttype === tt.BIG_OPERATOR && delims.length > 1) {
           delims[delims.length - 1].isTall = true;
-        } else if (isCalc) {
-          rpnStack.push({ prec: rpnPrec, symbol: token.input });
+        }
+        if (isCalc) {
+          if (token.input === "∑" || token.input === "\\sum") {
+            rpn += "\\∑";
+            token.input === "∑";
+          }
+          rpnStack.push({ prec: rpnPrecFromType[token.ttype], symbol: token.input });
         }
 
         okToAppend = true;
@@ -5061,9 +5110,10 @@ const parse = (
           // We've encountered something like the expression "2a".
           popTexTokens(2, okToAppend);
           if (isCalc) {
+            rpnPrec = rpnPrecFromType[tt.MULT];
             rpn += tokenSep;
-            popRpnTokens(7);
-            rpnStack.push({ prec: rpnPrecFromType[tt.MULT], symbol: "⌧" });
+            popRpnTokens(rpnPrec);
+            rpnStack.push({ prec: rpnPrec, symbol: "⌧" });
           }
         }
         break
@@ -5085,7 +5135,7 @@ const parse = (
         const ch = token.input.charAt(0);
         if (isCalc) { rpn += ch + token.output + ch; }
         if (isPrecededBySpace) { posOfPrevRun = tex.length; }
-        token.output = token.output === "`" ? "`" : parse(token.output, decimalFormat, false);
+        token.output = token.output === "`" ? "`" : parse$1(token.output, decimalFormat, false);
         tex += "{" + token.output + "}";
         okToAppend = true;
         break
@@ -5112,7 +5162,7 @@ const parse = (
 
         if (!isCalc) {
           if (token.ttype === tt.LONGVAR) {
-            if (!accentRegEx$2.test(token.input)) {
+            if (!accentRegEx.test(token.input)) {
               token.output = "\\mathrm{" + token.output + "}";
             }
           }
@@ -5128,7 +5178,7 @@ const parse = (
               : token.output;
           } else {
             token.output = token.input;
-            token.output = "〖" + token.output;
+            token.output = (posArrow > 0 ? "" : "〖") + token.output;
           }
           rpn += token.input === "im" ? "im" : "¿" + token.input;
           if (token.input !== "im") { dependencies.push(token.input); }
@@ -5147,7 +5197,7 @@ const parse = (
         popTexTokens(14, true);
         texStack.push({ prec: 14, pos: op.pos, ttype: tt.UNIT, closeDelim: "" });
         if (isCalc) {
-          popRpnTokens(14);
+          popRpnTokens(rpnPrecFromType[tt.UNIT]);
           rpn += tokenSep + "applyUnit" + tokenSep + token.input.replace(/'/g, "");
         }
         if (!/^'?°'?$/.test(token.input)) { tex += "\\;"; }
@@ -5221,10 +5271,11 @@ const parse = (
         break
       }
 
-      case tt.DIV:  //  / or \atop
+      case tt.DIV: { //  / or \atop
         if (isCalc) { rpn += tokenSep; }
         popTexTokens(2, true);
-        popRpnTokens(7);
+        rpnPrec = rpnPrecFromType[tt.DIV];
+        popRpnTokens(rpnPrec);
         if (token.input === "//") {
           // case fraction
           texStack.push({ prec: 2, pos: op.pos, ttype: tt.DIV, closeDelim: "}" });
@@ -5244,16 +5295,17 @@ const parse = (
         if (isCalc) {
           if (token.input === "\\atop") {
             if (delims[delims.length - 1].delimType === dBINOMIAL) {
-              rpnStack.push({ prec: 7, symbol: "()" });
+              rpnStack.push({ prec: rpnPrec, symbol: "()" });
             }
           } else {
-            rpnStack.push({ prec: 7, symbol: token.input });
+            rpnStack.push({ prec: rpnPrec, symbol: token.input });
           }
         }
         delims[delims.length - 1].isTall = true;
         posOfPrevRun = tex.length;
         okToAppend = false;
         break
+      }
 
       case tt.SUB: { // _
         popTexTokens(15, true);
@@ -5273,7 +5325,7 @@ const parse = (
             rpn = rpn.slice(0, -2) + "®27182818284590452353602874713527/10000000000000000000000000000000";
           }
           rpn += tokenSep;
-          popRpnTokens(13);
+          popRpnTokens(rpnPrecFromType[tt.SUP]);
         }
         popTexTokens(13, true);
         if (prevToken.ttype === tt.RIGHTBRACKET) {
@@ -5281,7 +5333,7 @@ const parse = (
         } else {
           texStack.push({ prec: 13, pos: posOfPrevRun, ttype: tt.SUP, closeDelim: "}" });
         }
-        if (isCalc) { rpnStack.push({ prec: 13, symbol: "^" }); }
+        if (isCalc) { rpnStack.push({ prec: rpnPrecFromType[tt.SUP], symbol: "^" }); }
         if (delims.length > 0 && str.charAt(0) === "(") {
           delims[delims.length - 1].isTall = true;
         }
@@ -5297,7 +5349,7 @@ const parse = (
             rpn = rpn.slice(0, -2) + "®27182818284590452353602874713527/10000000000000000000000000000000";
           }
           rpn += tokenSep;
-          popRpnTokens(13);
+          popRpnTokens(rpnPrecFromType[tt.SUPCHAR]);
         }
         popTexTokens(13, true);
         const supNum = numFromSupChars(token.output);
@@ -5308,7 +5360,7 @@ const parse = (
         }
         tex += "^{" + supNum;
         if (isCalc) {
-          rpnStack.push({ prec: 13, symbol: "^" });
+          rpnStack.push({ prec: rpnPrecFromType[tt.SUPCHAR], symbol: "^" });
           rpn += rationalRPN(supNum);
         }
         okToAppend = true;
@@ -5333,7 +5385,7 @@ const parse = (
           str = str.slice(L).trim();
         }
         if (isCalc) {
-          rpnStack.push({ prec: 12, symbol: token.input });
+          rpnStack.push({ prec: rpnPrecFromType[tt.FUNCTION], symbol: token.input });
           if (prevToken.input === "⌧") { tex += "×"; }
         }
         fc = str.charAt(0);
@@ -5353,13 +5405,13 @@ const parse = (
       case tt.ACCENT:
         if (isCalc) {
           rpn += tokenSep;
-          popRpnTokens(16);
+          popRpnTokens(rpnPrecFromType[tt.ACCENT]);
         }
         popTexTokens(1, okToAppend);
 
         if (isCalc) {
           texStack.push({ prec: 16, pos: tex.length, ttype: tt.ACCENT, closeDelim: "〗" });
-          tex += "〖" + token.input;
+          tex += (posArrow > 0 ? "" : "〖") + token.input;
           rpn += "¿" + token.input;
           dependencies.push(token.input);
         } else {
@@ -5386,7 +5438,9 @@ const parse = (
         posOfPrevRun = tex.length;
         const binCD = token.input === "root" ? "]{" : "}{";
         texStack.push({ prec: 12, pos: tex.length, ttype: tt.BINARY, closeDelim: binCD });
-        if (isCalc) { rpnStack.push({ prec: 12, symbol: token.output }); }
+        if (isCalc) {
+          rpnStack.push({ prec: rpnPrecFromType[tt.BINARY], symbol: token.output });
+        }
         tex += token.output + (token.input === "root" ? "[" : "{");
         delims[delims.length - 1].isTall = true;
         okToAppend = false;
@@ -5398,7 +5452,10 @@ const parse = (
         posOfPrevRun = tex.length;
         texStack.push({ prec: 12, pos: tex.length, ttype: tt.CURRENCY, closeDelim: "" });
         if (isCalc) {
-          rpnStack.push({ prec: 12, symbol: "applyUnit" + tokenSep + token.input });
+          rpnStack.push({
+            prec: rpnPrecFromType[tt.CURRENCY],
+            symbol: "applyUnit" + tokenSep + token.input
+          });
           if (prevToken.input === "⌧") { tex += "×"; }
         }
         tex += token.output;
@@ -5411,7 +5468,7 @@ const parse = (
         posOfPrevRun = tex.length;
         texStack.push({ prec: 12, pos: tex.length, ttype: tt.UNARY, closeDelim: "}" });
         if (isCalc) {
-          rpnStack.push({ prec: 12, symbol: token.input });
+          rpnStack.push({ prec: rpnPrecFromType[tt.UNARY], symbol: token.input });
           if (prevToken.input === "⌧") { tex += "×"; }
         }
         tex += token.output;
@@ -5443,7 +5500,7 @@ const parse = (
         popTexTokens(14, true);
         texStack.push({ prec: 14, pos: op.pos, ttype: tt.FACTORIAL, closeDelim: "" });
         if (isCalc) {
-          popRpnTokens(14);
+          popRpnTokens(rpnPrecFromType[tt.FACTORIAL]);
           rpn += tokenSep + token.output;
         }
         tex += token.output;
@@ -5636,12 +5693,13 @@ const parse = (
               if ([",", "\t"].includes(token.input) && (str.charAt(0) === "]")) {
                 rpn += "®0/1";
               }
-              if (token.input === "," && delim.delimType === dFUNCTION &&
-                          delim.numArgs === 2 && delim.name === "plot" ) {
-                // The literal function for a plot() statement inside a draw()
-                // Wrap the rpn in quotation marks.
-                rpn = rpn.slice(0, delim.rpnPos + 5) + '"'
-                    + rpn.slice(delim.rpnPos + 5, -1).replace(/\u00a0/g, "§") + '"' + tokenSep;
+              if (token.input === "," && delim.delimType === dFUNCTION) {
+                if (delim.numArgs === 2 && delim.name === "plot" ) {
+                  // The literal function for a plot() statement inside a draw()
+                  // Wrap the rpn in quotation marks.
+                  rpn = rpn.slice(0, delim.rpnPos + 5) + '"'
+                      + rpn.slice(delim.rpnPos + 5, -1).replace(/\u00a0/g, "§") + '"' + tokenSep;
+                }
               }
             }
             delim.numArgs += 1;
@@ -5835,25 +5893,34 @@ const parse = (
       default:
         if (isCalc) {
           rpn += tokenSep;
-          popRpnTokens(12);
+          popRpnTokens(rpnPrecFromType[tt.ORD]);
         }
         popTexTokens(1, okToAppend);
         texStack.push({ prec: 1, pos: tex.length, ttype: tt.ORD, closeDelim: "" });
-        if (isCalc) { rpnStack.push({ prec: 12, symbol: token.output }); }
+        if (isCalc) { rpnStack.push({ prec: rpnPrecFromType[tt.ORD], symbol: token.output }); }
         tex += token.output + " ";
         posOfPrevRun = tex.length;
         okToAppend = true;
     }
 
-    prevToken = cloneToken$1(token);
+    prevToken = cloneToken(token);
     isPrecededBySpace = isFollowedBySpace || token.input === "⌧";
   }
 
   popTexTokens(0, true); // Pop all the remaining close delimiters off the stack.
 
+  let indexVariable = "";
   if (isCalc) {
     while (rpnStack.length > 0) {
       rpn += tokenSep + rpnStack.pop().symbol;
+    }
+    let sum = sumRegEx.exec(rpn);
+    while (sum) {
+      // We've matched a ∑_(i=0)^n … term. Edit the index variable and the local RPN.
+      indexVariable = sum[1];
+      rpn = rpn.slice(0, sum.index) + '"' + sum[1] + '"' + sum[2] + sum[3] + tokenSep
+        + '"' + sum[4].replace(/\u00a0/g, "§") + '"\xa0∑' + rpn.slice(sum.index + sum[0].length);
+      sum = sumRegEx.exec(rpn);
     }
     if (numFreeCommas > 0) {
       rpn += tokenSep + "tuple" + tokenSep + String(numFreeCommas + 1);
@@ -5876,6 +5943,9 @@ const parse = (
   tex = tex.replace(/ {2,}/g, " "); // Replace multiple spaces with single space.
   tex = tex.replace(/\s+(?=[_^'!)}\]〗])/g, ""); // Delete spaces before right delims
   tex = tex.replace(/\s+$/, ""); //                 Delete trailing space
+  if (indexVariable.length > 0) {
+    tex = tex.replace(new RegExp(`〖${indexVariable}〗`, "g"), indexVariable);
+  }
 
   if (mustAlign) {
     const pos = tex.indexOf("=");
@@ -5923,7 +5993,7 @@ function insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat) {
             name: attrs.name[iName],
             value,
             resultdisplay: isQuantity
-              ? parse(displays[iName].trim() + " '" + attrs.unit + "'")
+              ? parse$1(displays[iName].trim() + " '" + attrs.unit + "'")
               : displays[iName].trim(),
             expos: attrs.expos,
             unit: isQuantity ? attrs.unit : undefined,
@@ -5945,7 +6015,7 @@ function insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat) {
           name: attrs.name[i],
           value,
           resultdisplay: isQuantity
-            ? parse(displays[i].trim() + " '" + attrs.unit + "'")
+            ? parse$1(displays[i].trim() + " '" + attrs.unit + "'")
             : displays[i].trim(),
           expos: attrs.expos,
           unit: isQuantity ? attrs.unit : undefined,
@@ -6013,12 +6083,12 @@ function insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat) {
         dtype
       };
       if ((dtype & dt.RATIONAL) && isSingleRow) {
-        result.resultdisplay = parse(format(value));
+        result.resultdisplay = parse$1(format(value));
       } else if (dtype & dt.RATIONAL) {
         result.resultdisplay = Matrix.display({ value, dtype }, formatSpec, decimalFormat)
-            + parse(`'${attrs.value.units[i]}'`);
+            + parse$1(`'${attrs.value.units[i]}'`);
       } else {
-        result.resultdisplay = parse(value);
+        result.resultdisplay = parse$1(value);
       }
       if (attrs.value.units[i]) {
         result.value = { plain: result.value };
@@ -6051,7 +6121,7 @@ function insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat) {
         i += 1;
       }
     }
-  }
+  } else ;
 }
 
 /*
@@ -6082,7 +6152,7 @@ const checkUnitEquality = (u1, u2) => {
   }
 };
 
-const append$1 = (o1, o2, shape1, shape2) => {
+const append = (o1, o2, shape1, shape2) => {
   let map;
   let scalar;
   if (o1.dtype & dt.MAP) {
@@ -6100,7 +6170,7 @@ const append$1 = (o1, o2, shape1, shape2) => {
   return map
 };
 
-const convertFromBaseUnits$1 = (data, gauge, factor) => {
+const convertFromBaseUnits = (data, gauge, factor) => {
   data = data.map(column => Rnl.isRational(column[0])
     ? column.map(e => Rnl.divide(e, factor))
     : column
@@ -6114,7 +6184,7 @@ const convertFromBaseUnits$1 = (data, gauge, factor) => {
   return data
 };
 
-const convertToBaseUnits$1 = (data, gauge, factor) => {
+const convertToBaseUnits = (data, gauge, factor) => {
   if (!Rnl.isZero(gauge)) {
     data = data.map(column => Rnl.isRational(column[0])
       ? column.map(e => Rnl.add(e, gauge))
@@ -6128,7 +6198,7 @@ const convertToBaseUnits$1 = (data, gauge, factor) => {
   return data
 };
 
-const range$1 = (map, keys) => {
+const range = (map, keys) => {
   let unit = clone(map.unit);
   const [rowList, columnList, iStart, iEnd] = identifyRange(map, keys);
   if (rowList.length === 0 && iStart === iEnd && columnList.length === 1) {
@@ -6175,10 +6245,10 @@ const range$1 = (map, keys) => {
 };
 
 const map = Object.freeze({
-  append: append$1,
-  convertFromBaseUnits: convertFromBaseUnits$1,
-  convertToBaseUnits: convertToBaseUnits$1,
-  range: range$1
+  append,
+  convertFromBaseUnits,
+  convertToBaseUnits,
+  range
 });
 
 /*
@@ -6323,7 +6393,7 @@ function propertyFromDotAccessor(parent, index, unitAware) {
   }
 }
 
-const display$3 = (tuple, formatSpec = "h3", decimalFormat = "1,000,000.") => {
+const display = (tuple, formatSpec = "h3", decimalFormat = "1,000,000.") => {
   if (tuple.size === 0) { return "" }
   let str = "\\begin{array}{c}";
 
@@ -6355,7 +6425,7 @@ const display$3 = (tuple, formatSpec = "h3", decimalFormat = "1,000,000.") => {
   return str
 };
 
-const displayAlt$2 = (tuple, formatSpec = "h3") => {
+const displayAlt = (tuple, formatSpec = "h3") => {
   if (tuple.size === 0) { return "" }
   let str = "``";
 
@@ -6386,8 +6456,8 @@ const displayAlt$2 = (tuple, formatSpec = "h3") => {
 };
 
 const Tuple = Object.freeze({
-  display: display$3,
-  displayAlt: displayAlt$2
+  display,
+  displayAlt
 });
 
 // A result has been sent here from evaluate.js or updateCalculations.js.
@@ -6397,7 +6467,7 @@ const numMisMatchError = _ => {
   const str = "Error. Mismatch in number of multiple assignment.";
   return [`\\textcolor{firebrick}{\\text{${str}}}`, str]
 };
-const testRegEx = /^@{1,2}test /;
+const testRegEx$1 = /^@{1,2}test /;
 const compRegEx = /\u00a0([⩵≠><>≤≥∋∈∉∌⊂⊃⊄⊅]|==|in|!in|!=|=>|<=)$/;
 const negatedComp = {
   "⩵": ["≠", "≠"],
@@ -6450,25 +6520,25 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
       altResultDisplay = "";
       return stmt
 
-    } else if (result.dtype & dt.BOOLEAN && testRegEx.test(stmt.entry) &&
+    } else if (result.dtype & dt.BOOLEAN && testRegEx$1.test(stmt.entry) &&
       compRegEx.test(stmt.rpn)) {
       if (testValue(result) === true) {
-        resultDisplay = parse(stmt.entry.replace(testRegEx, "")) +
+        resultDisplay = parse$1(stmt.entry.replace(testRegEx$1, "")) +
           ",\\text{ ok }✓";
-        altResultDisplay = stmt.entry.replace(testRegEx, "") + ", ok ✓";
+        altResultDisplay = stmt.entry.replace(testRegEx$1, "") + ", ok ✓";
       } else {
         const op = compRegEx.exec(stmt.rpn).slice(1);
         const negOp = negatedComp[op];
         if (assert) {
           const assertStr = assert.value.replace(/\.$/, "");
-          resultDisplay = `\\colorbox{Salmon}{${assertStr}, but $` +
-              parse(stmt.entry.replace(testRegEx, "").replace(op, negOp[0])) + "$}";
+          resultDisplay = "\\colorbox{Salmon}{" + assertStr + ", but $" +
+              parse$1(stmt.entry.replace(testRegEx$1, "").replace(op, negOp[0])) + "$}";
           altResultDisplay = assertStr + ", but " +
-              stmt.entry.replace(testRegEx, "").replace(op, negOp[1]);
+              stmt.entry.replace(testRegEx$1, "").replace(op, negOp[1]);
         } else {
-          resultDisplay = parse(stmt.entry.replace(testRegEx, "").replace(op, negOp[0])) +
+          resultDisplay = parse$1(stmt.entry.replace(testRegEx$1, "").replace(op, negOp[0])) +
               ",\\colorbox{Salmon}{ n.g.}";
-          altResultDisplay = stmt.entry.replace(testRegEx, "").replace(op, negOp[1]) +
+          altResultDisplay = stmt.entry.replace(testRegEx$1, "").replace(op, negOp[1]) +
               ", n.g.";
         }
         // eslint-disable-next-line no-console
@@ -6529,7 +6599,7 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
       altResultDisplay = result.value;
 
     } else if (result.dtype & dt.RICHTEXT) {
-      resultDisplay = parse(result.value, decimalFormat, false);
+      resultDisplay = parse$1(result.value, decimalFormat, false);
       altResultDisplay = result.value;
 
     } else if (result.dtype & dt.BOOLEAN) {
@@ -6539,24 +6609,6 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
     } else if (result.dtype === dt.COMPLEX) {
       const z = result.value;
       [resultDisplay, altResultDisplay] = Cpx.display(z, formatSpec, decimalFormat);
-/*        const complexSpec = /[j∠°]/.test(formatSpec) ? formatSpec.slice(-1) : "j"
-      if (complexSpec === "j") {
-        const real = format(z[0], formatSpec, decimalFormat)
-        let im = format(z[1], formatSpec, decimalFormat)
-        if (im.charAt(0) === "-") { im = "(" + im + ")" }
-        resultDisplay = real + " + j" + im
-        altResultDisplay = real + " + j" + im
-      } else {
-        const mag = Rnl.hypot(z[0], z[1])
-        let angle = Cpx.argument(result.value)
-        if (complexSpec === "°") {
-          angle = Rnl.divide(Rnl.multiply(angle, Rnl.fromNumber(180)), Rnl.pi)
-        }
-        resultDisplay = format(mag, formatSpec, decimalFormat) + "∠" +
-                        format(angle, formatSpec, decimalFormat) +
-                        (complexSpec === "°" ? "°" : "")
-        altResultDisplay = resultDisplay
-      } */
 
     } else if (result.value.plain) {
       resultDisplay = format(result.value.plain, formatSpec, decimalFormat);
@@ -6637,7 +6689,7 @@ const testValue = oprnd => {
  */
 
 const varRegEx = /〖[^〗]*〗/;
-const openParenRegEx$1 = /(?:[([{|‖]|[^\\][,;:](?:\\:)?)$/;
+const openParenRegEx = /(?:[([{|‖]|[^\\][,;:](?:\\:)?)$/;
 
 const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
   // For each variable name in the echo string, substitute a value.
@@ -6680,6 +6732,10 @@ const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
       // e^x
       str = str.substring(0, pos) + "e" + str.substring(pos + matchLength);
       continue
+    } else if (varName === "j") {
+      // √(-1)
+      str = str.substring(0, pos) + "j" + str.substring(pos + matchLength);
+      continue
     } else if (!vars[varName]) {
       return errorOprnd("V_NAME", varName)
     } else {
@@ -6704,7 +6760,7 @@ const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
     let isParened = false; // Is the match already nested inside parens?
     if (pos > 0) {
       const pStr = str.slice(0, pos).trim();
-      if (openParenRegEx$1.test(pStr)) {
+      if (openParenRegEx.test(pStr)) {
         const fStr = str.slice(pos + varName.length + 2).trim();
         isParened = fStr.length > 0 && /^([)|‖\]},;:]|\\right)/.test(fStr);
       } else if (/^\\begin{[bp]matrix}/.test(hvar.resultdisplay)) {
@@ -6714,7 +6770,7 @@ const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
     needsParens = needsParens && !isParened;
 
     if (hvar.dtype === dt.DATAFRAME || (hvar.dtype & dt.MAP)) {
-      display = "\\mathrm{" + parse(vars[varName].name) + "}";
+      display = "\\mathrm{" + parse$1(vars[varName].name) + "}";
     } else {
       display = hvar.resultdisplay;
       if (!unitAware) {
@@ -6950,7 +7006,7 @@ const multiset = (n, k) => {
 
 const piOver180 = Rnl.divide(Rnl.pi, [BigInt(180), BigInt(1)]);
 
-const unary = {
+const unary$1 = {
   scalar: {
     // Functions that take one real argument.
     abs(x)  { return Rnl.abs(x) },
@@ -7287,7 +7343,7 @@ const unary = {
   }
 };
 
-const binary = {
+const binary$1 = {
   logn([n, x]) {
     return Rnl.fromNumber(Math.log(Rnl.toNumber(x)) / Math.log(Rnl.toNumber(n)))
   },
@@ -7413,8 +7469,8 @@ const lerp = (args, unitAware) => {
 
 const Functions = Object.freeze({
   functionExpos,
-  unary,
-  binary,
+  unary: unary$1,
+  binary: binary$1,
   reduce,
   lerp
 });
@@ -7724,7 +7780,7 @@ const compare = (op, x, y, yPrev) => {
 // This file implements the overloading.
 
 // Some helper functions
-const dotProduct = (a, b) => {
+const dotProduct$1 = (a, b) => {
   return a.map((e, j) => Rnl.multiply(e, b[j])).reduce((m, n) => Rnl.add(m, n))
 };
 const sumOfSquares = vector => {
@@ -7736,7 +7792,7 @@ const oneTenth = [BigInt(1), BigInt(100)];
 // that look like this:
 // resultValue = Operations.unary[shape][operator](inputValue)
 
-const unary$1 = {
+const unary = {
   scalar: {
     abs(x)       { return Rnl.abs(x) },
     norm(x)      { return Rnl.abs(x) },
@@ -7746,6 +7802,7 @@ const unary$1 = {
     ceil(x)      { return Rnl.ceil(x) },
     percent(x)   { return Rnl.multiply(oneTenth, x) },
     factorial(x) { return Rnl.factorial(x) },
+    doubleFactorial(x) { return Rnl.doubleFactorial(x) },
     not(x)       { return !x }
   },
 
@@ -7759,6 +7816,7 @@ const unary$1 = {
     ceil(z)      { return errorOprnd("NA_COMPL_OP", "ceil") },
     percent(z)   { return errorOprnd("NA_COMPL_OP", "percent") },
     factorial(z) { return errorOprnd("NA_COMPL_OP", "factorial") },
+    doubleFactorial(z) { return errorOprnd("NA_COMPL_OP", "factorial") },
     not(z)       { return errorOprnd("NA_COMPL_OP", "not") }
   },
 
@@ -7771,6 +7829,7 @@ const unary$1 = {
     ceil(v)      { return v.map(e => Rnl.ceil(e)) },
     percent(v)   { return v.map(e => Rnl.multiply(oneTenth, e)) },
     factorial(v) { return v.map(e => Rnl.factorial(e)) },
+    doubleFactorial(v) { return v.map(e => Rnl.doubleFactorial(e)) },
     not(v)       { return v.map(e => !e) }
   },
 
@@ -7791,6 +7850,7 @@ const unary$1 = {
     ceil(m)      { return m.map(row => row.map(e => Rnl.ceil(e))) },
     percent(m)   { return m.map(row => row.map(e => Rnl.multiply(oneTenth, e))) },
     factorial(m) { return m.map(row => row.map(e => Rnl.factorial(e))) },
+    doubleFactorial(m) { return m.map(row => row.map(e => Rnl.doubleFactorial(e))) },
     not(m)       { return m.map(row => row.map(e => !e)) }
   },
 
@@ -7839,6 +7899,13 @@ const unary$1 = {
     factorial(map) {
       map.data = map.data.map(column => Rnl.isRational(column[0])
         ? column.map(e => Rnl.factorial(e))
+        : column
+      );
+      return map
+    },
+    doubleFactorial(map) {
+      map.data = map.data.map(column => Rnl.isRational(column[0])
+        ? column.map(e => Rnl.doubleFactorial(e))
         : column
       );
       return map
@@ -7929,7 +7996,7 @@ const dtype = {
 // The binary operators below are called like this:
 // resultValue = Operations.binary[shape_0][shape_1][operator](input_0, input_1)
 
-const binary$1 = {
+const binary = {
   scalar: {
     scalar: {
       // Binary operations on two scalars
@@ -8138,7 +8205,7 @@ const binary$1 = {
       },
       dot(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
-        return dotProduct(x, y)
+        return dotProduct$1(x, y)
       },
       cross(x, y) {
         if (x.length !== 3 || y.length !== 3) { return errorOprnd("CROSS") }
@@ -8193,7 +8260,7 @@ const binary$1 = {
       },
       dot(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
-        return dotProduct(x, y)
+        return dotProduct$1(x, y)
       },
       cross(x, y) {
         if (x.length !== 3 || y.length !== 3) { return errorOprnd("CROSS") }
@@ -8205,7 +8272,7 @@ const binary$1 = {
       },
       multiply(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
-        return dotProduct(x, y)
+        return dotProduct$1(x, y)
       },
       circ(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
@@ -8248,7 +8315,7 @@ const binary$1 = {
       multiply(v, m) {
         if (v.length !== m[0].length) { return errorOprnd("MIS_ELNUM") }
         m = m[0].map((x, i) => m.map(y => y[i])); // Transpose m
-        return m.map(row => dotProduct(v, row))
+        return m.map(row => dotProduct$1(v, row))
       },
       circ(v, m) {
         if (v.length !== m[0].length) { return errorOprnd("MIS_ELNUM") }
@@ -8287,7 +8354,7 @@ const binary$1 = {
       },
       dot(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
-        return dotProduct(x, y)
+        return dotProduct$1(x, y)
       },
       cross(x, y) {
         if (x.length !== 3 || y.length !== 3) { return errorOprnd("CROSS") }
@@ -8348,7 +8415,7 @@ const binary$1 = {
       },
       dot(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
-        return dotProduct(x, y)
+        return dotProduct$1(x, y)
       },
       cross(x, y) {
         if (x.length !== 3 || y.length !== 3) { return errorOprnd("CROSS") }
@@ -8528,7 +8595,7 @@ const binary$1 = {
       multiply(m, v) {
         // Multiply a matrix times a column vector
         if (m[0].length !== v.length) { return errorOprnd("MIS_ELNUM") }
-        return m.map(row => dotProduct(row, v))
+        return m.map(row => dotProduct$1(row, v))
       },
       circ(m, v) { return m.map((row, i) => row.map(e => Rnl.multiply(e, v[i]) )) },
       divide(m, v)   { return m.map((row, i) => row.map(e => Rnl.divide(e, v[i]) )) },
@@ -8554,7 +8621,7 @@ const binary$1 = {
       dot(x, y) {
         if (x.length !== y.length)       { return errorOprnd("MIS_ELNUM") }
         if (x[0].length !== y[0].length) { return errorOprnd("MIS_ELNUM") }
-        return x.map((row, i) => dotProduct(row, y[i])).reduce((m, n) => Rnl.add(m, n))
+        return x.map((row, i) => dotProduct$1(row, y[i])).reduce((m, n) => Rnl.add(m, n))
       },
       cross(x, y) {
         return errorOprnd("CROSS")
@@ -8791,7 +8858,7 @@ const relations = {
           return v.map(e => compare(op, x, e, yPrev))
         } else if (Array.isArray(yPrev)) {
           return v.map((e, i) => compare(op, x, e, yPrev[i]))
-        }
+        } else ;
       }
     },
     matrix: {
@@ -8802,7 +8869,7 @@ const relations = {
           return m.map(row => row.map(e => compare(op, x, e, yPrev)))
         } else if (Array.isArray(yPrev)) {
           return m.map((row, i) => row.map((e, j) => compare(op, x, e, yPrev[i][j])))
-        }
+        } else ;
       }
     },
     map: {
@@ -8827,7 +8894,7 @@ const relations = {
           return v.map(e => compare(op, e, y, yPrev))
         } else if (Array.isArray(yPrev)) {
           return v.map((e, i) => compare(op, e, y, yPrev[i]))
-        }
+        } else ;
       }
     }
   },
@@ -8878,7 +8945,7 @@ const relations = {
           return m.map(row => row.map(e => compare(op, e, y, yPrev)))
         } else if (Array.isArray(yPrev)) {
           return m.map((row, i) => row.map((e, j) => compare(op, e, y, yPrev[i][j])))
-        }
+        } else ;
       }
     },
     matrix: {
@@ -8922,8 +8989,8 @@ const isDivByZero = (quotient, shape) => {
 };
 
 const Operators = Object.freeze({
-  unary: unary$1,
-  binary: binary$1,
+  unary,
+  binary,
   relations,
   condition,
   dtype
@@ -8931,7 +8998,7 @@ const Operators = Object.freeze({
 
 const wideCharRegEx = /[\uD800-\uDBFF][\uDC00-\uDFFF][\uFE00\uFE01]?/g;
 
-const findfirst$1 = (searchString, str) => {
+const findfirst = (searchString, str) => {
   const index = str.value.indexOf(searchString.value);
   const wideCharMatches = arrayOfRegExMatches(wideCharRegEx, str.value.slice(0, index));
   return Rnl.fromNumber(index + wideCharMatches.length + 1)
@@ -9049,8 +9116,8 @@ const CLASS_R = /(?:^| )\.([a-z-]+)(?: |$)/;
 const WIDTH_R = /(?:^| )width="?([\d.a-z]+"?)(?: |$)/;
 const COL_WIDTHS_R = /(?:^| )colWidths="([^"]*)"/;
 const ID_R = /(?:^| )#([a-z-]+)(?: |$)/;
-const leadingSpaceRegEx$2 = /^ +/;
-const trailingSpaceRegEx$1 = / +$/;
+const leadingSpaceRegEx$1 = /^ +/;
+const trailingSpaceRegEx = / +$/;
 
 // Turn various whitespace into easy-to-process whitespace
 const preprocess = function(source) {
@@ -9121,7 +9188,7 @@ const parseList = (str, state) => {
     // Parse the list item
     state.inline = isTight;
     const adjustedContent = contentStr.replace(LIST_ITEM_END_R, "");
-    const content = parse$1(adjustedContent, state);
+    const content = parse(adjustedContent, state);
     const result = isTight
       ? { type: "tight_list_item", content: [{ "type": "paragraph", "content": content }] }
       : { type: "list_item", content };
@@ -9170,10 +9237,10 @@ const TABLES = (function() {
     return [myClass, myID, colWidths]
   };
 
-  const pipeRegEx = /(?<!\\)\|/;
+  const pipeRegEx = /(?<!\\)\|/;  // eslint doesn't like look behind. Disregard the warning.
 
   const parsePipeTableRow = function(source, parse, state, colWidths, inHeader) {
-    let cells = source.trim().split(pipeRegEx);
+    const cells = source.trim().split(pipeRegEx);
     cells.shift();
     cells.pop();
     const tableRow = [{ type: "tableSeparator" }];
@@ -9194,10 +9261,10 @@ const TABLES = (function() {
     tableRow.forEach(function(node, i) {
       if (node.type === "text") {
         if (i > 0 && tableRow[i - 1].type === "tableSeparator") {
-          node.text = node.text.replace(leadingSpaceRegEx$2, "");
+          node.text = node.text.replace(leadingSpaceRegEx$1, "");
         }
         if (i < tableRow.length - 1) {
-          node.text = node.text.replace(trailingSpaceRegEx$1, "");
+          node.text = node.text.replace(trailingSpaceRegEx, "");
         }
       }
       if (node.type === "tableSeparator") {
@@ -9252,11 +9319,11 @@ const TABLES = (function() {
         table.content.push(colGroup);
       }
       if (!/^\|+$/.test(capture[1])) {
-        table.content.push(parsePipeTableRow(capture[1], parse$1, state, colWidths, true));
+        table.content.push(parsePipeTableRow(capture[1], parse, state, colWidths, true));
       }
       const tableBody = capture[3].trim().split("\n");
       tableBody.forEach(row => {
-        table.content.push(parsePipeTableRow(row, parse$1, state, colWidths, false));
+        table.content.push(parsePipeTableRow(row, parse, state, colWidths, false));
       });
       state.inline = false;
       return table
@@ -9416,7 +9483,7 @@ const TABLES = (function() {
           if (gridTable[i][j].rowspan === 0) { continue }
           const cell = gridTable[i][j];
           state.inline = false;
-          let content = parse$1(cell.blob, state);
+          let content = parse(cell.blob, state);
           if (state.inHtml && content.length === 1 && content[0].type === "paragraph") {
             content = content[0].content;
           }
@@ -9582,7 +9649,7 @@ rules.set("blockquote", {
   match: blockRegex(/^( *>[^\n]+(\n[^\n]+)*\n*)+\n{2,}/),
   parse: function(capture, state) {
     const content = capture[0].replace(/^ *> ?/gm, "");
-    return { content: parse$1(content, state) };
+    return { content: parse(content, state) };
   }
 });
 rules.set("ordered_list", {
@@ -9611,7 +9678,7 @@ rules.set("dd", {  // description details
     const indent = 1 + capture[1].length;
     const spaceRegex = new RegExp("^ {" + indent + "," + indent + "}", "gm");
     div = div.replace(spaceRegex, ""); // remove indents on trailing lines:
-    return { content: parse$1(div, state) };
+    return { content: parse(div, state) };
   }
 });
 rules.set("special_div", {
@@ -9621,7 +9688,7 @@ rules.set("special_div", {
   parse: function(capture, state) {
     const content = capture[2] === "comment"
       ? parseInline(capture[3], state)
-      : parse$1(capture[3], state);
+      : parse(capture[3], state);
     return { type: capture[2], content };
   }
 });
@@ -9771,7 +9838,7 @@ rules.set("code", {
 });
 rules.set("tex", {
   isLeaf: true,
-  match: inlineRegex(/^(?:\$\$((?:\\[\s\S]|[^\\])+?)\$\$|\$((?:[^\s][\S\s]*?)?(?:[^\s\\]))\$(?![0-9]))/),
+  match: inlineRegex(/^(?:\$\$((?:\\[\s\S]|[^\\])+?)\$\$|\$(?!\s|$)((?:(?:\\[\s\S]|[^\\])+?)?)(?<=[^\s\\$])\$(?![0-9$]))/),
   parse: function(capture, state) {
     if (capture[1]) {
       const tex = capture[1].trim();
@@ -9894,7 +9961,7 @@ rules.set("text", {
 const lists = ["bullet_list", "ordered_list"];
 const LIST_LOOKBEHIND_R = /(?:\n)( *)$/;
 
-const parse$1 = (source, state) => {
+const parse = (source, state) => {
   if (!state.inline) { source += "\n\n"; }
   source = preprocess(source);
   const result = [];
@@ -9957,7 +10024,7 @@ const parse$1 = (source, state) => {
 const parseInline = function(content, state) {
   const isCurrentlyInline = state.inline || false;
   state.inline = true;
-  const result = parse$1(content, state);
+  const result = parse(content, state);
   state.inline = isCurrentlyInline;
   return result;
 };
@@ -10062,7 +10129,7 @@ const dateMessageRegEx = /^date:([^\n]+)\nmessage:([^\n]+)\n/;
 
 const inlineMd2ast = md => {
   const state = { inline: true, _defs: {}, prevCapture: "", remainder: "", inHtml: false };
-  const ast = parse$1(md, state);
+  const ast = parse(md, state);
   if (Array.isArray(ast) && ast.length > 0 && ast[0].type === "null") {
     ast.shift();
   }
@@ -10112,7 +10179,7 @@ const md2ast = (md, inHtml = false) => {
   }
 
   // Proceed to parse the document.
-  const ast = parse$1(md, state);
+  const ast = parse(md, state);
   if (Array.isArray(ast) && ast.length > 0 && ast[0].type === "null") {
     ast.shift();
   }
@@ -10302,7 +10369,7 @@ const textLocal = (svg, p, str, pos) => {
   return svg
 };
 
-const functions = {
+const functions$1 = {
   // Set attributes
   stroke(svgOprnd, color) {
     svgOprnd.value.temp.stroke = color.value;
@@ -10557,7 +10624,7 @@ const functions = {
   },
 
   curve(svgOprnd, plist) {
-    return functions.path(svgOprnd, plist, "T")
+    return functions$1.path(svgOprnd, plist, "T")
   },
 
   rect(svgOprnd, m, r) { // opposite corners in units, rounded by radius
@@ -10792,7 +10859,7 @@ const functions = {
 
 const draw = Object.freeze({
   startSvg,
-  functions
+  functions: functions$1
 });
 
 // Some helper functions and objects.
@@ -11372,7 +11439,7 @@ const Draw = Object.freeze({
   textNode
 });
 
-const round = (num, prec) => {
+const round$1 = (num, prec) => {
   // Round a number to prec significant digits.
   // Return a string. This is used for display of numbers on the diagram.
   const str = num.toPrecision(prec);
@@ -11428,7 +11495,7 @@ text, tspan { font: 12px Arial; }`
     if (okay) {
       const x = beam.xDiagram + beam.xScale * (nodes[i].x + spans[i].length / 2);
       const unit = beam.SI ? "" : "′";
-      const sText = round(spans[i].length / lengthFactor, 3);
+      const sText = round$1(spans[i].length / lengthFactor, 3);
       diagram.push(Draw.textNode(`${sText}${unit}`, x, beam.yLoad + 15));
     }
   }
@@ -11437,11 +11504,11 @@ text, tspan { font: 12px Arial; }`
   for (let i = 0; i < nodes.length; i++) {
     const x = beam.xDiagram + beam.xScale * nodes[i].x;
     if (Math.abs(nodes[i].P[0]) > 0) {
-      const sText = round(nodes[i].P[0] / forceFactor, 3);
+      const sText = round$1(nodes[i].P[0] / forceFactor, 3);
       diagram = diagram.concat(Draw.pointForce(x, beam.yLoad, sText, nodes[i].fixity));
     }
     if (Math.abs(nodes[i].M[0]) > 0) {
-      const sText = round(nodes[i].M[0] / momentFactor, 3);
+      const sText = round$1(nodes[i].M[0] / momentFactor, 3);
       diagram = diagram.concat(Draw.pointMoment(x, beam.yLoad, sText));
     }
   }
@@ -11455,11 +11522,11 @@ text, tspan { font: 12px Arial; }`
       const seg = spans[i].segments[j];
       const x = beam.xDiagram + beam.xScale * seg.xOfLeftEnd;
       if (Math.abs(seg.P[0]) > 0) {
-        const sText = round(seg.P[0] / forceFactor, 3);
+        const sText = round$1(seg.P[0] / forceFactor, 3);
         diagram = diagram.concat(Draw.pointForce(x, beam.yLoad, sText, "continuous"));
       }
       if (Math.abs(seg.M[0]) > 0) {
-        const sText = round(seg.M[0] / momentFactor, 3);
+        const sText = round$1(seg.M[0] / momentFactor, 3);
         diagram = diagram.concat(Draw.pointMoment(x, beam.yLoad, sText));
       }
       // Draw a line segment for the service load.
@@ -11505,7 +11572,7 @@ text, tspan { font: 12px Arial; }`
           let noBust = true; // initialize the value
           const fudge = seg.w1[0] > 0 ? 10 : -4;
           const yy = beam.yLoad + wScale * seg.w1[0] + fudge;
-          const str = round(Math.abs(seg.w1[0] / lineLoadFactor), 3);
+          const str = round$1(Math.abs(seg.w1[0] / lineLoadFactor), 3);
           // try the middle of the uniform load.  See if there is a point load there
           for (let j = firstSegment + 1; j <= i; j++) {
             if (beam.xScale * (Math.abs(segments[j].xOfLeftEnd
@@ -11571,7 +11638,7 @@ text, tspan { font: 12px Arial; }`
       if (Math.abs(s2 - s) > 0.05 || i === 0) {
         if (Math.abs(seg.w1[0]) > 0.05) {
           if (seg.length * beam.xScale > 20) {
-            const str = round(Math.abs(seg.w1[0] / lineLoadFactor), 3);
+            const str = round$1(Math.abs(seg.w1[0] / lineLoadFactor), 3);
             const x = beam.xDiagram + beam.xScale * seg.xOfLeftEnd;
             const fudge = seg.w1[0] > 0 ? 10 : -5;
             const yy = beam.yLoad + wScale * seg.w1[0] + fudge;
@@ -11583,7 +11650,7 @@ text, tspan { font: 12px Arial; }`
         || Math.abs(seg.w2[0] - segments[i + 1].w1[0]) > 0) {
         if (Math.abs(seg.w2[0]) > 0.05) {
           if (seg.length * beam.xScale > 20) {
-            const str = round(Math.abs(seg.w2[0] / lineLoadFactor), 3);
+            const str = round$1(Math.abs(seg.w2[0] / lineLoadFactor), 3);
             const x = beam.xDiagram + beam.xScale * (seg.xOfLeftEnd + seg.length) - 30;
             const fudge = seg.w2[0] > 0 ? 10 : -5;
             const yy = beam.yLoad + wScale * seg.w2[0] + fudge;
@@ -11781,7 +11848,7 @@ const readInputData = data => {
   return input
 };
 
-const dotProduct$1 = (a, b) => a.map((e, i) => (e * b[i])).reduce((m, n) => m + n);
+const dotProduct = (a, b) => a.map((e, i) => (e * b[i])).reduce((m, n) => m + n);
 const isLiveish = (loadType, beam) => beam.getsPattern[loadType];
 
 
@@ -12263,7 +12330,7 @@ function doAnalysis(beam, nodes, spans) {
 
         // Get the Member Action Matrix, MAM.
         // Multiply lsmDtm times dm, then add the resulting column vector to the FEAM
-        mam = lsmDtm.map(row => dotProduct$1(row, dm)).map((e, i) => e + feam[i]);
+        mam = lsmDtm.map(row => dotProduct(row, dm)).map((e, i) => e + feam[i]);
 
         //Set elements of mam = 0 where fixity so dictates
         for (let i = 1; i <= numEndActions; i++) {
@@ -13165,12 +13232,12 @@ function drawDiagrams(beam, nodes, spans, cases, yCoords, extremes, combinations
     const x = beam.xDiagram + beam.xScale * nodes[i].x;
     if (Math.abs(nodes[i].Pr[0]) > 0) {
       f = 1 / (beam.SI ? 1000 : 4448.2216152605);
-      const sText = round(nodes[i].Pr[0] * f, 3);
+      const sText = round$1(nodes[i].Pr[0] * f, 3);
       diagram = diagram.concat(Draw.pointForce(x, beam.yLoad, sText, nodes[i].fixity, true));
     }
     if (Math.abs(nodes[i].Mr[0]) > 0) {
       f = 1 / (beam.SI ? 1000 : 4448.2216152605 * 0.3048);
-      const sText = round(nodes[i].Mr[0] * f, 3);
+      const sText = round$1(nodes[i].Mr[0] * f, 3);
       diagram = diagram.concat(Draw.pointMoment(x, beam.yLoad, sText, true));
     }
   }
@@ -13444,7 +13511,8 @@ function drawDiagrams(beam, nodes, spans, cases, yCoords, extremes, combinations
       diagram.push(Draw.textNode("deflection", 20, yDeflection + 2));
       diagram.push({
         tag: "path",
-        attrs: { d: `M${beam.xDiagram} ${yDeflection} h300`, stroke: "black", "stroke-width": '1.5px' }
+        attrs: { d: `M${beam.xDiagram} ${yDeflection} h300`,
+          stroke: "black", "stroke-width": '1.5px' }
       });
       const xPoly = new Array(numDataPoints - 1).fill(0);
       const yPoly = new Array(numDataPoints - 1).fill(0);
@@ -13465,7 +13533,7 @@ function drawDiagrams(beam, nodes, spans, cases, yCoords, extremes, combinations
     const fudge = wV[0] > 0 ? -2 : 13;
     const yText = (yV - vScale * wV[0] + fudge).toFixed(2);
     // horizAlign is middle
-    diagram.push(Draw.textNode(round(wV.shift() * f, 3), xText, yText, horizAlign));
+    diagram.push(Draw.textNode(round$1(wV.shift() * f, 3), xText, yText, horizAlign));
   }
 
   // Write the values of the local bending maximums onto the diagrams.
@@ -13474,7 +13542,7 @@ function drawDiagrams(beam, nodes, spans, cases, yCoords, extremes, combinations
     const xText = (beam.xDiagram + beam.xScale * wMx.shift()).toFixed(2);
     const fudge = beam.convention * wM[0] > 0 ? -2 : 13;
     const yText = (yM - beam.convention * mScale * wM[0] + fudge).toFixed(2);
-    const sText = round(wM.shift() * f, 3);
+    const sText = round$1(wM.shift() * f, 3);
     diagram.push(Draw.textNode(sText, xText, yText, horizAlign));
   }
 
@@ -13489,9 +13557,9 @@ function drawDiagrams(beam, nodes, spans, cases, yCoords, extremes, combinations
       xText = beam.xDiagram + beam.xScale * xDeflectionMax;
       yText = yDeflection - deflectionScale * deflectionMax - 2;
       if (beam.SI) {
-        sText = round(deflectionMax * f, 1) + " mm";
+        sText = round$1(deflectionMax * f, 1) + " mm";
       } else {
-        sText = round(deflectionMax * f, 2) + '″';
+        sText = round$1(deflectionMax * f, 2) + '″';
       }
       diagram.push(Draw.textNode(sText, xText, yText, horizAlign));
     }
@@ -13499,9 +13567,9 @@ function drawDiagrams(beam, nodes, spans, cases, yCoords, extremes, combinations
       xText = beam.xDiagram + beam.xScale * xDeflectionMin;
       yText = yDeflection - deflectionScale * deflectionMin + 13;
       if (beam.SI) {
-        sText = round(f * deflectionMin, 1) + " mm";
+        sText = round$1(f * deflectionMin, 1) + " mm";
       } else {
-        sText = round(f * deflectionMin, 2) + '″';
+        sText = round$1(f * deflectionMin, 2) + '″';
       }
       diagram.push(Draw.textNode(sText, xText, yText, horizAlign));
     }
@@ -13803,6 +13871,11 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
             stack.length > 0 && isMatrix(stack[stack.length - 1])) {
         i += 1;
         oprnd = Matrix.transpose(stack.pop());
+      } else if (varName === "j" && !vars.j) {
+        oprnd.value = [Rnl.zero, Rnl.one];
+        oprnd.unit = Object.create(null);
+        oprnd.unit.expos = allZeros;
+        oprnd.dtype = dt.COMPLEX;
       } else {
         const cellAttrs = vars[varName];
         if (!cellAttrs) { return errorOprnd("V_NAME", varName) }
@@ -13856,17 +13929,6 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           e.unit = Object.create(null);
           e.unit.expos = allZeros;
           stack.push(Object.freeze(e));
-          break
-        }
-
-        case "im": {
-          // im = √(-1)
-          const j = Object.create(null);
-          j.value = [Rnl.zero, Rnl.one];
-          j.unit = Object.create(null);
-          j.unit.expos = allZeros;
-          j.dtype = dt.COMPLEX;
-          stack.push(Object.freeze(j));
           break
         }
 
@@ -14231,16 +14293,18 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
         case "uniform":
         case "lognormal": {
           // eslint-disable-next-line no-unused-vars
-          const high = stack.pop();
+          stack.pop();
           // eslint-disable-next-line no-unused-vars
-          const low = stack.pop();
+          stack.pop();
           // low and high define a probablility distribution. They are the ends of a
           // uniform distribution or they mark the 90% confidence interval of (log)normal.
           // TODO: Implement probability distributions as a data type.
           break
         }
 
-        case "!": {
+        case "!":
+        case "‼":
+        case "!!": {
           // TODO: "!!" and "¡"
           const o1 = stack.pop();
           if (!(o1.dtype & dt.RATIONAL)) { return errorOprnd("NAN_OP") }
@@ -14252,7 +14316,9 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           const factorial = Object.create(null);
           factorial.unit = allZeros;
           factorial.dtype = dt.RATIONAL;
-          factorial.value = Operators.unary[shapeOf(o1)]["factorial"](x);
+          factorial.value = tkn === "!"
+            ? Operators.unary[shapeOf(o1)]["factorial"](x)
+            : Operators.unary[shapeOf(o1)]["doubleFactorial"](x);
           if (factorial.value.dtype) { return factorial.value } // Error
           stack.push(Object.freeze(factorial));
           break
@@ -14517,11 +14583,11 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           const output = Object.create(null);
           output.unit = { expos: allZeros };
           output.value = isString && isVector(args[1])
-            ? args[1].value.map(e => findfirst$1(args[0], e))
+            ? args[1].value.map(e => findfirst(args[0], e))
             : isString && isMatrix(args[1])
-            ? args[1].value.map(row => row.map(e => findfirst$1(args[0], e)))
+            ? args[1].value.map(row => row.map(e => findfirst(args[0], e)))
             : isString
-            ? findfirst$1(args[0], args[1])
+            ? findfirst(args[0], args[1])
             : numArgs === 1
             ? Matrix.findfirst(true, args[0])
             : isVector(args[1])
@@ -15000,6 +15066,37 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           break
         }
 
+        case "→": {
+          // Anonymous function, e.g., x → cos x
+          const rpnLocal = stack.pop().value.replace(/§/g, "\xa0");
+          const parameter = stack.pop().value;
+          stack.push({
+            dtype: dt.MODULE,
+            unit: null,
+            value: {
+              parameters: [ { name: parameter }],
+              statements: [{ rpn: rpnLocal, stype: "return" }]
+            } });
+          break
+        }
+
+        case "∑": {
+          const rpnLocal = stack.pop().value.replace(/§/g, "\xa0");
+          const endOfRange = stack.pop().value;
+          let index = stack.pop().value;
+          const parameter = stack.pop().value;
+          let sum = Rnl.zero;
+          while (Rnl.lessThanOrEqualTo(index, endOfRange)) {
+            vars[parameter] = { value: index, unit: allZeros, dtype: dt.RATIONAL };
+            const localResult = evalRpn(rpnLocal, vars, decimalFormat, false);
+            sum = Rnl.add(sum, localResult.value);
+            index = Rnl.add(index, Rnl.one);
+          }
+          delete vars[parameter];
+          stack.push({ value: sum, unit: allZeros, dtype: dt.RATIONAL });
+          break
+        }
+
         case "throw":
           return { value: stack.pop().value, unit: null, dtype: dt.ERROR }
 
@@ -15055,7 +15152,7 @@ const plot = (svg, decimalFormat, fun, numPoints, xMin, xMax) => {
       funResult = evalRpn(fun.value.replace(/§/g, "\xa0"), { x: arg }, decimalFormat, false);
       pathValue = arg.value.map((e, i) => [e, funResult.value[i]]);
     }
-  }
+  } else ;
   const pth = { value: pathValue, unit: null, dtype: dt.MATRIX + dt.RATIONAL };
   return draw.functions.path(svg, pth, "L")
 };
@@ -15358,7 +15455,7 @@ const conditionResult = (stmt, oprnd, unitAware) => {
   result.dtype = oprnd.dtype;
 
   if (result.dtype === dt.COMPLEX && Rnl.isZero(Cpx.imag(result.value))) {
-    result.value = Cpx.re(result.value);
+    result.value = Cpx.real(result.value);
     result.dtype = 1;
   }
 
@@ -15513,14 +15610,14 @@ const evaluate = (stmt, vars, decimalFormat = "1,000,000.") => {
   return stmt
 };
 
-const numberRegEx$4 = new RegExp(Rnl.numberPattern);
+const numberRegEx$2 = new RegExp(Rnl.numberPattern);
 const matrixRegEx = /^[([] *(?:(?:-?[0-9.]+|"[^"]+"|true|false) *[,;\t]? *)+[)\]]/;
 /* eslint-disable max-len */
 
 const numStr = "(-?(?:0x[0-9A-Fa-f]+|[0-9]+(?: [0-9]+\\/[0-9]+|(?:\\.[0-9]+)?(?:e[+-]?[0-9]+|%)?)))";
 const nonNegNumStr = "(0x[0-9A-Fa-f]+|[0-9]+(?: [0-9]+\\/[0-9]+|(?:\\.[0-9]+)?(?:e[+-]?[0-9]+|%)?))";
-const complexRegEx = new RegExp("^" + numStr + "(?: *([+-]) *" + nonNegNumStr + " *im|∠" + numStr + "(°)?)");
-// const complexRegEx = /^(number)(?: *([+-]) *(non-negative number) *im|∠(number)(°)?)/
+const complexRegEx = new RegExp("^" + numStr + "(?: *([+-]) *(?: j *" + nonNegNumStr + "|" + nonNegNumStr + " *∠" + numStr + "(°)?))");
+// const complexRegEx = /^(number)(?: *([+-]) *(non-negative number) *j(number)(°)?)/
 /* eslint-enable max-len */
 // Capturing groups:
 //    [1] First number, either a in a ± b im, or r in r∠θ
@@ -15584,14 +15681,14 @@ const valueFromLiteral = (str, name, decimalFormat) => {
     if (name === "format") {
       return parseFormatSpec(str.slice(1, -1).trim())
     } else {
-      const tex = parse(str, decimalFormat);
+      const tex = parse$1(str, decimalFormat);
       return [str.slice(1, -1), undefined, dt.STRING, tex]
     }
 
   } else if (matrixRegEx.test(str)) {
     // We're processing a matrix
     const matrixStr = matrixRegEx.exec(str)[0];
-    const [tex, rpn, _] = parse(matrixStr, decimalFormat, true);
+    const [tex, rpn, _] = parse$1(matrixStr, decimalFormat, true);
     const oprnd = evalRpn(rpn, {}, decimalFormat, false, {});
     const unitStr = str.slice(matrixStr.length).trim();
     return literalWithUnit(oprnd, tex, unitStr)
@@ -15626,7 +15723,7 @@ const valueFromLiteral = (str, name, decimalFormat) => {
 
   } else if (complexRegEx.test(str)) {
     // str is a complex number.
-    const resultDisplay = parse(str, decimalFormat);
+    const resultDisplay = parse$1(str, decimalFormat);
     const parts = str.match(complexRegEx);
     let realPart;
     let imPart;
@@ -15646,12 +15743,12 @@ const valueFromLiteral = (str, name, decimalFormat) => {
     return [[realPart, imPart], allZeros, dt.COMPLEX, resultDisplay]
 
   } else {
-    const match = numberRegEx$4.exec(str);
+    const match = numberRegEx$2.exec(str);
     if (match) {
       // str begins with a number.
       const numStr = match[0];
       const unitStr = str.slice(numStr.length).trim();
-      const [tex, rpn, _] = parse(numStr, decimalFormat, true);
+      const [tex, rpn, _] = parse$1(numStr, decimalFormat, true);
       const oprnd = evalRpn(rpn, {}, decimalFormat, false, {});
       return literalWithUnit(oprnd, tex, unitStr)
 
@@ -15665,7 +15762,7 @@ const valueFromLiteral = (str, name, decimalFormat) => {
 const isValidIdentifier$1 = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
 const keywordRegEx = /^(if|elseif|else|return|throw|while|for|break|print|end)(\u2002|\b)/;
 const drawCommandRegEx = /^(title|frame|view|axes|grid|stroke|strokewidth|strokedasharray|fill|fontsize|fontweight|fontstyle|fontfamily|marker|line|path|plot|curve|rect|circle|ellipse|arc|text|dot|leader|dimension)\b/;
-const leadingSpaceRegEx$3 = /^[\t ]+/;
+const leadingSpaceRegEx = /^[\t ]+/;
 const oneLinerRegEx = /^( *)if ([^\n`]+) +(return|throw|print|break)\b([^\n]+)?(?: end)? *\n/gm;
 
 // If you change functionRegEx, then also change it in mathprompt.js.
@@ -15679,7 +15776,7 @@ const lexRegEx = /"[^"]*"|``.*|`[^`]*`|'[^']*'|#|[^"`'#]+/g;
 const testForStatement = str => {
   const pos = str.indexOf("=");
   if (pos === -1) { return false }
-  const leadStr = str.slice(0, pos).replace(leadingSpaceRegEx$3, "").trim();
+  const leadStr = str.slice(0, pos).replace(leadingSpaceRegEx, "").trim();
   if (isValidIdentifier$1.test(leadStr)) { return true }
   if (leadStr.indexOf(",") === -1) { return false }
   let result = true;
@@ -15844,7 +15941,7 @@ const scanFunction = (lines, decimalFormat, startLineNum) => {
     let rpn = "";
     let _;
     if (expression) {
-      [, rpn, _] = parse(expression, decimalFormat, true);
+      [, rpn, _] = parse$1(expression, decimalFormat, true);
       if (name === "for") { rpn = rpn.replace(/\u00a0in\u00a0/, "\u00a0"); }
     }
     const stype = isStatement ? "statement" : name;
@@ -15948,14 +16045,14 @@ const containsOperator = /[+\-×·*∘⌧/^%‰&√!¡|‖&=<>≟≠≤≥∈∉
 const mustDoCalculation = /^(``.+``|[$$£¥\u20A0-\u20CF]?(\?{1,2}|@{1,2}|%{1,2}|!{1,2})[^=!(?@%!{})]*)$/;
 const assignDataFrameRegEx = /^[^=]+=\s*``[\s\S]+`` *\n/;
 const currencyRegEx = /^[$£¥\u20A0-\u20CF]/;
-const isValidIdentifier$2 = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
+const isValidIdentifier = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
 const matrixOfNames = /^[([](?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*[,;].+[)\]]$/;
 const isKeyWord = /^(π|true|false|root|if|else|elseif|and|or|otherwise|mod|for|while|break|return|throw)$/;
-const testRegEx$1 = /^(@{1,2})test /;
+const testRegEx = /^(@{1,2})test /;
 
 const shortcut = (str, decimalFormat) => {
   // No calculation in str. Parse it just for presentation.
-  const tex = parse(str, decimalFormat);
+  const tex = parse$1(str, decimalFormat);
   return { entry: str, tex, alt: str }
 };
 
@@ -16006,6 +16103,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
       name,
       value: (isError || isModule) ? module.value : module.value[name],
       // TODO: what to do with comma decimals?
+      resultdisplay: "\\text{" + name + "}",
       dtype: isError ? dt.ERROR : name === "draw" ? dt.DRAWING : dt.MODULE,
       error: isError
     };
@@ -16014,10 +16112,10 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
 
   str = inputStr;
 
-  if (testRegEx$1.test(inputStr)) {
-    str = str.replace(testRegEx$1, "").trim();
-    const [_, rpn, dependencies] = parse(str, decimalFormat, true);
-    const resulttemplate = testRegEx$1.exec(inputStr)[1];
+  if (testRegEx.test(inputStr)) {
+    str = str.replace(testRegEx, "").trim();
+    const [_, rpn, dependencies] = parse$1(str, decimalFormat, true);
+    const resulttemplate = testRegEx.exec(inputStr)[1];
     return { entry: inputStr, template: "", rpn, dependencies, resulttemplate,
       altresulttemplate: resulttemplate, resultdisplay: "" }
   }
@@ -16064,7 +16162,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
           const potentialIdentifiers = leadStr.split(/[,;]/);
           for (let i = 0; i < potentialIdentifiers.length; i++) {
             const candidate = potentialIdentifiers[i].trim();
-            if (isKeyWord.test(candidate) || !isValidIdentifier$2.test(candidate)) {
+            if (isKeyWord.test(candidate) || !isValidIdentifier.test(candidate)) {
               // leadStr is not a list of valid identifiers.
               // So this isn't a valid calculation statement. Let's finish early.
               return shortcut(str, decimalFormat)
@@ -16074,7 +16172,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
           name = potentialIdentifiers.map(e => e.trim());
 
         } else {
-          if (isValidIdentifier$2.test(leadStr) && !isKeyWord.test(leadStr)) {
+          if (isValidIdentifier.test(leadStr) && !isKeyWord.test(leadStr)) {
             name = leadStr;
           } else {
             // The "=" sign is inside an expression. There is no lead identifier.
@@ -16091,14 +16189,14 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
     } else if (isDataFrameAssigment) {
       name = mainStr;
       expression = trailStr;
-    } else  if (isValidIdentifier$2.test(mainStr) && !isKeyWord.test(mainStr)) {
+    } else  if (isValidIdentifier.test(mainStr) && !isKeyWord.test(mainStr)) {
       // No calculation display selector is present,
       // but there is one "=" and a valid idendtifier.
       // It may be an assignment statement.
       // input has form:  name = trailStr
       name = mainStr;
       if (trailStr === "") {
-        const tex = parse(str, decimalFormat);
+        const tex = parse$1(str, decimalFormat);
         return { entry: str, tex, alt: str }
       }
     } else {
@@ -16121,7 +16219,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
 
     } else {
       // Parse the expression. Stop short of doing the calculation.
-      [echo, rpn, dependencies] = parse(expression, decimalFormat, true);
+      [echo, rpn, dependencies] = parse$1(expression, decimalFormat, true);
 
       // Shoulld we display an echo of the expression, with values shown for each variable?
       if (suppressResultDisplay || displayResultOnly || echo.indexOf("〖") === -1
@@ -16162,9 +16260,9 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
     } else {
       if (unit) {
         resultDisplay = trailStr.trim().replace(/([^ ?!@%]+)$/, "'" + "$1" + "'");
-        resultDisplay = parse(resultDisplay, decimalFormat).replace(/\\%/g, "%").replace("@ @", "@@");
+        resultDisplay = parse$1(resultDisplay, decimalFormat).replace(/\\%/g, "%").replace("@ @", "@@");
       } else {
-        resultDisplay = parse(trailStr, decimalFormat).replace(/\\%/g, "%").replace("@ @", "@@");
+        resultDisplay = parse$1(trailStr, decimalFormat).replace(/\\%/g, "%").replace("@ @", "@@");
       }
       resultDisplay = resultDisplay.replace(/\\text\{(\?\??|%%?)\}/, "$1");
       resultDisplay = resultDisplay.replace(/([?%]) ([?%])/, "$1" + "$2");
@@ -16183,7 +16281,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
   let eqn = "";
   let altEqn = "";
   if (!displayResultOnly) {
-    eqn = parse(mainStr, decimalFormat);
+    eqn = parse$1(mainStr, decimalFormat);
     if (mustAlign) {
       eqn = "\\begin{aligned}" + eqn;
       const pos = eqn.indexOf("=");
@@ -16420,7 +16518,7 @@ const protocolFromUrl = function(url) {
  * 1/6551.6em with our ptPerEm = 10):
  * http://www.ctex.org/documents/shredder/src/texbook.pdf#page=69
  */
-const round$1 = function(n) {
+const round = function(n) {
   return +n.toFixed(4);
 };
 
@@ -16431,7 +16529,7 @@ var utils = {
   getBaseElem,
   isCharacterBox,
   protocolFromUrl,
-  round: round$1
+  round
 };
 
 /**
@@ -17234,6 +17332,10 @@ defineSymbol(math, mathord, "\u21af", "\\lightning", true);
 defineSymbol(math, mathord, "\u220E", "\\QED", true);
 defineSymbol(math, mathord, "\u2030", "\\permil", true);
 defineSymbol(text, textord, "\u2030", "\\permil");
+defineSymbol(math, mathord, "\u2609", "\\astrosun", true);
+defineSymbol(math, mathord, "\u263c", "\\sun", true);
+defineSymbol(math, mathord, "\u263e", "\\leftmoon", true);
+defineSymbol(math, mathord, "\u263d", "\\rightmoon", true);
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);
@@ -18208,7 +18310,7 @@ const consolidateText = mrow => {
   return mtext
 };
 
-const numberRegEx$1$1 = /^[0-9]$/;
+const numberRegEx$1 = /^[0-9]$/;
 const isCommaOrDot = node => {
   return (node.type === "atom" && node.text === ",") ||
          (node.type === "textord" && node.text === ".")
@@ -18222,7 +18324,7 @@ const consolidateNumbers = expression => {
   // Find adjacent numerals
   for (let i = 0; i < expression.length; i++) {
     const node = expression[i];
-    if (node.type === "textord" && numberRegEx$1$1.test(node.text)) {
+    if (node.type === "textord" && numberRegEx$1.test(node.text)) {
       if (!inNum) { nums.push({ start: i }); }
       inNum = true;
     } else {
@@ -24052,7 +24154,7 @@ const smallCaps = Object.freeze({
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
 // src/symbols.js.
 
-const numberRegEx$5 = /^\d(?:[\d,.]*\d)?$/;
+const numberRegEx = /^\d(?:[\d,.]*\d)?$/;
 const latinRegEx = /[A-Ba-z]/;
 
 const italicNumber = (text, variant, tag) => {
@@ -24106,7 +24208,7 @@ defineFunctionBuilders({
     const variant = getVariant(group, style) || "normal";
 
     let node;
-    if (numberRegEx$5.test(group.text)) {
+    if (numberRegEx.test(group.text)) {
       const tag = group.mode === "text" ? "mtext" : "mn";
       if (variant === "italic" || variant === "bold-italic") {
         return italicNumber(text, variant, tag)
@@ -24303,7 +24405,7 @@ const makeVerb = (group) => group.body.replace(/ /g, group.star ? "\u2423" : "\x
 
 /** Include this to ensure that all functions are defined. */
 
-const functions$1 = _functions;
+const functions = _functions;
 
 /**
  * Lexing or parsing positional information for error reporting.
@@ -27585,7 +27687,7 @@ class MacroExpander {
   isDefined(name) {
     return (
       this.macros.has(name) ||
-      Object.prototype.hasOwnProperty.call(functions$1, name ) ||
+      Object.prototype.hasOwnProperty.call(functions, name ) ||
       Object.prototype.hasOwnProperty.call(symbols.math, name ) ||
       Object.prototype.hasOwnProperty.call(symbols.text, name ) ||
       Object.prototype.hasOwnProperty.call(implicitCommands, name )
@@ -27599,7 +27701,7 @@ class MacroExpander {
     const macro = this.macros.get(name);
     return macro != null
       ? typeof macro === "string" || typeof macro === "function" || !macro.unexpandable
-      : Object.prototype.hasOwnProperty.call(functions$1, name ) && !functions$1[name].primitive;
+      : Object.prototype.hasOwnProperty.call(functions, name ) && !functions[name].primitive;
   }
 }
 
@@ -28261,7 +28363,7 @@ class Parser {
       if (breakOnTokenText && lex.text === breakOnTokenText) {
         break;
       }
-      if (breakOnInfix && functions$1[lex.text] && functions$1[lex.text].infix) {
+      if (breakOnInfix && functions[lex.text] && functions[lex.text].infix) {
         break;
       }
       const atom = this.parseAtom(breakOnTokenText);
@@ -28516,7 +28618,7 @@ class Parser {
   ) {
     const token = this.fetch();
     const func = token.text;
-    const funcData = functions$1[func];
+    const funcData = functions[func];
     if (!funcData) {
       return null;
     }
@@ -28549,7 +28651,7 @@ class Parser {
       token,
       breakOnTokenText
     };
-    const func = functions$1[name];
+    const func = functions[name];
     if (func && func.handler) {
       return func.handler(context, args, optArgs);
     } else {
@@ -29288,10 +29390,11 @@ function postProcess(block) {
 /* eslint no-console:0 */
 
 /**
+ * @type {import('./temml').render}
  * Parse and build an expression, and place that expression in the DOM node
  * given.
  */
-let render = function(expression, baseNode, options) {
+let render$1 = function(expression, baseNode, options) {
   baseNode.textContent = "";
   const alreadyInMathElement = baseNode.tagName === "MATH";
   if (alreadyInMathElement) { options.wrap = "none"; }
@@ -29318,13 +29421,14 @@ if (typeof document !== "undefined") {
           "website has a suitable doctype."
       );
 
-    render = function() {
+    render$1 = function() {
       throw new ParseError("Temml doesn't work in quirks mode.");
     };
   }
 }
 
 /**
+ * @type {import('./temml').renderToString}
  * Parse and build an expression, and return the markup for that.
  */
 const renderToString = function(expression, options) {
@@ -29333,6 +29437,7 @@ const renderToString = function(expression, options) {
 };
 
 /**
+ * @type {import('./temml').generateParseTree}
  * Parse an expression and return the parse tree.
  */
 const generateParseTree = function(expression, options) {
@@ -29341,6 +29446,7 @@ const generateParseTree = function(expression, options) {
 };
 
 /**
+ * @type {import('./temml').definePreamble}
  * Take an expression which contains a preamble.
  * Parse it and return the macros.
  */
@@ -29373,6 +29479,7 @@ const renderError = function(error, expression, options) {
 };
 
 /**
+ * @type {import('./temml').renderToMathMLTree}
  * Generates and returns the Temml build tree. This is used for advanced
  * use cases (like rendering to custom output).
  */
@@ -29390,6 +29497,7 @@ const renderToMathMLTree = function(expression, options) {
   }
 };
 
+/** @type {import('./temml').default} */
 var temml = {
   /**
    * Current Temml version
@@ -29399,7 +29507,7 @@ var temml = {
    * Renders the given LaTeX into MathML, and adds
    * it as a child to the specified DOM node.
    */
-  render,
+  render: render$1,
   /**
    * Renders the given LaTeX into MathML string,
    * for sending to the client.
@@ -29508,7 +29616,7 @@ const processFetchedString = (entry, text, hurmetVars, decimalFormat) => {
   const attrs = Object.create(null);
   attrs.entry = entry;
   attrs.name = entry.replace(/=.+$/, "").trim();
-  let str = parse(entry.replace(/\s*=\s*[$$£¥\u20A0-\u20CF]?(?:!{1,2}).*$/, ""), decimalFormat);
+  let str = parse$1(entry.replace(/\s*=\s*[$$£¥\u20A0-\u20CF]?(?:!{1,2}).*$/, ""), decimalFormat);
   const url = urlFromEntry(entry);
   if (/\.(?:tsv|txt)$/.test(url)) {
     // Shorten the URL.
@@ -29540,7 +29648,7 @@ const processFetchedString = (entry, text, hurmetVars, decimalFormat) => {
     let i = 0;
     Object.entries(data.value).forEach(([key, value]) => {
       hurmetVars[key] =  value;
-      nameTex += parse(value.name) + " & ";
+      nameTex += parse$1(value.name) + " & ";
       i += 1;
       if (i === 5) {
         nameTex = nameTex.slice(0, -1) + "\\\\ ";
@@ -30012,6 +30120,9 @@ const htmlTag = (tagName, content, attributes = {}, isClosed = true) => {
   const unclosedTag = "<" + tagName + attributeString + ">";
 
   if (isClosed) {
+    if (content.charAt(content.length - 1) === "\n") {
+      content = content.slice(0, -1);
+    }
     return unclosedTag + content + "</" + tagName + ">";
   } else {
     return unclosedTag;
@@ -30074,6 +30185,8 @@ const writeSVG = dwg => {
   svg += "</svg>";
   return svg
 };
+
+const functionOrModuleRegEx = /^ *(?:function|module) /;
 
 const writeTOC = node => {
   let toc = "<ul class='toc'>\n";
@@ -30172,11 +30285,14 @@ const nodes = {
       const style = svg.indexOf('float="right"' > -1) ? " style='float: right;'" : "";
       return `<span class='hurmet-calc' data-entry=${dataStr(node.attrs.entry)}${style}>` +
         `${svg}</span>`
+    } else if (node.attrs.dtype && node.attrs.dtype === dt.MODULE &&
+               functionOrModuleRegEx.test(node.attrs.entry)) {
+      return `<pre><code>${node.attrs.entry}</code></pre>`
     } else {
-      const tex = node.attrs.tex ? node.attrs.tex : parse(node.attrs.entry);
+      const tex = node.attrs.tex ? node.attrs.tex : parse$1(node.attrs.entry);
       const mathML = temml.renderToString(
         tex,
-        { trust: true, displayMode: (node.attrs.displayMode || false) }
+        { trust: true, wrap: "=", displayMode: (node.attrs.displayMode || false) }
       );
       const tag = node.attrs.displayMode ? "p" : "span";
       return `<${tag} class='hurmet-calc' data-entry=${dataStr(node.attrs.entry)}>` +
@@ -30338,19 +30454,19 @@ async function md2html(md, title = "", inHtml = false) {
  *   calculate() returns either a TeX string or a string in Hurmet calculation syntax.
  */
 
-const render$1 = (tex, dom, options) => {
+const render = (tex, dom, options) => {
   temml.render(tex, dom, options);
 };
 
 var hurmet = {
-  parse,
+  parse: parse$1,
   calculate,
   compile,
   md2ast,
   md2html,
   scanModule,
   updateCalculations,
-  render: render$1
+  render
 };
 
 module.exports = hurmet;
