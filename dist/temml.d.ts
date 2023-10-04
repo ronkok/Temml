@@ -5,7 +5,7 @@ export interface Options {
   throwOnError?: boolean;
   errorColor?: string;
   macros?: Record<string, string>;
-  wrap?: "tex" | "=";
+  wrap?: "tex" | "=" | "none";
   xml?: boolean;
   colorIsTextColor?: boolean;
   strict?: boolean;
@@ -28,15 +28,33 @@ export function definePreamble(expression: string, options?: Options): any;
 
 export function renderToMathMLTree(expression: string, options?: Options): any;
 
-export default {
-  version: string,
-  render,
-  renderToString,
-  postProcess,
-  ParseError,
-  definePreamble,
-  __parse: generateParseTree,
-  __renderToMathMLTree: renderToMathMLTree,
-  __defineSymbol: defineSymbol,
-  __defineMacro: defineMacro,
+declare function postProcess(block: any): void;
+declare function defineMacro(name: string, body: any): void;
+declare function defineSymbol(
+  mode: string,
+  group: string,
+  replace: string,
+  name: string,
+  acceptUnicodeChar: boolean,
+): void;
+declare class ParseError {
+  constructor(
+    message: string, // The error message
+    token: any, // An object providing position information
+  ) {}
+}
+
+declare const Temml: {
+  version: string;
+  render: typeof render;
+  renderToString: typeof renderToString;
+  postProcess: typeof postProcess;
+  ParseError: typeof ParseError;
+  definePreamble: typeof definePreamble;
+  __parse: typeof generateParseTree;
+  __renderToMathMLTree: typeof renderToMathMLTree;
+  __defineSymbol: typeof defineSymbol;
+  __defineMacro: typeof defineMacro;
 };
+
+export default Temml;
