@@ -177,7 +177,7 @@ Available options are:
 
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. (default: `false`)
 
-- `wrap`: (`"tex"` | `"="`).  A mode for soft line breaks in non-display
+- `wrap`: (`"tex"` | `"="` | `"none"`).  A mode for soft line breaks in non-display
   mode math. The `tex` option sets a soft line break after every top-level relation and
   binary operator, per _The TeXbook_, page 173. The `=` option sets a soft line
   break before the second and subsequent top-level `=` signs. `tex` is the default.
