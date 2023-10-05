@@ -179,7 +179,7 @@ export class Img {
       markup += ` style="${utils.escape(styles)}"`;
     }
 
-    markup += "/>";
+    markup += ">";
     return markup;
   }
 }
