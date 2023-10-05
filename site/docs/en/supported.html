@@ -69,15 +69,14 @@ rgba(0,0,0,0) 100%);;"><mrow><mi>A</mi><mi>B</mi><mi>C</mi></mrow></mrow></math>
 <p>A <code>\label{…}</code> may be placed anywhere and will create an HTML id matching the <code>\label{…}</code> argument. That argument may contain only the characters <code>A-Za-z0-9_-</code>.</p>
 <p>On sites where Temml fields are updated dynamically, <code>\ref{…}</code> may not be supported. Other Temml functions update only the local field. <code>\ref{…}</code> must make two passes through the entire document. Some sites may choose not to do this.</p>
 <h2 id='color'>Color</h2>
-<table style="width: 670px"><colgroup><col style="width: 300px"></col>
-<col style="width: 370px"></col>
-<td><span class='hurmet-tex' data-entry='\color{blue} F=ma'><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></span>  <code>{\color{blue} F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[RGB]{255,0,255} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[RGB]{255,0,255} F=ma}</code></td></colgroup>
+<table style="width: 670px">
+<colgroup><col style="width: 300px"><col style="width: 370px"></colgroup>
+<tr><td><span class='hurmet-tex' data-entry='\color{blue} F=ma'><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></span>  <code>{\color{blue} F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[RGB]{255,0,255} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[RGB]{255,0,255} F=ma}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\textcolor{blue}{F=ma}'><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></span>  <code>\textcolor{blue}{F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[rgb]{1,0,1} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[rgb]{1,0,1} F=ma}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\textcolor{#228B22}{F=ma}'><math><mrow><mi style="color:#228B22;">F</mi><mo style="color:#228B22;">=</mo></mrow><mrow><mi style="color:#228B22;">m</mi><mi style="color:#228B22;">a</mi></mrow></math></span>  <code>\textcolor{#228B22}{F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[HTML]{ff00ff} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[HTML]{ff00ff} F=ma}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\colorbox{aqua}{A}'><math><mrow mathbackground="aqua" style="padding:3pt 0 3pt 0;"><mspace width="3pt"></mspace><mtext>A</mtext><mspace width="3pt"></mspace></mrow></math></span>  <code>\colorbox{aqua}{A}</code></td><td rowspan="2"><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code><br> <span class='hurmet-tex' data-entry='\definecolor{sortaGreen}{RGB}{128,128,0}
  \color{sortaGreen} F=ma'><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo></mrow><mrow><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></span>  <code>{\color{sortaGreen} F=ma}</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\fcolorbox{red}{aqua}{A}'><math><mrow mathbackground="aqua" style="padding:3pt 0 3pt 0;border:0.06em solid #ff0000;"><mspace width="3pt"></mspace><mtext>A</mtext><mspace width="3pt"></mspace></mrow></math></span>  <code>\fcolorbox{red}{aqua}{A}</code></td></tr>
-<tr></tr></table>
+<tr><td><span class='hurmet-tex' data-entry='\fcolorbox{red}{aqua}{A}'><math><mrow mathbackground="aqua" style="padding:3pt 0 3pt 0;border:0.06em solid #ff0000;"><mspace width="3pt"></mspace><mtext>A</mtext><mspace width="3pt"></mspace></mrow></math></span>  <code>\fcolorbox{red}{aqua}{A}</code></td></tr></table>
 <p><code>\definecolor</code> functions can be included in a <a href='administration.html#preamble'>preamble</a>. If so, their color definitions will have document-wide scope.</p>
 <p>Color functions can all take an optional argument to set the color model, as in the <code>xcolor</code> package. (Exception: <code>\definecolor</code>’s model argument is required.) Temml supports color models <code>HTML</code>, <code>RGB</code>, and <code>rgb</code>.</p>
 <p>If the color model is omitted, Temml color functions will accept:</p>
@@ -210,7 +209,7 @@ i\in\Lambda\\
 <tr><td><span class='hurmet-tex' data-entry='\url{https://temml.org/}'><math><mtext href="https://temml.org/">𝚑𝚝𝚝𝚙𝚜://𝚝𝚎𝚖𝚖𝚕.𝚘𝚛𝚐/</mtext></math></span></td><td><code>\url{https://temml.org/}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\includegraphics[height=1em,
  totalheight=1.2em, width=1.2em,
- alt=sphere]{../sphere.jpg}'><math><mtext><img src='../sphere.jpg' alt='sphere' style="height:1.2em;width:1.2em;vertical-align:-0.19999999999999996em;"/></mtext></math></span></td><td><code>\includegraphics[height=1em,</code><br><code>totalheight=1.2em,width=1.2em, alt=sphere]</code><br><code>{../sphere.jpg}</code></td></tr>
+ alt=sphere]{../sphere.jpg}'><math><mtext><img src='../sphere.jpg' alt='sphere' style="height:1.2em;width:1.2em;vertical-align:-0.19999999999999996em;"></mtext></math></span></td><td><code>\includegraphics[height=1em,</code><br><code>totalheight=1.2em,width=1.2em, alt=sphere]</code><br><code>{../sphere.jpg}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\id{idName}{x}'><math><mi id="idName">x</mi></math></span></td><td><code>\id{idName}{x}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\class{class-name}{x}'><math><mi class="class-name">x</mi></math></span></td><td><code>\class{class-name}{x}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\style{color: red;}{x}'><math><mi style="color: red;">x</mi></math></span></td><td><code>\style{color: red;}{x}</code></td></tr>
@@ -333,10 +332,9 @@ i\in\Lambda\\
 <table><tr><td><span class='hurmet-tex' data-entry='\exist'><math><mi>∃</mi></math></span>  <code>\exist</code></td><td><span class='hurmet-tex' data-entry='\isin'><math><mo>∈</mo></math></span>  <code>\isin</code></td><td><span class='hurmet-tex' data-entry='\empty'><math><mi>∅</mi></math></span>  <code>\empty</code></td><td><span class='hurmet-tex' data-entry='\sub'><math><mo>⊂</mo></math></span>  <code>\sub</code></td></tr></table>
 <p>Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ ∧ ∨ ↦ → ← ↔ ∅ ⟹ ⟺ ¬ ↯ ⥼ ⥽</span><br><span class="direct">ℂ ℍ ℕ ℙ ℚ ℝ</span></p>
 <h2 id='macros'>Macros</h2>
-<table class="grid" style="width: 293px"><colgroup><col style="width: 136px"></col>
-<col style="width: 71px"></col>
-<col style="width: 86px"></col>
-<td rowspan="2">\def</td><td colspan="2"><code>\def\macroname&lt;arg list&gt;{definition to be expanded}</code></td></colgroup>
+<table class="grid" style="width: 293px">
+<colgroup><col style="width: 136px"><col style="width: 71px"><col style="width: 86px"></colgroup>
+<tr><td rowspan="2">\def</td><td colspan="2"><code>\def\macroname&lt;arg list&gt;{definition to be expanded}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\def\foo#1#2{#1^2 #2^3}
 \foo a b + \foo c d'><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo></mrow><mrow><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math></span></td><td><code>\def\foo#1#2{#1^2 #2^3}
  \foo a b + \foo c d</code></td></tr>
@@ -350,8 +348,7 @@ i\in\Lambda\\
 \foo a b + \foo c d'><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo></mrow><mrow><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math></span></td><td><code>\newcommand\foo[2]{#1^2 #2^3}
  \foo a b + \foo c d</code></td></tr>
 <tr><td><code>\renewcommand</code></td><td colspan="2"><code>\renewcommand\macroname[numargs]{definition}</code></td></tr>
-<tr><td><code>\providecommand</code></td><td colspan="2"><code>\providecommand\macroname[numargs]{definition}</code></td></tr>
-<tr></tr></table>
+<tr><td><code>\providecommand</code></td><td colspan="2"><code>\providecommand\macroname[numargs]{definition}</code></td></tr></table>
 <p>To create macros with document-wide scope, use <code>\gdef</code>, <code>\global\let</code>, or define a <a href='./administration.html#preamble'>preamble</a> in one of the Temml <a href='./administration.html#options'>rendering options</a>. (Global macros may be disabled for security reasons.)</p>
 <p>Macros accept up to nine arguments: #1, #2, etc.</p>
 <p>Available functions include:<br><code>\char</code> <code>\mathchoice</code> <code>\TextOrMath</code> <code>\@ifstar</code> <code>\@ifnextchar</code> <code>\@firstoftwo</code> <code>\@secondoftwo</code> <code>\relax</code> <code>\expandafter</code> <code>\noexpand</code></p>
