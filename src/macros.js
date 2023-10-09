@@ -188,6 +188,9 @@ defineMacro("\\char", function(context) {
 // This macro provides a better rendering.
 defineMacro("\\surd", '\\sqrt{\\vphantom{|}}')
 
+// See comment for \oplus in symbols.js.
+defineMacro("\u2295", "\\oplus")
+
 defineMacro("\\hbox", "\\text{#1}");
 
 // Per TeXbook p.122, "/" gets zero operator spacing.
