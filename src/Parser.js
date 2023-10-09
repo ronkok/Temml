@@ -972,7 +972,6 @@ export default class Parser {
           loc: SourceLocation.range(nucleus),
           label: command,
           isStretchy: false,
-          isShifty: true,
           base: symbol
         };
       }
