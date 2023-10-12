@@ -9,6 +9,8 @@ import * as mml from "../buildMathML"
 
 const numberRegEx = /^\d(?:[\d,.]*\d)?$/
 const latinRegEx = /[A-Ba-z]/
+const primes = new Set(["\\prime", "\\dprime", "\\trprime", "\\qprime",
+  "\\backprime", "\\backdprime", "\\backtrprime"]);
 
 const italicNumber = (text, variant, tag) => {
   const mn = new mathMLTree.MathNode(tag, [text])
@@ -76,7 +78,7 @@ defineFunctionBuilders({
         text.text = variantChar(text.text, variant)
       }
       node = new mathMLTree.MathNode("mtext", [text])
-    } else if (group.text === "\\prime") {
+    } else if (primes.has(group.text)) {
       node = new mathMLTree.MathNode("mo", [text])
       // TODO: If/when Chromium uses ssty variant for prime, remove the next line.
       node.classes.push("tml-prime")
