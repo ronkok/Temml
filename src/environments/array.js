@@ -342,6 +342,10 @@ const mathmlBuilder = function(group, style) {
           // TODO: Remove -webkit- when Chromium no longer needs it.
           row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right")
         }
+        if (group.addEqnNum) {
+          const k = group.leqno ? 0 : row.children.length - 1
+          row.children[k].style.textAlign = "-webkit-" + (group.leqno ? "left" : "right")
+        }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
         row.children[1].style.padding = row.children[1].style.padding.replace(/0em$/, "1em")
