@@ -134,7 +134,7 @@ export class TextNode {
   }
 }
 
-/**
+/*
  * This node represents an image embed (<img>) element.
  */
 export class Img {
