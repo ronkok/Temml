@@ -501,7 +501,7 @@ defineSymbol(math, textord, "\u221e", "\\infty", true);
 defineSymbol(math, textord, "\u2032", "\\prime");
 defineSymbol(math, textord, "\u2033", "\\dprime");
 defineSymbol(math, textord, "\u2034", "\\trprime");
-defineSymbol(math, textord, "\u2056", "\\qprime");
+defineSymbol(math, textord, "\u2057", "\\qprime");
 defineSymbol(math, textord, "\u25b3", "\\triangle");
 defineSymbol(text, textord, "\u0391", "\\Alpha", true);
 defineSymbol(text, textord, "\u0392", "\\Beta", true);
