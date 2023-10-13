@@ -253,23 +253,20 @@ Temml has several different pre-written CSS files. You should use only one and
 by that choice, you also choose a math font. There are several math fonts
 available and each has different advantages.
 
+**Latin Modern** will provide the best quality rendering. It is a clone of
+Computer Modern and so is very home-like for readers accustomed to LaTeX
+documents. For best results, you must also serve a small
+(10kb) `Temml.woff2` file. Then you’ll get support for `\mathscr{…}` and you’ll
+get primes at the correct vertical alignment in Chrome and Edge.
+
 **Temml-Local.css** is the light-weight option. It calls two fonts: _Cambria
 Math_, which comes pre-installed in Windows, or _STIX TWO_, which comes
-pre-installed in iOS and MacOS (as of Safari 16). Cambria Math lacks roundhand
-glyphs, so you still have to serve a small (12 kb) font, `Temml.woff2`, in
-order to support `\mathscr{…}`.\
-Android does not currently provide a font with a MATH table. They are
-considering [several options](https://github.com/notofonts/math/issues/14#issuecomment-1268851556).
+pre-installed in iOS and MacOS (as of Safari 16). It also needs to be augmented
+with `Temml.woff2`.
 
-Sadly, native fonts render math with a couple of flaws. In Firefox, square root
-radicals are sometimes oddly sized. Chromium is better at radicals, but it
-fails to stretch five stretchy accents and some extensible arrows. Chromium also
-renders extensible arrows with notes placed too high.
-
-**Latin Modern** is a clone of Computer Modern and so is very home-like for
-readers accustomed to LaTeX documents. Rendering is excellent except that some
-line thicknesses may be too thin for some screens. This option also needs that
-additional 12kb `Temml.woff2` file in order to support `\mathscr{…}`.
+Sadly, this option has rendering issues. Chrome botches extensible arrows and it
+will fail to stretch the `∫` symbol on Windows. Android does not currently
+provide a font with a MATH table, so it has many problems.
 
 **Asana** and **Libertinus** have some of the same rendering problems as Cambria Math,
 although Asana does contain its own roundhand glyphs.
@@ -380,39 +377,31 @@ poorly.
 
 | Item                     | Chromium         | Firefox | WebKit (Safari)   |
 |:-------------------------|:----------------:|:-------:|:-----------------:|
-| Accents                  | ✓                | ✓       | bad<sup>1, 2</sup>   |
-| Wide accents, in general | ✓                | ✓       | bad<sup>3</sup>   |
-| \\widehat, \\widetilde   | poor<sup>4</sup> | ✓       | ✓                 |
-| Prime                    | meh<sup>5</sup>  | ✓       | meh<sup>5</sup>   |
-| Integral, ∫, in display mode  | poor<sup>6</sup> | ✓  | ✓                 |
-| \\left( x \\right)       | meh<sup>7</sup>  | ✓       | meh<sup>7</sup>   |
-| \\bigg(, \\Bigg(, etc.   | meh<sup>8</sup>  | ✓       | meh<sup>8</sup>   |
-| \\cancel, \\bcancel, \\xcancel | meh<sup>9</sup> | meh<sup>9</sup>  | meh<sup>9</sup>   |
-| {Vmatrix} environment    | ✓                | ✓       | poor<sup>10</sup>  |
-| {align} environment      | ✓                | ✓       | bad<sup>11</sup>   |
-| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>12</sup>  |
-| Extensible arrows        | bad<sup>13</sup> | ✓       | bad<sup>13, 14</sup> |
-| Square root radicals     | ✓                | meh<sup>15</sup> | ✓        |
-| Line-breaking            | ✓                | ✓       | bad<sup>16</sup>  |
+| Accents                  | ✓                | ✓       | bad<sup>1, 2</sup> |
+| Integral, ∫, in display mode  | poor<sup>3</sup> | ✓  | ✓                 |
+| \\left( x \\right)       | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   |
+| \\bigg(, \\Bigg(, etc.   | meh<sup>5</sup>  | ✓       | meh<sup>5</sup>   |
+| \\cancel, \\bcancel, \\xcancel | meh<sup>6</sup> | meh<sup>6</sup>  | meh<sup>6</sup>   |
+| {align} environment      | ✓                | ✓       | bad<sup>7</sup>   |
+| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>  |
+| Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 10</sup> |
+| Square root radicals     | ✓                | meh<sup>11</sup> | ✓        |
+| Line-breaking            | ✓                | ✓       | bad<sup>12</sup>  |
 
 Notes:
 
 1.  WebKit renders normal accents too high. (Extensible accents are set at the correct height.)
 2.  WebKit fails to make a italic correction on accents. Many are set too far left.
-3.  WebKit fails to stretch many wide accents.
-4.  Chromium does not stretch \\widehat or \\widetilde.
-5.  Chromium and WebKit fail to properly address italic correction on prime. So _f_ ′ overlaps.
-6.  Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.
-7.  Chromium and WebKit set parentheses too high for \\left( x \\right).
-8.  Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.
-9.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
-10.  WebKit does not stretch the delimiters for {Vmatrix}.
-11. WebKit renders the {align} environment remarkably poorly.
-12. WebKit does not render laps properly.
-13. Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
-14. WebKit fails to stretch most extensible arrows.
-15. Firefox sometimes selects radicals that are too tall.
-16. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+3.  Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.
+4.  Chromium and WebKit set parentheses too high for \\left( x \\right).
+5.  Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.
+6.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
+7. WebKit renders the {align} environment remarkably poorly.
+8. WebKit does not render laps properly.
+9. Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
+10. WebKit fails to stretch most extensible arrows.
+11. Firefox sometimes selects radicals that are too tall.
+12. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
