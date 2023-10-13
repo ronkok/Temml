@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.16] = 2023-10-13
+
+### Fixed
+
+- Prevent f′ from overlapping in Chromium
+- Stretch \widetilde & \widehat in Chromium
+- Prevent Firefox from substituting an emoji for \oplus
+- Prevent Firefox from substituting a dotless i in \widetilde{U_i}
+- Fix tag alignment in {align} environment
+
+## Added
+
+- \dprime \trprime \qprime \backprime \backdprime \backtrprime
+
 ## [0.10.15] = 2023-10-4
 
 ### Changed

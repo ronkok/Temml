@@ -8,42 +8,87 @@
    <link rel="stylesheet" type="text/css" href="main.css">   
    <script src="./temml.js"></script>
    <style>
-    math > mrow { padding: 0.5ex 0px }
+    math > mrow {
+      padding: 0.5ex 0px
+    }
+    @supports (not (-webkit-backdrop-filter: blur(1px))) and (not (-moz-appearance: none)) {
+      .tml-crooked-2 {
+        transform: scale(2.0, 1.1)
+      }
+      .tml-crooked-3 {
+        transform: scale(4.0, 1.1)
+      }
+    }
+
+    .tml-accent {
+      font-family: Temml;
+    }
+
    </style>
 </head>
 
-<body>
   <p>
-  </p>
-  <p class="math">
     <math>
-      <mrow>
-        <mi>A</mi>
-        <mrow>
-          <mspace width="0.2778em"></mspace>
-          <mover accent="false">
-            <mo stretchy="true" minsize="10em" lspace="0" rspace="0">→</mo>
-            <mtext>over</mtext>
-          </mover>
-          <mspace width="0.2778em"></mspace>
-        </mrow>
+      <mover>
         <mi>B</mi>
-      </mrow>
+        <mo stretchy="false" class="tml-accent" style="math-style:normal;math-depth:0;">^</mo>
+      </mover>
+      <mover>
+        <mi>B</mi>
+        <mo stretchy="false" style="math-style:normal;math-depth:0;">^</mo>
+      </mover>
+      <mover>
+        <mi>a</mi>
+        <mo stretchy="false" class="tml-accent" style="math-style:normal;math-depth:0;">^</mo>
+      </mover>
+      <mover>
+        <mi>a</mi>
+        <mo stretchy="false" style="math-style:normal;math-depth:0;">^</mo>
+      </mover>
+    </math>
+  </p>
+
+  <p>
+    <math>
+      <mover accent="true">
+        <mtext>AB</mtext>
+        <mo class="tml-crooked">~</mo>
+      </mover>
+    </math>
+  </p>
+
+  <p>
+    <math display="block" style="display:block math;">
+      <mover>
+        <msub>
+          <mi>U</mi>
+          <mi>i&#xFE0E;</mi>
+        </msub>
+        <mo stretchy="true" style="math-style:normal;math-depth:0;">~</mo>
+      </mover>
     </math>
   </p>
   
  <p>
   <math>
-    <mrow>
-      <mo fence="false" stretchy="true" symmetric="true" minsize="1.2em" maxsize="1.2em">(</mo>
-      <mstyle displaystyle="true" scriptlevel="0">
-        <mfrac>
-          <mi>a</mi>
-          <mi>b</mi>
-        </mfrac>
-      </mstyle>
-      <mo fence="false" stretchy="true" symmetric="true" minsize="1.2em" maxsize="1.2em">)</mo>
-    </mrow>
+    <mtable displaystyle="true" columnalign="right">
+      <mtr>
+        <mtd style="padding:0.7ex 0em 0.7ex 0em;text-align:-webkit-right;">
+          <mrow>
+            <mo>⊕&#xFE0E;</mo>
+            <mo>⊕</mo>
+          </mrow>
+        </mtd>
+      </mtr>
+      <mtr>
+        <mtd style="padding:0.7ex 0em 0.7ex 0em;text-align:-webkit-right;">
+          <mrow>
+            <mo>⊕</mo>
+            <mo>⊕</mo>
+          </mrow>
+        </mtd>
+      </mtr>
+    </mtable>
   </math>
  </p>
 

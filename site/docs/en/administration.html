@@ -128,9 +128,9 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <p>If you use the <a href='https://github.com/ronkok/Temml/tree/main/contrib/auto-render'>auto-render extension</a>, it includes the post-processor nuances.</p>
 <h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
-<p><strong>Temml-Local.css</strong> is the light-weight option. It calls two fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, or <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16). Cambria Math lacks roundhand glyphs, so you still have to serve a small (12 kb) font, <code>Temml.woff2</code>, in order to support <code>\mathscr{…}</code>.<br>Android does not currently provide a font with a MATH table. They are considering <a href='https://github.com/notofonts/math/issues/14#issuecomment-1268851556'>several options</a>.</p>
-<p>Sadly, native fonts render math with a couple of flaws. In Firefox, square root radicals are sometimes oddly sized. Chromium is better at radicals, but it fails to stretch five stretchy accents and some extensible arrows. Chromium also renders extensible arrows with notes placed too high.</p>
-<p><strong>Latin Modern</strong> is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. Rendering is excellent except that some line thicknesses may be too thin for some screens. This option also needs that additional 12kb <code>Temml.woff2</code> file in order to support <code>\mathscr{…}</code>.</p>
+<p><strong>Latin Modern</strong> will provide the best quality rendering. It is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. For best results, you must also serve a small (10kb) <code>Temml.woff2</code> file. Then you’ll get support for <code>\mathscr{…}</code> and you’ll get primes at the correct vertical alignment in Chrome and Edge.</p>
+<p><strong>Temml-Local.css</strong> is the light-weight option. It calls two fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, or <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16). It also needs to be augmented with <code>Temml.woff2</code>.</p>
+<p>Sadly, this option has rendering issues. Chrome botches extensible arrows and it will fail to stretch the <code>∫</code> symbol on Windows. Android does not currently provide a font with a MATH table, so it has many problems.</p>
 <p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
@@ -178,30 +178,22 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <th>Firefox</th>
 <th>WebKit (Safari)</th></tr>
 <tr><td>Accents</td><td>✓</td><td>✓</td><td>bad<sup>1, 2</sup></td></tr>
-<tr><td>Wide accents, in general</td><td>✓</td><td>✓</td><td>bad<sup>3</sup></td></tr>
-<tr><td>\widehat, \widetilde</td><td>poor<sup>4</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>Prime</td><td>meh<sup>5</sup></td><td>✓</td><td>meh<sup>5</sup></td></tr>
-<tr><td>Integral, ∫, in display mode</td><td>poor<sup>6</sup></td><td>✓</td><td>✓</td></tr>
-<tr><td>\left( x \right)</td><td>meh<sup>7</sup></td><td>✓</td><td>meh<sup>7</sup></td></tr>
-<tr><td>\bigg(, \Bigg(, etc.</td><td>meh<sup>8</sup></td><td>✓</td><td>meh<sup>8</sup></td></tr>
-<tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>9</sup></td><td>meh<sup>9</sup></td><td>meh<sup>9</sup></td></tr>
-<tr><td>{Vmatrix} environment</td><td>✓</td><td>✓</td><td>poor<sup>10</sup></td></tr>
-<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>11</sup></td></tr>
-<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr>
-<tr><td>Extensible arrows</td><td>bad<sup>13</sup></td><td>✓</td><td>bad<sup>13, 14</sup></td></tr>
-<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>15</sup></td><td>✓</td></tr>
-<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>16</sup></td></tr></table>
+<tr><td>Integral, ∫, in display mode</td><td>poor<sup>3</sup></td><td>✓</td><td>✓</td></tr>
+<tr><td>\left( x \right)</td><td>meh<sup>4</sup></td><td>✓</td><td>meh<sup>4</sup></td></tr>
+<tr><td>\bigg(, \Bigg(, etc.</td><td>meh<sup>5</sup></td><td>✓</td><td>meh<sup>5</sup></td></tr>
+<tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>6</sup></td><td>meh<sup>6</sup></td><td>meh<sup>6</sup></td></tr>
+<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>7</sup></td></tr>
+<tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>8</sup></td></tr>
+<tr><td>Extensible arrows</td><td>poor<sup>9</sup></td><td>✓</td><td>bad<sup>9, 10</sup></td></tr>
+<tr><td>Square root radicals</td><td>✓</td><td>meh<sup>11</sup></td><td>✓</td></tr>
+<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr></table>
 <p>Notes:</p>
 <ol><li class="tight"><p>WebKit renders normal accents too high. (Extensible accents are set at the correct height.)</p></li>
 <li class="tight"><p>WebKit fails to make a italic correction on accents. Many are set too far left.</p></li>
-<li class="tight"><p>WebKit fails to stretch many wide accents.</p></li>
-<li class="tight"><p>Chromium does not stretch \widehat or \widetilde.</p></li>
-<li class="tight"><p>Chromium and WebKit fail to properly address italic correction on prime. So <em>f</em> ′ overlaps.</p></li>
 <li class="tight"><p>Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.</p></li>
 <li class="tight"><p>Chromium and WebKit set parentheses too high for \left( x \right).</p></li>
 <li class="tight"><p>Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.</p></li>
 <li class="tight"><p>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print properly.</p></li>
-<li class="tight"><p>WebKit does not stretch the delimiters for {Vmatrix}.</p></li>
 <li class="tight"><p>WebKit renders the {align} environment remarkably poorly.</p></li>
 <li class="tight"><p>WebKit does not render laps properly.</p></li>
 <li class="tight"><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</p></li>
@@ -217,7 +209,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></span>    v0.10.15</p>
+<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></span>    v0.10.16</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p></li>
 <li><p><a href='#installation'>Installation</a></p></li>

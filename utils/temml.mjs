@@ -476,7 +476,7 @@ class TextNode$1 {
   }
 }
 
-/**
+/*
  * This node represents an image embed (<img>) element.
  */
 class Img {
@@ -521,7 +521,7 @@ class Img {
       markup += ` style="${utils.escape(styles)}"`;
     }
 
-    markup += "/>";
+    markup += ">";
     return markup;
   }
 }
@@ -697,6 +697,34 @@ var mathMLTree = {
  * This file provides support for building horizontal stretchy elements.
  */
 
+// TODO: Remove when Chromium stretches \widetilde & \widehat
+const estimatedWidth = node => {
+  let width = 0;
+  if (node.body) {
+    for (const item of node.body) {
+      width += estimatedWidth(item);
+    }
+  } else if (node.type === "supsub") {
+    width += estimatedWidth(node.base);
+    if (node.sub) { width += 0.7 * estimatedWidth(node.sub); }
+    if (node.sup) { width += 0.7 * estimatedWidth(node.sup); }
+  } else if (node.type === "mathord" || node.type === "textord") {
+    for (const ch of node.text.split('')) {
+      const codePoint = ch.codePointAt(0);
+      if ((0x60 < codePoint && codePoint < 0x7B) || (0x03B0 < codePoint && codePoint < 0x3CA)) {
+        width += 0.56; // lower case latin or greek. Use advance width of letter n
+      } else if (0x2F < codePoint && codePoint < 0x3A) {
+        width += 0.50; // numerals.
+      } else {
+        width += 0.92; // advance width of letter M
+      }
+    }
+  } else {
+    width += 1.0;
+  }
+  return width
+};
+
 const stretchyCodePoint = {
   widehat: "^",
   widecheck: "ˇ",
@@ -754,8 +782,27 @@ const mathMLnode = function(label) {
   return node
 };
 
+const crookedWides = ["\\widetilde", "\\widehat", "\\widecheck", "\\utilde"];
+
+// TODO: Remove when Chromium stretches \widetilde & \widehat
+const accentNode = (group) => {
+  const mo = mathMLnode(group.label);
+  if (crookedWides.includes(group.label)) {
+    const width = estimatedWidth(group.base);
+    if (1 < width && width < 1.6) {
+      mo.classes.push("tml-crooked-2");
+    } else if (1.6 <= width && width < 2.5) {
+      mo.classes.push("tml-crooked-3");
+    } else if (2.5 <= width) {
+      mo.classes.push("tml-crooked-4");
+    }
+  }
+  return mo
+};
+
 var stretchy = {
-  mathMLnode
+  mathMLnode,
+  accentNode
 };
 
 /**
@@ -1053,6 +1100,8 @@ defineSymbol(math, textord, "\u2127", "\\mho");
 defineSymbol(math, textord, "\u2132", "\\Finv", true);
 defineSymbol(math, textord, "\u2141", "\\Game", true);
 defineSymbol(math, textord, "\u2035", "\\backprime");
+defineSymbol(math, textord, "\u2036", "\\backdprime");
+defineSymbol(math, textord, "\u2037", "\\backtrprime");
 defineSymbol(math, textord, "\u25b2", "\\blacktriangle");
 defineSymbol(math, textord, "\u25bc", "\\blacktriangledown");
 defineSymbol(math, textord, "\u25a0", "\\blacksquare");
@@ -1256,6 +1305,9 @@ defineSymbol(text, textord, "\u2423", "\\textvisiblespace", true);
 defineSymbol(math, textord, "\u2220", "\\angle", true);
 defineSymbol(math, textord, "\u221e", "\\infty", true);
 defineSymbol(math, textord, "\u2032", "\\prime");
+defineSymbol(math, textord, "\u2033", "\\dprime");
+defineSymbol(math, textord, "\u2034", "\\trprime");
+defineSymbol(math, textord, "\u2057", "\\qprime");
 defineSymbol(math, textord, "\u25b3", "\\triangle");
 defineSymbol(text, textord, "\u0391", "\\Alpha", true);
 defineSymbol(text, textord, "\u0392", "\\Beta", true);
@@ -1435,7 +1487,8 @@ defineSymbol(math, punct, ";", ";");
 defineSymbol(math, bin, "\u22bc", "\\barwedge", true);
 defineSymbol(math, bin, "\u22bb", "\\veebar", true);
 defineSymbol(math, bin, "\u2299", "\\odot", true);
-defineSymbol(math, bin, "\u2295", "\\oplus", true);
+// Firefox turns ⊕ into an emoji. So append \uFE0E. Define Unicode character in macros, not here.
+defineSymbol(math, bin, "\u2295\uFE0E", "\\oplus");
 defineSymbol(math, bin, "\u2297", "\\otimes", true);
 defineSymbol(math, textord, "\u2202", "\\partial", true);
 defineSymbol(math, bin, "\u2298", "\\oslash", true);
@@ -1666,6 +1719,8 @@ for (let i = 0; i < letters.length; i++) {
   defineSymbol(math, mathord, ch, ch);
   defineSymbol(text, textord, ch, ch);
 }
+// Prevent Firefox from using a dotless i.
+defineSymbol(text, textord, "i\uFE0E", "i");
 
 // Some more letters in Unicode Basic Multilingual Plane.
 const narrow = "ÇÐÞçþℂℍℕℙℚℝℤℎℏℊℋℌℐℑℒℓ℘ℛℜℬℰℱℳℭℨ";
@@ -2143,7 +2198,7 @@ function buildMathML(tree, texExpression, style, settings) {
 
 const mathmlBuilder$a = (group, style) => {
   const accentNode = group.isStretchy
-    ? stretchy.mathMLnode(group.label)
+    ? stretchy.accentNode(group)
     : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
 
   if (group.label === "\\vec") {
@@ -2163,25 +2218,21 @@ const mathmlBuilder$a = (group, style) => {
   return node;
 };
 
-const NON_STRETCHY_ACCENT_REGEX = new RegExp(
-  [
-    "\\acute",
-    "\\grave",
-    "\\ddot",
-    "\\dddot",
-    "\\ddddot",
-    "\\tilde",
-    "\\bar",
-    "\\breve",
-    "\\check",
-    "\\hat",
-    "\\vec",
-    "\\dot",
-    "\\mathring"
-  ]
-    .map((accent) => `\\${accent}`)
-    .join("|")
-);
+const nonStretchyAccents = new Set([
+  "\\acute",
+  "\\grave",
+  "\\ddot",
+  "\\dddot",
+  "\\ddddot",
+  "\\tilde",
+  "\\bar",
+  "\\breve",
+  "\\check",
+  "\\hat",
+  "\\vec",
+  "\\dot",
+  "\\mathring"
+]);
 
 // Accents
 defineFunction({
@@ -2219,7 +2270,7 @@ defineFunction({
   handler: (context, args) => {
     const base = normalizeArgument(args[0]);
 
-    const isStretchy = !NON_STRETCHY_ACCENT_REGEX.test(context.funcName);
+    const isStretchy = !nonStretchyAccents.has(context.funcName);
 
     return {
       type: "accent",
@@ -2257,7 +2308,6 @@ defineFunction({
       mode: mode,
       label: context.funcName,
       isStretchy: false,
-      isShifty: true,
       base: base
     };
   },
@@ -2287,7 +2337,7 @@ defineFunction({
     };
   },
   mathmlBuilder: (group, style) => {
-    const accentNode = stretchy.mathMLnode(group.label);
+    const accentNode = stretchy.accentNode(group);
     accentNode.style["math-depth"] = 0;
     const node = new mathMLTree.MathNode("munder", [
       buildGroup$1(group.base, style),
@@ -4388,6 +4438,10 @@ const mathmlBuilder$7 = function(group, style) {
           // Chromium does not recognize text-align: left. Use -webkit-
           // TODO: Remove -webkit- when Chromium no longer needs it.
           row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right");
+        }
+        if (group.addEqnNum) {
+          const k = group.leqno ? 0 : row.children.length - 1;
+          row.children[k].style.textAlign = "-webkit-" + (group.leqno ? "left" : "right");
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
@@ -7329,7 +7383,14 @@ defineFunctionBuilders({
     }
 
     if (group.sup) {
-      children.push(buildGroup$1(group.sup, childStyle));
+      const sup = buildGroup$1(group.sup, childStyle);
+      const testNode = sup.type === "mrow" ? sup.children[0] : sup;
+      if ((testNode.type === "mo" && testNode.classes.includes("tml-prime"))
+        && group.base && group.base.text && group.base.text === "f") {
+        // Chromium does not address italic correction on prime. Prevent f′ from overlapping.
+        testNode.classes.push("prime-pad");
+      }
+      children.push(sup);
     }
 
     let nodeType;
@@ -7795,6 +7856,8 @@ const smallCaps = Object.freeze({
 
 const numberRegEx = /^\d(?:[\d,.]*\d)?$/;
 const latinRegEx = /[A-Ba-z]/;
+const primes = new Set(["\\prime", "\\dprime", "\\trprime", "\\qprime",
+  "\\backprime", "\\backdprime", "\\backtrprime"]);
 
 const italicNumber = (text, variant, tag) => {
   const mn = new mathMLTree.MathNode(tag, [text]);
@@ -7862,7 +7925,7 @@ defineFunctionBuilders({
         text.text = variantChar(text.text, variant);
       }
       node = new mathMLTree.MathNode("mtext", [text]);
-    } else if (group.text === "\\prime") {
+    } else if (primes.has(group.text)) {
       node = new mathMLTree.MathNode("mo", [text]);
       // TODO: If/when Chromium uses ssty variant for prime, remove the next line.
       node.classes.push("tml-prime");
@@ -8515,6 +8578,9 @@ defineMacro("\\char", function(context) {
 // The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
 // This macro provides a better rendering.
 defineMacro("\\surd", '\\sqrt{\\vphantom{|}}');
+
+// See comment for \oplus in symbols.js.
+defineMacro("\u2295", "\\oplus");
 
 defineMacro("\\hbox", "\\text{#1}");
 
@@ -12796,7 +12862,6 @@ class Parser {
           loc: SourceLocation.range(nucleus),
           label: command,
           isStretchy: false,
-          isShifty: true,
           base: symbol
         };
       }
@@ -12994,7 +13059,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.15";
+const version = "0.10.16";
 
 function postProcess(block) {
   const labelMap = {};

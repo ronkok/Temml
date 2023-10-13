@@ -47,6 +47,24 @@ mo.tml-prime {
   font-feature-settings: 'salt';
 }
 
+/* Prevent f' from overlapping in Chromium */
+mo.prime-pad {
+  padding-left: 0.08em;
+}
+
+/* Stretch \widetilde in Chromium */
+@supports (not (-webkit-backdrop-filter: blur(1px))) and (not (-moz-appearance: none)) {
+  .tml-crooked-2 {
+    transform: scale(2.0, 1.1)
+  }
+  .tml-crooked-3 {
+    transform: scale(3.0, 1.1)
+  }
+  .tml-crooked-4 {
+    transform: scale(4.0, 1.1)
+  }
+}
+
 /* flex-wrap for line-breaking in Chromium */
 math {
   display: inline-flex;
