@@ -31,8 +31,8 @@ that lists both supported and some un-supported functions.
 +--------------------------+--------------------------+------------------------------------+
 | $f''$  `f''`             | $\vec{F}$  `\vec{F}`     | $\utilde{AB}$  `\utilde{AB}`       |
 +--------------------------+--------------------------+------------------------------------+
-| $f^{\prime}$             | $\overleftarrow{AB}$     | $\overrightarrow{AB}$              |
-| `f^{\prime}`             |  `\overleftarrow{AB}`    | `\overrightarrow{AB}`              |
+| $f^{\prime}$             | $\overleftarrow{AB}$     | $\overrightarrow{ABC}$             |
+| `f^{\prime}`             |  `\overleftarrow{AB}`    | `\overrightarrow{ABC}`             |
 +--------------------------+--------------------------+------------------------------------+
 | $\acute{a}$  `\acute{a}` | $\underleftarrow{AB}$    | $\underrightarrow{AB}$             |
 |                          |  `\underleftarrow{AB}`   |  `\underrightarrow{AB}`            |
@@ -64,7 +64,12 @@ that lists both supported and some un-supported functions.
 | $\hat{\theta}$           | $\widehat{ac}$           | $\underbrace{AB}$                  |
 | `\hat{\theta}`           |  `\widehat{ac}`          |  `\underbrace{AB}`                 |
 +--------------------------+--------------------------+------------------------------------+
-
+| $f^{\dprime}$            | $f^{\trprime}$           | $f^{\qprime}$                      |
+| `f^{\dprime}`            | `f^{\trprime}`           | `f^{\qprime}`                      |
++--------------------------+--------------------------+------------------------------------+
+| $\sigma^{\backprime}$    | $\sigma^{\backdprime}$   | $\sigma^{\backtrprime}$            |
+| `\sigma^{\backprime}`    | `\sigma^{\backdprime}`   | `\sigma^{\backtrprime}`            |
++--------------------------+--------------------------+------------------------------------+
 
 **Accent functions inside \\text{…}**
 

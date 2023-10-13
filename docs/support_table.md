@@ -145,13 +145,17 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------+--------------------------+-------------------+
 | \backepsilon        | $\backepsilon$           |                          | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
-| \backprime          | $\backprime$             |                          | ams               |
+| \backprime          | $\sigma^\backprime$      | `\sigma^\backprime`      | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backdprime         | $\sigma^\backdprime$     | `\sigma^\backdprime`     | stix              |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \backsim            | $\backsim$               |                          | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \backsimeq          | $\backsimeq$             |                          | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \backslash          | $\backslash$             |                          |                   |
++---------------------+--------------------------+--------------------------+-------------------+
+| \backtrprime        | $\sigma^\backtrprime$    | `\sigma^\backtrprime`    | stix              |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \bar                | $\bar{y}$                | `\bar{y}`                |                   |
 +---------------------+--------------------------+--------------------------+-------------------+
@@ -508,6 +512,7 @@ If you know the shape of a character, but not its name,
 |\downdownarrows|$\downdownarrows$|| ams |
 |\downharpoonleft|$\downharpoonleft$|| ams |
 |\downharpoonright|$\downharpoonright$|| ams |
+|\dprime|$f^\dprime$|`f^\dprime`| stix |
 |{drcases}|$\begin{drcases}a&\text{if }b\\c&\text{if }d\end{drcases}$|`\begin{drcases}`<br>   `a &\text{if } b  \\`<br>   `c &\text{if } d`<br>`\end{drcases}`| mathtools |
 |\dv|$\dv{x}{y}$|`\dv{x}{y}`| physics extension |
 |\dyad|$\dyad{a}{b}$|`\dyad{a}{b}`| physics extension |
@@ -1118,6 +1123,7 @@ If you know the shape of a character, but not its name,
 | \qodd       | $\qodd$                  |                         | physics extension |
 | \qor        | $\qor$                   |                         | physics extension |
 | \qotherwise | $\qotherwise$            |                         | physics extension |
+| \qprime     | $f^\qprime$              | `f^\qprime`             | stix              |
 | \qq         | $\qq{text}$              | `\qq{text}`             | physics extension |
 | \qqtext     | $\qqtext{text}$          | `\qqtext{text}`         | physics extension |
 | \qquad      | $a\qquad\qquad{b}$       | `a\qquad\qquad{b}`      |                   |
@@ -1392,6 +1398,7 @@ If you know the shape of a character, but not its name,
 |\triangleq|$\triangleq$|| ams |
 |\triangleright|$\triangleright$|||
 |\trianglerighteq|$\trianglerighteq$|| ams |
+|\trprime|$f^\trprime$|`f^\trprime`| stix |
 |\tt|${\tt AaBb123}$|`{\tt AaBb123}`||
 |\twoheadleftarrow|$\twoheadleftarrow$|| ams |
 |\twoheadrightarrow|$\twoheadrightarrow$|| ams |
