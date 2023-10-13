@@ -5,7 +5,7 @@ import * as mml from "../buildMathML"
 
 const mathmlBuilder = (group, style) => {
   const accentNode = group.isStretchy
-    ? stretchy.mathMLnode(group.label)
+    ? stretchy.accentNode(group)
     : new mathMLTree.MathNode("mo", [mml.makeText(group.label, group.mode)]);
 
   if (group.label === "\\vec") {
@@ -25,25 +25,21 @@ const mathmlBuilder = (group, style) => {
   return node;
 };
 
-const NON_STRETCHY_ACCENT_REGEX = new RegExp(
-  [
-    "\\acute",
-    "\\grave",
-    "\\ddot",
-    "\\dddot",
-    "\\ddddot",
-    "\\tilde",
-    "\\bar",
-    "\\breve",
-    "\\check",
-    "\\hat",
-    "\\vec",
-    "\\dot",
-    "\\mathring"
-  ]
-    .map((accent) => `\\${accent}`)
-    .join("|")
-);
+const nonStretchyAccents = new Set([
+  "\\acute",
+  "\\grave",
+  "\\ddot",
+  "\\dddot",
+  "\\ddddot",
+  "\\tilde",
+  "\\bar",
+  "\\breve",
+  "\\check",
+  "\\hat",
+  "\\vec",
+  "\\dot",
+  "\\mathring"
+])
 
 // Accents
 defineFunction({
@@ -81,7 +77,7 @@ defineFunction({
   handler: (context, args) => {
     const base = normalizeArgument(args[0]);
 
-    const isStretchy = !NON_STRETCHY_ACCENT_REGEX.test(context.funcName);
+    const isStretchy = !nonStretchyAccents.has(context.funcName);
 
     return {
       type: "accent",
@@ -119,7 +115,6 @@ defineFunction({
       mode: mode,
       label: context.funcName,
       isStretchy: false,
-      isShifty: true,
       base: base
     };
   },
