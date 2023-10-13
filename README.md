@@ -7,7 +7,7 @@
 | KaTeX         |         280 KB            |
 | TeXZilla      |         168 KB            |
 
-As a futher advantage, Temml can use local system fonts. The minimum Temml installation serves a font file that is only 12kb. Sadly, Chromium has some rendering bugs when using system fonts. It
+As a futher advantage, Temml can use local system fonts. The minimum Temml installation serves a font file that is only 10kb. Sadly, Chromium has some rendering bugs when using system fonts. It
 work better with the Latin Modern font, a 380 KB file.
 
 Temml’s coverage of LaTeX functions is as good as MathJax, slightly better than KaTeX 0.16.0 and substantially better than TeXZilla. See a [detailed coverage comparison](https://temml.org/docs/en/comparison.html).
