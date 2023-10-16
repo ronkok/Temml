@@ -326,11 +326,13 @@ CSS has overwritten the Temml counter-reset.
 More Temml functionality can be added via the following extensions:
 
 * [auto-render][]: Find and render all math in a running HTML page.
+* [copy-tex][]: When users select and copy <math> elements, copies their LaTeX source to the clipboard
 * [mhchem][]: Write beautiful chemical equations easily.
 * [physics][]: Implement much of the LaTeX `physics` package.
 * [texvc][]: Support functions used in wikimedia.
 
 [auto-render]: https://github.com/ronkok/Temml/tree/main/contrib/auto-render
+[copy-tex]: https://github.com/ronkok/Temml/tree/main/contrib/copy-tex
 [mhchem]: https://github.com/ronkok/Temml/tree/main/contrib/mhchem
 [physics]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
 [texvc]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
