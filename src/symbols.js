@@ -913,8 +913,6 @@ for (let i = 0; i < letters.length; i++) {
   defineSymbol(math, mathord, ch, ch);
   defineSymbol(text, textord, ch, ch);
 }
-// Prevent Firefox from using a dotless i.
-defineSymbol(text, textord, "i\uFE0E", "i")
 
 // Some more letters in Unicode Basic Multilingual Plane.
 const narrow = "ÇÐÞçþℂℍℕℙℚℝℤℎℏℊℋℌℐℑℒℓ℘ℛℜℬℰℱℳℭℨ";
