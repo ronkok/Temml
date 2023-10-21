@@ -1120,11 +1120,11 @@ const unitTable = Object.freeze(JSON.parse(`{
 "£":["1","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "'":["0.3048","1","0","0",[1,0,0,0,0,0,0,0]],
 "A":["1","1","0","siSymbol",[0,0,0,1,0,0,0,0]],
-"AUD":["1.6339","1","0","AUD",[0,0,0,0,0,0,0,1]],
+"AUD":["1.6586","1","0","AUD",[0,0,0,0,0,0,0,1]],
 "Adobe point":["0.0254","72","0","0",[1,0,0,0,0,0,0,0]],
 "At":["1","1","0","siSymbol",[0,0,0,0,1,0,1,0]],
 "Australian dollar":["1","1","0","AUD",[0,0,0,0,0,0,0,1]],
-"BRL":["5.3065","1","0","BRL",[0,0,0,0,0,0,0,1]],
+"BRL":["5.3295","1","0","BRL",[0,0,0,0,0,0,0,1]],
 "BTU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "BThU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Bq":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
@@ -1133,10 +1133,10 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Btu":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "C":["1","1","0","siSymbol",[0,0,1,1,0,0,0,0]],
 "C$":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
-"CAD":["1.4227","1","0","CAD",[0,0,0,0,0,0,0,1]],
+"CAD":["1.4425","1","0","CAD",[0,0,0,0,0,0,0,1]],
 "CCF":["1","1","0","0",[3,0,0,0,0,0,0,0]],
-"CHF":["0.9669","1","0","CHF",[0,0,0,0,0,0,0,1]],
-"CNY":["7.7352","1","0","CNY",[0,0,0,0,0,0,0,1]],
+"CHF":["0.9492","1","0","CHF",[0,0,0,0,0,0,0,1]],
+"CNY":["7.7278","1","0","CNY",[0,0,0,0,0,0,0,1]],
 "CY":["0.764554857984","1","0","0",[3,0,0,0,0,0,0,0]],
 "Calorie":["4186.8","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Canadian dollar":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
@@ -1156,7 +1156,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Fahrenheit":["5","9","459","0",[0,0,0,0,1,0,0,0]],
 "G":["0.0001","1","0","siSymbol",[-2,-2,-2,-1,0,0,0,0]],
 "GB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
-"GBP":["0.86458","1","0","GBP",[0,0,0,0,0,0,0,1]],
+"GBP":["0.86610","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "Gal":["0.01","1","0","siSymbol",[1,0,-2,0,0,0,0,0]],
 "Gi":["10","12.5663706143592","0","siWord",[0,0,0,0,1,0,1,0]],
 "GiB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1164,12 +1164,12 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Gy":["1","1","0","siSymbol",[2,0,-2,0,0,0,0,0]],
 "H":["1","1","0","siSymbol",[2,1,-2,-2,0,0,0,0]],
 "HK$":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
-"HKD":["8.2959","1","0","HKD",[0,0,0,0,0,0,0,1]],
+"HKD":["8.2687","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "HP":["745.69987158227","1","0","0",[2,1,-3,0,0,0,0,0]],
 "Hong Kong dollar":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "Hz":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
-"ILS":["4.0472","1","0","ILS",[0,0,0,0,0,0,0,1]],
-"INR":["88.0165","1","0","INR",[0,0,0,0,0,0,0,1]],
+"ILS":["4.2515","1","0","ILS",[0,0,0,0,0,0,0,1]],
+"INR":["87.9540","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Indian Rupee":["1","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Israeli New Shekel":["1","1","0","ILS",[0,0,0,0,0,0,0,1]],
 "J":["1","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
@@ -1180,7 +1180,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Jy":["1e-26","1","0","siSymbol",[0,1,-2,0,0,0,0,0]],
 "K":["1","1","0","0",[0,0,0,0,1,0,0,0]],
 "KiB":["8192","1","0","0",[0,0,0,0,0,1,0,0]],
-"KRW":["1425.26","1","0","KRW",[0,0,0,0,0,0,0,1]],
+"KRW":["1428.23","1","0","KRW",[0,0,0,0,0,0,0,1]],
 "L":["0.001","1","0","siSymbol",[3,0,0,0,0,0,0,0]],
 "Lego stud":["0.008","1","0","siSymbol",[1,0,0,0,0,0,0,0]],
 "MB":["8388608","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1191,7 +1191,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "MMscf":["28316.846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "MMscfd":["0.32774128","1","0","0",[3,0,0,0,0,0,0,0]],
 "MT":["1000","1","0","0",[0,1,0,0,0,0,0,0]],
-"MXN":["18.5030","1","0","MXN",[0,0,0,0,0,0,0,1]],
+"MXN":["19.0247","1","0","MXN",[0,0,0,0,0,0,0,1]],
 "Mach":["331.6","1","0","0",[1,0,-1,0,0,0,0,0]],
 "Mbbl":["158.987294928","1","0","0",[3,0,0,0,0,0,0,0]],
 "Mexican Peso":["1","1","0","MXN",[0,0,0,0,0,0,0,1]],
@@ -1221,7 +1221,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "TeX point":["0.0003515","1","0","0",[1,0,0,0,0,0,0,0]],
 "TiB":["8796093022208","1","0","0",[0,0,0,0,0,1,0,0]],
 "US$":["1","1","0","USD",[0,0,0,0,0,0,0,1]],
-"USD":["1.0594","1","0","USD",[0,0,0,0,0,0,0,1]],
+"USD":["1.0565","1","0","USD",[0,0,0,0,0,0,0,1]],
 "V":["1","1","0","siSymbol",[2,1,-3,-1,0,0,0,0]],
 "VA":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
 "W":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
@@ -18082,8 +18082,6 @@ for (let i = 0; i < letters.length; i++) {
   defineSymbol(math, mathord, ch, ch);
   defineSymbol(text, textord, ch, ch);
 }
-// Prevent Firefox from using a dotless i.
-defineSymbol(text, textord, "i\uFE0E", "i");
 
 // Some more letters in Unicode Basic Multilingual Plane.
 const narrow = "ÇÐÞçþℂℍℕℙℚℝℤℎℏℊℋℌℐℑℒℓ℘ℛℜℬℰℱℳℭℨ";
@@ -18498,13 +18496,8 @@ const taggedExpression = (expression, tag, style, leqno) => {
 
   expression = new mathMLTree.MathNode("mtd", [expression]);
   const rowArray = [glue$1(), expression, glue$1()];
-  if (leqno) {
-    rowArray[0].children.push(tag);
-    rowArray[0].style.textAlign = "-webkit-left";
-  } else {
-    rowArray[2].children.push(tag);
-    rowArray[2].style.textAlign = "-webkit-right";
-  }
+  rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right");
+  rowArray[leqno ? 0 : 2].children.push(tag);
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
   const table = new mathMLTree.MathNode("mtable", [mtr]);
   table.style.width = "100%";
@@ -20517,8 +20510,9 @@ const getTag = (group, style, rowNum) => {
     return tag
   } else {
     // AMS automatcally numbered equaton.
-    // Insert a class so the element can be populated by a post-processor.
-    tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"]);
+    // Insert a class so the element can be populated by a CSS counter.
+    // WebKit will display the CSS counter only inside a span.
+    tag = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])]);
   }
   return tag
 };
@@ -20715,7 +20709,7 @@ const mathmlBuilder$7 = function(group, style) {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center";
         mtd.setAttribute("columnalign", align);
         if (align !== "center") {
-          mtd.style.textAlign = "-webkit-" + align;
+          mtd.classes.push("tml-" + align);
         }
       }
       row.push(mtd);
@@ -20726,10 +20720,10 @@ const mathmlBuilder$7 = function(group, style) {
       const tag = getTag(group, style.withLevel(cellLevel), i);
       if (group.leqno) {
         row[0].children.push(tag);
-        row[0].style.textAlign = "-webkit-left";
+        row[0].classes.push("tml-left");
       } else {
         row[row.length - 1].children.push(tag);
-        row[row.length - 1].style.textAlign = "-webkit-right";
+        row[row.length - 1].classes.push("tml-right");
       }
     }
     const mtr = new mathMLTree.MathNode("mtr", row, []);
@@ -20800,11 +20794,11 @@ const mathmlBuilder$7 = function(group, style) {
         for (let j = 0; j < row.children.length; j++) {
           // Chromium does not recognize text-align: left. Use -webkit-
           // TODO: Remove -webkit- when Chromium no longer needs it.
-          row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right");
+          row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")];
         }
         if (group.addEqnNum) {
           const k = group.leqno ? 0 : row.children.length - 1;
-          row.children[k].style.textAlign = "-webkit-" + (group.leqno ? "left" : "right");
+          row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")];
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
@@ -20813,7 +20807,7 @@ const mathmlBuilder$7 = function(group, style) {
 
       if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
         for (const cell of row.children) {
-          cell.style.textAlign = "-webkit-" + "left";
+          cell.classes.push("tml-left");
         }
       }
     }
@@ -20868,7 +20862,7 @@ const mathmlBuilder$7 = function(group, style) {
         iCol += 1;
         for (const row of table.children) {
           if (colAlign.trim() !== "center" && iCol < row.children.length) {
-            row.children[iCol].style.textAlign = "-webkit-" + colAlign.trim();
+            row.children[iCol].classes = ["tml-" + colAlign.trim()];
           }
         }
         prevTypeWasAlign = true;
@@ -29406,7 +29400,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.15";
+const version = "0.10.16";
 
 function postProcess(block) {
   const labelMap = {};
@@ -30356,7 +30350,8 @@ const nodes = {
         `${svg}</span>`
     } else if (node.attrs.dtype && node.attrs.dtype === dt.MODULE &&
                functionOrModuleRegEx.test(node.attrs.entry)) {
-      return `<pre><code>${node.attrs.entry}</code></pre>`
+      return `<span class='hurmet-calc' data-entry=${dataStr(node.attrs.entry)}>`
+        + `<span class='hmt-code'>${sanitizeText(node.attrs.entry)}</span></span>`
     } else {
       const tex = node.attrs.tex ? node.attrs.tex : parse$1(node.attrs.entry);
       const mathML = temml.renderToString(
@@ -30535,7 +30530,8 @@ var hurmet = {
   md2html,
   scanModule,
   updateCalculations,
-  render
+  render,
+  Rnl
 };
 
 module.exports = hurmet;

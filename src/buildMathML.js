@@ -207,13 +207,8 @@ const taggedExpression = (expression, tag, style, leqno) => {
 
   expression = new mathMLTree.MathNode("mtd", [expression])
   const rowArray = [glue(), expression, glue()]
-  if (leqno) {
-    rowArray[0].children.push(tag)
-    rowArray[0].style.textAlign = "-webkit-left"
-  } else {
-    rowArray[2].children.push(tag)
-    rowArray[2].style.textAlign = "-webkit-right"
-  }
+  rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right")
+  rowArray[leqno ? 0 : 2].children.push(tag)
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"])
   const table = new mathMLTree.MathNode("mtable", [mtr])
   table.style.width = "100%"

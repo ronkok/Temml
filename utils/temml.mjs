@@ -1719,8 +1719,6 @@ for (let i = 0; i < letters.length; i++) {
   defineSymbol(math, mathord, ch, ch);
   defineSymbol(text, textord, ch, ch);
 }
-// Prevent Firefox from using a dotless i.
-defineSymbol(text, textord, "i\uFE0E", "i");
 
 // Some more letters in Unicode Basic Multilingual Plane.
 const narrow = "ÇÐÞçþℂℍℕℙℚℝℤℎℏℊℋℌℐℑℒℓ℘ℛℜℬℰℱℳℭℨ";
@@ -2135,13 +2133,8 @@ const taggedExpression = (expression, tag, style, leqno) => {
 
   expression = new mathMLTree.MathNode("mtd", [expression]);
   const rowArray = [glue$1(), expression, glue$1()];
-  if (leqno) {
-    rowArray[0].children.push(tag);
-    rowArray[0].style.textAlign = "-webkit-left";
-  } else {
-    rowArray[2].children.push(tag);
-    rowArray[2].style.textAlign = "-webkit-right";
-  }
+  rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right");
+  rowArray[leqno ? 0 : 2].children.push(tag);
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
   const table = new mathMLTree.MathNode("mtable", [mtr]);
   table.style.width = "100%";
@@ -4154,8 +4147,9 @@ const getTag = (group, style, rowNum) => {
     return tag
   } else {
     // AMS automatcally numbered equaton.
-    // Insert a class so the element can be populated by a post-processor.
-    tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"]);
+    // Insert a class so the element can be populated by a CSS counter.
+    // WebKit will display the CSS counter only inside a span.
+    tag = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])]);
   }
   return tag
 };
@@ -4352,7 +4346,7 @@ const mathmlBuilder$7 = function(group, style) {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center";
         mtd.setAttribute("columnalign", align);
         if (align !== "center") {
-          mtd.style.textAlign = "-webkit-" + align;
+          mtd.classes.push("tml-" + align);
         }
       }
       row.push(mtd);
@@ -4363,10 +4357,10 @@ const mathmlBuilder$7 = function(group, style) {
       const tag = getTag(group, style.withLevel(cellLevel), i);
       if (group.leqno) {
         row[0].children.push(tag);
-        row[0].style.textAlign = "-webkit-left";
+        row[0].classes.push("tml-left");
       } else {
         row[row.length - 1].children.push(tag);
-        row[row.length - 1].style.textAlign = "-webkit-right";
+        row[row.length - 1].classes.push("tml-right");
       }
     }
     const mtr = new mathMLTree.MathNode("mtr", row, []);
@@ -4437,11 +4431,11 @@ const mathmlBuilder$7 = function(group, style) {
         for (let j = 0; j < row.children.length; j++) {
           // Chromium does not recognize text-align: left. Use -webkit-
           // TODO: Remove -webkit- when Chromium no longer needs it.
-          row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right");
+          row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")];
         }
         if (group.addEqnNum) {
           const k = group.leqno ? 0 : row.children.length - 1;
-          row.children[k].style.textAlign = "-webkit-" + (group.leqno ? "left" : "right");
+          row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")];
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
@@ -4450,7 +4444,7 @@ const mathmlBuilder$7 = function(group, style) {
 
       if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
         for (const cell of row.children) {
-          cell.style.textAlign = "-webkit-" + "left";
+          cell.classes.push("tml-left");
         }
       }
     }
@@ -4505,7 +4499,7 @@ const mathmlBuilder$7 = function(group, style) {
         iCol += 1;
         for (const row of table.children) {
           if (colAlign.trim() !== "center" && iCol < row.children.length) {
-            row.children[iCol].style.textAlign = "-webkit-" + colAlign.trim();
+            row.children[iCol].classes = ["tml-" + colAlign.trim()];
           }
         }
         prevTypeWasAlign = true;

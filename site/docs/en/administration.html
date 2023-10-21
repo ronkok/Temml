@@ -183,9 +183,9 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>\left( x \right)</td><td>meh<sup>4</sup></td><td>✓</td><td>meh<sup>4</sup></td></tr>
 <tr><td>\bigg(, \Bigg(, etc.</td><td>meh<sup>5</sup></td><td>✓</td><td>meh<sup>5</sup></td></tr>
 <tr><td>\cancel, \bcancel, \xcancel</td><td>meh<sup>6</sup></td><td>meh<sup>6</sup></td><td>meh<sup>6</sup></td></tr>
-<tr><td>{align} environment</td><td>✓</td><td>✓</td><td>bad<sup>7</sup></td></tr>
+<tr><td>Tag placement</td><td>✓</td><td>✓</td><td>bad<sup>7</sup></td></tr>
 <tr><td>\mathllap, \mathrlap</td><td>✓</td><td>✓</td><td>bad<sup>8</sup></td></tr>
-<tr><td>Extensible arrows</td><td>poor<sup>9</sup></td><td>✓</td><td>bad<sup>9, 10</sup></td></tr>
+<tr><td>Extensible arrows</td><td>poor<sup>9</sup></td><td>✓</td><td>bad<sup>9, 1-</sup></td></tr>
 <tr><td>Square root radicals</td><td>✓</td><td>meh<sup>11</sup></td><td>✓</td></tr>
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad<sup>12</sup></td></tr></table>
 <p>Notes:</p>
@@ -195,7 +195,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li class="tight"><p>Chromium and WebKit set parentheses too high for \left( x \right).</p></li>
 <li class="tight"><p>Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.</p></li>
 <li class="tight"><p>Because Chromium does not support &lt;enclose&gt;, Temml uses background images for \cancel. It may not print properly.</p></li>
-<li class="tight"><p>WebKit renders the {align} environment remarkably poorly.</p></li>
+<li class="tight"><p>WebKit ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>, so Temml tags are not located correctly.</p></li>
 <li class="tight"><p>WebKit does not render laps properly.</p></li>
 <li class="tight"><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.</p></li>
 <li class="tight"><p>WebKit fails to stretch most extensible arrows.</p></li>

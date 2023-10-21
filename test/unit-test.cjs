@@ -2035,7 +2035,7 @@ const test = () => {
   assertion = "\\tag support should add tml-tageqn class"
   new Expect(temml.renderToString(r`\tag{hi}x+y`, displayMode())).toContain("tml-tageqn")
   assertion = "leqno rendering option should differ from default"
-  new Expect(temml.renderToString(r`\tag{hi}x+y`, new Settings({ displayMode: true, leqno: true }))).toContain("text-align:-webkit-left")
+  new Expect(temml.renderToString(r`\tag{hi}x+y`, new Settings({ displayMode: true, leqno: true }))).toContain('class="tml-left"')
   new Expect(temml.renderToString(r`\tag{hi}x+y`,displayMode())).toNotContain("rspace")
 
   assertion = "\\@binrel automatic bin/rel/ord should generate proper class"

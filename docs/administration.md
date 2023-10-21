@@ -384,9 +384,9 @@ poorly.
 | \\left( x \\right)       | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   |
 | \\bigg(, \\Bigg(, etc.   | meh<sup>5</sup>  | ✓       | meh<sup>5</sup>   |
 | \\cancel, \\bcancel, \\xcancel | meh<sup>6</sup> | meh<sup>6</sup>  | meh<sup>6</sup>   |
-| {align} environment      | ✓                | ✓       | bad<sup>7</sup>   |
+| Tag placement            | ✓                | ✓       | poor<sup>7</sup>  |
 | \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>  |
-| Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 10</sup> |
+| Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 1-</sup> |
 | Square root radicals     | ✓                | meh<sup>11</sup> | ✓        |
 | Line-breaking            | ✓                | ✓       | bad<sup>12</sup>  |
 
@@ -398,9 +398,9 @@ Notes:
 4.  Chromium and WebKit set parentheses too high for \\left( x \\right).
 5.  Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.
 6.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
-7. WebKit renders the {align} environment remarkably poorly.
-8. WebKit does not render laps properly.
-9. Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
+7.  WebKit ignores `width: 100%` on an `<mtable>`, so tags and AMS automatic equation numbers are not located correctly.
+8.  WebKit does not render laps properly.
+9.  Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
 10. WebKit fails to stretch most extensible arrows.
 11. Firefox sometimes selects radicals that are too tall.
 12. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.

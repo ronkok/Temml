@@ -292,6 +292,8 @@ $( \big( \Big( \bigg( \Bigg($ `( \big( \Big( \bigg( \Bigg(`
 |                       |                            | $$                         |                              |
 +-----------------------+----------------------------+----------------------------+------------------------------+
 
+### AMS Environments
+
 The auto-render extension will render the following environments even if they
 are not inside math delimiters such as `$$…$$`. They are display-mode only.
 

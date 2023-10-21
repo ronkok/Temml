@@ -2,6 +2,7 @@ import defineEnvironment from "../defineEnvironment";
 import { parseCD } from "./cd";
 import defineFunction from "../defineFunction";
 import mathMLTree from "../mathMLTree";
+import { Span } from "../domTree"
 import { StyleLevel } from "../constants"
 import ParseError from "../ParseError";
 import { assertNodeType, assertSymbolNodeType } from "../parseNode";
@@ -57,8 +58,9 @@ const getTag = (group, style, rowNum) => {
     return tag
   } else {
     // AMS automatcally numbered equaton.
-    // Insert a class so the element can be populated by a post-processor.
-    tag = new mathMLTree.MathNode("mtext", [], ["tml-eqn"])
+    // Insert a class so the element can be populated by a CSS counter.
+    // WebKit will display the CSS counter only inside a span.
+    tag = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])])
   }
   return tag
 }
@@ -255,7 +257,7 @@ const mathmlBuilder = function(group, style) {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center"
         mtd.setAttribute("columnalign", align)
         if (align !== "center") {
-          mtd.style.textAlign = "-webkit-" + align
+          mtd.classes.push("tml-" + align)
         }
       }
       row.push(mtd)
@@ -266,10 +268,10 @@ const mathmlBuilder = function(group, style) {
       const tag = getTag(group, style.withLevel(cellLevel), i)
       if (group.leqno) {
         row[0].children.push(tag)
-        row[0].style.textAlign = "-webkit-left"
+        row[0].classes.push("tml-left")
       } else {
         row[row.length - 1].children.push(tag)
-        row[row.length - 1].style.textAlign = "-webkit-right"
+        row[row.length - 1].classes.push("tml-right")
       }
     }
     const mtr = new mathMLTree.MathNode("mtr", row, [])
@@ -340,11 +342,11 @@ const mathmlBuilder = function(group, style) {
         for (let j = 0; j < row.children.length; j++) {
           // Chromium does not recognize text-align: left. Use -webkit-
           // TODO: Remove -webkit- when Chromium no longer needs it.
-          row.children[j].style.textAlign = "-webkit-" + (j % 2 ? "left" : "right")
+          row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")]
         }
         if (group.addEqnNum) {
           const k = group.leqno ? 0 : row.children.length - 1
-          row.children[k].style.textAlign = "-webkit-" + (group.leqno ? "left" : "right")
+          row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")]
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
@@ -353,7 +355,7 @@ const mathmlBuilder = function(group, style) {
 
       if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
         for (const cell of row.children) {
-          cell.style.textAlign = "-webkit-" + "left"
+          cell.classes.push("tml-left")
         }
       }
     }
@@ -408,7 +410,7 @@ const mathmlBuilder = function(group, style) {
         iCol += 1
         for (const row of table.children) {
           if (colAlign.trim() !== "center" && iCol < row.children.length) {
-            row.children[iCol].style.textAlign = "-webkit-" + colAlign.trim()
+            row.children[iCol].classes = ["tml-" + colAlign.trim()]
           }
         }
         prevTypeWasAlign = true;
