@@ -4,6 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Administration</title>
+   <link rel="stylesheet" href="../../assets/Temml-Local.css">
    <link rel="stylesheet" href="../docStyles.css">
 </head>
 
@@ -377,33 +378,41 @@ Temml [function support page](https://temml.org/docs/en/supported.html).
 The rest of you, stay here. This section identifies functions that browsers render
 poorly.
 
-| Item                     | Chromium         | Firefox | WebKit (Safari)   |
-|:-------------------------|:----------------:|:-------:|:-----------------:|
-| Accents                  | ✓                | ✓       | bad<sup>1, 2</sup> |
-| Integral, ∫, in display mode  | poor<sup>3</sup> | ✓  | ✓                 |
-| \\left( x \\right)       | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   |
-| \\bigg(, \\Bigg(, etc.   | meh<sup>5</sup>  | ✓       | meh<sup>5</sup>   |
-| \\cancel, \\bcancel, \\xcancel | meh<sup>6</sup> | meh<sup>6</sup>  | meh<sup>6</sup>   |
-| Tag placement            | ✓                | ✓       | poor<sup>7</sup>  |
-| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>  |
-| Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 1-</sup> |
-| Square root radicals     | ✓                | meh<sup>11</sup> | ✓        |
-| Line-breaking            | ✓                | ✓       | bad<sup>12</sup>  |
+| Item                     | Chromium         | Firefox | WebKit (Safari)   | Examples |
+|:-------------------------|:----------------:|:-------:|:-----------------:|:--------:|
+| Renders well on first paint | ✓             | ✓       | bad<sup>1</sup>   | $\hat{E}\;\; \overrightarrow{ABCD}$ |
+| Accents                  | ✓                | ✓       | bad<sup>2</sup>   | $\vec{E}$ |
+| Integral, ∫, in display mode  | poor<sup>3</sup> | ✓  | ✓                 | $\displaystyle\int x^2$ |
+| \\left( x \\right)       | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   | $\left( x \right)$ |
+| \\bigg(, \\Bigg(, etc.   | meh<sup>5</sup>  | ✓       | ✓                 | $$\bigg(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2}\bigg)$$ |
+| \\cancel, \\bcancel, \\xcancel | meh<sup>6</sup> | meh<sup>6</sup>  | meh<sup>6</sup> | $\cancel{5}$ |
+| Tag placement            | ✓                | ✓       | poor<sup>7</sup>  | $$x\tag{tag}$$ |
+| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>   | |
+| Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 10</sup> | $A \xrightharpoonup{\text{note}} B$ |
+| Square root radicals     | ✓                | meh<sup>11</sup> | ✓        | $\sqrt{f_c}$ |
+| Line-breaking            | ✓                | ✓       | bad<sup>12</sup>  | |
+| Size 4 radicals          | meh<sup>13</sup> | ✓       | ✓                 | $\sqrt{{\color{white}\rule{2em}{6em}}}$ |
 
 Notes:
 
-1.  WebKit renders normal accents too high. (Extensible accents are set at the correct height.)
-2.  WebKit fails to make a italic correction on accents. Many are set too far left.
-3.  Chromium does not stretch a system font ∫ in display mode. Latin Modern is okay.
-4.  Chromium and WebKit set parentheses too high for \\left( x \\right).
-5.  Chromium and WebKit set \bigg(, \Bigg(, etc., at the wrong vertical alignment.
+1.  There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation.
+    + accent height
+    + accent italic correction
+    + extensible accents
+    + extensible arrows
+    + height of ‖ in {Vmatrix} environment
+2.  WebKit renders some accents too high even after a page refresh.
+3.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
+4.  Chromium and WebKit mis-align short parentheses, given a \left and \right.
+5.  Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.
 6.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
 7.  WebKit ignores `width: 100%` on an `<mtable>`, so tags and AMS automatic equation numbers are not located correctly.
 8.  WebKit does not render laps properly.
-9.  Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch. Again, Latin Modern is okay.
+9.  Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 10. WebKit fails to stretch most extensible arrows.
 11. Firefox sometimes selects radicals that are too tall.
 12. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+13. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
