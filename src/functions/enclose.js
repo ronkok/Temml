@@ -65,7 +65,7 @@ rgba(0,0,0,0) 100%);`
     case "\\sout":
       node.style.backgroundImage = 'linear-gradient(black, black)'
       node.style.backgroundRepeat = 'no-repeat'
-      node.style.backgroundSize = '100% 2px'
+      node.style.backgroundSize = '100% 1.5px'
       node.style.backgroundPosition = '0 center'
       break
     case "\\boxed":
