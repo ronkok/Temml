@@ -63,7 +63,10 @@ rgba(0,0,0,0) 100%);`
       node.style.marginRight = "0.03889em"
       break
     case "\\sout":
-      node.style["text-decoration"] = "line-through 0.08em solid"
+      node.style.backgroundImage = 'linear-gradient(black, black)'
+      node.style.backgroundRepeat = 'no-repeat'
+      node.style.backgroundSize = '100% 2px'
+      node.style.backgroundPosition = '0 center'
       break
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
