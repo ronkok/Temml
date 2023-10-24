@@ -2,6 +2,16 @@ import defineFunction, { normalizeArgument } from "../defineFunction"
 import mathMLTree from "../mathMLTree"
 import stretchy from "../stretchy"
 import * as mml from "../buildMathML"
+import utils from "../utils"
+
+const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳"
+const talls = "ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhkltΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩβδλζφθψ"
+             + "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐛𝐝𝐟𝐡𝐤𝐥𝐭"
+const longSmalls = new Set(["\\alpha", "\\gamma", "\\delta", "\\epsilon", "\\eta", "\\iota",
+  "\\kappa", "\\mu", "\\nu", "\\pi", "\\rho", "\\sigma", "\\tau", "\\upsilon", "\\chi", "\\psi",
+  "\\omega"])
+const longTalls = new Set(["\\Gamma", "\\Delta", "\\Sigma", "\\Omega", "\\beta", "\\delta",
+  "\\lambda", "\\theta", "\\psi"])
 
 const mathmlBuilder = (group, style) => {
   const accentNode = group.isStretchy
@@ -13,6 +23,13 @@ const mathmlBuilder = (group, style) => {
   } else {
     accentNode.style.mathStyle = "normal"
     accentNode.style.mathDepth = "0"
+    if (needWebkitShift.has(group.label) &&  utils.isCharacterBox(group.base)) {
+      let shift = ""
+      const ch = group.base.text
+      if (smalls.indexOf(ch) > -1 || longSmalls.has(ch)) { shift = "tml-xshift" }
+      if (talls.indexOf(ch) > -1  || longTalls.has(ch))  { shift = "tml-capshift" }
+      if (shift) { accentNode.classes.push(shift) }
+    }
   }
   if (!group.isStretchy) {
     accentNode.setAttribute("stretchy", "false")
@@ -39,6 +56,19 @@ const nonStretchyAccents = new Set([
   "\\vec",
   "\\dot",
   "\\mathring"
+])
+
+const needWebkitShift = new Set([
+  "\\acute",
+  "\\bar",
+  "\\breve",
+  "\\check",
+  "\\dot",
+  "\\ddot",
+  "\\grave",
+  "\\hat",
+  "\\mathring",
+  "\\'", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
 ])
 
 // Accents
