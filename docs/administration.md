@@ -381,17 +381,18 @@ poorly.
 | Item                     | Chromium         | Firefox | WebKit (Safari)   | Examples |
 |:-------------------------|:----------------:|:-------:|:-----------------:|:--------:|
 | Renders well on first paint | ✓             | ✓       | bad<sup>1</sup>   | $\hat{E}\;\; \overrightarrow{ABCD}$ |
-| Accents                  | ✓                | ✓       | bad<sup>2</sup>   | $\vec{E}$ |
+| Accents                  | ✓                | ✓       | bad<sup>2</sup>   | $\hat{𝖺}$ |
 | Integral, ∫, in display mode  | poor<sup>3</sup> | ✓  | ✓                 | $\displaystyle\int x^2$ |
 | \\left( x \\right)       | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   | $\left( x \right)$ |
 | \\bigg(, \\Bigg(, etc.   | meh<sup>5</sup>  | ✓       | ✓                 | $$\bigg(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2}\bigg)$$ |
 | \\cancel, \\bcancel, \\xcancel | meh<sup>6</sup> | meh<sup>6</sup>  | meh<sup>6</sup> | $\cancel{5}$ |
 | Tag placement            | ✓                | ✓       | poor<sup>7</sup>  | $$x\tag{tag}$$ |
-| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>   | |
+| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>   | ${=}\mathllap{/\,}$ |
 | Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 10</sup> | $A \xrightharpoonup{\text{note}} B$ |
-| Square root radicals     | ✓                | meh<sup>11</sup> | ✓        | $\sqrt{f_c}$ |
-| Line-breaking            | ✓                | ✓       | bad<sup>12</sup>  | |
-| Size 4 radicals          | meh<sup>13</sup> | ✓       | ✓                 | $\sqrt{{\color{white}\rule{2em}{6em}}}$ |
+| Radical height           | ✓                | meh<sup>11</sup> | meh<sup>11</sup> | $\sqrt{f_c}$ |
+| Size 4 radicals          | meh<sup>12</sup> | ✓       | ✓                 | $\sqrt{\rule{}{6em}\kern2em}$ |
+| Line-breaking            | ✓                | ✓       | bad<sup>13</sup>  | |
+| mhchem subscripts        | ✓                | ✓       | bad<sup>14</sup>  | $\ce{H2O}$ |
 
 Notes:
 
@@ -406,20 +407,18 @@ Notes:
 4.  Chromium and WebKit mis-align short parentheses, given a \left and \right.
 5.  Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.
 6.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
-7.  WebKit ignores `width: 100%` on an `<mtable>`, so tags and AMS automatic equation numbers are not located correctly.
-8.  WebKit does not render laps properly.
+7.  WebKit mis-locates tags and AMS automatic equation numbers because it ignores `width: 100%` on an `<mtable>`.
+8.  WebKit lap are broken.
 9.  Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 10. WebKit fails to stretch most extensible arrows.
-11. Firefox sometimes selects radicals that are too tall.
-12. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
-13. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+11. Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)
+12. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+13. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+14. WebKit hides mhchem subscripts and superscripts.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
 don’t think it has shipped.
-
-You can view all these issues for yourself at the Temml [function support
-page](https://temml.org/docs/en/supported.html).
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 
