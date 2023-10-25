@@ -4,7 +4,7 @@ import mathMLTree from "../mathMLTree"
 import * as mml from "../buildMathML"
 import ParseError from "../ParseError";
 
-const textModeLap = ["\\clap", "\\llap", "\\rlap"]
+const textModeLap = ["\\clap", "\\llap", "\\rlap"];
 
 defineFunction({
   type: "lap",
