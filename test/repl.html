@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Temml REPL</title>
+        <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Latin-Modern.css">
+        <link rel="stylesheet" type="text/css" href="main.css">
+        
+        <script src="./temml.js" type="text/javascript"></script>    
+        <script src="../contrib/mhchem/mhchem.js" type="text/javascript"></script>        
+        <script src="../contrib/texvc/texvc.js" type="text/javascript"></script>        
+        <script src="../contrib/physics/physics.js" type="text/javascript"></script>
+        <script type="module" type="text/javascript">
+            const input = document.getElementById("input");
+            const math = document.getElementById("math");
+            const mode = document.querySelector('input[id="displayMode"]');
+            const strict = document.querySelector('input[id="strictMode"]');
+            const macros = temml.definePreamble(
+                `\\newcommand\\d[0]{\\operatorname{d}\\!}
+                \\def\\foo{x^2}
+                \\definecolor{sortaGreen}{RGB}{128,128,0}`
+            )
+
+            input.addEventListener("input", reprocess, false);
+            reprocess();
+
+            function reprocess() {
+                temml.render(
+                    input.value,
+                    math, 
+                    {
+                        displayMode: mode.checked,
+                        maxSize: [5, 360],
+                        leqno: true,
+                        strict: strict.checked,
+                        preventTagLap: true,
+                        fleqn: true,
+                        trust: true,
+                        macros
+                    });
+                temml.postProcess(document.body)
+            }
+
+            mode.addEventListener('change', () => reprocess());
+        </script>
+    </head>
+    <body>
+        <textarea id="input" rows="5">
+\left( x \right) \left( x^2 \right) % comment
+\left( \frac{a}{b} \right) \left( \frac{a^2}{b} \right)
+\left( \dfrac{a}{b} \right) \left( \dfrac{a^2}{b} \right)
+        </textarea>
+        <input type="checkbox" id="displayMode" name="displayMode" checked>
+        <label for="displayMode">Display Mode</label>
+        <input type="checkbox" id="strictMode" name="strictMode">
+        <label for="strictMode">Strict Mode</label>
+        <div id="math"></div>
+    </body>
+</html>

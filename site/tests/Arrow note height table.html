@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1">
+  <title>Rename OverShift and UnderShift</title>
+  <link rel="stylesheet" href="../docs/docStyles.css">
+  <link rel="stylesheet" type="text/css" href="../assets/Temml-Latin-Modern.css">
+  <style>
+    @font-face {
+      font-family: Asana Math;
+      src: local('Asana Math'), local('Asana-Math'),
+      url('../assets/Asana-Math.woff2');
+    }
+
+    @font-face {
+      font-family: Libertinus Math;
+      src: url('../assets/LibertinusMath-Regular.woff2');
+    }
+
+    @font-face {
+      font-family: STIX2;
+      src: local('STIXTwoMath-Regular'),
+      url('../assets/STIXTwoMath-Regular.woff2');
+    }
+
+    body { font-size: 18px }
+    table tr > td:nth-of-type(4) math { font-family: "Cambria Math", math; }
+    table tr > td:nth-of-type(5) math { font-family: "STIX2", math; }
+    table tr > td:nth-of-type(6) math { font-family: "Libertinus Math", math; }
+    table tr > td:nth-of-type(7) math { font-family: "Asana Math", math; }
+  </style>
+</head>
+<body>
+
+<table class="grid c1c c2l c3c c4c c5c c6c c7c" style="margin-left: 2em">
+   <tbody>
+      <tr>
+         <th></th>
+         <th>Method</th>
+         <th>Latin<br>Modern</th>
+         <th>Cambria<br>Math</th>
+         <th>STIX<br>TWO</th>
+         <th>Libertinus</th>
+         <th>Asana</th>
+      </tr>
+      <tr>
+         <td>1</td>
+         <td>Current Chromium <code>&lt;mover&gt;</code></td>
+         <td><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></td>
+         <td><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></td>
+         <td><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></td>
+         <td><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></td>
+         <td><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></td>
+      </tr>
+      <tr>
+         <td>2</td>
+         <td>Ink height + StretchStackTopShiftUp</td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.621em" style="padding: 0.621em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.0em"></mspace>
+              <mpadded voffset="1.269em" style="padding: 1.269em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="1.260em" style="padding: 1.260em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.1em"></mspace>
+              <mpadded voffset="1.248em" style="padding: 1.248em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.541em" style="padding: 0.541em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+      </tr>
+      <tr>
+         <td>3</td>
+         <td>Baseline + StretchStackTopShiftUp</td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.2em"></mspace>
+              <mpadded voffset="0.111em" style="padding: 0.111em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.0em"></mspace>
+              <mpadded voffset="0.781em" style="padding: 0.781em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.800em" style="padding: 0.800em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.1em"></mspace>
+              <mpadded voffset="0.800em" style="padding: 0.800em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.050em" style="padding: 0.050em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+      </tr>
+      <tr>
+         <td>4</td>
+         <td>Ink height + StretchStackGapAboveMin</td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.710em" style="padding: 0.710em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.0em"></mspace>
+              <mpadded voffset="0.552em" style="padding: 0.552em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.2em"></mspace>
+              <mpadded voffset="0.528em" style="padding: 0.528em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.1em"></mspace>
+              <mpadded voffset="0.513em" style="padding: 0.513em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.571em" style="padding: 0.571em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+      </tr>
+      <tr>
+         <td>5</td>
+         <td>Ink height + 0.111em (as per LaTeX)</td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.621em" style="padding: 0.621em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.0em"></mspace>
+              <mpadded voffset="0.598em" style="padding: 0.598em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.571em" style="padding: 0.571em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.2em"></mspace>
+              <mpadded voffset="0.559em" style="padding: 0.559em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+         <td>
+           <math><mrow><mspace width="-0.65em" style="margin-left:-0.65em;"></mspace><mpadded width="0px"><mrow><mi>A</mi><mo>−</mo><mspace width="-0.65em" style="margin-left: -0.65em;"></mspace><mo stretchy="false">⟶</mo><mi>B</mi></mrow></mpadded><mrow>
+              <mspace width="1.3em"></mspace>
+              <mpadded voffset="0.602em" style="padding: 0.602em 0px 0px;"><mstyle scriptlevel="1" displaystyle="false"><mtext>note</mtext></mstyle></mpadded></mrow></mrow>
+           </math>
+         </td>
+      </tr>
+   </tbody>
+</table>

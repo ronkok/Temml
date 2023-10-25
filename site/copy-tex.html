@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<!--To run this example, navigate to https://temml.org/copy-tex.html  -->
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Copy-tex test</title>
+    <script src="./assets/temml.min.js" type="text/javascript"></script>
+    <script src="./assets/auto-render.min.js" type="text/javascript"></script>
+    <script src="./assets/copy-tex.min.js" type="text/javascript"></script>
+    <style type="text/css">
+      body {
+          margin: 0px;
+          padding: 0px;
+          font-size: 24px;
+      }
+      p {width: 900px}
+    </style>
+  </head>
+  <body>
+    <h1>Copy-tex test</h1>
+    <h2>Try copy/pasting some of the text below.</h2>
+
+    <p>With any second order polynomial, \(\mathrm{a}x^{2} + \mathrm{b}x + \mathrm{c} = 0\),
+    you can solve for the zeros with the quadratic formula:</p>
+
+    <p>$$ x = \frac{-\mathrm{b} ± \sqrt{\mathrm{b}^{2} - 4 \mathrm{a}\mathrm{c}}}{2 \mathrm{a}} $$</p>
+
+    <p>The system:
+\(\begin{matrix}
+   3 x + 2 y + z = 39 \\
+   2 x + 3 y + z = 34 \\
+   x + 2 y + 3 z = 26
+\end{matrix}\) when restated in matrix format is:
+\(\begin{pmatrix}
+   3 & 2 & 1 \\
+   2 & 3 & 1 \\
+   1 & 2 & 3
+\end{pmatrix}
+\begin{bmatrix}x \\ y \\ z \end{bmatrix} =
+\begin{bmatrix}39 \\ 34 \\ 26 \end{bmatrix}\)<p>
+
+    <script>
+      renderMathInElement(document.body, { annotate: "true" });
+    </script>
+  </body>
+</html>
