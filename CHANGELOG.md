@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.17] = 2023-10-25
+
+### Fixed
+
+- Mitigate WebKit accent alignment
+- Fix \sout in WebKit
+- Fix visibility of AMS automatic equation numbers in WebKit
+- Improve rendering option defaults
+
 ## [0.10.16] = 2023-10-13
 
 ### Fixed

@@ -80,6 +80,12 @@ mo.prime-pad {
   }
 }
 
+/* Adjust WebKit accents */
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  .tml-xshift { transform: translate(0px, 0.45em) }
+  .tml-capshift { transform: translate(0px, 0.35em) }
+}
+
 /* flex-wrap for line-breaking in Chromium */
 math {
   display: inline-flex;

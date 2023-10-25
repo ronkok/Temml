@@ -2189,6 +2189,15 @@ function buildMathML(tree, texExpression, style, settings) {
   return math;
 }
 
+const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳";
+const talls = "ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhkltΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩβδλζφθψ"
+             + "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐛𝐝𝐟𝐡𝐤𝐥𝐭";
+const longSmalls = new Set(["\\alpha", "\\gamma", "\\delta", "\\epsilon", "\\eta", "\\iota",
+  "\\kappa", "\\mu", "\\nu", "\\pi", "\\rho", "\\sigma", "\\tau", "\\upsilon", "\\chi", "\\psi",
+  "\\omega", "\\imath", "\\jmath"]);
+const longTalls = new Set(["\\Gamma", "\\Delta", "\\Sigma", "\\Omega", "\\beta", "\\delta",
+  "\\lambda", "\\theta", "\\psi"]);
+
 const mathmlBuilder$a = (group, style) => {
   const accentNode = group.isStretchy
     ? stretchy.accentNode(group)
@@ -2199,6 +2208,13 @@ const mathmlBuilder$a = (group, style) => {
   } else {
     accentNode.style.mathStyle = "normal";
     accentNode.style.mathDepth = "0";
+    if (needWebkitShift.has(group.label) &&  utils.isCharacterBox(group.base)) {
+      let shift = "";
+      const ch = group.base.text;
+      if (smalls.indexOf(ch) > -1 || longSmalls.has(ch)) { shift = "tml-xshift"; }
+      if (talls.indexOf(ch) > -1  || longTalls.has(ch))  { shift = "tml-capshift"; }
+      if (shift) { accentNode.classes.push(shift); }
+    }
   }
   if (!group.isStretchy) {
     accentNode.setAttribute("stretchy", "false");
@@ -2225,6 +2241,19 @@ const nonStretchyAccents = new Set([
   "\\vec",
   "\\dot",
   "\\mathring"
+]);
+
+const needWebkitShift = new Set([
+  "\\acute",
+  "\\bar",
+  "\\breve",
+  "\\check",
+  "\\dot",
+  "\\ddot",
+  "\\grave",
+  "\\hat",
+  "\\mathring",
+  "\\'", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
 ]);
 
 // Accents
@@ -3896,7 +3925,10 @@ rgba(0,0,0,0) 100%);`;
       node.style.marginRight = "0.03889em";
       break
     case "\\sout":
-      node.style["text-decoration"] = "line-through 0.08em solid";
+      node.style.backgroundImage = 'linear-gradient(black, black)';
+      node.style.backgroundRepeat = 'no-repeat';
+      node.style.backgroundSize = '100% 1.5px';
+      node.style.backgroundPosition = '0 center';
       break
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
@@ -13053,7 +13085,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.16";
+const version = "0.10.17";
 
 function postProcess(block) {
   const labelMap = {};
