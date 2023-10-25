@@ -25,9 +25,9 @@ import { postProcess, version } from "./src/postProcess";
  * Parse and build an expression, and place that expression in the DOM node
  * given.
  */
-let render = function(expression, baseNode, options) {
+let render = function(expression, baseNode, options={}) {
   baseNode.textContent = "";
-  const alreadyInMathElement = baseNode.tagName === "MATH"
+  const alreadyInMathElement = baseNode.tagName.toLowerCase() === "math"
   if (alreadyInMathElement) { options.wrap = "none" }
   const math = renderToMathMLTree(expression, options)
   if (alreadyInMathElement) {
