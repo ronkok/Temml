@@ -1,0 +1,377 @@
+* {
+  margin: 0;
+} /* reset */
+
+body {
+  font-family: "Times New Roman", Cambria, "Cambria Math", Georgia, serif;
+}
+
+body {
+  font-size: 18px;
+}
+@media (max-width: 830px) {
+  body {
+    font-size: 16px;
+  }
+}
+@media (max-width: 740px) {
+  body {
+    font-size: 16px;
+  }
+}
+
+main {
+  position: absolute;
+  top: 0;
+  padding: 0px 2.5px 0px 2.5px;
+}
+
+#sidebar {
+  position: fixed;
+  top: 0;
+  margin: 0px 2.5px 0px 2.5px;
+  overflow: fixed;
+}
+
+#demo {
+  margin: 0px 2.5px 0px 2.5px;
+  overflow: fixed;
+}
+
+@media all {
+  #sidebar {
+    left: 50px;
+    width: 245px;
+  }
+  #sidebar.narrow {
+    width: 100px;
+  }
+  main {
+    left: 330px;
+    width: 580px;
+  }
+  main.sptable {
+    left: 190px;
+  }
+  main.comp {
+    left: 200px;
+  }
+}
+
+@media (max-width: 880px) {
+  #sidebar {
+    left: 0px;
+    width: 20%;
+  }
+  main {
+    left: 24%;
+    width: 75%;
+  }
+}
+
+@media (max-width: 670px) {
+  #sidebar {
+    left: 0px;
+    width: 5%;
+  }
+  main {
+    left: 7%;
+    width: 90%;
+  }
+}
+
+
+h1,
+h2,
+h3 {
+  font-family: Verdana, sans-serif;
+  font-variant: small-caps;
+  letter-spacing: 0.05em;
+  margin-top: 3em;
+}
+
+h1 {
+  font-size: 140%;
+  margin-top: 1em;
+}
+h2 {
+  font-size: 110%;
+  margin-bottom: 0.5em;
+}
+h3 {
+  font-size: 110%;
+  margin-bottom: 0.5em;
+  margin-top: 0.8em;
+}
+h4 {
+  margin-bottom: 0.5em;
+  margin-top: 0.8em;
+}
+
+p {
+  margin-top: 1em;
+  line-height: 1.35;
+  text-align: justify;
+}
+
+td > p:first-child { margin-top: 0em; }
+
+hr {
+  margin: 1em;
+}
+
+/* Style subscripts and superscripts to avoid wide line spacing. */
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+sup {
+  top: -0.5em;
+}
+sub {
+  bottom: -0.25em;
+}
+
+.direct {
+  font-family: "Cambria Math";
+}
+.reduced {
+  font-size: 80%;
+}
+.dim {
+  color: gray;
+}
+
+.indented {
+  margin-left: 2.5em;
+}
+p.indented {
+  margin-top: 0.25em;
+  text-align: left;
+}
+.indented p {
+  margin-top: 0.5em;
+  text-align: left;
+}
+
+table {
+  font-size: inherit;
+  border-collapse: collapse;
+  width: auto;
+}
+
+div > table {
+  margin-left: 0;
+}
+
+table td {
+  padding: 0.3em 0.8em 0.3em 0.8em;
+  vertical-align: middle;
+  hyphens: none;
+  white-space: nowrap;
+  border: 1px solid #ddd;
+}
+
+table th {
+  font-size: 95%;
+  padding: 0.3rem 0.5rem 0.3rem 0.5rem;
+  line-height: 1.05;
+  border-bottom: 1px solid #ccc;
+  white-space: nowrap;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: #f6f8fa;
+}
+
+/* Column alignment. Apply these classes to the table node. */
+.c1r td:nth-child(1), .c1r th:nth-child(1),
+.c2r td:nth-child(2), .c2r th:nth-child(2),
+.c3r td:nth-child(3), .c3r th:nth-child(3),
+.c4r td:nth-child(4), .c4r th:nth-child(4),
+.c5r td:nth-child(5), .c5r th:nth-child(5),
+.c6r td:nth-child(6), .c6r th:nth-child(6),
+.c7r td:nth-child(7), .c7r th:nth-child(7),
+.c8r td:nth-child(8), .c8r th:nth-child(8),
+.c9r td:nth-child(9), .c9r th:nth-child(9) { text-align:right }
+
+.c1c td:nth-child(1), .c1c th:nth-child(1),
+.c2c td:nth-child(2), .c2c th:nth-child(2),
+.c3c td:nth-child(3), .c3c th:nth-child(3),
+.c4c td:nth-child(4), .c4c th:nth-child(4),
+.c5c td:nth-child(5), .c5c th:nth-child(5),
+.c6c td:nth-child(6), .c6c th:nth-child(6),
+.c7c td:nth-child(7), .c7c th:nth-child(7),
+.c8c td:nth-child(8), .c8c th:nth-child(8),
+.c9c td:nth-child(9), .c9c th:nth-child(9) { text-align:center }
+
+ul {
+  padding: 0;
+}
+
+ol li {
+  position: relative;
+  left: 0em;
+  width: 88%;
+  line-height: 1.35;
+  margin-top: 0.5em;
+}
+ul li {
+  list-style-type: disc;
+  line-height: 1.35;
+  margin-top: 0.5em;
+  position: relative;
+  left: 1.8em;
+}
+
+ul li p:first-child {
+  margin-top: 0;
+}
+
+a {
+  text-decoration: underline;
+  color: black;
+}
+
+pre {
+  margin: 0px;
+  padding: 12px 12px 12px 12px;
+  line-height: 1.5;
+  display: block;
+  overflow: visible;
+}
+
+code {
+  font-family: Consolas, "Courier New", Courier, monospace;
+  font-size: 85%;
+  /*color: #404040;*/
+  background-color: rgba(27, 31, 35, 0.05);
+}
+pre > code,
+td code {
+  background-color: transparent;
+}
+
+.no-sup {
+  color: dimgray;
+}
+
+#input-container {
+  font-size: 0.9em;
+  width: 100%;
+  height: 3em;
+  border-radius: 4px;
+  border: 1px solid rgb(200, 200, 200);
+  display: inline-block;
+  padding: 0.5em 0.5em;
+  vertical-align: top;
+  resize: none;
+}
+
+#demo-output {
+  font-size: 0.9em;
+  width: 100%;
+  height: 5em;
+  padding: 1em 1em;
+  vertical-align: top;
+}
+
+summary {
+  outline: none;
+  cursor: pointer;
+}
+
+.mobile-menu {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #aaa;
+  padding-right: 3em;
+}
+.mobile-menu summary:after {
+  content: none;
+}
+
+/* Table of Contents, sidebar version */
+#sidebar {
+  cursor: pointer;
+  font-family: Calibri, sans-serif;
+  padding-top: 0.5em;
+  background: #fff;
+}
+
+#sidebar li {
+  list-style: none;
+  line-height: 1.35;
+  position: relative;
+  margin-top: 0em;
+  left: 0em;
+}
+
+#sidebar ul li ul {
+  padding-left: 1.3em;
+}
+
+#sidebar ul li ul li {
+  margin-top: 0em;
+  width: 88%;
+}
+
+#sidebar a {
+  text-decoration: none;
+  color: black;
+}
+
+/* Table of Contents, mobile version */
+#mobile-nav {
+  display: none; /* hidden on large screens */
+  position: fixed;
+}
+
+/* On small screens, switch from sidebar TOC to navicon and drop-down menu */
+@media screen and (max-width: 670px) {
+  #mobile-nav {
+    display: block;
+  }
+  #sidebar {
+    display: none;
+  }
+}
+
+#mobile-nav ul {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  display: block;
+  background:#fff;
+  border:1px solid #aaa;
+  padding-right: 3em;
+  color: black;
+  display: block;
+}
+
+#mobile-nav input[type="checkbox"]:checked ~ ul {
+  top: 26px;
+  left: 25px;
+}
+
+input[type="checkbox"] {
+  display: none;
+}
+
+#mobile-nav li {
+  list-style: none;
+  margin: 0;
+  padding: 0.2em;
+}
+
+#mobile-nav li a {
+  width: 60px;
+}
+
+#mobile-nav a {
+  text-decoration: none;
+  color: black;
+}
