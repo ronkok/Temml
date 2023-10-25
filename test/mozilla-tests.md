@@ -74,7 +74,7 @@ Images from LaTeX are also included for comparison.
 |    | {\partial x^2} + \frac \     | {\partial x^2} + \frac       |           |              |
 |    | {\partial^2}{\partial y^2}\  | {\partial^2}{\partial y^2}   |           |              |
 |    | \bigg){\big\lvert\varphi \   | \bigg){\big\lvert\varphi     |           |              |
-|    | (x+iy)\big\rvert}^2          | (x+iy)\big\rvert}^2$$        |           |              |
+|    | (x+iy)\big\rvert}^2 = 0      | (x+iy)\big\rvert}^2 = 0$$    |           |              |
 +----+------------------------------+------------------------------+-----------+--------------+
 | 15 | 2^{2^{2^x}}                  | $$2^{2^{2^x}}$$              | ![ex15][] | TeXbook p128 |
 +----+------------------------------+------------------------------+-----------+--------------+
