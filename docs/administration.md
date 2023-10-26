@@ -378,21 +378,21 @@ Temml [function support page](https://temml.org/docs/en/supported.html).
 The rest of you, stay here. This section identifies functions that browsers render
 poorly.
 
-| Item                     | Chromium         | Firefox | WebKit (Safari)   | Examples |
-|:-------------------------|:----------------:|:-------:|:-----------------:|:--------:|
-| Renders well on first paint | ✓             | ✓       | bad<sup>1</sup>   | $\hat{E}\;\; \overrightarrow{ABCD}$ |
-| Accents                  | ✓                | ✓       | bad<sup>2</sup>   | $\hat{𝖺}$ |
-| Integral, ∫, in display mode  | poor<sup>3</sup> | ✓  | ✓                 | $\displaystyle\int x^2$ |
-| \\left( x \\right)       | meh<sup>4</sup>  | ✓       | meh<sup>4</sup>   | $\left( x \right)$ |
-| \\bigg(, \\Bigg(, etc.   | meh<sup>5</sup>  | ✓       | ✓                 | $$\bigg(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2}\bigg)$$ |
-| \\cancel, \\bcancel, \\xcancel | meh<sup>6</sup> | meh<sup>6</sup>  | meh<sup>6</sup> | $\cancel{5}$ |
-| Tag placement            | ✓                | ✓       | poor<sup>7</sup>  | $$x\tag{tag}$$ |
-| \\mathllap, \\mathrlap   | ✓                | ✓       | bad<sup>8</sup>   | ${=}\mathllap{/\,}$ |
-| Extensible arrows        | poor<sup>9</sup> | ✓       | bad<sup>9, 10</sup> | $A \xrightharpoonup{\text{note}} B$ |
-| Radical height           | ✓                | meh<sup>11</sup> | meh<sup>11</sup> | $\sqrt{f_c}$ |
-| Size 4 radicals          | meh<sup>12</sup> | ✓       | ✓                 | $\sqrt{\rule{}{6em}\kern2em}$ |
-| Line-breaking            | ✓                | ✓       | bad<sup>13</sup>  | |
-| mhchem subscripts        | ✓                | ✓       | bad<sup>14</sup>  | $\ce{H2O}$ |
+| Item                     | Chromium | Gecko<br>(Firefox) | WebKit<br>(Safari) | Examples                    |
+|:-----------------------------|:--------:|:---------:|:---------:|:-----------------------------------------:|
+| Renders well on first paint  | ✓        | ✓         | bad¹      | $\hat{E}\;\; \overrightarrow{ABCD}$       |
+| Accents                      | ✓        | ✓         | bad²      | $\hat{𝖺}$                                 |
+| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int x^2$                   |
+| \left( x \right)             | meh⁴     | ✓         | meh⁴      | $\left( x \right)$                        |
+| \bigg(, \Bigg(, etc.         | meh⁵     | ✓         | ✓         | $$\bigg(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2}\bigg)$$ |
+| \cancel, \bcancel, \xcancel  | meh⁶     | meh⁶      | meh⁶      | $\cancel{5}$                              |
+| Tag placement                | ✓        | ✓         | poor⁷     | $$x\tag{tag}$$                            |
+| \mathllap, \mathrlap         | ✓        | ✓         | bad⁸      | ${=}\mathllap{/\,}$                       |
+| Extensible arrows            | poor⁹    | ✓         | bad<sup>9, 10</sup> | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh¹¹     | meh¹¹     | $\sqrt{f_c}$                              |
+| Size 4 radicals              | meh¹²    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
+| Line-breaking                | ✓        | ✓         | bad¹³     |                                           |
+| mhchem subscripts            | ✓        | ✓         | bad¹⁴     | $\ce{H2O}$                                |
 
 Notes:
 
@@ -402,13 +402,13 @@ Notes:
     + extensible accents
     + extensible arrows
     + height of ‖ in {Vmatrix} environment
-2.  WebKit renders some accents too high even after a page refresh.
+2.  WebKit renders some accents too high even after a page refresh. Temml does some work to mitigate this. It’s not enough.
 3.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 4.  Chromium and WebKit mis-align short parentheses, given a \left and \right.
 5.  Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.
-6.  Because Chromium does not support \<enclose>, Temml uses background images for \\cancel. It may not print properly.
+6.  Because Chromium does not support `<enclose>`, Temml uses background images for \cancel. It may not print properly.
 7.  WebKit mis-locates tags and AMS automatic equation numbers because it ignores `width: 100%` on an `<mtable>`.
-8.  WebKit lap are broken.
+8.  WebKit laps are broken.
 9.  Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 10. WebKit fails to stretch most extensible arrows.
 11. Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)
