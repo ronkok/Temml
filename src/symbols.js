@@ -556,7 +556,7 @@ defineSymbol(math, open, "\u00ac", "\\lnot");
 defineSymbol(math, textord, "\u22a4", "\\top");
 defineSymbol(math, textord, "\u22a5", "\\bot");
 defineSymbol(math, textord, "\u2205", "\\emptyset");
-defineSymbol(math, textord, "\u00f8", "\\varnothing");
+defineSymbol(math, textord, "\u2300", "\\varnothing");
 defineSymbol(math, mathord, "\u03b1", "\\alpha", true);
 defineSymbol(math, mathord, "\u03b2", "\\beta", true);
 defineSymbol(math, mathord, "\u03b3", "\\gamma", true);
