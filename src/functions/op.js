@@ -71,7 +71,8 @@ const singleCharBigOps = {
   "\u2a02": "\\bigotimes",
   "\u2a04": "\\biguplus",
   "\u2a05": "\\bigsqcap",
-  "\u2a06": "\\bigsqcup"
+  "\u2a06": "\\bigsqcup",
+  "\u2a09": "\\bigtimes"
 };
 
 defineFunction({

@@ -746,6 +746,7 @@ defineSymbol(math, op, "\u2211", "\\sum");
 defineSymbol(math, op, "\u2a02", "\\bigotimes");
 defineSymbol(math, op, "\u2a01", "\\bigoplus");
 defineSymbol(math, op, "\u2a00", "\\bigodot");
+defineSymbol(math, op, "\u2a09", "\\bigtimes");
 defineSymbol(math, op, "\u222e", "\\oint");
 defineSymbol(math, op, "\u222f", "\\oiint");
 defineSymbol(math, op, "\u2230", "\\oiiint");
