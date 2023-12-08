@@ -228,14 +228,19 @@ If the color model is omitted, Temml color functions will accept:
 | `\|`             |                    |              | `\llcorner`\               |  `\Updownarrow`     |
 |                  |                    |              | $~~~~$  `\lrcorner`        |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
-| $\lvert~\rvert$  | $\lVert~\rVert$    | `\left.`     | `\right.`                  | $\backslash$        |
-| `\lvert`\        | `\lVert`\          |              |                            | `\backslash`        |
-| $~~~~$  `\rvert` | $~~~~~$  `\rVert`  |              |                            |                     |
+|                  |                    | `\left.`     | `\right.`                  | $\backslash$        |
+|                  |                    |              |                            | `\backslash`        |
+|                  |                    |              |                            |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
-|                  | $\lt\gt$  `\lt`\   | $⟦~⟧$  `⟦ ⟧` | $\llbracket~\rrbracket$    | $\lBrace~\rBrace$   |
-|                  | $~~~~~$            |              | `\llbracket`\              | `\lBrace \rBrace`   |
-|                  | `\gt`              |              | $~~~~$  `\rrbracket`       |                     |
+| $\lvert~\rvert$  | $\lVert~\rVert$    | $⟦~⟧$  `⟦ ⟧` | $\llbracket~\rrbracket$    | $\lBrace~\rBrace$   |
+| `\lvert`\        | `\lVert`\          |              | `\llbracket`\              | `\lBrace \rBrace`   |
+| $~~~~$  `\rvert` | $~~~~~$  `\rVert`  |              | $~~~~$  `\rrbracket`       |                     |
 +------------------+--------------------+--------------+----------------------------+---------------------+
+|                  | $\lt\gt$  `\lt`\   |              |                            |                     |
+|                  | $~~~~~$            |              |                            |                     |
+|                  | `\gt`              |              |                            |                     |
++------------------+--------------------+--------------+----------------------------+---------------------+
+
 
 The _texvc_ extension includes $\lang$ `\lang` and $\rang$ `\rang`.
 
@@ -1450,7 +1455,7 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 +------------------------------+-------------------------+------------------------------------+
 | $\permil$  `\permil`         | $\astrosun$ `\astrosun` | $\sun$  `\sun`                     |
 +------------------------------+-------------------------+------------------------------------+
-|                              | $\leftmoon$ `\leftmoon` | $\rightmoon$ `\rightmoon`          |
+| $\diameter$ `\diameter`      | $\leftmoon$ `\leftmoon` | $\rightmoon$ `\rightmoon`          |
 +------------------------------+-------------------------+------------------------------------+
 
 Symbols in the _texvc_ extension
@@ -1463,7 +1468,7 @@ Symbols in the _texvc_ extension
 | $\bull$  `\bull`         | $\text{\sect}$  `\text{\sect}` | $\Dagger$  `\Dagger` |
 +--------------------------+--------------------------------+----------------------+
 
-Direct Input: <span class="direct">§ ¶ £ ¥ € ∇ ∞ · ∠ ∡ ∢ ♠ ♡ ♢ ♣ ♭ ♮ ♯ © ® ☺ ✓ ↯ ∎ …  ⋮  ⋯  ⋱  ! ‼ ☉</span>
+Direct Input: <span class="direct">§ ¶ £ ¥ € ∇ ∞ · ∠ ∡ ∢ ⌀ ♠ ♡ ♢ ♣ ♭ ♮ ♯ © ® ☺ ✓ ↯ ∎ …  ⋮  ⋯  ⋱  ! ‼ ☉</span>
 
 ## Units
 

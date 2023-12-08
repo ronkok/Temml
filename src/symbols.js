@@ -866,6 +866,8 @@ defineSymbol(text, textord, "\u20ac", "\\euro", true);
 defineSymbol(text, textord, "\u20ac", "\\texteuro");
 defineSymbol(math, textord, "\u00a9", "\\copyright", true);
 defineSymbol(text, textord, "\u00a9", "\\textcopyright");
+defineSymbol(math, textord, "\u2300", "\\diameter", true);
+defineSymbol(text, textord, "\u2300", "\\diameter");
 
 // Italic Greek
 defineSymbol(math, textord, "𝛤", "\\varGamma");
