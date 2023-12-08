@@ -275,6 +275,7 @@ const dotsByToken = {
   "\\bigodot": "\\dotsb",
   "\\bigsqcap": "\\dotsb",
   "\\bigsqcup": "\\dotsb",
+  "\\bigtimes": "\\dotsb",
   "\\And": "\\dotsb",
   "\\longrightarrow": "\\dotsb",
   "\\Longrightarrow": "\\dotsb",
