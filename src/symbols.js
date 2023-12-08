@@ -617,6 +617,8 @@ defineSymbol(math, bin, "\u2228", "\\vee", true);
 defineSymbol(math, open, "\u27e6", "\\llbracket", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u27e7", "\\rrbracket", true);
 defineSymbol(math, open, "\u27e8", "\\langle", true);
+defineSymbol(math, open, "\u27ea", "\\lAngle", true);
+defineSymbol(math, open, "\u2989", "\\llangle", true);
 defineSymbol(math, open, "|", "\\lvert");
 defineSymbol(math, open, "\u2016", "\\lVert");
 defineSymbol(math, textord, "!", "\\oc"); // cmll package
@@ -628,6 +630,8 @@ defineSymbol(math, close, "?", "?");
 defineSymbol(math, close, "!", "!");
 defineSymbol(math, close, "‼", "‼");
 defineSymbol(math, close, "\u27e9", "\\rangle", true);
+defineSymbol(math, close, "\u27eb", "\\rAngle", true);
+defineSymbol(math, close, "\u298a", "\\rrangle", true);
 defineSymbol(math, close, "|", "\\rvert");
 defineSymbol(math, close, "\u2016", "\\rVert");
 defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
@@ -709,6 +713,8 @@ defineSymbol(math, close, "]", "\\rbrack", true);
 defineSymbol(text, textord, "]", "\\rbrack", true);
 defineSymbol(math, open, "(", "\\lparen", true);
 defineSymbol(math, close, ")", "\\rparen", true);
+defineSymbol(math, open, "⦇", "\\llparenthesis", true);
+defineSymbol(math, close, "⦈", "\\rrparenthesis", true);
 defineSymbol(text, textord, "<", "\\textless", true); // in T1 fontenc
 defineSymbol(text, textord, ">", "\\textgreater", true); // in T1 fontenc
 defineSymbol(math, open, "\u230a", "\\lfloor", true);

@@ -746,6 +746,7 @@ If you know the shape of a character, but not its name,
 | \label               | | `\label{idName}`<br>Creates an HTML id.<br>Characters limited to: `A-Za-z0-9_-`| |
 | \land                | $\land$                    |                   |           |
 | \lang                | $\lang A\rangle$           | `\lang A\rangle` | texvc extension |
+| \lAngle              | $\lAngle A\rAngle$         | `\lAngle A\rAngle` | unicode-math |
 | \langle              | $\langle A\rangle$         | `\langle A\rangle` | |
 | \laplacian           | $\laplacian$               | | physics extension |
 | \Larr                | $\Larr$                    | | texvc extension |
@@ -801,6 +802,7 @@ If you know the shape of a character, but not its name,
 | \limits              | $\lim\limits_x$            | `\lim\limits_x`| |
 | \limsup              | $\limsup$                  | | |
 | \ll                  | $\ll$                      | | |
+| \llangle             | $\llangle A\rrangle$       | `\llangle A\rrangle` | unicode-math |
 | \llap                | ${=}\llap{/\,}$            | `{=}\llap{/\,}`| |
 | \llbracket           | $\llbracket$               | | stmaryrd |
 | \llcorner            | $\llcorner$                | | ams |
@@ -1148,6 +1150,7 @@ If you know the shape of a character, but not its name,
 | \raise             | $M\raise3pt{M^2}M$| `M\raise3pt{M^2}M`  or<br>`M\raise3pt\hbox{$M^2$}M`| |
 | \raisebox          | $h\raisebox{2pt}{ighe}r$| `h\raisebox{2pt}{ighe}r`| |
 | \rang              | $\langle A\rang$| `\langle A\rang` | texvc extension |
+| \rAngle            | $\lAngle A\rAngle$| `\lAngle A\rAngle`| unicode-math |
 | \rangle            | $\langle A\rangle$| `\langle A\rangle`| |
 | \rank              | $\rank M$| `\rank M`|  physics extension |
 | \Rarr              | $\Rarr$| | texvc extension |
@@ -1197,6 +1200,7 @@ If you know the shape of a character, but not its name,
 | \rparen            | $\rparen$| | mathtools |
 | \rppolint          | $\rppolint$| | |
 | \rq                | $\rq$| | |
+| \rrangle           | $\llangle A\rrangle$       | `\llangle A\rrangle` | unicode-math |
 | \rrbracket         | $\rrbracket$| |  stmaryrd |
 | \Rrightarrow       | $\Rrightarrow$| | ams |
 | \Rsh               | $\Rsh$| | ams |
