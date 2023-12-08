@@ -478,7 +478,7 @@ If you know the shape of a character, but not its name,
 |\derivative|$\derivative{x}{y}$|`\derivative{x}{y}`| physics extension |
 |\det|$\det$|||
 |\dfrac|$\dfrac{a-1}{b-1}$|`\dfrac{a-1}{b-1}`| ams |
-|\diameter|$\diameter$|||
+|\diameter|$\diameter$|| stix |
 |\differential|$\differential$|`\differential`| physics extension |
 |\diagdown|$\diagdown$|| ams |
 |\diagonalmatrix|(Not supported)|| physics |
