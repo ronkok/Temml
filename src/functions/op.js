@@ -92,6 +92,7 @@ defineFunction({
     "\\bigodot",
     "\\bigsqcap",
     "\\bigsqcup",
+    "\\bigtimes",
     "\\smallint",
     "\u220F",
     "\u2210",
