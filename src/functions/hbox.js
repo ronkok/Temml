@@ -1,10 +1,10 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import { StyleLevel } from "../constants"
-import mathMLTree from "../mathMLTree";
 import * as mml from "../buildMathML";
 
 // \hbox is provided for compatibility with LaTeX functions that act on a box.
-// This function by itself doesn't do anything but prevent a soft line break.
+// This function by itself doesn't do anything but set scriptlevel to \textstyle
+// and prevent a soft line break.
 
 defineFunction({
   type: "hbox",
@@ -23,7 +23,8 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    const newOptions = style.withLevel(StyleLevel.TEXT)
-    return new mathMLTree.MathNode("mrow", mml.buildExpression(group.body, newOptions));
+    const newStyle = style.withLevel(StyleLevel.TEXT)
+    const mrow = mml.buildExpressionRow(group.body, newStyle)
+    return mml.consolidateText(mrow)
   }
 });

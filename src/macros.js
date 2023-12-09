@@ -191,8 +191,6 @@ defineMacro("\\surd", '\\sqrt{\\vphantom{|}}')
 // See comment for \oplus in symbols.js.
 defineMacro("\u2295", "\\oplus")
 
-defineMacro("\\hbox", "\\text{#1}");
-
 // Per TeXbook p.122, "/" gets zero operator spacing.
 // And MDN recommends using U+2044 instead of / for inline
 defineMacro("/", "{\u2044}")

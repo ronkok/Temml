@@ -21,6 +21,7 @@ import "./functions/environment";
 import "./functions/envTag";
 import "./functions/font";
 import "./functions/genfrac";
+import "./functions/hbox";
 import "./functions/horizBrace";
 import "./functions/href";
 import "./functions/html";

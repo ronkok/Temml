@@ -36,7 +36,7 @@ export const makeText = function(text, mode, style) {
 
 export const consolidateText = mrow => {
   // If possible, consolidate adjacent <mtext> elements into a single element.
-  if (mrow.type !== "mrow") { return mrow }
+  if (mrow.type !== "mrow" && mrow.type !== "mstyle") { return mrow }
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
   if (!mrow.children[0].attributes || mrow.children[0].type !== "mtext") { return mrow }
   const variant = mrow.children[0].attributes.mathvariant || ""
@@ -72,6 +72,9 @@ export const consolidateText = mrow => {
   const L = mtext.children[0].text.length
   if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
     mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0"
+  }
+  for (const [key, value] of Object.entries(mrow.attributes)) {
+    mtext.attributes[key] = value
   }
   return mtext
 }
