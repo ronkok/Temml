@@ -220,8 +220,8 @@ If the color model is omitted, Temml color functions will accept:
 |                  | `\langle` \        |              | `\lgroup`\                      | `\Uparrow`          |
 |                  | $~~~~$ `\rangle`   |              | $~~~~~$  `\rgroup`              |                     |
 +------------------+--------------------+--------------+---------------------------------+---------------------+
-|                  | $\lAngle~\rAngle$  | $┌ ┐$  `┌ ┐` | $\ulcorner \urcorner$           | $\Downarrow$        |
-|                  | `\lAngle` \        |              | `\ulcorner`\                    |  `\Downarrow`       |
+| $\lt\gt$ `\lt`\  | $\lAngle~\rAngle$  | $┌ ┐$  `┌ ┐` | $\ulcorner \urcorner$           | $\Downarrow$        |
+|         `\gt`    | `\lAngle` \        |              | `\ulcorner`\                    |  `\Downarrow`       |
 |                  | $~~~~$ `\rAngle`   |              | $~~~~$  `\urcorner`             |                     |
 +------------------+--------------------+--------------+---------------------------------+---------------------+
 | $\vert$  `|`     | $\vert$  `\vert`   | $└ ┘$  `└ ┘` | $\llcorner \lrcorner$           | $\Updownarrow$      |
@@ -234,11 +234,11 @@ If the color model is omitted, Temml color functions will accept:
 +------------------+--------------------+--------------+---------------------------------+---------------------+
 | $\lvert~\rvert$  | $\lVert~\rVert$    | $⟦~⟧$  `⟦ ⟧` | $\llbracket~\rrbracket$         | $\lBrace~\rBrace$   |
 | `\lvert`\        | `\lVert`\          |              | `\llbracket`\                   | `\lBrace \rBrace`   |
-| $~~~~$  `\rvert` | $~~~~~$  `\rVert`  |              | $~~~~$  `\rrbracket`            |                     |
+| $~~~~$  `\rvert` | $~~~~$  `\rVert`   |              | $~~~~$  `\rrbracket`            |                     |
 +------------------+--------------------+--------------+---------------------------------+---------------------+
-|                  | $\lt\gt$  `\lt`\   |              | $\llparenthesis~\rrparenthesis$ | $\llangle~\rrangle$ |
-|                  |        `\gt`       |              | `\llparenthesis`\               | `\llangle \rrangle` |
-|                  |                    |              |          `\rrparenthesis`       |                     |
+|                  |                    |              | $\llparenthesis~\rrparenthesis$ | $\llangle~\rrangle$ |
+|                  |                    |              | `\llparenthesis`\               | `\llangle \rrangle` |
+|                  |                    |              |        `\rrparenthesis`         |                     |
 +------------------+--------------------+--------------+---------------------------------+---------------------+
 
 
