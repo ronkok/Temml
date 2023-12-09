@@ -129,6 +129,14 @@ export const makeRow = function(body) {
   if (body.length === 1 && !(body[0] instanceof DocumentFragment)) {
     return body[0];
   } else {
+    // Suppress spacing on <mo> nodes at both ends of the row.
+    if (body[0] instanceof MathNode && body[0].type === "mo" && !body[0].attributes.fence) {
+      body[0].attributes.lspace = "0em"
+    }
+    const end = body.length - 1
+    if (body[end] instanceof MathNode && body[end].type === "mo" && !body[0].attributes.fence) {
+      body[end].attributes.rspace = "0em"
+    }
     return new mathMLTree.MathNode("mrow", body);
   }
 };

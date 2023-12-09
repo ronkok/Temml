@@ -1233,9 +1233,9 @@ const test = () => {
   new Expect(markup).toContain("<mi>ω</mi>");   // \omega
   new Expect(markup).toContain('<mi mathvariant="normal">Ω</mi>');   // \Omega
   new Expect(markup).toContain('<mi>ı</mi>');   // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
+  new Expect(markup).toContain('<mo>+</mo>');
   markup = temml.renderToString(r`\mathbb{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe("<mrow><mi>𝔸</mi><mi>𝕩</mi><mn>𝟚</mn><mi>𝕜</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo>+</mo></mrow>");
+  new Expect(markup).toBe('<mrow><mi>𝔸</mi><mi>𝕩</mi><mn>𝟚</mn><mi>𝕜</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo rspace="0em">+</mo></mrow>');
   markup = temml.renderToString(r`\mathrm{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi mathvariant=\"normal\">A</mi>");
   new Expect(markup).toContain("<mi mathvariant=\"normal\">x</mi>");
@@ -1243,9 +1243,9 @@ const test = () => {
   new Expect(markup).toContain("<mi mathvariant=\"normal\">ω</mi>");   // \omega
   new Expect(markup).toContain("<mi mathvariant=\"normal\">Ω</mi>");   // \Omega
   new Expect(markup).toContain("<mi mathvariant=\"normal\">ı</mi>");   // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
+  new Expect(markup).toContain('<mo rspace="0em">+</mo>');
   markup = temml.renderToString(r`\mathit{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mi>A</mi><mi>x</mi><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mn>2</mn></mstyle><mi>k</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  new Expect(markup).toBe(`<mrow><mi>A</mi><mi>x</mi><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mn>2</mn></mstyle><mi>k</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo rspace="0em">+</mo></mrow>`);
   markup = temml.renderToString(r`\mathnormal{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi>A</mi>");
   new Expect(markup).toContain("<mi>x</mi>");
@@ -1253,17 +1253,17 @@ const test = () => {
   new Expect(markup).toContain("<mi>ω</mi>");   // \omega
   new Expect(markup).toContain("<mi mathvariant=\"normal\">Ω</mi>");   // \Omega
   new Expect(markup).toContain("<mi>ı</mi>");   // \imath
-  new Expect(markup).toContain("<mo>+</mo>");
+  new Expect(markup).toContain('<mo rspace="0em">+</mo>');
   markup = temml.renderToString(r`\mathbf{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mi>𝐀</mi><mi>𝐱</mi><mn>𝟐</mn><mi>𝐤</mi><mi>𝛚</mi><mi>𝛀</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  new Expect(markup).toBe(`<mrow><mi>𝐀</mi><mi>𝐱</mi><mn>𝟐</mn><mi>𝐤</mi><mi>𝛚</mi><mi>𝛀</mi><mi>ı</mi><mo rspace="0em">+</mo></mrow>`);
   markup = temml.renderToString(r`\mathcal{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">𝓍</mi><mn>2</mn><mi class="mathcal">𝓀</mi><mi class="mathcal">ω</mi><mi class="mathcal">Ω</mi><mi class="mathcal">ı</mi><mo>+</mo></mrow>`);
+  new Expect(markup).toBe(`<mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">𝓍</mi><mn>2</mn><mi class="mathcal">𝓀</mi><mi class="mathcal">ω</mi><mi class="mathcal">Ω</mi><mi class="mathcal">ı</mi><mo rspace="0em">+</mo></mrow>`);
   markup = temml.renderToString(r`\mathfrak{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mi>𝔄</mi><mi>𝔵</mi><mn>2</mn><mi>𝔨</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  new Expect(markup).toBe(`<mrow><mi>𝔄</mi><mi>𝔵</mi><mn>2</mn><mi>𝔨</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo rspace="0em">+</mo></mrow>`);
   markup = temml.renderToString(r`\mathscr{A}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe(`<mi class="mathscr">𝒜</mi>`);
   markup = temml.renderToString(r`\mathsf{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe(`<mrow><mi>𝖠</mi><mi>𝗑</mi><mn>𝟤</mn><mi>𝗄</mi><mi>𝞈</mi><mi>𝝮</mi><mi>ı</mi><mo>+</mo></mrow>`);
+  new Expect(markup).toBe(`<mrow><mi>𝖠</mi><mi>𝗑</mi><mn>𝟤</mn><mi>𝗄</mi><mi>𝞈</mi><mi>𝝮</mi><mi>ı</mi><mo rspace="0em">+</mo></mrow>`);
 
   assertion = "A font tree-builder should render text as <mtext>"
   markup = temml.renderToString(r`\text{for }`);
