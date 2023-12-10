@@ -222,7 +222,8 @@ const dt = Object.freeze({
   UNIT: 65536, // User-defined units.
   DRAWING: 131072,
   RICHTEXT: 262144,
-  DICTIONARY: 524288
+  DICTIONARY: 524288,
+  MACRO: 1048576
 });
 
 const errorMessages = Object.freeze({
@@ -1120,11 +1121,11 @@ const unitTable = Object.freeze(JSON.parse(`{
 "£":["1","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "'":["0.3048","1","0","0",[1,0,0,0,0,0,0,0]],
 "A":["1","1","0","siSymbol",[0,0,0,1,0,0,0,0]],
-"AUD":["1.6586","1","0","AUD",[0,0,0,0,0,0,0,1]],
+"AUD":["1.6448","1","0","AUD",[0,0,0,0,0,0,0,1]],
 "Adobe point":["0.0254","72","0","0",[1,0,0,0,0,0,0,0]],
 "At":["1","1","0","siSymbol",[0,0,0,0,1,0,1,0]],
 "Australian dollar":["1","1","0","AUD",[0,0,0,0,0,0,0,1]],
-"BRL":["5.3295","1","0","BRL",[0,0,0,0,0,0,0,1]],
+"BRL":["5.3538","1","0","BRL",[0,0,0,0,0,0,0,1]],
 "BTU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "BThU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Bq":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
@@ -1133,10 +1134,10 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Btu":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "C":["1","1","0","siSymbol",[0,0,1,1,0,0,0,0]],
 "C$":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
-"CAD":["1.4425","1","0","CAD",[0,0,0,0,0,0,0,1]],
+"CAD":["1.4736","1","0","CAD",[0,0,0,0,0,0,0,1]],
 "CCF":["1","1","0","0",[3,0,0,0,0,0,0,0]],
-"CHF":["0.9492","1","0","CHF",[0,0,0,0,0,0,0,1]],
-"CNY":["7.7278","1","0","CNY",[0,0,0,0,0,0,0,1]],
+"CHF":["0.9530","1","0","CHF",[0,0,0,0,0,0,0,1]],
+"CNY":["7.7685","1","0","CNY",[0,0,0,0,0,0,0,1]],
 "CY":["0.764554857984","1","0","0",[3,0,0,0,0,0,0,0]],
 "Calorie":["4186.8","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Canadian dollar":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
@@ -1156,7 +1157,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Fahrenheit":["5","9","459","0",[0,0,0,0,1,0,0,0]],
 "G":["0.0001","1","0","siSymbol",[-2,-2,-2,-1,0,0,0,0]],
 "GB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
-"GBP":["0.86610","1","0","GBP",[0,0,0,0,0,0,0,1]],
+"GBP":["0.86045","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "Gal":["0.01","1","0","siSymbol",[1,0,-2,0,0,0,0,0]],
 "Gi":["10","12.5663706143592","0","siWord",[0,0,0,0,1,0,1,0]],
 "GiB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1164,23 +1165,23 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Gy":["1","1","0","siSymbol",[2,0,-2,0,0,0,0,0]],
 "H":["1","1","0","siSymbol",[2,1,-2,-2,0,0,0,0]],
 "HK$":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
-"HKD":["8.2687","1","0","HKD",[0,0,0,0,0,0,0,1]],
+"HKD":["8.4970","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "HP":["745.69987158227","1","0","0",[2,1,-3,0,0,0,0,0]],
 "Hong Kong dollar":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "Hz":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
-"ILS":["4.2515","1","0","ILS",[0,0,0,0,0,0,0,1]],
-"INR":["87.9540","1","0","INR",[0,0,0,0,0,0,0,1]],
+"ILS":["4.0530","1","0","ILS",[0,0,0,0,0,0,0,1]],
+"INR":["90.6125","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Indian Rupee":["1","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Israeli New Shekel":["1","1","0","ILS",[0,0,0,0,0,0,0,1]],
 "J":["1","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
-"JPY":["158.10","1","0","JPY",[0,0,0,0,0,0,0,1]],
+"JPY":["161.14","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Japanese Yen":["1","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Joule":["1","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Julian year":["31557600","1","0","0",[0,0,1,0,0,0,0,0]],
 "Jy":["1e-26","1","0","siSymbol",[0,1,-2,0,0,0,0,0]],
 "K":["1","1","0","0",[0,0,0,0,1,0,0,0]],
 "KiB":["8192","1","0","0",[0,0,0,0,0,1,0,0]],
-"KRW":["1428.23","1","0","KRW",[0,0,0,0,0,0,0,1]],
+"KRW":["1420.73","1","0","KRW",[0,0,0,0,0,0,0,1]],
 "L":["0.001","1","0","siSymbol",[3,0,0,0,0,0,0,0]],
 "Lego stud":["0.008","1","0","siSymbol",[1,0,0,0,0,0,0,0]],
 "MB":["8388608","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1191,7 +1192,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "MMscf":["28316.846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "MMscfd":["0.32774128","1","0","0",[3,0,0,0,0,0,0,0]],
 "MT":["1000","1","0","0",[0,1,0,0,0,0,0,0]],
-"MXN":["19.0247","1","0","MXN",[0,0,0,0,0,0,0,1]],
+"MXN":["18.8153","1","0","MXN",[0,0,0,0,0,0,0,1]],
 "Mach":["331.6","1","0","0",[1,0,-1,0,0,0,0,0]],
 "Mbbl":["158.987294928","1","0","0",[3,0,0,0,0,0,0,0]],
 "Mexican Peso":["1","1","0","MXN",[0,0,0,0,0,0,0,1]],
@@ -1221,7 +1222,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "TeX point":["0.0003515","1","0","0",[1,0,0,0,0,0,0,0]],
 "TiB":["8796093022208","1","0","0",[0,0,0,0,0,1,0,0]],
 "US$":["1","1","0","USD",[0,0,0,0,0,0,0,1]],
-"USD":["1.0565","1","0","USD",[0,0,0,0,0,0,0,1]],
+"USD":["1.0875","1","0","USD",[0,0,0,0,0,0,0,1]],
 "V":["1","1","0","siSymbol",[2,1,-3,-1,0,0,0,0]],
 "VA":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
 "W":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
@@ -1784,6 +1785,7 @@ const unitFromWord = (inputStr) => {
 
 const opOrNumRegEx = /[0-9·\-⁰¹²³\u2074-\u2079⁻/^()]/;
 const numeralRegEx = /[0-9-]/;
+const opRegEx = /^[·/\-^]$/;
 
 const unitFromUnitName = (inputStr) => {
 
@@ -1940,7 +1942,7 @@ const unitFromUnitName = (inputStr) => {
   iQueue = 0;
 
   for (let i = 0; i < rpnArray.length; i++) {
-    if (/[·/\-^]/.test(rpnArray[i])) {
+    if (opRegEx.test(rpnArray[i])) {
       val2 = factors.pop();
       e2 = expoStack.pop();
     }
@@ -2868,6 +2870,7 @@ const identifyRange = (df, args) => {
     // The source is a single-row data frame. Each argument calls a column.
     iStart = 0;
     iEnd = 0;
+    if (df.dtype === dt.DATAFRAME) { df.value.usedRows.add(0); }
     for (let i = 0; i < args.length; i++) {
       if (args[i].dtype === dt.STRING) {
         columnList.push(df.value.columnMap[args[i].value]);
@@ -2889,6 +2892,9 @@ const identifyRange = (df, args) => {
   } else if (args.length === 1 && args[0].dtype === dt.RANGE) {
     iStart = Rnl.toNumber(args[0].value[0]) - 1;
     iEnd = Rnl.toNumber(args[0].value[1]) - 1;
+    if (df.dtype === dt.DATAFRAME) {
+      for (let i = iStart; i <= iEnd; i++) { df.value.usedRows.add(i); }
+    }
     columnList = columnListFromRange(0, df.value.data.length - 1);
   } else if (args.length === 1 && args[0].dtype === dt.STRING) {
     // Only one indicator has been given.
@@ -2897,6 +2903,7 @@ const identifyRange = (df, args) => {
       // Return a row
       iStart = df.value.rowMap[args[0].value];
       iEnd = iStart;
+      if (df.dtype === dt.DATAFRAME) { df.value.usedRows.add(iStart); }
       columnList = columnListFromRange(0, df.value.data.length - 1);
     } else if (df.value.columnMap && args[0].value in df.value.columnMap) {
       // Return a column vector
@@ -2904,12 +2911,13 @@ const identifyRange = (df, args) => {
       iEnd = df.value.data[0].length - 1;
       columnList.push(df.value.columnMap[args[0].value]);
     } else {
-      return errorOprnd("BAD_ROW_NAME", args[0].value)
+      return [errorOprnd("BAD_ROW_NAME", args[0].value), null, null, null]
     }
   } else if (args.length === 1 && args[0].dtype === dt.STRING + dt.COLUMNVECTOR) {
     // A vector of row names
     for (const rowName of args[0].value) {
       rowList.push(rowName);
+      if (df.dtype === dt.DATAFRAME) { df.value.usedRows.add(df.value.rowMap[rowName]); }
     }
     columnList = columnListFromRange(0, df.value.data.length - 1); // All the columns.
   } else if (args.length === 1 && args[0].dtype === dt.STRING + dt.ROWVECTOR) {
@@ -2925,6 +2933,7 @@ const identifyRange = (df, args) => {
     // Return a single cell value
     iStart = df.value.rowMap[args[0].value];
     iEnd = iStart;
+    if (df.dtype === dt.DATAFRAME) { df.value.usedRows.add(iStart); }
     columnList.push(df.value.columnMap[args[0].value]);
   } else {
     // Default for args is a list of column names
@@ -2940,6 +2949,7 @@ const identifyRange = (df, args) => {
 const range$1 = (df, args, unitAware) => {
   let unit = Object.create(null);
   const [rowList, columnList, iStart, iEnd] = identifyRange(df, args);
+  if (rowList.dtype && rowList.dtype === dt.ERROR) { return rowList }
   if (rowList.length === 0 && iStart === iEnd && columnList.length === 1) {
     // Return one value.
     let dtype = df.value.dtype[columnList[0]];
@@ -3009,6 +3019,7 @@ const range$1 = (df, args, unitAware) => {
         columnMap,
         rowMap,
         units,
+        usedRows: new Set(),
         dtype
       },
       unit: clone(unitMap),
@@ -3022,7 +3033,21 @@ const numberRegEx$5 = new RegExp("^(?:=|" + Rnl.numberPattern.slice(1) + "$)");
 const mixedFractionRegEx = /^-?(?:[0-9]+(?: [0-9]+\/[0-9]+))$/;
 const escRegEx = /^\\#/;
 
-const dataFrameFromTSV = (str) => {
+const hasUnitRow = lines => {
+  // Determine if there is a row for unit names.
+  if (lines.length < 3) { return false }
+  const units = lines[1].split("\t").map(el => el.trim());
+  for (const unitName of units) {
+    if (numberRegEx$5.test(unitName)) { return false }
+  }
+  const firstDataLine = lines[2].split("\t").map(el => el.trim());
+  for (const datum of firstDataLine) {
+    if (numberRegEx$5.test(datum)) { return true }
+  }
+  return false
+};
+
+const dataFrameFromTSV = str => {
   // Load a TSV string into a data frame.
   // Data frames are loaded column-wise. The subordinate data structures are:
   let data = [];   // where the main data lives, not including column names or units.
@@ -3032,68 +3057,54 @@ const dataFrameFromTSV = (str) => {
   const units = [];                     // array of unit names, one for each column
   const dtype = [];                     // each column's Hurmet operand type
   const unitMap = Object.create(null);   // map from unit names to unit data
-  let gotUnits = false;
+  const usedRows = new Set();
 
   if (str.charAt(0) === "`") { str = str.slice(1); }
-  let row = 0;
-  let col = 0;
 
-  // Before we start loading data, let's write two closed functions, to share variable scope.
-  const checkForUnitRow = _ => {
-    // Determine if there is a row for unit names.
-    let gotAnswer = false;
-    for (let iCol = 0; iCol < data.length; iCol++) {
-      if (numberRegEx$5.test(data[iCol][0])) { gotAnswer = true; break }
-    }
-    if (!gotAnswer) {
-      for (let iCol = 0; iCol < data.length; iCol++) {
-        if (numberRegEx$5.test(data[iCol][1])) { gotUnits = true; break }
-      }
-    }
-    if (gotUnits) {
-      // Shift the top row of data into units.
-      for (let iCol = 0; iCol < data.length; iCol++) {
-        const unitName = data[iCol].shift();
-        units.push(unitName);
-        if (unitName.length > 0) {
-          if (!unitMap[unitName]) {
-            const unit = unitFromUnitName(unitName);
-            if (unit) {
-              unitMap[unitName] = unit;
-            } else {
-              return errorOprnd("DF_UNIT", unitName)
-            }
-          }
-        }
-      }
-      if (rowMap) {
-        Object.entries(rowMap).forEach(([key, value]) => { rowMap[key] = value - 1; });
-      }
-    }
-  };
+  // It's tab-separated values, so we can use splits to load in the data.
+  const lines = str.split(/\r?\n/g);
+  const gotUnits = hasUnitRow(lines);
 
-  const harvest = (datum) => {
-    // Load a datum into the dataTable
+  // Read in the column headings.
+  const cols = lines[0].split('\t');
+  if (cols[0].length > 0 && cols[0].charAt(0) === "#") {
+    // Create a rowMap. The first datum in each row is a key to the row.
+    rowMap = Object.create(null);
+    cols[0] = cols[0].slice(1);
+  } else if (escRegEx.test(cols[0])) {
+    cols[0] = cols[0].slice(1);
+  }
+  cols.forEach((datum, col) => {
     datum = datum.trim();
+    headings.push(datum);
+    columnMap[datum] = col;
+    data.push([]);
+  });
 
-    if (row === 3 && col === 0) {
-      checkForUnitRow();
-    }
-
-    if (row === 0) {
-      if (col === 0) {
-        if (datum.length > 0 && datum.charAt(0) === "#") {
-          // Create a rowMap. The first datum in each row is a key to the row.
-          rowMap = Object.create(null);
-          datum = datum.slice(1);
-        } else if (escRegEx.test(datum)) {
-          datum = datum.slice(1);
+  // Units
+  if (gotUnits) {
+    const unitNames = lines[1].split('\t');
+    unitNames.forEach(unitName => {
+      unitName = unitName.trim();
+      units.push(unitName);
+      if (unitName.length > 0 && !unitMap[unitName]) {
+        const unit = unitFromUnitName(unitName);
+        if (unit) {
+          unitMap[unitName] = unit;
+        } else {
+          return errorOprnd("DF_UNIT", unitName)
         }
       }
-      headings.push(datum);
-      columnMap[datum] = col;
-    } else {
-      if (row === 1) { data.push([]); } // First data row.
+    });
+  }
+
+  // Data
+  let row = -1;
+  for (let i = (gotUnits ? 2 : 1); i < lines.length; i++) {
+    const line = lines[i];
+    row += 1;
+    line.split('\t').forEach((datum, col) => {
+      datum = datum.trim();
       if (datum === "sumAbove()") {
         let sum = Rnl.zero;
         for (const num of data[col]) {
@@ -3105,23 +3116,10 @@ const dataFrameFromTSV = (str) => {
       }
       data[col].push(datum);
       if (rowMap && col === 0) {
-        rowMap[datum] = row - 1 - (gotUnits ? 1 : 0);
+        rowMap[datum] = row;
       }
-    }
-  };
-
-  // With the closure out of the way, let's load in data.
-  // It's tab-separated values, so we can use splits to load in the data.
-  const lines = str.split(/\r?\n/g);
-  for (const line of lines) {
-    if (line.length > 0) {
-      col = 0;
-      const items = line.split('\t');
-      for (const item of items) { harvest(item.trim()); col++; }
-      row += 1;
-    }
+    });
   }
-  if (row === 3) { checkForUnitRow(); }
 
   // Data is loaded in. Finish by determining the operand type of each column
   for (let j = 0; j < data.length; j++) {
@@ -3158,13 +3156,13 @@ const dataFrameFromTSV = (str) => {
       );
     }
     return {
-      value: { data, headings, columnMap, rowMap },
+      value: { data, headings, columnMap, rowMap, usedRows },
       unit: (dtype[0] === dt.RATIONAL ? { expos: allZeros } : null),
       dtype: dt.MAP + dtype[iStart]
     }
   } else {
     return {
-      value: { data, headings, columnMap, rowMap, units, dtype },
+      value: { data, headings, columnMap, rowMap, units, usedRows, dtype },
       unit: unitMap,
       dtype: dt.DATAFRAME
     }
@@ -3216,6 +3214,7 @@ const dataFrameFromVectors = (vectors, formatSpec) => {
       columnMap: columnMap,
       rowMap: rowMap,
       units: units,
+      usedRows: new Set(),
       dtype: dtype
     },
     unit: unitMap,
@@ -3684,7 +3683,8 @@ const tt = Object.freeze({
   TO: 39,
   DATAFRAME: 40,
   RICHTEXT: 41,
-  BOOLEAN: 42
+  BOOLEAN: 42,
+  MACRO: 43
 });
 
 const minusRegEx = /^-(?![-=<>:])/;
@@ -4340,6 +4340,17 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
   let st = "";
   let matchObj;
 
+  if (str.length > 3 && str.slice(0, 3) === "===") {
+    // A macro between triple-double quotation marks.
+    pos = str.indexOf('"""', 3);
+    if (pos > 0) {
+      st = str.slice(3, pos);
+      return ['"""' + st + '"""', st, tt.MACRO, ""]
+    } else {
+      return [str, str.slice(3), tt.MACRO, ""]
+    }
+  }
+
   if (str.charAt(0) === '"') {
     // String between double quotation marks. Parser will convert it to \text{…}
     pos = str.indexOf('"', 1);
@@ -4375,7 +4386,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     if (inRealTime) {
       tex = DataFrame.quickDisplay(st);
     } else {
-      const dataStructure = DataFrame.dataFrameFromTSV(st, {});
+      const dataStructure = DataFrame.dataFrameFromTSV(st);
       tex = DataFrame.display(dataStructure.value, "h3", decimalFormat);
     }
     return ["``" + inputStr + "``", tex, tt.DATAFRAME, ""]
@@ -4481,7 +4492,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
   // No keywords were matched. Return 1 character.
   const c1 = str.charAt(0);
   if (c1 === "." && (prevToken.ttype === tt.VAR || prevToken.ttype === tt.LONGVAR ||
-    prevToken.ttype === tt.STRING || prevToken.input === "]" ||
+    prevToken.ttype === tt.STRING || prevToken.input === "]" || prevToken.input === ")" ||
     prevToken.ttype === tt.PROPERTY)) {
     // Suppress the spacing of the accessor dot.
     return [".", "{.}", tt.ACCESSOR, ""]
@@ -4729,7 +4740,7 @@ const rpnPrecFromType = [
       13, 17, 16, -1, 15,
       14, 10,  3,  2, 11,
       -1, -1,  4,  3, -1,
-      -1, -1
+      -1, -1, -1
 ];
 
 const texPrecFromType = [
@@ -4741,7 +4752,7 @@ const texPrecFromType = [
        2, -1, 15,  2, 14,
       13,  9, -1,  1, -1,
       15, -1,  1,  -1, 2,
-       2, 2
+       2,  2,  2
 ];
 /* eslint-enable indent-legacy */
 
@@ -5137,6 +5148,16 @@ const parse$1 = (
         if (isPrecededBySpace) { posOfPrevRun = tex.length; }
         token.output = token.output === "`" ? "`" : parse$1(token.output, decimalFormat, false);
         tex += "{" + token.output + "}";
+        okToAppend = true;
+        break
+      }
+
+      case tt.MACRO: {
+        popTexTokens(2, okToAppend);
+        if (isCalc) { rpn += '"""' + token.output + '"""'; }  // Keep before addTextEscapes()
+        if (isPrecededBySpace) { posOfPrevRun = tex.length; }
+        token.output = addTextEscapes(token.output);
+        tex += "\\text{" + token.output + "}";
         okToAppend = true;
         break
       }
@@ -5626,7 +5647,7 @@ const parse$1 = (
           delim.rpnLength = rpn.length;
         } else if (token.input === "[" &&
             ([tt.VAR, tt.LONGVAR, tt.STRING, tt.PROPERTY].includes(prevToken.ttype) ||
-            prevToken.input === "]")) {
+            prevToken.input === "]" || (prevToken.input === ")" && !isPrecededBySpace))) {
           rpn += tokenSep;
           delim.delimType = dACCESSOR;
         } else {
@@ -5806,7 +5827,10 @@ const parse$1 = (
               if (rpnOp.symbol === "\\lfloor") { rpn += tokenSep + "⎿⏌"; }
               if (rpnOp.symbol === "\\lceil") { rpn += tokenSep + "⎾⏋"; }
           }
-          if ((token.input === ")" && nextCharIsFactor(str, tt.RIGHTBRACKET)) ||
+          if ((token.input === ")" &&
+            // eslint-disable-next-line max-len
+            !(topDelim.delimType === dFUNCTION && str.charAt(0) === "[" && !isFollowedBySpace) &&
+            nextCharIsFactor(str, tt.RIGHTBRACKET)) ||
             (token.input === "]" && /^\(/.test(str) ||
              topDelim.delimType === dMATRIX && /^\[/.test(str))) {
             // Implicit multiplication between parens, as in (2)(3)
@@ -9066,19 +9090,22 @@ const textRange = (str, index) => {
  *        1. →  1. 2. 3.  etc.
  *        A. →  A. B. C.  etc. (future)
  *        a) →  (a) (b) (c)  etc. (future)
- * 12. Fenced divs, similar to Pandoc.
- *     ::: (centered|comment|indented|header)
+ * 12. Alerts per GFM
+ *     > [!note] or [!tip] or [!important] or [!warning]
+ *     > Content of note
+ * 13. Fenced divs, similar to Pandoc.
+ *     ::: (centered|comment|indented|boxed|header)
  *     Block elements
  *     :::
  *     Nested divs are distinguished by number of colons. Minimum three.
- * 13. Table of Contents
+ * 14. Table of Contents
  *     {.toc start=N end=N}
- * 14. Definition lists, per Pandoc.  (future)
- * 15. [^1] is a reference to a footnote. (future)
+ * 15. Definition lists, per Pandoc.  (future)
+ * 16. [^1] is a reference to a footnote. (future)
  *     [^1]: The body of the footnote is deferred, similar to reference links.
- * 16. [#1] is a reference to a citation. (future)
+ * 17. [#1] is a reference to a citation. (future)
  *     [#1]: The body of the citation is deferred, similar to reference links.
- * 17. Line blocks begin with "| ", as per Pandoc. (future)
+ * 18. Line blocks begin with "| ", as per Pandoc. (future)
  *
  * hurmetMark.js copyright (c) 2021 - 2023 Ron Kok
  *
@@ -9156,11 +9183,9 @@ const unescapeUrl = function(rawUrlString) {
   return rawUrlString.replace(UNESCAPE_URL_R, "$1");
 };
 
-const tightListRegEx = /(?:\n\n(?!$)|\n[ \t]+(?:\d{1,9}[.)]|[*+-]) )/;
-
 const parseList = (str, state) => {
   const items = str.replace(LIST_BLOCK_END_R, "\n").match(LIST_ITEM_R);
-  const isTight = !tightListRegEx.test(str);
+  const isTight = !/\n\n/.test(str.replace(/\n*$/, ""));
   const itemContent = items.map(function(item, i) {
     // We need to see how far indented this item is:
     const prefixCapture = LIST_ITEM_PREFIX_R.exec(item);
@@ -9245,7 +9270,7 @@ const TABLES = (function() {
     cells.pop();
     const tableRow = [{ type: "tableSeparator" }];
     for (const str of cells) {
-      const cell = parse(str, state);
+      const cell = parse(str.trim(), state);
       tableRow.push(...cell);
       tableRow.push({ type: "tableSeparator" });
     }
@@ -9646,11 +9671,21 @@ rules.set("fence", {
     };
   }
 });
+rules.set("alert", {
+  isLeaf: false,
+  match: blockRegex(/^(?: *> \[!(NOTE|TIP|IMPORTANT|WARNING)\])((?:\n *>(?! *\[!)[^\n]*)+)(?:\n *)+\n/),
+  // Alert for note |tip | important | warning
+  parse: function(capture, state) {
+    const cap = capture[2].replace(/\n *> ?/gm, "\n").replace(/^\n/, "");
+    const content = parse(cap, state);
+    return { type: capture[1].toLowerCase(), content }
+  }
+});
 rules.set("blockquote", {
   isLeaf: false,
-  match: blockRegex(/^( *>[^\n]+(\n[^\n]+)*\n*)+\n{2,}/),
+  match: blockRegex(/^>([^\n]*(?:\n *>[^\n]*)*)(?:\n *)+\n/),
   parse: function(capture, state) {
-    const content = capture[0].replace(/^ *> ?/gm, "");
+    const content = capture[1].replace(/\n *> ?/gm, "\n");
     return { content: parse(content, state) };
   }
 });
@@ -9685,12 +9720,10 @@ rules.set("dd", {  // description details
 });
 rules.set("special_div", {
   isLeaf: false,
-  match: blockRegex(/^(:{3,}) ?(indented|comment|centered|header|hidden) *\n([\s\S]+?)\n+\1 *(?:\n{2,}|\s*$)/),
-  // indented or centered or comment div, or <header>
+  match: blockRegex(/^(:{3,}) ?(indented|comment|centered|boxed|header|hidden) *\n([\s\S]+?)\n+\1 *(?:\n{2,}|\s*$)/),
+  // indented or centered or boxed or comment div, or <header>
   parse: function(capture, state) {
-    const content = capture[2] === "comment"
-      ? parseInline(capture[3], state)
-      : parse(capture[3], state);
+    const content = parse(capture[3], state);
     return { type: capture[2], content };
   }
 });
@@ -9947,12 +9980,9 @@ rules.set("span", {
   }
 });
 rules.set("text", {
-  // Here we look for anything followed by non-symbols,
-  // double newlines, or double-space-newlines
-  // We break on any symbol characters so that this grammar
-  // is easy to extend without needing to modify this regex
+  // We break on symbol characters, double newlines, or double-space-newlines.
   isLeaf: true,
-  match: anyScopeRegex(/^[\s\S]+?(?=[^0-9A-Za-z\s\u00c0-\uffff]|\n\n| {2,}\n|\w+:\S|$)/),
+  match: anyScopeRegex(/^[\s\S]+?(?=[_*`#>|\\\-+=![({$¢¶<~+:]|\n\n| {2,}\n|\d+[.)]|\w+:\S|$)/),
   parse: function(capture, state) {
     return {
       text: capture[0].replace(/\n/g, " ")
@@ -10180,6 +10210,17 @@ const md2ast = (md, inHtml = false) => {
     }
   }
 
+  // Find out if there are any fallbacks for fetched files
+  let fallbackStrings = [];
+  if (metadata) {
+    fallbackStrings = md.split("<!--FALLBACKS-->\n");
+    if (fallbackStrings.length > 1) {
+      md = fallbackStrings.shift();
+    } else {
+      fallbackStrings = null;
+    }
+  }
+
   // Proceed to parse the document.
   const ast = parse(md, state);
   if (Array.isArray(ast) && ast.length > 0 && ast[0].type === "null") {
@@ -10188,6 +10229,9 @@ const md2ast = (md, inHtml = false) => {
   consolidate(ast);
   populateTOC(ast);
   if (metadata) {
+    if (fallbackStrings) {
+      metadata.fallbacks = JSON.parse(fallbackStrings.pop().trim());
+    }
     if (gotSnapshot) {
       const snapshots = [];
       for (const str of snapshotStrings) {
@@ -15452,7 +15496,9 @@ const errorResult = (stmt, result) => {
 
 const conditionResult = (stmt, oprnd, unitAware) => {
   let result = Object.create(null);
-  result.value = clone(oprnd.value);
+  result.value = oprnd.dtype === dt.DATAFRAME
+    ? oprnd.value
+    : clone(oprnd.value);
   result.unit = clone(oprnd.unit);
   result.dtype = oprnd.dtype;
 
@@ -15677,6 +15723,10 @@ const valueFromLiteral = (str, name, decimalFormat) => {
 
   } else if (str === "true" || str === "false") {
     return [Boolean(str), null, dt.BOOLEAN, `\\mathord{\\text{${str}}}`]
+
+  } else if (str.length > 3 && str.slice(0, 3) === '"""') {
+    // str contains a macro
+    return [str.slice(3, -3), undefined, dt.MACRO, ""]
 
   } else if (/^\x22.+\x22/.test(str)) {
     // str contains text between quotation marks
@@ -16009,7 +16059,18 @@ const scanAssignment = (lines, decimalFormat, iStart) => {
   if (/[,;]/.test(name)) {
     name = name.split(/[,;]/).map(e => e.trim());
   }
-  const trailStr = str.slice(posEquals + 1).trim();
+  let trailStr = str.slice(posEquals + 1).trim();
+  if (trailStr.length > 3 && trailStr.slice(0, 3) === '"""') {
+    // We're at a macro, which extends beyond normal line endings.
+    let j = iEnd;
+    let pos = trailStr.indexOf('"""', 3);
+    while (pos < 0 && j < lines.length - 1) {
+      j += 1;
+      trailStr += "\n" + lines[j];
+      pos = trailStr.indexOf('"""', 3);
+    }
+    iEnd = j;
+  }
   const [value, unit, dtype, resultDisplay] = valueFromLiteral(trailStr, name, decimalFormat);
   const stmt = { name, value, unit, dtype, resultDisplay };
   return [stmt, iEnd]
@@ -17725,7 +17786,7 @@ defineSymbol(math, open, "\u00ac", "\\lnot");
 defineSymbol(math, textord, "\u22a4", "\\top");
 defineSymbol(math, textord, "\u22a5", "\\bot");
 defineSymbol(math, textord, "\u2205", "\\emptyset");
-defineSymbol(math, textord, "\u00f8", "\\varnothing");
+defineSymbol(math, textord, "\u2300", "\\varnothing");
 defineSymbol(math, mathord, "\u03b1", "\\alpha", true);
 defineSymbol(math, mathord, "\u03b2", "\\beta", true);
 defineSymbol(math, mathord, "\u03b3", "\\gamma", true);
@@ -17786,6 +17847,8 @@ defineSymbol(math, bin, "\u2228", "\\vee", true);
 defineSymbol(math, open, "\u27e6", "\\llbracket", true); // stmaryrd/semantic packages
 defineSymbol(math, close, "\u27e7", "\\rrbracket", true);
 defineSymbol(math, open, "\u27e8", "\\langle", true);
+defineSymbol(math, open, "\u27ea", "\\lAngle", true);
+defineSymbol(math, open, "\u2989", "\\llangle", true);
 defineSymbol(math, open, "|", "\\lvert");
 defineSymbol(math, open, "\u2016", "\\lVert");
 defineSymbol(math, textord, "!", "\\oc"); // cmll package
@@ -17797,6 +17860,8 @@ defineSymbol(math, close, "?", "?");
 defineSymbol(math, close, "!", "!");
 defineSymbol(math, close, "‼", "‼");
 defineSymbol(math, close, "\u27e9", "\\rangle", true);
+defineSymbol(math, close, "\u27eb", "\\rAngle", true);
+defineSymbol(math, close, "\u298a", "\\rrangle", true);
 defineSymbol(math, close, "|", "\\rvert");
 defineSymbol(math, close, "\u2016", "\\rVert");
 defineSymbol(math, open, "\u2983", "\\lBrace", true); // stmaryrd/semantic packages
@@ -17878,6 +17943,8 @@ defineSymbol(math, close, "]", "\\rbrack", true);
 defineSymbol(text, textord, "]", "\\rbrack", true);
 defineSymbol(math, open, "(", "\\lparen", true);
 defineSymbol(math, close, ")", "\\rparen", true);
+defineSymbol(math, open, "⦇", "\\llparenthesis", true);
+defineSymbol(math, close, "⦈", "\\rrparenthesis", true);
 defineSymbol(text, textord, "<", "\\textless", true); // in T1 fontenc
 defineSymbol(text, textord, ">", "\\textgreater", true); // in T1 fontenc
 defineSymbol(math, open, "\u230a", "\\lfloor", true);
@@ -17915,6 +17982,7 @@ defineSymbol(math, op, "\u2211", "\\sum");
 defineSymbol(math, op, "\u2a02", "\\bigotimes");
 defineSymbol(math, op, "\u2a01", "\\bigoplus");
 defineSymbol(math, op, "\u2a00", "\\bigodot");
+defineSymbol(math, op, "\u2a09", "\\bigtimes");
 defineSymbol(math, op, "\u222e", "\\oint");
 defineSymbol(math, op, "\u222f", "\\oiint");
 defineSymbol(math, op, "\u2230", "\\oiiint");
@@ -18034,6 +18102,8 @@ defineSymbol(text, textord, "\u20ac", "\\euro", true);
 defineSymbol(text, textord, "\u20ac", "\\texteuro");
 defineSymbol(math, textord, "\u00a9", "\\copyright", true);
 defineSymbol(text, textord, "\u00a9", "\\textcopyright");
+defineSymbol(math, textord, "\u2300", "\\diameter", true);
+defineSymbol(text, textord, "\u2300", "\\diameter");
 
 // Italic Greek
 defineSymbol(math, textord, "𝛤", "\\varGamma");
@@ -18325,7 +18395,7 @@ const makeText = function(text, mode, style) {
 
 const consolidateText = mrow => {
   // If possible, consolidate adjacent <mtext> elements into a single element.
-  if (mrow.type !== "mrow") { return mrow }
+  if (mrow.type !== "mrow" && mrow.type !== "mstyle") { return mrow }
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
   if (!mrow.children[0].attributes || mrow.children[0].type !== "mtext") { return mrow }
   const variant = mrow.children[0].attributes.mathvariant || "";
@@ -18361,6 +18431,9 @@ const consolidateText = mrow => {
   const L = mtext.children[0].text.length;
   if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
     mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
+  }
+  for (const [key, value] of Object.entries(mrow.attributes)) {
+    mtext.attributes[key] = value;
   }
   return mtext
 };
@@ -18415,6 +18488,14 @@ const makeRow = function(body) {
   if (body.length === 1 && !(body[0] instanceof DocumentFragment)) {
     return body[0];
   } else {
+    // Suppress spacing on <mo> nodes at both ends of the row.
+    if (body[0] instanceof MathNode && body[0].type === "mo" && !body[0].attributes.fence) {
+      body[0].attributes.lspace = "0em";
+    }
+    const end = body.length - 1;
+    if (body[end] instanceof MathNode && body[end].type === "mo" && !body[end].attributes.fence) {
+      body[end].attributes.rspace = "0em";
+    }
     return new mathMLTree.MathNode("mrow", body);
   }
 };
@@ -19960,6 +20041,10 @@ const delimiters = [
   "\\lbrace",
   "\\}",
   "\\rbrace",
+  "⦇",
+  "\\llparenthesis",
+  "⦈",
+  "\\rrparenthesis",
   "\\lfloor",
   "\\rfloor",
   "\u230a",
@@ -19974,6 +20059,14 @@ const delimiters = [
   "\u27e8",
   "\\rangle",
   "\u27e9",
+  "\\lAngle",
+  "\u27ea",
+  "\\rAngle",
+  "\u27eb",
+  "\\llangle",
+  "⦉",
+  "\\rrangle",
+  "⦊",
   "\\lt",
   "\\gt",
   "\\lvert",
@@ -20095,9 +20188,9 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (group.delim === "\u2216" || group.delim.indexOf("arrow") > -1) {
-      // \backslash is not in the operator dictionary,
-      // so we have to explicitly set stretchy to true.
+    if (group.delim === "\u2216" || group.delim === "\\vert" ||
+        group.delim === "|" || group.delim.indexOf("arrow") > -1) {
+      // We have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true");
     }
     node.setAttribute("symmetric", "true"); // Needed for tall arrows in Firefox.
@@ -21887,6 +21980,33 @@ defineFunction({
   mathmlBuilder: mathmlBuilder$5
 });
 
+// \hbox is provided for compatibility with LaTeX functions that act on a box.
+// This function by itself doesn't do anything but set scriptlevel to \textstyle
+// and prevent a soft line break.
+
+defineFunction({
+  type: "hbox",
+  names: ["\\hbox"],
+  props: {
+    numArgs: 1,
+    argTypes: ["hbox"],
+    allowedInArgument: true,
+    allowedInText: false
+  },
+  handler({ parser }, args) {
+    return {
+      type: "hbox",
+      mode: parser.mode,
+      body: ordargument(args[0])
+    };
+  },
+  mathmlBuilder(group, style) {
+    const newStyle = style.withLevel(StyleLevel.TEXT);
+    const mrow = buildExpressionRow(group.body, newStyle);
+    return consolidateText(mrow)
+  }
+});
+
 const mathmlBuilder$4 = (group, style) => {
   const accentNode = stretchy.mathMLnode(group.label);
   accentNode.style["math-depth"] = 0;
@@ -22856,7 +22976,8 @@ const singleCharBigOps = {
   "\u2a02": "\\bigotimes",
   "\u2a04": "\\biguplus",
   "\u2a05": "\\bigsqcap",
-  "\u2a06": "\\bigsqcup"
+  "\u2a06": "\\bigsqcup",
+  "\u2a09": "\\bigtimes"
 };
 
 defineFunction({
@@ -22876,6 +22997,7 @@ defineFunction({
     "\\bigodot",
     "\\bigsqcap",
     "\\bigsqcup",
+    "\\bigtimes",
     "\\smallint",
     "\u220F",
     "\u2210",
@@ -24971,8 +25093,6 @@ defineMacro("\\surd", '\\sqrt{\\vphantom{|}}');
 // See comment for \oplus in symbols.js.
 defineMacro("\u2295", "\\oplus");
 
-defineMacro("\\hbox", "\\text{#1}");
-
 // Per TeXbook p.122, "/" gets zero operator spacing.
 // And MDN recommends using U+2044 instead of / for inline
 defineMacro("/", "{\u2044}");
@@ -25055,6 +25175,7 @@ const dotsByToken = {
   "\\bigodot": "\\dotsb",
   "\\bigsqcap": "\\dotsb",
   "\\bigsqcup": "\\dotsb",
+  "\\bigtimes": "\\dotsb",
   "\\And": "\\dotsb",
   "\\longrightarrow": "\\dotsb",
   "\\Longrightarrow": "\\dotsb",
@@ -29727,14 +29848,15 @@ const processFetchedString = (entry, text, hurmetVars, decimalFormat) => {
     return attrs
   }
   const data = importRegEx.test(entry)
-    ? scanModule(text, decimalFormat)               // import code
-    : DataFrame.dataFrameFromTSV(text, hurmetVars);  // fetch data
+    ? scanModule(text, decimalFormat)     // import code
+    : DataFrame.dataFrameFromTSV(text);    // fetch data
 
   // Append the data to attrs
   attrs.value = data.value;
   attrs.dtype = data.dtype;
   attrs.unit = data.unit;
   attrs.isFetch = true;
+  attrs.fallback = data.dtype === dt.MODULE ? text : "";
   if (data.dtype === dt.MODULE && /^importedParameters *=/.test(entry)) {
     // Assign to multiple variables, not one namespace.
     let nameTex = "\\begin{matrix}";
@@ -29770,6 +29892,48 @@ const mustCalc = (attrs, hurmetVars, changedVars, isCalcAll, isFormat) => {
   return false
 };
 
+const workWithFetchedTexts = (
+  view,
+  doc,
+  inDraftMode,
+  decimalFormat,
+  calcNodeSchema,
+  isCalcAll,
+  nodeAttrs,
+  curPos,
+  hurmetVars,
+  fetchPositions,
+  texts
+) => {
+  // At this point, we have the text of each Hurmet fetch and import.
+  // Create a ProseMirror transaction.
+  // Each node update below will be one step in the transaction.
+  const state = view.state;
+  if (state.selection.to === curPos + 1) {
+    // See Note 1 above for an explanation of the state.selection shenanigans.
+    state.selection = state.selection.constructor.near(state.doc.resolve(curPos + 1));
+  }
+  const tr = state.tr;
+
+  // Load in the data from the fetch statements
+  for (let i = 0; i < texts.length; i++) {
+    const pos = fetchPositions[i];
+    const entry = isCalcAll
+      ? doc.nodeAt(pos).attrs.entry
+      : nodeAttrs.entry;
+    const attrs = processFetchedString(entry, texts[i], hurmetVars, decimalFormat);
+    attrs.inDraftMode = inDraftMode;
+    tr.replaceWith(pos, pos + 1, calcNodeSchema.createAndFill(attrs));
+    if (attrs.name) {
+      insertOneHurmetVar(hurmetVars, attrs, null, decimalFormat);
+    }
+  }
+  // There. Fetches are done and are loaded into the document.
+  // Now proceed to the rest of the work.
+  proceedAfterFetch(view, calcNodeSchema, isCalcAll, nodeAttrs, curPos, hurmetVars, tr);
+
+};
+
 const workAsync = (
   view,
   calcNodeSchema,
@@ -29786,50 +29950,45 @@ const workAsync = (
   const inDraftMode = doc.attrs.inDraftMode;
   const decimalFormat = doc.attrs.decimalFormat;
 
-  Promise.all(
-    urls.map(url => fetch(url, {
-      method: "GET",
-      headers: { "Content-Type": "text/plain;charset=UTF-8" },
-      mode: "cors"
-    }))
-  ).then(fetchResponses => {
-    // The fetch promises have resolved. Now we extract their text.
-    return Promise.all(fetchResponses.map(r => {
-      if (r.status !== 200 && r.status !== 0) {
-        return r.status === 404
-          ? 'File not found.'
-          : 'Error while reading file. Status Code: ' + r.status
-      }
-      return r.text()
-    }))
-  }).then((texts) => {
-    // At this point, we have the text of each Hurmet fetch and import.
-    // Create a ProseMirror transacation.
-    // Each node update below will be one step in the transaction.
-    const state = view.state;
-    if (state.selection.to === curPos + 1) {
-      // See Note 1 above for an explanation of the state.selection shenanigans.
-      state.selection = state.selection.constructor.near(state.doc.resolve(curPos + 1));
+  if (!navigator.onLine) {
+    const texts = [];
+    for (const url of urls) {
+      Object.keys(doc.attrs.fallbacks).forEach(function(key) {
+        if (doc.attrs.fallbacks[key].url === url) {
+          texts.push(doc.attrs.fallbacks[key].text);
+        }
+      });
     }
-    const tr = state.tr;
-
-    // Load in the data from the fetch statements
-    for (let i = 0; i < texts.length; i++) {
-      const pos = fetchPositions[i];
-      const entry = isCalcAll
-        ? doc.nodeAt(pos).attrs.entry
-        : nodeAttrs.entry;
-      const attrs = processFetchedString(entry, texts[i], hurmetVars, decimalFormat);
-      attrs.inDraftMode = inDraftMode;
-      tr.replaceWith(pos, pos + 1, calcNodeSchema.createAndFill(attrs));
-      if (attrs.name) {
-        insertOneHurmetVar(hurmetVars, attrs, null, decimalFormat);
-      }
-    }
-    // There. Fetches are done and are loaded into the document.
-    // Now proceed to the rest of the work.
-    proceedAfterFetch(view, calcNodeSchema, isCalcAll, nodeAttrs, curPos, hurmetVars, tr);
-  });
+    workWithFetchedTexts(view, doc, inDraftMode, decimalFormat, calcNodeSchema, isCalcAll,
+      nodeAttrs, curPos, hurmetVars, fetchPositions, texts);
+  } else {
+    Promise.all(
+      urls.map(url => fetch(url, {
+        method: "GET",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        mode: "cors"
+      }))
+    ).then(fetchResponses => {
+      // The fetch promises have resolved. Now we extract their text.
+      return Promise.all(fetchResponses.map(r => {
+        if (r.status !== 200 && r.status !== 0) {
+          // The fetch failed. Try for a fallback.
+          Object.keys(doc.attrs.fallbacks).forEach(function(key) {
+            if (doc.attrs.fallbacks[key].url === r.url) {
+              return doc.attrs.fallbacks[key].text
+            }
+          });
+          return r.status === 404
+            ? 'File not found.'
+            : 'Error while reading file. Status Code: ' + r.status
+        }
+        return r.text()
+      }))
+    }).then((texts) => {
+      workWithFetchedTexts(view, doc, inDraftMode, decimalFormat, calcNodeSchema, isCalcAll,
+        nodeAttrs, curPos, hurmetVars, fetchPositions, texts);
+    });
+  }
 };
 
 const proceedAfterFetch = (
@@ -30407,11 +30566,26 @@ const nodes = {
   indented(node) {
     return htmlTag("div", ast2html(node.content), { class: 'indented' }) + "\n"
   },
+  boxed(node) {
+    return htmlTag("div", ast2html(node.content), { class: 'boxed' }) + "\n"
+  },
   centered(node) {
     return htmlTag("div", ast2html(node.content), { class: 'centered' }) + "\n"
   },
   hidden(node) {
     return htmlTag("div", ast2html(node.content), { class: 'hidden' }) + "\n"
+  },
+  note(node) {
+    return htmlTag("div", ast2html(node.content), { class: 'note' }) + "\n"
+  },
+  tip(node) {
+    return htmlTag("div", ast2html(node.content), { class: 'tip' }) + "\n"
+  },
+  important(node) {
+    return htmlTag("div", ast2html(node.content), { class: 'important' }) + "\n"
+  },
+  warning(node) {
+    return htmlTag("div", ast2html(node.content), { class: 'warning' }) + "\n"
   },
   header(node)   {
     return htmlTag("header", ast2html(node.content)) + "\n"

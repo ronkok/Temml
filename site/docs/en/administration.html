@@ -199,25 +199,20 @@ rgba(0,0,0,0) 100%);;"><mn>5</mn></mrow></math></span></td></tr>
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad¹³</td><td></td></tr>
 <tr><td>mhchem subscripts</td><td>✓</td><td>✓</td><td>bad¹⁴</td><td><span class='hurmet-tex' data-entry='\ce{H2O}'><math><mrow><mrow><mi mathvariant="normal">H</mi></mrow><msub><mrow></mrow><mpadded height="0px"><mn>2</mn></mpadded></msub><mrow><mi mathvariant="normal">O</mi></mrow></mrow></math></span></td></tr></table>
 <p>Notes:</p>
-<ol><li><p>There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation. </p>
-<ul><li class="tight"><p>accent height</p></li>
-<li class="tight"><p>accent italic correction</p></li>
-<li class="tight"><p>extensible accents</p></li>
-<li class="tight"><p>extensible arrows</p></li>
-<li class="tight"><p>height of ‖ in {Vmatrix} environment</p></li></ul></li>
-<li><p>WebKit renders some accents too high even after a page refresh. Temml does some work to mitigate this. It’s not enough.</p></li>
-<li><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.</p></li>
-<li><p>Chromium and WebKit mis-align short parentheses, given a \left and \right.</p></li>
-<li><p>Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.</p></li>
-<li><p>Because Chromium does not support <code>&lt;enclose&gt;</code>, Temml uses background images for \cancel. It may not print properly.</p></li>
-<li><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
-<li><p>WebKit laps are broken.</p></li>
-<li><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.</p></li>
-<li><p>WebKit fails to stretch most extensible arrows.</p></li>
-<li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
-<li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
-<li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
-<li><p>WebKit hides mhchem subscripts and superscripts.</p></li></ol>
+<ol><li class="tight"><p>There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation. </p></li>
+<li class="tight"><p>WebKit renders some accents too high even after a page refresh. Temml does some work to mitigate this. It’s not enough.+ accent height </p></li>
+<li class="tight"><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.+ accent italic correction </p></li>
+<li class="tight"><p>Chromium and WebKit mis+ extensible accents </p></li>
+<li class="tight"><p>Chromium sets + extensible arrows </p></li>
+<li class="tight"><p>Because Chromium does not support + height of ‖ in {Vmatrix} environment          <code>&lt;enclose&gt;</code>, Temml uses background images for \cancel. It may not print properly.</p></li>
+<li class="tight"><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
+<li class="tight"><p>WebKit laps are broken.</p></li>
+<li class="tight"><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.</p></li>
+<li class="tight"><p>WebKit fails to stretch most extensible arrows.</p></li>
+<li class="tight"><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
+<li class="tight"><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
+<li class="tight"><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
+<li class="tight"><p>WebKit hides mhchem subscripts and superscripts.</p></li></ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
@@ -226,17 +221,17 @@ rgba(0,0,0,0) 100%);;"><mn>5</mn></mrow></math></span></td></tr>
 </main>
 <nav>
 <div id="sidebar">
-<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></span>    v0.10.17</p>
+<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><math><mrow href="https://temml.org/"><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></span>    v0.10.18</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p></li>
 <li><p><a href='#installation'>Installation</a></p></li>
 <li><p><a href='#api'>API</a></p>
-<ul><li><p><a href='#overview'>Overview</a></p></li>
-<li><p><a href='#in-browser'>In Browser</a></p></li>
-<li><p><a href='#server-side'>Server Side</a></p></li>
-<li><p><a href='#preamble'>Preamble</a></p></li>
-<li><p><a href='#options'>Options</a></p></li>
-<li><p><a href='#post-process'>Post Process</a></p></li></ul></li>
+<ul><li class="tight"><p><a href='#overview'>Overview</a></p></li>
+<li class="tight"><p><a href='#in-browser'>In Browser</a></p></li>
+<li class="tight"><p><a href='#server-side'>Server Side</a></p></li>
+<li class="tight"><p><a href='#preamble'>Preamble</a></p></li>
+<li class="tight"><p><a href='#options'>Options</a></p></li>
+<li class="tight"><p><a href='#post-process'>Post Process</a></p></li></ul></li>
 <li><p><a href='#fonts'>Fonts</a></p></li>
 <li><p><a href='#equation-numbering'>Equation numbering</a></p></li>
 <li><p><a href='#extensions'>Extensions</a></p></li>

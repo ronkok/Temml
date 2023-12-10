@@ -134,7 +134,7 @@ export const makeRow = function(body) {
       body[0].attributes.lspace = "0em"
     }
     const end = body.length - 1
-    if (body[end] instanceof MathNode && body[end].type === "mo" && !body[0].attributes.fence) {
+    if (body[end] instanceof MathNode && body[end].type === "mo" && !body[end].attributes.fence) {
       body[end].attributes.rspace = "0em"
     }
     return new mathMLTree.MathNode("mrow", body);
