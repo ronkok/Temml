@@ -3,6 +3,8 @@ const hurmet = require('./hurmet.cjs');
 const temml = require('./temml.cjs');
 const katex = require('./katex.min.js');
 const TeXZilla = require("./TeXZilla.js");
+// eslint-disable-next-line no-undef
+globalThis.temml = temml;
 
 // The main Hurmet function has to be async because it contains an 'await' statement.
 (async function main() {
