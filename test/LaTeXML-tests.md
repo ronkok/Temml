@@ -51,7 +51,7 @@ The equations in the first table came originally from http://www.mathjax.org/dem
 |     | \\frac{\\partial Y}{\\partial v} & 0 \         | \frac{\partial Y}{\partial v} & 0              |
 |     | \\end{vmatrix}                                 | \end{vmatrix}$$                                |
 +-----+------------------------------------------------+------------------------------------------------+
-|       The probability of getting $k$  heads when flipping $n$  coins is:                              |
+| The probability of getting $k$ heads when flipping $n$ coins is:                                      |
 +-----+------------------------------------------------+------------------------------------------------+
 |  4  | P(E) = {n \\choose k} p^k (1-p)^{ n-k} \       | $$P(E) = {n \choose k} p^k (1-p)^{ n-k}$$      |
 +-----+------------------------------------------------+------------------------------------------------+
