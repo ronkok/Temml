@@ -118,6 +118,15 @@ const consolidateNumbers = expression => {
       expression[nums[i].start].text += expression[j].text
     }
     expression.splice(nums[i].start + 1, nums[i].end - nums[i].start)
+    // Check if the <mn> is followed by a numeric base in a supsub, e.g. the "12" in 123^4
+    if (expression.length > nums[i].start + 1) {
+      const nextTerm = expression[nums[i].start + 1];
+      if (nextTerm.type === "supsub" && nextTerm.base && nextTerm.base.type === "textord" &&
+          numberRegEx.test(nextTerm.base.text)) {
+        nextTerm.base.text = expression[nums[i].start].text + nextTerm.base.text
+        expression.splice(nums[i].start, 1)
+      }
+    }
   }
 }
 

@@ -394,6 +394,9 @@ const test = () => {
   new Expect(r`\text{B²⁺³}`).toParse()
   new Expect(r`\text{B²⁺³}`).toBuild()
 
+  assertion = "A supsub parser should merge a numeric base with a preceding number"
+  new Expect(temml.renderToString(r`123^4`)).toContain("<mn>123</mn>")
+
   assertion = "A parser with limit controls should fail when the limit control is not preceded by an op node"
   new Expect(r`3\nolimits_2^2`).toNotParse();
   new Expect(r`\sqrt\limits_2^2`).toNotParse();
