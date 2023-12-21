@@ -436,6 +436,8 @@ defineMacro("\\quad", "\\hskip1em\\relax");
 // \def\qquad{\hskip2em\relax}
 defineMacro("\\qquad", "\\hskip2em\\relax");
 
+defineMacro("\\AA", "\\TextOrMath{\\Angstrom}{\\mathring{A}}\\relax")
+
 // \tag@in@display form of \tag
 defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
 defineMacro("\\tag@paren", "\\tag@literal{({#1})}");

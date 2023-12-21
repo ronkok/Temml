@@ -113,6 +113,7 @@ If you know the shape of a character, but not its name,
 |\angl|$a_{\angl n}$|`a_{\angl n}` | actuarialangle |
 |\angln|$a_\angln$|`a_\angln` | actuarialangle |
 |\angle|$\angle$|||
+|\Angstrom|$\Angstrom$|| stix |
 |\anticommutator|$\anticommutator{A}{B}$|`\anticommutator{A}{B}`| physics extension |
 |\approx|$\approx$|||
 |\approxeq|$\approxeq$|||

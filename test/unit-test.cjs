@@ -2248,6 +2248,10 @@ const test = () => {
   new Expect(r`\standardstate`).toBuild(strictSettings())
   new Expect(r`\text{\ae\AE\oe\OE\o\O\ss}`).toBuildLike(r`\text{æÆœŒøØß}`, strictSettings())
 
+  assertion = "\\AA should render upright in text mode and italic in math mode"
+  new Expect(temml.renderToString(r`\text{\AA}`)).toContain("Å")
+  new Expect(temml.renderToString(r`\AA`)).toContain("<mi>A</mi>")
+
   assertion = "Settings should allow unicode text when not strict"
   new Expect(`é`).toParse()
   new Expect(`試`).toParse()
