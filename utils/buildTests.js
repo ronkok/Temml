@@ -1,5 +1,8 @@
 const fs = require("fs")  // Node.js file system
+const temml = require('./temml.cjs');
 const  hurmet = require("./hurmet.cjs");
+// eslint-disable-next-line no-undef
+globalThis.temml = temml;
 
 // The main Hurmet function has to be async because it contains an 'await' statement.
 (async function main() {

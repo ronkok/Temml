@@ -941,8 +941,8 @@ var temml = (function () {
   defineSymbol(math, textord, "\u266d", "\\flat", true);
   defineSymbol(math, textord, "\u2113", "\\ell", true);
   defineSymbol(math, textord, "\u266e", "\\natural", true);
-  defineSymbol(math, textord, "Å", "\\AA", true);
-  defineSymbol(text, textord, "Å", "\\AA", true);
+  defineSymbol(math, textord, "Å", "\\Angstrom", true);
+  defineSymbol(text, textord, "Å", "\\Angstrom", true);
   defineSymbol(math, textord, "\u2663", "\\clubsuit", true);
   defineSymbol(math, textord, "\u2667", "\\varclubsuit", true);
   defineSymbol(math, textord, "\u2118", "\\wp", true);
@@ -2056,6 +2056,16 @@ var temml = (function () {
         expression[nums[i].start].text += expression[j].text;
       }
       expression.splice(nums[i].start + 1, nums[i].end - nums[i].start);
+      // Check if the <mn> is followed by a numeric base in a supsub, e.g. the "3" in 123^4
+      // If so, merge the first <mn> into the base.
+      if (expression.length > nums[i].start + 1) {
+        const nextTerm = expression[nums[i].start + 1];
+        if (nextTerm.type === "supsub" && nextTerm.base && nextTerm.base.type === "textord" &&
+            numberRegEx$1.test(nextTerm.base.text)) {
+          nextTerm.base.text = expression[nums[i].start].text + nextTerm.base.text;
+          expression.splice(nums[i].start, 1);
+        }
+      }
     }
   };
 
@@ -8917,6 +8927,8 @@ rgba(0,0,0,0) 100%);`;
   // \def\qquad{\hskip2em\relax}
   defineMacro("\\qquad", "\\hskip2em\\relax");
 
+  defineMacro("\\AA", "\\TextOrMath{\\Angstrom}{\\mathring{A}}\\relax");
+
   // \tag@in@display form of \tag
   defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
   defineMacro("\\tag@paren", "\\tag@literal{({#1})}");
@@ -11248,7 +11260,7 @@ rgba(0,0,0,0) 100%);`;
    * https://mit-license.org/
    */
 
-  const version = "0.10.18";
+  const version = "0.10.19";
 
   function postProcess(block) {
     const labelMap = {};

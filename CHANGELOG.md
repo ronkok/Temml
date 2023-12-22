@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.19] = 2023-12-22
+
+### Fixed
+
+- Render math mode \AA as italic
+- Improve consolidation of <mn> elements in the base of of a <supsub>
+
+## Added
+
+- \Angstrom
+
 ## [0.10.18] = 2023-12-12
 
 ### Fixed
