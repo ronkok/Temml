@@ -15,6 +15,8 @@ import { isDelimiter } from "./functions/delimsizing"
 import unicodeAccents from /*preval*/ "./unicodeAccents";
 import unicodeSymbols from /*preval*/ "./unicodeSymbols";
 
+const openerGroups = ["bin", "op", "open", "punct", "rel"];
+
 /**
  * This file contains the parser used to parse out a TeX expression from the
  * input. Since TeX isn't context-free, standard parsers don't work particularly
@@ -899,7 +901,11 @@ export default class Parser {
     // Recognize base symbol
     let symbol;
     if (symbols[this.mode][text]) {
-      const group = symbols[this.mode][text].group;
+      let group = symbols[this.mode][text].group;
+      if (group === "bin" && openerGroups.includes(this.prevAtomType)) {
+        // Change from a binary operator to a unary (prefix) operator
+        group = "open"
+      }
       const loc = SourceLocation.range(nucleus);
       let s;
       if (Object.prototype.hasOwnProperty.call(ATOMS, group )) {

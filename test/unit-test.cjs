@@ -276,11 +276,22 @@ const test = () => {
       new Expect(ords[i].type.slice(4)).toBe("ord");
   }
 
-  assertion = "Parser should build a list of bins"
-  let nodes = parse(r`+-*\cdot\pm\div`)
-  for (let i = 0; i < nodes.length; i++) {
+  assertion = "Parser should build bins"
+  let nodes = parse(r`1 + 2 - 3 * 4 \cdot 5 \pm 6 \div 7`)
+  for (let i = 1; i < nodes.length; i+=2) {
     new Expect(nodes[i].type).toBe("atom");
     new Expect(nodes[i].family).toBe("bin");
+  }
+
+  assertion = "Parser should change bins to opens when they should be unary"
+  nodes = parse(r`a = -1 \ast (-4) \pm {+5} + \sin -2 x^{-2} \ast 3 \sum -c + \dots + d`)
+  for (const i of [4, 9, 11, 16, 21, 23]) {
+    new Expect(nodes[i].type).toBe("atom");
+    new Expect(nodes[i].family).toBe("bin");
+  }
+  for (const i of [2, 6, 13, 19]) {
+    new Expect(nodes[i].type).toBe("atom");
+    new Expect(nodes[i].family).toBe("open");
   }
 
   assertion = "Parser should build a list of rels"
