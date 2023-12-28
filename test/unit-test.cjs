@@ -1136,6 +1136,10 @@ const test = () => {
   new Expect(r`\uptheta\varDelta`).toParse(strictSettings())
   new Expect(r`\uptheta\varDelta`).toBuild()
 
+  assertion = "A \\boldsymbol builder should work"
+  new Expect(temml.renderToString(r`\boldsymbol{A}`)).toContain("𝑨")
+  new Expect(temml.renderToString(r`\boldsymbol{\mathrm{b}}`)).toContain('style="font-weight:bold;"')
+
   assertion = "A \\pmb builder should work"
   new Expect(r`\pmb{\mu}`).toParse();
   new Expect(r`\pmb{=}`).toParse();
