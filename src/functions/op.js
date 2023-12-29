@@ -17,6 +17,13 @@ export const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"]
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
 
+const setSpacing = node => {
+  // The user wrote a \mathop{…} function. Change spacing from default to OP spacing.
+  // The most likely spacing for an OP is a thin space per TeXbook p170.
+  node.attributes.lspace = "0.1667em"
+  node.attributes.rspace = "0.1667em"
+}
+
 const mathmlBuilder = (group, style) => {
   let node;
 
@@ -28,9 +35,11 @@ const mathmlBuilder = (group, style) => {
     } else {
       node.setAttribute("movablelimits", "false")
     }
+    if (group.fromMathOp) { setSpacing(node) }
   } else if (group.body) {
     // This is an operator with children. Add them.
     node = new mathMLTree.MathNode("mo", mml.buildExpression(group.body, style));
+    if (group.fromMathOp) { setSpacing(node) }
   } else {
     // This is a text operator. Add all of the characters from the operator's name.
     node = new mathMLTree.MathNode("mi", [new mathMLTree.TextNode(group.name.slice(1))]);
@@ -150,6 +159,7 @@ defineFunction({
       limits: true,
       parentIsSupSub: false,
       symbol: isSymbol,
+      fromMathOp: true,
       stack: false,
       name: isSymbol ? arr[0].text : null,
       body: isSymbol ? null : ordargument(body)
