@@ -15,7 +15,7 @@ import { isDelimiter } from "./functions/delimsizing"
 import unicodeAccents from /*preval*/ "./unicodeAccents";
 import unicodeSymbols from /*preval*/ "./unicodeSymbols";
 
-const openerGroups = ["bin", "op", "open", "punct", "rel"];
+const binLeftCancellers = ["bin", "op", "open", "punct", "rel"];
 
 /**
  * This file contains the parser used to parse out a TeX expression from the
@@ -902,7 +902,7 @@ export default class Parser {
     let symbol;
     if (symbols[this.mode][text]) {
       let group = symbols[this.mode][text].group;
-      if (group === "bin" && openerGroups.includes(this.prevAtomType)) {
+      if (group === "bin" && binLeftCancellers.includes(this.prevAtomType)) {
         // Change from a binary operator to a unary (prefix) operator
         group = "open"
       }
