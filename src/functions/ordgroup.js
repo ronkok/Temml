@@ -4,6 +4,6 @@ import * as mml from "../buildMathML";
 defineFunctionBuilders({
   type: "ordgroup",
   mathmlBuilder(group, style) {
-    return mml.buildExpressionRow(group.body, style, true);
+    return mml.buildExpressionRow(group.body, style, group.semisimple);
   }
 });

@@ -786,8 +786,7 @@ export default class Parser {
         body: expression,
         // A group formed by \begingroup...\endgroup is a semi-simple group
         // which doesn't affect spacing in math mode, i.e., is transparent.
-        // https://tex.stackexchange.com/questions/1930/when-should-one-
-        // use-begingroup-instead-of-bgroup
+        // https://tex.stackexchange.com/questions/1930/
         semisimple: text === "\\begingroup" || undefined
       };
     } else {

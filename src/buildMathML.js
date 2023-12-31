@@ -135,20 +135,22 @@ const consolidateNumbers = expression => {
  * Wrap the given array of nodes in an <mrow> node if needed, i.e.,
  * unless the array has length 1.  Always returns a single node.
  */
-export const makeRow = function(body) {
+export const makeRow = function(body, semisimple = false) {
   if (body.length === 1 && !(body[0] instanceof DocumentFragment)) {
     return body[0];
-  } else {
+  } else if (!semisimple) {
     // Suppress spacing on <mo> nodes at both ends of the row.
     if (body[0] instanceof MathNode && body[0].type === "mo" && !body[0].attributes.fence) {
       body[0].attributes.lspace = "0em"
+      body[0].attributes.rspace = "0em"
     }
     const end = body.length - 1
     if (body[end] instanceof MathNode && body[end].type === "mo" && !body[end].attributes.fence) {
+      body[end].attributes.lspace = "0em"
       body[end].attributes.rspace = "0em"
     }
-    return new mathMLTree.MathNode("mrow", body);
   }
+  return new mathMLTree.MathNode("mrow", body);
 };
 
 const isRel = item => {
@@ -162,10 +164,10 @@ const isRel = item => {
  * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
  * (2) Suppress spacing between two adjacent relations.
  */
-export const buildExpression = function(expression, style, isOrdgroup) {
-  if (expression.length === 1) {
+export const buildExpression = function(expression, style, semisimple = false) {
+  if (!semisimple && expression.length === 1) {
     const group = buildGroup(expression[0], style);
-    if (isOrdgroup && group instanceof MathNode && group.type === "mo") {
+    if (group instanceof MathNode && group.type === "mo") {
       // When TeX writers want to suppress spacing on an operator,
       // they often put the operator by itself inside braces.
       group.setAttribute("lspace", "0em");
@@ -195,8 +197,8 @@ export const buildExpression = function(expression, style, isOrdgroup) {
  * Equivalent to buildExpression, but wraps the elements in an <mrow>
  * if there's more than one.  Returns a single node instead of an array.
  */
-export const buildExpressionRow = function(expression, style, isOrdgroup) {
-  return makeRow(buildExpression(expression, style, isOrdgroup));
+export const buildExpressionRow = function(expression, style, semisimple = false) {
+  return makeRow(buildExpression(expression, style, semisimple), semisimple);
 };
 
 /**

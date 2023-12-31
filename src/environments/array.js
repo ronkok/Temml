@@ -44,7 +44,7 @@ const getTag = (group, style, rowNum) => {
   if (tagContents) {
     // The author has written a \tag or a \notag in this row.
     if (tagContents.body) {
-      tag = mml.buildExpressionRow(tagContents.body, style)
+      tag = mml.buildExpressionRow(tagContents.body, style, true)
       tag.classes = ["tml-tag"]
     } else {
       // \notag. Return an empty span.
@@ -132,7 +132,8 @@ function parseArray(
     cell = {
       type: "ordgroup",
       mode: parser.mode,
-      body: cell
+      body: cell,
+      semisimple: true
     };
     row.push(cell);
     const next = parser.fetch().text;

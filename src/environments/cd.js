@@ -49,7 +49,8 @@ function cdArrow(arrowChar, labels, parser) {
       const arrowGroup = {
         type: "ordgroup",
         mode: "math",
-        body: [leftLabel, sizedArrow, rightLabel]
+        body: [leftLabel, sizedArrow, rightLabel],
+        semisimple: true
       };
       return parser.callFunction("\\\\cdparent", [arrowGroup], []);
     }

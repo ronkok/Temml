@@ -37,7 +37,7 @@ defineFunction({
   },
   mathmlBuilder(group, style) {
     if (group.isCharacterBox) {
-      const inner = mml.buildExpression(group.body, style);
+      const inner = mml.buildExpression(group.body, style, true);
       return inner[0]
     } else {
       return mml.buildExpressionRow(group.body, style, true)
