@@ -91,7 +91,9 @@ function parseArray(
     parser.gullet.macros.set("\\cr", "\\\\\\relax");
   }
   if (addEqnNum) {
-    parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
+    parser.gullet.macros.set("\\tag", "\\@ifstar\\envtag@literal\\envtag@paren")
+    parser.gullet.macros.set("\\envtag@paren", "\\env@tag{{(\\text{#1})}}");
+    parser.gullet.macros.set("\\envtag@literal", "\\env@tag{\\text{#1}}")
     parser.gullet.macros.set("\\notag", "\\env@notag");
     parser.gullet.macros.set("\\nonumber", "\\env@notag")
   }
