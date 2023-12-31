@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.20] = 2023-12-31
+
+### Fixed
+
+- Client-side rendering of `\cancel`, `\bcancel`, & `\xcancel`
+- Write parens around `\tag` inside array environments
+- Spacing of operators at ends of braced group
+- `\mathop{…}` spacing
+- `\boldsymbol`
+- Spacing for unary operators
+
 ## [0.10.19] = 2023-12-22
 
 ### Fixed

@@ -2072,20 +2072,22 @@ const consolidateNumbers = expression => {
  * Wrap the given array of nodes in an <mrow> node if needed, i.e.,
  * unless the array has length 1.  Always returns a single node.
  */
-const makeRow = function(body) {
+const makeRow = function(body, semisimple = false) {
   if (body.length === 1 && !(body[0] instanceof DocumentFragment)) {
     return body[0];
-  } else {
+  } else if (!semisimple) {
     // Suppress spacing on <mo> nodes at both ends of the row.
     if (body[0] instanceof MathNode && body[0].type === "mo" && !body[0].attributes.fence) {
       body[0].attributes.lspace = "0em";
+      body[0].attributes.rspace = "0em";
     }
     const end = body.length - 1;
     if (body[end] instanceof MathNode && body[end].type === "mo" && !body[end].attributes.fence) {
+      body[end].attributes.lspace = "0em";
       body[end].attributes.rspace = "0em";
     }
-    return new mathMLTree.MathNode("mrow", body);
   }
+  return new mathMLTree.MathNode("mrow", body);
 };
 
 const isRel = item => {
@@ -2099,10 +2101,10 @@ const isRel = item => {
  * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
  * (2) Suppress spacing between two adjacent relations.
  */
-const buildExpression = function(expression, style, isOrdgroup) {
-  if (expression.length === 1) {
+const buildExpression = function(expression, style, semisimple = false) {
+  if (!semisimple && expression.length === 1) {
     const group = buildGroup$1(expression[0], style);
-    if (isOrdgroup && group instanceof MathNode && group.type === "mo") {
+    if (group instanceof MathNode && group.type === "mo") {
       // When TeX writers want to suppress spacing on an operator,
       // they often put the operator by itself inside braces.
       group.setAttribute("lspace", "0em");
@@ -2132,8 +2134,8 @@ const buildExpression = function(expression, style, isOrdgroup) {
  * Equivalent to buildExpression, but wraps the elements in an <mrow>
  * if there's more than one.  Returns a single node instead of an array.
  */
-const buildExpressionRow = function(expression, style, isOrdgroup) {
-  return makeRow(buildExpression(expression, style, isOrdgroup));
+const buildExpressionRow = function(expression, style, semisimple = false) {
+  return makeRow(buildExpression(expression, style, semisimple), semisimple);
 };
 
 /**
@@ -2818,7 +2820,8 @@ function cdArrow(arrowChar, labels, parser) {
       const arrowGroup = {
         type: "ordgroup",
         mode: "math",
-        body: [leftLabel, sizedArrow, rightLabel]
+        body: [leftLabel, sizedArrow, rightLabel],
+        semisimple: true
       };
       return parser.callFunction("\\\\cdparent", [arrowGroup], []);
     }
@@ -3940,20 +3943,12 @@ const mathmlBuilder$8 = (group, style) => {
       node.style.borderBottom = "0.065em solid";
       break
     case "\\cancel":
-      node.style.background = `linear-gradient(to top left,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`;
+      // We can't use an inline background-gradient. It does not work client-side.
+      // So set a class and put the rule in the external CSS file.
+      node.classes.push("tml-cancel");
       break
     case "\\bcancel":
-      node.style.background = `linear-gradient(to top right,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`;
+      node.classes.push("tml-bcancel");
       break
     /*
     case "\\longdiv":
@@ -4000,18 +3995,7 @@ rgba(0,0,0,0) 100%);`;
       break
     }
     case "\\xcancel":
-      node.style.background = `linear-gradient(to top left,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%),
-linear-gradient(to top right,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`;
+      node.classes.push("tml-xcancel");
       break
   }
   if (group.backgroundColor) {
@@ -4209,7 +4193,7 @@ const getTag = (group, style, rowNum) => {
   if (tagContents) {
     // The author has written a \tag or a \notag in this row.
     if (tagContents.body) {
-      tag = buildExpressionRow(tagContents.body, style);
+      tag = buildExpressionRow(tagContents.body, style, true);
       tag.classes = ["tml-tag"];
     } else {
       // \notag. Return an empty span.
@@ -4256,7 +4240,9 @@ function parseArray(
     parser.gullet.macros.set("\\cr", "\\\\\\relax");
   }
   if (addEqnNum) {
-    parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
+    parser.gullet.macros.set("\\tag", "\\@ifstar\\envtag@literal\\envtag@paren");
+    parser.gullet.macros.set("\\envtag@paren", "\\env@tag{{(\\text{#1})}}");
+    parser.gullet.macros.set("\\envtag@literal", "\\env@tag{\\text{#1}}");
     parser.gullet.macros.set("\\notag", "\\env@notag");
     parser.gullet.macros.set("\\nonumber", "\\env@notag");
   }
@@ -4297,7 +4283,8 @@ function parseArray(
     cell = {
       type: "ordgroup",
       mode: parser.mode,
-      body: cell
+      body: cell,
+      semisimple: true
     };
     row.push(cell);
     const next = parser.fetch().text;
@@ -5130,7 +5117,7 @@ const mathmlBuilder$6 = (group, style) => {
   const mathGroup = buildGroup$1(group.body, newStyle);
 
   if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
-  if (font === "boldsymbol" && ["mo", "mpadded"].includes(mathGroup.type)) {
+  if (font === "boldsymbol" && ["mo", "mpadded", "mrow"].includes(mathGroup.type)) {
     mathGroup.style.fontWeight = "bold";
     return mathGroup
   }
@@ -6487,10 +6474,10 @@ defineFunction({
   },
   mathmlBuilder(group, style) {
     if (group.isCharacterBox) {
-      const inner = buildExpression(group.body, style);
+      const inner = buildExpression(group.body, style, true);
       return inner[0]
     } else {
-      return buildExpressionRow(group.body, style, true)
+      return buildExpressionRow(group.body, style)
     }
   }
 });
@@ -6510,6 +6497,13 @@ const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"];
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
 
+const setSpacing = node => {
+  // The user wrote a \mathop{…} function. Change spacing from default to OP spacing.
+  // The most likely spacing for an OP is a thin space per TeXbook p170.
+  node.attributes.lspace = "0.1667em";
+  node.attributes.rspace = "0.1667em";
+};
+
 const mathmlBuilder$2 = (group, style) => {
   let node;
 
@@ -6521,9 +6515,11 @@ const mathmlBuilder$2 = (group, style) => {
     } else {
       node.setAttribute("movablelimits", "false");
     }
+    if (group.fromMathOp) { setSpacing(node); }
   } else if (group.body) {
     // This is an operator with children. Add them.
     node = new MathNode("mo", buildExpression(group.body, style));
+    if (group.fromMathOp) { setSpacing(node); }
   } else {
     // This is a text operator. Add all of the characters from the operator's name.
     node = new MathNode("mi", [new TextNode(group.name.slice(1))]);
@@ -6643,6 +6639,7 @@ defineFunction({
       limits: true,
       parentIsSupSub: false,
       symbol: isSymbol,
+      fromMathOp: true,
       stack: false,
       name: isSymbol ? arr[0].text : null,
       body: isSymbol ? null : ordargument(body)
@@ -6976,7 +6973,7 @@ defineMacro("\\operatorname",
 defineFunctionBuilders({
   type: "ordgroup",
   mathmlBuilder(group, style) {
-    return buildExpressionRow(group.body, style, true);
+    return buildExpressionRow(group.body, style, group.semisimple);
   }
 });
 
@@ -12005,6 +12002,8 @@ var unicodeSymbols = {
 
 /* eslint no-constant-condition:0 */
 
+const binLeftCancellers = ["bin", "op", "open", "punct", "rel"];
+
 /**
  * This file contains the parser used to parse out a TeX expression from the
  * input. Since TeX isn't context-free, standard parsers don't work particularly
@@ -12774,8 +12773,7 @@ class Parser {
         body: expression,
         // A group formed by \begingroup...\endgroup is a semi-simple group
         // which doesn't affect spacing in math mode, i.e., is transparent.
-        // https://tex.stackexchange.com/questions/1930/when-should-one-
-        // use-begingroup-instead-of-bgroup
+        // https://tex.stackexchange.com/questions/1930/
         semisimple: text === "\\begingroup" || undefined
       };
     } else {
@@ -12889,7 +12887,11 @@ class Parser {
     // Recognize base symbol
     let symbol;
     if (symbols[this.mode][text]) {
-      const group = symbols[this.mode][text].group;
+      let group = symbols[this.mode][text].group;
+      if (group === "bin" && binLeftCancellers.includes(this.prevAtomType)) {
+        // Change from a binary operator to a unary (prefix) operator
+        group = "open";
+      }
       const loc = SourceLocation.range(nucleus);
       let s;
       if (Object.prototype.hasOwnProperty.call(ATOMS, group )) {
@@ -13159,7 +13161,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.19";
+const version = "0.10.20";
 
 function postProcess(block) {
   const labelMap = {};
