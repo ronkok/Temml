@@ -40,7 +40,7 @@ defineFunction({
       const inner = mml.buildExpression(group.body, style, true);
       return inner[0]
     } else {
-      return mml.buildExpressionRow(group.body, style, true)
+      return mml.buildExpressionRow(group.body, style)
     }
   }
 });
