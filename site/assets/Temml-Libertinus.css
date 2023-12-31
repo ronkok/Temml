@@ -54,6 +54,39 @@ mo.tml-prime {
   font-feature-settings: 'ssty';
 }
 
+mrow.tml-cancel {
+  background: linear-gradient(to top left,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) calc(50% - 0.06em),
+    rgba(0,0,0,1) 50%,
+    rgba(0,0,0,0) calc(50% + 0.06em),
+    rgba(0,0,0,0) 100%);
+}
+
+mrow.tml-bcancel {
+  background: linear-gradient(to top right,
+  rgba(0,0,0,0) 0%,
+  rgba(0,0,0,0) calc(50% - 0.06em),
+  rgba(0,0,0,1) 50%,
+  rgba(0,0,0,0) calc(50% + 0.06em),
+  rgba(0,0,0,0) 100%);
+}
+
+mrow.tml-xcancel {
+  background: linear-gradient(to top left,
+  rgba(0,0,0,0) 0%,
+  rgba(0,0,0,0) calc(50% - 0.06em),
+  rgba(0,0,0,1) 50%,
+  rgba(0,0,0,0) calc(50% + 0.06em),
+  rgba(0,0,0,0) 100%),
+  linear-gradient(to top right,
+  rgba(0,0,0,0) 0%,
+  rgba(0,0,0,0) calc(50% - 0.06em),
+  rgba(0,0,0,1) 50%,
+  rgba(0,0,0,0) calc(50% + 0.06em),
+  rgba(0,0,0,0) 100%)
+}
+
 /* Prevent f' from overlapping in Chromium */
 mo.prime-pad {
   padding-left: 0.08em;

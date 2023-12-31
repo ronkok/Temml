@@ -34,20 +34,12 @@ const mathmlBuilder = (group, style) => {
       node.style.borderBottom = "0.065em solid"
       break
     case "\\cancel":
-      node.style.background = `linear-gradient(to top left,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`
+      // We can't use an inline background-gradient. It does not work client-side.
+      // So set a class and put the rule in the external CSS file.
+      node.classes.push("tml-cancel")
       break
     case "\\bcancel":
-      node.style.background = `linear-gradient(to top right,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`
+      node.classes.push("tml-bcancel")
       break
     /*
     case "\\longdiv":
@@ -94,18 +86,7 @@ rgba(0,0,0,0) 100%);`
       break
     }
     case "\\xcancel":
-      node.style.background = `linear-gradient(to top left,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%),
-linear-gradient(to top right,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`
+      node.classes.push("tml-xcancel")
       break
   }
   if (group.backgroundColor) {
