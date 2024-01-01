@@ -353,8 +353,8 @@ To install extensions for browser use, include the appropriate file from the
 
 The extension reference must come after the reference to `temml.min.js`.
 
-For server-side use, just use `temml.cjs` instead of `temml.min.js`.
-`temml.cjs` includes `mhchem`, `physics`, and `texvc`.
+For server-side use, just use `temml.cjs` or `temml.mjs` instead of `temml.min.js`.
+`temml.cjs` and `temml.mjs` both include `mhchem`, `physics`, and `texvc`.
 
 # Security
 
