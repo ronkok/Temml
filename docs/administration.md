@@ -429,7 +429,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 
 <br>
 
-<p class="reduced">Copyright © 2021-2023 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p class="reduced">Copyright © 2021-2024 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
 </main>
