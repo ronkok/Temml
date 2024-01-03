@@ -201,7 +201,7 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw"]
   },
-  handler({ parser, token }, args, optArgs) {
+  handler({ parser, breakOnTokenText, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string
     let color = ""
     if (model) {
@@ -211,15 +211,8 @@ defineFunction({
       color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token)
     }
 
-    // Set macro \current@color in current namespace to store the current
-    // color, mimicking the behavior of color.sty.
-    // This is currently used just to correctly color a \right
-    // that follows a \color command.
-    parser.gullet.macros.set("\\current@color", color)
-
     // Parse out the implicit body that should be colored.
-    // Since \color nodes should not be nested, break on \color.
-    const body = parser.parseExpression(true, "\\color")
+    const body = parser.parseExpression(true, breakOnTokenText)
 
     return {
       type: "color",

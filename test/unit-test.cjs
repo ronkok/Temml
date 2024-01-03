@@ -468,6 +468,11 @@ const test = () => {
   new Expect(r`\sqrt[\textstyle 3]{x}`).toParse()
   new Expect(r`\sqrt[\tt 3]{x}`).toParse()
 
+  assertion = "An implicit group parser should work within environment arrays"
+  node = parse(r`\begin{array}{l}\color{red}a\\ b \\ c \end{array}`)[0];
+  new Expect(node.type).toBe("array")
+  new Expect(node.body.length).toBe(3)
+
   assertion = "A semi-simple group builder should not affect spacing of operators"
   let markup = temml.renderToString(r`1\begingroup + 2 *\endgroup 3`)
   new Expect(markup).toNotContain("lspace")
@@ -1432,9 +1437,6 @@ const test = () => {
 
   assertion = "An fcolorbox parser should not fail, given a text argument"
   new Expect(r`\fcolorbox{red}{yellow}{a b}`).toParse()
-
-  assertion = "\\color should work properly on right parens"
-  new Expect(temml.renderToString(r`\color{red}\left(a\right)`)).toContain('form="postfix" style="color:#ff0000;"');
 
   assertion = "A strike-through builder should work"
   new Expect(r`\cancel{x}`).toParse()

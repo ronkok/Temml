@@ -211,18 +211,10 @@ defineFunction({
     argTypes: ["primitive"]
   },
   handler: (context, args) => {
-    // \left case below triggers parsing of \right in
-    //   `const right = parser.parseFunction();`
-    // uses this return value.
-    const color = context.parser.gullet.macros.get("\\current@color");
-    if (color && typeof color !== "string") {
-      throw new ParseError("\\current@color set to non-string in \\right");
-    }
     return {
       type: "leftright-right",
       mode: context.parser.mode,
-      delim: checkDelimiter(args[0], context).text,
-      color // undefined if not set via \color
+      delim: checkDelimiter(args[0], context).text
     };
   }
 });
@@ -251,8 +243,7 @@ defineFunction({
       mode: parser.mode,
       body,
       left: delim.text,
-      right: right.delim,
-      rightColor: right.color
+      right: right.delim
     };
   },
   mathmlBuilder: (group, style) => {
@@ -275,7 +266,6 @@ defineFunction({
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true")
     }
-    if (group.rightColor) { rightNode.style.color =  group.rightColor }
     inner.push(rightNode)
 
     return mml.makeRow(inner);
