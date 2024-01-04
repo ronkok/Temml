@@ -3245,7 +3245,7 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw"]
   },
-  handler({ parser, token }, args, optArgs) {
+  handler({ parser, breakOnTokenText, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
     let color = "";
     if (model) {
@@ -3255,15 +3255,8 @@ defineFunction({
       color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token);
     }
 
-    // Set macro \current@color in current namespace to store the current
-    // color, mimicking the behavior of color.sty.
-    // This is currently used just to correctly color a \right
-    // that follows a \color command.
-    parser.gullet.macros.set("\\current@color", color);
-
     // Parse out the implicit body that should be colored.
-    // Since \color nodes should not be nested, break on \color.
-    const body = parser.parseExpression(true, "\\color");
+    const body = parser.parseExpression(true, breakOnTokenText);
 
     return {
       type: "color",
@@ -3803,18 +3796,10 @@ defineFunction({
     argTypes: ["primitive"]
   },
   handler: (context, args) => {
-    // \left case below triggers parsing of \right in
-    //   `const right = parser.parseFunction();`
-    // uses this return value.
-    const color = context.parser.gullet.macros.get("\\current@color");
-    if (color && typeof color !== "string") {
-      throw new ParseError("\\current@color set to non-string in \\right");
-    }
     return {
       type: "leftright-right",
       mode: context.parser.mode,
-      delim: checkDelimiter(args[0], context).text,
-      color // undefined if not set via \color
+      delim: checkDelimiter(args[0], context).text
     };
   }
 });
@@ -3843,8 +3828,7 @@ defineFunction({
       mode: parser.mode,
       body,
       left: delim.text,
-      right: right.delim,
-      rightColor: right.color
+      right: right.delim
     };
   },
   mathmlBuilder: (group, style) => {
@@ -3867,7 +3851,6 @@ defineFunction({
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true");
     }
-    if (group.rightColor) { rightNode.style.color =  group.rightColor; }
     inner.push(rightNode);
 
     return makeRow(inner);
@@ -13159,7 +13142,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.20";
+const version = "0.10.21";
 
 function postProcess(block) {
   const labelMap = {};
