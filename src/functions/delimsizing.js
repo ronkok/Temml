@@ -4,6 +4,7 @@ import ParseError from "../ParseError";
 import { assertNodeType, checkSymbolNodeType } from "../parseNode";
 
 import * as mml from "../buildMathML";
+import symbols from "../symbols";
 
 // Extra data needed for the delimiter handler down below
 export const delimiterSizes = {
@@ -113,17 +114,13 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
-  if (delim.type === "ordgroup" && delim.body.length === 1 && delim.body[0].text === "\u2044") {
-    // Recover "/" from the zero spacing group. (See macros.js)
-    delim = { type: "textord", text: "/", mode: "math" }
-  }
   const symDelim = checkSymbolNodeType(delim)
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
+    if (["/", "\u2044"].includes(symDelim.text)) { symDelim.text = "\u2215" }
     if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨" }
     if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩" }
-    if (symDelim.text === "/") { symDelim.text = "\u2215" }
     if (symDelim.text === "\\backslash") { symDelim.text = "\u2216" }
     return symDelim;
   } else if (symDelim) {
@@ -232,8 +229,26 @@ defineFunction({
     const parser = context.parser;
     // Parse out the implicit body
     ++parser.leftrightDepth;
-    // parseExpression stops before '\\right'
-    const body = parser.parseExpression(false);
+    // parseExpression stops before '\\right' or `\\middle`
+    let body = parser.parseExpression(false, null, true)
+    let nextToken = parser.fetch()
+    while (nextToken.text === "\\middle") {
+      // `\middle`, from the ε-TeX package, ends one group and starts another group.
+      // We had to parse this expression with `breakOnMiddle` enabled in order
+      // to get TeX-compliant parsing of \over.
+      // But we do not want, at this point, to end on \middle, so continue
+      // to parse until we fetch a `\right`.
+      parser.consume()
+      const middle = parser.fetch().text
+      if (!symbols.math[middle]) {
+        throw new ParseError(`Invalid delimiter '${middle}' after '\\middle'`);
+      }
+      checkDelimiter({ type: "atom", mode: "math", text: middle }, { funcName: "\\middle" })
+      body.push({ type: "middle", mode: "math", delim: middle })
+      parser.consume()
+      body = body.concat(parser.parseExpression(false, null, true))
+      nextToken = parser.fetch()
+    }
     --parser.leftrightDepth;
     // Check the next token
     parser.expect("\\right", false);

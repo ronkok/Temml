@@ -44,7 +44,7 @@ defineFunction({
       // eslint-disable-next-line no-console
       console.log(`Temml strict-mode warning: Command ${funcName} is invalid in math mode.`)
     }
-    const body = parser.parseExpression(false, breakOnTokenText);
+    const body = parser.parseExpression(false, breakOnTokenText, true);
     return {
       type: "sizing",
       mode: parser.mode,

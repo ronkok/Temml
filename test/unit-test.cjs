@@ -899,6 +899,8 @@ const test = () => {
   new Expect(r`\left\langle \right\rangle`).toBuildLike(r`\left< \right>`);
   new Expect(r`\left\langle \right\rangle`).toBuildLike("\\left\u27e8 \\right\u27e9");
   new Expect(r`\left\lparen \right\rparen`).toBuildLike(r`\left( \right)`);
+  new Expect(temml.renderToString(r`\left\{a\over2\middle|b\right\}`)).toContain("<mfrac><mi>a</mi><mn>2</mn>")
+  new Expect(temml.renderToString(r`\Set{\color{red}222|11111}`)).toContain('<mn style="color:#ff0000;">222</mn><mspace width="0.2778em" style="color:#ff0000;"></mspace><mo fence="true" form="prefix" lspace="0.05em" rspace="0.05em">|</mo>')
 
   assertion = "A begin/end parser should work"
   new Expect(r`\begin{matrix}a&b\\c&d\end{matrix}`).toParse();

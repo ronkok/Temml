@@ -212,7 +212,7 @@ defineFunction({
     }
 
     // Parse out the implicit body that should be colored.
-    const body = parser.parseExpression(true, breakOnTokenText)
+    const body = parser.parseExpression(true, breakOnTokenText, true)
 
     return {
       type: "color",

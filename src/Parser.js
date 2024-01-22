@@ -179,8 +179,12 @@ export default class Parser {
    * `breakOnTokenText`: The text of the token that the expression should end
    *                     with, or `null` if something else should end the
    *                     expression.
+   *
+   * `breakOnMiddle`: \color, \over, and old styling functions work on an implicit group.
+   *                  These groups end just before the usual tokens, but they also
+   *                  end just before `\middle`.
    */
-  parseExpression(breakOnInfix, breakOnTokenText) {
+  parseExpression(breakOnInfix, breakOnTokenText, breakOnMiddle) {
     const body = [];
     // Keep adding atoms to the body until we can't parse any more atoms (either
     // we reached the end, a }, or a \right)
@@ -195,6 +199,9 @@ export default class Parser {
       }
       if (breakOnTokenText && lex.text === breakOnTokenText) {
         break;
+      }
+      if (breakOnMiddle && lex.text === "\\middle") {
+        break
       }
       if (breakOnInfix && functions[lex.text] && functions[lex.text].infix) {
         break;

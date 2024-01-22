@@ -103,7 +103,7 @@ defineFunction({
   },
   handler: ({ parser, funcName, breakOnTokenText }, args) => {
     const { mode } = parser;
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
     const fontStyle = `math${funcName.slice(1)}`;
 
     return {

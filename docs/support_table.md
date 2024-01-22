@@ -894,7 +894,7 @@ If you know the shape of a character, but not its name,
 |\medspace|$a\medspace b$ |`a\medspace b`| ams |
 |\mho|$\mho$ |||
 |\mid|$\{x∈ℝ\mid x>0\}$ |`\{x∈ℝ\mid x>0\}`||
-|\middle|$P\left(A\middle\vert B\right)$ |`P\left(A\middle\vert B\right)`||
+|\middle|$P\left(A\middle\vert B\right)$ |`P\left(A\middle\vert B\right)`| ε-TeX |
 |\min|$\min$ |||
 |\minuscolon|$\minuscolon$ || colonequals |
 |\minuscoloncolon|$\minuscoloncolon$ || colonequals |

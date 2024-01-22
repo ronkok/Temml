@@ -26,7 +26,7 @@ defineFunction({
   },
   handler({ breakOnTokenText, funcName, parser }, args) {
     // parse out the implicit body
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
 
     const scriptLevel = funcName.slice(1, funcName.length - 5);
     return {
