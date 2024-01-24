@@ -184,6 +184,24 @@ defineMacro("\\char", function(context) {
   return `\\@char{${number}}`;
 });
 
+function recreateArgStr(context) {
+  // Recreate the macro's original argument string from the array of parse tokens.
+  const tokens = context.consumeArgs(1)[0];
+  let str = ""
+  let expectedLoc = tokens[tokens.length - 1].loc.start
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    const actualLoc = tokens[i].loc.start
+    if (actualLoc > expectedLoc) {
+      // context.consumeArgs has eaten a space.
+      str += " "
+      expectedLoc = actualLoc;
+    }
+    str += tokens[i].text
+    expectedLoc += tokens[i].text.length
+  }
+  return str
+}
+
 // The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
 // This macro provides a better rendering.
 defineMacro("\\surd", '\\sqrt{\\vphantom{|}}')
@@ -577,56 +595,33 @@ defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
 defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
 defineMacro("\\Bra", "\\left\\langle#1\\right|");
 defineMacro("\\Ket", "\\left|#1\\right\\rangle");
-const braketHelper = (one) => (context) => {
-  const left = context.consumeArg().tokens;
-  const middle = context.consumeArg().tokens;
-  const middleDouble = context.consumeArg().tokens;
-  const right = context.consumeArg().tokens;
-  const oldMiddle = context.macros.get("|");
-  const oldMiddleDouble = context.macros.get("\\|");
-  context.macros.beginGroup();
-  const midMacro = (double) => (context) => {
-    if (one) {
-      // Only modify the first instance of | or \|
-      context.macros.set("|", oldMiddle);
-      if (middleDouble.length) {
-        context.macros.set("\\|", oldMiddleDouble);
-      }
-    }
-    let doubled = double;
-    if (!double && middleDouble.length) {
-      // Mimic \@ifnextchar
-      const nextToken = context.future();
-      if (nextToken.text === "|") {
-        context.popToken();
-        doubled = true;
-      }
-    }
-    return {
-      tokens: doubled ? middleDouble : middle,
-      numArgs: 0
-    };
-  };
-  context.macros.set("|", midMacro(false));
-  if (middleDouble.length) {
-    context.macros.set("\\|", midMacro(true));
+// A helper for \Braket and \Set
+const replaceVert = (argStr, match) => {
+  const ch = match[0] === "|" ? "\\vert" : "\\Vert"
+  const replaceStr = `}\\,\\middle${ch}\\,{`
+  return argStr.slice(0, match.index) + replaceStr + argStr.slice(match.index + match[0].length)
+}
+defineMacro("\\Braket",  function(context) {
+  let argStr = recreateArgStr(context)
+  const regEx = /\|\||\||\\\|/g
+  let match
+  while ((match = regEx.exec(argStr)) !== null) {
+    argStr = replaceVert(argStr, match)
   }
-  const arg = context.consumeArg().tokens;
-  const expanded = context.expandTokens([...right, ...arg, ...left]);  // reversed
-  context.macros.endGroup();
-  return {
-    tokens: expanded.reverse(),
-    numArgs: 0
-  };
-};
-defineMacro("\\bra@ket", braketHelper(false));
-defineMacro("\\bra@set", braketHelper(true));
-defineMacro("\\Braket", "\\bra@ket{\\left\\langle}" +
-  "{\\,\\middle\\vert\\,}{\\,\\middle\\vert\\,}{\\right\\rangle}");
-defineMacro("\\Set", "\\bra@set{\\left\\{\\:}" +
-  "{\\;\\middle\\vert\\;}{\\;\\middle\\Vert\\;}{\\:\\right\\}}");
-defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
-  // has no support for special || or \|
+  return "\\left\\langle{" + argStr + "}\\right\\rangle"
+});
+defineMacro("\\Set",  function(context) {
+  let argStr = recreateArgStr(context)
+  const match = /\|\||\||\\\|/.exec(argStr)
+  if (match) {
+    argStr = replaceVert(argStr, match)
+  }
+  return "\\left\\{\\:{" + argStr + "}\\:\\right\\}"
+});
+defineMacro("\\set",  function(context) {
+  const argStr = recreateArgStr(context)
+  return "\\{{" + argStr.replace(/\|/, "}\\mid{") + "}\\}"
+});
 
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx

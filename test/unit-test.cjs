@@ -900,7 +900,6 @@ const test = () => {
   new Expect(r`\left\langle \right\rangle`).toBuildLike("\\left\u27e8 \\right\u27e9");
   new Expect(r`\left\lparen \right\rparen`).toBuildLike(r`\left( \right)`);
   new Expect(temml.renderToString(r`\left\{a\over2\middle|b\right\}`)).toContain("<mfrac><mi>a</mi><mn>2</mn>")
-  new Expect(temml.renderToString(r`\Set{\color{red}222|11111}`)).toContain('<mn style="color:#ff0000;">222</mn><mspace width="0.2778em" style="color:#ff0000;"></mspace><mo fence="true" form="prefix" lspace="0.05em" rspace="0.05em">|</mo>')
 
   assertion = "A begin/end parser should work"
   new Expect(r`\begin{matrix}a&b\\c&d\end{matrix}`).toParse();
@@ -1990,6 +1989,10 @@ const test = () => {
   new Expect(r`\braket{\phi|\psi}`).toParseLike(r`\mathinner{\langle{\phi|\psi}\rangle}`)
   new Expect(r`\Bra{\phi}`).toParseLike(r`\left\langle\phi\right|`)
   new Expect(r`\Ket{\psi}`).toParseLike(r`\left|\psi\right\rangle`)
+  new Expect(temml.renderToString(r`\Set{\color{red}222|11111}`)).toContain('<mn style="color:#ff0000;">222</mn></mrow><mspace width="0.1667em"></mspace><mo fence="true" form="prefix" lspace="0.05em" rspace="0.05em">|</mo>')
+  new Expect(temml.renderToString(r`\Set{a\over b}`)).toContain('<mfrac><mi>a</mi><mi>b</mi></mfrac>')
+  new Expect(temml.renderToString(r`\Set{a\over b | c}`)).toContain('<mfrac><mi>a</mi><mi>b</mi></mfrac>')
+  new Expect(temml.renderToString(r`\Set{a\over b || c}`)).toContain('‖')
 
   assertion = "Macro arguments do not generate groups"
   new Expect("\\def\\x{a}\\x\\def\\foo#1{#1}\\foo{\\x\\def\\x{b}\\x}\\x").toParseLike(`aabb`)
