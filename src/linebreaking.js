@@ -57,7 +57,8 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
       continue
     }
     block.push(node);
-    if (node.type && node.type === "mo" && node.children.length === 1) {
+    if (node.type && node.type === "mo" && node.children.length === 1 &&
+        !Object.hasOwn(node.attributes, "movablelimits")) {
       const ch = node.children[0].text
       if (openDelims.indexOf(ch) > -1) {
         level += 1
@@ -72,7 +73,7 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
           mrows.push(element)
           block = [node];
         }
-      } else if (level === 0 && wrapMode === "tex") {
+      } else if (level === 0 && wrapMode === "tex" && ch !== "∇") {
         // Check if the following node is a \nobreak text node, e.g. "~""
         const next = i < expression.length - 1 ? expression[i + 1] : null;
         let glueIsFreeOfNobreak = true;
