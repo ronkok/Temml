@@ -106,22 +106,22 @@ const offset = Object.freeze({
     "sans-serif-bold-italic": ch => { return 0x1D5F5 },
     "monospace": ch =>              { return 0x1D629 }
   },
-  upperCaseGreek: { // A-Ω ∇
+  upperCaseGreek: { // A-Ω
     "normal": ch =>                 { return 0 },
-    "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
-    "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
+    "bold": ch =>                   { return 0x1D317 },
+    "italic": ch =>                 { return 0x1D351 },
     // \boldsymbol actually returns upright bold for upperCaseGreek
-    "bold-italic": ch =>            { return ch === "∇" ? 0x1B4BA : 0x1D317 },
+    "bold-italic": ch =>            { return 0x1D317 },
     "script": ch =>                 { return 0 },
     "script-bold": ch =>            { return 0 },
     "fraktur": ch =>                { return 0 },
     "fraktur-bold": ch =>           { return 0 },
     "double-struck": ch =>          { return 0 },
     // Unicode has no code points for regular-weight san-serif Greek. Use bold.
-    "sans-serif": ch =>             { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
-    "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
+    "sans-serif": ch =>             { return 0x1D3C5 },
+    "sans-serif-bold": ch =>        { return 0x1D3C5 },
     "sans-serif-italic": ch =>      { return 0 },
-    "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
+    "sans-serif-bold-italic": ch => { return 0x1D3FF },
     "monospace": ch =>              { return 0 }
   },
   lowerCaseGreek: { // α-ω
@@ -181,7 +181,7 @@ export const variantChar = (ch, variant) => {
     ? "upperCaseLatin"
     : 0x60 < codePoint && codePoint < 0x7b
     ? "lowerCaseLatin"
-    : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
+    : (0x390  < codePoint && codePoint < 0x3AA)
     ? "upperCaseGreek"
     : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
     ? "lowerCaseGreek"

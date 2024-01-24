@@ -23,6 +23,9 @@ function mathmlBuilder(group, style) {
     if (group.isCharacterBox || inner[0].type === "mathord") {
       node = inner[0];
       node.type = "mi";
+      if (node.children.length === 1 && node.children[0].text && node.children[0].text === "∇") {
+        node.setAttribute("mathvariant", "normal")
+      }
     } else {
       node = new mathMLTree.MathNode("mi", inner);
     }

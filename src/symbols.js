@@ -128,7 +128,8 @@ defineSymbol(math, textord, "\u2135", "\\aleph", true);
 defineSymbol(math, textord, "\u2200", "\\forall", true);
 defineSymbol(math, textord, "\u210f", "\\hbar", true);
 defineSymbol(math, textord, "\u2203", "\\exists", true);
-defineSymbol(math, textord, "\u2207", "\\nabla", true);
+// ∇ is actually a unary operator, not binary. But this works.
+defineSymbol(math, bin, "\u2207", "\\nabla", true);
 defineSymbol(math, textord, "\u266d", "\\flat", true);
 defineSymbol(math, textord, "\u2113", "\\ell", true);
 defineSymbol(math, textord, "\u266e", "\\natural", true);

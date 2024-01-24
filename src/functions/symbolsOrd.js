@@ -90,8 +90,6 @@ defineFunctionBuilders({
       node = new mathMLTree.MathNode("mi", [text])
       if (text.text === origText && latinRegEx.test(origText)) {
         node.setAttribute("mathvariant", "italic")
-      } else if (text.text === "∇" && variant === "normal") {
-        node.setAttribute("mathvariant", "normal")
       }
     }
     return node
