@@ -183,6 +183,7 @@ defineSymbol(math, bin, "\u2021", "\\ddagger");
 defineSymbol(math, bin, "\u2240", "\\wr", true);
 defineSymbol(math, bin, "\u2a3f", "\\amalg");
 defineSymbol(math, bin, "\u0026", "\\And"); // from amsmath
+defineSymbol(math, bin, "\u2AFD", "\\sslash", true); // from stmaryrd
 
 // Arrow Symbols
 defineSymbol(math, rel, "\u27f5", "\\longleftarrow", true);
