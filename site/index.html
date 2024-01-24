@@ -13,7 +13,7 @@
 <script src="./assets/mhchem.min.js"></script>
 <script src="./assets/physics.js"></script>
 <script src="./assets/texvc.js"></script>
-<script type="text/javascript" src="./xml-formatter.js"></script>
+<script src="./xml-formatter.js"></script>
 </head>
 
 <body>
@@ -39,18 +39,14 @@
     
     <div id="demo">
     <div id="input">
-      <label for="demoSource">Input:</label>
-      <br/>
-  
+      <div>Input:</div>
       <textarea class="ioArea" id="demoSource" spellcheck="false" wrap="soft">\def\d{\mathrm{d}}
 
 \oint_C \vec{B}\circ \d\vec{l} = \mu_0 \left( I_{\text{enc}} + \varepsilon_0 \frac{\d}{\d t} \int_S {\vec{E} \circ \hat{n}}\; \d a \right)</textarea>
     </div>
     <div id="spacer"></div>
     <div id="output">
-      <label for="demoRendering">Output:</label>
-      <br/>
-  
+      <div>Output:</div>
       <div class="ioArea" id="demoRendering">
         <div id="math">
           <math display="block"><mrow><msub><mo movablelimits="false">∮</mo><mi>C</mi></msub><mover accent="true"><mi>B</mi><mo stretchy="false">⃗</mo></mover><mo>∘</mo><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mover accent="true"><mi>l</mi><mo stretchy="false">⃗</mo></mover><mo>=</mo><msub><mi>μ</mi><mn>0</mn></msub><mrow><mo fence="true" form="prefix">(</mo><msub><mi>I</mi><mtext>enc</mtext></msub><mo>+</mo><msub><mi>ε</mi><mn>0</mn></msub><mfrac><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mrow><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mi>t</mi></mrow></mfrac><msub><mo movablelimits="false">∫</mo><mi>S</mi></msub><mover accent="true"><mi>E</mi><mo stretchy="false">⃗</mo></mover><mo>∘</mo><mover accent="true"><mi>n</mi><mo stretchy="false">^</mo></mover><mspace width="0.2778em"></mspace><mpadded lspace="0" width="+0em"><mi mathvariant="normal">d</mi></mpadded><mi>a</mi><mo fence="true" form="postfix">)</mo></mrow></mrow></math>
@@ -229,6 +225,6 @@
     }
   }
 </script>
-
+</main>
 </body>
 </html>
