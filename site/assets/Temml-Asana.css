@@ -30,10 +30,6 @@ math * {
   border-color: currentColor;
 }
 
-mtext {
-  font-family: Asana Math;
-}
-
 math {
   font-family: Asana Math, math;
 }

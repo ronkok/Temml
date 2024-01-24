@@ -32,10 +32,6 @@ math * {
  * Not in Chromium, which recognizes display: "block math" written inline. */
 math.tml-display { display: block; }
 
-mtext {
-  font-family: STIX2;
-}
-
 math {
   font-family: STIX2, math;
 }
