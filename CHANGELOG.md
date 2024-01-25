@@ -2,6 +2,29 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.22] = 2024-01-25
+
+### Fixed
+
+- Parse `\middle` to end one group and start another group
+- Render `\nabla` as a `<mo>` element
+- Do not insert soft line break at `\int` or `\nabla`
+- Edit home page for HTML validation
+- Remove redundant CSS rule for `<mtext>` font family
+- Remove extraneous pair of braces from TypeScript `d.ts` file
+
+### Added
+
+- `\sslash`
+- `\reflectbox`
+- `\leftmodels`
+
+## [0.10.21] = 2024-1-4
+
+### Fixed
+
+- `\color{…}` inside an environment array
+
 ## [0.10.20] = 2023-12-31
 
 ### Fixed

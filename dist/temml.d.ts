@@ -41,7 +41,7 @@ declare class ParseError {
   constructor(
     message: string, // The error message
     token: any, // An object providing position information
-  ) {}
+  );
 }
 
 declare const Temml: {

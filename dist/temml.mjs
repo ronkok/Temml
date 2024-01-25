@@ -934,7 +934,8 @@ defineSymbol(math, textord, "\u2135", "\\aleph", true);
 defineSymbol(math, textord, "\u2200", "\\forall", true);
 defineSymbol(math, textord, "\u210f", "\\hbar", true);
 defineSymbol(math, textord, "\u2203", "\\exists", true);
-defineSymbol(math, textord, "\u2207", "\\nabla", true);
+// ∇ is actually a unary operator, not binary. But this works.
+defineSymbol(math, bin, "\u2207", "\\nabla", true);
 defineSymbol(math, textord, "\u266d", "\\flat", true);
 defineSymbol(math, textord, "\u2113", "\\ell", true);
 defineSymbol(math, textord, "\u266e", "\\natural", true);
@@ -988,6 +989,7 @@ defineSymbol(math, bin, "\u2021", "\\ddagger");
 defineSymbol(math, bin, "\u2240", "\\wr", true);
 defineSymbol(math, bin, "\u2a3f", "\\amalg");
 defineSymbol(math, bin, "\u0026", "\\And"); // from amsmath
+defineSymbol(math, bin, "\u2AFD", "\\sslash", true); // from stmaryrd
 
 // Arrow Symbols
 defineSymbol(math, rel, "\u27f5", "\\longleftarrow", true);
@@ -1406,6 +1408,7 @@ defineSymbol(math, mathord, "\u2aeb", "\\Bot");
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "*", "*");
+defineSymbol(math, bin, "\u2044", "/", true);
 defineSymbol(math, bin, "\u2044", "\u2044");
 defineSymbol(math, bin, "\u2212", "-", true);
 defineSymbol(math, bin, "\u22c5", "\\cdot", true);
@@ -1862,7 +1865,8 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
       continue
     }
     block.push(node);
-    if (node.type && node.type === "mo" && node.children.length === 1) {
+    if (node.type && node.type === "mo" && node.children.length === 1 &&
+        !Object.hasOwn(node.attributes, "movablelimits")) {
       const ch = node.children[0].text;
       if (openDelims.indexOf(ch) > -1) {
         level += 1;
@@ -1877,7 +1881,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
           mrows.push(element);
           block = [node];
         }
-      } else if (level === 0 && wrapMode === "tex") {
+      } else if (level === 0 && wrapMode === "tex" && ch !== "∇") {
         // Check if the following node is a \nobreak text node, e.g. "~""
         const next = i < expression.length - 1 ? expression[i + 1] : null;
         let glueIsFreeOfNobreak = true;
@@ -3256,7 +3260,7 @@ defineFunction({
     }
 
     // Parse out the implicit body that should be colored.
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
 
     return {
       type: "color",
@@ -3698,17 +3702,13 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
-  if (delim.type === "ordgroup" && delim.body.length === 1 && delim.body[0].text === "\u2044") {
-    // Recover "/" from the zero spacing group. (See macros.js)
-    delim = { type: "textord", text: "/", mode: "math" };
-  }
   const symDelim = checkSymbolNodeType(delim);
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
+    if (["/", "\u2044"].includes(symDelim.text)) { symDelim.text = "\u2215"; }
     if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨"; }
     if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩"; }
-    if (symDelim.text === "/") { symDelim.text = "\u2215"; }
     if (symDelim.text === "\\backslash") { symDelim.text = "\u2216"; }
     return symDelim;
   } else if (symDelim) {
@@ -3817,8 +3817,26 @@ defineFunction({
     const parser = context.parser;
     // Parse out the implicit body
     ++parser.leftrightDepth;
-    // parseExpression stops before '\\right'
-    const body = parser.parseExpression(false);
+    // parseExpression stops before '\\right' or `\\middle`
+    let body = parser.parseExpression(false, null, true);
+    let nextToken = parser.fetch();
+    while (nextToken.text === "\\middle") {
+      // `\middle`, from the ε-TeX package, ends one group and starts another group.
+      // We had to parse this expression with `breakOnMiddle` enabled in order
+      // to get TeX-compliant parsing of \over.
+      // But we do not want, at this point, to end on \middle, so continue
+      // to parse until we fetch a `\right`.
+      parser.consume();
+      const middle = parser.fetch().text;
+      if (!symbols.math[middle]) {
+        throw new ParseError(`Invalid delimiter '${middle}' after '\\middle'`);
+      }
+      checkDelimiter({ type: "atom", mode: "math", text: middle }, { funcName: "\\middle" });
+      body.push({ type: "middle", mode: "math", delim: middle });
+      parser.consume();
+      body = body.concat(parser.parseExpression(false, null, true));
+      nextToken = parser.fetch();
+    }
     --parser.leftrightDepth;
     // Check the next token
     parser.expect("\\right", false);
@@ -5193,7 +5211,7 @@ defineFunction({
   },
   handler: ({ parser, funcName, breakOnTokenText }, args) => {
     const { mode } = parser;
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
     const fontStyle = `math${funcName.slice(1)}`;
 
     return {
@@ -6154,6 +6172,9 @@ function mathmlBuilder$3(group, style) {
     if (group.isCharacterBox || inner[0].type === "mathord") {
       node = inner[0];
       node.type = "mi";
+      if (node.children.length === 1 && node.children[0].text && node.children[0].text === "∇") {
+        node.setAttribute("mathvariant", "normal");
+      }
     } else {
       node = new mathMLTree.MathNode("mi", inner);
     }
@@ -7142,6 +7163,28 @@ defineFunction({
 });
 
 defineFunction({
+  type: "reflect",
+  names: ["\\reflectbox"],
+  props: {
+    numArgs: 1,
+    argTypes: ["hbox"],
+    allowedInText: true
+  },
+  handler({ parser }, args) {
+    return {
+      type: "reflect",
+      mode: parser.mode,
+      body: args[0]
+    };
+  },
+  mathmlBuilder(group, style) {
+    const node = buildGroup$1(group.body, style);
+    node.style.transform = "scaleX(-1)";
+    return node
+  }
+});
+
+defineFunction({
   type: "internal",
   names: ["\\relax"],
   props: {
@@ -7246,7 +7289,7 @@ defineFunction({
       // eslint-disable-next-line no-console
       console.log(`Temml strict-mode warning: Command ${funcName} is invalid in math mode.`);
     }
-    const body = parser.parseExpression(false, breakOnTokenText);
+    const body = parser.parseExpression(false, breakOnTokenText, true);
     return {
       type: "sizing",
       mode: parser.mode,
@@ -7379,7 +7422,7 @@ defineFunction({
   },
   handler({ breakOnTokenText, funcName, parser }, args) {
     // parse out the implicit body
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
 
     const scriptLevel = funcName.slice(1, funcName.length - 5);
     return {
@@ -7810,22 +7853,22 @@ const offset = Object.freeze({
     "sans-serif-bold-italic": ch => { return 0x1D5F5 },
     "monospace": ch =>              { return 0x1D629 }
   },
-  upperCaseGreek: { // A-Ω ∇
+  upperCaseGreek: { // A-Ω
     "normal": ch =>                 { return 0 },
-    "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
-    "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
+    "bold": ch =>                   { return 0x1D317 },
+    "italic": ch =>                 { return 0x1D351 },
     // \boldsymbol actually returns upright bold for upperCaseGreek
-    "bold-italic": ch =>            { return ch === "∇" ? 0x1B4BA : 0x1D317 },
+    "bold-italic": ch =>            { return 0x1D317 },
     "script": ch =>                 { return 0 },
     "script-bold": ch =>            { return 0 },
     "fraktur": ch =>                { return 0 },
     "fraktur-bold": ch =>           { return 0 },
     "double-struck": ch =>          { return 0 },
     // Unicode has no code points for regular-weight san-serif Greek. Use bold.
-    "sans-serif": ch =>             { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
-    "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
+    "sans-serif": ch =>             { return 0x1D3C5 },
+    "sans-serif-bold": ch =>        { return 0x1D3C5 },
     "sans-serif-italic": ch =>      { return 0 },
-    "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
+    "sans-serif-bold-italic": ch => { return 0x1D3FF },
     "monospace": ch =>              { return 0 }
   },
   lowerCaseGreek: { // α-ω
@@ -7885,7 +7928,7 @@ const variantChar = (ch, variant) => {
     ? "upperCaseLatin"
     : 0x60 < codePoint && codePoint < 0x7b
     ? "lowerCaseLatin"
-    : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
+    : (0x390  < codePoint && codePoint < 0x3AA)
     ? "upperCaseGreek"
     : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
     ? "lowerCaseGreek"
@@ -8014,8 +8057,6 @@ defineFunctionBuilders({
       node = new mathMLTree.MathNode("mi", [text]);
       if (text.text === origText && latinRegEx.test(origText)) {
         node.setAttribute("mathvariant", "italic");
-      } else if (text.text === "∇" && variant === "normal") {
-        node.setAttribute("mathvariant", "normal");
       }
     }
     return node
@@ -8652,16 +8693,30 @@ defineMacro("\\char", function(context) {
   return `\\@char{${number}}`;
 });
 
+function recreateArgStr(context) {
+  // Recreate the macro's original argument string from the array of parse tokens.
+  const tokens = context.consumeArgs(1)[0];
+  let str = "";
+  let expectedLoc = tokens[tokens.length - 1].loc.start;
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    const actualLoc = tokens[i].loc.start;
+    if (actualLoc > expectedLoc) {
+      // context.consumeArgs has eaten a space.
+      str += " ";
+      expectedLoc = actualLoc;
+    }
+    str += tokens[i].text;
+    expectedLoc += tokens[i].text.length;
+  }
+  return str
+}
+
 // The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
 // This macro provides a better rendering.
 defineMacro("\\surd", '\\sqrt{\\vphantom{|}}');
 
 // See comment for \oplus in symbols.js.
 defineMacro("\u2295", "\\oplus");
-
-// Per TeXbook p.122, "/" gets zero operator spacing.
-// And MDN recommends using U+2044 instead of / for inline
-defineMacro("/", "{\u2044}");
 
 // Since Temml has no \par, ignore \long.
 defineMacro("\\long", "");
@@ -9041,6 +9096,11 @@ defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
 defineMacro("\\plim", "\\DOTSB\\operatorname*{plim}");
 
 //////////////////////////////////////////////////////////////////////
+// MnSymbol.sty
+
+defineMacro("\\leftmodels", "\\mathop{\\reflectbox{$\\models$}}");
+
+//////////////////////////////////////////////////////////////////////
 // braket.sty
 // http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/braket/braket.pdf
 
@@ -9049,56 +9109,33 @@ defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
 defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
 defineMacro("\\Bra", "\\left\\langle#1\\right|");
 defineMacro("\\Ket", "\\left|#1\\right\\rangle");
-const braketHelper = (one) => (context) => {
-  const left = context.consumeArg().tokens;
-  const middle = context.consumeArg().tokens;
-  const middleDouble = context.consumeArg().tokens;
-  const right = context.consumeArg().tokens;
-  const oldMiddle = context.macros.get("|");
-  const oldMiddleDouble = context.macros.get("\\|");
-  context.macros.beginGroup();
-  const midMacro = (double) => (context) => {
-    if (one) {
-      // Only modify the first instance of | or \|
-      context.macros.set("|", oldMiddle);
-      if (middleDouble.length) {
-        context.macros.set("\\|", oldMiddleDouble);
-      }
-    }
-    let doubled = double;
-    if (!double && middleDouble.length) {
-      // Mimic \@ifnextchar
-      const nextToken = context.future();
-      if (nextToken.text === "|") {
-        context.popToken();
-        doubled = true;
-      }
-    }
-    return {
-      tokens: doubled ? middleDouble : middle,
-      numArgs: 0
-    };
-  };
-  context.macros.set("|", midMacro(false));
-  if (middleDouble.length) {
-    context.macros.set("\\|", midMacro(true));
-  }
-  const arg = context.consumeArg().tokens;
-  const expanded = context.expandTokens([...right, ...arg, ...left]);  // reversed
-  context.macros.endGroup();
-  return {
-    tokens: expanded.reverse(),
-    numArgs: 0
-  };
+// A helper for \Braket and \Set
+const replaceVert = (argStr, match) => {
+  const ch = match[0] === "|" ? "\\vert" : "\\Vert";
+  const replaceStr = `}\\,\\middle${ch}\\,{`;
+  return argStr.slice(0, match.index) + replaceStr + argStr.slice(match.index + match[0].length)
 };
-defineMacro("\\bra@ket", braketHelper(false));
-defineMacro("\\bra@set", braketHelper(true));
-defineMacro("\\Braket", "\\bra@ket{\\left\\langle}" +
-  "{\\,\\middle\\vert\\,}{\\,\\middle\\vert\\,}{\\right\\rangle}");
-defineMacro("\\Set", "\\bra@set{\\left\\{\\:}" +
-  "{\\;\\middle\\vert\\;}{\\;\\middle\\Vert\\;}{\\:\\right\\}}");
-defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
-  // has no support for special || or \|
+defineMacro("\\Braket",  function(context) {
+  let argStr = recreateArgStr(context);
+  const regEx = /\|\||\||\\\|/g;
+  let match;
+  while ((match = regEx.exec(argStr)) !== null) {
+    argStr = replaceVert(argStr, match);
+  }
+  return "\\left\\langle{" + argStr + "}\\right\\rangle"
+});
+defineMacro("\\Set",  function(context) {
+  let argStr = recreateArgStr(context);
+  const match = /\|\||\||\\\|/.exec(argStr);
+  if (match) {
+    argStr = replaceVert(argStr, match);
+  }
+  return "\\left\\{\\:{" + argStr + "}\\:\\right\\}"
+});
+defineMacro("\\set",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\{{" + argStr.replace(/\|/, "}\\mid{") + "}\\}"
+});
 
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx
@@ -12147,8 +12184,12 @@ class Parser {
    * `breakOnTokenText`: The text of the token that the expression should end
    *                     with, or `null` if something else should end the
    *                     expression.
+   *
+   * `breakOnMiddle`: \color, \over, and old styling functions work on an implicit group.
+   *                  These groups end just before the usual tokens, but they also
+   *                  end just before `\middle`.
    */
-  parseExpression(breakOnInfix, breakOnTokenText) {
+  parseExpression(breakOnInfix, breakOnTokenText, breakOnMiddle) {
     const body = [];
     // Keep adding atoms to the body until we can't parse any more atoms (either
     // we reached the end, a }, or a \right)
@@ -12163,6 +12204,9 @@ class Parser {
       }
       if (breakOnTokenText && lex.text === breakOnTokenText) {
         break;
+      }
+      if (breakOnMiddle && lex.text === "\\middle") {
+        break
       }
       if (breakOnInfix && functions[lex.text] && functions[lex.text].infix) {
         break;
@@ -13142,7 +13186,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.21";
+const version = "0.10.22";
 
 function postProcess(block) {
   const labelMap = {};
