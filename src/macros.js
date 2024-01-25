@@ -587,6 +587,11 @@ defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
 defineMacro("\\plim", "\\DOTSB\\operatorname*{plim}");
 
 //////////////////////////////////////////////////////////////////////
+// MnSymbol.sty
+
+defineMacro("\\leftmodels", "\\mathop{\\reflectbox{$\\models$}}")
+
+//////////////////////////////////////////////////////////////////////
 // braket.sty
 // http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/braket/braket.pdf
 

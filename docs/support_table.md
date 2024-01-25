@@ -773,6 +773,7 @@ If you know the shape of a character, but not its name,
 | \leftharpoondown     | $\leftharpoondown$         | | |
 | \leftharpoonup       | $\leftharpoonup$           | | |
 | \leftleftarrows      | $\leftleftarrows$          | | ams |
+| \leftmodels          | $\leftmodels$              | | MnSymbol |
 | \leftmoon            | $\leftmoon$                | | stix |
 | \leftouterjoin       | $\leftouterjoin$           | | stix |
 | \Leftrightarrow      | $\Leftrightarrow$          | | |
@@ -1168,6 +1169,7 @@ If you know the shape of a character, but not its name,
 | \Reals             | $\Reals$| | texvc extension |
 | \reals             | $\reals$| | texvc extension |
 | \ref               | $\ref{tag1}$| `\ref{tag1}`<br>Some sites do not support `\ref`.| |
+| \reflectbox        | $\reflectbox{S}$ | `\reflectbox{S}` | graphicx |
 | \relax             | | | |
 | \renewcommand      | $\def\hail{Hi!}\renewcommand\hail{\text{Ahoy!}} \hail$| `\def\hail{Hi!}`<br>`\renewcommand\hail{\text{Ahoy!}}`<br>`\hail`|  newcommand |
 | \renewenvironment  | (Not supported)| |  newcommand |
