@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file. This CHANGE
 ### Fixed
 
 - Parse `\middle` to end one group and start another group
+- `\Set`, when containing an `\over`
 - Render `\nabla` as a `<mo>` element
 - Do not insert soft line break at `\int` or `\nabla`
 - Edit home page for HTML validation
