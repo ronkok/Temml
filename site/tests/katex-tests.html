@@ -554,30 +554,12 @@ x^{x^{x_{x_{x_{x_{x}}}}}}\bigg|'><math><mrow><msup><mi>x</mi><msup><mi>x</mi><mi
 \textsf{abc123}}\\
 \end{matrix}'><math><mtable columnalign="center"><mtr><mtd style="padding-left:0em;padding-right:0em;"><mtext>𝖺𝖻𝖼𝟣𝟤𝟥 𝗮𝗯𝗰𝟭𝟮𝟯 𝘢𝘣𝘤123</mtext></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mtext>a</mtext><mtext>b</mtext><mtext>c</mtext><mtext>123</mtext><mtext> </mtext><mtext>𝐚𝐛𝐜𝟏𝟐𝟑</mtext><mtext> </mtext><mrow><mtext>𝑎</mtext><mtext>𝑏</mtext><mtext>𝑐</mtext><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mtext>123</mtext></mstyle></mrow></mrow></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mtext>a</mtext><mtext>b</mtext><mtext>c</mtext><mtext>123</mtext><mtext> </mtext><mtext>𝐚𝐛𝐜𝟏𝟐𝟑</mtext><mtext> </mtext><mrow><mtext>𝑎</mtext><mtext>𝑏</mtext><mtext>𝑐</mtext><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mtext>123</mtext></mstyle></mrow></mrow></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mtext>𝐚𝐛𝐜𝟏𝟐𝟑 𝗮𝗯𝗰𝟭𝟮𝟯 𝘢𝘣𝘤123</mtext></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mtext>𝑎</mtext><mtext>𝑏</mtext><mtext>𝑐</mtext><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mtext>123</mtext></mstyle><mtext> </mtext><mrow><mtext>𝒂</mtext><mtext>𝒃</mtext><mtext>𝒄</mtext><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;font-weight:bold;"><mtext>123</mtext></mstyle></mrow><mtext> </mtext><mtext>𝘢𝘣𝘤123</mtext></mrow></mtd></mtr></mtable></math></span></td><td><img src="images/TextStacked.svg" alt="TextStacked"></td></tr></table>
 <h4 id='textwithmath'>TextWithMath</h4>
-<table><tr><td>\begin{matrix} <br>\text{for <span class='hurmet-tex' data-entry='a < b'><math><mrow><mi>a</mi><mo>&lt;</mo></mrow><mrow><mi>b</mi></mrow></math></span> and $ c &lt; d <span class='hurmet-tex' data-entry='}. \\\\ \
-\textsf{for $a < b'><span class="temml-error" style="color:#b22222;white-space:pre-line;">}. \\\\ \
-\textsf{for $a &lt; b
-ParseError:  Expected &#x27;EOF&#x27;, got &#x27;}&#x27; at position 1: }̲. \\\\ \
-\texts…</span></span> and $ c &lt; d <span class='hurmet-tex' data-entry='}. \\\\ \
-\textsf{for $a < b \textbf{ and } c < d $} \\\\ \
-\text{\sf for $a < b'><span class="temml-error" style="color:#b22222;white-space:pre-line;">}. \\\\ \
-\textsf{for $a &lt; b \textbf{ and } c &lt; d $} \\\\ \
-\text{\sf for $a &lt; b
-ParseError:  Expected &#x27;EOF&#x27;, got &#x27;}&#x27; at position 1: }̲. \\\\ \
-\texts…</span></span> and <span class='hurmet-tex' data-entry='c < d'><math><mrow><mi>c</mi><mo>&lt;</mo></mrow><mrow><mi>d</mi></mrow></math></span>.} <br>\end{matrix}</td><td><span class='hurmet-tex' data-entry='\begin{matrix}
-\text{for $a < b'><span class="temml-error" style="color:#b22222;white-space:pre-line;">\begin{matrix}
-\text{for $a &lt; b
-ParseError:  Unexpected end of input in a macro argument, expected &#x27;}&#x27; at end of input: …text{for $a &lt; b</span></span> and $ c &lt; d <span class='hurmet-tex' data-entry='}. \\
-\textsf{for $a < b'><span class="temml-error" style="color:#b22222;white-space:pre-line;">}. \\
-\textsf{for $a &lt; b
-ParseError:  Expected &#x27;EOF&#x27;, got &#x27;}&#x27; at position 1: }̲. \\
-\textsf{fo…</span></span> and $ c &lt; d <span class='hurmet-tex' data-entry='}. \\
+<table><tr><td>\begin{matrix} <br>\text{for $a &lt; b $ and $ c &lt; d $}. \\ <br>\textsf{for $a &lt; b $ and $ c &lt; d $}. \\ <br>\textsf{for $a &lt; b \textbf{ and } c &lt; d $} \\ <br>\text{\sf for $a &lt; b $ and $c &lt; d $.} <br>\end{matrix}</td><td><span class='hurmet-tex' data-entry='\begin{matrix}
+\text{for $a < b $ and $ c < d $}. \\
+\textsf{for $a < b $ and $ c < d $}. \\
 \textsf{for $a < b \textbf{ and } c < d $} \\
-\text{\sf for $a < b'><span class="temml-error" style="color:#b22222;white-space:pre-line;">}. \\
-\textsf{for $a &lt; b \textbf{ and } c &lt; d $} \\
-\text{\sf for $a &lt; b
-ParseError:  Expected &#x27;EOF&#x27;, got &#x27;}&#x27; at position 1: }̲. \\
-\textsf{fo…</span></span> and <span class='hurmet-tex' data-entry='c < d'><math><mrow><mi>c</mi><mo>&lt;</mo></mrow><mrow><mi>d</mi></mrow></math></span>.} \end{matrix}$</td><td><img src="images/TextWithMath.svg" alt="TextWithMath"></td></tr></table>
+\text{\sf for $a < b $ and $c < d $.}
+\end{matrix}'><math><mtable columnalign="center"><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mrow><mtext>f</mtext><mtext>o</mtext><mtext>r</mtext><mtext> </mtext><mrow><mi>a</mi><mo>&lt;</mo><mi>b</mi></mrow><mtext> </mtext><mtext>a</mtext><mtext>n</mtext><mtext>d</mtext><mtext> </mtext><mrow><mi>c</mi><mo>&lt;</mo><mi>d</mi></mrow></mrow><mi>.</mi></mrow></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mrow><mtext>𝖿</mtext><mtext>𝗈</mtext><mtext>𝗋</mtext><mtext> </mtext><mrow><mi>𝖺</mi><mo>&lt;</mo><mi>𝖻</mi></mrow><mtext> </mtext><mtext>𝖺</mtext><mtext>𝗇</mtext><mtext>𝖽</mtext><mtext> </mtext><mrow><mi>𝖼</mi><mo>&lt;</mo><mi>𝖽</mi></mrow></mrow><mi>.</mi></mrow></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mtext>𝖿</mtext><mtext>𝗈</mtext><mtext>𝗋</mtext><mtext> </mtext><mrow><mi>𝖺</mi><mo>&lt;</mo><mi>𝖻</mi><mtext> 𝗮𝗻𝗱 </mtext><mi>𝖼</mi><mo>&lt;</mo><mi>𝖽</mi></mrow></mrow></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:0em;"><mrow><mtext>𝖿</mtext><mtext>𝗈</mtext><mtext>𝗋</mtext><mtext> </mtext><mrow><mi>𝖺</mi><mo>&lt;</mo><mi>𝖻</mi></mrow><mtext> </mtext><mtext>𝖺</mtext><mtext>𝗇</mtext><mtext>𝖽</mtext><mtext> </mtext><mrow><mi>𝖼</mi><mo>&lt;</mo><mi>𝖽</mi></mrow><mtext>.</mtext></mrow></mtd></mtr></mtable></math></span></td><td><img src="images/TextWithMath.svg" alt="TextWithMath"></td></tr></table>
 <h4 id='unicode'>Unicode</h4>
 <table><tr><th>Source</th>
 <th>Temml</th></tr>

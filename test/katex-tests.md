@@ -1071,10 +1071,10 @@ $\def\logo{\includegraphics[height=0.8em, totalheight=0.9em, width=0.9em, alt=sp
 
 +---------------------------------------------------+-----------------------------------------------+-------------------+
 | \begin{matrix} \                                  | $\begin{matrix}                               | ![TextWithMath][] |
-| \text{for $a < b$ and $ c < d $}. \\\\ \          | \text{for $a < b$ and $ c < d $}. \\          |                   |
-| \textsf{for $a < b$ and $ c < d $}. \\\\ \        | \textsf{for $a < b$ and $ c < d $}. \\        |                   |
+| \text{for $a < b $ and $ c < d $}. \\\\ \         | \text{for $a < b $ and $ c < d $}. \\         |                   |
+| \textsf{for $a < b $ and $ c < d $}. \\\\ \       | \textsf{for $a < b $ and $ c < d $}. \\       |                   |
 | \textsf{for $a < b \textbf{ and } c < d $} \\\\ \ | \textsf{for $a < b \textbf{ and } c < d $} \\ |                   |
-| \text{\sf for $a < b$ and $c < d$.} \             | \text{\sf for $a < b$ and $c < d$.}           |                   |
+| \text{\sf for $a < b $ and $c < d $.} \           | \text{\sf for $a < b $ and $c < d $.}         |                   |
 | \end{matrix}                                      | \end{matrix}$                                 |                   |
 +---------------------------------------------------+-----------------------------------------------+-------------------+
 
