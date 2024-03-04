@@ -529,6 +529,7 @@ If you know the shape of a character, but not its name,
 
 | Function       |  Rendered   | Source or Comment |  Package  |
 |----------------|-------------|-------------------|-----------|
+|\Earth|$\Earth$|| stix |
 |\edef|$\def\foo{a}\edef\bar{\foo}\def\foo{}\bar$|`\def\foo{a}\edef\bar{\foo}\def\foo{}\bar`||
 |\ell|$\ell$|||
 |\else|(Not supported)|||

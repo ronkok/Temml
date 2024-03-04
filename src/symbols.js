@@ -218,6 +218,7 @@ defineSymbol(math, mathord, "\u2609", "\\astrosun", true);
 defineSymbol(math, mathord, "\u263c", "\\sun", true);
 defineSymbol(math, mathord, "\u263e", "\\leftmoon", true);
 defineSymbol(math, mathord, "\u263d", "\\rightmoon", true);
+defineSymbol(math, mathord, "\u2295", "\\Earth");
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);
