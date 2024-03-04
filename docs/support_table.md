@@ -500,6 +500,7 @@ If you know the shape of a character, but not its name,
 |\Doteq|$\Doteq$|| ams |
 |\doteq|$\doteq$|||
 |\doteqdot|$\doteqdot$|| ams |
+|\dotminus|$\dotminus$|| stix |
 |\dotplus|$\dotplus$|| ams |
 |\dotproduct|$\dotproduct$|`\dotproduct`| physics extension |
 |\dots|$x_1 + \dots + x_n$ | `x_1 + \dots + x_n` ||

@@ -445,6 +445,8 @@ defineSymbol(math, bin, "\u27d5", "\\leftouterjoin", true);
 defineSymbol(math, bin, "\u27d6", "\\rightouterjoin", true);
 defineSymbol(math, bin, "\u27d7", "\\fullouterjoin", true);
 
+defineSymbol(math, bin, "\u2238", "\\dotminus", true); // stix
+
 // AMS Arrows
 // Note: unicode-math maps \u21e2 to their own function \rightdasharrow.
 // We'll map it to AMS function \dashrightarrow. It produces the same atom.

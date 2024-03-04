@@ -752,21 +752,23 @@ Direct Input: <span class="direct">∫ ∬ ∭ ⨌ ∮ ∯ ∰ ⨖ ∲ ∏ ∐ �
 | $\boxdot$   `\boxdot`    | $\divideontimes$          | $\odot$  `\odot`        | $\unlhd$  `\unlhd`      |
 |                          | `\divideontimes`          |                         |                         |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\boxminus$ `\boxminus`  | $\dotplus$  `\dotplus`    | $\ominus$  `\ominus`    | $\unrhd$  `\unrhd`      |
+| $\boxminus$ `\boxminus`  | $\dotminus$  `\dotminus`  | $\ominus$  `\ominus`    | $\unrhd$  `\unrhd`      |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\boxplus$  `\boxplus`   | $\doublebarwedge$         | $\oplus$  `\oplus`      | $\uplus$  `\uplus`      |
+| $\boxplus$  `\boxplus`   | $\dotplus$  `\dotplus`    | $\oplus$  `\oplus`      | $\uplus$  `\uplus`      |
++--------------------------+---------------------------+-------------------------+-------------------------+
+| $\boxtimes$ `\boxtimes`  | $\doublebarwedge$         | $\otimes$  `\otimes`    | $\vee$  `\vee`          |
 |                          | `\doublebarwedge`         |                         |                         |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\boxtimes$ `\boxtimes`  | $\doublecap$ `\doublecap` | $\otimes$  `\otimes`    | $\vee$  `\vee`          |
+| $\bullet$   `\bullet`    | $\doublecap$ `\doublecap` | $\oslash$  `\oslash`    | $\veebar$  `\veebar`    |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\bullet$   `\bullet`    | $\doublecup$ `\doublecup` | $\oslash$  `\oslash`    | $\veebar$  `\veebar`    |
+| $\Cap$  `\Cap`           | $\doublecup$ `\doublecup` | $\parr$   `\parr`       | $\wedge$  `\wedge`      |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\Cap$  `\Cap`           | $\fullouterjoin$          | $\parr$   `\parr`       | $\wedge$  `\wedge`      |
+| $\cap$  `\cap`           | $\fullouterjoin$          | $\pm$  `\pm`            | $\with$   `\with`       |
 |                          | `\fullouterjoin`          |                         |                         |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\cap$  `\cap`           | $\gtrdot$  `\gtrdot`      | $\pm$  `\pm`            | $\with$   `\with`       |
+| $\cdot$  `\cdot`         | $\gtrdot$  `\gtrdot`      | $x \pmod a$ `x \pmod a` | $\wr$  `\wr`            |
 +--------------------------+---------------------------+-------------------------+-------------------------+
-| $\cdot$  `\cdot`         | $\intercal$ `\intercal`   | $x \pmod a$ `x \pmod a` | $\wr$  `\wr`            |
+|                          | $\intercal$ `\intercal`   |                         |                         |
 +--------------------------+---------------------------+-------------------------+-------------------------+
 
 The _texvc_ extension provides $\plusmn$ `\plusmn`.
