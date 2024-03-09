@@ -80,9 +80,11 @@ export const consolidateText = mrow => {
 }
 
 const numberRegEx = /^[0-9]$/
-const isCommaOrDot = node => {
-  return (node.type === "atom" && node.text === ",") ||
-         (node.type === "textord" && node.text === ".")
+const isDotOrComma = (node, followingNode) => {
+  return ((node.type === "textord" && node.text === ".") ||
+    (node.type === "atom" && node.text === ",")) &&
+    // Don't consolidate if there is a space after the comma.
+    node.loc.end === followingNode.loc.start
 }
 const consolidateNumbers = expression => {
   // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
@@ -105,7 +107,8 @@ const consolidateNumbers = expression => {
 
   // Determine if numeral groups are separated by a comma or dot.
   for (let i = nums.length - 1; i > 0; i--) {
-    if (nums[i - 1].end === nums[i].start - 2 && isCommaOrDot(expression[nums[i].start - 1])) {
+    if (nums[i - 1].end === nums[i].start - 2 &&
+      isDotOrComma(expression[nums[i].start - 1], expression[nums[i].start])) {
       // Merge the two groups.
       nums[i - 1].end = nums[i].end
       nums.splice(i, 1)

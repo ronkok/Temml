@@ -2,7 +2,7 @@ const temml = require("../utils/temml.cjs")
 
 /*
  * Unit tests for Temml.
- * This file contains more than 1200 tests of various Temml functions.
+ * This file contains more than 1300 tests of various Temml functions.
  *
  * Sidenote:
  * Temml aims to minimize dependency hell by minimizing dependencies.
@@ -270,6 +270,17 @@ const test = () => {
   new Expect(`    x   ^ y    `).toParseLike("x^y")
   new Expect("\u00a0\ufe0e" + `x   ^ y    `).toParseLike("x^y")
 
+  assertion = "Temml should consolidate numbers into a single <mn> element"
+  let nodes = build(`12.34`)
+  new Expect(nodes.length).toBe(1)
+  new Expect(nodes[0].type).toBe("mn")
+  nodes = build(`12.34`)
+  new Expect(nodes.length).toBe(1)
+  new Expect(nodes[0].type).toBe("mn")
+  assertion = "Temml should split numbers if a space follows a comma"
+  let markup = temml.renderToString(`12, 340`)
+  new Expect(markup).toBe('<math><mrow><mn>12</mn><mo separator="true">,</mo></mrow><mrow><mn>340</mn></mrow></math>')
+
   assertion = "Parser should build a list of ords"
   const ords = parse("1234|@.`abcdefgzABCDEFGZ");
   for (let i = 0; i < ords.length; i++) {
@@ -277,7 +288,7 @@ const test = () => {
   }
 
   assertion = "Parser should build bins"
-  let nodes = parse(r`1 + 2 - 3 * 4 \cdot 5 \pm 6 \div 7`)
+  nodes = parse(r`1 + 2 - 3 * 4 \cdot 5 \pm 6 \div 7`)
   for (let i = 1; i < nodes.length; i+=2) {
     new Expect(nodes[i].type).toBe("atom");
     new Expect(nodes[i].family).toBe("bin");
@@ -474,7 +485,7 @@ const test = () => {
   new Expect(node.body.length).toBe(3)
 
   assertion = "A semi-simple group builder should not affect spacing of operators"
-  let markup = temml.renderToString(r`1\begingroup + 2 *\endgroup 3`)
+  markup = temml.renderToString(r`1\begingroup + 2 *\endgroup 3`)
   new Expect(markup).toNotContain("lspace")
   new Expect(markup).toNotContain("rspace")
   assertion = "A braced group builder should change spacing of operators at ends of group"
