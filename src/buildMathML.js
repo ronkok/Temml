@@ -84,7 +84,7 @@ const isDotOrComma = (node, followingNode) => {
   return ((node.type === "textord" && node.text === ".") ||
     (node.type === "atom" && node.text === ",")) &&
     // Don't consolidate if there is a space after the comma.
-    node.loc.end === followingNode.loc.start
+    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
 }
 const consolidateNumbers = expression => {
   // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
