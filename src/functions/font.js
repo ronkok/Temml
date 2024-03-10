@@ -2,6 +2,21 @@ import defineFunction, { normalizeArgument } from "../defineFunction"
 import * as mml from "../buildMathML"
 import mathMLTree from "../mathMLTree"
 
+const isLongVariableName = (group, font) => {
+  if (font !== "mathrm" || group.body.type !== "ordgroup" || group.body.body.length === 1) {
+    return false
+  }
+  if (group.body.body[0].type !== "mathord") { return false }
+  for (let i = 1; i < group.body.body.length; i++) {
+    const parseNodeType = group.body.body[i].type
+    if (!(parseNodeType ===  "mathord" ||
+    (parseNodeType ===  "textord" && !isNaN(group.body.body[i].text)))) {
+      return false
+    }
+  }
+  return true
+}
+
 const mathmlBuilder = (group, style) => {
   const font = group.font
   const newStyle = style.withFont(font)
@@ -13,6 +28,20 @@ const mathmlBuilder = (group, style) => {
     return mathGroup
   }
   // Check if it is possible to consolidate elements into a single <mi> element.
+  if (isLongVariableName(group, font)) {
+    // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
+    // wraps <mi> elements with <mrow>s to work around a Firefox bug.
+    const mi = mathGroup.children[0].children[0];
+    delete mi.attributes.mathvariant
+    for (let i = 1; i < mathGroup.children.length; i++) {
+      mi.children[0].text += mathGroup.children[i].type === "mn"
+        ? mathGroup.children[i].children[0].text
+        : mathGroup.children[i].children[0].children[0].text
+    }
+    // Wrap in a <mrow> to prevent the same Firefox bug.
+    const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"))
+    return new mathMLTree.MathNode("mrow", [bogus, mi])
+  }
   let canConsolidate = mathGroup.children[0].type === "mo"
   for (let i = 1; i < mathGroup.children.length; i++) {
     if (mathGroup.children[i].type === "mo" && font === "boldsymbol") {
@@ -25,7 +54,7 @@ const mathmlBuilder = (group, style) => {
   }
   if (!canConsolidate) { return mathGroup }
   // Consolidate the <mi> elements.
-  const mi = mathGroup.children[0]
+  const mi = mathGroup.children[0];
   for (let i = 1; i < mathGroup.children.length; i++) {
     mi.children.push(mathGroup.children[i].children[0])
   }

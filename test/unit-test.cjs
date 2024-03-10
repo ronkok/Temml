@@ -1283,6 +1283,8 @@ const test = () => {
   new Expect(markup).toContain('<mo>+</mo>');
   markup = temml.renderToString(r`\mathbb{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mrow><mi>𝔸</mi><mi>𝕩</mi><mn>𝟚</mn><mi>𝕜</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo lspace="0em" rspace="0em">+</mo></mrow>');
+  markup = temml.renderToString(r`\mathrm{Ax2k\omega\Omega\imath}`).replace(mathTagRegEx, "");
+  new Expect(markup).toBe('<mrow><mtext></mtext><mi>Ax2kωΩı</mi></mrow>');
   markup = temml.renderToString(r`\mathrm{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi mathvariant=\"normal\">A</mi>");
   new Expect(markup).toContain("<mi mathvariant=\"normal\">x</mi>");
