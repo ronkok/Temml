@@ -89,7 +89,9 @@ for (let aSpan of [...mathSpans]) {
 temml.postProcess(document.body);
 ```
 
-i> Notice that you can choose when to stop macro persistence by redefining `macros`.
+::: indented
+Notice that you can choose when to stop macro persistence by redefining `macros`.
+:::
 
 <br>
 
@@ -439,7 +441,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.22
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.23
 
 <h3><a href="#top">Contents</a></h3>
 

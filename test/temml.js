@@ -1027,6 +1027,7 @@ var temml = (function () {
   defineSymbol(math, mathord, "\u263c", "\\sun", true);
   defineSymbol(math, mathord, "\u263e", "\\leftmoon", true);
   defineSymbol(math, mathord, "\u263d", "\\rightmoon", true);
+  defineSymbol(math, mathord, "\u2295", "\\Earth");
 
   // AMS Negated Binary Relations
   defineSymbol(math, rel, "\u226e", "\\nless", true);
@@ -1253,6 +1254,8 @@ var temml = (function () {
   defineSymbol(math, bin, "\u27d5", "\\leftouterjoin", true);
   defineSymbol(math, bin, "\u27d6", "\\rightouterjoin", true);
   defineSymbol(math, bin, "\u27d7", "\\fullouterjoin", true);
+
+  defineSymbol(math, bin, "\u2238", "\\dotminus", true); // stix
 
   // AMS Arrows
   // Note: unicode-math maps \u21e2 to their own function \rightdasharrow.
@@ -2022,9 +2025,11 @@ var temml = (function () {
   };
 
   const numberRegEx$1 = /^[0-9]$/;
-  const isCommaOrDot = node => {
-    return (node.type === "atom" && node.text === ",") ||
-           (node.type === "textord" && node.text === ".")
+  const isDotOrComma = (node, followingNode) => {
+    return ((node.type === "textord" && node.text === ".") ||
+      (node.type === "atom" && node.text === ",")) &&
+      // Don't consolidate if there is a space after the comma.
+      node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
   };
   const consolidateNumbers = expression => {
     // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
@@ -2047,7 +2052,8 @@ var temml = (function () {
 
     // Determine if numeral groups are separated by a comma or dot.
     for (let i = nums.length - 1; i > 0; i--) {
-      if (nums[i - 1].end === nums[i].start - 2 && isCommaOrDot(expression[nums[i].start - 1])) {
+      if (nums[i - 1].end === nums[i].start - 2 &&
+        isDotOrComma(expression[nums[i].start - 1], expression[nums[i].start])) {
         // Merge the two groups.
         nums[i - 1].end = nums[i].end;
         nums.splice(i, 1);
@@ -5113,6 +5119,21 @@ var temml = (function () {
     }
   });
 
+  const isLongVariableName = (group, font) => {
+    if (font !== "mathrm" || group.body.type !== "ordgroup" || group.body.body.length === 1) {
+      return false
+    }
+    if (group.body.body[0].type !== "mathord") { return false }
+    for (let i = 1; i < group.body.body.length; i++) {
+      const parseNodeType = group.body.body[i].type;
+      if (!(parseNodeType ===  "mathord" ||
+      (parseNodeType ===  "textord" && !isNaN(group.body.body[i].text)))) {
+        return false
+      }
+    }
+    return true
+  };
+
   const mathmlBuilder$6 = (group, style) => {
     const font = group.font;
     const newStyle = style.withFont(font);
@@ -5124,6 +5145,20 @@ var temml = (function () {
       return mathGroup
     }
     // Check if it is possible to consolidate elements into a single <mi> element.
+    if (isLongVariableName(group, font)) {
+      // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
+      // wraps <mi> elements with <mrow>s to work around a Firefox bug.
+      const mi = mathGroup.children[0].children[0];
+      delete mi.attributes.mathvariant;
+      for (let i = 1; i < mathGroup.children.length; i++) {
+        mi.children[0].text += mathGroup.children[i].type === "mn"
+          ? mathGroup.children[i].children[0].text
+          : mathGroup.children[i].children[0].children[0].text;
+      }
+      // Wrap in a <mrow> to prevent the same Firefox bug.
+      const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"));
+      return new mathMLTree.MathNode("mrow", [bogus, mi])
+    }
     let canConsolidate = mathGroup.children[0].type === "mo";
     for (let i = 1; i < mathGroup.children.length; i++) {
       if (mathGroup.children[i].type === "mo" && font === "boldsymbol") {
@@ -11289,7 +11324,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.22";
+  const version = "0.10.23";
 
   function postProcess(block) {
     const labelMap = {};

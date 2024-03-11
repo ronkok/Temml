@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.23] = 2024-03-11
+
+### Fixed
+
+- Do not consolidate `<mn>` at a comma with a subsequent space
+
+### Added
+
+- Consolidate `\mathrm{…}` into a single `<mi>` element
+- Optional CSS file for Fira Math font
+- Support \dotminus
+- Support \Earth
+
 ## [0.10.22] = 2024-01-25
 
 ### Fixed
