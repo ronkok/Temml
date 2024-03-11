@@ -272,6 +272,8 @@ provide a font with a MATH table, so it has many problems.
 **Asana** and **Libertinus** have some of the same rendering problems as Cambria Math,
 although Asana does contain its own roundhand glyphs.
 
+**Fira Math** is a sans-serif math font.
+
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
 

@@ -133,6 +133,7 @@ const mathML = temml.renderToString(&quot;c = \\pm\\sqrt{a^2 + b^2}&quot;);</cod
 <p><strong>Temml-Local.css</strong> is the light-weight option. It calls two fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, or <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16). It also needs to be augmented with <code>Temml.woff2</code>.</p>
 <p>Sadly, this option has rendering issues. Chrome botches extensible arrows and it will fail to stretch the <code>∫</code> symbol on Windows. Android does not currently provide a font with a MATH table, so it has many problems.</p>
 <p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
+<p><strong>Fira Math</strong> is a sans-serif math font.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
 <ul><li class="tight"><p>Temml.woff2 can be downloaded with the latest Temml <a href='https://github.com/ronkok/Temml/releases'>release</a>.</p></li>
