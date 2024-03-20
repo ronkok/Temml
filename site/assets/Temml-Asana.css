@@ -24,6 +24,7 @@ math {
   letter-spacing: normal;
   word-wrap: normal;
   direction: ltr;
+  font-feature-settings: "dtls" off;
 }
 
 math * {

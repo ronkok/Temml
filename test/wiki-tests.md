@@ -932,6 +932,14 @@ should be as long at the bar between C & D.
 |     | \rule[0.3em]{1.75em}{0.05em} D     | \rule[0.3em]{1.75em}{0.05em} D$    |
 +-----+------------------------------------+------------------------------------+
 
+The next line tests the fix for Temml issue #21. Firefox would ordinarily omit\
+the dot in the i below. It's fixed by a Temml CSS rule, so it renders properly.
+
++=====+=================+===================+
+| 267 | \widetilde{U_i} | $\widetilde{U_i}$ |
++-----+-----------------+-------------------+
+
+
 <br>
 </body>
 </html>

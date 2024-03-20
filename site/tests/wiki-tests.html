@@ -583,6 +583,8 @@ y &= \tfrac{1}{\sqrt{2}}(u-v)
 <p>The next line tests the length of an extensible arrow. Since Firefox does not<br>support the <code>minsize</code> attribute, Temml has a workaround. The middle arrow<br>should be as long at the bar between C &amp; D.</p>
 <table><tr><td>266</td><td>A \rightarrow B \xrightarrow{i} C<br>\rule[0.3em]{1.75em}{0.05em} D</td><td><span class='hurmet-tex' data-entry='A \rightarrow B \xrightarrow{i} C
 \rule[0.3em]{1.75em}{0.05em} D'><math><mrow><mi>A</mi><mo stretchy="false">→</mo></mrow><mrow><mi>B</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mover><mrow><mspace width="0.4286em"></mspace><mi>i</mi><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow><mi>C</mi><mpadded height="+0.3em" voffset="0.3em"><mspace mathbackground="black" width="1.75em" height="0.05em"></mspace></mpadded><mi>D</mi></mrow></math></span></td></tr></table>
+<p>The next line tests the fix for Temml issue #21. Firefox would ordinarily omit<br>the dot in the i below. It&#x27;s fixed by a Temml CSS rule, so it renders properly.</p>
+<table><tr><td>267</td><td>\widetilde{U_i}</td><td><span class='hurmet-tex' data-entry='\widetilde{U_i}'><math><mover><msub><mi>U</mi><mi>i</mi></msub><mo stretchy="true" class="tml-crooked-2" style="math-style:normal;math-depth:0;">~</mo></mover></math></span></td></tr></table>
 <br>
 </body>
 </html>

@@ -3485,6 +3485,9 @@ defineFunction({
 
     if (funcName === "\\edef" || funcName === "\\xdef") {
       tokens = parser.gullet.expandTokens(tokens);
+      if (tokens.length > 2000) {
+        throw new ParseError("Too many expansions");
+      }
       tokens.reverse(); // to fit in with stack order
     }
     // Final arg is the expansion of the macro
