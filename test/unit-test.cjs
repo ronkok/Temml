@@ -2264,6 +2264,7 @@ const test = () => {
   new Expect(r`\def\foo{1}\foo`).toNotParse(new Settings({maxExpand: 0}))
   assertion = "The maxExpand setting should prevent infinite loops"
   new Expect(r`\def\foo{\foo}\foo`).toNotParse(new Settings({maxExpand: 10}))
+  new Expect(r`\edef0{x}\edef0{00}\edef0{00}\edef0{00}\edef0{00}`).toNotParse(new Settings({maxExpand: 10}))
 
   assertion = "The \\mathchoice function should render as if there is nothing other in display math"
   const cmd = r`\sum_{k = 0}^{\infty} x^k`
