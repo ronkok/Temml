@@ -66,6 +66,14 @@ class Settings {
   }
 }
 
+function getProtocolViaTrust(url) {
+  let protocol;
+  parse(`\\url{${url}}`, new Settings({
+    trust: context => protocol = context.protocol,
+  }));
+  return protocol;
+}
+
 // Strip positions from ParseNodes.
 const stripPositions = expr => {
   if (typeof expr !== "object" || expr === null) { return expr }
@@ -1696,7 +1704,7 @@ const test = () => {
   markup = temml.renderToString("\\href{relative}{foo}")
   new Expect(markup).toContain("#b22222") // color of error message
 
-  assertion = "href and url commands should allow explicitly allowed protocols"
+  assertion = "href and url commands should not allow explicitly disallowed protocols"
   new Expect("\\href{ftp://x}{foo}").toParse(new Settings({trust: (context) => context.protocol === "ftp"}))
   new Expect("\\href{ftp://x}{foo}").toBuild(new Settings({trust: (context) => context.protocol === "ftp"}))
   assertion = "href and url commands should allow all protocols when trust option is true"
@@ -1704,6 +1712,23 @@ const test = () => {
   new Expect("\\href{ftp://x}{foo}").toBuild(trustSettings())
   assertion = "href and url commands should not allow explicitly disallowed protocols"
   new Expect("\\href{javascript:alert('x')}{foo}").toNotParse(new Settings({trust: context => context.protocol !== "javascript"}))
+  new Expect("\\href{JavaScript:alert('x')}{foo}").toNotParse(new Settings({trust: context => context.protocol !== "javascript"}))
+  new Expect("\\url{!:}").toNotParse()
+  new Expect("\\url{foo&colon;}").toNotParse()
+  new Expect("\\url{://foo}").toNotParse()
+
+  assertion = "href and url commands should get protocols correctly"
+  new Expect (getProtocolViaTrust("foo")).toBe("_relative")
+  new Expect (getProtocolViaTrust("Foo:")).toBe("foo")
+  new Expect (getProtocolViaTrust("Foo:bar")).toBe("foo")
+  new Expect (getProtocolViaTrust("JavaScript:")).toBe("javascript")
+  new Expect (getProtocolViaTrust("JavaScript:code")).toBe("javascript")
+  new Expect (getProtocolViaTrust("?query=string&colon=")).toBe("_relative")
+  new Expect (getProtocolViaTrust("#query=string&colon=")).toBe("_relative")
+  new Expect (getProtocolViaTrust("dir/file&colon")).toBe("_relative")
+  new Expect (getProtocolViaTrust("//foo")).toBe("_relative")
+  new Expect (getProtocolViaTrust("  \t http://")).toBe("http")
+  new Expect (getProtocolViaTrust("  \t http://foo")).toBe("http")
 
   assertion = "The symbol table integrity should treat certain symbols as synonyms"
   new Expect(`<`).toBuildLike(r`\lt`)

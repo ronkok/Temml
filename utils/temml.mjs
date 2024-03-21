@@ -144,11 +144,29 @@ const assert = function(value) {
 
 /**
  * Return the protocol of a URL, or "_relative" if the URL does not specify a
- * protocol (and thus is relative).
+ * protocol (and thus is relative), or `null` if URL has invalid protocol
+ * (so should be outright rejected).
  */
 const protocolFromUrl = function(url) {
-  const protocol = /^\s*([^\\/#]*?)(?::|&#0*58|&#x0*3a)/i.exec(url);
-  return protocol != null ? protocol[1] : "_relative";
+  // Check for possible leading protocol.
+  // https://url.spec.whatwg.org/#url-parsing strips leading whitespace
+  // (\x00) or C0 control (\x00-\x1F) characters.
+  // eslint-disable-next-line no-control-regex
+  const protocol = /^[\x00-\x20]*([^\\/#?]*?)(:|&#0*58|&#x0*3a|&colon)/i.exec(url);
+  if (!protocol) {
+    return "_relative";
+  }
+  // Reject weird colons
+  if (protocol[2] !== ":") {
+    return null;
+  }
+  // Reject invalid characters in scheme according to
+  // https://datatracker.ietf.org/doc/html/rfc3986#section-3.1
+  if (!/^[a-zA-Z][a-zA-Z0-9+\-.]*$/.test(protocol[1])) {
+    return null;
+  }
+  // Lowercase the protocol
+  return protocol[1].toLowerCase();
 };
 
 /**
@@ -213,7 +231,11 @@ class Settings {
    */
   isTrusted(context) {
     if (context.url && !context.protocol) {
-      context.protocol = utils.protocolFromUrl(context.url);
+      const protocol = utils.protocolFromUrl(context.url);
+      if (protocol == null) {
+        return false
+      }
+      context.protocol = protocol;
     }
     const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
     return Boolean(trust);

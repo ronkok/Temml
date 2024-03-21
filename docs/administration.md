@@ -208,7 +208,9 @@ Available options are:
 
 - `trust`: `boolean` or `function` (default: `false`). If `false` (do not trust input), prevent any commands like `\includegraphics` that could enable adverse behavior, rendering them instead in `errorColor`. If `true` (trust input), allow all such commands. Provide a custom function `handler(context)` to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:
 
-  - `{command: "\\url", url, protocol}`
+  - `{command: "\\url", url, protocol}`\
+    where `protocol` is a lowercased string like `"http"` or `"https"`
+    that appears before a colon, or `"_relative"` for relative URLs.
   - `{command: "\\href", url, protocol}`
   - `{command: "\\includegraphics", url, protocol}`
   - `{command: "\\class", class}`
