@@ -160,6 +160,12 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------+--------------------------+-------------------+
 | \bar                | $\bar{y}$                | `\bar{y}`                |                   |
 +---------------------+--------------------------+--------------------------+-------------------+
+| \barcap             | $\barcap$                |                          | stix              |
++---------------------+--------------------------+--------------------------+-------------------+
+| \barcup             | $\barcup$                |                          | stix              |
++---------------------+--------------------------+--------------------------+-------------------+
+| \barvee             | $\barvee$                |                          | stix              |
++---------------------+--------------------------+--------------------------+-------------------+
 | \barwedge           | $\barwedge$              |                          | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \ballotx            | $\ballotx$               |                          | arev              |
@@ -261,6 +267,8 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------+--------------------------+-------------------+
 | \binom              | $\binom n k$             | `\binom n k`             | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
+| \blackhourglass     | $\blackhourglass$        |                          | stix              |
++---------------------+--------------------------+--------------------------+-------------------+
 | \blacklozenge       | $\blacklozenge$          |                          | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \blacksquare        | $\blacksquare$           |                          | ams               |
@@ -308,6 +316,12 @@ If you know the shape of a character, but not its name,
 | \bowtie             | $\bowtie$                |                          |                   |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \Box                | $\Box$                   |                          | ams               |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxast             | $\boxast$                |                          | stix              |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxbox             | $\boxbox$                |                          | stix              |
++---------------------+--------------------------+--------------------------+-------------------+
+| \boxcircle          | $\boxcircle$             |                          | stix              |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \boxdot             | $\boxdot$                |                          | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
@@ -361,6 +375,9 @@ If you know the shape of a character, but not its name,
 |\cancel|$\cancel{5}$|`\cancel{5}`| cancel |
 |\Cap|$\Cap$|| ams |
 |\cap|$\cap$|||
+|\capbarcup|$\capbarcup$|| stix |
+|\capdot|$\capdot$|| stix |
+|\capovercup|$\capovercup$|| stix |
 |{cases}|$$\begin{cases}a&\text{if }b\\c&\text{if }d\end{cases}$$|`\begin{cases}`<br>   `a &\text{if } b  \\`<br>   `c &\text{if } d`<br>`\end{cases}`| ams |
 |\cases|(Not supported)|see `{cases}`||
 |{CD}|$$\begin{CD}A @>a>> B \\@VbVV @AAcA\\C @= D\end{CD}$$|`\begin{CD}`<br>   `A  @>a>>  B  \\`<br>`@VbVV    @AAcA \\`<br>   `C  @=     D`<br>`\end{CD}`| ams |
@@ -385,11 +402,17 @@ If you know the shape of a character, but not its name,
 |\circlearrowright|$\circlearrowright$|| ams |
 |\circledast|$\circledast$|| ams |
 |\circledcirc|$\circledcirc$|| ams |
+|\circledequal|$\circledequal$|| stix |
 |\circleddash|$\circleddash$|| ams |
+|\circledparallel|$\circledparallel$|| stix |
 |\circledR|$\circledR$|| ams |
 |\circledS|$\circledS$|| ams |
+|\circledvert|$\circledvert$|| stix |
+|\circlehbar|$\circlehbar$|| stix |
 |\class|(Not supported)|||
 |\cline|(Not supported)|||
+|\closedvarcap|$\closedvarcap$|| stix |
+|\closedvarcup|$\closedvarcup$|| stix |
 |\clubs|$\clubs$|| texvc extension |
 |\clubsuit|$\clubsuit$|||
 |\cnums|$\cnums$|| texvc extension |
@@ -415,6 +438,9 @@ If you know the shape of a character, but not its name,
 |\commutator|$\commutator{A}{B}$|`\commutator{A}{B}`| physics extension |
 |\complement|$\complement$|| ams |
 |\Complex|$\Complex$|| texvc extension |
+|\concavediamond|$\concavediamond$|| stix |
+|\concavediamondtickleft|$\concavediamondtickleft$|| stix |
+|\concavediamondtickright|$\concavediamondtickright$|| stix |
 |\cong|$\cong$|||
 |\Coppa|$\Coppa$|||
 |\coppa|$\coppa$|||
@@ -436,6 +462,7 @@ If you know the shape of a character, but not its name,
 |\cth|$\cth$|||
 |\Cup|$\Cup$|| ams |
 |\cup|$\cup$|||
+|\cupovercap|$\cupovercap$|| stix |
 |\curl|$\curl$|| physics extension |
 |\curlyeqprec|$\curlyeqprec$|| ams |
 |\curlyeqsucc|$\curlyeqsucc$|| ams |
@@ -509,7 +536,8 @@ If you know the shape of a character, but not its name,
 |\dotsi|$$\int_{A_1}\int_{A_2}\dotsi$$|`\int_{A_1}\int_{A_2}\dotsi`| ams |
 |\dotsm|$x_1 x_2 \dotsm x_n$|`$x_1 x_2 \dotsm x_n`| ams |
 |\dotso|$\dotso$|| ams |
-|\doublebarwedge|$\doublebarwedge$|| ams |
+|\doublebarvee|$\doublebarvee$|| stix |
+|\doublebarwedge|$\doublebarwedge$|| stix |
 |\doublecap|$\doublecap$|| ams |
 |\doublecup|$\doublecup$|| ams |
 |\Downarrow|$\Downarrow$|||
@@ -664,6 +692,7 @@ If you know the shape of a character, but not its name,
 | \hom            | $\hom$                    | | |
 | \hookleftarrow  | $\hookleftarrow$          | | |
 | \hookrightarrow | $\hookrightarrow$         | | |
+| \hourglass      | $\hourglass$              | | stix |
 | \hphantom       | $a\hphantom{bc}d$         | `a\hphantom{bc}d`| |
 | \href           | $\href{https://temml.org/}{\Temml}$| `\href{https://temml.org/}{\Temml}`<br>Requires `trust` [option](options.md)|  href |
 | \hskip          | $w\hskip1em i\hskip2em d$ | `w\hskip1em i\hskip2em d`| |
@@ -698,7 +727,7 @@ If you know the shape of a character, but not its name,
 | \implies         | $P\implies Q$         | `P\implies Q`         | ams               |
 | \in              | $\in$                 |                       |                   |
 | \includegraphics | $\includegraphics[height=1em, totalheight=1.2em, width=1.2em, alt=sphere]{../sphere.jpg}$ |  `\includegraphics[height=1em,`<br>`totalheight=1.2em, width=1.2em,`<br>`alt=sphere]{../sphere.jpg}` | graphicx |
-|\incoh            | $\incoh$              |                       | cmll              |
+| \incoh           | $\incoh$              |                       | cmll              |
 | \inf             | $\inf$                |                       |                   |
 | \infin           | $\infin$              |                       | texvc extension   |
 | \infty           | $\infty$              |                       |                   |
@@ -711,10 +740,12 @@ If you know the shape of a character, but not its name,
 | \intclockwise    | $\intclockwise$       |                       |                   |
 | \intcup          | $\intcup$             |                       |                   |
 | \intercal        | $\intercal$           |                       | ams               |
+| \interleave      | $\interleave$         |                       | stix              |
 | \intlarhk        | $\intlarhk$           |                       |                   |
 | \intop           | $\intop$              |                       |                   |
 | \intx            | $\intx$               |                       |                   |
 | \invamp          | $\invamp$             |                       | cmll              |
+| \invlazys        | $\invlazys$           |                       | stix              |
 | \Iota            | $\Iota$               |                       |                   |
 | \iota            | $\iota$               |                       |                   |
 | \isin            | $\isin$               |                       | texvc extension   |
@@ -834,6 +865,7 @@ If you know the shape of a character, but not its name,
 | \lor                 | $\lor$                     | | |
 | \lower               | $M\lower5pt{M^2}M$         | `M\lower5pt{M^2}M`  or <br>`M\lower5pt\hbox{$M^2$}M`| |
 | \lozenge             | $\lozenge$                 | | ams |
+| \lozengeminus        | $\lozengeminus$            | | stix |
 | \lparen              | $\lparen$                  | | mathtools |
 | \Lrarr               | $\Lrarr$                   | | texvc extension |
 | \lrArr               | $\lrArr$                   | | texvc extension |
@@ -901,6 +933,9 @@ If you know the shape of a character, but not its name,
 |\min|$\min$ |||
 |\minuscolon|$\minuscolon$ || colonequals |
 |\minuscoloncolon|$\minuscoloncolon$ || colonequals |
+|\minusdot|$\minusdot$|| stix |
+|\minusfdots|$\minusfdots$|| stix |
+|\minusrdots|$\minusrdots$|| stix |
 |\minuso|(Not supported)| See `\standardstate`||
 |\mit|(Not supported)|See `\mathit`||
 |\mkern|$a\mkern18mu b$ |`a\mkern18mu b`||
@@ -929,6 +964,7 @@ If you know the shape of a character, but not its name,
 |----------------|-------------|-------------------|-----------|
 |\N|$\N$ || texvc extension |
 |\nabla|$\nabla$ |||
+|\Nand|$\Nand$|| stix |
 |\natnums|$\natnums$ || texvc extension |
 |\natural|$\natural$ |||
 |\negmedspace|$a\negmedspace b$ |`a\negmedspace b`| ams |
@@ -962,6 +998,7 @@ If you know the shape of a character, but not its name,
 |\nobreakspace|$a\nobreakspace b$ |`a\nobreakspace b`| ams |
 |\noexpand||||
 |\nolimits|$\lim\nolimits_x$ |`\lim\nolimits_x`||
+|\Nor|$\Nor$|| stix |
 |\norm|$\norm{x}$ |\norm{x}| physics extension |
 |\normalfont|(Not supported)|||
 |\normalsize|$\normalsize normalsize$ |`\normalsize normalsize`||
@@ -1003,18 +1040,23 @@ If you know the shape of a character, but not its name,
 |----------------|-------------|-------------------|-----------|
 |\O|$\text{\O}$ |`\text{\O}`||
 |\o|$\text{\o}$ |`\text{\o}`||
+|\obar|$\obar$ || stix |
+|\obslash|$\obslash$ || stix |
 |\oc|$\oc$ || cmll |
+|\odiv|$\odiv$ || stix |
 |\odot|$\odot$ |||
 |\odv|$\odv{f}{x}$ |`\odv{f}{x}`| derivative |
 |\odv*|$\odv*{f}{x}$ |`\odv*{f}{x}`| derivative |
 |\OE|$\text{\OE}$ |`\text{\OE}`||
 |\oe|$\text{\oe}$ |`\text{\oe}`||
 |\officialeuro|(Not supported)|See `\euro`||
+|\ogreaterthan|$\ogreaterthan$ || stix |
 |\oiiint|$\oiiint$ |||
 |\oiint|$\oiint$ |||
 |\oint|$\oint$ |||
 |\oldstyle|(Not supported)|||
 |\oldstylenums|(Not supported)|||
+|\olessthan|$\olessthan$ || stix |
 |\omega|$\omega$ |||
 |\Omega|$\Omega$ |||
 |\Omicron|$\Omicron$ |||
@@ -1024,12 +1066,15 @@ If you know the shape of a character, but not its name,
 |\operatorname|$\operatorname{asin} x$ |\operatorname{asin} x| ams |
 |\operatorname\*|$\operatorname*{asin}\limits_y x$ |`\operatorname*{asin}\limits_y x`| ams |
 |\operatornamewithlimits|$\operatornamewithlimits{asin}\limits_y x$ |`\operatornamewithlimits{asin}\limits_y x`| |
+|\operp|$\operp$ || stix |
 |\oplus|$\oplus$ |||
 |\or|(Not supported)|||
 |\order|$\order{x^2}$ |`\order{x^2}`| physics extension |
 |\origof|$\origof$ || stix |
 |\oslash|$\oslash$ |||
 |\otimes|$\otimes$ |||
+|\Otimes|$\Otimes$ || stix |
+|\otimeshat|$\otimeshat$ || stix |
 |\outerproduct|$\outerproduct{a}{b}$ |`\outerproduct{a}{b}`| physics extension |
 |\over|${a+1 \over b+2}+c$ |`{a+1 \over b+2}+c`||
 |\overbrace|$\overbrace{x+⋯+x}^{n\text{ times}}$ |`\overbrace{x+⋯+x}^{n\text{ times}}`||
@@ -1281,6 +1326,8 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\shpos             | $\shpos$                             |                                  | cmll               |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
+| \\shuffle           | $\shuffle$                           |                                  | stix               |
++---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\sideset           | $\sideset{_a^b}{_c^d}\sum$           | `\sideset{_a^b}{_c^d}\sum`       | ams                |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\Sigma             | $\Sigma$                             |                                  |                    |
@@ -1324,6 +1371,8 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\smash             | $\left(x^{\smash{2}}\right)$         | `\left(x^{\smash{2}}\right)`     |                    |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
+| \\smashtimes        | $\smashtimes$                        |                                  | stix               |
++---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\smile             | $\smile$                             |                                  |                    |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\smiley            | $\smiley$                            |                                  | wasysym            |
@@ -1349,7 +1398,11 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\sqcap             | $\sqcap$                             |                                  |                    |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
+| \\Sqcap             | $\Sqcap$                             |                                  | stix               |
++---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\sqcup             | $\sqcup$                             |                                  |                    |
++---------------------+--------------------------------------+----------------------------------+--------------------+
+| \\Sqcup             | $\Sqcup$                             |                                  | stix               |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
 | \\sqint             | $\sqint$                             |                                  |                    |
 +---------------------+--------------------------------------+----------------------------------+--------------------+
@@ -1518,6 +1571,7 @@ If you know the shape of a character, but not its name,
 |\thicksim|$\thicksim$|| ams |
 |\thickspace|$a\thickspace b$|`a\thickspace b`| ams |
 |\thinspace|$a\thinspace b$|`a\thinspace b`| ams |
+|\threedotcolon|$\threedotcolon$|| stix |
 |\tilde|$\tilde M$|`\tilde M`||
 |\times|$\times$|||
 |\Tiny|$\Tiny Tiny$|`\Tiny Tiny`||
@@ -1531,12 +1585,18 @@ If you know the shape of a character, but not its name,
 |\triangleleft|$\triangleleft$|||
 |\trianglelefteq|$\trianglelefteq$|| ams |
 |\triangleq|$\triangleq$|| ams |
+|\triangleminus|$\triangleminus$|| stix |
+|\triangleplus|$\triangleplus$|| stix |
 |\triangleright|$\triangleright$|||
 |\trianglerighteq|$\trianglerighteq$|| ams |
+|\triangletimes|$\triangletimes$|| stix |
 |\trprime|$f^\trprime$|`f^\trprime`| stix |
 |\tt|${\tt AaBb123}$|`{\tt AaBb123}`||
+|\twocaps|$\twocaps$|| stix |
+|\twocups|$\twocups$|| stix |
 |\twoheadleftarrow|$\twoheadleftarrow$|| ams |
 |\twoheadrightarrow|$\twoheadrightarrow$|| ams |
+|\typecolon|$\typecolon$|| stix |
 
 ## U
 
@@ -1663,8 +1723,12 @@ If you know the shape of a character, but not its name,
 |\vectorbold|$\vectorbold{a}$ |`\vectorbold{a}`| physics extension |
 |\vectorunit|$\vectorunit{a}$ |`\vectorunit{a}`| physics extension |
 |\vee|$\vee$ |||
+|\Vee|$\Vee$ || stix |
 |\veebar|$\veebar$ || ams |
+|\veedot|$\veedot$ || stix |
+|\veedoublebar|$\veedoublebar$ || stix |
 |\veeeq|$\veeeq$ || stix |
+|\veeonvee|$\veeonvee$|| stix |
 |\verb|$\verb!\frac a b!$ |`\verb!\frac a b!`||
 |\Vert|$\Vert$ |||
 |\vert|$\vert$ |||
@@ -1685,8 +1749,15 @@ If you know the shape of a character, but not its name,
 | Function   |  Rendered          | Source or Comment |  Package        |
 |------------|--------------------|-------------------|-----------------|
 | \wedge     | $\wedge$           |                   |                 |
+| \Wedge     | $\Wedge$           |                   | stix            |
+| \wedgebar  | $\wedgebar$        |                   | stix            |
+| \wedgedot  | $\wedgedot$        |                   | stix            |
+| \wedgedoublebar  | $\wedgedoublebar$ |              | stix            |
 | \wedgeq    | $\wedgeq$          |                   | stix            |
+| \wedgeonwedge | $\wedgeonwedge$ |                   | stix            |
 | \weierp    | $\weierp$          |                   | texvc extension |
+| \whitesquaretickleft | $\whitesquaretickleft$ |     | stix            |
+| \whitesquaretickright | $\whitesquaretickright$ |   | stix            |
 | \widecheck | $\widecheck{AB}$   |`\widecheck{AB}`   | mathabx         |
 | \widehat   | $\widehat{AB}$     |`\widehat{AB}`     |                 |
 | \wideparen | $\wideparen{abc}$  |`\wideparen{abc}`  | MnSymbol        |
@@ -1715,6 +1786,7 @@ If you know the shape of a character, but not its name,
 | \xleftrightharpoons | $\xleftrightharpoons{abc}$  | `\xleftrightharpoons{abc}` | mathtools |
 | \xlongequal         | $\xlongequal{abc}$          | `\xlongequal{abc}`         |  extpfeil |
 | \xmapsto            | $\xmapsto{abc}$             | `\xmapsto{abc}`            | mathtools |
+| \Xor                | $\Xor$                      |                            | stix      |
 | \xRightarrow        | $\xRightarrow{abc}$         | `\xRightarrow{abc}`        | mathtools |
 | \xrightarrow        | $\xrightarrow{abc}$         | `\xrightarrow{abc}`        | ams       |
 | \xrightharpoondown  | $\xrightharpoondown{abc}$   | `\xrightharpoondown{abc}`  | mathtools |
