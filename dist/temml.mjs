@@ -144,11 +144,29 @@ const assert = function(value) {
 
 /**
  * Return the protocol of a URL, or "_relative" if the URL does not specify a
- * protocol (and thus is relative).
+ * protocol (and thus is relative), or `null` if URL has invalid protocol
+ * (so should be outright rejected).
  */
 const protocolFromUrl = function(url) {
-  const protocol = /^\s*([^\\/#]*?)(?::|&#0*58|&#x0*3a)/i.exec(url);
-  return protocol != null ? protocol[1] : "_relative";
+  // Check for possible leading protocol.
+  // https://url.spec.whatwg.org/#url-parsing strips leading whitespace
+  // (\x00) or C0 control (\x00-\x1F) characters.
+  // eslint-disable-next-line no-control-regex
+  const protocol = /^[\x00-\x20]*([^\\/#?]*?)(:|&#0*58|&#x0*3a|&colon)/i.exec(url);
+  if (!protocol) {
+    return "_relative";
+  }
+  // Reject weird colons
+  if (protocol[2] !== ":") {
+    return null;
+  }
+  // Reject invalid characters in scheme according to
+  // https://datatracker.ietf.org/doc/html/rfc3986#section-3.1
+  if (!/^[a-zA-Z][a-zA-Z0-9+\-.]*$/.test(protocol[1])) {
+    return null;
+  }
+  // Lowercase the protocol
+  return protocol[1].toLowerCase();
 };
 
 /**
@@ -213,7 +231,11 @@ class Settings {
    */
   isTrusted(context) {
     if (context.url && !context.protocol) {
-      context.protocol = utils.protocolFromUrl(context.url);
+      const protocol = utils.protocolFromUrl(context.url);
+      if (protocol == null) {
+        return false
+      }
+      context.protocol = protocol;
     }
     const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
     return Boolean(trust);
@@ -1252,7 +1274,72 @@ defineSymbol(math, bin, "\u27d5", "\\leftouterjoin", true);
 defineSymbol(math, bin, "\u27d6", "\\rightouterjoin", true);
 defineSymbol(math, bin, "\u27d7", "\\fullouterjoin", true);
 
-defineSymbol(math, bin, "\u2238", "\\dotminus", true); // stix
+// stix Binary Operators
+defineSymbol(math, bin, "\u2238", "\\dotminus", true);
+defineSymbol(math, bin, "\u27D1", "\\wedgedot", true);
+defineSymbol(math, bin, "\u27C7", "\\veedot", true);
+defineSymbol(math, bin, "\u2A62", "\\doublebarvee", true);
+defineSymbol(math, bin, "\u2A63", "\\veedoublebar", true);
+defineSymbol(math, bin, "\u2A5F", "\\wedgebar", true);
+defineSymbol(math, bin, "\u2A60", "\\wedgedoublebar", true);
+defineSymbol(math, bin, "\u2A54", "\\Vee", true);
+defineSymbol(math, bin, "\u2A53", "\\Wedge", true);
+defineSymbol(math, bin, "\u2A43", "\\barcap", true);
+defineSymbol(math, bin, "\u2A42", "\\barcup", true);
+defineSymbol(math, bin, "\u2A48", "\\capbarcup", true);
+defineSymbol(math, bin, "\u2A40", "\\capdot", true);
+defineSymbol(math, bin, "\u2A47", "\\capovercup", true);
+defineSymbol(math, bin, "\u2A46", "\\cupovercap", true);
+defineSymbol(math, bin, "\u2A4D", "\\closedvarcap", true);
+defineSymbol(math, bin, "\u2A4C", "\\closedvarcup", true);
+defineSymbol(math, bin, "\u2A2A", "\\minusdot", true);
+defineSymbol(math, bin, "\u2A2B", "\\minusfdots", true);
+defineSymbol(math, bin, "\u2A2C", "\\minusrdots", true);
+defineSymbol(math, bin, "\u22BB", "\\Xor", true);
+defineSymbol(math, bin, "\u22BC", "\\Nand", true);
+defineSymbol(math, bin, "\u22BD", "\\Nor", true);
+defineSymbol(math, bin, "\u22BD", "\\barvee");
+defineSymbol(math, bin, "\u2AF4", "\\interleave", true);
+defineSymbol(math, bin, "\u29E2", "\\shuffle", true);
+defineSymbol(math, bin, "\u2AF6", "\\threedotcolon", true);
+defineSymbol(math, bin, "\u2982", "\\typecolon", true);
+defineSymbol(math, bin, "\u223E", "\\invlazys", true);
+defineSymbol(math, bin, "\u2A4B", "\\twocaps", true);
+defineSymbol(math, bin, "\u2A4A", "\\twocups", true);
+defineSymbol(math, bin, "\u2A4E", "\\Sqcap", true);
+defineSymbol(math, bin, "\u2A4F", "\\Sqcup", true);
+defineSymbol(math, bin, "\u2A56", "\\veeonvee", true);
+defineSymbol(math, bin, "\u2A55", "\\wedgeonwedge", true);
+defineSymbol(math, bin, "\u29D7", "\\blackhourglass", true);
+defineSymbol(math, bin, "\u29C6", "\\boxast", true);
+defineSymbol(math, bin, "\u29C8", "\\boxbox", true);
+defineSymbol(math, bin, "\u29C7", "\\boxcircle", true);
+defineSymbol(math, bin, "\u229C", "\\circledequal", true);
+defineSymbol(math, bin, "\u29B7", "\\circledparallel", true);
+defineSymbol(math, bin, "\u29B6", "\\circledvert", true);
+defineSymbol(math, bin, "\u29B5", "\\circlehbar", true);
+defineSymbol(math, bin, "\u27E1", "\\concavediamond", true);
+defineSymbol(math, bin, "\u27E2", "\\concavediamondtickleft", true);
+defineSymbol(math, bin, "\u27E3", "\\concavediamondtickright", true);
+defineSymbol(math, bin, "\u22C4", "\\diamond", true);
+defineSymbol(math, bin, "\u29D6", "\\hourglass", true);
+defineSymbol(math, bin, "\u27E0", "\\lozengeminus", true);
+defineSymbol(math, bin, "\u233D", "\\obar", true);
+defineSymbol(math, bin, "\u29B8", "\\obslash", true);
+defineSymbol(math, bin, "\u2A38", "\\odiv", true);
+defineSymbol(math, bin, "\u29C1", "\\ogreaterthan", true);
+defineSymbol(math, bin, "\u29C0", "\\olessthan", true);
+defineSymbol(math, bin, "\u29B9", "\\operp", true);
+defineSymbol(math, bin, "\u2A37", "\\Otimes", true);
+defineSymbol(math, bin, "\u2A36", "\\otimeshat", true);
+defineSymbol(math, bin, "\u22C6", "\\star", true);
+defineSymbol(math, bin, "\u25B3", "\\triangle", true);
+defineSymbol(math, bin, "\u2A3A", "\\triangleminus", true);
+defineSymbol(math, bin, "\u2A39", "\\triangleplus", true);
+defineSymbol(math, bin, "\u2A3B", "\\triangletimes", true);
+defineSymbol(math, bin, "\u27E4", "\\whitesquaretickleft", true);
+defineSymbol(math, bin, "\u27E5", "\\whitesquaretickright", true);
+defineSymbol(math, bin, "\u2A33", "\\smashtimes", true);
 
 // AMS Arrows
 // Note: unicode-math maps \u21e2 to their own function \rightdasharrow.
@@ -1494,8 +1581,8 @@ defineSymbol(math, spacing, null, "\\allowbreak");
 defineSymbol(math, punct, ",", ",");
 defineSymbol(text, punct, ":", ":");
 defineSymbol(math, punct, ";", ";");
-defineSymbol(math, bin, "\u22bc", "\\barwedge", true);
-defineSymbol(math, bin, "\u22bb", "\\veebar", true);
+defineSymbol(math, bin, "\u22bc", "\\barwedge");
+defineSymbol(math, bin, "\u22bb", "\\veebar");
 defineSymbol(math, bin, "\u2299", "\\odot", true);
 // Firefox turns ⊕ into an emoji. So append \uFE0E. Define Unicode character in macros, not here.
 defineSymbol(math, bin, "\u2295\uFE0E", "\\oplus");
@@ -1508,7 +1595,6 @@ defineSymbol(math, bin, "\u25b3", "\\bigtriangleup");
 defineSymbol(math, bin, "\u25bd", "\\bigtriangledown");
 defineSymbol(math, bin, "\u2020", "\\dagger");
 defineSymbol(math, bin, "\u22c4", "\\diamond");
-defineSymbol(math, bin, "\u22c6", "\\star");
 defineSymbol(math, bin, "\u25c3", "\\triangleleft");
 defineSymbol(math, bin, "\u25b9", "\\triangleright");
 defineSymbol(math, open, "{", "\\{");
@@ -3483,6 +3569,9 @@ defineFunction({
 
     if (funcName === "\\edef" || funcName === "\\xdef") {
       tokens = parser.gullet.expandTokens(tokens);
+      if (tokens.length > parser.gullet.settings.maxExpand) {
+        throw new ParseError("Too many expansions in an " + funcName);
+      }
       tokens.reverse(); // to fit in with stack order
     }
     // Final arg is the expansion of the macro
@@ -13221,7 +13310,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.23";
+const version = "0.10.24";
 
 function postProcess(block) {
   const labelMap = {};

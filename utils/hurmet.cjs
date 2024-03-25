@@ -2,13 +2,17 @@
 
 /*
  * Hurmet, copyright (c) by Ron Kok
- * Distributed under an MIT license: https://Hurmet.app/LICENSE.txt
+ * Distributed under an MIT license: https://hurmet.org/LICENSE.txt
  *
  * Hurmet adds calculation cells to the ProseMirror rich text editor.
- * See https://Hurmet.app and https://Hurmet.app/docs/en/manual.html
+ * See https://hurmet.org and https://hurmet.org/docs/en/manual.html
  */
 
 // utils.js
+
+const isValidIdentifier$1 = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
+// Detect string interpolation ${varName}
+const interpolateRegEx = /\$\{[^}\s]+\}/g;
 
 const clone = obj => {
   // Clone a JavaScript object.
@@ -1064,6 +1068,106 @@ const format = (num, specStr = "h3", decimalFormat = "1,000,000.") => {
   }
 };
 
+/*
+ * Hurmet operands often have numeric values. Sometimes they are the numbers originally
+ * input by the writer, henceforward known as "plain". Sometimes we work instead with
+ * values that have been converted to SI base units. It turns out that operands inside
+ * evalRpn() can often get by with less information than in the original cell assignment attrs.
+ * Some details for various data types:
+ *
+ * RATIONAL operand: { value: plain, unit: allZeros, dtype: RATIONAL }
+ * RATIONAL cell attrs: ditto.
+ * Note: "allZeros" is the array of unit-checking exponents for a number: [0,0,0,0,0,0,0,0,0]
+ *
+ * RATIONAL + QUANTITY unit-unaware operand: same as RATIONAL.
+ * RATIONAL + QUANTITY unit-AWARE oprnd: {
+ *   value: inBaseUnits, unit: expos, dtype: RATIONAL + QUANTITY
+ * }
+ * RATIONAL + QUANTITY cell attrs include both of the above and also a `resultdisplay` string.
+ *
+ * RATIONAL + ROWVECTOR is the same as RATIONAL except the value is an array of plains.
+ * RATIONAL + ROWVECTOR + QUANTITY is the same as RATIONAL + QUANTITY except values are arrays.
+ * COLUMNVECTOR is the same as ROWVECTOR exept that they are treated differently by operators.
+ * MATRIX indicates that values are each an array of row vectors.
+ * *
+ * A MAP's values are all the same data type and all have the same unit of measure.
+ * MAP oprnd: {name, value: see below, unit: {name, factor, gauge, expos}, dtype: dMAP + ...}
+ *    where: value is: {name1: value, name2: value} or
+ *    where value is: {plain: {name1: value, name2: value},
+ *                     inBaseUnits: {name1: value, name2: value},
+ *                     etc}
+ * A `resultdisplay` string is always in a MAP's cell attrs and sometimes in an operand.
+ *
+ * ERROR operand: { value: error message, unit: undefined, dtype: ERROR }
+ *
+ * When this module creates Hurmet operands, it does not make defensive copies of
+ * cell attributes. The deep data is referenced. So Hurmet evaluate.js must copy whenever
+ * operators or functions might change a cell attribute.
+ *
+ */
+
+const fromAssignment = (cellAttrs, unitAware) => {
+  // Get the value that was assigned to a variable. Load it into an operand.
+  if (cellAttrs.value === null) {
+    // Return an error message.
+    const insert = (cellAttrs.name) ? cellAttrs.name : "?";
+    return errorOprnd("NULL", insert)
+  }
+
+  const oprnd = Object.create(null);
+  oprnd.dtype = cellAttrs.dtype;
+  oprnd.name = cellAttrs.name;
+
+  // Get the unit data.
+  const dtype = cellAttrs.dtype;
+  if (dtype === dt.STRING || dtype === dt.BOOLEAN || dtype === dt.DRAWING ||
+      dtype === dt.MODULE || dtype === dt.NULL) {
+    oprnd.unit = null;
+  } else if (cellAttrs.unit) {
+    oprnd.unit = clone(cellAttrs.unit);
+  } else {
+    oprnd.unit = null;
+  }
+
+  // Get the value.
+  if (cellAttrs.dtype & dt.QUANTITY) {
+    // Here we discard some of the cellAttrs information. In a unit-aware calculation,
+    // number, matrix, and map operands contain only the value.inBaseUnits.
+    if (cellAttrs.dtype & dt.MAP) {
+      oprnd.value = clone(cellAttrs.value);
+      oprnd.value.data = unitAware
+        ? oprnd.value.data.inBaseUnits
+        : oprnd.value.data.plain;
+    } else {
+      oprnd.value = Object.freeze(unitAware
+        ? clone(cellAttrs.value.inBaseUnits)
+        : clone(cellAttrs.value.plain)
+      );
+    }
+    oprnd.dtype = cellAttrs.dtype - dt.QUANTITY;
+
+  } else if (cellAttrs.dtype === dt.STRING) {
+    const str = cellAttrs.value;
+    const ch = str.charAt(0);
+    const chEnd = str.charAt(str.length - 1);
+    oprnd.value = ch === '"' && chEnd === '"' ? str.slice(1, -1).trim() : str.trim();
+
+  } else if (cellAttrs.dtype === dt.DATAFRAME) {
+    // For data frames, Hurmet employs copy-on-write tactics.
+    // So at this point, we can pass a reference to the value
+    oprnd.value = cellAttrs.value;
+
+    // Note the only operations on data frames are: (1) access, and (2) concatenate.
+    // That's where the copy-on-write takes place.
+
+  } else {
+    // For all other data types, we employ copy-on-read. So we return a deep copy from here.
+    oprnd.value = clone(cellAttrs.value);
+  }
+
+  return Object.freeze(oprnd)
+};
+
 // units.js
 
 /*
@@ -1121,11 +1225,11 @@ const unitTable = Object.freeze(JSON.parse(`{
 "£":["1","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "'":["0.3048","1","0","0",[1,0,0,0,0,0,0,0]],
 "A":["1","1","0","siSymbol",[0,0,0,1,0,0,0,0]],
-"AUD":["1.6327","1","0","AUD",[0,0,0,0,0,0,0,1]],
+"AUD":["1.6601","1","0","AUD",[0,0,0,0,0,0,0,1]],
 "Adobe point":["0.0254","72","0","0",[1,0,0,0,0,0,0,0]],
 "At":["1","1","0","siSymbol",[0,0,0,0,1,0,1,0]],
 "Australian dollar":["1","1","0","AUD",[0,0,0,0,0,0,0,1]],
-"BRL":["5.2933","1","0","BRL",[0,0,0,0,0,0,0,1]],
+"BRL":["5.4099","1","0","BRL",[0,0,0,0,0,0,0,1]],
 "BTU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "BThU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Bq":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
@@ -1134,10 +1238,10 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Btu":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "C":["1","1","0","siSymbol",[0,0,1,1,0,0,0,0]],
 "C$":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
-"CAD":["1.4627","1","0","CAD",[0,0,0,0,0,0,0,1]],
+"CAD":["1.4688","1","0","CAD",[0,0,0,0,0,0,0,1]],
 "CCF":["1","1","0","0",[3,0,0,0,0,0,0,0]],
-"CHF":["0.9438","1","0","CHF",[0,0,0,0,0,0,0,1]],
-"CNY":["7.7179","1","0","CNY",[0,0,0,0,0,0,0,1]],
+"CHF":["0.9729","1","0","CHF",[0,0,0,0,0,0,0,1]],
+"CNY":["7.8245","1","0","CNY",[0,0,0,0,0,0,0,1]],
 "CY":["0.764554857984","1","0","0",[3,0,0,0,0,0,0,0]],
 "Calorie":["4186.8","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Canadian dollar":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
@@ -1157,7 +1261,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Fahrenheit":["5","9","459","0",[0,0,0,0,1,0,0,0]],
 "G":["0.0001","1","0","siSymbol",[-2,-2,-2,-1,0,0,0,0]],
 "GB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
-"GBP":["0.85690","1","0","GBP",[0,0,0,0,0,0,0,1]],
+"GBP":["0.85795","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "Gal":["0.01","1","0","siSymbol",[1,0,-2,0,0,0,0,0]],
 "Gi":["10","12.5663706143592","0","siWord",[0,0,0,0,1,0,1,0]],
 "GiB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1165,23 +1269,23 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Gy":["1","1","0","siSymbol",[2,0,-2,0,0,0,0,0]],
 "H":["1","1","0","siSymbol",[2,1,-2,-2,0,0,0,0]],
 "HK$":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
-"HKD":["8.4190","1","0","HKD",[0,0,0,0,0,0,0,1]],
+"HKD":["8.4645","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "HP":["745.69987158227","1","0","0",[2,1,-3,0,0,0,0,0]],
 "Hong Kong dollar":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "Hz":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
-"ILS":["3.9982","1","0","ILS",[0,0,0,0,0,0,0,1]],
-"INR":["89.8875","1","0","INR",[0,0,0,0,0,0,0,1]],
+"ILS":["3.9265","1","0","ILS",[0,0,0,0,0,0,0,1]],
+"INR":["90.4090","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Indian Rupee":["1","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Israeli New Shekel":["1","1","0","ILS",[0,0,0,0,0,0,0,1]],
 "J":["1","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
-"JPY":["155.53","1","0","JPY",[0,0,0,0,0,0,0,1]],
+"JPY":["163.74","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Japanese Yen":["1","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Joule":["1","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Julian year":["31557600","1","0","0",[0,0,1,0,0,0,0,0]],
 "Jy":["1e-26","1","0","siSymbol",[0,1,-2,0,0,0,0,0]],
 "K":["1","1","0","0",[0,0,0,0,1,0,0,0]],
 "KiB":["8192","1","0","0",[0,0,0,0,0,1,0,0]],
-"KRW":["1412.83","1","0","KRW",[0,0,0,0,0,0,0,1]],
+"KRW":["1453.62","1","0","KRW",[0,0,0,0,0,0,0,1]],
 "L":["0.001","1","0","siSymbol",[3,0,0,0,0,0,0,0]],
 "Lego stud":["0.008","1","0","siSymbol",[1,0,0,0,0,0,0,0]],
 "MB":["8388608","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1192,7 +1296,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "MMscf":["28316.846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "MMscfd":["0.32774128","1","0","0",[3,0,0,0,0,0,0,0]],
 "MT":["1000","1","0","0",[0,1,0,0,0,0,0,0]],
-"MXN":["18.7923","1","0","MXN",[0,0,0,0,0,0,0,1]],
+"MXN":["18.1372","1","0","MXN",[0,0,0,0,0,0,0,1]],
 "Mach":["331.6","1","0","0",[1,0,-1,0,0,0,0,0]],
 "Mbbl":["158.987294928","1","0","0",[3,0,0,0,0,0,0,0]],
 "Mexican Peso":["1","1","0","MXN",[0,0,0,0,0,0,0,1]],
@@ -1222,7 +1326,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "TeX point":["0.0003515","1","0","0",[1,0,0,0,0,0,0,0]],
 "TiB":["8796093022208","1","0","0",[0,0,0,0,0,1,0,0]],
 "US$":["1","1","0","USD",[0,0,0,0,0,0,0,1]],
-"USD":["1.0777","1","0","USD",[0,0,0,0,0,0,0,1]],
+"USD":["1.0823","1","0","USD",[0,0,0,0,0,0,0,1]],
 "V":["1","1","0","siSymbol",[2,1,-3,-1,0,0,0,0]],
 "VA":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
 "W":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
@@ -1315,7 +1419,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "dscf":["0.028316846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "dyn":["0.00001","1","0","0",[1,1,-2,0,0,0,0,0]],
 "dyne":["0.00001","1","0","0",[1,1,-2,0,0,0,0,0]],
-"eV":["1.602176462e-19","1","0","0",[2,1,-2,0,0,0,0,0]],
+"eV":["1.602176462e-19","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
 "electric horsepower":["746","1","0","0",[2,1,-3,0,0,0,0,0]],
 "electrical horsepower":["746","1","0","0",[2,1,-3,0,0,0,0,0]],
 "electron volt":["1.602176462e-19","1","0","0",[2,1,-2,0,0,0,0,0]],
@@ -2862,7 +2966,7 @@ const identifyRange = (df, args) => {
 
   let iStart;
   let iEnd;
-  const rowList = [];
+  let rowList = [];
   let columnList = [];
 
   // Find what must be returned. I.e. populate rowList and columnList
@@ -2936,11 +3040,16 @@ const identifyRange = (df, args) => {
     if (df.dtype === dt.DATAFRAME) { df.value.usedRows.add(iStart); }
     columnList.push(df.value.columnMap[args[0].value]);
   } else {
-    // Default for args is a list of column names
+    // Default for args is a list of (row|column) names
     iStart = 0;
     iEnd = args.length;
-    for (const arg of args) {
-      columnList.push(df.value.columnMap[arg.value]);
+    if (df.value.rowMap && df.value.rowMap[args[iEnd - 1].value]) {
+      // A row list
+      rowList = args.map(arg => arg.value);
+      columnList = columnListFromRange(0, df.value.data.length - 1); // All the columns.
+    } else {
+      // A column list
+      columnList = args.map(arg => df.value.columnMap[arg.value]);
     }
   }
   return [rowList, columnList, iStart, iEnd]
@@ -3047,7 +3156,7 @@ const hasUnitRow = lines => {
   return false
 };
 
-const dataFrameFromTSV = str => {
+const dataFrameFromTSV = (str, vars) => {
   // Load a TSV string into a data frame.
   // Data frames are loaded column-wise. The subordinate data structures are:
   let data = [];   // where the main data lives, not including column names or units.
@@ -3060,6 +3169,28 @@ const dataFrameFromTSV = str => {
   const usedRows = new Set();
 
   if (str.charAt(0) === "`") { str = str.slice(1); }
+
+  if (vars) {
+    // Substitute values in for string interpolation, ${…}
+    const matches = arrayOfRegExMatches(interpolateRegEx, str);
+    for (let i = matches.length - 1; i >= 0; i--) {
+      const mch = matches[i];
+      const varName = mch.value.slice(2, -1);
+      let value = "";
+      if (varName === "undefined") {
+        value = "";
+      } else if (varName === "j" && !vars.j) {
+        value = "j";
+      } else {
+        const cellAttrs = vars[varName];
+        if (!cellAttrs) { return errorOprnd("V_NAME", varName) }
+        const oprnd = fromAssignment(cellAttrs, false);
+        if (oprnd.dtype === dt.ERROR) { return oprnd }
+        value = Rnl.isRational(oprnd.value) ? String(Rnl.toNumber(oprnd.value)) : oprnd.value;
+      }
+      str = str.slice(0, mch.index) + value + str.slice(mch.index + mch.length);
+    }
+  }
 
   // It's tab-separated values, so we can use splits to load in the data.
   const lines = str.split(/\r?\n/g);
@@ -3382,7 +3513,6 @@ const quickDisplay = str => {
 };
 
 // The next 40 lines contain helper functions for display().
-const isValidIdentifier$2 = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
 const accentRegEx$1 = /^([^\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]+)([\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1])(.+)?/;
 const subscriptRegEx = /([^_]+)(_[^']+)?(.*)?/;
 const accentFromChar$1 = Object.freeze({
@@ -3406,7 +3536,7 @@ const accentFromChar$1 = Object.freeze({
 const formatColumnName = str => {
   // We can't call parse(str) because that would be a circular dependency.
   // So this module needs its own function to format dataframe column names.
-  if (!isValidIdentifier$2.test(str)) {
+  if (!isValidIdentifier$1.test(str)) {
     return "\\text{" + addTextEscapes(str) + "}"
   } else {
     // Format it like a Hurmet identifier.
@@ -3544,7 +3674,7 @@ const display$1 = (df, formatSpec = "h3", decimalFormat = "1,000,000.", omitHead
         ? format(datum, formatSpec, decimalFormat) + "&"
         : Cpx.isComplex(datum)
         ? Cpx.display(datum, formatSpec, decimalFormat)[0] + "&"
-        : "\\text{" + datum + "} &";
+        : "\\text{" + addTextEscapes(datum) + "} &";
       } else {
         str += mixedFractionRegEx.test(datum)
           ? format(Rnl.fromString(datum), formatSpec, decimalFormat) + "&"
@@ -4093,6 +4223,7 @@ const mathOperators = new Set([
 
 const colors = new Set([
   "blue",
+  "firebrick",
   "gray",
   "green",
   "orange",
@@ -4906,7 +5037,7 @@ const parse$1 = (
           if (delim.delimType === dDICTIONARY && delim.open.length > 3) {
             tex = tex.slice(0, op.pos) + delim.open + tex.slice(op.pos + 2);
             op.closeDelim = delim.close;
-          } else if (delim.delimType === dMATRIX) {
+          } else if (delim.delimType === dMATRIX || delim.delimType === dACCESSOR) {
             const inc = tex.slice(op.pos, op.pos + 1) === "\\" ? 2 : 1;
             tex = tex.slice(0, op.pos) + delim.open + tex.slice(op.pos + inc);
             op.closeDelim = delim.close;
@@ -5168,6 +5299,11 @@ const parse$1 = (
         tex += token.output;
         if (isCalc) {
           rpn += token.input;
+          // Identify string interpolation
+          const matches = arrayOfRegExMatches(interpolateRegEx, token.input);
+          for (const match of matches) {
+            dependencies.push(match.value.slice(2, -1));
+          }
         }
         okToAppend = true;
         break
@@ -5215,6 +5351,10 @@ const parse$1 = (
       }
 
       case tt.UNIT: {  //  e.g.  'meters'
+        if (delims.length > 1 && delims[delims.length - 1].delimType === dMATRIX) {
+          token.output = "\\text{Error. Write a unit name outside a matrix, not inside. "
+              + "Apply one unit to the entire matrix.}";
+        }
         popTexTokens(14, true);
         texStack.push({ prec: 14, pos: op.pos, ttype: tt.UNIT, closeDelim: "" });
         if (isCalc) {
@@ -5668,9 +5808,10 @@ const parse$1 = (
         popTexTokens(1, okToAppend);
         posOfPrevRun = tex.length;
         const delim = delims[delims.length - 1];
-        if (delim.delimType === dPAREN && ([";", "\t"].includes(token.input) ||
-            token.input === "," && isFollowedBySpaceOrNewline)) {
-          delim.delimType = dMATRIX;
+        if ((delim.delimType === dPAREN || delim.delimType === dACCESSOR)
+            && ([";", "\t"].includes(token.input)
+            || token.input === "," && isFollowedBySpaceOrNewline)) {
+          delim.delimType = delim.delimType === dPAREN ? dMATRIX : dACCESSOR;
           const ch = delim.name === "["
             ? "b"
             : delim.name === "("
@@ -6108,6 +6249,9 @@ function insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat) {
       };
       if ((dtype & dt.RATIONAL) && isSingleRow) {
         result.resultdisplay = parse$1(format(value));
+        if (result.unit && result.unit.name) {
+          result.resultdisplay += " " + parse$1(`'${result.unit.name}'`);
+        }
       } else if (dtype & dt.RATIONAL) {
         result.resultdisplay = Matrix.display({ value, dtype }, formatSpec, decimalFormat)
             + parse$1(`'${attrs.value.units[i]}'`);
@@ -6274,106 +6418,6 @@ const map = Object.freeze({
   convertToBaseUnits,
   range
 });
-
-/*
- * Hurmet operands often have numeric values. Sometimes they are the numbers originally
- * input by the writer, henceforward known as "plain". Sometimes we work instead with
- * values that have been converted to SI base units. It turns out that operands inside
- * evalRpn() can often get by with less information than in the original cell assignment attrs.
- * Some details for various data types:
- *
- * RATIONAL operand: { value: plain, unit: allZeros, dtype: RATIONAL }
- * RATIONAL cell attrs: ditto.
- * Note: "allZeros" is the array of unit-checking exponents for a number: [0,0,0,0,0,0,0,0,0]
- *
- * RATIONAL + QUANTITY unit-unaware operand: same as RATIONAL.
- * RATIONAL + QUANTITY unit-AWARE oprnd: {
- *   value: inBaseUnits, unit: expos, dtype: RATIONAL + QUANTITY
- * }
- * RATIONAL + QUANTITY cell attrs include both of the above and also a `resultdisplay` string.
- *
- * RATIONAL + ROWVECTOR is the same as RATIONAL except the value is an array of plains.
- * RATIONAL + ROWVECTOR + QUANTITY is the same as RATIONAL + QUANTITY except values are arrays.
- * COLUMNVECTOR is the same as ROWVECTOR exept that they are treated differently by operators.
- * MATRIX indicates that values are each an array of row vectors.
- * *
- * A MAP's values are all the same data type and all have the same unit of measure.
- * MAP oprnd: {name, value: see below, unit: {name, factor, gauge, expos}, dtype: dMAP + ...}
- *    where: value is: {name1: value, name2: value} or
- *    where value is: {plain: {name1: value, name2: value},
- *                     inBaseUnits: {name1: value, name2: value},
- *                     etc}
- * A `resultdisplay` string is always in a MAP's cell attrs and sometimes in an operand.
- *
- * ERROR operand: { value: error message, unit: undefined, dtype: ERROR }
- *
- * When this module creates Hurmet operands, it does not make defensive copies of
- * cell attributes. The deep data is referenced. So Hurmet evaluate.js must copy whenever
- * operators or functions might change a cell attribute.
- *
- */
-
-const fromAssignment = (cellAttrs, unitAware) => {
-  // Get the value that was assigned to a variable. Load it into an operand.
-  if (cellAttrs.value === null) {
-    // Return an error message.
-    const insert = (cellAttrs.name) ? cellAttrs.name : "?";
-    return errorOprnd("NULL", insert)
-  }
-
-  const oprnd = Object.create(null);
-  oprnd.dtype = cellAttrs.dtype;
-  oprnd.name = cellAttrs.name;
-
-  // Get the unit data.
-  const dtype = cellAttrs.dtype;
-  if (dtype === dt.STRING || dtype === dt.BOOLEAN || dtype === dt.DRAWING ||
-      dtype === dt.MODULE || dtype === dt.NULL) {
-    oprnd.unit = null;
-  } else if (cellAttrs.unit) {
-    oprnd.unit = clone(cellAttrs.unit);
-  } else {
-    oprnd.unit = null;
-  }
-
-  // Get the value.
-  if (cellAttrs.dtype & dt.QUANTITY) {
-    // Here we discard some of the cellAttrs information. In a unit-aware calculation,
-    // number, matrix, and map operands contain only the value.inBaseUnits.
-    if (cellAttrs.dtype & dt.MAP) {
-      oprnd.value = clone(cellAttrs.value);
-      oprnd.value.data = unitAware
-        ? oprnd.value.data.inBaseUnits
-        : oprnd.value.data.plain;
-    } else {
-      oprnd.value = Object.freeze(unitAware
-        ? clone(cellAttrs.value.inBaseUnits)
-        : clone(cellAttrs.value.plain)
-      );
-    }
-    oprnd.dtype = cellAttrs.dtype - dt.QUANTITY;
-
-  } else if (cellAttrs.dtype === dt.STRING) {
-    const str = cellAttrs.value;
-    const ch = str.charAt(0);
-    const chEnd = str.charAt(str.length - 1);
-    oprnd.value = ch === '"' && chEnd === '"' ? str.slice(1, -1).trim() : str.trim();
-
-  } else if (cellAttrs.dtype === dt.DATAFRAME) {
-    // For data frames, Hurmet employs copy-on-write tactics.
-    // So at this point, we can pass a reference to the value
-    oprnd.value = cellAttrs.value;
-
-    // Note the only operations on data frames are: (1) access, and (2) concatenate.
-    // That's where the copy-on-write takes place.
-
-  } else {
-    // For all other data types, we employ copy-on-read. So we return a deep copy from here.
-    oprnd.value = clone(cellAttrs.value);
-  }
-
-  return Object.freeze(oprnd)
-};
 
 function propertyFromDotAccessor(parent, index, unitAware) {
   const property = Object.create(null);
@@ -6667,17 +6711,31 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
     // Write the TeX for this node
     if (stmt.resulttemplate.indexOf("@") > -1) {
       stmt.tex = stmt.resultdisplay;
+      stmt.displaySelector = stmt.altresulttemplate.indexOf("@@") > -1 ? "@@" : "@";
+      if (!testRegEx$1.test(stmt.entry)) {
+        const pos = stmt.entry.lastIndexOf(stmt.displaySelector);
+        stmt.md = stmt.entry.slice(0, pos) + `〔${altResultDisplay}〕`
+            + stmt.entry.slice(pos + stmt.displaySelector.length);
+      }
       stmt.alt = stmt.altresulttemplate.replace(/@@?/, altResultDisplay);
     } else if (stmt.resulttemplate.indexOf("?") > -1) {
       let pos = stmt.tex.lastIndexOf("?");
       stmt.tex = stmt.tex.slice(0, pos).replace(/\? *$/, "") + resultDisplay + stmt.tex.slice(pos + 1);
-      pos = stmt.alt.lastIndexOf("?");
-      stmt.alt = stmt.alt.slice(0, pos).replace(/\? *$/, "") + altResultDisplay + stmt.alt.slice(pos + 1);
+      stmt.displaySelector = stmt.altresulttemplate.indexOf("??") > -1 ? "??" : "?";
+      pos = stmt.alt.lastIndexOf(stmt.displaySelector);
+      stmt.md = stmt.alt.slice(0, pos) + `〔${altResultDisplay}〕`
+          + stmt.alt.slice(pos + stmt.displaySelector.length);
+      stmt.alt = stmt.alt.slice(0, pos) + altResultDisplay
+          + stmt.alt.slice(pos + stmt.displaySelector.length);
     } else if (stmt.resulttemplate.indexOf("%") > -1) {
       let pos = stmt.tex.lastIndexOf("%");
       stmt.tex = stmt.tex.slice(0, pos).replace(/% *$/, "") + resultDisplay + stmt.tex.slice(pos + 1);
-      pos = stmt.alt.lastIndexOf("%");
-      stmt.alt = stmt.alt.slice(0, pos).replace(/% *$/, "") + altResultDisplay + stmt.alt.slice(pos + 1);
+      stmt.displaySelector = stmt.altresulttemplate.indexOf("%%") > -1 ? "%%" : "%";
+      pos = stmt.alt.lastIndexOf(stmt.displaySelector);
+      stmt.md = stmt.alt.slice(0, pos) + `〔${altResultDisplay}〕`
+          + stmt.alt.slice(pos + stmt.displaySelector.length);
+      stmt.alt = stmt.alt.slice(0, pos) + altResultDisplay
+          + stmt.alt.slice(pos + stmt.displaySelector.length);
     }
   }
   return stmt
@@ -9059,7 +9117,7 @@ const textRange = (str, index) => {
 };
 
 /**
- * md2ast() returns an AST that matches the memory structure  of a Hurmet.app document.
+ * md2ast() returns an AST that matches the memory structure  of a Hurmet.org document.
  * Elsewhere, Hurmet uses the AST to create either a live Hurmet doc or a static HTML doc.
  *
  * ## Restrictions
@@ -9091,17 +9149,17 @@ const textRange = (str, index) => {
  *        A. →  A. B. C.  etc. (future)
  *        a) →  (a) (b) (c)  etc. (future)
  * 12. Alerts per GFM
- *     > [!note] or [!tip] or [!important] or [!warning]
+ *     > [!note] or [!tip] or [!important] or [!warning] or [!epigraph]
  *     > Content of note
  * 13. Fenced divs, similar to Pandoc.
- *     ::: (centered|comment|indented|boxed|header)
+ *     ::: (centered|right_justified|comment|indented|boxed|header)
  *     Block elements
  *     :::
  *     Nested divs are distinguished by number of colons. Minimum three.
  * 14. Table of Contents
  *     {.toc start=N end=N}
  * 15. Definition lists, per Pandoc.  (future)
- * 16. [^1] is a reference to a footnote. (future)
+ * 16. [^1] is a reference to a footnote.
  *     [^1]: The body of the footnote is deferred, similar to reference links.
  * 17. [#1] is a reference to a citation. (future)
  *     [#1]: The body of the citation is deferred, similar to reference links.
@@ -9552,6 +9610,10 @@ const linkIndex = marks => {
   }
 };
 
+// Pattern to find Hurmet calculation results.
+// This will be replaced in the entry with the display selector.
+const resultRegEx = /〔[^〕]*〕/;
+
 const parseRef = function(capture, state, refNode) {
   // Handle implicit refs: [title][<ref>], ![alt or caption][<ref>]
   let ref = capture[2] ? capture[2] : capture[1];
@@ -9673,8 +9735,8 @@ rules.set("fence", {
 });
 rules.set("alert", {
   isLeaf: false,
-  match: blockRegex(/^(?: *> \[!(NOTE|TIP|IMPORTANT|WARNING)\])((?:\n *>(?! *\[!)[^\n]*)+)(?:\n *)+\n/),
-  // Alert for note |tip | important | warning
+  match: blockRegex(/^(?: *> \[!(NOTE|TIP|IMPORTANT|WARNING|EPIGRAPH)\])((?:\n *>(?! *\[!)[^\n]*)+)(?:\n *)+\n/),
+  // Alert for note |tip | important | warning |epigraph
   parse: function(capture, state) {
     const cap = capture[2].replace(/\n *> ?/gm, "\n").replace(/^\n/, "");
     const content = parse(cap, state);
@@ -9720,8 +9782,8 @@ rules.set("dd", {  // description details
 });
 rules.set("special_div", {
   isLeaf: false,
-  match: blockRegex(/^(:{3,}) ?(indented|comment|centered|boxed|header|hidden) *\n([\s\S]+?)\n+\1 *(?:\n{2,}|\s*$)/),
-  // indented or centered or boxed or comment div, or <header>
+  match: blockRegex(/^(:{3,}) ?(indented|comment|centered|right_justified|boxed|header|hidden) *\n([\s\S]+?)\n+\1 *(?:\n{2,}|\s*$)/),
+  // indented or centered or right-justified or boxed or comment div, or <header>
   parse: function(capture, state) {
     const content = parse(capture[3], state);
     return { type: capture[2], content };
@@ -9843,6 +9905,14 @@ rules.set("reflink", {
     return textNode
   }
 });
+rules.set("footnote", {
+  isLeaf: true,
+  match: inlineRegex(/^\[\^(\d+)\]/),
+  parse: function(capture, state) {
+    const index = Number(capture[1]) - 1;
+    return { type: "footnote", content: parseInline(state.footnotes[index], state) }
+  }
+});
 rules.set("refimage", {
   isLeaf: true,
   match: inlineRegex(/^!\[((?:(?:\\[\s\S]|[^\\])+?)?)\]\[([^\]]*)\]/),
@@ -9886,16 +9956,22 @@ rules.set("tex", {
 });
 rules.set("calculation", {
   isLeaf: true,
-  match: anyScopeRegex(/^(?:¢(`+)([\s\S]*?[^`])\1(?!`)|¢¢\n?((?:\\[\s\S]|[^\\])+?)\n?¢¢)/),
+  match: anyScopeRegex(/^(?:¢(\?\?|\?|%%|%|@@|@)?(`+)([\s\S]*?[^`])\2(?!`)|¢¢(\?\?|\?|%%|%|@@|@)?\n?((?:\\[\s\S]|[^\\])+?)\n?¢¢)/),
   parse: function(capture, state) {
-    if (capture[2]) {
-      let entry = capture[2].trim();
+    if (capture[3]) {
+      let entry = capture[3].trim();
+      if (capture[1]) {
+        entry = entry.replace(resultRegEx, capture[1]);
+      }
       if (!/^(?:function|draw\()/.test(entry) && entry.indexOf("``") === -1) {
         entry = entry.replace(/\n/g, " ");
       }
       return { attrs: { entry } }
     } else {
-      const entry = capture[3].trim();
+      let entry = capture[5].trim();
+      if (capture[4]) {
+        entry = entry.replace(resultRegEx, capture[4]);
+      }
       return { attrs: { entry, displayMode: true } }
     }
   }
@@ -10179,8 +10255,16 @@ const md2ast = (md, inHtml = false) => {
   }
 
   // Second, get all the link reference definitions
-  const state = { inline: false, _defs: {}, prevCapture: "", remainder: "", inHtml };
+  const state = {
+    inline: false,
+    _defs: {},
+    footnotes: [],
+    prevCapture: "",
+    remainder: "",
+    inHtml
+  };
   const defRegEx = /\n *\[([^\]\n]+)\]: *(?:¢(`+)([\s\S]*?[^`])\2(?!`)|<?([^\n>]*)>? *(?:\n\{([^\n}]*)\})?)(?=\n)/gm;
+  const footnoteDefRegEx = /\n *\[\^\d+\]: *([^\n]*)(?=\n)/gm;
   let capture;
   while ((capture = defRegEx.exec(md)) !== null) {
     const def = capture[1].replace(/\s+/g, " ");
@@ -10197,6 +10281,12 @@ const md2ast = (md, inHtml = false) => {
       if (matchID)    { attrs.id = matchID[1]; }
     }
     state._defs[def] = { target, attrs };
+  }
+
+  // Next, get all the footnote definitions
+  capture = null;
+  while ((capture = footnoteDefRegEx.exec(md)) !== null) {
+    state.footnotes.push(capture[1].trim());
   }
 
   // Find out if there are any snapshots.
@@ -10326,6 +10416,21 @@ const markerDot = (center, attrs, s, f) => { // coordinates in units, radius in 
   return node
 };
 
+const rationals2numbers = array => {
+  const newArray = [];
+  for (let i = 0; i < array.length; i++) {
+    const element = array[i];
+    if (element.dtype) {
+      newArray[i] = rationals2numbers(element.value);
+    } else if (Rnl.isRational(element)) {
+      newArray[i] = Rnl.toNumber(element);
+    } else {
+      newArray[i] = rationals2numbers(element);
+    }
+  }
+  return newArray
+};
+
 const arrowhead = (svg, p, q) => { // draw arrowhead at q (in units)
   const attrs = svg.temp;
   const v = [p[0] * attrs.xunitlength + attrs.origin[0], attrs.height -
@@ -10338,10 +10443,12 @@ const arrowhead = (svg, p, q) => { // draw arrowhead at q (in units)
     u = [u[0] / d, u[1] / d];
     const z = attrs.marker === "markerdot" ? 3 : attrs.isDim ? 0 : 1;
     const up = [-u[1], u[0]];
+    const L = d > 12 ? 12.5 : 7.8125;
+    const S = d > 12 ? 3 : 1.875;
     const node = { tag: "path", attrs: {} };
-    node.attrs.d = "M " + (w[0] - 12.5 * u[0] - 3 * up[0]) + "," +
-      (w[1] - 12.5 * u[1] - 3 * up[1]) + " L " + (w[0] - z * u[0]) + "," + (w[1] - z * u[1]) +
-      " L " + (w[0] - 12.5 * u[0] + 3 * up[0]) + "," + (w[1] - 12.5 * u[1] + 3 * up[1]) + " z";
+    node.attrs.d = "M " + (w[0] - L * u[0] - S * up[0]) + "," +
+      (w[1] - L * u[1] - S * up[1]) + " L " + (w[0] - z * u[0]) + "," + (w[1] - z * u[1]) +
+      " L " + (w[0] - L * u[0] + S * up[0]) + "," + (w[1] - L * u[1] + S * up[1]) + " z";
     if (attrs.isDim) {
       node.attrs.stroke = "none";
     } else {
@@ -10413,6 +10520,11 @@ const textLocal = (svg, p, str, pos) => {
   }
   svg.children.push(textNode);
   return svg
+};
+
+const pointText = (point, attrs) => {
+  return (point[0] * attrs.xunitlength + attrs.origin[0]).toFixed(4) + ","
+    + (attrs.height - point[1] * attrs.yunitlength - attrs.origin[1]).toFixed(4)
 };
 
 const functions$1 = {
@@ -10613,40 +10725,43 @@ const functions$1 = {
     return { value: svg, unit: null, dtype: dt.DRAWING }
   },
 
-  path(svgOprnd, plistOprnd, c) {
+  path(svgOprnd, args) {
     const svg = svgOprnd.value;
     const attrs = svg.temp;
+    if (args[0].dtype !== dt.STRING) {
+      args = rationals2numbers(args);
+    }
     const node = { tag: "path", attrs: {} };
     // Get the "d" attribute of a path
     let str = "";
-    let plist;
-    if (typeof plistOprnd === "string") {
-      str = plistOprnd.value;
-    } else {
-      plist = plistOprnd.value.map(row => row.map(e => Rnl.toNumber(e)));
-      if (c == null) {
-        c = new Array(plist.length).fill("L");
-        c[0] = "M";
-      } else if (c.dtype === dt.STRING) {
-        c = new Array(plist.length).fill(c.value);
-        c[0] = "M";
-      } else if (typeof c === "string") {
-        c = new Array(plist.length).fill(c);
-        c[0] = "M";
-      } else if ((c.dtype & dt.ROWVECTOR) || (c.dtype & dt.COLUMNVECTOR)) {
-        c = c.value.map(e => {
-          if (Rnl.isZero(e)) { return "L" }
-          const radius = Rnl.toNumber(e) * attrs.xunitlength;
-          return `A${radius} ${radius} 0 0 0 `
-        });
-        c.unshift("M");
-      } else {
-        c = new Array(plist.length).fill("L");
-        c[0] = "M";
-      }
-      for (let i = 0; i < plist.length; i++) {
-        str += c[i] + (plist[i][0] * attrs.xunitlength + attrs.origin[0]) + ","
-            + (attrs.height - plist[i][1] * attrs.yunitlength - attrs.origin[1]) + " ";
+    for (let i = 0; i < args.length; i++) {
+      const el = args[i];
+      if (i === 0) {
+        if (el.dtype && el.dtype === dt.STRING) {
+          str = args[i].value;
+        } else {
+          str += "M" + pointText(el, attrs);
+        }
+      } else if (typeof el[0] === "number") {
+        if (el.length === 2) {
+          str += " L" + pointText(el, attrs);
+        } else if (el.length === 3) {
+          str += " M" + pointText(el, attrs);
+        } else if (el.length === 5) {
+          const r = String(el[2] * attrs.xunitlength);
+          const sweep = String(el[3]);
+          str += ` A${r},${r} 0 0 ${sweep} ${pointText(el, attrs)}`;
+        }
+      } else if (el[0].length === 2) {
+        for (let j = 0; j < el.length; j++) {
+          str +=  " L" + pointText(el[j], attrs);
+        }
+      } else if (el[0].length === 5) {
+        for (let j = 0; j < el.length; j++) {
+          const r = String(el[j][2] * attrs.xunitlength);
+          const sweep = String(el[j][3]);
+          str += ` A${r},${r} 0 0 ${sweep} ${pointText(el[j], attrs)}`;
+        }
       }
     }
     node.attrs.d = str;
@@ -10656,21 +10771,42 @@ const functions$1 = {
     }
     node.attrs.stroke = attrs.stroke;
     node.attrs.fill = attrs.fill;
-    if (attrs.marker === "dot" || attrs.marker === "arrowdot") {
-      for (let i = 0; i < plist.length; i++) {
-        if (c !== "C" && c !== "T" || i !== 1 && i !== 2) {
-          svg.children.push(markerDot(plist[i], attrs, attrs.markerstroke, attrs.markerfill));
+    if (attrs.marker === "dot") {
+      for (let i = 0; i < args.length; i++) {
+        const el = args[i];
+        if (typeof el[0] === "number") {
+          svg.children.push(markerDot(el, attrs, attrs.markerstroke, attrs.markerfill));
+        } else {
+          for (const row of el) {
+            svg.children.push(markerDot(row, attrs, attrs.markerstroke, attrs.markerfill));
+          }
         }
       }
-    } else if (attrs.marker === "arrow") {
-      arrowhead(svg, plist[plist.length - 2], plist[plist.length - 1]);
+    } else if (attrs.marker === "arrow" || attrs.marker === "arrowdot") {
+      const lastEl = args[args.length - 1];
+      if (typeof lastEl[0] !== "number") {
+        const end = lastEl[lastEl.length - 1];
+        arrowhead(svg, lastEl[lastEl.length - 2], end);
+        if (attrs.marker === "arrowdot") {
+          svg.children.push(markerDot(end, attrs, attrs.markerstroke, attrs.markerfill));
+        }
+      } else if (typeof lastEl[0] === "number") {
+        const prevEl = args[args.length - 2];
+        const end = lastEl;
+        let start;
+        if (typeof prevEl[0] === "number") {
+          start = prevEl;
+        } else {
+          start = prevEl[prevEl.length - 1];
+        }
+        arrowhead(svg, start, end);
+        if (attrs.marker === "arrowdot") {
+          svg.children.push(markerDot(end, attrs, attrs.markerstroke, attrs.markerfill));
+        }
+      }
     }
     svg.children.push(node);
     return { value: svg, unit: null, dtype: dt.DRAWING }
-  },
-
-  curve(svgOprnd, plist) {
-    return functions$1.path(svgOprnd, plist, "T")
   },
 
   rect(svgOprnd, m, r) { // opposite corners in units, rounded by radius
@@ -10822,11 +10958,17 @@ const functions$1 = {
     const marker = svgOprnd.value.temp.marker;
     svgOprnd.value.temp.marker = "arrow";
     svgOprnd.value.temp.isDim = true;
-    const plistCopy = clone(plistOprnd);
+    const startPoint = {
+      value: clone(plistOprnd.value[plistOprnd.value.length - 1]),
+      unit: null,
+      dtype: dt.RATIONAL + dt.ROWVECTOR
+    };
+    const plistCopy = clone(plistOprnd); // Copy to an un-frozen object.
+    plistCopy.value.pop();
     plistCopy.value.reverse();
-    svgOprnd = this.path(svgOprnd, plistCopy, "L");
-    const p = plistCopy.value[0].map(e => Rnl.toNumber(e));
-    const q = plistCopy.value[1].map(e => Rnl.toNumber(e));
+    svgOprnd = this.path(svgOprnd, [startPoint, plistCopy]);
+    const p = rationals2numbers(startPoint.value);
+    const q = rationals2numbers(plistCopy.value[0]);
     let pos = "right";
     if (Math.abs(p[0] - q[0]) >= Math.abs(p[1] - q[1])) {
       pos = p[0] >= q[0] ? "right" : "left";
@@ -13937,7 +14079,7 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
       stack.push(Object.freeze({ value: str, unit: null, dtype: dt.STRING }));
 
     } else if (/^``/.test(tkn)) {
-      stack.push(DataFrame.dataFrameFromTSV(tablessTrim(tkn.slice(2, -2))));
+      stack.push(DataFrame.dataFrameFromTSV(tablessTrim(tkn.slice(2, -2)), vars));
 
     } else if (ch === '`') {
       // A rich text literal
@@ -14868,6 +15010,8 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
             if (functionName === "plot") {
               args.splice(1, 0, decimalFormat);
               oprnd = plot(...args);
+            } else if (functionName === "path") {
+              oprnd = draw.functions[functionName](args[0], args.slice(1));
             } else {
               oprnd = draw.functions[functionName](...args);
             }
@@ -15199,8 +15343,9 @@ const plot = (svg, decimalFormat, fun, numPoints, xMin, xMax) => {
       pathValue = arg.value.map((e, i) => [e, funResult.value[i]]);
     }
   } else ;
-  const pth = { value: pathValue, unit: null, dtype: dt.MATRIX + dt.RATIONAL };
-  return draw.functions.path(svg, pth, "L")
+  const point = { value: pathValue[0], unit: null, dtype: dt.ROWVECTOR + dt.RATIONAL };
+  const pth = { value: pathValue.slice(1), unit: null, dtype: dt.MATRIX + dt.RATIONAL };
+  return draw.functions.path(svg, [point, pth])
 };
 
 const elementFromIterable = (iterable, index, step) => {
@@ -15811,7 +15956,7 @@ const valueFromLiteral = (str, name, decimalFormat) => {
   }
 };
 
-const isValidIdentifier$1 = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
+const isValidIdentifier = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
 const keywordRegEx = /^(if|elseif|else|return|throw|while|for|break|print|end)(\u2002|\b)/;
 const drawCommandRegEx = /^(title|frame|view|axes|grid|stroke|strokewidth|strokedasharray|fill|fontsize|fontweight|fontstyle|fontfamily|marker|line|path|plot|curve|rect|circle|ellipse|arc|text|dot|leader|dimension)\b/;
 const leadingSpaceRegEx = /^[\t ]+/;
@@ -15829,12 +15974,12 @@ const testForStatement = str => {
   const pos = str.indexOf("=");
   if (pos === -1) { return false }
   const leadStr = str.slice(0, pos).replace(leadingSpaceRegEx, "").trim();
-  if (isValidIdentifier$1.test(leadStr)) { return true }
+  if (isValidIdentifier.test(leadStr)) { return true }
   if (leadStr.indexOf(",") === -1) { return false }
   let result = true;
   const arry = leadStr.split(",");
   arry.forEach(e => {
-    if (!isValidIdentifier$1.test(e.trim())) { result = false; }
+    if (!isValidIdentifier.test(e.trim())) { result = false; }
   });
   return result
 };
@@ -16108,7 +16253,6 @@ const containsOperator = /[+\-×·*∘⌧/^%‰&√!¡|‖&=<>≟≠≤≥∈∉
 const mustDoCalculation = /^(``.+``|[$$£¥\u20A0-\u20CF]?(\?{1,2}|@{1,2}|%{1,2}|!{1,2})[^=!(?@%!{})]*)$/;
 const assignDataFrameRegEx = /^[^=]+=\s*``[\s\S]+`` *\n/;
 const currencyRegEx = /^[$£¥\u20A0-\u20CF]/;
-const isValidIdentifier = /^(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*$/;
 const matrixOfNames = /^[([](?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*[,;].+[)\]]$/;
 const isKeyWord = /^(π|true|false|root|if|else|elseif|and|or|otherwise|mod|for|while|break|return|throw)$/;
 const testRegEx = /^(@{1,2})test /;
@@ -16225,7 +16369,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
           const potentialIdentifiers = leadStr.split(/[,;]/);
           for (let i = 0; i < potentialIdentifiers.length; i++) {
             const candidate = potentialIdentifiers[i].trim();
-            if (isKeyWord.test(candidate) || !isValidIdentifier.test(candidate)) {
+            if (isKeyWord.test(candidate) || !isValidIdentifier$1.test(candidate)) {
               // leadStr is not a list of valid identifiers.
               // So this isn't a valid calculation statement. Let's finish early.
               return shortcut(str, decimalFormat)
@@ -16235,7 +16379,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
           name = potentialIdentifiers.map(e => e.trim());
 
         } else {
-          if (isValidIdentifier.test(leadStr) && !isKeyWord.test(leadStr)) {
+          if (isValidIdentifier$1.test(leadStr) && !isKeyWord.test(leadStr)) {
             name = leadStr;
           } else {
             // The "=" sign is inside an expression. There is no lead identifier.
@@ -16252,7 +16396,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
     } else if (isDataFrameAssigment) {
       name = mainStr;
       expression = trailStr;
-    } else  if (isValidIdentifier.test(mainStr) && !isKeyWord.test(mainStr)) {
+    } else  if (isValidIdentifier$1.test(mainStr) && !isKeyWord.test(mainStr)) {
       // No calculation display selector is present,
       // but there is one "=" and a valid idendtifier.
       // It may be an assignment statement.
@@ -16397,7 +16541,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
   return attrs
 };
 
-// This function is not used by the Hurmet.app page.
+// This function is not used by the hurmet.org page.
 // It is provided for use by unit tests and by the demo box in the manual page.
 // If you are looking for the app's main calculation module, try evaluate.js.
 const calculate = (
@@ -16429,7 +16573,7 @@ const calculate = (
  *
  *  To be more precise, this module is called:
  *    1. When an author submits one calculation cell, or
- *    2. When a new Hurmet.app instance has opened (from index.js), or
+ *    2. When a new Hurmet.org instance has opened (from index.js), or
  *    3. When a user has opened a new file         (from openFile.js), or
  *    4. When a recalculate-all has been called, possibly after a paste. (from menu.js)
  *
@@ -16700,7 +16844,7 @@ const proceedAfterFetch = (
             : evaluate(attrs, hurmetVars, decimalFormat);
         }
         if (attrs.name) { insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat); }
-        attrs.displayMode = nodeAttrs.displayMode;
+        //attrs.displayMode = nodeAttrs.displayMode
       } catch (err) {
         attrs.tex = "\\text{" + attrs.entry + " = " + err + "}";
       }
@@ -17186,6 +17330,7 @@ const nodes = {
     if (node.attrs.width) { attributes.width = node.attrs.width; }
     return htmlTag("img", "", attributes, false) + "\n";
   },
+  footnote(node)   { return htmlTag("footnote", "") },
   calculation(node) {
     if (node.attrs.dtype && node.attrs.dtype === dt.DRAWING) {
       const svg = writeSVG(node.attrs.resultdisplay);
@@ -17227,8 +17372,14 @@ const nodes = {
   centered(node) {
     return htmlTag("div", ast2html(node.content), { class: 'centered' }) + "\n"
   },
+  right_justified(node) {
+    return htmlTag("div", ast2html(node.content), { class: 'right_justified' }) + "\n"
+  },
   hidden(node) {
     return htmlTag("div", ast2html(node.content), { class: 'hidden' }) + "\n"
+  },
+  epigraph(node) {
+    return htmlTag("blockquote", ast2html(node.content), { class: 'epigraph' }) + "\n"
   },
   note(node) {
     return htmlTag("div", ast2html(node.content), { class: 'note' }) + "\n"
@@ -17300,6 +17451,21 @@ const getTOCitems = (ast, tocArray, start, end, node) => {
   }
 };
 
+const getFootnotes = (ast, footnotes) => {
+  if (Array.isArray(ast)) {
+    for (let i = 0; i < ast.length; i++) {
+      getFootnotes(ast[i], footnotes);
+    }
+  } else if (ast && ast.type === "footnote") {
+    footnotes.push(ast.content);
+  // eslint-disable-next-line no-prototype-builtins
+  } else if (ast.hasOwnProperty("content")) {
+    for (let j = 0; j < ast.content.length; j++) {
+      getFootnotes(ast.content[j], footnotes);
+    }
+  }
+};
+
 const ast2html = ast => {
   // Return HTML.
   let html = "";
@@ -17330,8 +17496,9 @@ const wrapWithHead = (html, title, attrs) => {
 </head>
 <body>
 <article class="ProseMirror ${fontClass}">
+<div class="ProseMirror-setup">
 `;
-  return head + html + "\n</article>\n</body>\n</html>"
+  return head + html + "\n</div></article>\n</body>\n</html>"
 };
 
 async function md2html(md, title = "", inHtml = false) {
@@ -17354,6 +17521,17 @@ async function md2html(md, title = "", inHtml = false) {
 
   // Write the HTML
   let html = ast2html(ast);
+
+  // Write the footnotes, if any.
+  const footnotes = [];
+  getFootnotes(ast, footnotes);
+  if (footnotes.length > 0) {
+    html += "\n<hr>\n<ol>\n";
+    for (const footnote of footnotes) {
+      html += "<li><p>" + ast2html(footnote) + "</p></li>\n";
+    }
+    html += "</ol>\n";
+  }
 
   if (title.length > 0) {
     html = wrapWithHead(html, title, ast.attrs);
@@ -17508,11 +17686,29 @@ const assert = function(value) {
 
 /**
  * Return the protocol of a URL, or "_relative" if the URL does not specify a
- * protocol (and thus is relative).
+ * protocol (and thus is relative), or `null` if URL has invalid protocol
+ * (so should be outright rejected).
  */
 const protocolFromUrl = function(url) {
-  const protocol = /^\s*([^\\/#]*?)(?::|&#0*58|&#x0*3a)/i.exec(url);
-  return protocol != null ? protocol[1] : "_relative";
+  // Check for possible leading protocol.
+  // https://url.spec.whatwg.org/#url-parsing strips leading whitespace
+  // (\x00) or C0 control (\x00-\x1F) characters.
+  // eslint-disable-next-line no-control-regex
+  const protocol = /^[\x00-\x20]*([^\\/#?]*?)(:|&#0*58|&#x0*3a|&colon)/i.exec(url);
+  if (!protocol) {
+    return "_relative";
+  }
+  // Reject weird colons
+  if (protocol[2] !== ":") {
+    return null;
+  }
+  // Reject invalid characters in scheme according to
+  // https://datatracker.ietf.org/doc/html/rfc3986#section-3.1
+  if (!/^[a-zA-Z][a-zA-Z0-9+\-.]*$/.test(protocol[1])) {
+    return null;
+  }
+  // Lowercase the protocol
+  return protocol[1].toLowerCase();
 };
 
 /**
@@ -17577,7 +17773,11 @@ class Settings {
    */
   isTrusted(context) {
     if (context.url && !context.protocol) {
-      context.protocol = utils.protocolFromUrl(context.url);
+      const protocol = utils.protocolFromUrl(context.url);
+      if (protocol == null) {
+        return false
+      }
+      context.protocol = protocol;
     }
     const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
     return Boolean(trust);
@@ -18298,12 +18498,13 @@ defineSymbol(math, textord, "\u2135", "\\aleph", true);
 defineSymbol(math, textord, "\u2200", "\\forall", true);
 defineSymbol(math, textord, "\u210f", "\\hbar", true);
 defineSymbol(math, textord, "\u2203", "\\exists", true);
-defineSymbol(math, textord, "\u2207", "\\nabla", true);
+// ∇ is actually a unary operator, not binary. But this works.
+defineSymbol(math, bin, "\u2207", "\\nabla", true);
 defineSymbol(math, textord, "\u266d", "\\flat", true);
 defineSymbol(math, textord, "\u2113", "\\ell", true);
 defineSymbol(math, textord, "\u266e", "\\natural", true);
-defineSymbol(math, textord, "Å", "\\AA", true);
-defineSymbol(text, textord, "Å", "\\AA", true);
+defineSymbol(math, textord, "Å", "\\Angstrom", true);
+defineSymbol(text, textord, "Å", "\\Angstrom", true);
 defineSymbol(math, textord, "\u2663", "\\clubsuit", true);
 defineSymbol(math, textord, "\u2667", "\\varclubsuit", true);
 defineSymbol(math, textord, "\u2118", "\\wp", true);
@@ -18352,6 +18553,7 @@ defineSymbol(math, bin, "\u2021", "\\ddagger");
 defineSymbol(math, bin, "\u2240", "\\wr", true);
 defineSymbol(math, bin, "\u2a3f", "\\amalg");
 defineSymbol(math, bin, "\u0026", "\\And"); // from amsmath
+defineSymbol(math, bin, "\u2AFD", "\\sslash", true); // from stmaryrd
 
 // Arrow Symbols
 defineSymbol(math, rel, "\u27f5", "\\longleftarrow", true);
@@ -18386,6 +18588,7 @@ defineSymbol(math, mathord, "\u2609", "\\astrosun", true);
 defineSymbol(math, mathord, "\u263c", "\\sun", true);
 defineSymbol(math, mathord, "\u263e", "\\leftmoon", true);
 defineSymbol(math, mathord, "\u263d", "\\rightmoon", true);
+defineSymbol(math, mathord, "\u2295", "\\Earth");
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);
@@ -18613,6 +18816,73 @@ defineSymbol(math, bin, "\u27d5", "\\leftouterjoin", true);
 defineSymbol(math, bin, "\u27d6", "\\rightouterjoin", true);
 defineSymbol(math, bin, "\u27d7", "\\fullouterjoin", true);
 
+// stix Binary Operators
+defineSymbol(math, bin, "\u2238", "\\dotminus", true);
+defineSymbol(math, bin, "\u27D1", "\\wedgedot", true);
+defineSymbol(math, bin, "\u27C7", "\\veedot", true);
+defineSymbol(math, bin, "\u2A62", "\\doublebarvee", true);
+defineSymbol(math, bin, "\u2A63", "\\veedoublebar", true);
+defineSymbol(math, bin, "\u2A5F", "\\wedgebar", true);
+defineSymbol(math, bin, "\u2A60", "\\wedgedoublebar", true);
+defineSymbol(math, bin, "\u2A54", "\\Vee", true);
+defineSymbol(math, bin, "\u2A53", "\\Wedge", true);
+defineSymbol(math, bin, "\u2A43", "\\barcap", true);
+defineSymbol(math, bin, "\u2A42", "\\barcup", true);
+defineSymbol(math, bin, "\u2A48", "\\capbarcup", true);
+defineSymbol(math, bin, "\u2A40", "\\capdot", true);
+defineSymbol(math, bin, "\u2A47", "\\capovercup", true);
+defineSymbol(math, bin, "\u2A46", "\\cupovercap", true);
+defineSymbol(math, bin, "\u2A4D", "\\closedvarcap", true);
+defineSymbol(math, bin, "\u2A4C", "\\closedvarcup", true);
+defineSymbol(math, bin, "\u2A2A", "\\minusdot", true);
+defineSymbol(math, bin, "\u2A2B", "\\minusfdots", true);
+defineSymbol(math, bin, "\u2A2C", "\\minusrdots", true);
+defineSymbol(math, bin, "\u22BB", "\\Xor", true);
+defineSymbol(math, bin, "\u22BC", "\\Nand", true);
+defineSymbol(math, bin, "\u22BD", "\\Nor", true);
+defineSymbol(math, bin, "\u22BD", "\\barvee");
+defineSymbol(math, bin, "\u2AF4", "\\interleave", true);
+defineSymbol(math, bin, "\u29E2", "\\shuffle", true);
+defineSymbol(math, bin, "\u2AF6", "\\threedotcolon", true);
+defineSymbol(math, bin, "\u2982", "\\typecolon", true);
+defineSymbol(math, bin, "\u223E", "\\invlazys", true);
+defineSymbol(math, bin, "\u2A4B", "\\twocaps", true);
+defineSymbol(math, bin, "\u2A4A", "\\twocups", true);
+defineSymbol(math, bin, "\u2A4E", "\\Sqcap", true);
+defineSymbol(math, bin, "\u2A4F", "\\Sqcup", true);
+defineSymbol(math, bin, "\u2A56", "\\veeonvee", true);
+defineSymbol(math, bin, "\u2A55", "\\wedgeonwedge", true);
+defineSymbol(math, bin, "\u29D7", "\\blackhourglass", true);
+defineSymbol(math, bin, "\u29C6", "\\boxast", true);
+defineSymbol(math, bin, "\u29C8", "\\boxbox", true);
+defineSymbol(math, bin, "\u29C7", "\\boxcircle", true);
+defineSymbol(math, bin, "\u229C", "\\circledequal", true);
+defineSymbol(math, bin, "\u29B7", "\\circledparallel", true);
+defineSymbol(math, bin, "\u29B6", "\\circledvert", true);
+defineSymbol(math, bin, "\u29B5", "\\circlehbar", true);
+defineSymbol(math, bin, "\u27E1", "\\concavediamond", true);
+defineSymbol(math, bin, "\u27E2", "\\concavediamondtickleft", true);
+defineSymbol(math, bin, "\u27E3", "\\concavediamondtickright", true);
+defineSymbol(math, bin, "\u22C4", "\\diamond", true);
+defineSymbol(math, bin, "\u29D6", "\\hourglass", true);
+defineSymbol(math, bin, "\u27E0", "\\lozengeminus", true);
+defineSymbol(math, bin, "\u233D", "\\obar", true);
+defineSymbol(math, bin, "\u29B8", "\\obslash", true);
+defineSymbol(math, bin, "\u2A38", "\\odiv", true);
+defineSymbol(math, bin, "\u29C1", "\\ogreaterthan", true);
+defineSymbol(math, bin, "\u29C0", "\\olessthan", true);
+defineSymbol(math, bin, "\u29B9", "\\operp", true);
+defineSymbol(math, bin, "\u2A37", "\\Otimes", true);
+defineSymbol(math, bin, "\u2A36", "\\otimeshat", true);
+defineSymbol(math, bin, "\u22C6", "\\star", true);
+defineSymbol(math, bin, "\u25B3", "\\triangle", true);
+defineSymbol(math, bin, "\u2A3A", "\\triangleminus", true);
+defineSymbol(math, bin, "\u2A39", "\\triangleplus", true);
+defineSymbol(math, bin, "\u2A3B", "\\triangletimes", true);
+defineSymbol(math, bin, "\u27E4", "\\whitesquaretickleft", true);
+defineSymbol(math, bin, "\u27E5", "\\whitesquaretickright", true);
+defineSymbol(math, bin, "\u2A33", "\\smashtimes", true);
+
 // AMS Arrows
 // Note: unicode-math maps \u21e2 to their own function \rightdasharrow.
 // We'll map it to AMS function \dashrightarrow. It produces the same atom.
@@ -18770,6 +19040,7 @@ defineSymbol(math, mathord, "\u2aeb", "\\Bot");
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "*", "*");
+defineSymbol(math, bin, "\u2044", "/", true);
 defineSymbol(math, bin, "\u2044", "\u2044");
 defineSymbol(math, bin, "\u2212", "-", true);
 defineSymbol(math, bin, "\u22c5", "\\cdot", true);
@@ -18852,8 +19123,8 @@ defineSymbol(math, spacing, null, "\\allowbreak");
 defineSymbol(math, punct, ",", ",");
 defineSymbol(text, punct, ":", ":");
 defineSymbol(math, punct, ";", ";");
-defineSymbol(math, bin, "\u22bc", "\\barwedge", true);
-defineSymbol(math, bin, "\u22bb", "\\veebar", true);
+defineSymbol(math, bin, "\u22bc", "\\barwedge");
+defineSymbol(math, bin, "\u22bb", "\\veebar");
 defineSymbol(math, bin, "\u2299", "\\odot", true);
 // Firefox turns ⊕ into an emoji. So append \uFE0E. Define Unicode character in macros, not here.
 defineSymbol(math, bin, "\u2295\uFE0E", "\\oplus");
@@ -18866,7 +19137,6 @@ defineSymbol(math, bin, "\u25b3", "\\bigtriangleup");
 defineSymbol(math, bin, "\u25bd", "\\bigtriangledown");
 defineSymbol(math, bin, "\u2020", "\\dagger");
 defineSymbol(math, bin, "\u22c4", "\\diamond");
-defineSymbol(math, bin, "\u22c6", "\\star");
 defineSymbol(math, bin, "\u25c3", "\\triangleleft");
 defineSymbol(math, bin, "\u25b9", "\\triangleright");
 defineSymbol(math, open, "{", "\\{");
@@ -19226,7 +19496,8 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
       continue
     }
     block.push(node);
-    if (node.type && node.type === "mo" && node.children.length === 1) {
+    if (node.type && node.type === "mo" && node.children.length === 1 &&
+        !Object.hasOwn(node.attributes, "movablelimits")) {
       const ch = node.children[0].text;
       if (openDelims.indexOf(ch) > -1) {
         level += 1;
@@ -19241,7 +19512,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
           mrows.push(element);
           block = [node];
         }
-      } else if (level === 0 && wrapMode === "tex") {
+      } else if (level === 0 && wrapMode === "tex" && ch !== "∇") {
         // Check if the following node is a \nobreak text node, e.g. "~""
         const next = i < expression.length - 1 ? expression[i + 1] : null;
         let glueIsFreeOfNobreak = true;
@@ -19379,9 +19650,11 @@ const consolidateText = mrow => {
 };
 
 const numberRegEx$1 = /^[0-9]$/;
-const isCommaOrDot = node => {
-  return (node.type === "atom" && node.text === ",") ||
-         (node.type === "textord" && node.text === ".")
+const isDotOrComma = (node, followingNode) => {
+  return ((node.type === "textord" && node.text === ".") ||
+    (node.type === "atom" && node.text === ",")) &&
+    // Don't consolidate if there is a space after the comma.
+    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
 };
 const consolidateNumbers = expression => {
   // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
@@ -19404,7 +19677,8 @@ const consolidateNumbers = expression => {
 
   // Determine if numeral groups are separated by a comma or dot.
   for (let i = nums.length - 1; i > 0; i--) {
-    if (nums[i - 1].end === nums[i].start - 2 && isCommaOrDot(expression[nums[i].start - 1])) {
+    if (nums[i - 1].end === nums[i].start - 2 &&
+      isDotOrComma(expression[nums[i].start - 1], expression[nums[i].start])) {
       // Merge the two groups.
       nums[i - 1].end = nums[i].end;
       nums.splice(i, 1);
@@ -19417,6 +19691,16 @@ const consolidateNumbers = expression => {
       expression[nums[i].start].text += expression[j].text;
     }
     expression.splice(nums[i].start + 1, nums[i].end - nums[i].start);
+    // Check if the <mn> is followed by a numeric base in a supsub, e.g. the "3" in 123^4
+    // If so, merge the first <mn> into the base.
+    if (expression.length > nums[i].start + 1) {
+      const nextTerm = expression[nums[i].start + 1];
+      if (nextTerm.type === "supsub" && nextTerm.base && nextTerm.base.type === "textord" &&
+          numberRegEx$1.test(nextTerm.base.text)) {
+        nextTerm.base.text = expression[nums[i].start].text + nextTerm.base.text;
+        expression.splice(nums[i].start, 1);
+      }
+    }
   }
 };
 
@@ -19424,20 +19708,22 @@ const consolidateNumbers = expression => {
  * Wrap the given array of nodes in an <mrow> node if needed, i.e.,
  * unless the array has length 1.  Always returns a single node.
  */
-const makeRow = function(body) {
+const makeRow = function(body, semisimple = false) {
   if (body.length === 1 && !(body[0] instanceof DocumentFragment)) {
     return body[0];
-  } else {
+  } else if (!semisimple) {
     // Suppress spacing on <mo> nodes at both ends of the row.
     if (body[0] instanceof MathNode && body[0].type === "mo" && !body[0].attributes.fence) {
       body[0].attributes.lspace = "0em";
+      body[0].attributes.rspace = "0em";
     }
     const end = body.length - 1;
     if (body[end] instanceof MathNode && body[end].type === "mo" && !body[end].attributes.fence) {
+      body[end].attributes.lspace = "0em";
       body[end].attributes.rspace = "0em";
     }
-    return new mathMLTree.MathNode("mrow", body);
   }
+  return new mathMLTree.MathNode("mrow", body);
 };
 
 const isRel = item => {
@@ -19451,10 +19737,10 @@ const isRel = item => {
  * (1) Suppress spacing when an author wraps an operator w/braces, as in {=}.
  * (2) Suppress spacing between two adjacent relations.
  */
-const buildExpression = function(expression, style, isOrdgroup) {
-  if (expression.length === 1) {
+const buildExpression = function(expression, style, semisimple = false) {
+  if (!semisimple && expression.length === 1) {
     const group = buildGroup$1(expression[0], style);
-    if (isOrdgroup && group instanceof MathNode && group.type === "mo") {
+    if (group instanceof MathNode && group.type === "mo") {
       // When TeX writers want to suppress spacing on an operator,
       // they often put the operator by itself inside braces.
       group.setAttribute("lspace", "0em");
@@ -19484,8 +19770,8 @@ const buildExpression = function(expression, style, isOrdgroup) {
  * Equivalent to buildExpression, but wraps the elements in an <mrow>
  * if there's more than one.  Returns a single node instead of an array.
  */
-const buildExpressionRow = function(expression, style, isOrdgroup) {
-  return makeRow(buildExpression(expression, style, isOrdgroup));
+const buildExpressionRow = function(expression, style, semisimple = false) {
+  return makeRow(buildExpression(expression, style, semisimple), semisimple);
 };
 
 /**
@@ -20170,7 +20456,8 @@ function cdArrow(arrowChar, labels, parser) {
       const arrowGroup = {
         type: "ordgroup",
         mode: "math",
-        body: [leftLabel, sizedArrow, rightLabel]
+        body: [leftLabel, sizedArrow, rightLabel],
+        semisimple: true
       };
       return parser.callFunction("\\\\cdparent", [arrowGroup], []);
     }
@@ -20596,7 +20883,7 @@ defineFunction({
     allowedInText: true,
     argTypes: ["raw", "raw"]
   },
-  handler({ parser, token }, args, optArgs) {
+  handler({ parser, breakOnTokenText, token }, args, optArgs) {
     const model = optArgs[0] && assertNodeType(optArgs[0], "raw").string;
     let color = "";
     if (model) {
@@ -20606,15 +20893,8 @@ defineFunction({
       color = validateColor(assertNodeType(args[0], "raw").string, parser.gullet.macros, token);
     }
 
-    // Set macro \current@color in current namespace to store the current
-    // color, mimicking the behavior of color.sty.
-    // This is currently used just to correctly color a \right
-    // that follows a \color command.
-    parser.gullet.macros.set("\\current@color", color);
-
     // Parse out the implicit body that should be colored.
-    // Since \color nodes should not be nested, break on \color.
-    const body = parser.parseExpression(true, "\\color");
+    const body = parser.parseExpression(true, breakOnTokenText, true);
 
     return {
       type: "color",
@@ -20831,6 +21111,9 @@ defineFunction({
 
     if (funcName === "\\edef" || funcName === "\\xdef") {
       tokens = parser.gullet.expandTokens(tokens);
+      if (tokens.length > parser.gullet.settings.maxExpand) {
+        throw new ParseError("Too many expansions in an " + funcName);
+      }
       tokens.reverse(); // to fit in with stack order
     }
     // Final arg is the expansion of the macro
@@ -21056,17 +21339,13 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
-  if (delim.type === "ordgroup" && delim.body.length === 1 && delim.body[0].text === "\u2044") {
-    // Recover "/" from the zero spacing group. (See macros.js)
-    delim = { type: "textord", text: "/", mode: "math" };
-  }
   const symDelim = checkSymbolNodeType(delim);
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
+    if (["/", "\u2044"].includes(symDelim.text)) { symDelim.text = "\u2215"; }
     if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨"; }
     if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩"; }
-    if (symDelim.text === "/") { symDelim.text = "\u2215"; }
     if (symDelim.text === "\\backslash") { symDelim.text = "\u2216"; }
     return symDelim;
   } else if (symDelim) {
@@ -21154,18 +21433,10 @@ defineFunction({
     argTypes: ["primitive"]
   },
   handler: (context, args) => {
-    // \left case below triggers parsing of \right in
-    //   `const right = parser.parseFunction();`
-    // uses this return value.
-    const color = context.parser.gullet.macros.get("\\current@color");
-    if (color && typeof color !== "string") {
-      throw new ParseError("\\current@color set to non-string in \\right");
-    }
     return {
       type: "leftright-right",
       mode: context.parser.mode,
-      delim: checkDelimiter(args[0], context).text,
-      color // undefined if not set via \color
+      delim: checkDelimiter(args[0], context).text
     };
   }
 });
@@ -21183,8 +21454,26 @@ defineFunction({
     const parser = context.parser;
     // Parse out the implicit body
     ++parser.leftrightDepth;
-    // parseExpression stops before '\\right'
-    const body = parser.parseExpression(false);
+    // parseExpression stops before '\\right' or `\\middle`
+    let body = parser.parseExpression(false, null, true);
+    let nextToken = parser.fetch();
+    while (nextToken.text === "\\middle") {
+      // `\middle`, from the ε-TeX package, ends one group and starts another group.
+      // We had to parse this expression with `breakOnMiddle` enabled in order
+      // to get TeX-compliant parsing of \over.
+      // But we do not want, at this point, to end on \middle, so continue
+      // to parse until we fetch a `\right`.
+      parser.consume();
+      const middle = parser.fetch().text;
+      if (!symbols.math[middle]) {
+        throw new ParseError(`Invalid delimiter '${middle}' after '\\middle'`);
+      }
+      checkDelimiter({ type: "atom", mode: "math", text: middle }, { funcName: "\\middle" });
+      body.push({ type: "middle", mode: "math", delim: middle });
+      parser.consume();
+      body = body.concat(parser.parseExpression(false, null, true));
+      nextToken = parser.fetch();
+    }
     --parser.leftrightDepth;
     // Check the next token
     parser.expect("\\right", false);
@@ -21194,8 +21483,7 @@ defineFunction({
       mode: parser.mode,
       body,
       left: delim.text,
-      right: right.delim,
-      rightColor: right.color
+      right: right.delim
     };
   },
   mathmlBuilder: (group, style) => {
@@ -21218,7 +21506,6 @@ defineFunction({
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true");
     }
-    if (group.rightColor) { rightNode.style.color =  group.rightColor; }
     inner.push(rightNode);
 
     return makeRow(inner);
@@ -21292,20 +21579,12 @@ const mathmlBuilder$8 = (group, style) => {
       node.style.borderBottom = "0.065em solid";
       break
     case "\\cancel":
-      node.style.background = `linear-gradient(to top left,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`;
+      // We can't use an inline background-gradient. It does not work client-side.
+      // So set a class and put the rule in the external CSS file.
+      node.classes.push("tml-cancel");
       break
     case "\\bcancel":
-      node.style.background = `linear-gradient(to top right,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`;
+      node.classes.push("tml-bcancel");
       break
     /*
     case "\\longdiv":
@@ -21352,18 +21631,7 @@ rgba(0,0,0,0) 100%);`;
       break
     }
     case "\\xcancel":
-      node.style.background = `linear-gradient(to top left,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%),
-linear-gradient(to top right,
-rgba(0,0,0,0) 0%,
-rgba(0,0,0,0) calc(50% - 0.06em),
-rgba(0,0,0,1) 50%,
-rgba(0,0,0,0) calc(50% + 0.06em),
-rgba(0,0,0,0) 100%);`;
+      node.classes.push("tml-xcancel");
       break
   }
   if (group.backgroundColor) {
@@ -21561,7 +21829,7 @@ const getTag = (group, style, rowNum) => {
   if (tagContents) {
     // The author has written a \tag or a \notag in this row.
     if (tagContents.body) {
-      tag = buildExpressionRow(tagContents.body, style);
+      tag = buildExpressionRow(tagContents.body, style, true);
       tag.classes = ["tml-tag"];
     } else {
       // \notag. Return an empty span.
@@ -21608,7 +21876,9 @@ function parseArray(
     parser.gullet.macros.set("\\cr", "\\\\\\relax");
   }
   if (addEqnNum) {
-    parser.gullet.macros.set("\\tag", "\\env@tag{\\text{#1}}");
+    parser.gullet.macros.set("\\tag", "\\@ifstar\\envtag@literal\\envtag@paren");
+    parser.gullet.macros.set("\\envtag@paren", "\\env@tag{{(\\text{#1})}}");
+    parser.gullet.macros.set("\\envtag@literal", "\\env@tag{\\text{#1}}");
     parser.gullet.macros.set("\\notag", "\\env@notag");
     parser.gullet.macros.set("\\nonumber", "\\env@notag");
   }
@@ -21649,7 +21919,8 @@ function parseArray(
     cell = {
       type: "ordgroup",
       mode: parser.mode,
-      body: cell
+      body: cell,
+      semisimple: true
     };
     row.push(cell);
     const next = parser.fetch().text;
@@ -22476,17 +22747,46 @@ defineFunction({
   }
 });
 
+const isLongVariableName = (group, font) => {
+  if (font !== "mathrm" || group.body.type !== "ordgroup" || group.body.body.length === 1) {
+    return false
+  }
+  if (group.body.body[0].type !== "mathord") { return false }
+  for (let i = 1; i < group.body.body.length; i++) {
+    const parseNodeType = group.body.body[i].type;
+    if (!(parseNodeType ===  "mathord" ||
+    (parseNodeType ===  "textord" && !isNaN(group.body.body[i].text)))) {
+      return false
+    }
+  }
+  return true
+};
+
 const mathmlBuilder$6 = (group, style) => {
   const font = group.font;
   const newStyle = style.withFont(font);
   const mathGroup = buildGroup$1(group.body, newStyle);
 
   if (mathGroup.children.length === 0) { return mathGroup } // empty group, e.g., \mathrm{}
-  if (font === "boldsymbol" && ["mo", "mpadded"].includes(mathGroup.type)) {
+  if (font === "boldsymbol" && ["mo", "mpadded", "mrow"].includes(mathGroup.type)) {
     mathGroup.style.fontWeight = "bold";
     return mathGroup
   }
   // Check if it is possible to consolidate elements into a single <mi> element.
+  if (isLongVariableName(group, font)) {
+    // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
+    // wraps <mi> elements with <mrow>s to work around a Firefox bug.
+    const mi = mathGroup.children[0].children[0];
+    delete mi.attributes.mathvariant;
+    for (let i = 1; i < mathGroup.children.length; i++) {
+      mi.children[0].text += mathGroup.children[i].type === "mn"
+        ? mathGroup.children[i].children[0].text
+        : mathGroup.children[i].children[0].children[0].text;
+    }
+    // Wrap in a <mrow> to prevent the same Firefox bug.
+    const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"));
+    return new mathMLTree.MathNode("mrow", [bogus, mi])
+  }
   let canConsolidate = mathGroup.children[0].type === "mo";
   for (let i = 1; i < mathGroup.children.length; i++) {
     if (mathGroup.children[i].type === "mo" && font === "boldsymbol") {
@@ -22577,7 +22877,7 @@ defineFunction({
   },
   handler: ({ parser, funcName, breakOnTokenText }, args) => {
     const { mode } = parser;
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
     const fontStyle = `math${funcName.slice(1)}`;
 
     return {
@@ -23538,6 +23838,9 @@ function mathmlBuilder$3(group, style) {
     if (group.isCharacterBox || inner[0].type === "mathord") {
       node = inner[0];
       node.type = "mi";
+      if (node.children.length === 1 && node.children[0].text && node.children[0].text === "∇") {
+        node.setAttribute("mathvariant", "normal");
+      }
     } else {
       node = new mathMLTree.MathNode("mi", inner);
     }
@@ -23839,10 +24142,10 @@ defineFunction({
   },
   mathmlBuilder(group, style) {
     if (group.isCharacterBox) {
-      const inner = buildExpression(group.body, style);
+      const inner = buildExpression(group.body, style, true);
       return inner[0]
     } else {
-      return buildExpressionRow(group.body, style, true)
+      return buildExpressionRow(group.body, style)
     }
   }
 });
@@ -23862,6 +24165,13 @@ const ordTypes = ["textord", "mathord", "ordgroup", "close", "leftright"];
 // NOTE: Unlike most `builders`s, this one handles not only "op", but also
 // "supsub" since some of them (like \int) can affect super/subscripting.
 
+const setSpacing = node => {
+  // The user wrote a \mathop{…} function. Change spacing from default to OP spacing.
+  // The most likely spacing for an OP is a thin space per TeXbook p170.
+  node.attributes.lspace = "0.1667em";
+  node.attributes.rspace = "0.1667em";
+};
+
 const mathmlBuilder$2 = (group, style) => {
   let node;
 
@@ -23873,9 +24183,11 @@ const mathmlBuilder$2 = (group, style) => {
     } else {
       node.setAttribute("movablelimits", "false");
     }
+    if (group.fromMathOp) { setSpacing(node); }
   } else if (group.body) {
     // This is an operator with children. Add them.
     node = new MathNode("mo", buildExpression(group.body, style));
+    if (group.fromMathOp) { setSpacing(node); }
   } else {
     // This is a text operator. Add all of the characters from the operator's name.
     node = new MathNode("mi", [new TextNode(group.name.slice(1))]);
@@ -23995,6 +24307,7 @@ defineFunction({
       limits: true,
       parentIsSupSub: false,
       symbol: isSymbol,
+      fromMathOp: true,
       stack: false,
       name: isSymbol ? arr[0].text : null,
       body: isSymbol ? null : ordargument(body)
@@ -24328,7 +24641,7 @@ defineMacro("\\operatorname",
 defineFunctionBuilders({
   type: "ordgroup",
   mathmlBuilder(group, style) {
-    return buildExpressionRow(group.body, style, true);
+    return buildExpressionRow(group.body, style, group.semisimple);
   }
 });
 
@@ -24516,6 +24829,28 @@ defineFunction({
 });
 
 defineFunction({
+  type: "reflect",
+  names: ["\\reflectbox"],
+  props: {
+    numArgs: 1,
+    argTypes: ["hbox"],
+    allowedInText: true
+  },
+  handler({ parser }, args) {
+    return {
+      type: "reflect",
+      mode: parser.mode,
+      body: args[0]
+    };
+  },
+  mathmlBuilder(group, style) {
+    const node = buildGroup$1(group.body, style);
+    node.style.transform = "scaleX(-1)";
+    return node
+  }
+});
+
+defineFunction({
   type: "internal",
   names: ["\\relax"],
   props: {
@@ -24620,7 +24955,7 @@ defineFunction({
       // eslint-disable-next-line no-console
       console.log(`Temml strict-mode warning: Command ${funcName} is invalid in math mode.`);
     }
-    const body = parser.parseExpression(false, breakOnTokenText);
+    const body = parser.parseExpression(false, breakOnTokenText, true);
     return {
       type: "sizing",
       mode: parser.mode,
@@ -24753,7 +25088,7 @@ defineFunction({
   },
   handler({ breakOnTokenText, funcName, parser }, args) {
     // parse out the implicit body
-    const body = parser.parseExpression(true, breakOnTokenText);
+    const body = parser.parseExpression(true, breakOnTokenText, true);
 
     const scriptLevel = funcName.slice(1, funcName.length - 5);
     return {
@@ -25184,22 +25519,22 @@ const offset = Object.freeze({
     "sans-serif-bold-italic": ch => { return 0x1D5F5 },
     "monospace": ch =>              { return 0x1D629 }
   },
-  upperCaseGreek: { // A-Ω ∇
+  upperCaseGreek: { // A-Ω
     "normal": ch =>                 { return 0 },
-    "bold": ch =>                   { return ch === "∇" ? 0x1B4BA : 0x1D317 },
-    "italic": ch =>                 { return ch === "∇" ? 0x1B4F4 : 0x1D351 },
+    "bold": ch =>                   { return 0x1D317 },
+    "italic": ch =>                 { return 0x1D351 },
     // \boldsymbol actually returns upright bold for upperCaseGreek
-    "bold-italic": ch =>            { return ch === "∇" ? 0x1B4BA : 0x1D317 },
+    "bold-italic": ch =>            { return 0x1D317 },
     "script": ch =>                 { return 0 },
     "script-bold": ch =>            { return 0 },
     "fraktur": ch =>                { return 0 },
     "fraktur-bold": ch =>           { return 0 },
     "double-struck": ch =>          { return 0 },
     // Unicode has no code points for regular-weight san-serif Greek. Use bold.
-    "sans-serif": ch =>             { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
-    "sans-serif-bold": ch =>        { return ch === "∇" ? 0x1B568 : 0x1D3C5 },
+    "sans-serif": ch =>             { return 0x1D3C5 },
+    "sans-serif-bold": ch =>        { return 0x1D3C5 },
     "sans-serif-italic": ch =>      { return 0 },
-    "sans-serif-bold-italic": ch => { return ch === "∇" ? 0x1B5A2 : 0x1D3FF },
+    "sans-serif-bold-italic": ch => { return 0x1D3FF },
     "monospace": ch =>              { return 0 }
   },
   lowerCaseGreek: { // α-ω
@@ -25259,7 +25594,7 @@ const variantChar = (ch, variant) => {
     ? "upperCaseLatin"
     : 0x60 < codePoint && codePoint < 0x7b
     ? "lowerCaseLatin"
-    : (0x390  < codePoint && codePoint < 0x3AA) || ch === "∇"
+    : (0x390  < codePoint && codePoint < 0x3AA)
     ? "upperCaseGreek"
     : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
     ? "lowerCaseGreek"
@@ -25388,8 +25723,6 @@ defineFunctionBuilders({
       node = new mathMLTree.MathNode("mi", [text]);
       if (text.text === origText && latinRegEx.test(origText)) {
         node.setAttribute("mathvariant", "italic");
-      } else if (text.text === "∇" && variant === "normal") {
-        node.setAttribute("mathvariant", "normal");
       }
     }
     return node
@@ -26026,16 +26359,30 @@ defineMacro("\\char", function(context) {
   return `\\@char{${number}}`;
 });
 
+function recreateArgStr(context) {
+  // Recreate the macro's original argument string from the array of parse tokens.
+  const tokens = context.consumeArgs(1)[0];
+  let str = "";
+  let expectedLoc = tokens[tokens.length - 1].loc.start;
+  for (let i = tokens.length - 1; i >= 0; i--) {
+    const actualLoc = tokens[i].loc.start;
+    if (actualLoc > expectedLoc) {
+      // context.consumeArgs has eaten a space.
+      str += " ";
+      expectedLoc = actualLoc;
+    }
+    str += tokens[i].text;
+    expectedLoc += tokens[i].text.length;
+  }
+  return str
+}
+
 // The Latin Modern font renders <mi>√</mi> at the wrong vertical alignment.
 // This macro provides a better rendering.
 defineMacro("\\surd", '\\sqrt{\\vphantom{|}}');
 
 // See comment for \oplus in symbols.js.
 defineMacro("\u2295", "\\oplus");
-
-// Per TeXbook p.122, "/" gets zero operator spacing.
-// And MDN recommends using U+2044 instead of / for inline
-defineMacro("/", "{\u2044}");
 
 // Since Temml has no \par, ignore \long.
 defineMacro("\\long", "");
@@ -26278,6 +26625,8 @@ defineMacro("\\quad", "\\hskip1em\\relax");
 // \def\qquad{\hskip2em\relax}
 defineMacro("\\qquad", "\\hskip2em\\relax");
 
+defineMacro("\\AA", "\\TextOrMath{\\Angstrom}{\\mathring{A}}\\relax");
+
 // \tag@in@display form of \tag
 defineMacro("\\tag", "\\@ifstar\\tag@literal\\tag@paren");
 defineMacro("\\tag@paren", "\\tag@literal{({#1})}");
@@ -26413,6 +26762,11 @@ defineMacro("\\argmax", "\\DOTSB\\operatorname*{arg\\,max}");
 defineMacro("\\plim", "\\DOTSB\\operatorname*{plim}");
 
 //////////////////////////////////////////////////////////////////////
+// MnSymbol.sty
+
+defineMacro("\\leftmodels", "\\mathop{\\reflectbox{$\\models$}}");
+
+//////////////////////////////////////////////////////////////////////
 // braket.sty
 // http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/braket/braket.pdf
 
@@ -26421,56 +26775,33 @@ defineMacro("\\ket", "\\mathinner{|{#1}\\rangle}");
 defineMacro("\\braket", "\\mathinner{\\langle{#1}\\rangle}");
 defineMacro("\\Bra", "\\left\\langle#1\\right|");
 defineMacro("\\Ket", "\\left|#1\\right\\rangle");
-const braketHelper = (one) => (context) => {
-  const left = context.consumeArg().tokens;
-  const middle = context.consumeArg().tokens;
-  const middleDouble = context.consumeArg().tokens;
-  const right = context.consumeArg().tokens;
-  const oldMiddle = context.macros.get("|");
-  const oldMiddleDouble = context.macros.get("\\|");
-  context.macros.beginGroup();
-  const midMacro = (double) => (context) => {
-    if (one) {
-      // Only modify the first instance of | or \|
-      context.macros.set("|", oldMiddle);
-      if (middleDouble.length) {
-        context.macros.set("\\|", oldMiddleDouble);
-      }
-    }
-    let doubled = double;
-    if (!double && middleDouble.length) {
-      // Mimic \@ifnextchar
-      const nextToken = context.future();
-      if (nextToken.text === "|") {
-        context.popToken();
-        doubled = true;
-      }
-    }
-    return {
-      tokens: doubled ? middleDouble : middle,
-      numArgs: 0
-    };
-  };
-  context.macros.set("|", midMacro(false));
-  if (middleDouble.length) {
-    context.macros.set("\\|", midMacro(true));
-  }
-  const arg = context.consumeArg().tokens;
-  const expanded = context.expandTokens([...right, ...arg, ...left]);  // reversed
-  context.macros.endGroup();
-  return {
-    tokens: expanded.reverse(),
-    numArgs: 0
-  };
+// A helper for \Braket and \Set
+const replaceVert = (argStr, match) => {
+  const ch = match[0] === "|" ? "\\vert" : "\\Vert";
+  const replaceStr = `}\\,\\middle${ch}\\,{`;
+  return argStr.slice(0, match.index) + replaceStr + argStr.slice(match.index + match[0].length)
 };
-defineMacro("\\bra@ket", braketHelper(false));
-defineMacro("\\bra@set", braketHelper(true));
-defineMacro("\\Braket", "\\bra@ket{\\left\\langle}" +
-  "{\\,\\middle\\vert\\,}{\\,\\middle\\vert\\,}{\\right\\rangle}");
-defineMacro("\\Set", "\\bra@set{\\left\\{\\:}" +
-  "{\\;\\middle\\vert\\;}{\\;\\middle\\Vert\\;}{\\:\\right\\}}");
-defineMacro("\\set", "\\bra@set{\\{\\,}{\\mid}{}{\\,\\}}");
-  // has no support for special || or \|
+defineMacro("\\Braket",  function(context) {
+  let argStr = recreateArgStr(context);
+  const regEx = /\|\||\||\\\|/g;
+  let match;
+  while ((match = regEx.exec(argStr)) !== null) {
+    argStr = replaceVert(argStr, match);
+  }
+  return "\\left\\langle{" + argStr + "}\\right\\rangle"
+});
+defineMacro("\\Set",  function(context) {
+  let argStr = recreateArgStr(context);
+  const match = /\|\||\||\\\|/.exec(argStr);
+  if (match) {
+    argStr = replaceVert(argStr, match);
+  }
+  return "\\left\\{\\:{" + argStr + "}\\:\\right\\}"
+});
+defineMacro("\\set",  function(context) {
+  const argStr = recreateArgStr(context);
+  return "\\{{" + argStr.replace(/\|/, "}\\mid{") + "}\\}"
+});
 
 //////////////////////////////////////////////////////////////////////
 // actuarialangle.dtx
@@ -29339,6 +29670,8 @@ var unicodeSymbols = {
 
 /* eslint no-constant-condition:0 */
 
+const binLeftCancellers = ["bin", "op", "open", "punct", "rel"];
+
 /**
  * This file contains the parser used to parse out a TeX expression from the
  * input. Since TeX isn't context-free, standard parsers don't work particularly
@@ -29501,8 +29834,12 @@ class Parser {
    * `breakOnTokenText`: The text of the token that the expression should end
    *                     with, or `null` if something else should end the
    *                     expression.
+   *
+   * `breakOnMiddle`: \color, \over, and old styling functions work on an implicit group.
+   *                  These groups end just before the usual tokens, but they also
+   *                  end just before `\middle`.
    */
-  parseExpression(breakOnInfix, breakOnTokenText) {
+  parseExpression(breakOnInfix, breakOnTokenText, breakOnMiddle) {
     const body = [];
     // Keep adding atoms to the body until we can't parse any more atoms (either
     // we reached the end, a }, or a \right)
@@ -29517,6 +29854,9 @@ class Parser {
       }
       if (breakOnTokenText && lex.text === breakOnTokenText) {
         break;
+      }
+      if (breakOnMiddle && lex.text === "\\middle") {
+        break
       }
       if (breakOnInfix && functions[lex.text] && functions[lex.text].infix) {
         break;
@@ -30108,8 +30448,7 @@ class Parser {
         body: expression,
         // A group formed by \begingroup...\endgroup is a semi-simple group
         // which doesn't affect spacing in math mode, i.e., is transparent.
-        // https://tex.stackexchange.com/questions/1930/when-should-one-
-        // use-begingroup-instead-of-bgroup
+        // https://tex.stackexchange.com/questions/1930/
         semisimple: text === "\\begingroup" || undefined
       };
     } else {
@@ -30223,7 +30562,11 @@ class Parser {
     // Recognize base symbol
     let symbol;
     if (symbols[this.mode][text]) {
-      const group = symbols[this.mode][text].group;
+      let group = symbols[this.mode][text].group;
+      if (group === "bin" && binLeftCancellers.includes(this.prevAtomType)) {
+        // Change from a binary operator to a unary (prefix) operator
+        group = "open";
+      }
       const loc = SourceLocation.range(nucleus);
       let s;
       if (Object.prototype.hasOwnProperty.call(ATOMS, group )) {
@@ -30493,7 +30836,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.17";
+const version = "0.10.23";
 
 function postProcess(block) {
   const labelMap = {};
@@ -30712,11 +31055,11 @@ var temml = {
 /*
  * This file bundles together and exposes the calculation parts of Hurmet.
  * I use Rollup to create a UMD module from this code.
- * That way, one file can expose the same functionality to (1) the Hurmet.app web page,
+ * That way, one file can expose the same functionality to (1) the Hurmet.org web page,
  * (2) the REPL in the reference manual, (3) the script that transpiles
  * the Hurmet reference manual from Markdown to HTML, and (4) unit testing.
  *
- * Some of Hurmet’s exported functions are valuable only to the Hurmet.app web page.
+ * Some of Hurmet’s exported functions are valuable only to the Hurmet.org web page.
  * If you wish to use Hurmet’s math parsing and/or calculation abilities,
  * the two functions you want are:
  *   parse(entry: string, decimalFormat?: string)

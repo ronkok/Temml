@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.24] = 2024-03-25
+
+### Fixed
+
+- Prevent Firefox from omitting the dot on i or j
+- Prevent infinite loop in an `\edef` macro
+- Convert protocol in a URL to lower case, to enable a URL whitelist
+
+### Added
+
+- Support 60 binary operators from the `stix` package
+
 ## [0.10.23] = 2024-03-11
 
 ### Fixed
