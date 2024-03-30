@@ -405,6 +405,13 @@ const test = () => {
   new Expect(`x_{x^x}`).toParse();
   new Expect(`x_{x_x}`).toParse();
 
+  assertion = "Empty super and subscripts should work"
+  new Expect("x^{}").toBuild();
+  new Expect("x^{}_{}").toBuild();
+  new Expect("x^{}_2").toBuild();
+  new Expect("x^2_{}").toBuild();
+  new Expect("x_{}").toBuild();
+  
   assertion = "A row builder should work when given a document fragment"
   new Expect((build(`x^{\color{red}{hello}}`))[0].children.length).toBe(2)
   new Expect((build(`x^{\color{red}{hello}}`))[0].children[1].type).toBe("mrow")

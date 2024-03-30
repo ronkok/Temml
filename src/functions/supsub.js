@@ -55,7 +55,7 @@ defineFunctionBuilders({
     if (group.sup) {
       const sup = mml.buildGroup(group.sup, childStyle)
       const testNode = sup.type === "mrow" ? sup.children[0] : sup
-      if ((testNode.type === "mo" && testNode.classes.includes("tml-prime"))
+      if ((testNode && testNode.type === "mo" && testNode.classes.includes("tml-prime"))
         && group.base && group.base.text && group.base.text === "f") {
         // Chromium does not address italic correction on prime. Prevent f′ from overlapping.
         testNode.classes.push("prime-pad")
