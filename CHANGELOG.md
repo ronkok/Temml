@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.25] = 2024-03-31
+
+### Fixed
+
+- Build empty braced exponents. Fixes #61.
+
 ## [0.10.24] = 2024-03-25
 
 ### Fixed

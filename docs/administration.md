@@ -443,7 +443,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.24
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.25
 
 <h3><a href="#top">Contents</a></h3>
 
