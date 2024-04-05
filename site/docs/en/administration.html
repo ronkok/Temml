@@ -195,20 +195,25 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad¹³</td><td></td></tr>
 <tr><td>mhchem subscripts</td><td>✓</td><td>✓</td><td>bad¹⁴</td><td><span class='hurmet-tex' data-entry='\ce{H2O}'><math><mrow><mrow><mi mathvariant="normal">H</mi></mrow><msub><mrow></mrow><mpadded height="0px"><mn>2</mn></mpadded></msub><mrow><mi mathvariant="normal">O</mi></mrow></mrow></math></span></td></tr></table>
 <p>Notes:</p>
-<ol><li class="tight"><p>There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation. </p></li>
-<li class="tight"><p>WebKit renders some accents too high even after a page refresh. Temml does some work to mitigate this. It’s not enough.+ accent height </p></li>
-<li class="tight"><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.+ accent italic correction </p></li>
-<li class="tight"><p>Chromium and WebKit mis+ extensible accents </p></li>
-<li class="tight"><p>Chromium sets + extensible arrows </p></li>
-<li class="tight"><p>Because Chromium does not support + height of ‖ in {Vmatrix} environment          <code>&lt;enclose&gt;</code>, Temml uses background images for \cancel. It may not print properly.</p></li>
-<li class="tight"><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
-<li class="tight"><p>WebKit laps are broken.</p></li>
-<li class="tight"><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.</p></li>
-<li class="tight"><p>WebKit fails to stretch most extensible arrows.</p></li>
-<li class="tight"><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
-<li class="tight"><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
-<li class="tight"><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
-<li class="tight"><p>WebKit hides mhchem subscripts and superscripts.</p></li></ol>
+<ol><li><p>There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation. </p>
+<ul><li class="tight"><p>accent height</p></li>
+<li class="tight"><p>accent italic correction</p></li>
+<li class="tight"><p>extensible accents</p></li>
+<li class="tight"><p>extensible arrows</p></li>
+<li class="tight"><p>height of ‖ in {Vmatrix} environment</p></li></ul></li>
+<li><p>WebKit renders some accents too high even after a page refresh. Temml does some work to mitigate this. It’s not enough.</p></li>
+<li><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.</p></li>
+<li><p>Chromium and WebKit mis-align short parentheses, given a \left and \right.</p></li>
+<li><p>Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.</p></li>
+<li><p>Because Chromium does not support <code>&lt;enclose&gt;</code>, Temml uses background images for \cancel. It may not print properly.</p></li>
+<li><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
+<li><p>WebKit laps are broken.</p></li>
+<li><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.</p></li>
+<li><p>WebKit fails to stretch most extensible arrows.</p></li>
+<li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
+<li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
+<li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
+<li><p>WebKit hides mhchem subscripts and superscripts.</p></li></ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
