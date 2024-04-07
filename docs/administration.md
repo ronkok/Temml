@@ -389,16 +389,15 @@ poorly.
 | Renders well on first paint  | ✓        | ✓         | bad¹      | $\hat{E}\;\; \overrightarrow{ABCD}$       |
 | Accents                      | ✓        | ✓         | bad²      | $\hat{𝖺}$                                 |
 | Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int x^2$                   |
-| \left( x \right)             | meh⁴     | ✓         | meh⁴      | $\left( x \right)$                        |
-| \bigg(, \Bigg(, etc.         | meh⁵     | ✓         | ✓         | $$\bigg(\frac{\partial^2}{\partial x^2} + \frac{\partial^2}{\partial y^2}\bigg)$$ |
-| \cancel, \bcancel, \xcancel  | meh⁶     | meh⁶      | meh⁶      | $\cancel{5}$                              |
-| Tag placement                | ✓        | ✓         | poor⁷     | $$x\tag{tag}$$                            |
-| \mathllap, \mathrlap         | ✓        | ✓         | bad⁸      | ${=}\mathllap{/\,}$                       |
-| Extensible arrows            | poor⁹    | ✓         | bad<sup>9, 10</sup> | $A \xrightharpoonup{\text{note}} B$ |
-| Radical height               | ✓        | meh¹¹     | meh¹¹     | $\sqrt{f_c}$                              |
-| Size 4 radicals              | meh¹²    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
-| Line-breaking                | ✓        | ✓         | bad¹³     |                                           |
-| mhchem subscripts            | ✓        | ✓         | bad¹⁴     | $\ce{H2O}$                                |
+| \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                        |
+| \cancel, \bcancel, \xcancel  | meh⁵     | meh⁵      | meh⁵      | $\cancel{5}$                              |
+| Tag placement                | ✓        | ✓         | poor⁶     | $$x\tag{tag}$$                            |
+| \mathllap, \mathrlap         | ✓        | ✓         | bad⁷      | ${=}\mathllap{/\,}$                       |
+| Extensible arrows            | poor⁸    | ✓         | bad<sup>8, 9</sup> | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh¹⁰     | meh¹⁰     | $\sqrt{f_c}$                              |
+| Size 4 radicals              | meh¹¹    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
+| Line-breaking                | ✓        | ✓         | bad¹²     |                                           |
+| mhchem subscripts            | ✓        | ✓         | bad¹³     | $\ce{H2O}$                                |
 
 Notes:
 
@@ -414,31 +413,29 @@ Notes:
 
 3.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
-4.  Chromium and WebKit mis-align short parentheses, given a \left and \right.
+4.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-5.  Chromium sets \bigg(, \Bigg(, etc., at the wrong vertical alignment.
-
-6.  Because Chromium does not support `<enclose>`, Temml uses background images for
+5.  Because Chromium does not support `<enclose>`, Temml uses background images for
     \cancel. It may not print properly.
 
-7.  WebKit mis-locates tags and AMS automatic equation numbers because it
+6.  WebKit mis-locates tags and AMS automatic equation numbers because it
     ignores `width: 100%` on an `<mtable>`.
 
-8.  WebKit laps are broken.
+7.  WebKit laps are broken.
 
-9.  Chromium and WebKit system font extensible arrows have notes placed too high.
+8.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 
-10. WebKit fails to stretch most extensible arrows.
+9.  WebKit fails to stretch most extensible arrows.
 
-11. Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+10. Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-12. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+11. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-13. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+12. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-14. WebKit hides mhchem subscripts and superscripts.
+13. WebKit hides mhchem subscripts and superscripts.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
