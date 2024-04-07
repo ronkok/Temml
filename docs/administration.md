@@ -388,11 +388,11 @@ poorly.
 |:-----------------------------|:--------:|:---------:|:---------:|:-----------------------------------------:|
 | Renders well on first paint  | ✓        | ✓         | bad¹      | $\hat{E}\;\; \overrightarrow{ABCD}$       |
 | Accents                      | ✓        | ✓         | bad²      | $\hat{𝖺}$                                 |
-| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int x^2$                   |
+| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int \frac a b$             |
 | \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                        |
 | \cancel, \bcancel, \xcancel  | meh⁵     | meh⁵      | meh⁵      | $\cancel{5}$                              |
 | Tag placement                | ✓        | ✓         | poor⁶     | $$x\tag{tag}$$                            |
-| Extensible arrows            | poor⁷    | ✓         | bad<sup>7, 8</sup> | $A \xrightharpoonup{\text{note}} B$ |
+| Extensible arrows            | poor⁷    | ✓         | bad<sup>7, 8</sup> | $\;\;\;A \xrightharpoonup{\text{note}} B\;\;\;$  |
 | Radical height               | ✓        | meh⁹      | meh⁹      | $\sqrt{f_c}$                              |
 | Size 4 radicals              | meh¹⁰    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
 | Line-breaking                | ✓        | ✓         | bad¹¹     |                                           |
