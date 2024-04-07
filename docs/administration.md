@@ -392,12 +392,11 @@ poorly.
 | \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                        |
 | \cancel, \bcancel, \xcancel  | meh⁵     | meh⁵      | meh⁵      | $\cancel{5}$                              |
 | Tag placement                | ✓        | ✓         | poor⁶     | $$x\tag{tag}$$                            |
-| \mathllap, \mathrlap         | ✓        | ✓         | bad⁷      | ${=}\mathllap{/\,}$                       |
-| Extensible arrows            | poor⁸    | ✓         | bad<sup>8, 9</sup> | $A \xrightharpoonup{\text{note}} B$ |
-| Radical height               | ✓        | meh¹⁰     | meh¹⁰     | $\sqrt{f_c}$                              |
-| Size 4 radicals              | meh¹¹    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
-| Line-breaking                | ✓        | ✓         | bad¹²     |                                           |
-| mhchem subscripts            | ✓        | ✓         | bad¹³     | $\ce{H2O}$                                |
+| Extensible arrows            | poor⁷    | ✓         | bad<sup>7, 8</sup> | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh⁹      | meh⁹      | $\sqrt{f_c}$                              |
+| Size 4 radicals              | meh¹⁰    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
+| Line-breaking                | ✓        | ✓         | bad¹¹     |                                           |
+| mhchem subscripts            | ✓        | ✓         | bad¹²     | $\ce{H2O}$                                |
 
 Notes:
 
@@ -421,21 +420,19 @@ Notes:
 6.  WebKit mis-locates tags and AMS automatic equation numbers because it
     ignores `width: 100%` on an `<mtable>`.
 
-7.  WebKit laps are broken.
-
-8.  Chromium and WebKit system font extensible arrows have notes placed too high.
+7.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 
-9.  WebKit fails to stretch most extensible arrows.
+8.  WebKit fails to stretch most extensible arrows.
 
-10. Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+9.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-11. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+10. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-12. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+11. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-13. WebKit hides mhchem subscripts and superscripts.
+12. WebKit hides mhchem subscripts and superscripts.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
