@@ -508,6 +508,13 @@ const test = () => {
   new Expect(markup).toContain("lspace")
   new Expect(markup).toContain("rspace")
 
+  assertion = "A space should be placed between certain atom types and a math operator"
+  new Expect(temml.renderToString(r`d\sin`)).toContain('<mspace width="0.1667em">')
+  new Expect(temml.renderToString(r`\text{d}\sin`)).toContain('<mspace width="0.1667em">')
+  new Expect(temml.renderToString(r`(d+1)\sin`)).toContain('<mspace width="0.1667em">')
+  new Expect(temml.renderToString(r`{d+1}\sin`)).toContain('<mspace width="0.1667em">')
+  new Expect(temml.renderToString(r`\mathrm{d}\sin`)).toContain('<mspace width="0.1667em">')
+
   assertion = "A function parser should work"
   new Expect(r`\div`).toParse();
   new Expect(r`\blue x`).toParse();
