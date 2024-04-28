@@ -1930,6 +1930,8 @@ const test = () => {
 
   assertion = "\\def works locally"
   new Expect("\\def\\x{1}\\x{\\def\\x{2}\\x{\\def\\x{3}\\x}\\x}\\x").toParseLike(`1{2{3}2}1`)
+  assertion = "\\newcommand and \\renewcommand work locally"
+  new Expect("\\newcommand\\x{1}\\x{\\renewcommand\\x{2}\\x{\\renewcommand\\x{3}\\x}\\x}\\x").toParseLike(`1{2{3}2}1`)
 
   assertion = "\\gdef overrides at all levels"
   new Expect("\\def\\x{1}\\x{\\def\\x{2}\\x{\\gdef\\x{3}\\x}\\x}\\x").toParseLike(`1{2{3}3}3`)
@@ -1953,6 +1955,11 @@ const test = () => {
   macros = {}
   new Expect(r`\def\foo{1}`).toParse(new Settings({macros}))
   new Expect(macros["\\foo"]).toBeFalsy()
+  assertion = "\\newcommand doesn't change settings.macros"
+  macros = {}
+  new Expect(r`\newcommand\foo{1}`).toParse(new Settings({macros}))
+  new Expect(macros["\\foo"]).toBeFalsy()
+  
 
   assertion = "In a macro expander, \\long needs to be followed by macro prefixes, \\def or \\edef"
   new Expect(r`\long\def\foo{}\foo`).toParseLike("")

@@ -652,8 +652,12 @@ Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ �
 +===================+==================================================================+
 | \\def             | `\def\macroname<arg list>{definition to be expanded}`            |
 |                   +---------------------------------+--------------------------------+
-|                   | $\def\foo#1#2{#1^2 #2^3}        | `\def\foo#1#2{#1^2 #2^3}       |
-|                   | \foo a b + \foo c d$            |  \foo a b + \foo c d`          |
+|                   | $\def\foo{x^2} {\foo + \foo}$   | `\def\foo{x^2} \foo + \foo `   |
++-------------------+---------------------------------+--------------------------------+
+| \\gdef            | `\gdef\macroname<arg list>{definition to be expanded}`           |
+|                   +---------------------------------+--------------------------------+
+|                   | $\gdef\foo#1#2{#1^2 #2^3}       | `\gdef\foo#1#2{#1^2 #2^3}      |
+|                   | {\foo a b + \foo c d}$          |  \foo a b + \foo c d`          |
 +-------------------+---------------------------------+--------------------------------+
 | \\xdef            | `\xdef\macroname#1#2…{definition to be expanded}`                |
 +-------------------+------------------------------------------------------------------+
@@ -668,13 +672,13 @@ Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ �
 | `\newcommand`     | `\newcommand\macroname[numargs]{definition}`                     |
 |                   +---------------------------------+--------------------------------+
 |                   | $\newcommand\foo[2]{#1^2 #2^3}  | `\newcommand\foo[2]{#1^2 #2^3} |
-|                   | \foo a b + \foo c d$            |  \foo a b + \foo c d `         |
+|                   | {\foo a b + \foo c d}$          |  \foo a b + \foo c d `         |
 +-------------------+---------------------------------+--------------------------------+
 | `\renewcommand`   | `\renewcommand\macroname[numargs]{definition}`                   |
 +-------------------+------------------------------------------------------------------+
 | `\providecommand` | `\providecommand\macroname[numargs]{definition}`                 |
 +-------------------+---------------------------------+--------------------------------+
-{.grid colWidths="136 71 86"}
+{.grid}
 
 To create macros with document-wide scope, use `\gdef`, `\global\let`, or define a
 [preamble](./administration.html#preamble) in one of the Temml

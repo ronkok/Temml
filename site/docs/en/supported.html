@@ -319,11 +319,11 @@ i\in\Lambda\\
 <table><tr><td><span class='hurmet-tex' data-entry='\exist'><math><mi>∃</mi></math></span>  <code>\exist</code></td><td><span class='hurmet-tex' data-entry='\isin'><math><mo lspace="0em" rspace="0em">∈</mo></math></span>  <code>\isin</code></td><td><span class='hurmet-tex' data-entry='\empty'><math><mi>∅</mi></math></span>  <code>\empty</code></td><td><span class='hurmet-tex' data-entry='\sub'><math><mo lspace="0em" rspace="0em">⊂</mo></math></span>  <code>\sub</code></td></tr></table>
 <p>Direct Input: <span class="direct">∀ ∴ ∁ ∵ ∃ ∣ ∈ ∉ ∋ ⊂ ⊃ ∧ ∨ ↦ → ← ↔ ∅ ⟹ ⟺ ¬ ↯ ⥼ ⥽</span><br><span class="direct">ℂ ℍ ℕ ℙ ℚ ℝ</span></p>
 <h2 id='macros'>Macros</h2>
-<table class="grid" style="width: 293px">
-<colgroup><col style="width: 136px"><col style="width: 71px"><col style="width: 86px"></colgroup>
-<tr><td rowspan="2">\def</td><td colspan="2"><code>\def\macroname&lt;arg list&gt;{definition to be expanded}</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\def\foo#1#2{#1^2 #2^3}
-\foo a b + \foo c d'><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo></mrow><mrow><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math></span></td><td><code>\def\foo#1#2{#1^2 #2^3}
+<table class="grid"><tr><td rowspan="2">\def</td><td colspan="2"><code>\def\macroname&lt;arg list&gt;{definition to be expanded}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\def\foo{x^2} {\foo + \foo}'><math><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>x</mi><mn>2</mn></msup></mrow></math></span></td><td><code>\def\foo{x^2} \foo + \foo</code></td></tr>
+<tr><td rowspan="2">\gdef</td><td colspan="2"><code>\gdef\macroname&lt;arg list&gt;{definition to be expanded}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\gdef\foo#1#2{#1^2 #2^3}
+{\foo a b + \foo c d}'><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math></span></td><td><code>\gdef\foo#1#2{#1^2 #2^3}
  \foo a b + \foo c d</code></td></tr>
 <tr><td>\xdef</td><td colspan="2"><code>\xdef\macroname#1#2…{definition to be expanded}</code></td></tr>
 <tr><td>\edef</td><td colspan="2"><code>\edef\macroname#1#2…{definition}</code></td></tr>
@@ -332,7 +332,7 @@ i\in\Lambda\\
 <tr><td>\global\def</td><td colspan="2"><code>\global\def\macroname#1#2…{definition}</code></td></tr>
 <tr><td rowspan="2"><code>\newcommand</code></td><td colspan="2"><code>\newcommand\macroname[numargs]{definition}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\newcommand\foo[2]{#1^2 #2^3}
-\foo a b + \foo c d'><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo></mrow><mrow><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math></span></td><td><code>\newcommand\foo[2]{#1^2 #2^3}
+{\foo a b + \foo c d}'><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>3</mn></msup><mo>+</mo><msup><mi>c</mi><mn>2</mn></msup><msup><mi>d</mi><mn>3</mn></msup></mrow></math></span></td><td><code>\newcommand\foo[2]{#1^2 #2^3}
  \foo a b + \foo c d</code></td></tr>
 <tr><td><code>\renewcommand</code></td><td colspan="2"><code>\renewcommand\macroname[numargs]{definition}</code></td></tr>
 <tr><td><code>\providecommand</code></td><td colspan="2"><code>\providecommand\macroname[numargs]{definition}</code></td></tr></table>

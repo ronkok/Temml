@@ -3683,8 +3683,7 @@ var temml = (function () {
 
       parser.gullet.macros.set(
         name,
-        { tokens, numArgs },
-        !parser.settings.strict
+        { tokens, numArgs }
       );
 
       return { type: "internal", mode: parser.mode };

@@ -44,6 +44,7 @@ const arrayOfRegExMatches = (regex, text) => {
 
 // Comparison page
 const temmlRegEx = /₮{1,2}[^₮]+₮{1,2}/g
+let macros = {};
 let comp = fs.readFileSync('./docs/comparison.html').toString('utf8')
 let matches = arrayOfRegExMatches(temmlRegEx, comp)
 for (let i = matches.length - 1; i >= 0; i--) {
@@ -52,7 +53,7 @@ for (let i = matches.length - 1; i >= 0; i--) {
       ? matches[i].value.slice(2, -2).trim()
       : matches[i].value.slice(1, -1).trim();
   tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-  let math =  temml.renderToString(tex, { displayMode, trust: true });
+  let math =  temml.renderToString(tex, { displayMode, trust: true, macros });
   if (math.indexOf("#b22222") > -1) {
     math = '<span class="no-sup">Not supported</span>'
   }
