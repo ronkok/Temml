@@ -1959,7 +1959,6 @@ const test = () => {
   macros = {}
   new Expect(r`\newcommand\foo{1}`).toParse(new Settings({macros}))
   new Expect(macros["\\foo"]).toBeFalsy()
-  
 
   assertion = "In a macro expander, \\long needs to be followed by macro prefixes, \\def or \\edef"
   new Expect(r`\long\def\foo{}\foo`).toParseLike("")

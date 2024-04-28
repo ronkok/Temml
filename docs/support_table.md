@@ -641,7 +641,7 @@ If you know the shape of a character, but not its name,
 | {gather*}      | $$\begin{gather*}a=b\\e=b+c\end{gather*}$$| `\begin{gather*}`<br>   `a=b \\ `<br>   `e=b+c`<br>`\end{gather*}`| ams |
 | {gathered}     | $\begin{gathered}a=b\\e=b+c\end{gathered}$| `\begin{gathered}`<br>   `a=b \\ `<br>   `e=b+c`<br>`\end{gathered}`| ams |
 | \gcd           | $\gcd$| | |
-| \gdef          | (Not supported)| | |
+| \gdef          | $\gdef\barr#1#2{#1^2 #2^3} \barr a b + \barr c d$| `\gdef\barr#1#2{#1^2 #2^3} \barr a b + \barr c d` | |
 | \ge            | $\ge$| | |
 | \geneuro       | (Not supported) | See `\euro`| |
 | \geneuronarrow | (Not supported) | See `\euro`| |
