@@ -126,9 +126,10 @@ If you know the shape of a character, but not its name,
 |\arg|$\arg$|||
 |\argmax|$\argmax$|| statmath |
 |\argmin|$\argmin$|| statmath |
-|{array}|$\begin{array}{cc}a&b\\c&d\end{array}$ | `\begin{array}{cc}`<br>   `a & b \\`<br>   `c & d`<br>`\end{array}`| LaTeX2ε |
+|{array}|$\begin{array}{cc}a&b\\c&d\end{array}$ | `\begin{array}{cc}`<br>   `a & b \\`<br>   `c & d`<br>`\end{array}`| LaTeX 2ε |
 |\array|(Not supported)|See `{array}`||
-|\arraystretch|(Not supported)|||
+|\arraycolsep|$\renewcommand{\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}$| `\renewcommand{\arraycolsep}{12pt}`<br>`\begin{array}{cc}`<br>   `a & b \\`<br>   `c & d`<br>`\end{array}`| LaTeX 2ε |
+|\arraystretch|$\renewcommand{\arraystretch}{2.0}\begin{array}{cc}a&b\\c&d\end{array}$| `\renewcommand{\arraystretch}{2.0}`<br>`\begin{array}{cc}`<br>   `a & b \\`<br>   `c & d`<br>`\end{array}`| LaTeX 2ε |
 |\Arrowvert|(Not supported)|see `\Vert`||
 |\arrowvert|(Not supported)|see `\vert`||
 |\ast|$\ast$|||

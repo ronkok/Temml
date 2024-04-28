@@ -262,40 +262,42 @@ $( \big( \Big( \bigg( \Bigg($ `( \big( \Big( \bigg( \Bigg(`
 
 ## Environments
 
-+:=====================:+:===========================+:==========================:+:=============================+
-| $\begin{matrix}       | `\begin{matrix}`\          | $\begin{array}{cc}         | `\begin{array}{cc}`\         |
-|  a & b \\             |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
-|  c & d                |    `c & d`\                | c & d                      |    `c & d`\                  |
-|  \end{matrix}$        | `\end{matrix}`             | \end{array}$               | `\end{array}`                |
-+-----------------------+---------------------------+----------------------------+------------------------------+
-| $\begin{pmatrix}      | `\begin{pmatrix}`\         | $\begin{bmatrix}           | `\begin{bmatrix}`\           |
-| a & b \\              |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
-| c & d                 |    `c & d`\                | c & d                      |    `c & d`\                  |
-| \end{pmatrix}$        | `\end{pmatrix}`            | \end{bmatrix}$             | `\end{bmatrix}`              |
-+-----------------------+----------------------------+----------------------------+------------------------------+
-| $\begin{vmatrix}      | `\begin{vmatrix}`\         | $\begin{Vmatrix}           | `\begin{Vmatrix}`\           |
-|    a & b \\           |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
-|    c & d              |    `c & d`\                | c & d                      |    `c & d`\                  |
-| \end{vmatrix}$        | `\end{vmatrix}`            | \end{Vmatrix}$             | `\end{Vmatrix}`              |
-+-----------------------+----------------------------+----------------------------+------------------------------+
-| $\begin{Bmatrix}      | `\begin{Bmatrix}`\         | $\begin{array}{c|c:c}      | `\begin{array}{c|c:c}`\      |
-|  a & b \\             |    `a & b \\`\             | a & b & c \\ \hline        |    `a & b & c \\ \hline`\    |
-|  c & d                |    `c & d`\                | d & e & f \\ \hdashline    |    `d & e & f \\`\           |
-| \end{Bmatrix}$        | `\end{Bmatrix}`            | g & h & i                  |    `\hdashline`\             |
-|                       |                            | \end{array}$               |    `g & h & i`\              |
-|                       |                            |                            | `\end{array}`                |
-+-----------------------+----------------------------+----------------------------+------------------------------+
-| $x = \begin{cases}    | `x = \begin{cases}`\       | $\begin{rcases}            | `\begin{rcases}`\            |
-| a &\text{if } b \\    |    `a &\text{if } b \\`\   | a &\text{if } b \\         |    `a &\text{if } b  \\`\    |
-| c &\text{if } d       |    `c &\text{if } d`\      | c &\text{if } d            |   `c &\text{if } d`\         |
-| \end{cases}$          | `\end{cases}`              | \end{rcases}⇒$             | `\end{rcases}⇒`              |
-+-----------------------+----------------------------+----------------------------+------------------------------+
-| $\begin{smallmatrix}  | `\begin{smallmatrix}`\     | $$                         | `\sum_{\begin{subarray}{l}`\ |
-|  a & b \\             |    `a & b \\`\             | \sum_{\begin{subarray}{l}  |    `i\in\Lambda\\`\          |
-|  c & d                |    `c & d`\                | i\in\Lambda\\              |    `0<j<n`\                  |
-| \end{smallmatrix}$    | `\end{smallmatrix}`        |  0<j<n\end{subarray}}      | `\end{subarray}}`            |
-|                       |                            | $$                         |                              |
-+-----------------------+----------------------------+----------------------------+------------------------------+
++:=====================:+:===========================+:=================================:+:=====================================+
+| $\begin{matrix}       | `\begin{matrix}`\          | $\begin{array}{cc}                | `\begin{array}{cc}`\                 |
+|  a & b \\             |    `a & b \\`\             | a & b \\                          |    `a & b \\`\                       |
+|  c & d                |    `c & d`\                | c & d                             |    `c & d`\                          |
+|  \end{matrix}$        | `\end{matrix}`             | \end{array}$                      | `\end{array}`                        |
++-----------------------+---------------------------+------------------------------------+---------------------------------------+
+| $\begin{pmatrix}      | `\begin{pmatrix}`\         | $\begin{bmatrix}                  | `\begin{bmatrix}`\                   |
+| a & b \\              |    `a & b \\`\             | a & b \\                          |    `a & b \\`\                       |
+| c & d                 |    `c & d`\                | c & d                             |    `c & d`\                          |
+| \end{pmatrix}$        | `\end{pmatrix}`            | \end{bmatrix}$                    | `\end{bmatrix}`                      |
++-----------------------+----------------------------+-----------------------------------+--------------------------------------+
+| $\begin{vmatrix}      | `\begin{vmatrix}`\         | $\begin{Vmatrix}                  | `\begin{Vmatrix}`\                   |
+|    a & b \\           |    `a & b \\`\             | a & b \\                          |    `a & b \\`\                       |
+|    c & d              |    `c & d`\                | c & d                             |    `c & d`\                          |
+| \end{vmatrix}$        | `\end{vmatrix}`            | \end{Vmatrix}$                    | `\end{Vmatrix}`                      |
++-----------------------+----------------------------+-----------------------------------+--------------------------------------+
+| $\begin{Bmatrix}      | `\begin{Bmatrix}`\         | $\renewcommand{\arraycolsep}{9pt} | `\renewcommand{\arraycolsep}{9pt}`\  |
+|  a & b \\             |    `a & b \\`\             | \renewcommand{\arraystretch}{1.3} | `\renewcommand{\arraystretch}{1.3}`\ |
+|  c & d                |    `c & d`\                | \begin{array}{c|c:c}              | `\begin{array}{c|c:c}`\              |
+| \end{Bmatrix}$        | `\end{Bmatrix}`            |   a & b & c \\ \hline             |    `a & b & c \\ \hline`\            |
+|                       |                            |   d & e & f \\ \hdashline         |    `d & e & f \\`\                   |
+|                       |                            |   g & h & i                       |    `\hdashline`\                     |
+|                       |                            | \end{array}$                      |    `g & h & i`\                      |
+|                       |                            |                                   | `\end{array}`                        |
++-----------------------+----------------------------+-----------------------------------+--------------------------------------+
+| $x = \begin{cases}    | `x = \begin{cases}`\       | $\begin{rcases}                   | `\begin{rcases}`\                    |
+| a &\text{if } b \\    |    `a &\text{if } b \\`\   | a &\text{if } b \\                |    `a &\text{if } b  \\`\            |
+| c &\text{if } d       |    `c &\text{if } d`\      | c &\text{if } d                   |   `c &\text{if } d`\                 |
+| \end{cases}$          | `\end{cases}`              | \end{rcases}⇒$                    | `\end{rcases}⇒`                      |
++-----------------------+----------------------------+-----------------------------------+--------------------------------------+
+| $\begin{smallmatrix}  | `\begin{smallmatrix}`\     | $$                                | `\sum_{\begin{subarray}{l}`\         |
+|  a & b \\             |    `a & b \\`\             | \sum_{\begin{subarray}{l}         |    `i\in\Lambda\\`\                  |
+|  c & d                |    `c & d`\                | i\in\Lambda\\                     |    `0<j<n`\                          |
+| \end{smallmatrix}$    | `\end{smallmatrix}`        |  0<j<n\end{subarray}}             | `\end{subarray}}`                    |
+|                       |                            | $$                                |                                      |
++-----------------------+----------------------------+-----------------------------------+--------------------------------------+
 
 ### AMS Environments
 

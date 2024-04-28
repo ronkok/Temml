@@ -7,7 +7,8 @@ import { StyleLevel } from "../constants"
 import ParseError from "../ParseError";
 import { assertNodeType, assertSymbolNodeType } from "../parseNode";
 import { checkSymbolNodeType } from "../parseNode";
-
+import { stringFromArg } from "../macros"
+import { calculateSize } from "../units"
 import * as mml from "../buildMathML";
 
 // Helper functions
@@ -36,6 +37,24 @@ const validateAmsEnvironmentContext = context => {
   if (!settings.displayMode) {
     throw new ParseError(`{${context.envName}} can be used only in display mode.`);
   }
+}
+
+const sizeRegEx = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/
+const arrayGaps = macros => {
+  let arraystretch = macros.get("\\arraystretch")
+  if (typeof arraystretch !== "string") {
+    arraystretch = stringFromArg(arraystretch.tokens)
+  }
+  arraystretch = isNaN(arraystretch) ? null : Number(arraystretch)
+  let arraycolsepStr = macros.get("\\arraycolsep")
+  if (typeof arraycolsepStr !== "string") {
+    arraycolsepStr = stringFromArg(arraycolsepStr.tokens)
+  }
+  const match = sizeRegEx.exec(arraycolsepStr)
+  const arraycolsep = match
+    ? { number: +(match[1] + match[2]), unit: match[3] }
+    : null
+  return [arraystretch, arraycolsep]
 }
 
 const getTag = (group, style, rowNum) => {
@@ -76,12 +95,14 @@ function parseArray(
   {
     cols, // [{ type: string , align: l|c|r|null }]
     envClasses, // align(ed|at|edat) | array | cases | cd | small | multline
-    addEqnNum, // boolean
-    singleRow, // boolean
+    addEqnNum,      // boolean
+    singleRow,      // boolean
     emptySingleRow, // boolean
-    maxNumCols, // number
-    leqno // boolean
-  },
+    maxNumCols,     // number
+    leqno,          // boolean
+    arraystretch,   // number  | null
+    arraycolsep     // size value | null
+},
   scriptLevel
 ) {
   parser.gullet.beginGroup();
@@ -211,7 +232,9 @@ function parseArray(
     addEqnNum,
     scriptLevel,
     tags,
-    leqno
+    leqno,
+    arraystretch,
+    arraycolsep
   };
 }
 
@@ -301,12 +324,18 @@ const mathmlBuilder = function(group, style) {
   }
 
   if (group.envClasses.length > 0) {
-    const pad = group.envClasses.includes("jot")
+    let pad = group.envClasses.includes("jot")
       ? "0.7" // 0.5ex + 0.09em top & bot padding
       : group.envClasses.includes("small")
       ? "0.35"
       : "0.5" // 0.5ex default top & bot padding
-    const sidePadding = group.envClasses.includes("abut")
+    if (group.arraystretch && group.arraystretch !== 1) {
+      // In LaTeX, \arraystretch is a factor applied to a 12pt strut height.
+      // It defines a baseline to baseline distance.
+      // Here, we do an approximation of that approach.
+      pad = String(1.4 * group.arraystretch - 0.8)
+    }
+    let sidePadding = group.envClasses.includes("abut")
       ? "0"
       : group.envClasses.includes("cases")
       ? "0"
@@ -315,6 +344,12 @@ const mathmlBuilder = function(group, style) {
       : group.envClasses.includes("cd")
       ? "0.25"
       : "0.4" // default side padding
+    let sidePadUnit = "em"
+    if (group.arraycolsep) {
+      const arraySidePad = calculateSize(group.arraycolsep, style)
+      sidePadding = arraySidePad.number
+      sidePadUnit = arraySidePad.unit
+    }
 
     const numCols = tbl.length === 0 ? 0 : tbl[0].children.length
 
@@ -333,7 +368,8 @@ const mathmlBuilder = function(group, style) {
     // Padding
     for (let i = 0; i < tbl.length; i++) {
       for (let j = 0; j < tbl[i].children.length; j++) {
-        tbl[i].children[j].style.padding = `${pad}ex ${sidePad(j, 1)}em ${pad}ex ${sidePad(j, 0)}em`
+        tbl[i].children[j].style.padding = `${pad}ex ${sidePad(j, 1)}${sidePadUnit}`
+          + ` ${pad}ex ${sidePad(j, 0)}${sidePadUnit}`
       }
     }
 
@@ -587,10 +623,13 @@ defineEnvironment({
       }
       throw new ParseError("Unknown column alignment: " + ca, nde);
     });
+    const [arraystretch, arraycolsep] = arrayGaps(context.parser.gullet.macros)
     const res = {
       cols,
       envClasses: ["array"],
-      maxNumCols: cols.length
+      maxNumCols: cols.length,
+      arraystretch,
+      arraycolsep
     };
     return parseArray(context.parser, res, dCellStyle(context.envName));
   },
@@ -656,6 +695,7 @@ defineEnvironment({
     }
     const res = parseArray(context.parser, payload, "text")
     res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign })
+    const [arraystretch, arraycolsep] = arrayGaps(context.parser.gullet.macros)
     return delimiters
       ? {
         type: "leftright",
@@ -663,7 +703,9 @@ defineEnvironment({
         body: [res],
         left: delimiters[0],
         right: delimiters[1],
-        rightColor: undefined // \right uninfluenced by \color in array
+        rightColor: undefined, // \right uninfluenced by \color in array
+        arraystretch,
+        arraycolsep
       }
       : res;
   },

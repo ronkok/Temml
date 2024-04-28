@@ -16,6 +16,7 @@ import unicodeAccents from /*preval*/ "./unicodeAccents";
 import unicodeSymbols from /*preval*/ "./unicodeSymbols";
 
 const binLeftCancellers = ["bin", "op", "open", "punct", "rel"];
+const sizeRegEx = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/
 
 /**
  * This file contains the parser used to parse out a TeX expression from the
@@ -679,7 +680,7 @@ export default class Parser {
       res.text = "0pt"; // Enable \above{}
       isBlank = true; // This is here specifically for \genfrac
     }
-    const match = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/.exec(res.text);
+    const match = sizeRegEx.exec(res.text);
     if (!match) {
       throw new ParseError("Invalid size: '" + res.text + "'", res);
     }

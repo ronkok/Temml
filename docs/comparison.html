@@ -721,12 +721,20 @@
             <td><code>\array{ a & b+1 \\ c+1 & d }</code></td>
           </tr>
           <tr>
-            <td>\arraystretch</td>
+            <td>\arraycolsep</td>
+            <td>₮\renewcommand{\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td>\(\def\arraystretch{1.5}\begin{array}{cc}a&b\\c&d\end{array}\)</td>
-            <td>₭\def\arraystretch{1.5}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
-            <td>₸\def\arraystretch{1.5}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
-            <td><code>\def\arraystretch{1.5}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
+            <td>₭\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
+            <td>₸\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
+            <td><code>\arraycolsep}{12pt}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
+          </tr>
+          <tr>
+            <td>\arraystretch</td>
+            <td>₮\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
+            <td>\(\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}\)</td>
+            <td>₭\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
+            <td>₸\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
+            <td><code>\renewcommand{\arraystretch}{1.5}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
           </tr>
           <tr>
             <td>\Arrowvert</td>
@@ -3350,7 +3358,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\gdef</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₮\gdef\bar#1{#1^2} \bar{y} + \bar{y}₮</td>
             <td><span class="no-sup">Not supported</span></td>
             <td>₭\gdef\bar#1{#1^2} \bar{y} + \bar{y}₭</td>
             <td data-tex="\gdef\bar#1{#1^2} \bar{y} + \bar{y}"><span class="no-sup">Not supported</span></td>

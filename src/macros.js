@@ -82,7 +82,7 @@ defineMacro("\\TextOrMath", function(context) {
   }
 });
 
-const stringFromArg = arg => {
+export const stringFromArg = arg => {
   // Reverse the order of the arg and return a string.
   let str = ""
   for (let i = arg.length - 1; i > -1; i--) {
@@ -245,6 +245,10 @@ defineMacro("\\underbar", "\\underline{\\text{#1}}");
 // The zero-width rule gets us an equivalent to the vertical 6pt kern.
 defineMacro("\\vdots", "{\\varvdots\\rule{0pt}{15pt}}");
 defineMacro("\u22ee", "\\vdots");
+
+// {array} environment gaps
+defineMacro("\\arraystretch", "1")     // line spacing factor times 12pt
+defineMacro("\\arraycolsep", "6pt")    // half the width separating columns
 
 //////////////////////////////////////////////////////////////////////
 // amsmath.sty
