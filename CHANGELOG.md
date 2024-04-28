@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.26] = 2024-04-28
+
+### Fixed
+
+- Insert a space between a font atom and a math operator. Fixes #62,
+- \newcommand and \renewcommand act locally, not globally
+
+### Added
+
+- Support \arraycolsep & \arraystretch
+
 ## [0.10.25] = 2024-03-31
 
 ### Fixed

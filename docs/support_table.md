@@ -1818,7 +1818,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.25
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.26
 
 <div style="height:0.5em;"></div>
 
