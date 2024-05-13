@@ -431,6 +431,12 @@ const test = () => {
   new Expect(r`\text{B²⁺³}`).toParse()
   new Expect(r`\text{B²⁺³}`).toBuild()
 
+  assertion = "A text builder should consolidate mtext elements when possible"
+  nodes = build(r`\text{He\'{A} l\textbf{l}ó w{orl}d}`)
+  new Expect(nodes.length).toBe(1)
+  new Expect(nodes[0].type).toBe("mrow")
+  new Expect(nodes[0].children.length).toBe(3)
+
   assertion = "A supsub parser should merge a numeric base with a preceding number"
   new Expect(temml.renderToString(r`123^4`)).toContain("<mn>123</mn>")
 

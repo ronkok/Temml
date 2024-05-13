@@ -34,49 +34,72 @@ export const makeText = function(text, mode, style) {
   return new mathMLTree.TextNode(text);
 };
 
+const copyChar = (newRow, child) => {
+  if (newRow.children.length === 0 ||
+      newRow.children[newRow.children.length - 1].type !== "mtext") {
+    const mtext = new mathMLTree.MathNode(
+      "mtext",
+      [new mathMLTree.TextNode(child.children[0].text)]
+    )
+    newRow.children.push(mtext)
+  } else {
+    newRow.children[newRow.children.length - 1].children[0].text += child.children[0].text
+  }
+}
+
 export const consolidateText = mrow => {
   // If possible, consolidate adjacent <mtext> elements into a single element.
   if (mrow.type !== "mrow" && mrow.type !== "mstyle") { return mrow }
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
-  if (!mrow.children[0].attributes || mrow.children[0].type !== "mtext") { return mrow }
-  const variant = mrow.children[0].attributes.mathvariant || ""
-  const mtext = new mathMLTree.MathNode(
-    "mtext",
-    [new mathMLTree.TextNode(mrow.children[0].children[0].text)]
-  )
-  for (let i = 1; i < mrow.children.length; i++) {
-    // Check each child and, if possible, copy the character into child[0].
-    const localVariant = mrow.children[i].attributes.mathvariant || ""
-    if (mrow.children[i].type === "mrow") {
-      const childRow = mrow.children[i]
-      for (let j = 0; j < childRow.children.length; j++) {
-        // We'll also check the children of a mrow. One level only. No recursion.
-        const childVariant = childRow.children[j].attributes.mathvariant || ""
-        if (childVariant !== variant || childRow.children[j].type !== "mtext") {
-          return mrow // At least one element cannot be consolidated. Get out.
-        } else {
-          mtext.children[0].text += childRow.children[j].children[0].text
+  const newRow = new mathMLTree.MathNode("mrow")
+  for (let i = 0; i < mrow.children.length; i++) {
+    const child = mrow.children[i];
+    if (child.type === "mtext" && Object.keys(child.attributes).length === 0) {
+      copyChar(newRow, child)
+    } else if (child.type === "mrow") {
+      // We'll also check the children of an mrow. One level only. No recursion.
+      let canConsolidate = true
+      for (let j = 0; j < child.children.length; j++) {
+        const grandChild = child.children[j];
+        if (grandChild.type !== "mtext" || Object.keys(child.attributes).length !== 0) {
+          canConsolidate = false
+          break
         }
       }
-    } else if (localVariant !== variant || mrow.children[i].type !== "mtext") {
-      return mrow
+      if (canConsolidate) {
+        for (let j = 0; j < child.children.length; j++) {
+          const grandChild = child.children[j];
+          copyChar(newRow, grandChild)
+        }
+      } else {
+        newRow.children.push(child)
+      }
     } else {
-      mtext.children[0].text += mrow.children[i].children[0].text
+      newRow.children.push(child)
     }
   }
-  // Firefox does not render a space at either end of an <mtext> string.
-  // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
-  if (mtext.children[0].text.charAt(0) === " ") {
-    mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1)
+  for (let i = 0; i < newRow.children.length; i++) {
+    if (newRow.children[i].type === "mtext") {
+      const mtext = newRow.children[i];
+      // Firefox does not render a space at either end of an <mtext> string.
+      // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
+      if (mtext.children[0].text.charAt(0) === " ") {
+        mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1)
+      }
+      const L = mtext.children[0].text.length
+      if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
+        mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0"
+      }
+      for (const [key, value] of Object.entries(mrow.attributes)) {
+        mtext.attributes[key] = value
+      }
+    }
   }
-  const L = mtext.children[0].text.length
-  if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
-    mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0"
+  if (newRow.children.length === 1 && newRow.children[0].type === "mtext") {
+    return newRow.children[0]; // A consolidated <mtext>
+  } else {
+    return newRow
   }
-  for (const [key, value] of Object.entries(mrow.attributes)) {
-    mtext.attributes[key] = value
-  }
-  return mtext
 }
 
 const numberRegEx = /^[0-9]$/
