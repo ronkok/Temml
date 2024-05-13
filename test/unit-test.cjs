@@ -2173,26 +2173,11 @@ const test = () => {
   )
     
   assertion = "Unicode accents should parse Latin-1 letters in text mode"
-  new Expect(`\\text{ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ}`).toBuildLike(
-    r`\text{\`A\'A\^A\~A\"A\r A` +
-    r`\`E\'E\^E\"E` +
-    r`\`I\'I\^I\"I` +
-    r`\~N` +
-    r`\`O\'O\^O\~O\"O` +
-    r`\`U\'U\^U\"U` +
-    r`\'Y` +
-    r`\`a\'a\^a\~a\"a\r a` +
-    r`\`e\'e\^e\"e` +
-    r`\`ı\'ı\^ı\"ı` +
-    r`\~n` +
-    r`\`o\'o\^o\~o\"o` +
-    r`\`u\'u\^u\"u` +
-    r`\'y\"y}`
-  )
+  new Expect(temml.renderToString(r`\text{ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ}`))
+    .toContain("ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ")
 
   assertion = "Unicode accents should parse combining characters"
   new Expect("A\u0301C\u0301").toBuildLike(r`Á\acute C`);
-  new Expect("\\text{A\u0301C\u0301}").toBuildLike(r`\text{Á\'C}`, strictSettings());
 
   assertion = "Unicode accents should build multi-accented characters"
   new Expect(`ấā́ắ\text{ấā́ắ}`).toParse()

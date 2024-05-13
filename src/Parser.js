@@ -886,7 +886,7 @@ export default class Parser {
     // At this point, we should have a symbol, possibly with accents.
     // First expand any accented base symbol according to unicodeSymbols.
     if (Object.prototype.hasOwnProperty.call(unicodeSymbols, text[0]) &&
-        !symbols[this.mode][text[0]]) {
+      this.mode === "math" && !symbols[this.mode][text[0]]) {
       // This behavior is not strict (XeTeX-compatible) in math mode.
       if (this.settings.strict && this.mode === "math") {
         throw new ParseError(`Accented Unicode text character "${text[0]}" used in ` + `math mode`,
@@ -896,7 +896,9 @@ export default class Parser {
       text = unicodeSymbols[text[0]] + text.slice(1);
     }
     // Strip off any combining characters
-    const match = combiningDiacriticalMarksEndRegex.exec(text);
+    const match = this.mode === "math"
+      ? combiningDiacriticalMarksEndRegex.exec(text)
+      : null
     if (match) {
       text = text.substring(0, match.index);
       if (text === "i") {
@@ -949,7 +951,7 @@ export default class Parser {
         };
       }
       symbol = s;
-    } else if (text.charCodeAt(0) >= 0x80) {
+    } else if (text.charCodeAt(0) >= 0x80 || combiningDiacriticalMarksEndRegex.exec(text)) {
       // no symbol for e.g. ^
       if (this.settings.strict && this.mode === "math") {
         throw new ParseError(`Unicode text character "${text[0]}" used in math mode`, nucleus)
