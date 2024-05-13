@@ -72,6 +72,7 @@ const needWebkitShift = new Set([
 ])
 
 const combiningChar = {
+  "\\`": "\u0300",
   "\\'": "\u0301",
   "\\^": "\u0302",
   "\\~": "\u0303",
@@ -153,7 +154,8 @@ defineFunction({
       console.log(`Temml parse error: Command ${context.funcName} is invalid in math mode.`)
     }
 
-    if (mode === "text" && base.text && base.text.length === 1 && smalls.indexOf(base.text) > -1) {
+    if (mode === "text" && base.text && base.text.length === 1
+        && context.funcName in combiningChar  && smalls.indexOf(base.text) > -1) {
       // Return a combining accent character
       return {
         type: "textord",
