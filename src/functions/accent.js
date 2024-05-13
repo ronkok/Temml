@@ -71,6 +71,19 @@ const needWebkitShift = new Set([
   "\\'", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
 ])
 
+const combiningChar = {
+  "\\'": "\u0301",
+  "\\^": "\u0302",
+  "\\~": "\u0303",
+  "\\=": "\u0304",
+  "\\u": "\u0306",
+  "\\.": "\u0307",
+  '\\"': "\u0308",
+  "\\r": "\u030A",
+  "\\H": "\u030B",
+  "\\v": "\u030C"
+}
+
 // Accents
 defineFunction({
   type: "accent",
@@ -140,13 +153,23 @@ defineFunction({
       console.log(`Temml parse error: Command ${context.funcName} is invalid in math mode.`)
     }
 
-    return {
-      type: "accent",
-      mode: mode,
-      label: context.funcName,
-      isStretchy: false,
-      base: base
-    };
+    if (mode === "text" && base.text && base.text.length === 1 && smalls.indexOf(base.text) > -1) {
+      // Return a combining accent character
+      return {
+        type: "textord",
+        mode: "text",
+        text: base.text + combiningChar[context.funcName]
+      }
+    } else {
+      // Build up the accent
+      return {
+        type: "accent",
+        mode: mode,
+        label: context.funcName,
+        isStretchy: false,
+        base: base
+      }
+    }
   },
   mathmlBuilder
 });
