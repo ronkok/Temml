@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.27] = 2024-05-13
+
+### Fixed
+
+- Avoid Unicode normalization of text-mode Latin-1 characters
+- Use combining characters for some text-mode accents
+- Improve consolidation of text into \<mtext\> elements. Fixes issue #64.
+
 ## [0.10.26] = 2024-04-28
 
 ### Fixed

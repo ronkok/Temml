@@ -2062,49 +2062,72 @@ const makeText = function(text, mode, style) {
   return new mathMLTree.TextNode(text);
 };
 
+const copyChar = (newRow, child) => {
+  if (newRow.children.length === 0 ||
+      newRow.children[newRow.children.length - 1].type !== "mtext") {
+    const mtext = new mathMLTree.MathNode(
+      "mtext",
+      [new mathMLTree.TextNode(child.children[0].text)]
+    );
+    newRow.children.push(mtext);
+  } else {
+    newRow.children[newRow.children.length - 1].children[0].text += child.children[0].text;
+  }
+};
+
 const consolidateText = mrow => {
   // If possible, consolidate adjacent <mtext> elements into a single element.
   if (mrow.type !== "mrow" && mrow.type !== "mstyle") { return mrow }
   if (mrow.children.length === 0) { return mrow } // empty group, e.g., \text{}
-  if (!mrow.children[0].attributes || mrow.children[0].type !== "mtext") { return mrow }
-  const variant = mrow.children[0].attributes.mathvariant || "";
-  const mtext = new mathMLTree.MathNode(
-    "mtext",
-    [new mathMLTree.TextNode(mrow.children[0].children[0].text)]
-  );
-  for (let i = 1; i < mrow.children.length; i++) {
-    // Check each child and, if possible, copy the character into child[0].
-    const localVariant = mrow.children[i].attributes.mathvariant || "";
-    if (mrow.children[i].type === "mrow") {
-      const childRow = mrow.children[i];
-      for (let j = 0; j < childRow.children.length; j++) {
-        // We'll also check the children of a mrow. One level only. No recursion.
-        const childVariant = childRow.children[j].attributes.mathvariant || "";
-        if (childVariant !== variant || childRow.children[j].type !== "mtext") {
-          return mrow // At least one element cannot be consolidated. Get out.
-        } else {
-          mtext.children[0].text += childRow.children[j].children[0].text;
+  const newRow = new mathMLTree.MathNode("mrow");
+  for (let i = 0; i < mrow.children.length; i++) {
+    const child = mrow.children[i];
+    if (child.type === "mtext" && Object.keys(child.attributes).length === 0) {
+      copyChar(newRow, child);
+    } else if (child.type === "mrow") {
+      // We'll also check the children of an mrow. One level only. No recursion.
+      let canConsolidate = true;
+      for (let j = 0; j < child.children.length; j++) {
+        const grandChild = child.children[j];
+        if (grandChild.type !== "mtext" || Object.keys(child.attributes).length !== 0) {
+          canConsolidate = false;
+          break
         }
       }
-    } else if (localVariant !== variant || mrow.children[i].type !== "mtext") {
-      return mrow
+      if (canConsolidate) {
+        for (let j = 0; j < child.children.length; j++) {
+          const grandChild = child.children[j];
+          copyChar(newRow, grandChild);
+        }
+      } else {
+        newRow.children.push(child);
+      }
     } else {
-      mtext.children[0].text += mrow.children[i].children[0].text;
+      newRow.children.push(child);
     }
   }
-  // Firefox does not render a space at either end of an <mtext> string.
-  // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
-  if (mtext.children[0].text.charAt(0) === " ") {
-    mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
+  for (let i = 0; i < newRow.children.length; i++) {
+    if (newRow.children[i].type === "mtext") {
+      const mtext = newRow.children[i];
+      // Firefox does not render a space at either end of an <mtext> string.
+      // To get proper rendering, we replace leading or trailing spaces with no-break spaces.
+      if (mtext.children[0].text.charAt(0) === " ") {
+        mtext.children[0].text = "\u00a0" + mtext.children[0].text.slice(1);
+      }
+      const L = mtext.children[0].text.length;
+      if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
+        mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
+      }
+      for (const [key, value] of Object.entries(mrow.attributes)) {
+        mtext.attributes[key] = value;
+      }
+    }
   }
-  const L = mtext.children[0].text.length;
-  if (L > 0 && mtext.children[0].text.charAt(L - 1) === " ") {
-    mtext.children[0].text = mtext.children[0].text.slice(0, -1) + "\u00a0";
+  if (newRow.children.length === 1 && newRow.children[0].type === "mtext") {
+    return newRow.children[0]; // A consolidated <mtext>
+  } else {
+    return newRow
   }
-  for (const [key, value] of Object.entries(mrow.attributes)) {
-    mtext.attributes[key] = value;
-  }
-  return mtext
 };
 
 const numberRegEx$1 = /^[0-9]$/;
@@ -2384,6 +2407,20 @@ const needWebkitShift = new Set([
   "\\'", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
 ]);
 
+const combiningChar = {
+  "\\`": "\u0300",
+  "\\'": "\u0301",
+  "\\^": "\u0302",
+  "\\~": "\u0303",
+  "\\=": "\u0304",
+  "\\u": "\u0306",
+  "\\.": "\u0307",
+  '\\"': "\u0308",
+  "\\r": "\u030A",
+  "\\H": "\u030B",
+  "\\v": "\u030C"
+};
+
 // Accents
 defineFunction({
   type: "accent",
@@ -2453,13 +2490,24 @@ defineFunction({
       console.log(`Temml parse error: Command ${context.funcName} is invalid in math mode.`);
     }
 
-    return {
-      type: "accent",
-      mode: mode,
-      label: context.funcName,
-      isStretchy: false,
-      base: base
-    };
+    if (mode === "text" && base.text && base.text.length === 1
+        && context.funcName in combiningChar  && smalls.indexOf(base.text) > -1) {
+      // Return a combining accent character
+      return {
+        type: "textord",
+        mode: "text",
+        text: base.text + combiningChar[context.funcName]
+      }
+    } else {
+      // Build up the accent
+      return {
+        type: "accent",
+        mode: mode,
+        label: context.funcName,
+        isStretchy: false,
+        base: base
+      }
+    }
   },
   mathmlBuilder: mathmlBuilder$a
 });
@@ -13059,7 +13107,7 @@ class Parser {
     // At this point, we should have a symbol, possibly with accents.
     // First expand any accented base symbol according to unicodeSymbols.
     if (Object.prototype.hasOwnProperty.call(unicodeSymbols, text[0]) &&
-        !symbols[this.mode][text[0]]) {
+      this.mode === "math" && !symbols[this.mode][text[0]]) {
       // This behavior is not strict (XeTeX-compatible) in math mode.
       if (this.settings.strict && this.mode === "math") {
         throw new ParseError(`Accented Unicode text character "${text[0]}" used in ` + `math mode`,
@@ -13069,7 +13117,9 @@ class Parser {
       text = unicodeSymbols[text[0]] + text.slice(1);
     }
     // Strip off any combining characters
-    const match = combiningDiacriticalMarksEndRegex.exec(text);
+    const match = this.mode === "math"
+      ? combiningDiacriticalMarksEndRegex.exec(text)
+      : null;
     if (match) {
       text = text.substring(0, match.index);
       if (text === "i") {
@@ -13122,7 +13172,7 @@ class Parser {
         };
       }
       symbol = s;
-    } else if (text.charCodeAt(0) >= 0x80) {
+    } else if (text.charCodeAt(0) >= 0x80 || combiningDiacriticalMarksEndRegex.exec(text)) {
       // no symbol for e.g. ^
       if (this.settings.strict && this.mode === "math") {
         throw new ParseError(`Unicode text character "${text[0]}" used in math mode`, nucleus)
@@ -13355,7 +13405,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.26";
+const version = "0.10.27";
 
 function postProcess(block) {
   const labelMap = {};
