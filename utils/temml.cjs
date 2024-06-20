@@ -5039,6 +5039,7 @@ defineMacro("\\standardstate", "\\text{\\tiny\\char`⦵}");
  *    4. The ~bond forms are composed entirely of \rule elements.
  *    5. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
  *    6. The electron dot uses \textbullet instead of \bullet.
+ *    7. \smash[T] has been removed. (WebKit hides anything inside \smash{…})
  *
  *    This code, as other Temml code, is released under the MIT license.
  * 
@@ -6453,8 +6454,12 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
             res += "{\\vphantom{X}}";
             res += "^{\\hphantom{"+(b5.b||"")+"}}_{\\hphantom{"+(b5.p||"")+"}}";
             res += "{\\vphantom{X}}";
-            res += "^{\\smash[t]{\\vphantom{2}}\\mathllap{"+(b5.b||"")+"}}";
-            res += "_{\\vphantom{2}\\mathllap{\\smash[t]{"+(b5.p||"")+"}}}";
+            // In the next two lines, I've removed \smash[t] (ron)
+            // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+            //res += "^{\\smash[t]{\\vphantom{2}}\\mathllap{"+(b5.b||"")+"}}";
+            res += "^{\\vphantom{2}\\mathllap{"+(b5.b||"")+"}}";
+            //res += "_{\\vphantom{2}\\mathllap{\\smash[t]{"+(b5.p||"")+"}}}";
+            res += "_{\\vphantom{2}\\mathllap{"+(b5.p||"")+"}}";
           }
           //
           // o
@@ -6474,7 +6479,10 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
               res += "^{"+b5.d+"}";
             }
             if (b5.q) {
-              res += "_{\\smash[t]{"+b5.q+"}}";
+              // In the next line, I've removed \smash[t] (ron)
+              // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+              //res += "_{\\smash[t]{"+b5.q+"}}";
+              res += "_{"+b5.q+"}";
             }
           } else if (buf.dType === 'oxidation') {
             if (b5.d) {
@@ -6486,14 +6494,20 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
               // TODO: Reinstate \vphantom{X} when the Firefox bug is fixed.
 //              res += "{\\vphantom{X}}";
               res += "{{}}";
-              res += "_{\\smash[t]{"+b5.q+"}}";
+              // In the next line, I've removed \smash[t] (ron)
+              // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+              //res += "_{\\smash[t]{"+b5.q+"}}";
+              res += "_{"+b5.q+"}";
             }
           } else {
             if (b5.q) {
               // TODO: Reinstate \vphantom{X} when the Firefox bug is fixed.
 //              res += "{\\vphantom{X}}";
               res += "{{}}";
-              res += "_{\\smash[t]{"+b5.q+"}}";
+              // In the next line, I've removed \smash[t] (ron)
+              // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+              //res += "_{\\smash[t]{"+b5.q+"}}";
+              res += "_{"+b5.q+"}";
             }
             if (b5.d) {
               // TODO: Reinstate \vphantom{X} when the Firefox bug is fixed.
