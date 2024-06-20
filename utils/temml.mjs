@@ -1639,6 +1639,10 @@ defineSymbol(math, op, "\u2210", "\\coprod");
 defineSymbol(math, op, "\u22c1", "\\bigvee");
 defineSymbol(math, op, "\u22c0", "\\bigwedge");
 defineSymbol(math, op, "\u2a04", "\\biguplus");
+defineSymbol(math, op, "\u2a04", "\\bigcupplus");
+defineSymbol(math, op, "\u2a03", "\\bigcupdot");
+defineSymbol(math, op, "\u2a07", "\\bigdoublevee");
+defineSymbol(math, op, "\u2a08", "\\bigdoublewedge");
 defineSymbol(math, op, "\u22c2", "\\bigcap");
 defineSymbol(math, op, "\u22c3", "\\bigcup");
 defineSymbol(math, op, "\u222b", "\\int");
@@ -9390,6 +9394,9 @@ const singleCharBigOps = {
   "\u2a04": "\\biguplus",
   "\u2a05": "\\bigsqcap",
   "\u2a06": "\\bigsqcup",
+  "\u2a03": "\\bigcupdot",
+  "\u2a07": "\\bigdoublevee",
+  "\u2a08": "\\bigdoublewedge",
   "\u2a09": "\\bigtimes"
 };
 
@@ -9400,8 +9407,12 @@ defineFunction({
     "\\bigvee",
     "\\bigwedge",
     "\\biguplus",
+    "\\bigcupplus",
+    "\\bigcupdot",
     "\\bigcap",
     "\\bigcup",
+    "\\bigdoublevee",
+    "\\bigdoublewedge",
     "\\intop",
     "\\prod",
     "\\sum",

@@ -6,25 +6,22 @@ const TeXZilla = require("./TeXZilla.js");
 // eslint-disable-next-line no-undef
 globalThis.temml = temml;
 
-// The main Hurmet function has to be async because it contains an 'await' statement.
-(async function main() {
-  // Build supported.html.
-  let supported = fs.readFileSync('./docs/supported.md').toString('utf8')
-  // convert Markdown to HTML
-  supported = await hurmet.md2html(supported, "", true)
-  fs.writeFileSync('./site/docs/en/supported.html', supported)
+// Build supported.html.
+let supported = fs.readFileSync('./docs/supported.md').toString('utf8')
+// convert Markdown to HTML
+supported = hurmet.md2html(supported, true)
+fs.writeFileSync('./site/docs/en/supported.html', supported)
 
-  let table = fs.readFileSync('./docs/support_table.md').toString('utf8')
-  // convert Markdown to HTML
-  table =  await hurmet.md2html(table, "", true)
-  table = table.replace(/\(Not supported\)/g, `<span class="no-sup">Not supported</span>`)
-  fs.writeFileSync('./site/docs/en/support_table.html', table)
+let table = fs.readFileSync('./docs/support_table.md').toString('utf8')
+// convert Markdown to HTML
+table =  hurmet.md2html(table, true)
+table = table.replace(/\(Not supported\)/g, `<span class="no-sup">Not supported</span>`)
+fs.writeFileSync('./site/docs/en/support_table.html', table)
 
-  let admin = fs.readFileSync('./docs/administration.md').toString('utf8')
-  // convert Markdown to HTML
-  admin =  await hurmet.md2html(admin, "", true)
-  fs.writeFileSync('./site/docs/en/administration.html', admin)
-})();
+let admin = fs.readFileSync('./docs/administration.md').toString('utf8')
+// convert Markdown to HTML
+admin =  hurmet.md2html(admin, true)
+fs.writeFileSync('./site/docs/en/administration.html', admin)
 
 // helper function for comparison page.
 const arrayOfRegExMatches = (regex, text) => {

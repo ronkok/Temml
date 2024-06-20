@@ -81,6 +81,9 @@ const singleCharBigOps = {
   "\u2a04": "\\biguplus",
   "\u2a05": "\\bigsqcap",
   "\u2a06": "\\bigsqcup",
+  "\u2a03": "\\bigcupdot",
+  "\u2a07": "\\bigdoublevee",
+  "\u2a08": "\\bigdoublewedge",
   "\u2a09": "\\bigtimes"
 };
 
@@ -91,8 +94,12 @@ defineFunction({
     "\\bigvee",
     "\\bigwedge",
     "\\biguplus",
+    "\\bigcupplus",
+    "\\bigcupdot",
     "\\bigcap",
     "\\bigcup",
+    "\\bigdoublevee",
+    "\\bigdoublewedge",
     "\\intop",
     "\\prod",
     "\\sum",
