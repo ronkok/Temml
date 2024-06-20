@@ -1642,6 +1642,10 @@ var temml = (function () {
   defineSymbol(math, op, "\u22c1", "\\bigvee");
   defineSymbol(math, op, "\u22c0", "\\bigwedge");
   defineSymbol(math, op, "\u2a04", "\\biguplus");
+  defineSymbol(math, op, "\u2a04", "\\bigcupplus");
+  defineSymbol(math, op, "\u2a03", "\\bigcupdot");
+  defineSymbol(math, op, "\u2a07", "\\bigdoublevee");
+  defineSymbol(math, op, "\u2a08", "\\bigdoublewedge");
   defineSymbol(math, op, "\u22c2", "\\bigcap");
   defineSymbol(math, op, "\u22c3", "\\bigcup");
   defineSymbol(math, op, "\u222b", "\\int");
@@ -7493,6 +7497,9 @@ var temml = (function () {
     "\u2a04": "\\biguplus",
     "\u2a05": "\\bigsqcap",
     "\u2a06": "\\bigsqcup",
+    "\u2a03": "\\bigcupdot",
+    "\u2a07": "\\bigdoublevee",
+    "\u2a08": "\\bigdoublewedge",
     "\u2a09": "\\bigtimes"
   };
 
@@ -7503,8 +7510,12 @@ var temml = (function () {
       "\\bigvee",
       "\\bigwedge",
       "\\biguplus",
+      "\\bigcupplus",
+      "\\bigcupdot",
       "\\bigcap",
       "\\bigcup",
+      "\\bigdoublevee",
+      "\\bigdoublewedge",
       "\\intop",
       "\\prod",
       "\\sum",
@@ -11508,7 +11519,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.27";
+  const version = "0.10.28";
 
   function postProcess(block) {
     const labelMap = {};

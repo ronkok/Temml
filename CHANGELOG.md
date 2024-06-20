@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.28] = 2024-06-20
+
+### Fixed
+
+- Work around a WebKit bug so `mhchem` subscripts will render
+
+### Added
+
+- Support \bigcupplus, \bigcupdot, \bigdoublevee, and \bigdoublewedge
+
 ## [0.10.27] = 2024-05-13
 
 ### Fixed
