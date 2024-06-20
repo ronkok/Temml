@@ -396,7 +396,7 @@ poorly.
 | Radical height               | ✓        | meh⁹      | meh⁹      | $\sqrt{f_c}$                              |
 | Size 4 radicals              | meh¹⁰    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
 | Line-breaking                | ✓        | ✓         | bad¹¹     |                                           |
-| mhchem subscripts            | ✓        | ✓         | bad¹²     | $\ce{H2O}$                                |
+| \smash                       | ✓        | ✓         | bad¹²     | $x\smash{y}z$                             |
 
 Notes:
 
@@ -432,7 +432,8 @@ Notes:
 
 11. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-12. WebKit hides mhchem subscripts and superscripts.
+12. WebKit hides anything inside `\smash{…}`. Root cause: WebKit does not implement
+    `<mpadded>` correctly.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I

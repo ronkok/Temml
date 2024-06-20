@@ -191,7 +191,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>Radical height</td><td>✓</td><td>meh⁹</td><td>meh⁹</td><td><span class='hurmet-tex' data-entry='\sqrt{f_c}'><math><msqrt><msub><mi>f</mi><mi>c</mi></msub></msqrt></math></span></td></tr>
 <tr><td>Size 4 radicals</td><td>meh¹⁰</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad¹¹</td><td></td></tr>
-<tr><td>mhchem subscripts</td><td>✓</td><td>✓</td><td>bad¹²</td><td><span class='hurmet-tex' data-entry='\ce{H2O}'><math><mrow><mrow><mi mathvariant="normal">H</mi></mrow><msub><mrow></mrow><mn>2</mn></msub><mrow><mi mathvariant="normal">O</mi></mrow></mrow></math></span></td></tr></table>
+<tr><td>\smash</td><td>✓</td><td>✓</td><td>bad¹²</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr></table>
 <p>Notes:</p>
 <ol><li><p>There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation. </p>
 <ul><li class="tight"><p>accent height</p></li>
@@ -209,7 +209,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
 <li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
 <li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
-<li><p>WebKit hides mhchem subscripts and superscripts.</p></li></ol>
+<li><p>WebKit hides anything inside <code>\smash{…}</code>. Root cause: WebKit does not implement <code>&lt;mpadded&gt;</code> correctly.</p></li></ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
