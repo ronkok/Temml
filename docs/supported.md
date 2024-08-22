@@ -819,19 +819,22 @@ Direct Input: <span class="direct">+ - / ∖ * ⋅ ∘ ± × ÷ ∓ ∔ ∧ ∨ 
 +-------------------------------------+-------------------------------------+-----------------------------------+
 | $\boxplus$  `\boxplus`              | $\lozengeminus$ `\lozengeminus`     | $\star$ `\star`                   |
 +-------------------------------------+-------------------------------------+-----------------------------------+
-| $\boxtimes$ `\boxtimes`             | $\obar$ `\obar`                     | $\triangle$ `\triangle`           |
+| $\boxslash$ `\boxslash`             | $\obar$ `\obar`                     | $\triangle$ `\triangle`           |
 +-------------------------------------+-------------------------------------+-----------------------------------+
-| $\circledast$ `\circledast`         | $\obslash$ `\obslash`               | $\triangleminus$ `\triangleminus` |
+| $\boxtimes$ `\boxtimes`             | $\obslash$ `\obslash`               | $\triangleminus$ `\triangleminus` |
 +-------------------------------------+-------------------------------------+-----------------------------------+
-| $\circledcirc$ `\circledcirc`       | $\odiv$ `\odiv`                     | $\triangleplus$ `\triangleplus`   |
+| $\circledast$ `\circledast`         | $\odiv$ `\odiv`                     | $\triangleplus$ `\triangleplus`   |
 +-------------------------------------+-------------------------------------+-----------------------------------+
-| $\circleddash$ `\circleddash`       | $\odot$  `\odot`                    | $\triangletimes$ `\triangletimes` |
+| $\circledcirc$ `\circledcirc`       | $\odot$  `\odot`                    | $\triangletimes$ `\triangletimes` |
 +-------------------------------------+-------------------------------------+-----------------------------------+
-| $\circledequal$ `\circledequal`     | $\ogreaterthan$ `\ogreaterthan`     | $\whitesquaretickleft$            |
+| $\circleddash$ `\circleddash`       | $\ogreaterthan$ `\ogreaterthan`     | $\whitesquaretickleft$            |
 |                                     |                                     | `\whitesquaretickleft`            |
 +-------------------------------------+-------------------------------------+-----------------------------------+
-| $\circledparallel$                  | $\olessthan$ `\olessthan`           | $\whitesquaretickright$           |
-| `\circledparallel`                  |                                     | `\whitesquaretickright`           |
+| $\circledequal$ `\circledequal`     | $\olessthan$ `\olessthan`           | $\whitesquaretickright$           |
+|                                     |                                     | `\whitesquaretickright`           |
++-------------------------------------+-------------------------------------+-----------------------------------+
+| $\circledparallel$                  |                                     |                                   |
+| `\circledparallel`                  |                                     |                                   |
 +-------------------------------------+-------------------------------------+-----------------------------------+
 
 Direct Input: <span class="direct">◯ ⧗ ⧆ ⧈ ⧇ ⊡ ⊟ ⊞ ⊠ ⊛ ⊚ ⊖ ⊜ ⦷ ⦶ ⦵ ⟡ ⟢ ⟣ ⋄ ⧖ ⟠ ⌽ ⦸ ⨸ ⊙ ⧁ ⧀ ⊝ ⦹ ⊕ ⊘ ⊗ ⨷ ⨶ ⋆ △ ⨺ ⨻ ⟤ ⟥</span>

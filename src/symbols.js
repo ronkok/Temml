@@ -427,6 +427,7 @@ defineSymbol(math, bin, "\u22d3", "\\Cup", true);
 defineSymbol(math, bin, "\u2a5e", "\\doublebarwedge", true);
 defineSymbol(math, bin, "\u229f", "\\boxminus", true);
 defineSymbol(math, bin, "\u229e", "\\boxplus", true);
+defineSymbol(math, bin, "\u29C4", "\\boxslash", true);
 defineSymbol(math, bin, "\u22c7", "\\divideontimes", true);
 defineSymbol(math, bin, "\u22c9", "\\ltimes", true);
 defineSymbol(math, bin, "\u22ca", "\\rtimes", true);
