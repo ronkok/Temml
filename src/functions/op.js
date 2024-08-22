@@ -32,6 +32,13 @@ const mathmlBuilder = (group, style) => {
     node = new mathMLTree.MathNode("mo", [mml.makeText(group.name, group.mode)]);
     if (noSuccessor.includes(group.name)) {
       node.setAttribute("largeop", "false")
+    } else if (group.limits) {
+      // This is a workaround for a MathML/Chromium bug.
+      // This is being applied to singleCharBigOps, which are not really stretchy.
+      // But by setting the stretchy attribute, Chromium will vertically center
+      // big ops around the math axis. This is needed since STIX TWO does not do so.
+      // TODO: Remove this hack when MathML & Chromium fix their problem.
+      node.setAttribute("stretchy", "true")
     } else {
       node.setAttribute("movablelimits", "false")
     }
