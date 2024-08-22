@@ -196,6 +196,7 @@ var utils = {
  * default settings.
  */
 
+
 /**
  * The main Settings object
  */
@@ -488,7 +489,7 @@ class Span {
   }
 }
 
-class TextNode$1 {
+let TextNode$1 = class TextNode {
   constructor(text) {
     this.text = text;
   }
@@ -498,7 +499,7 @@ class TextNode$1 {
   toMarkup() {
     return utils.escape(this.text);
   }
-}
+};
 
 /*
  * This node represents an image embed (<img>) element.
@@ -551,6 +552,12 @@ class Img {
 }
 
 //
+/**
+ * These objects store data about MathML nodes.
+ * The `toNode` and `toMarkup` functions  create namespaced DOM nodes and
+ * HTML text markup respectively.
+ */
+
 
 function newDocumentFragment(children) {
   return new DocumentFragment(children);
@@ -720,6 +727,7 @@ var mathMLTree = {
 /**
  * This file provides support for building horizontal stretchy elements.
  */
+
 
 // TODO: Remove when Chromium stretches \widetilde & \widehat
 const estimatedWidth = node => {
@@ -1257,6 +1265,7 @@ defineSymbol(math, bin, "\u22d3", "\\Cup", true);
 defineSymbol(math, bin, "\u2a5e", "\\doublebarwedge", true);
 defineSymbol(math, bin, "\u229f", "\\boxminus", true);
 defineSymbol(math, bin, "\u229e", "\\boxplus", true);
+defineSymbol(math, bin, "\u29C4", "\\boxslash", true);
 defineSymbol(math, bin, "\u22c7", "\\divideontimes", true);
 defineSymbol(math, bin, "\u22c9", "\\ltimes", true);
 defineSymbol(math, bin, "\u22ca", "\\rtimes", true);
@@ -2046,6 +2055,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
  * parser.
  */
 
+
 /**
  * Takes a symbol and converts it into a MathML text node after performing
  * optional replacement from symbols.js.
@@ -2556,6 +2566,7 @@ defineFunction({
  * calculateSize to convert other units into CSS units.
  */
 
+
 const ptPerUnit = {
   // Convert to CSS (Postscipt) points, not TeX points
   // https://en.wikibooks.org/wiki/LaTeX/Lengths and
@@ -2990,7 +3001,7 @@ function parseCD(parser) {
   parser.gullet.beginGroup();
   parser.gullet.macros.set("\\cr", "\\\\\\relax");
   parser.gullet.beginGroup();
-  while (true) { // eslint-disable-line no-constant-condition
+  while (true) {
     // Get the parse nodes for the next row.
     parsedRows.push(parser.parseExpression(false, "\\\\"));
     parser.gullet.endGroup();
@@ -3444,6 +3455,7 @@ defineFunction({
 });
 
 // Row breaks within tabular environments, and line breaks at top level
+
 
 // \DeclareRobustCommand\\{...\@xnewline}
 defineFunction({
@@ -4297,6 +4309,9 @@ function defineEnvironment({ type, names, props, handler, mathmlBuilder }) {
 }
 
 // In TeX, there are actually three sets of dimensions, one for each of
+// textstyle, scriptstyle, and scriptscriptstyle.  These are
+// provided in the the arrays below, in that order.
+//
 
 // Math style is not quite the same thing as script level.
 const StyleLevel = {
@@ -4322,6 +4337,7 @@ function defineMacro(name, body) {
  * Predefined macros for Temml.
  * This can be used to define some commands in terms of others.
  */
+
 const macros = _macros;
 
 //////////////////////////////////////////////////////////////////////
@@ -7056,7 +7072,6 @@ function parseArray(
   // Test for \hline at the top of the array.
   hLinesBeforeRow.push(getHLines(parser));
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     // Parse each cell in its own group (namespace)
     let cell = parser.parseExpression(false, singleRow ? "\\end" : "\\\\");
@@ -8757,6 +8772,7 @@ defineFunction({
 });
 
 // Horizontal spacing commands
+
 
 // TODO: \hskip and \mskip should support plus and minus in lengths
 
@@ -11151,6 +11167,7 @@ class Token {
  * kinds.
  */
 
+
 /* The following tokenRegex
  * - matches typical whitespace (but not NBSP etc.) using its first two groups
  * - does not match any control character \x00-\x1f except whitespace
@@ -11258,6 +11275,7 @@ class Lexer {
  * `set` takes time proportional to the depth of group nesting.
  */
 
+
 class Namespace {
   /**
    * Both arguments are optional.  The first argument is an object of
@@ -11360,6 +11378,7 @@ class Namespace {
  * This file contains the “gullet” where macros are expanded
  * until only non-macro tokens remain.
  */
+
 
 // List of commands that act like macros but aren't defined as a macro,
 // function, or symbol.  Used in `isDefined`.
@@ -13481,6 +13500,14 @@ function postProcess(block) {
 }
 
 /* eslint no-console:0 */
+/**
+ * This is the main entry point for Temml. Here, we expose functions for
+ * rendering expressions either to DOM nodes or to markup strings.
+ *
+ * We also expose the ParseError class to check if errors thrown from Temml are
+ * errors in the expression, or errors in javascript handling.
+ */
+
 
 /**
  * @type {import('./temml').render}

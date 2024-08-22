@@ -71,7 +71,7 @@ export function parseCD(parser) {
   parser.gullet.beginGroup();
   parser.gullet.macros.set("\\cr", "\\\\\\relax");
   parser.gullet.beginGroup();
-  while (true) { // eslint-disable-line no-constant-condition
+  while (true) {
     // Get the parse nodes for the next row.
     parsedRows.push(parser.parseExpression(false, "\\\\"));
     parser.gullet.endGroup();
