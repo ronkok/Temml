@@ -1813,6 +1813,12 @@ const test = () => {
   // \def is not expandable, i.e., \expandafter doesn't define the macro
   new Expect(r`\def\foo{x}\def\bar{\def\foo{y}}\expandafter\bar\foo`).toParseLike(`x`)
 
+  assertion = "\\emph should toggle italics"
+  new Expect(r`\emph{foo \emph{bar}}`).toBuildLike(r`\textit{foo \textup{bar}}`)
+  new Expect(r`\text{\emph{foo \emph{bar}}}`).toBuildLike(r`\text{\textit{foo \textup{bar}}}`)
+  new Expect(r`\textup{\emph{foo \emph{bar}}}`).toBuildLike(r`\textup{\textit{foo \textup{bar}}}`)
+  new Expect(r`\textit{\emph{foo \emph{bar}}}`).toBuildLike(r`\textit{\textup{foo \textit{bar}}}`)
+
   assertion = "A macro expander should not expand if preceded by \\noexpand"
   // \foo is not expanded and interpreted as if its meaning were \relax
   new Expect(r`\noexpand\foo y`).toParseLike(r`y`, new Settings({macros: {"\\foo": "x"}}))

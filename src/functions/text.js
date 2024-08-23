@@ -30,9 +30,12 @@ const styleWithFont = (group, style) => {
     return style.withTextFontFamily(textFontFamilies[font]);
   } else if (textFontWeights[font]) {
     return style.withTextFontWeight(textFontWeights[font]);
-  } else {
-    return style.withTextFontShape(textFontShapes[font]);
+  } else if (font === "\\emph") {
+    return style.fontShape === "textit"
+      ? style.withTextFontShape("textup")
+      : style.withTextFontShape("textit")
   }
+  return style.withTextFontShape(textFontShapes[font])
 };
 
 defineFunction({
@@ -50,7 +53,8 @@ defineFunction({
     "\\textmd",
     // Font Shapes
     "\\textit",
-    "\\textup"
+    "\\textup",
+    "\\emph"
   ],
   props: {
     numArgs: 1,

@@ -573,7 +573,7 @@ If you know the shape of a character, but not its name,
 |\ell|$\ell$|||
 |\else|(Not supported)|||
 |\em|(Not supported)|||
-|\emph|(Not supported)|||
+|\emph|$\emph{nested \emph{emphasis}}$|`\emph{nested \emph{emphasis}}`| LaTeX 2ε |
 |\empty|$\empty$|| texvc extension |
 |\emptyset|$\emptyset$|||
 |\enclose|(Not supported)|Non standard.<br>See `\boxed`, `\cancel`, `\bcancel`,<br>`\xcancel`, `\sout`, `\angl`||
