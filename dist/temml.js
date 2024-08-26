@@ -197,6 +197,7 @@ var temml = (function () {
    * default settings.
    */
 
+
   /**
    * The main Settings object
    */
@@ -489,7 +490,7 @@ var temml = (function () {
     }
   }
 
-  class TextNode$1 {
+  let TextNode$1 = class TextNode {
     constructor(text) {
       this.text = text;
     }
@@ -499,7 +500,7 @@ var temml = (function () {
     toMarkup() {
       return utils.escape(this.text);
     }
-  }
+  };
 
   /*
    * This node represents an image embed (<img>) element.
@@ -552,6 +553,12 @@ var temml = (function () {
   }
 
   //
+  /**
+   * These objects store data about MathML nodes.
+   * The `toNode` and `toMarkup` functions  create namespaced DOM nodes and
+   * HTML text markup respectively.
+   */
+
 
   function newDocumentFragment(children) {
     return new DocumentFragment(children);
@@ -721,6 +728,7 @@ var temml = (function () {
   /**
    * This file provides support for building horizontal stretchy elements.
    */
+
 
   // TODO: Remove when Chromium stretches \widetilde & \widehat
   const estimatedWidth = node => {
@@ -1258,6 +1266,7 @@ var temml = (function () {
   defineSymbol(math, bin, "\u2a5e", "\\doublebarwedge", true);
   defineSymbol(math, bin, "\u229f", "\\boxminus", true);
   defineSymbol(math, bin, "\u229e", "\\boxplus", true);
+  defineSymbol(math, bin, "\u29C4", "\\boxslash", true);
   defineSymbol(math, bin, "\u22c7", "\\divideontimes", true);
   defineSymbol(math, bin, "\u22c9", "\\ltimes", true);
   defineSymbol(math, bin, "\u22ca", "\\rtimes", true);
@@ -2047,6 +2056,7 @@ var temml = (function () {
    * parser.
    */
 
+
   /**
    * Takes a symbol and converts it into a MathML text node after performing
    * optional replacement from symbols.js.
@@ -2557,6 +2567,7 @@ var temml = (function () {
    * calculateSize to convert other units into CSS units.
    */
 
+
   const ptPerUnit = {
     // Convert to CSS (Postscipt) points, not TeX points
     // https://en.wikibooks.org/wiki/LaTeX/Lengths and
@@ -2991,7 +3002,7 @@ var temml = (function () {
     parser.gullet.beginGroup();
     parser.gullet.macros.set("\\cr", "\\\\\\relax");
     parser.gullet.beginGroup();
-    while (true) { // eslint-disable-line no-constant-condition
+    while (true) {
       // Get the parse nodes for the next row.
       parsedRows.push(parser.parseExpression(false, "\\\\"));
       parser.gullet.endGroup();
@@ -3445,6 +3456,7 @@ var temml = (function () {
   });
 
   // Row breaks within tabular environments, and line breaks at top level
+
 
   // \DeclareRobustCommand\\{...\@xnewline}
   defineFunction({
@@ -4079,52 +4091,62 @@ var temml = (function () {
         padding$1()
       ]);
     } else {
-      node = new mathMLTree.MathNode("mrow", [buildGroup$1(group.body, style)]);
+      node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
     }
     switch (group.label) {
       case "\\overline":
-        node.style.padding = "0.1em 0 0 0";
-        node.style.borderTop = "0.065em solid";
+        node.setAttribute("notation", "top"); // for Firefox & WebKit
+        node.classes.push("tml-overline");    // for Chromium
         break
       case "\\underline":
-        node.style.padding = "0 0 0.1em 0";
-        node.style.borderBottom = "0.065em solid";
+        node.setAttribute("notation", "bottom");
+        node.classes.push("tml-underline");
         break
       case "\\cancel":
-        // We can't use an inline background-gradient. It does not work client-side.
-        // So set a class and put the rule in the external CSS file.
-        node.classes.push("tml-cancel");
+        node.setAttribute("notation", "updiagonalstrike");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "upstrike"]));
         break
       case "\\bcancel":
-        node.classes.push("tml-bcancel");
+        node.setAttribute("notation", "downdiagonalstrike");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "downstrike"]));
         break
-      /*
+      case "\\sout":
+        node.setAttribute("notation", "horizontalstrike");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "sout"]));
+        break
+      case "\\xcancel":
+        node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
+        node.classes.push("tml-xcancel");
+        break
       case "\\longdiv":
         node.setAttribute("notation", "longdiv");
+        node.classes.push("longdiv-top");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["longdiv-arc"]));
         break
       case "\\phase":
         node.setAttribute("notation", "phasorangle");
-        break */
-      case "\\angl":
-        node.style.padding = "0.03889em 0.03889em 0 0.03889em";
-        node.style.borderTop = "0.049em solid";
-        node.style.borderRight = "0.049em solid";
-        node.style.marginRight = "0.03889em";
+        node.classes.push("phasor-bottom");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["phasor-angle"]));
         break
-      case "\\sout":
-        node.style.backgroundImage = 'linear-gradient(black, black)';
-        node.style.backgroundRepeat = 'no-repeat';
-        node.style.backgroundSize = '100% 1.5px';
-        node.style.backgroundPosition = '0 center';
+      case "\\textcircled":
+        node.setAttribute("notation", "circle");
+        node.classes.push("circle-pad");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["textcircle"]));
+        break
+      case "\\angl":
+        node.setAttribute("notation", "actuarial");
+        node.classes.push("actuarial");
         break
       case "\\boxed":
         // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
-        node.style = { padding: "3pt 0 3pt 0", border: "1px solid" };
+        node.setAttribute("notation", "box");
+        node.classes.push("tml-box");
         node.setAttribute("scriptlevel", "0");
         node.setAttribute("displaystyle", "true");
         break
       case "\\fbox":
-        node.style = { padding: "3pt", border: "1px solid" };
+        node.setAttribute("notation", "box");
+        node.classes.push("tml-fbox");
         break
       case "\\fcolorbox":
       case "\\colorbox": {
@@ -4137,14 +4159,11 @@ var temml = (function () {
         const style = { padding: "3pt 0 3pt 0" };
 
         if (group.label === "\\fcolorbox") {
-          style.border = "0.06em solid " + String(group.borderColor);
+          style.border = "0.0667em solid " + String(group.borderColor);
         }
         node.style = style;
         break
       }
-      case "\\xcancel":
-        node.classes.push("tml-xcancel");
-        break
     }
     if (group.backgroundColor) {
       node.setAttribute("mathbackground", group.backgroundColor);
@@ -4237,8 +4256,8 @@ var temml = (function () {
 
   defineFunction({
     type: "enclose",
-    names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\boxed"],
-     // , "\\phase", "\\longdiv"
+    names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline",
+      "\\boxed", "\\longdiv", "\\phase"],
     props: {
       numArgs: 1
     },
@@ -4259,6 +4278,28 @@ var temml = (function () {
     names: ["\\underline"],
     props: {
       numArgs: 1,
+      allowedInText: true
+    },
+    handler({ parser, funcName }, args) {
+      const body = args[0];
+      return {
+        type: "enclose",
+        mode: parser.mode,
+        label: funcName,
+        body
+      };
+    },
+    mathmlBuilder: mathmlBuilder$8
+  });
+
+
+  defineFunction({
+    type: "enclose",
+    names: ["\\textcircled"],
+    props: {
+      numArgs: 1,
+      argTypes: ["text"],
+      allowedInArgument: true,
       allowedInText: true
     },
     handler({ parser, funcName }, args) {
@@ -4298,6 +4339,9 @@ var temml = (function () {
   }
 
   // In TeX, there are actually three sets of dimensions, one for each of
+  // textstyle, scriptstyle, and scriptscriptstyle.  These are
+  // provided in the the arrays below, in that order.
+  //
 
   // Math style is not quite the same thing as script level.
   const StyleLevel = {
@@ -4323,6 +4367,7 @@ var temml = (function () {
    * Predefined macros for Temml.
    * This can be used to define some commands in terms of others.
    */
+
   const macros = _macros;
 
   //////////////////////////////////////////////////////////////////////
@@ -5143,7 +5188,6 @@ var temml = (function () {
     // Test for \hline at the top of the array.
     hLinesBeforeRow.push(getHLines(parser));
 
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       // Parse each cell in its own group (namespace)
       let cell = parser.parseExpression(false, singleRow ? "\\end" : "\\\\");
@@ -6845,6 +6889,7 @@ var temml = (function () {
 
   // Horizontal spacing commands
 
+
   // TODO: \hskip and \mskip should support plus and minus in lengths
 
   defineFunction({
@@ -7448,6 +7493,13 @@ var temml = (function () {
       node = new MathNode("mo", [makeText(group.name, group.mode)]);
       if (noSuccessor.includes(group.name)) {
         node.setAttribute("largeop", "false");
+      } else if (group.limits) {
+        // This is a workaround for a MathML/Chromium bug.
+        // This is being applied to singleCharBigOps, which are not really stretchy.
+        // But by setting the stretchy attribute, Chromium will vertically center
+        // big ops around the math axis. This is needed since STIX TWO does not do so.
+        // TODO: Remove this hack when MathML & Chromium fix their problem.
+        node.setAttribute("stretchy", "true");
       } else {
         node.setAttribute("movablelimits", "false");
       }
@@ -9078,9 +9130,12 @@ var temml = (function () {
       return style.withTextFontFamily(textFontFamilies[font]);
     } else if (textFontWeights[font]) {
       return style.withTextFontWeight(textFontWeights[font]);
-    } else {
-      return style.withTextFontShape(textFontShapes[font]);
+    } else if (font === "\\emph") {
+      return style.fontShape === "textit"
+        ? style.withTextFontShape("textup")
+        : style.withTextFontShape("textit")
     }
+    return style.withTextFontShape(textFontShapes[font])
   };
 
   defineFunction({
@@ -9098,7 +9153,8 @@ var temml = (function () {
       "\\textmd",
       // Font Shapes
       "\\textit",
-      "\\textup"
+      "\\textup",
+      "\\emph"
     ],
     props: {
       numArgs: 1,
@@ -9238,6 +9294,7 @@ var temml = (function () {
    * kinds.
    */
 
+
   /* The following tokenRegex
    * - matches typical whitespace (but not NBSP etc.) using its first two groups
    * - does not match any control character \x00-\x1f except whitespace
@@ -9345,6 +9402,7 @@ var temml = (function () {
    * `set` takes time proportional to the depth of group nesting.
    */
 
+
   class Namespace {
     /**
      * Both arguments are optional.  The first argument is an object of
@@ -9447,6 +9505,7 @@ var temml = (function () {
    * This file contains the “gullet” where macros are expanded
    * until only non-macro tokens remain.
    */
+
 
   // List of commands that act like macros but aren't defined as a macro,
   // function, or symbol.  Used in `isDefined`.
@@ -11519,7 +11578,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.10.28";
+  const version = "0.10.29";
 
   function postProcess(block) {
     const labelMap = {};
@@ -11568,6 +11627,14 @@ var temml = (function () {
   }
 
   /* eslint no-console:0 */
+  /**
+   * This is the main entry point for Temml. Here, we expose functions for
+   * rendering expressions either to DOM nodes or to markup strings.
+   *
+   * We also expose the ParseError class to check if errors thrown from Temml are
+   * errors in the expression, or errors in javascript handling.
+   */
+
 
   /**
    * @type {import('./temml').render}

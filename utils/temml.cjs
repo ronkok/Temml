@@ -4109,11 +4109,11 @@ const mathmlBuilder$8 = (group, style) => {
       node.setAttribute("notation", "downdiagonalstrike");
       node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "downstrike"]));
       break
-      case "\\sout":
-        node.setAttribute("notation", "horizontalstrike");
-        node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "sout"]));
-        break
-      case "\\xcancel":
+    case "\\sout":
+      node.setAttribute("notation", "horizontalstrike");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "sout"]));
+      break
+    case "\\xcancel":
       node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
       node.classes.push("tml-xcancel");
       break
@@ -4256,7 +4256,7 @@ defineFunction({
 defineFunction({
   type: "enclose",
   names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline",
-          "\\boxed", "\\longdiv", "\\phase"],
+    "\\boxed", "\\longdiv", "\\phase"],
   props: {
     numArgs: 1
   },
@@ -13491,7 +13491,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.28";
+const version = "0.10.29";
 
 function postProcess(block) {
   const labelMap = {};

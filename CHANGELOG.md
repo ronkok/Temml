@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.29] = 2024-08-26
+
+### Fixed
+
+- Work around a Chromium bug so big operators from the STIX-TWO font will be vertically centered on the math axis
+
+### Added
+
+- Support \boxslash, \longdiv, \phase, and \textcircled
+
+### Changed
+
+- Use the `<menclose>` element and the `notation` attribute when possible.
+  This will improve accessibility for functions such as `\cancel` and `\boxed`.
+  Since Chromiumn does not support `<menclose>`, use CSS in Chromium.
+
 ## [0.10.28] = 2024-06-20
 
 ### Fixed

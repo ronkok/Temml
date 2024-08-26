@@ -1572,7 +1572,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.28
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.10.29
 
 <h3><a href="#top">Contents</a></h3>
 
