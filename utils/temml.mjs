@@ -4088,52 +4088,62 @@ const mathmlBuilder$8 = (group, style) => {
       padding$1()
     ]);
   } else {
-    node = new mathMLTree.MathNode("mrow", [buildGroup$1(group.body, style)]);
+    node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
   }
   switch (group.label) {
     case "\\overline":
-      node.style.padding = "0.1em 0 0 0";
-      node.style.borderTop = "0.065em solid";
+      node.setAttribute("notation", "top"); // for Firefox & WebKit
+      node.classes.push("tml-overline");    // for Chromium
       break
     case "\\underline":
-      node.style.padding = "0 0 0.1em 0";
-      node.style.borderBottom = "0.065em solid";
+      node.setAttribute("notation", "bottom");
+      node.classes.push("tml-underline");
       break
     case "\\cancel":
-      // We can't use an inline background-gradient. It does not work client-side.
-      // So set a class and put the rule in the external CSS file.
-      node.classes.push("tml-cancel");
+      node.setAttribute("notation", "updiagonalstrike");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "upstrike"]));
       break
     case "\\bcancel":
-      node.classes.push("tml-bcancel");
+      node.setAttribute("notation", "downdiagonalstrike");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "downstrike"]));
       break
-    /*
+      case "\\sout":
+        node.setAttribute("notation", "horizontalstrike");
+        node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "sout"]));
+        break
+      case "\\xcancel":
+      node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
+      node.classes.push("tml-xcancel");
+      break
     case "\\longdiv":
       node.setAttribute("notation", "longdiv");
+      node.classes.push("longdiv-top");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["longdiv-arc"]));
       break
     case "\\phase":
       node.setAttribute("notation", "phasorangle");
-      break */
-    case "\\angl":
-      node.style.padding = "0.03889em 0.03889em 0 0.03889em";
-      node.style.borderTop = "0.049em solid";
-      node.style.borderRight = "0.049em solid";
-      node.style.marginRight = "0.03889em";
+      node.classes.push("phasor-bottom");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["phasor-angle"]));
       break
-    case "\\sout":
-      node.style.backgroundImage = 'linear-gradient(black, black)';
-      node.style.backgroundRepeat = 'no-repeat';
-      node.style.backgroundSize = '100% 1.5px';
-      node.style.backgroundPosition = '0 center';
+    case "\\textcircled":
+      node.setAttribute("notation", "circle");
+      node.classes.push("circle-pad");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["textcircle"]));
+      break
+    case "\\angl":
+      node.setAttribute("notation", "actuarial");
+      node.classes.push("actuarial");
       break
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
-      node.style = { padding: "3pt 0 3pt 0", border: "1px solid" };
+      node.setAttribute("notation", "box");
+      node.classes.push("tml-box");
       node.setAttribute("scriptlevel", "0");
       node.setAttribute("displaystyle", "true");
       break
     case "\\fbox":
-      node.style = { padding: "3pt", border: "1px solid" };
+      node.setAttribute("notation", "box");
+      node.classes.push("tml-fbox");
       break
     case "\\fcolorbox":
     case "\\colorbox": {
@@ -4146,14 +4156,11 @@ const mathmlBuilder$8 = (group, style) => {
       const style = { padding: "3pt 0 3pt 0" };
 
       if (group.label === "\\fcolorbox") {
-        style.border = "0.06em solid " + String(group.borderColor);
+        style.border = "0.0667em solid " + String(group.borderColor);
       }
       node.style = style;
       break
     }
-    case "\\xcancel":
-      node.classes.push("tml-xcancel");
-      break
   }
   if (group.backgroundColor) {
     node.setAttribute("mathbackground", group.backgroundColor);
@@ -4246,8 +4253,8 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\boxed"],
-   // , "\\phase", "\\longdiv"
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline",
+          "\\boxed", "\\longdiv", "\\phase"],
   props: {
     numArgs: 1
   },
@@ -4268,6 +4275,28 @@ defineFunction({
   names: ["\\underline"],
   props: {
     numArgs: 1,
+    allowedInText: true
+  },
+  handler({ parser, funcName }, args) {
+    const body = args[0];
+    return {
+      type: "enclose",
+      mode: parser.mode,
+      label: funcName,
+      body
+    };
+  },
+  mathmlBuilder: mathmlBuilder$8
+});
+
+
+defineFunction({
+  type: "enclose",
+  names: ["\\textcircled"],
+  props: {
+    numArgs: 1,
+    argTypes: ["text"],
+    allowedInArgument: true,
     allowedInText: true
   },
   handler({ parser, funcName }, args) {
@@ -9375,6 +9404,13 @@ const mathmlBuilder$2 = (group, style) => {
     node = new MathNode("mo", [makeText(group.name, group.mode)]);
     if (noSuccessor.includes(group.name)) {
       node.setAttribute("largeop", "false");
+    } else if (group.limits) {
+      // This is a workaround for a MathML/Chromium bug.
+      // This is being applied to singleCharBigOps, which are not really stretchy.
+      // But by setting the stretchy attribute, Chromium will vertically center
+      // big ops around the math axis. This is needed since STIX TWO does not do so.
+      // TODO: Remove this hack when MathML & Chromium fix their problem.
+      node.setAttribute("stretchy", "true");
     } else {
       node.setAttribute("movablelimits", "false");
     }
@@ -11005,9 +11041,12 @@ const styleWithFont = (group, style) => {
     return style.withTextFontFamily(textFontFamilies[font]);
   } else if (textFontWeights[font]) {
     return style.withTextFontWeight(textFontWeights[font]);
-  } else {
-    return style.withTextFontShape(textFontShapes[font]);
+  } else if (font === "\\emph") {
+    return style.fontShape === "textit"
+      ? style.withTextFontShape("textup")
+      : style.withTextFontShape("textit")
   }
+  return style.withTextFontShape(textFontShapes[font])
 };
 
 defineFunction({
@@ -11025,7 +11064,8 @@ defineFunction({
     "\\textmd",
     // Font Shapes
     "\\textit",
-    "\\textup"
+    "\\textup",
+    "\\emph"
   ],
   props: {
     numArgs: 1,

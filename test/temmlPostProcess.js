@@ -65,6 +65,4 @@
   exports.postProcess = postProcess;
   exports.version = version;
 
-  Object.defineProperty(exports, '__esModule', { value: true });
-
 }));

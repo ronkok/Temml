@@ -903,11 +903,13 @@ Functions in the bottom five rows of this table can take `\limits`.
 
 ### Enclosing Operators
 
-+:===============================+:===============================+
-| $\sqrt{x}$  `\sqrt{x}`         | $a_{\angl n}$    `a_{\angl n}` |
-+--------------------------------+--------------------------------+
-| $\sqrt[3]{x}$  `\sqrt[3]{x}`   | $a_\angln$    `a_\angln`       |
-+--------------------------------+--------------------------------+
++:===============================+:======================================+:===============================+
+| $\sqrt{x}$  `\sqrt{x}`         | $\longdiv{40.0}$ `\longdiv{40.0}`     | $a_{\angl n}$    `a_{\angl n}` |
++--------------------------------+---------------------------------------+--------------------------------+
+| $\sqrt[3]{x}$  `\sqrt[3]{x}`   | $\phase{30^\circ}$ `\phase{30^\circ}` | $a_\angln$    `a_\angln`       |
++--------------------------------+---------------------------------------+--------------------------------+
+
+Note: WebKit (Safari) does not support `\phase`.
 
 ## Physics and Chemistry
 
@@ -1506,16 +1508,16 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\text{\textregistered}$           | $\astrosun$ `\astrosun`            | $\sun$  `\sun`                     |
 | `\text{\textregistered}`           |                                    |                                    |
 +------------------------------------+------------------------------------+------------------------------------+
-| $\text{\textbullet}$               | $\leftmoon$ `\leftmoon`            | $\rightmoon$ `\rightmoon`          |
+| $\textcircled{a}$ `\textcircled{a}`| $\leftmoon$ `\leftmoon`            | $\rightmoon$ `\rightmoon`          |
++------------------------------------+------------------------------------+------------------------------------+
+| $\text{\textbullet}$               | $\Earth$  `\Earth`                 | $\flat$  `\flat`                   |
 | `\text{\textbullet}`               |                                    |                                    |
 +------------------------------------+------------------------------------+------------------------------------+
-| $\smiley$  `\smiley`               | $\Earth$  `\Earth`                 | $\flat$  `\flat`                   |
+| $\smiley$  `\smiley`               | $\natural$  `\natural`             | $\sharp$  `\sharp`                 |
 +------------------------------------+------------------------------------+------------------------------------+
-| $\standardstate$  `\standardstate` | $\natural$  `\natural`             | $\sharp$  `\sharp`                 |
+| $\standardstate$  `\standardstate` | $\QED$  `\QED`                     | $\lightning$ `\lightning`          |
 +------------------------------------+------------------------------------+------------------------------------+
-| $\permil$  `\permil`               | $\QED$  `\QED`                     | $\lightning$ `\lightning`          |
-+------------------------------------+------------------------------------+------------------------------------+
-| $\diameter$ `\diameter`            |                                    |                                    |
+| $\diameter$ `\diameter`            | $\permil$  `\permil`               |                                    |
 +------------------------------------+------------------------------------+------------------------------------+
 
 Symbols in the _texvc_ extension

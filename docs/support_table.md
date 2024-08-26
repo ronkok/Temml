@@ -863,7 +863,8 @@ If you know the shape of a character, but not its name,
 | \lnot                | $\lnot$                    | | |
 | \lnsim               | $\lnsim$                   | | ams |
 | \log                 | $\log$                     | | |
-| \long                |                           | | |
+| \long                |                            | | |
+| \longdiv             | $\longdiv{40.0}$           | `\longdiv{40.0}` ||
 | \Longleftarrow       | $\Longleftarrow$           | | |
 | \longleftarrow       | $\longleftarrow$           | | |
 | \Longleftrightarrow  | $\Longleftrightarrow$      | | |
@@ -1122,7 +1123,7 @@ If you know the shape of a character, but not its name,
 |\perp|$\perp$ |||
 |\Perp|$\Perp$ || cmll |
 |\phantom|$\Gamma^{\phantom{i}j}_{i\phantom{j}k}$ |`\Gamma^{\phantom{i}j}_{i\phantom{j}k}`||
-|\phase|(Not supported)|||
+|\phase| $\phase{30^\circ}$ | `\phase{30^\circ}` | steinmetz |
 |\Phi|$\Phi$ |||
 |\phi|$\phi$ |||
 |\Pi|$\Pi$ |||
@@ -1541,7 +1542,7 @@ If you know the shape of a character, but not its name,
 |\textbraceleft|$\text{\textbraceleft}$|`\text{\textbraceleft}`||
 |\textbraceright|$\text{\textbraceright}$|`\text{\textbraceright}`||
 |\textbullet|$\text{\textbullet}$|`\text{\textbullet}`||
-|\textcircled|(Not supported)|||
+|\textcircled|$\textcircled{a}$|`\textcircled{a}`| amssymb |
 |\textcolor|$\textcolor{blue}{F=ma}$|`\textcolor{blue}{F=ma}`| color |
 |\textdagger|$\text{\textdagger}$|`\text{\textdagger}`||
 |\textdaggerdbl|$\text{\textdaggerdbl}$|`\text{\textdaggerdbl}`||

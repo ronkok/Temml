@@ -4,10 +4,41 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1">
 	<title>Investigate</title>
-   <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Local.css">
+   <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Latin-Modern.css">
    <link rel="stylesheet" type="text/css" href="main.css">   
    <script src="./temml.js"></script>
    <style>
+    .longdiv { position: absolute;
+    top: 0;
+    bottom: 0.1em;
+    left: -0.4em;
+    width: 0.7em;
+    border: 0.067em solid;
+    transform: translateY(-0.067em);
+    border-radius: 70%;
+    clip-path: inset(0 0 0 0.4em);
+    box-sizing: border-box;}
+    .menclose {display: inline-block;
+    text-align: left;
+    position: relative;}
+    .circle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    border: 0.067em solid;
+    border-radius: 50%;
+   }
+   .phasorangle {display: inline-block;
+    position: absolute;
+    left: 0.5px;
+    bottom: -0.04em;
+    height: 100%;
+    aspect-ratio: 0.5;
+    background-color: currentColor;
+    clip-path: polygon(0.05em 100%, 0em calc(100% - 0.05em), calc(100% - 0.05em) 0em, 100% 0.05em);
+    }
    </style>
 </head>
 
@@ -17,15 +48,25 @@
 
   <p>
     <math display="block" class="tml-display" style="display:block math;">
+    <mrow class="menclose" style="border-top: 0.067em solid; padding: 0.267em 0.2em 0.2em 0.433em;">
+      <mn>45.6</mn>
+      <mrow class="longdiv"></mrow>
+    </mrow>
+    <mo>+</mo>
+    <mrow class="menclose" style="padding: 0.267em;">
+      <mi>c</mi>
+      <mrow class="circle"></mrow>
+    </mrow>
+    <mo>+</mo>
+    <mrow class="menclose" style="border-bottom: 0.067em solid; padding: 0.2em 0.2em 0.0em 0.6em;">
       <mrow>
-        <mtext>He</mtext>
-        <mover>
-          <mtext>A</mtext>
-          <mo stretchy="false" class="tml-capshift" style="math-style:normal;math-depth:0;">ˊ</mo>
-        </mover>
-        <mtext> l𝐥ó world</mtext>
+        <mi>π</mi>
+        <mo>/</mo>
+        <mn>8</mn>
       </mrow>
-    </math>
+      <mrow class="phasorangle"></mrow>
+    </mrow>
+  </math>
   </p>
   
  <p>
