@@ -114,7 +114,7 @@ Images from LaTeX are also included for comparison.
 |    | \end{pmatrix}                | \end{pmatrix}$$              |           |              |
 +----+------------------------------+------------------------------+-----------+--------------+
 | 24 | `\det\begin{vmatrix}` \      | $$\det\begin{vmatrix}        | ![ex24][] | TeXbook p181 |
-|    | `c_0&c_1&c_2&\dots& c_n\\`\ `| c_0&c_1&c_2&\dots& c_n\\     |           |              |
+|    | `c_0&c_1&c_2&\dots& c_n\\`\  | c_0&c_1&c_2&\dots& c_n\\     |           |              |
 |    | `c_1 & c_2 & c_3 & \dots &`\ | c_1 & c_2 & c_3 & \dots &    |           |              |
 |    | `c_{n+1}\\ c_2 & c_3 & c_4`\ | c_{n+1}\\ c_2 & c_3 & c_4    |           |              |
 |    | `&\dots & c_{n+2}\\ \vdots`\ | &\dots & c_{n+2}\\ \vdots    |           |              |
