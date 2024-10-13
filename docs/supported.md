@@ -715,7 +715,8 @@ Temml has no `\par`, so `\long` is ignored.
 +----------------------+--------------------------+-----------------------------+-------------------------------+
 | $\oiiint$  `\oiiint` | $\intlarhk$  `\intlarhk` | $\sqint$  `\sqint`          | $\intx$  `\intx`              |
 +----------------------+--------------------------+-----------------------------+-------------------------------+
-| $\intbar$  `\intbar` | $\intBar$  `\intBar`     | $\fint$  `\fint`            | $\bigdoublevee$ `bigdoublevee`|
+| $\intbar$  `\intbar` | $\intBar$  `\intBar`     | $\fint$  `\fint`            | $\bigdoublevee$               |
+|                      |                          |                             | `\bigdoublevee`               |
 +----------------------+--------------------------+-----------------------------+-------------------------------+
 | $\intcup$  `\intcup` | $\intclockwise$          | $\bigtimes$ `\bigtimes`     | $\bigdoublewedge$             |
 |                      | `\intclockwise`          |                             | `\bigdoublewedge`             |
