@@ -118,10 +118,8 @@ function checkDelimiter(delim, context) {
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
-    if (["/", "\u2044"].includes(symDelim.text)) { symDelim.text = "\u2215" }
     if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨" }
     if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩" }
-    if (symDelim.text === "\\backslash") { symDelim.text = "\u2216" }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
@@ -129,6 +127,9 @@ function checkDelimiter(delim, context) {
     throw new ParseError(`Invalid delimiter type '${delim.type}'`, delim);
   }
 }
+
+//                               /         \
+const needExplicitStretch = ["\u002F", "\u005C", "\\backslash", "\\vert", "|"];
 
 defineFunction({
   type: "delimsizing",
@@ -182,8 +183,7 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (group.delim === "\u2216" || group.delim === "\\vert" ||
-        group.delim === "|" || group.delim.indexOf("arrow") > -1) {
+    if (needExplicitStretch.includes(group.delim) || group.delim.indexOf("arrow") > -1) {
       // We have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true")
     }
