@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.30] = 2024-11-11
+
+### Fixed
+
+- Fix `minsize` on `/` & `\`. Fixes issue #71.
+- Fix \color and \right delimiter. Fixes issue #73.
+
 ## [0.10.29] = 2024-08-26
 
 ### Fixed

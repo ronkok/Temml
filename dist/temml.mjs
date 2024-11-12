@@ -3389,6 +3389,7 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
+      isTextColor: true,
       body: ordargument(body)
     }
   },
@@ -3421,6 +3422,7 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
+      isTextColor: false,
       body
     }
   },
@@ -3864,10 +3866,8 @@ function checkDelimiter(delim, context) {
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
-    if (["/", "\u2044"].includes(symDelim.text)) { symDelim.text = "\u2215"; }
     if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨"; }
     if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩"; }
-    if (symDelim.text === "\\backslash") { symDelim.text = "\u2216"; }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
@@ -3875,6 +3875,9 @@ function checkDelimiter(delim, context) {
     throw new ParseError(`Invalid delimiter type '${delim.type}'`, delim);
   }
 }
+
+//                               /         \
+const needExplicitStretch = ["\u002F", "\u005C", "\\backslash", "\\vert", "|"];
 
 defineFunction({
   type: "delimsizing",
@@ -3928,8 +3931,7 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (group.delim === "\u2216" || group.delim === "\\vert" ||
-        group.delim === "|" || group.delim.indexOf("arrow") > -1) {
+    if (needExplicitStretch.includes(group.delim) || group.delim.indexOf("arrow") > -1) {
       // We have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true");
     }
@@ -4015,7 +4017,7 @@ defineFunction({
     const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
     leftNode.setAttribute("fence", "true");
     leftNode.setAttribute("form", "prefix");
-    if (group.left === "\u2216" || group.left.indexOf("arrow") > -1) {
+    if (group.left === "/" || group.left === "\u005C" || group.left.indexOf("arrow") > -1) {
       leftNode.setAttribute("stretchy", "true");
     }
     inner.unshift(leftNode);
@@ -4026,6 +4028,15 @@ defineFunction({
     rightNode.setAttribute("form", "postfix");
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true");
+    }
+    if (group.body.length > 0) {
+      const lastElement = group.body[group.body.length - 1];
+      if (lastElement.type === "color" && !lastElement.isTextColor) {
+        // \color is a switch. If the last element is of type "color" then
+        // the user set the \color switch and left it on.
+        // A \right delimiter turns the switch off, but the delimiter itself gets the color.
+        rightNode.setAttribute("mathcolor", lastElement.color);
+      }
     }
     inner.push(rightNode);
 
@@ -13489,7 +13500,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.29";
+const version = "0.10.30";
 
 function postProcess(block) {
   const labelMap = {};
