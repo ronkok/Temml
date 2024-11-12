@@ -186,6 +186,7 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
+      isTextColor: true,
       body: ordargument(body)
     }
   },
@@ -218,6 +219,7 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
+      isTextColor: false,
       body
     }
   },

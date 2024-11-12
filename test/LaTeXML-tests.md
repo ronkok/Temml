@@ -36,9 +36,9 @@ The equations in the first table came originally from http://www.mathjax.org/dem
 +-----+------------------------------------------------+------------------------------------------------+
 |       The Cauchy-Schwarz Inequality                                                                   |
 +-----+------------------------------------------------+------------------------------------------------+
-|  2  | \\left( \\sum\_{k=1}^n a_k b_k \\right)^2 \    | $$\left( \sum_{k=1}^n a_k b_k \right)^2        |
-|     | \\leq \\left( \\sum\_{k=1}^n a_k^2 \\right) \  | \leq \left( \sum_{k=1}^n a_k^2 \right)         |
-|     | \left( \sum\_{k=1}^n b_k^2 \right) \           | \left( \sum_{k=1}^n b_k^2 \right)$$            |
+|  2  | \\left( \\sum\_{k=1}^n a\_k b\_k \\right)^2 \  | $$\left( \sum_{k=1}^n a_k b_k \right)^2        |
+|     | \\leq \\left( \\sum\_{k=1}^n a\_k^2 \\right) \ | \leq \left( \sum_{k=1}^n a_k^2 \right)         |
+|     | \left( \sum\_{k=1}^n b\_k^2 \right) \          | \left( \sum_{k=1}^n b_k^2 \right)$$            |
 +-----+------------------------------------------------+------------------------------------------------+
 |       A Cross Product Formula                                                                         |
 +-----+------------------------------------------------+------------------------------------------------+

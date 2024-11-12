@@ -269,7 +269,7 @@ defineFunction({
     const leftNode = new mathMLTree.MathNode("mo", [mml.makeText(group.left, group.mode)]);
     leftNode.setAttribute("fence", "true")
     leftNode.setAttribute("form", "prefix")
-    if (group.left === "\u2216" || group.left.indexOf("arrow") > -1) {
+    if (group.left === "/" || group.left === "\u005C" || group.left.indexOf("arrow") > -1) {
       leftNode.setAttribute("stretchy", "true")
     }
     inner.unshift(leftNode)
@@ -280,6 +280,15 @@ defineFunction({
     rightNode.setAttribute("form", "postfix")
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true")
+    }
+    if (group.body.length > 0) {
+      const lastElement = group.body[group.body.length - 1];
+      if (lastElement.type === "color" && !lastElement.isTextColor) {
+        // \color is a switch. If the last element is of type "color" then
+        // the user set the \color switch and left it on.
+        // A \right delimiter turns the switch off, but the delimiter itself gets the color.
+        rightNode.setAttribute("mathcolor", lastElement.color);
+      }
     }
     inner.push(rightNode)
 
