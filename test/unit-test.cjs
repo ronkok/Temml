@@ -531,6 +531,7 @@ const test = () => {
   new Expect(temml.renderToString(r`(d+1)\sin`)).toContain('<mspace width="0.1667em">')
   new Expect(temml.renderToString(r`{d+1}\sin`)).toContain('<mspace width="0.1667em">')
   new Expect(temml.renderToString(r`\mathrm{d}\sin`)).toContain('<mspace width="0.1667em">')
+  new Expect(temml.renderToString(r`\mathrm{d}\left(\sin \right)`)).toNotContain('<mspace width="0.1667em">')
 
   assertion = "A function parser should work"
   new Expect(r`\div`).toParse();
