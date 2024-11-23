@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+[0.10.31] = 2024-11-23
+
+### Fixed
+
+- Fix stray <mspace> between open delimiter and a math operator
+
 ## [0.10.30] = 2024-11-11
 
 ### Fixed

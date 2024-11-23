@@ -12505,6 +12505,7 @@ class Parser {
    */
   parseExpression(breakOnInfix, breakOnTokenText, breakOnMiddle) {
     const body = [];
+    this.prevAtomType = "";
     // Keep adding atoms to the body until we can't parse any more atoms (either
     // we reached the end, a }, or a \right)
     while (true) {
@@ -13502,7 +13503,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.30";
+const version = "0.10.31";
 
 function postProcess(block) {
   const labelMap = {};
