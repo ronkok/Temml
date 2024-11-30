@@ -47,6 +47,12 @@ mo.prime-pad {
   padding-left: 0.08em;
 }
 
+/* \cancel & \phase use background images. Get them to print. */
+menclose {
+  -webkit-print-color-adjust: exact;  /* Chrome & Edge */
+          print-color-adjust: exact;
+}
+
 /* Array cell justification in Firefox & WebKit */
 .tml-right {
   text-align: right;

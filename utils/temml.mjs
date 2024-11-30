@@ -1692,6 +1692,7 @@ defineSymbol(math, inner, "\u22f0", "\\iddots", true);
 defineSymbol(math, inner, "\u22ef", "\\@cdots", true);
 defineSymbol(math, inner, "\u22f1", "\\ddots", true);
 defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
+defineSymbol(text, textord, "\u22ee", "\\textvdots");
 defineSymbol(math, accent, "\u02ca", "\\acute");
 defineSymbol(math, accent, "\u0060", "\\grave");
 defineSymbol(math, accent, "\u00a8", "\\ddot");
@@ -4610,7 +4611,7 @@ defineMacro("\\underbar", "\\underline{\\text{#1}}");
 // \kern6\p@\hbox{.}\hbox{.}\hbox{.}}}
 // We'll call \varvdots, which gets a glyph from symbols.js.
 // The zero-width rule gets us an equivalent to the vertical 6pt kern.
-defineMacro("\\vdots", "{\\varvdots\\rule{0pt}{15pt}}");
+defineMacro("\\vdots", "\\TextOrMath{\\textvdots}{{\\varvdots\\rule{0pt}{15pt}}}\\relax");
 defineMacro("\u22ee", "\\vdots");
 
 // {array} environment gaps
@@ -13501,7 +13502,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.31";
+const version = "0.10.32";
 
 function postProcess(block) {
   const labelMap = {};

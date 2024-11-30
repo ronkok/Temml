@@ -2,7 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
-[0.10.31] = 2024-11-23
+## [0.10.32] = 2024-11-30
+
+### Fixed
+
+- Parse \vdots in text mode
+
+### Added
+
+- Ensure printing of \cancel & \phase
+
+## [0.10.31] = 2024-11-23
 
 ### Fixed
 
