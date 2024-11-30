@@ -753,6 +753,7 @@ const test = () => {
   // Check for duplication of text. Prevent reoccurence of issue #9.
   node = parse(r`\text{MMö}`)[0];
   new Expect(node.body[0].text).toBe("M")
+  new Expect(r`\text{a \vdots b ⋮ d}`).toParse()
 
   assertion = `A texvc builder should not fail`
   new Expect(r`\lang\N\darr\R\dArr\Z\Darr\alef\rang`).toParse();
