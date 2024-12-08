@@ -9,6 +9,8 @@ defineFunction({
   props: {
     numArgs: 2,
     numOptionalArgs: 1,
+    allowedInText: true,
+    allowedInMath: true,
     argTypes: ["size", "size", "size"]
   },
   handler({ parser }, args, optArgs) {

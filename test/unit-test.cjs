@@ -852,6 +852,7 @@ const test = () => {
   node = parse(r`\rule{-1em}{- 0.2em}`)[0];
   new Expect(node.width.number).toBeCloseTo(-1);
   new Expect(node.height.number).toBeCloseTo(-0.2);
+  new Expect(r`\text{a\rule{1em}{2em}b}`).toParse()
 
   assertion = "A kern parser should work"
   let emKern = r`\kern{1em}`;
