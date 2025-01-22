@@ -45,18 +45,27 @@ defineFunctionBuilders({
 
     const children = group.base && group.base.stack
       ? [mml.buildGroup(group.base.body[0], style)]
-      : [mml.buildGroup(group.base, style)]
+      : [mml.buildGroup(group.base, style)];
+
+    // Note regarding scriptstyle level.
+    // (Sub|super)scripts should not shrink beyond MathML scriptlevel 2 aka \scriptscriptstyle
+    // Ref: https://w3c.github.io/mathml-core/#the-displaystyle-and-scriptlevel-attributes
+    // (BTW, MathML scriptlevel 2 is equal to Temml level 3.)
+    // But Chromium continues to shrink the (sub|super)scripts. So we explicitly set scriptlevel 2.
 
     const childStyle = style.inSubOrSup()
     if (group.sub) {
-      children.push(mml.buildGroup(group.sub, childStyle))
+      const sub = mml.buildGroup(group.sub, childStyle)
+      if (style.level === 3) { sub.setAttribute("scriptlevel", "2") }
+      children.push(sub)
     }
 
     if (group.sup) {
       const sup = mml.buildGroup(group.sup, childStyle)
+      if (style.level === 3) { sup.setAttribute("scriptlevel", "2") }
       const testNode = sup.type === "mrow" ? sup.children[0] : sup
       if ((testNode && testNode.type === "mo" && testNode.classes.includes("tml-prime"))
-        && group.base && group.base.text && group.base.text === "f") {
+        && group.base && group.base.text && "fF".indexOf(group.base.text) > -1) {
         // Chromium does not address italic correction on prime.  Prevent f′ from overlapping.
         testNode.classes.push("prime-pad")
       }

@@ -411,6 +411,14 @@ const test = () => {
   new Expect("x^{}_2").toBuild();
   new Expect("x^2_{}").toBuild();
   new Expect("x_{}").toBuild();
+
+  assertion = "Deeply nested super and subscripts should have explicit scriptlevel"
+  nodes = build("2^{2^{2^{^2}}}")
+  new Expect(nodes[0].children[1].children[1].children[1].attributes.scriptlevel).toBe("2")
+  new Expect(nodes[0].children[1].children[1].children[1].children[1].attributes.scriptlevel).toBe("2")
+  nodes = build("2_{2_{2_{_2}}}")
+  new Expect(nodes[0].children[1].children[1].children[1].attributes.scriptlevel).toBe("2")
+  new Expect(nodes[0].children[1].children[1].children[1].children[1].attributes.scriptlevel).toBe("2")
   
   assertion = "A row builder should work when given a document fragment"
   new Expect((build(`x^{\color{red}{hello}}`))[0].children.length).toBe(2)
