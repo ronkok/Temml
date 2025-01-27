@@ -250,10 +250,13 @@ defineFunction({
     // replacement text, enclosed in '{' and '}' and properly nested
     const { tokens } = parser.gullet.consumeArg();
 
-    parser.gullet.macros.set(
-      name,
-      { tokens, numArgs }
-    )
+    if (!(funcName === "\\providecommand" && parser.gullet.macros.has(name))) {
+      // Ignore \providecommand
+      parser.gullet.macros.set(
+        name,
+        { tokens, numArgs }
+      )
+    }
 
     return { type: "internal", mode: parser.mode };
 
