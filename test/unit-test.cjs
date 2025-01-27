@@ -597,6 +597,10 @@ const test = () => {
   new Expect(node.denom).toBeDefined();
   new Expect(node.hasBarLine).toBe(false);
 
+  assertion = "A fraction builder should not over-shrink its  contents"
+  nodes = build(r`\frac{2}{c +\frac{2}{d +\frac{2}{\frac 2 2}}}`)
+  new Expect(nodes[0].children[1].children[2].children[1].children[2].children[1].style.mathDepth).toBe("2")
+
   assertion = "An over/brace/brack parser should work"
   const simpleOver = r`1 \over x`;
   const complexOver = r`1+2i \over 3+4i`;

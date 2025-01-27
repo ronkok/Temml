@@ -20,10 +20,19 @@ const mathmlBuilder = (group, style) => {
     ? style.withLevel(StyleLevel.SCRIPT)
     : style.withLevel(StyleLevel.SCRIPTSCRIPT);
 
-  let node = new mathMLTree.MathNode("mfrac", [
-    mml.buildGroup(group.numer, childOptions),
-    mml.buildGroup(group.denom, childOptions)
-  ]);
+  // Chromium (wrongly) continues to shrink fractions beyond scriptscriptlevel.
+  // So we check for levels that Chromium shrinks too small.
+  // If necessary, set an explicit fraction depth.
+  const numer = mml.buildGroup(group.numer, childOptions)
+  const denom = mml.buildGroup(group.denom, childOptions)
+  if (style.level === 3) {
+    numer.style.mathDepth = "2"
+    numer.setAttribute("scriptlevel", "2")
+    denom.style.mathDepth = "2"
+    denom.setAttribute("scriptlevel", "2")
+  }
+
+  let node = new mathMLTree.MathNode("mfrac", [numer, denom]);
 
   if (!group.hasBarLine) {
     node.setAttribute("linethickness", "0px");

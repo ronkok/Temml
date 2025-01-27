@@ -16,9 +16,11 @@ class Style {
   constructor(data) {
     // Style.level can be 0 | 1 | 2 | 3, which correspond to
     //       displaystyle, textstyle, scriptstyle, and scriptscriptstyle.
-    // style.level does not directly set MathML's script level. MathML does that itself.
-    // We use style.level to track, not set, math style so that we can get the
-    // correct scriptlevel when needed in supsub.js, mathchoice.js, or for dimensions in em.
+    // style.level usually does not directly set MathML's script level. MathML does that itself.
+    // However, Chromium does not stop shrinking after scriptscriptstyle, so we do explicitly
+    // set a scriptlevel attribute in those conditions.
+    // We also use style.level to track math style so that we can get the correct
+    // scriptlevel when needed in supsub.js, mathchoice.js, or for dimensions in em.
     this.level = data.level;
     this.color = data.color;  // string | void
     // A font family applies to a group of fonts (i.e. SansSerif), while a font
