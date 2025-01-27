@@ -93,6 +93,7 @@ export const delimiters = [
   "\\vert",
   "\\|",
   "\\Vert",
+  "\u2016",
   "\\uparrow",
   "\\Uparrow",
   "\\downarrow",

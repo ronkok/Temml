@@ -692,7 +692,7 @@ defineSymbol(math, open, "\u27e8", "\\langle", true);
 defineSymbol(math, open, "\u27ea", "\\lAngle", true);
 defineSymbol(math, open, "\u2989", "\\llangle", true);
 defineSymbol(math, open, "|", "\\lvert");
-defineSymbol(math, open, "\u2016", "\\lVert");
+defineSymbol(math, open, "\u2016", "\\lVert", true);
 defineSymbol(math, textord, "!", "\\oc"); // cmll package
 defineSymbol(math, textord, "?", "\\wn");
 defineSymbol(math, textord, "\u2193", "\\shpos");
