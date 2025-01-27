@@ -2046,8 +2046,8 @@ const test = () => {
   assertion = "In a macro expander, \\providecommand defines macros but does not redefine them"
   new Expect(r`\providecommand\foo{x^2}\foo+\foo`).toParseLike(r`x^2+x^2`, strictSettings())
   new Expect(r`\providecommand{\foo}{x^2}\foo+\foo`).toParseLike(r`x^2+x^2`, strictSettings())
-  //new Expect(r`\providecommand\bar{x^2}\bar+\bar`).toParseLike(r`x^2+x^2`, strictSettings())
-  //new Expect(r`\providecommand{\bar}{x^2}\bar+\bar`).toParseLike(r`x^2+x^2`, strictSettings())
+  new Expect(r`\providecommand\bar{x^2}\bar+\bar`).toParseLike(r`x^2+x^2`, strictSettings())
+  new Expect(r`\providecommand{\bar}{x^2}\bar+\bar`).toParseLike(r`x^2+x^2`, strictSettings())
   new Expect(r`\newcommand{\foo}{1}\foo\providecommand{\foo}{b}\foo`).toParseLike(r`11`, strictSettings())
   new Expect(r`\providecommand{\foo}{1}\foo\renewcommand{\foo}{b}\foo`).toParseLike(r`1b`, strictSettings())
   new Expect(r`\providecommand{\foo}{1}\foo\providecommand{\foo}{b}\foo`).toParseLike(r`11`, strictSettings())
