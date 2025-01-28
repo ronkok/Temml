@@ -922,6 +922,7 @@ If you know the shape of a character, but not its name,
 |\mathrm|$\mathrm{AaBb12}$ |`\mathrm{AaBb12}`||
 |\mathscr|$\mathscr{AB}$ |`\mathscr{AB}`||
 |\mathsf|$\mathsf{AaBb123}$ |`\mathsf{AaBb123}`||
+|\mathsfit|$\mathsfit{AaBb}$ |`\mathsfit{AaBb}`| isomath |
 |\mathsterling|$\mathsterling$ |||
 |\mathstrut|$\sqrt{\mathstrut a}$ |`\sqrt{\mathstrut a}`||
 |\mathtip|(Not supported)|See `\texttip`||

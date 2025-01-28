@@ -85,6 +85,8 @@ export const getVariant = function(group, style) {
       return "script"
     case "mathsf":
       return "sans-serif"
+    case "mathsfit":
+      return "sans-serif-italic"
     case "mathtt":
       return "monospace"
     default:

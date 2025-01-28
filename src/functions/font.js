@@ -94,6 +94,7 @@ defineFunction({
     "\\mathfrak",
     "\\mathscr",
     "\\mathsf",
+    "\\mathsfit",
     "\\mathtt",
 
     // aliases

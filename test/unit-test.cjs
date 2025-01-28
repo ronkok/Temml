@@ -1367,6 +1367,8 @@ const test = () => {
   new Expect(markup).toBe(`<mi class="mathscr">𝒜</mi>`);
   markup = temml.renderToString(r`\mathsf{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe(`<mrow><mi>𝖠</mi><mi>𝗑</mi><mn>𝟤</mn><mi>𝗄</mi><mi>𝞈</mi><mi>𝝮</mi><mi>ı</mi><mo lspace="0em" rspace="0em">+</mo></mrow>`);
+  markup = temml.renderToString(r`\mathsfit{Ab}`).replace(mathTagRegEx, "")
+  new Expect(markup).toBe(`<mrow><mi>𝘈</mi><mi>𝘣</mi></mrow>`);
 
   assertion = "A font tree-builder should render text as <mtext>"
   markup = temml.renderToString(r`\text{for }`);
