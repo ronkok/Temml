@@ -180,8 +180,6 @@ export const buildExpression = function(expression, style, semisimple = false) {
     return [group];
   }
 
-  //consolidateNumbers(expression)
-
   const groups = [];
   const groupArray = [];
   let lastGroup
