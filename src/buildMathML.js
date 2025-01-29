@@ -8,7 +8,7 @@ import mathMLTree from "./mathMLTree"
 import ParseError from "./ParseError"
 import symbols, { ligatures } from "./symbols"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
-import { MathNode } from "./mathMLTree"
+import { MathNode, TextNode } from "./mathMLTree"
 import { DocumentFragment } from "./tree"
 import setLineBreaks from "./linebreaking"
 
@@ -102,61 +102,6 @@ export const consolidateText = mrow => {
   }
 }
 
-const numberRegEx = /^[0-9]$/
-const isDotOrComma = (node, followingNode) => {
-  return ((node.type === "textord" && node.text === ".") ||
-    (node.type === "atom" && node.text === ",")) &&
-    // Don't consolidate if there is a space after the comma.
-    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
-}
-const consolidateNumbers = expression => {
-  // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
-  // not <mn>1</mn><mo>,</mo><mn>5</mn><mn>0</mn><mn>6</mn><mi>.</mi><mn>3</mn>
-  if (expression.length < 2) { return }
-  const nums = [];
-  let inNum = false
-  // Find adjacent numerals
-  for (let i = 0; i < expression.length; i++) {
-    const node = expression[i];
-    if (node.type === "textord" && numberRegEx.test(node.text)) {
-      if (!inNum) { nums.push({ start: i }) }
-      inNum = true
-    } else {
-      if (inNum) { nums[nums.length - 1].end = i - 1 }
-      inNum = false
-    }
-  }
-  if (inNum) { nums[nums.length - 1].end = expression.length - 1 }
-
-  // Determine if numeral groups are separated by a comma or dot.
-  for (let i = nums.length - 1; i > 0; i--) {
-    if (nums[i - 1].end === nums[i].start - 2 &&
-      isDotOrComma(expression[nums[i].start - 1], expression[nums[i].start])) {
-      // Merge the two groups.
-      nums[i - 1].end = nums[i].end
-      nums.splice(i, 1)
-    }
-  }
-
-  // Consolidate the number nodes
-  for (let i = nums.length - 1; i >= 0; i--) {
-    for (let j = nums[i].start + 1; j <= nums[i].end; j++) {
-      expression[nums[i].start].text += expression[j].text
-    }
-    expression.splice(nums[i].start + 1, nums[i].end - nums[i].start)
-    // Check if the <mn> is followed by a numeric base in a supsub, e.g. the "3" in 123^4
-    // If so, merge the first <mn> into the base.
-    if (expression.length > nums[i].start + 1) {
-      const nextTerm = expression[nums[i].start + 1];
-      if (nextTerm.type === "supsub" && nextTerm.base && nextTerm.base.type === "textord" &&
-          numberRegEx.test(nextTerm.base.text)) {
-        nextTerm.base.text = expression[nums[i].start].text + nextTerm.base.text
-        expression.splice(nums[i].start, 1)
-      }
-    }
-  }
-}
-
 /**
  * Wrap the given array of nodes in an <mrow> node if needed, i.e.,
  * unless the array has length 1.  Always returns a single node.
@@ -178,6 +123,39 @@ export const makeRow = function(body, semisimple = false) {
   }
   return new mathMLTree.MathNode("mrow", body);
 };
+
+/**
+ * Check for <mi>.</mi> which is how a dot renders in MathML,
+ * or <mo separator="true" lspace="0em" rspace="0em">,</mo>
+ * which is how a braced comma {,} renders in MathML
+ */
+function isNumberPunctuation(group) {
+  if (!group) {
+    return false
+  }
+  if (group.type === 'mi' && group.children.length === 1) {
+    const child = group.children[0];
+    return child instanceof TextNode && child.text === '.'
+  } else if (group.type === "mtext" && group.children.length === 1) {
+    const child = group.children[0];
+    return child instanceof TextNode && child.text === '\u2008' // punctuation space
+  } else if (group.type === 'mo' && group.children.length === 1 &&
+    group.getAttribute('separator') === 'true' &&
+    group.getAttribute('lspace') === '0em' &&
+    group.getAttribute('rspace') === '0em') {
+    const child = group.children[0];
+    return child instanceof TextNode && child.text === ','
+  } else {
+    return false
+  }
+}
+const isComma = (expression, i) => {
+  const node = expression[i];
+  const followingNode = expression[i + 1];
+  return (node.type === "atom" && node.text === ",") &&
+    // Don't consolidate if there is a space after the comma.
+    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
+}
 
 const isRel = item => {
   return (item.type === "atom" && item.family === "rel") ||
@@ -202,11 +180,18 @@ export const buildExpression = function(expression, style, semisimple = false) {
     return [group];
   }
 
-  consolidateNumbers(expression)
+  //consolidateNumbers(expression)
 
   const groups = [];
+  const groupArray = [];
+  let lastGroup
   for (let i = 0; i < expression.length; i++) {
-    const group = buildGroup(expression[i], style);
+    groupArray.push(buildGroup(expression[i], style))
+  }
+
+  for (let i = 0; i < groupArray.length; i++) {
+    const group = groupArray[i];
+
     // Suppress spacing between adjacent relations
     if (i < expression.length - 1 && isRel(expression[i]) && isRel(expression[i + 1])) {
       group.setAttribute("rspace", "0em")
@@ -214,9 +199,39 @@ export const buildExpression = function(expression, style, semisimple = false) {
     if (i > 0 && isRel(expression[i]) && isRel(expression[i - 1])) {
       group.setAttribute("lspace", "0em")
     }
-    groups.push(group);
+
+    // Concatenate numbers
+    if (group.type === 'mn' && lastGroup && lastGroup.type === 'mn') {
+      // Concatenate <mn>...</mn> followed by <mi>.</mi>
+      lastGroup.children.push(...group.children)
+      continue
+    } else if (isNumberPunctuation(group) && lastGroup && lastGroup.type === 'mn') {
+      // Concatenate <mn>...</mn> followed by <mi>.</mi>
+      lastGroup.children.push(...group.children)
+      continue
+    } else if (lastGroup && lastGroup.type === "mn" && i < groupArray.length - 1 &&
+      groupArray[i + 1].type === "mn" && isComma(expression, i)) {
+      lastGroup.children.push(...group.children)
+      continue
+    } else if (group.type === 'mn' && isNumberPunctuation(lastGroup)) {
+      // Concatenate <mi>.</mi> followed by <mn>...</mn>
+      group.children = [...lastGroup.children, ...group.children];
+      groups.pop()
+    } else if ((group.type === 'msup' || group.type === 'msub') &&
+        group.children.length >= 1 && lastGroup &&
+        (lastGroup.type === 'mn' || isNumberPunctuation(lastGroup))) {
+      // Put preceding <mn>...</mn> or <mi>.</mi> inside base of
+      // <msup><mn>...base...</mn>...exponent...</msup> (or <msub>)
+      const base = group.children[0];
+      if (base instanceof MathNode && base.type === 'mn' && lastGroup) {
+        base.children = [...lastGroup.children, ...base.children];
+        groups.pop()
+      }
+    }
+    groups.push(group)
+    lastGroup = group
   }
-  return groups;
+  return groups
 };
 
 /**

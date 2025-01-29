@@ -279,14 +279,20 @@ const test = () => {
   new Expect("\u00a0\ufe0e" + `x   ^ y    `).toParseLike("x^y")
 
   assertion = "Temml should consolidate numbers into a single <mn> element"
-  let nodes = build(`12.34`)
-  new Expect(nodes.length).toBe(1)
-  new Expect(nodes[0].type).toBe("mn")
-  nodes = build(`12.34`)
-  new Expect(nodes.length).toBe(1)
-  new Expect(nodes[0].type).toBe("mn")
+  let markup = temml.renderToString(`12.34`)
+  new Expect(markup).toBe("<math><mn>12.34</mn></math>")
+  markup = temml.renderToString(`24^3`)
+  new Expect(markup).toBe("<math><msup><mn>24</mn><mn>3</mn></msup></math>")
+  markup = temml.renderToString(`1{,}000.2`)
+  new Expect(markup).toBe("<math><mn>1,000.2</mn></math>")
+  markup = temml.renderToString(`1 000.2`)
+  new Expect(markup).toBe("<math><mn>1000.2</mn></math>")
+  markup = temml.renderToString("1\u2008000.2")
+  new Expect(markup).toBe("<math><mn>1 000.2</mn></math>")
+  markup = temml.renderToString(`1,000.2`)
+  new Expect(markup).toBe("<math><mn>1,000.2</mn></math>")
   assertion = "Temml should split numbers if a space follows a comma"
-  let markup = temml.renderToString(`12, 340`)
+  markup = temml.renderToString(`12, 340`)
   new Expect(markup).toBe('<math><mrow><mn>12</mn><mo separator="true">,</mo></mrow><mrow><mn>340</mn></mrow></math>')
 
   assertion = "Parser should build a list of ords"
