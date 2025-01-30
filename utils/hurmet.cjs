@@ -155,10 +155,10 @@ const numeralFromSuperScript = ch => {
 };
 
 // Trim spaces except for tabs. This is used to read tab-separated values (TSV).
-const leadingSpaceRegEx$3 = /^[ \r\n\f]+/;
-const trailingSpaceRegEx$1 = /[ \r\n\f]+$/;
+const leadingSpaceRegEx$4 = /^[ \r\n\f]+/;
+const trailingSpaceRegEx$2 = /[ \r\n\f]+$/;
 const tablessTrim = str => {
-  return str.replace(leadingSpaceRegEx$3, "").replace(trailingSpaceRegEx$1, "")
+  return str.replace(leadingSpaceRegEx$4, "").replace(trailingSpaceRegEx$2, "")
 };
 
 const midDotRegEx = /^(\*|·|\.|-[A-Za-z])/;
@@ -217,7 +217,7 @@ const dt = Object.freeze({
   BOOLEANFROMCOMPARISON: 12, // 4 + 8, useful for chained comparisons
   STRING: 16,
   QUANTITY: 32, // Contains both a magnitude and a unit-of-measure
-  DATE: 64, //     Not currently used
+  DATE: 64, //     Number of seconds after start of Jan 1, 1970, UTC.
   RANGE: 128, //   as in:  1:10
   TUPLE: 256, //   Used for multiple assignment from a module.
   MAP: 512,  //    A key:value store with all the same data type the same unit
@@ -241,8 +241,10 @@ const errorMessages = Object.freeze({
     ERR_FUNC:  "@",
     BAD_FUN_NM:"Error. Unrecognized function name \"@\".",
     DIV:       "Error. Divide by zero.",
-    NAN:       "Error. Value of $@$ is not a numeric.",
+    NAN:       "Error. Value of $@$ is not numeric.",
     NANARG:    "Error. Argument to function $@$ must be numeric.",
+    // eslint-disable-next-line max-len
+    NANEL:     "Error. A numeric vector must have numeric elements. The value of $@$ is not numeric.",
     NULL:      "Error. Missing value for $@$.", // $@$ will be italic in TeX
     BAD_EQ:    'Error. Use "==" instead of "=" to check for equality.',
     V_NAME:    "Error. Variable $@$ not found.",
@@ -257,6 +259,7 @@ const errorMessages = Object.freeze({
     UNIT_ARG:  "Error. Unit mis-match between arguments to function @.",
     UNIT_COL:  "Error. Data frame column @ has no units. Do not make a unit-aware call to it.",
     UNIT_AWARE: "Error. Calculation must be unit-aware in order to apply unit @",
+    UNIT_UN:    "Error. Hurmet does not do unit aware calculations involving @",
     DATE:      "Error. Date required.",
     LOGIC:     "Error. Logic operation “@” on a non-boolean value.",
     FACT:      "Error. Factorial may be applied only to a unit-less non-negative integer.",
@@ -306,6 +309,7 @@ const errorMessages = Object.freeze({
     PRIVATE:   "Error. Function @ is not private.",
     INT_ARG:   "Error. The @ function can take only integers as arguments.",
     BAD_KEY:   "Error. Data structure does not contain key \"@\".",
+    BAD_SHT_KEY: "Error. Spreadsheet does not contain key \"@\".",
     NUM_KEY:   "Error. A key must be a string, not a number.",
     IMMUT_UDF: `Error. Variable @ already contains a user-defined function.
                 Hurmet cannot assign a different value to @.`,
@@ -328,7 +332,8 @@ const errorMessages = Object.freeze({
     BAD_ARGS:   "Error. Wrong number of arguments to function @",
     BAD_SUM:    "Error. Second argument to sum function must be 1 or 2.",
     ZERO_STEP:  "Error. Step value must be > zero.",
-    SHEET_INDEX:"Error. Bad column or row index."
+    SHEET_INDEX:"Error. Bad column or row index.",
+    UNSAVED:    "Error. The current document has not been saved."
   }
 });
 
@@ -358,16 +363,17 @@ const errorOprnd = (errorCode, messageInsert) => {
 const iZero = BigInt(0);
 const iOne = BigInt(1);
 const iTwo = BigInt(2);
+const iTen = BigInt(10);
 const zero = [iZero, iOne];
 const one = [iOne, iOne];
 const two = [iTwo, iOne];
-const pi$1 = [BigInt(31415926535897932384626433832795028841971693993751),
-  BigInt(10000000000000000000000000000000000000000000000000)];
-const e$1 = [BigInt(2718281828459045235360287471352662497757247093699959574966),
-  BigInt(1000000000000000000000000000000000000000000000000000000000)];
+const pi$1 = [BigInt("31415926535897932384626433832795028841971693993751"),
+  BigInt("10000000000000000000000000000000000000000000000000")];
+const e$1 = [BigInt("2718281828459045235360287471352662497757247093699959574966"),
+  BigInt("1000000000000000000000000000000000000000000000000000000000")];
 // reduced Planck constant
 const hbar = [BigInt(1054571817),
-  BigInt(10000000000000000000000000000000000000000000)];
+  BigInt("10000000000000000000000000000000000000000000")];
 
 const intAbs$1 = i => i >= iZero ? i : BigInt(-1) * i;  // absolute value of a BigInt
 
@@ -393,13 +399,13 @@ const fromNumber = num => {
     const decimalFrac = parts[6] || "";
     const exp = BigInt(parts[7]) - BigInt(decimalFrac.length);
     if (exp < 0) {
-      return [BigInt(parts[1] + parts[3] + decimalFrac), BigInt(10) ** -exp]
+      return [BigInt(parts[1] + parts[3] + decimalFrac), iTen ** -exp]
     } else if (parts[5]) {
       const denominator = BigInt(parts[5]);
       return normalize(
         [BigInt(parts[1] + parts[3]) * denominator + BigInt(parts[4]) ])
     } else {
-      return normalize([BigInt(parts[1] + parts[3] + decimalFrac) * BigInt(10) ** exp, iOne])
+      return normalize([BigInt(parts[1] + parts[3] + decimalFrac) * iTen ** exp, iOne])
     }
   }
 };
@@ -428,8 +434,8 @@ const fromString = str => {
       ? BigInt(-2) - BigInt(decimalFrac.length)  // percentage.
       : BigInt(0) - BigInt(decimalFrac.length);
     r = (exp < 0)
-      ? [numerator, BigInt(10) ** -exp]
-      : normalize([numerator * BigInt(10) ** exp, iOne]);
+      ? [numerator, iTen ** -exp]
+      : normalize([numerator * iTen ** exp, iOne]);
   }
   if (parts[1]) { r = negate$1(r); }
   return r
@@ -471,6 +477,7 @@ const isZero = r => r[0] === iZero;
 
 const isNegative = r => r[0] < iZero;
 const isPositive = r => r[0] > iZero;
+const intSign = i => i >= iZero ? iOne : BigInt(-1);
 const sign = r => isPositive(r) ? one : isZero(r) ? zero : negate$1(one);
 
 const negate$1 = r => [BigInt(-1) * r[0], r[1]];
@@ -539,6 +546,7 @@ const power$1 = (a, b) => {
         : areEqual(mod(b, two), one)
         ? fromNumber(-1 * (-1 * toNumber(a)) ** toNumber(b))
         : errorOprnd("BAD_ROOT");
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       result = fromNumber(toNumber(a) ** toNumber(b));
     }
@@ -670,7 +678,7 @@ const toString = (r, numDigitsAfterDecimal) => {
     return "0"
   } else if (numDigitsAfterDecimal < 0) {
     const N = -numDigitsAfterDecimal;
-    const significand = toString(divide$1(r, [BigInt(10) ** BigInt(N), iOne]), 0);
+    const significand = toString(divide$1(r, [iTen ** BigInt(N), iOne]), 0);
     return significand + "0".repeat(N)
   } else {
     const [numerator, denominator] = normalize(r);
@@ -681,16 +689,21 @@ const toString = (r, numDigitsAfterDecimal) => {
       result += "." + "0".repeat(numDigitsAfterDecimal);
     } else if (remainder !== iZero) {
       remainder = intAbs$1(remainder);
-      const newNumerator = remainder * (BigInt(10) ** BigInt(numDigitsAfterDecimal));
+      const bigNumDigitsAfterDecimal = (iTen ** BigInt(numDigitsAfterDecimal));
+      const newNumerator = remainder * bigNumDigitsAfterDecimal;
       let fractus = newNumerator / denominator;
       const residue = newNumerator % denominator;
       if (numDigitsAfterDecimal === 0) {
         return (intAbs$1(iTwo * residue) >= intAbs$1(denominator))
-          ? String(quotient + iOne)
+          ? String((intAbs$1(quotient) + iOne) * intSign(quotient))
           : result
       }
       if (intAbs$1(iTwo * residue) >= intAbs$1(denominator)) {
         fractus = fractus + iOne;
+        if (fractus === bigNumDigitsAfterDecimal) {
+          return String((intAbs$1(quotient) + iOne) * intSign(quotient)) +
+            "." + "0".repeat(numDigitsAfterDecimal)
+        }
       }
       result += "." + String(fractus).padStart(numDigitsAfterDecimal, "0");
     }
@@ -959,14 +972,17 @@ const formattedDecimal = (numStr, decimalFormat, truncateTrailingZeros) => {
   }
 };
 
-const parseFormatSpec = str => {
-  // Do the RegEx once, at compile time, not every time a number is formatted.
-  //
-  // str ≔ "Tn", where:
-  //    T = type, [bEefhkmNnprSstx%], default: "h"
-  //    n = number of digits, [0-9]+, default: 15
-  //
-  //    Possible future additions: complex number format [∠°]
+const validateFormatSpec = str => {
+  /*
+   * Use a RegEx to determine if a format specification string is valid.
+   * Return the string if valid. Return an error message otherwise.
+   *
+   * str ≔ "Tn∠° (w, m-d-y L)?", where:
+   *    T = type, [bEefhkmNnprSstx%], default: "h"
+   *    n = number of digits, [0-9]+, default: 15
+   *    ∠ = optional. Specifies polar notation for complex numbers
+   *    ° = optional. Specifies polar noation in degrees
+   */
 
   const match = formatRegEx.exec(str);
   if (!match) {
@@ -1224,7 +1240,7 @@ const unitsAreCompatible = (a, b) => {
 
 // JSON.parse() is faster than a big object literal
 // eslint-disable-next-line max-len
-const prefixFactor = JSON.parse('{"Y":1e24,"yotta":1e24,"Z":1e21,"zetta":1e21,"E":1e18,"exa":1e18,"P":1e15,"peta":1e15,"T":1e12,"tera":1e12,"G":1e9,"giga":1e9,"M":1e6,"mega":1e6,"k":1000,"kilo":1000,"h":100,"hecto":100,"deka":10,"d":0.1,"deci":0.1,"c":0.01,"centi":0.01,"m":0.001,"milli":0.001,"µ":1e-6,"\u00B5":1e-6,"micro":1e-6,"n":1e-9,"nano":1e-9,"p":1e-12,"pico":1e-12,"f":1e-15,"femto":1e-15,"a":1e-18,"atto":1e-18,"z":1e-21,"zepto":1e-21,"y":1e-24,"yocto":1e-24,"Ki":1024,"kibi":1024,"Mi":1048576,"mebi":1048576,"Gi":1073741824,"gibi":1073741824,"Ti":1099511627776,"tebi":1099511627776}');
+const prefixFactor = JSON.parse('{"Y":1e24,"yotta":1e24,"Z":1e21,"zetta":1e21,"E":1e18,"exa":1e18,"P":1e15,"peta":1e15,"T":1e12,"tera":1e12,"G":1e9,"giga":1e9,"M":1e6,"mega":1e6,"k":1000,"kilo":1000,"h":100,"hecto":100,"deka":10,"d":0.1,"deci":0.1,"c":0.01,"centi":0.01,"m":0.001,"milli":0.001,"µ":1e-6,"\u00B5":1e-6,"\u03bc":1e-6,"micro":1e-6,"n":1e-9,"nano":1e-9,"p":1e-12,"pico":1e-12,"f":1e-15,"femto":1e-15,"a":1e-18,"atto":1e-18,"z":1e-21,"zepto":1e-21,"y":1e-24,"yocto":1e-24,"Ki":1024,"kibi":1024,"Mi":1048576,"mebi":1048576,"Gi":1073741824,"gibi":1073741824,"Ti":1099511627776,"tebi":1099511627776}');
 
   //  factor, numerator, denominator,  gauge, prefix|logarithm|currency, exponents
   //  exponent break-down: length, mass, time, elect, temp, amount, lum inten, money
@@ -1235,11 +1251,11 @@ const unitTable = Object.freeze(JSON.parse(`{
 "£":["1","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "'":["0.3048","1","0","0",[1,0,0,0,0,0,0,0]],
 "A":["1","1","0","siSymbol",[0,0,0,1,0,0,0,0]],
-"AUD":["1.6281","1","0","AUD",[0,0,0,0,0,0,0,1]],
+"AUD":["1.6600","1","0","AUD",[0,0,0,0,0,0,0,1]],
 "Adobe point":["0.0254","72","0","0",[1,0,0,0,0,0,0,0]],
 "At":["1","1","0","siSymbol",[0,0,0,0,1,0,1,0]],
 "Australian dollar":["1","1","0","AUD",[0,0,0,0,0,0,0,1]],
-"BRL":["5.5645","1","0","BRL",[0,0,0,0,0,0,0,1]],
+"BRL":["6.1866","1","0","BRL",[0,0,0,0,0,0,0,1]],
 "BTU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "BThU":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Bq":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
@@ -1248,10 +1264,10 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Btu":["1055.056","1","0","0",[2,1,-2,0,0,0,0,0]],
 "C":["1","1","0","siSymbol",[0,0,1,1,0,0,0,0]],
 "C$":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
-"CAD":["1.4784","1","0","CAD",[0,0,0,0,0,0,0,1]],
+"CAD":["1.5015","1","0","CAD",[0,0,0,0,0,0,0,1]],
 "CCF":["1","1","0","0",[3,0,0,0,0,0,0,0]],
-"CHF":["0.9855","1","0","CHF",[0,0,0,0,0,0,0,1]],
-"CNY":["7.8370","1","0","CNY",[0,0,0,0,0,0,0,1]],
+"CHF":["0.9494","1","0","CHF",[0,0,0,0,0,0,0,1]],
+"CNY":["7.5891","1","0","CNY",[0,0,0,0,0,0,0,1]],
 "CY":["0.764554857984","1","0","0",[3,0,0,0,0,0,0,0]],
 "Calorie":["4186.8","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Canadian dollar":["1","1","0","CAD",[0,0,0,0,0,0,0,1]],
@@ -1271,7 +1287,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Fahrenheit":["5","9","459","0",[0,0,0,0,1,0,0,0]],
 "G":["0.0001","1","0","siSymbol",[-2,-2,-2,-1,0,0,0,0]],
 "GB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
-"GBP":["0.85685","1","0","GBP",[0,0,0,0,0,0,0,1]],
+"GBP":["0.84413","1","0","GBP",[0,0,0,0,0,0,0,1]],
 "Gal":["0.01","1","0","siSymbol",[1,0,-2,0,0,0,0,0]],
 "Gi":["10","12.5663706143592","0","siWord",[0,0,0,0,1,0,1,0]],
 "GiB":["8589934592","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1279,23 +1295,23 @@ const unitTable = Object.freeze(JSON.parse(`{
 "Gy":["1","1","0","siSymbol",[2,0,-2,0,0,0,0,0]],
 "H":["1","1","0","siSymbol",[2,1,-2,-2,0,0,0,0]],
 "HK$":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
-"HKD":["8.4600","1","0","HKD",[0,0,0,0,0,0,0,1]],
+"HKD":["8.1559","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "HP":["745.69987158227","1","0","0",[2,1,-3,0,0,0,0,0]],
 "Hong Kong dollar":["1","1","0","HKD",[0,0,0,0,0,0,0,1]],
 "Hz":["1","1","0","siSymbol",[0,0,-1,0,0,0,0,0]],
-"ILS":["4.0318","1","0","ILS",[0,0,0,0,0,0,0,1]],
-"INR":["90.3883","1","0","INR",[0,0,0,0,0,0,0,1]],
+"ILS":["3.7585","1","0","ILS",[0,0,0,0,0,0,0,1]],
+"INR":["90.3300","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Indian Rupee":["1","1","0","INR",[0,0,0,0,0,0,0,1]],
 "Israeli New Shekel":["1","1","0","ILS",[0,0,0,0,0,0,0,1]],
 "J":["1","1","0","siSymbol",[2,1,-2,0,0,0,0,0]],
-"JPY":["168.96","1","0","JPY",[0,0,0,0,0,0,0,1]],
+"JPY":["163.90","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Japanese Yen":["1","1","0","JPY",[0,0,0,0,0,0,0,1]],
 "Joule":["1","1","0","0",[2,1,-2,0,0,0,0,0]],
 "Julian year":["31557600","1","0","0",[0,0,1,0,0,0,0,0]],
 "Jy":["1e-26","1","0","siSymbol",[0,1,-2,0,0,0,0,0]],
 "K":["1","1","0","0",[0,0,0,0,1,0,0,0]],
 "KiB":["8192","1","0","0",[0,0,0,0,0,1,0,0]],
-"KRW":["1471.55","1","0","KRW",[0,0,0,0,0,0,0,1]],
+"KRW":["1501.60","1","0","KRW",[0,0,0,0,0,0,0,1]],
 "L":["0.001","1","0","siSymbol",[3,0,0,0,0,0,0,0]],
 "Lego stud":["0.008","1","0","siSymbol",[1,0,0,0,0,0,0,0]],
 "MB":["8388608","1","0","0",[0,0,0,0,0,1,0,0]],
@@ -1306,7 +1322,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "MMscf":["28316.846592","1","0","0",[3,0,0,0,0,0,0,0]],
 "MMscfd":["0.32774128","1","0","0",[3,0,0,0,0,0,0,0]],
 "MT":["1000","1","0","0",[0,1,0,0,0,0,0,0]],
-"MXN":["18.0889","1","0","MXN",[0,0,0,0,0,0,0,1]],
+"MXN":["21.2056","1","0","MXN",[0,0,0,0,0,0,0,1]],
 "Mach":["331.6","1","0","0",[1,0,-1,0,0,0,0,0]],
 "Mbbl":["158.987294928","1","0","0",[3,0,0,0,0,0,0,0]],
 "Mexican Peso":["1","1","0","MXN",[0,0,0,0,0,0,0,1]],
@@ -1336,7 +1352,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "TeX point":["0.0003515","1","0","0",[1,0,0,0,0,0,0,0]],
 "TiB":["8796093022208","1","0","0",[0,0,0,0,0,1,0,0]],
 "US$":["1","1","0","USD",[0,0,0,0,0,0,0,1]],
-"USD":["1.0844","1","0","USD",[0,0,0,0,0,0,0,1]],
+"USD":["1.0472","1","0","USD",[0,0,0,0,0,0,0,1]],
 "V":["1","1","0","siSymbol",[2,1,-3,-1,0,0,0,0]],
 "VA":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
 "W":["1","1","0","siSymbol",[2,1,-3,0,0,0,0,0]],
@@ -1576,6 +1592,7 @@ const unitTable = Object.freeze(JSON.parse(`{
 "mgd":["3785.411784","86400","0","0",[3,0,-1,0,0,0,0,0]],
 "mho":["1","1","0","0",[-2,-1,3,2,0,0,0,0]],
 "mi":["1609.344","1","0","0",[1,0,0,0,0,0,0,0]],
+"micron":["0.000001","1","0","0",[1,0,0,0,0,0,0,0]],
 "mil":["0.0000254","1","0","0",[1,0,0,0,0,0,0,0]],
 "mile":["1609.344","1","0","0",[1,0,0,0,0,0,0,0]],
 "min":["60","1","0","0",[0,0,1,0,0,0,0,0]],
@@ -1789,6 +1806,8 @@ const synonyms = Object.freeze({
   "¥": "JPY"
 });
 
+const siPrefixRegEx = /^(yotta|zetta|exa|peta|tera|giga|mega|kilo|hecto|deka|deci|centi|milli|micro|nano|pico|femto|atto|zepto|yocto)/;
+
 const unitFromWord = (inputStr) => {
   const str = inputStr.trim();
   const L = str.length;
@@ -1824,11 +1843,11 @@ const unitFromWord = (inputStr) => {
         }
       }
 
-      let prefix = "";
+      prefix = "";
       if (L > 3) {
-        const match = /^(yotta|zetta|exa|peta|tera|giga|mega|kilo|hecto|deka|deci|centi|milli|micro|nano|pico|femto|atto|zepto|yocto)/.exec(word);
-        if (match) {
-          prefix = match[0].value;
+        const match = siPrefixRegEx.exec(word);
+        if (match && word !== "micron") {
+          prefix = match[0];
           doTheSearch = true;
           word = word.slice(prefix.length);
         }
@@ -1837,7 +1856,7 @@ const unitFromWord = (inputStr) => {
       // We're in the second pass. Try an SI short-form prefix.
       doTheSearch = false;
       prefix = word.charAt(0);
-      if ("YZEPTGMkhdcmnpfazyµμ".indexOf(prefix) > -1) {
+      if ("YZEPTGMkhdcmnpfazyµμµ".indexOf(prefix) > -1) {
         doTheSearch = true;
         word = word.substring(1);
       }
@@ -2966,7 +2985,9 @@ const datumFromValue = (value, dtype, formatSpec) => {
     ? "true"
     : value === false
     ? "false"
-    : value = (dtype === dt.RATIONAL)
+    : value === undefined
+    ? ""
+    : (dtype === dt.RATIONAL)
     ? format(value, formatSpec, "1000000.")
     : value
 };
@@ -3279,7 +3300,7 @@ const dataFrameFromTSV = (str, vars) => {
     row += 1;
     line.split('\t').forEach((datum, col) => {
       datum = datum.trim();
-      if (datum === "sumAbove()") {
+      if (datum === "=sum(up)") {
         let sum = Rnl.zero;
         for (const num of data[col]) {
           if (!isNaN(num)) {
@@ -3365,7 +3386,7 @@ const dataFrameFromVectors = (vectors, formatSpec) => {
     const colDtype = vector.dtype - vectorType;
     data.push(vector.value.map(e => datumFromValue(e, colDtype, formatSpec)));
     dtype.push(colDtype);
-    if (vector.unit.name) {
+    if (vector.unit && vector.unit.name) {
       units.push(vector.unit.name);
       if (!unitMap[vector.unit.name]) {
         const unit = unitFromUnitName(vector.unit.name);
@@ -3667,12 +3688,12 @@ const display$1 = (df, formatSpec = "h3", decimalFormat = "1,000,000.", omitHead
     : writeRowNums
     ? "r|"
     : "";
-  for (let j = 1; j < numCols; j++) {
+  for (let j = 0; j < numCols; j++) {
     str += isMap
       ? "c "
       : numRows === 1
       ? "c "
-      : Rnl.isRational(data[j][0])
+      : (df.dtype[j] & dt.RATIONAL)
       ? "r "
       : "l ";
   }
@@ -3809,6 +3830,91 @@ const DataFrame = Object.freeze({
   range: range$1
 });
 
+const dateFormatRegEx = /^(?:(w{3,4}), )?(y{1,4}|m{3,4}|d{1,2})([- .]| de )(m{2,4}|d{1,2})([- .]|, | de )(y{4}|d{2})(?: ([a-z]{2,3}))?$/;
+// Capturing groups:
+//  [1] weekday, optional
+//  [2] day, month, or year
+//  [3] separator between first & second [dmy]
+//  [4] day or month
+//  [5] separator
+//  [6] day or year
+//  [7] language code, optional
+
+
+const dateRegEx$1 = /^'(\d{4})-(\d{1,2})-(\d{1,2})'$/;
+const dateInSecondsFromIsoString = dateStr => {
+  // Return the number of seconds after the start January 1, 1970, UTC.
+  const match = dateStr.match(dateRegEx$1);
+  const timeZoneOffset = new Date().getTimezoneOffset() / 60; // in hours
+  const date = new Date( match[1], match[2] - 1, match[3], -timeZoneOffset );
+  return Math.floor(date.getTime() / 1000) // seconds after Jan 1, 1970, UTC
+};
+
+const dateInSecondsFromToday = _ => {
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  const isoString = `'${year}-${month}-${day}'`;
+  return dateInSecondsFromIsoString(isoString)
+};
+
+const dateRPN = dateStr => {
+  return "⌾" + String(dateInSecondsFromIsoString(dateStr))
+};
+
+const dateDisplayFromIsoString = (str, dateFormatSpec, inExpression = false) => {
+  const rnlDate = [BigInt(dateInSecondsFromIsoString(str)), BigInt(1)];
+  return formatDate(rnlDate, dateFormatSpec, inExpression)
+};
+
+const processDMY = (dmy, date, language, inExpression) => {
+  return dmy === "d"
+    ? String(date.getUTCDate())
+    : dmy === "dd"
+    ? String(date.getUTCDate()).padStart(2, '0')
+    : dmy === "mm"
+    ? String(date.getUTCMonth() + 1).padStart(2, '0')
+    : dmy === "mmm" || (inExpression && dmy === "mmmm")
+    ? new Intl.DateTimeFormat(language, { month: 'short', timeZone: 'GMT' }).format(date)
+    : dmy === "mmmm"
+    ? new Intl.DateTimeFormat(language, { month: 'long', timeZone: 'GMT' }).format(date)
+    : String(date.getUTCFullYear())
+};
+
+const formatDate = (dateValue, dateFormatSpec, inExpression = false) => {
+  // dateValue = number of seconds after start of January 1, 1970
+  const date = new Date(Rnl.toNumber(dateValue) * 1000);
+  // Write results in the document's main font.
+  const dateClass = inExpression ? "" : "\\class{date-result}{";
+
+  if (!dateFormatSpec || dateFormatSpec === "yyyy-mm-dd" ||
+    (inExpression && dateFormatSpec.indexOf("de") > -1)) {
+    let result = `${dateClass}\\text{${date.toISOString().split("T")[0]}}`;
+    if (!inExpression)  { result += "}"; }
+    return result
+  }
+
+  const match = dateFormatRegEx.exec(dateFormatSpec);
+  const language = match[7] ? match[7] : "en";
+
+  let str = "";
+  if (match[1] && !inExpression) {
+    const length = match[1].length === "3" ? "short" : "long";
+    str += new Intl.DateTimeFormat(language, { weekday: length, timeZone: 'GMT' }).format(date);
+    str += ", ";
+  }
+  str += processDMY(match[2], date, language, inExpression);
+  str += match[3];
+  str += processDMY(match[4], date, language, inExpression);
+  str += match[5];
+  str += processDMY(match[6], date, language, inExpression);
+
+  let result = `${dateClass}\\text{${str}}`;
+  if (!inExpression)  { result += "}"; }
+  return result
+};
+
 /*
  * lexer.js
  * This file supports parser.js.
@@ -3840,7 +3946,7 @@ const tt = Object.freeze({
   UNIT: 19, //    unit-of-measure, e.g., 'meters' or °
   BIN: 20, //     binary infix operators that render but don't calculate, e.g., ± \cdots
   ADD: 21, //     binary infix addition or subtraction operator: + -
-  MULT: 22, //    binary infix multiplication or division operator: × * · // ÷
+  MULT: 22, //    binary infix multiplication or division operator: × * · // ÷ modulo
   REL: 23, //     relational operator:  ≟ > < ≤ ≥ etc.
   LOGIC: 24, //   if and or xor else otherwise
   SEP: 25, //     argument separators, cell separators and row separators: , ;
@@ -3859,12 +3965,14 @@ const tt = Object.freeze({
   DATAFRAME: 40,
   RICHTEXT: 41,
   BOOLEAN: 42,
-  MACRO: 43
+  MACRO: 43,
+  DATE: 44  // Input format is 'yyyy-mm-dd'
 });
 
 const minusRegEx = /^-(?![-=<>:])/;
 const numberRegEx$5 = new RegExp(Rnl.numberPattern);
 const unitRegEx = /^(?:'[^']+'|[°ΩÅK])/;
+const dateRegEx = /^'\d{4}-\d{1,2}-\d{1,2}'/;
 
 const texFromNumStr = (numParts, decimalFormat) => {
   let num = "";
@@ -3899,6 +4007,7 @@ const isUnary = (prevToken) => {
     case tt.NUM:
     case tt.ORD:
     case tt.VAR:
+    case tt.DATE:
     case tt.RIGHTBRACKET:
     case tt.LONGVAR:
     case tt.UNIT:
@@ -3915,269 +4024,295 @@ const isUnary = (prevToken) => {
 const wordRegEx = /^(?:(?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u212C\u2130\u2131\u210B\u2110\u2112\u2133\u211B\u212F\u210A\u2113\u2134]|(?:\uD835[\uDC00-\udc33\udc9c-\udccf\udd38-\udd50]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*|!in|-->|->|left\.|right\.|log10|log2)/;
 
 const words = Object.freeze({
-  //       input,    tex output,               type, closeDelim
-  "true": ["true", "\\mathord{\\text{true}}", tt.BOOLEAN, ""],
-  "false": ["false", "\\mathord{\\text{false}}", tt.BOOLEAN, ""],
-  cos: ["cos", "\\cos", tt.FUNCTION, ""],
-  cosd: ["cosd", "\\operatorname{\\cos_d}", tt.FUNCTION, ""],
-  if: ["if", "\\mathrel{\\mathrm{if}}", tt.LOGIC, ""],
-  else: ["else", "\\mathrel{\\mathrm{else}}", tt.LOGIC, ""],
-  elseif: ["elseif", "\\mathrel{\\mathrm{elseif}}", tt.LOGIC, ""],
-  and: ["and", "\\mathrel{\\mathrm{and}}", tt.LOGIC, ""],
-  or: ["or", "\\mathrel{\\mathrm{or}}", tt.LOGIC, ""],
-  for: ["for", "\\mathrel{\\mathrm{for}}", tt.KEYWORD, ""],
-  while: ["while", "\\mathrel{\\mathrm{while}}", tt.KEYWORD, ""],
-  in: ["in", "\\mathrel{\\mathrm{in}}", tt.REL, ""],
-  "!in": ["!in", "\\mathrel{\\mathrm{!in}}", tt.REL, ""],
-  break: ["break", "\\mathrel{\\mathrm{break}}", tt.KEYWORD, ""],
-  to: ["to", "\\mathbin{\\mathrm{to}}", tt.TO, "" ],
-  throw: ["throw", "\\mathrel{\\mathrm{throw}}", tt.UNARY, ""],
-  print: ["print", "\\mathrel{\\mathrm{print}}", tt.UNARY, ""],
-  return: ["return", "\\mathrel{\\mathrm{return}}", tt.RETURN, ""],
-  sqrt: ["sqrt", "\\sqrt", tt.UNARY, ""],
-  otherwise: ["otherwise", "\\mathrel{\\mathrm{otherwise}}", tt.LOGIC, ""],
-  root: ["root", "\\sqrt", tt.BINARY, ""],
-  sin: ["sin", "\\sin", tt.FUNCTION, ""],
-  sind: ["sind", "\\operatorname{\\sin_d}", tt.FUNCTION, ""],
-  tan: ["tan", "\\tan", tt.FUNCTION, ""],
-  tand: ["tand", "\\operatorname{\\tan_d}", tt.FUNCTION, ""],
-  cotd: ["cotd", "\\operatorname{\\cot_d}", tt.FUNCTION, ""],
-  secd: ["secd", "\\operatorname{\\sec_d}", tt.FUNCTION, ""],
-  cscd: ["cscd", "\\operatorname{\\csc_d}", tt.FUNCTION, ""],
-  log: ["log", "\\log", tt.FUNCTION, ""],
-  ln: ["ln", "\\ln", tt.FUNCTION, ""],
-  log10: ["log10", "\\log_{10}", tt.FUNCTION, ""],
-  log2: ["log2", "\\log_{2}", tt.FUNCTION, ""],
-  "log!": ["log!", "\\operatorname{log!}", tt.FUNCTION, ""],
-  pi: ["pi", "\\mathrm{pi}", tt.ORD, ""],
-  π: ["π", "π", tt.ORD, ""],
-  "ℓ": ["ℓ", "ℓ", tt.VAR, ""],
+  //       input,    tex output,          calc output, type, closeDelim
+  "true": ["true", "\\mathord{\\text{true}}", "true", tt.BOOLEAN, ""],
+  "false": ["false", "\\mathord{\\text{false}}", "false", tt.BOOLEAN, ""],
+  cos: ["cos", "\\cos", "cos", tt.FUNCTION, ""],
+  cosd: ["cosd", "\\operatorname{\\cos_d}", "cosd", tt.FUNCTION, ""],
+  if: ["if", "\\mathrel{\\mathrm{if}}", "if", tt.LOGIC, ""],
+  else: ["else", "\\mathrel{\\mathrm{else}}", "else", tt.LOGIC, ""],
+  elseif: ["elseif", "\\mathrel{\\mathrm{elseif}}", "elseif", tt.LOGIC, ""],
+  and: ["and", "\\mathrel{\\mathrm{and}}", "and", tt.LOGIC, ""],
+  or: ["or", "\\mathrel{\\mathrm{or}}", "or", tt.LOGIC, ""],
+  for: ["for", "\\mathrel{\\mathrm{for}}", "for", tt.KEYWORD, ""],
+  while: ["while", "\\mathrel{\\mathrm{while}}", "while", tt.KEYWORD, ""],
+  in: ["in", "\\mathrel{\\mathrm{in}}", "in", tt.REL, ""],
+  "!in": ["!in", "\\mathrel{\\mathrm{!in}}", "∉", tt.REL, ""],
+  break: ["break", "\\mathrel{\\mathrm{break}}", "break", tt.KEYWORD, ""],
+  to: ["to", "\\mathbin{\\mathrm{to}}", "to", tt.TO, "" ],
+  throw: ["throw", "\\mathrel{\\mathrm{throw}}", "throw", tt.UNARY, ""],
+  print: ["print", "\\mathrel{\\mathrm{print}}", "print", tt.UNARY, ""],
+  return: ["return", "\\mathrel{\\mathrm{return}}", "print", tt.RETURN, ""],
+  sqrt: ["sqrt", "\\sqrt", "√", tt.UNARY, ""],
+  otherwise: ["otherwise", "\\mathrel{\\mathrm{otherwise}}", "otherwise", tt.LOGIC, ""],
+  root: ["root", "\\sqrt", "root", tt.BINARY, ""],
+  modulo: ["modulo", "\\mathbin{modulo}", "modulo", tt.MULT],
+  sin: ["sin", "\\sin", "sin", tt.FUNCTION, ""],
+  sind: ["sind", "\\operatorname{\\sin_d}", "sind", tt.FUNCTION, ""],
+  tan: ["tan", "\\tan", "tan", tt.FUNCTION, ""],
+  tand: ["tand", "\\operatorname{\\tan_d}", "tand", tt.FUNCTION, ""],
+  cotd: ["cotd", "\\operatorname{\\cot_d}", "cotd", tt.FUNCTION, ""],
+  secd: ["secd", "\\operatorname{\\sec_d}", "secd", tt.FUNCTION, ""],
+  cscd: ["cscd", "\\operatorname{\\csc_d}", "cscd", tt.FUNCTION, ""],
+  log: ["log", "\\log", "log", tt.FUNCTION, ""],
+  ln: ["ln", "\\ln", "ln", tt.FUNCTION, ""],
+  log10: ["log10", "\\log_{10}", "log10", tt.FUNCTION, ""],
+  log2: ["log2", "\\log_{2}", "log2", tt.FUNCTION, ""],
+  "log!": ["log!", "\\operatorname{log!}", "log!", tt.FUNCTION, ""],
+  pi: ["pi", "\\mathrm{pi}", "π", tt.ORD, ""],
+  π: ["π", "π", "π", tt.ORD, ""],
+  "ℓ": ["ℓ", "ℓ", "ℓ", tt.VAR, ""],
   // A few arrows are placed here to give them priority over other arrows
-  "->": ["->", "\u2192", tt.REL, ""], // right arrow
-  "-->": ["-->", "\\xrightarrow", tt.UNARY, ""],
-  "<-->": ["<-->", "\\xrightleftarrows", tt.UNARY, ""]
+  "->": ["->", "\u2192", "\u2192", tt.REL, ""], // right arrow
+  "-->": ["-->", "\\xrightarrow", "-->", tt.UNARY, ""],
+  "<-->": ["<-->", "\\xrightleftarrows", "<-->", tt.UNARY, ""]
 });
 
 const miscRegEx = /^([/÷\u2215_:,;\t^+\\\-–−*∗×∘⊗⦼⊙√∛∜·.%|╏‖¦><=≈≟≠≡≤≥≅∈∉∋∌⊂⊄⊆⊈⊃⊇⊉!¡‼¬∧∨⊻~#?⇒⟶⟵→←&@′″∀∃∫∬∮∑([{⟨⌊⎿⌈⎾〖〗⏋⌉⏌⌋⟩}\])˽∣ℂℕℚℝℤℓℏ∠¨ˆˉ˙˜▪✓\u00A0\u20D7$£¥€₨₩₪]+)/;
 
 const miscSymbols = Object.freeze({
   //    input, output, type,  closeDelim
-  "#": ["#", "#", tt.COMMENT, ""],
-  "/": ["/", "\\dfrac{", tt.DIV, ""],   // displaystyle fraction
-  "//": ["//", "\\tfrac{", tt.DIV, ""], // textstyle fraction
-  "///": ["///", "/", tt.MULT, ""],     // inline (shilling) fraction
-  "\u2215": ["\u2215", "\u2215", tt.MULT, ""], // inline (shilling) fraction
-  "÷": ["÷", "÷", tt.MULT, ""],
-  "./": ["./", "\\mathbin{.'}", tt.MULT, ""],
-  "_": ["_", "_", tt.SUB, ""],
-  "^": ["^", "^", tt.SUP, ""],
-  ".^": [".^", "\\mathbin{.^}", tt.SUP, ""],
-  "+": ["+", "+", tt.ADD, ""],
-  "-": ["-", "-", tt.ADD, ""],
-  "–": ["-", "-", tt.ADD, ""], // \u2013 en dash
-  "−": ["-", "-", tt.ADD, ""], // \u2212 math minus
-  ".+": [".+", "\\mathbin{.+}", tt.ADD, ""],
-  ".-": [".-", "\\mathbin{.-}", tt.ADD, ""],
-  "*": ["*", "*", tt.MULT, ""],
-  "∗": ["∗", "∗", tt.MULT, ""],
-  "×": ["×", "×", tt.MULT, ""],
-  "∘": ["∘", "∘", tt.MULT, ""], // U+2218
-  "⊗": ["⊗", "⊗", tt.MULT, ""],
-  ".*": [".*", "\\mathbin{.*}", tt.MULT, ""],
-  "√": ["√", "\\sqrt", tt.UNARY, ""],
-  "\u221B": ["\u221B", "\\sqrt[3]", tt.UNARY, ""],
-  "\u221C": ["\u221C", "\\sqrt[4]", tt.UNARY, ""],
-  "+-": ["+-", "\u00B1", tt.BIN, ""],
-  "**": ["**", "\\star", tt.BIN, ""],
-  "·": ["·", "\u22C5", tt.MULT, ""], // dot operator
-  "...": ["...", "\\dots", tt.RANGE, ""],
-  "%": ["%", "\\%", tt.FACTORIAL, ""],
-  "-:": ["-:", "÷", tt.MULT, ""],
-  "=": ["=", "=", tt.REL, ""],
-  "≈": ["≈", "≈", tt.REL, ""],
-  "==": ["==", "⩵", tt.REL, ""],
-  "≡": ["≡", "≡", tt.REL, ""],
-  ">": [">", "\\gt", tt.REL, ""],
-  "\u226f": ["\u226f", "\\ngtr", tt.REL, ""],
-  "<": ["<", "\\lt", tt.REL, ""],
-  "\u226e": ["\u226e", "\\nless", tt.REL, ""],
-  "?=": ["?=", "\u225F", tt.REL, ""],
-  "≟": ["≟", "\u225F", tt.REL, ""],
-  "≠": ["≠", "≠", tt.REL, ""],
-  "!=": ["!=", "≠", tt.REL, ""],
-  "<>": ["<>", "≠", tt.REL, ""],
-  ":=": [":=", "\u2254", tt.REL, ""],
-  "<=": ["<=", "≤", tt.REL, ""],
-  "≤": ["≤", "≤", tt.REL, ""],
-  ">=": [">=", "\u2265", tt.REL, ""],
-  "≥": ["≥", "≥", tt.REL, ""],
-  "-=": ["-=", "\u2261", tt.REL, ""],
-  "~=": ["~=", "\u2245", tt.REL, ""],
-  "≅": ["≅", "≅", tt.REL, ""],
-  "~~": ["~~", "\u2248", tt.REL, ""],
-  "~": ["~", "\\sim", tt.REL, ""],
-  "=>": ["=>", "\u21D2", tt.REL, ""],
-  "⟶": ["⟶", "\\xrightarrow", tt.UNARY, ""],
-  "⟵": ["⟵", "\\xleftarrow", tt.UNARY, ""],
+  "#": ["#", "#", "#", tt.COMMENT, ""],
+  "/": ["/", "\\dfrac{", "///", tt.DIV, ""],   // displaystyle fraction
+  "//": ["//", "\\tfrac{", "//", tt.DIV, ""], // textstyle fraction
+  "///": ["///", "/", "\u2215", tt.MULT, ""],     // inline (shilling) fraction
+  "\u2215": ["\u2215", "\u2215", "\u2215", tt.MULT, ""], // inline (shilling) fraction
+  "÷": ["÷", "÷", "÷", tt.MULT, ""],
+  "./": ["./", "\\mathbin{.'}", "./", tt.MULT, ""],
+  "_": ["_", "_", "_", tt.SUB, ""],
+  "^": ["^", "^", "^", tt.SUP, ""],
+  ".^": [".^", "\\mathbin{.^}", ".^", tt.SUP, ""],
+  "+": ["+", "+", "+", tt.ADD, ""],
+  "-": ["-", "-", "-", tt.ADD, ""],
+  "–": ["-", "-", "-", tt.ADD, ""], // \u2013 en dash
+  "−": ["-", "-", "-", tt.ADD, ""], // \u2212 math minus
+  ".+": [".+", "\\mathbin{.+}", ".+", tt.ADD, ""],
+  ".-": [".-", "\\mathbin{.-}", ".-", tt.ADD, ""],
+  "*": ["*", "*", "*", tt.MULT, ""],
+  "∗": ["∗", "∗", "∗", tt.MULT, ""],
+  "×": ["×", "×", "×", tt.MULT, ""],
+  "∘": ["∘", "∘", "∘", tt.MULT, ""], // U+2218
+  "⊗": ["⊗", "⊗", "⊗", tt.MULT, ""],
+  ".*": [".*", "\\mathbin{.*}", ".*", tt.MULT, ""],
+  "√": ["√", "\\sqrt", "√", tt.UNARY, ""],
+  "\u221B": ["\u221B", "\\sqrt[3]", "\u221B", tt.UNARY, ""],
+  "\u221C": ["\u221C", "\\sqrt[4]", "\u221C", tt.UNARY, ""],
+  "+-": ["+-", "\u00B1", "\u00B1", tt.BIN, ""],
+  "**": ["**", "\\star", "**", tt.BIN, ""],
+  "·": ["·", "\u22C5", "·", tt.MULT, ""], // dot operator
+  "...": ["...", "\\dots", "...", tt.RANGE, ""],
+  "\\dots": ["\\dots", "\\dots", "...", tt.RANGE, ""],
+  "%": ["%", "\\%", "%", tt.FACTORIAL, ""],
+  "-:": ["-:", "÷", "÷", tt.MULT, ""],
+  "=": ["=", "=", "=", tt.REL, ""],
+  "≈": ["≈", "≈", "≈", tt.REL, ""],
+  "==": ["==", "⩵", "==", tt.REL, ""],
+  "≡": ["≡", "≡", "≡", tt.REL, ""],
+  ">": [">", "\\gt", ">", tt.REL, ""],
+  "\u226f": ["\u226f", "\\ngtr", "\u226f", tt.REL, ""],
+  "<": ["<", "\\lt", "<", tt.REL, ""],
+  "\u226e": ["\u226e", "\\nless", "\u226e", tt.REL, ""],
+  "?=": ["?=", "\u225F", "\u225F", tt.REL, ""],
+  "≟": ["≟", "\u225F", "\u225F", tt.REL, ""],
+  "≠": ["≠", "≠", "≠", tt.REL, ""],
+  "!=": ["!=", "≠", "≠", tt.REL, ""],
+  "<>": ["<>", "≠", "≠", tt.REL, ""],
+  ":=": [":=", "\u2254", "\u2254", tt.REL, ""],
+  "<=": ["<=", "≤", "≤", tt.REL, ""],
+  "≤": ["≤", "≤", "≤", tt.REL, ""],
+  ">=": [">=", "\u2265", "\u2265", tt.REL, ""],
+  "≥": ["≥", "≥", "≥", tt.REL, ""],
+  "-=": ["-=", "\u2261", "\u2261", tt.REL, ""],
+  "~=": ["~=", "\u2245", "\u2245", tt.REL, ""],
+  "≅": ["≅", "≅", "≅", tt.REL, ""],
+  "~~": ["~~", "\u2248", "\u2248", tt.REL, ""],
+  "~": ["~", "\\sim", "˽", tt.REL, ""],
+  "=>": ["=>", "\u21D2", "\u21D2", tt.REL, ""],
   "⇒": ["⇒", "\u21D2", tt.REL, ""],
-  "<=>": ["<=>", "\u21D4", tt.REL, ""],
-  "-<": ["-<", "\u227A", tt.REL, ""],
-  ">-": [">-", "\u227B", tt.REL, ""],
-  "-<=": ["-<=", "\u2AAF", tt.REL, ""],
-  ">-=": [">-=", "\u2AB0", tt.REL, ""],
-  "_|_": ["_|_", "\\bot", tt.REL, ""],
-  "|--": ["|--", "\u22A2", tt.REL, ""],
-  "|==": ["|==", "\\models", tt.REL, ""],
-  "∈": ["∈", "∈", tt.REL, ""],
-  "∉": ["∉", "∉", tt.REL, ""],
-  "∋": ["∋", "∋", tt.REL, ""],
-  "∌": ["∌", "∌", tt.REL, ""],
-  "⊂": ["⊂", "⊂", tt.REL, ""],
-  "⊃": ["⊃", "⊃", tt.REL, ""],
-  "⊄": ["⊄", "⊄", tt.REL, ""],
-  "⊅": ["⊅", "⊅", tt.REL, ""],
-  "⊆": ["⊆", "⊆", tt.REL, ""],
-  "⊈": ["⊈", "⊈", tt.REL, ""],
-  "⊇": ["⊇", "⊇", tt.REL, ""],
-  "⊉": ["⊉", "⊉", tt.REL, ""],
-  "▪": ["▪", "\\mathrel{▪}", tt.REL, ""],
+  "⟶": ["⟶", "\\xrightarrow", "⟶", tt.UNARY, ""],
+  "⟵": ["⟵", "\\xleftarrow", "⟵", tt.UNARY, ""],
+  "<=>": ["<=>", "\u21D4", "\u21D4", tt.REL, ""],
+  "-<": ["-<", "\u227A", "\u227A", tt.REL, ""],
+  ">-": [">-", "\u227B", "\u227B", tt.REL, ""],
+  "-<=": ["-<=", "\u2AAF", "\u2AAF", tt.REL, ""],
+  ">-=": [">-=", "\u2AB0", "\u2AB0", tt.REL, ""],
+  "_|_": ["_|_", "\\bot", "_|_", tt.REL, ""],
+  "|--": ["|--", "\u22A2", "\u22A2", tt.REL, ""],
+  "|==": ["|==", "\\models", "⊨", tt.REL, ""],
+  "∈": ["∈", "∈", "∈", tt.REL, ""],
+  "∉": ["∉", "∉", "∉", tt.REL, ""],
+  "∋": ["∋", "∋", "∋", tt.REL, ""],
+  "∌": ["∌", "∌", "∌", tt.REL, ""],
+  "⊂": ["⊂", "⊂", "⊂", tt.REL, ""],
+  "⊃": ["⊃", "⊃", "⊃", tt.REL, ""],
+  "⊄": ["⊄", "⊄", "⊄", tt.REL, ""],
+  "⊅": ["⊅", "⊅", "⊅", tt.REL, ""],
+  "⊆": ["⊆", "⊆", "⊆", tt.REL, ""],
+  "⊈": ["⊈", "⊈", "⊈", tt.REL, ""],
+  "⊇": ["⊇", "⊇", "⊇", tt.REL, ""],
+  "⊉": ["⊉", "⊉", "⊉", tt.REL, ""],
+  "▪": ["▪", "\\mathrel{▪}", "▪", tt.REL, ""],
 
-  "!": ["!", "!", tt.FACTORIAL, ""],
-  "‼": ["‼", "!!", tt.FACTORIAL, ""],
-  "!!": ["!!", "!!", tt.FACTORIAL, ""],
-  "¡": ["¡", "¡", tt.FACTORIAL, ""],
-  "&": ["&", "\\mathbin{\\&}", tt.ADD, ""], // string concatenator
-  "&_": ["&_", "\\mathbin{\\underline{\\&}}", tt.ADD, ""], // concatenate to bottom
-  "′": ["′", "'", tt.PRIME, ""],
-  "″": ["″", "''", tt.PRIME, ""],
-  "′′": ["′′", "''", tt.PRIME, ""],
-  "′′′": ["′′′", "'''", tt.PRIME, ""],
+  "!": ["!", "!", "!", tt.FACTORIAL, ""],
+  "‼": ["‼", "!!", "‼", tt.FACTORIAL, ""],
+  "!!": ["!!", "!!", "‼", tt.FACTORIAL, ""],
+  "¡": ["¡", "¡", "¡", tt.FACTORIAL, ""],
+  "&": ["&", "\\mathbin{\\&}", "&", tt.ADD, ""], // string concatenator
+  "&_": ["&_", "\\mathbin{\\underline{\\&}}", "&_", tt.ADD, ""], // concatenate to bottom
+  "′": ["′", "'", "′", tt.PRIME, ""],
+  "″": ["″", "''", "″", tt.PRIME, ""],
+  "′′": ["′′", "''", "′′", tt.PRIME, ""],
+  "′′′": ["′′′", "'''", "′′′", tt.PRIME, ""],
 
-  "∀": ["∀", "∀", tt.LOGIC, ""],
-  "∃": ["∃", "∃", tt.LOGIC, ""],
-  "∧": ["∧", "∧", tt.LOGIC, ""],
-  "∨": ["∨", "∨", tt.LOGIC, ""],
-  "⊻": ["⊻", "⊻", tt.LOGIC, ""], // xor
-  "¬": ["¬", "¬", tt.UNARY, ""], // logical not
-  "&&": ["&&", "{\\;\\&\\&\\;}", tt.LOGIC, ""],
+  "∀": ["∀", "∀", "∀", tt.LOGIC, ""],
+  "∃": ["∃", "∃", "∃", tt.LOGIC, ""],
+  "∧": ["∧", "∧", "∧", tt.LOGIC, ""],
+  "∨": ["∨", "∨", "∨", tt.LOGIC, ""],
+  "⊻": ["⊻", "⊻", "⊻", tt.LOGIC, ""], // xor
+  "¬": ["¬", "¬", "¬", tt.UNARY, ""], // logical not
+  "&&": ["&&", "{\\;\\&\\&\\;}", "&&", tt.LOGIC, ""],
 
-  "\u222B": ["\u222B", "\\displaystyle\u222B", tt.BIG_OPERATOR, ""], // \int
-  "\u222C": ["\u222C", "\\displaystyle\u222C", tt.BIG_OPERATOR, ""], // \iint
-  "\u222E": ["\u222E", "\\displaystyle\u222E", tt.BIG_OPERATOR, ""], // \oint
-  "\u2211": ["\u2211", "\\displaystyle\u2211", tt.BIG_OPERATOR, ""], // \sum
+  "\u222B": ["\u222B", "\\displaystyle\u222B", "\u222B", tt.BIG_OPERATOR, ""], // \int
+  "\u222C": ["\u222C", "\\displaystyle\u222C", "\u222C", tt.BIG_OPERATOR, ""], // \iint
+  "\u222E": ["\u222E", "\\displaystyle\u222E", "\u222E", tt.BIG_OPERATOR, ""], // \oint
+  "\u2211": ["\u2211", "\\displaystyle\u2211", "\u2211", tt.BIG_OPERATOR, ""], // \sum
 
-  "(": ["(", "(", tt.LEFTBRACKET, ")"],
-  "[": ["[", "[", tt.LEFTBRACKET, "]"],
-  "{": ["{", "\\{", tt.LEFTBRACKET, "\\}"],
-  "{:": ["{:", "{", tt.LEFTBRACKET, "}"],
-  "⟨": ["⟨", "⟨", tt.LEFTBRACKET, "⟩"],
-  ")": [")", ")", tt.RIGHTBRACKET, ""],
-  "]": ["]", "]", tt.RIGHTBRACKET, ""],
-  "}": ["}", "\\}", tt.RIGHTBRACKET, ""],
-  "⟩": ["⟩", "⟩", tt.RIGHTBRACKET, ""],
-  ":}": [":}", "}", tt.RIGHTBRACKET, ""],
-  "|": ["|", "|", tt.LEFTRIGHT, ""],
-  "||": ["||", "\\mathbin{||}", tt.BIN, ""],
-  "\\|": ["\\|", "‖", tt.LEFTRIGHT, ""],
-  "‖": ["‖", "‖", tt.LEFTRIGHT, ""],
-  "<<": ["<<", "\u27E8", tt.LEFTBRACKET, "\u27E9"],
-  ">>": [">>", "\u27E9", tt.RIGHTBRACKET, ""],
-  "\u23BF": ["\u23BF", "\\lfloor ", tt.LEFTBRACKET, "\\rfloor "],
-  "\u230B": ["\u230B", "\\rfloor ", tt.RIGHTBRACKET, ""],
-  "\u23CC": ["\u23CC", "\\rfloor ", tt.RIGHTBRACKET, ""],
-  "\u2308": ["\u2308", "\\lceil ", tt.LEFTBRACKET, "\\rceil "],
-  "\u23BE": ["\u23BE", "\\lceil ", tt.LEFTBRACKET, "\\rceil "],
-  "\u2309": ["\u2309", "\\rceil ", tt.RIGHTBRACKET, ""],
-  "\u23CB": ["\u23CB", "\\rceil ", tt.RIGHTBRACKET, ""],
-  "\u3016": ["\u3016", "{", tt.LEFTBRACKET, "}"],
-  "\u3017": ["\u3017", "}", tt.RIGHTBRACKET, ""],
-  "¦": ["¦", "\\mid ", tt.REL, ""],
+  "(": ["(", "(", "(", tt.LEFTBRACKET, ")"],
+  "[": ["[", "[", "[", tt.LEFTBRACKET, "]"],
+  "{": ["{", "\\{", "{", tt.LEFTBRACKET, "\\}"],
+  "{:": ["{:", "{", "{:", tt.LEFTBRACKET, "}"],
+  "⟨": ["⟨", "⟨", "⟨", tt.LEFTBRACKET, "⟩"],
+  ")": [")", ")", ")", tt.RIGHTBRACKET, ""],
+  "]": ["]", "]", "]", tt.RIGHTBRACKET, ""],
+  "}": ["}", "\\}", "}", tt.RIGHTBRACKET, ""],
+  "⟩": ["⟩", "⟩", "⟩", tt.RIGHTBRACKET, ""],
+  ":}": [":}", "}", ":}", tt.RIGHTBRACKET, ""],
+  "|": ["|", "|", "|", tt.LEFTRIGHT, ""],
+  "||": ["||", "\\mathbin{||}", "||", tt.BIN, ""],
+  "\\|": ["\\|", "\\|", "‖", tt.LEFTRIGHT, ""],
+  "‖": ["‖", "\\|", "‖", tt.LEFTRIGHT, ""],
+  "<<": ["<<", "\u27E8", "\u27E8", tt.LEFTBRACKET, "\u27E9"],
+  ">>": [">>", "\u27E9", "\u27E9", tt.RIGHTBRACKET, ""],
+  "\u230A": ["\u230A", "\\lfloor ", "\u230A", tt.LEFTBRACKET, "\u230B"],
+  "\u23BF": ["\u23BF", "\\lfloor ", "\u230A", tt.LEFTBRACKET, "\u230B"],
+  "\u230B": ["\u230B", "\\rfloor ", "\u230B", tt.RIGHTBRACKET, ""],
+  "\u23CC": ["\u23CC", "\\rfloor ", "\u230B", tt.RIGHTBRACKET, ""],
+  "\u2308": ["\u2308", "\\lceil ", "\u2308", tt.LEFTBRACKET, "\u2309"],
+  "\u23BE": ["\u23BE", "\\lceil ", "\u2308", tt.LEFTBRACKET, "\u2309"],
+  "\u2309": ["\u2309", "\\rceil ", "\u2309", tt.RIGHTBRACKET, ""],
+  "\u23CB": ["\u23CB", "\\rceil ", "\u2309", tt.RIGHTBRACKET, ""],
+  "\u3016": ["\u3016", "{", "\u3016", tt.LEFTBRACKET, "\u3017"],
+  "\u3017": ["\u3017", "}", "\u3017", tt.RIGHTBRACKET, "\u3017"],
+  "¦": ["¦", "\\mid ", "¦", tt.REL, ""],
 
   // double-struck, i.e. blackboard bold
-  "ℂ": ["ℂ", "\u2102", tt.ORD, ""],
-  "ℕ": ["ℕ", "\u2115", tt.ORD, ""],
-  "ℚ": ["ℚ", "\u211A", tt.ORD, ""],
-  "ℝ": ["ℝ", "\u211D", tt.ORD, ""],
-  "ℤ": ["ℤ", "\u2124", tt.ORD, ""],
+  "ℂ": ["ℂ", "\u2102", "ℂ", tt.ORD, ""],
+  "ℕ": ["ℕ", "\u2115", "ℕ", tt.ORD, ""],
+  "ℚ": ["ℚ", "\u211A", "ℚ", tt.ORD, ""],
+  "ℝ": ["ℝ", "\u211D", "ℝ", tt.ORD, ""],
+  "ℤ": ["ℤ", "\u2124", "ℤ", tt.ORD, ""],
 
-  "ℏ": ["ℏ", "ℏ", tt.ORD, ""],
+  "ℏ": ["ℏ", "ℏ", "ℏ", tt.ORD, ""],
 
   //arrows
-  "\u2192": ["\u2192", "\u2192", tt.REL, ""],
-  "\u2190": ["\u2190", "\u2190", tt.REL, ""], // left arrow
-  ">->": [">->", "\u21a3", tt.REL, ""], // \rightarrowtail
-  "->>": ["->>", "\u21a0", tt.REL, ""], // \twoheadrightarrow
-  "|->": ["|->", "\u21a6", tt.REL, ""], // \mapsto
+  "\u2192": ["\u2192", "\u2192", "\u2192", tt.REL, ""],
+  "\u2190": ["\u2190", "\u2190", "\u2190", tt.REL, ""], // left arrow
+  ">->": [">->", "\u21a3", "\u21a3", tt.REL, ""], // \rightarrowtail
+  "->>": ["->>", "\u21a0", "\u21a0", tt.REL, ""], // \twoheadrightarrow
+  "|->": ["|->", "\u21a6", "\u21a6", tt.REL, ""], // \mapsto
 
   // extensible arrows
-  "<--": ["<--", "\\xleftarrow", tt.UNARY, ""],
-  "==>": ["==>", "\\xRightarrow", tt.UNARY, ""],
-  "<==": ["<==", "\\xLeftarrow", tt.UNARY, ""],
-  "<-->": ["<-->", "\\xleftrightarrow", tt.UNARY, ""],
-  "<==>": ["<==>", "\\xLeftrightarrow", tt.UNARY, ""],
+  "<--": ["<--", "\\xleftarrow", "\u27f5", tt.UNARY, ""],
+  "==>": ["==>", "\\xRightarrow", "==>", tt.UNARY, ""],
+  "<==": ["<==", "\\xLeftarrow", "<==", tt.UNARY, ""],
+  "<-->": ["<-->", "\\xleftrightarrow", "<-->", tt.UNARY, ""],
+  "<==>": ["<==>", "\\xLeftrightarrow", "<==>", tt.UNARY, ""],
 
-  "\u2220": ["\u2220", "\u2220", tt.ANGLE, ""],
-  "✓": ["✓", "✓", tt.ORD, ""],
-  "˽": ["˽", "~", tt.SPACE, ""],  // "~" is a no-break space in LaTeX.
-  "\\;": ["\\;", ";\\:", tt.SEP, ""],
-  "…": ["…", "…", tt.ORD, ""],
+  "\u2220": ["\u2220", "\u2220", "\u2220", tt.ANGLE, ""],
+  "✓": ["✓", "✓", "✓", tt.ORD, ""],
+  "˽": ["˽", "~", "˽", tt.SPACE, ""],  // "~" is a no-break space in LaTeX.
+  "\\;": ["\\;", ";\\:", "\\;", tt.SEP, ""],
+  "…": ["…", "…", "…", tt.ORD, ""],
 
-  ":": [":", "{:}", tt.RANGE, ""], // range separator
-  ",": [",", ",\\:", tt.SEP, ""], // function argument or vector row separator
-  "\t": ["\t", " & ", tt.SEP, ""],  // matrix element separator
-  ";": [";", " \\\\ ", tt.SEP, ""], // row separator
+  ":": [":", "{:}", ":", tt.RANGE, ""], // range separator
+  ",": [",", ",\\:", ",", tt.SEP, ""], // function argument or matrix element separator
+  "\t": ["\t", " & ", "\t", tt.SEP, ""],  // dataframe element separator
+  ";": [";", " \\\\ ", ";", tt.SEP, ""], // row separator
+  "\\\\": ["\\\\", " \\\\ ", ";", tt.SEP, ""], // row separator
 
-  "$": ["$", "\\$", tt.CURRENCY, ""],
-  "£": ["£", "£", tt.CURRENCY, ""],
-  "¥": ["¥", "¥", tt.CURRENCY, ""],
-  "€": ["€", "€", tt.CURRENCY, ""],
-  "₨": ["₨", "₨", tt.CURRENCY, ""],
-  "₩": ["₩", "₩", tt.CURRENCY, ""],
-  "₪": ["₪", "₪", tt.CURRENCY, ""]
+  "$": ["$", "\\$", "$", tt.CURRENCY, ""],
+  "£": ["£", "£", "£", tt.CURRENCY, ""],
+  "¥": ["¥", "¥", "¥", tt.CURRENCY, ""],
+  "€": ["€", "€", "€", tt.CURRENCY, ""],
+  "₨": ["₨", "₨", "₨", tt.CURRENCY, ""],
+  "₩": ["₩", "₩", "₩", tt.CURRENCY, ""],
+  "₪": ["₪", "₪", "₪", tt.CURRENCY, ""]
 });
 
 const texFunctionRegEx = /^(\\[A-Za-z]+\.?|\\([:.!\u0020]|'+))/;
 
 const texFunctions = Object.freeze({
   //          input,    output,  type,  closeDelim
-  "\\aleph": ["\\aleph", "\u2135", tt.VAR, ""],
-  "\\beth": ["\\beth", "\u2136", tt.VAR, ""],
-  "\\gimel": ["gimel", "\u2137", tt.VAR, ""],
-  "\\daleth": ["daleth", "\u2138", tt.VAR, ""],
-  "\\atop": ["\\atop", "\\atop{", tt.DIV, ""],
-  "\\cdots": ["\\cdots", "\u22ef", tt.BIN, ""],
-  "\\vdots": ["\\vdots", "\u22ee", tt.BIN, ""],
-  "\\ddots": ["\\ddots", "\u22f1", tt.BIN, ""],
-  "\\iff": ["\\iff", "\\iff", tt.LOGIC, ""],
-  "\\land": ["\\land", "\\land", tt.BIN, ""],
-  "\\lor": ["\\lor", "\\lor", tt.BIN, ""],
-  "\\ngtr": ["\\ngtr", "\\ngtr", tt.REL, ""],
-  "\\nless": ["\\nless", "\\nless", tt.REL, ""],
-  "\\nleq": ["\\nleq", "\\nleq", tt.REL, ""],
-  "\\ngeq": ["\\ngeq", "\\ngeq", tt.REL, ""],
-  "\\in": ["\\in", "∈", tt.REL, ""],
-  "\\notin": ["\\notin", "∉", tt.REL, ""],
-  "\\subset": ["\\subset", "⊂", tt.REL, ""],
-  "\\subseteq": ["\\subseteq", "⊆", tt.REL, ""],
-  "\\nsubset": ["\\nsubset", "⊄", tt.REL, ""],
-  "\\nsubseteq": ["\\nsubseteq", "⊈", tt.REL, ""],
-  "\\supset": ["\\subset", "⊃", tt.REL, ""],
-  "\\left.": ["\\left.", "\\left.", tt.LEFTBRACKET, "\\right."],
-  "\\right.": ["\\right.", "\\right.", tt.RIGHTBRACKET, ""],
-  "\\mod": ["\\mod", "\\mod", tt.BIN, ""],
-  "\\diamond": ["\\diamond", "\\diamond", tt.ORD, ""],
-  "\\square": ["\\square", "\\square", tt.ORD, ""],
-  "\\int": ["\\int", "\\displaystyle\\int", tt.BIG_OPERATOR, ""],
-  "\\iint": ["\\iint", "\\displaystyle\\iint", tt.BIG_OPERATOR, ""],
-  "\\iiint": ["\\iiint", "\\displaystyle\\iiint", tt.BIG_OPERATOR, ""],
-  "\\oint": ["\\oint", "\\displaystyle\\oint", tt.BIG_OPERATOR, ""],
-  "\\oiint": ["\\oiint", "\\displaystyle\\oiint", tt.BIG_OPERATOR, ""],
-  "\\oiiint": ["\\oiiint", "\\displaystyle\\oiiint", tt.BIG_OPERATOR, ""],
-  "\\over": ["\\over", "\\dfrac{", tt.DIV],
-  "\\sum": ["\\sum", "\\displaystyle\\sum", tt.BIG_OPERATOR, ""],
-  "\\prod": ["\\prod", "\\displaystyle\\prod", tt.BIG_OPERATOR, ""],
-  "\\quad": ["\\quad", "\\quad", tt.SPACE, ""],
-  "\\qquad": ["\\qquad", "\\qquad", tt.SPACE, ""]
+  "\\aleph": ["\\aleph", "\u2135", "\u2135", tt.VAR, ""],
+  "\\beth": ["\\beth", "\u2136", "\u2136", tt.VAR, ""],
+  "\\gimel": ["\\gimel", "\u2137", "\u2137", tt.VAR, ""],
+  "\\daleth": ["\\daleth", "\u2138", "\u2138", tt.VAR, ""],
+  "\\ast": ["\\ast", "∗", "∗", tt.MULT, ""],
+  "\\div": ["\\div", "÷", "÷", tt.MULT, ""],
+  "\\times": ["\\times", "×", "×", tt.MULT, ""],
+  "\\bmod": ["\\bmod", "\\bmod", "modulo", tt.MULT],
+  "\\circ": ["\\circ", "∘", "∘", tt.MULT, ""], // U+2218
+  "\\nabla": ["\\nabla", "∇", "∇", tt.ORD, ""],
+  "\\otimes": ["\\otimes", "⊗", "⊗", tt.MULT, ""],
+  "\\ne": ["\\ne", "≠", "≠", tt.REL, ""],
+  "\\cdot": ["\\cdot", "\u22C5", "·", tt.MULT, ""], // dot operator
+  "\\le": ["\\le", "≤", "≤", tt.REL, ""],
+  "\\leq": ["\\leq", "≤", "≤", tt.REL, ""],
+  "\\ge": ["\\ge", "≥", "≥", tt.REL, ""],
+  "\\geq": ["\\geq", "≥", "≥", tt.REL, ""],
+  "\\equiv": ["\\equiv", "\u2261", "\u2261", tt.REL, ""],
+  "\\cong": ["\\cong", "≅", "≅", tt.REL, ""],
+  "\\approx": ["\\approx", "\u2248", "\u2248", tt.REL, ""],
+  "\\Rightarrow": ["\\Rightarrow", "\u21D2", "\u21D2", tt.REL, ""],
+  "\\forall": ["\\forall", "∀", "∀", tt.LOGIC, ""],
+  "\\exists": ["\\exists", "∃", "∃", tt.LOGIC, ""],
+  "\\infty": ["\\infty", "∞", "∞", tt.ORD, ""],
+  "\\sqrt": ["\\sqrt", "\\sqrt", "√", tt.UNARY, ""],
+  "\\atop": ["\\atop", "\\atop{", "\\atop", tt.DIV, ""],
+  "\\cdots": ["\\cdots", "\u22ef", "\u22ef", tt.BIN, ""],
+  "\\vdots": ["\\vdots", "\u22ee", "\u22ee", tt.BIN, ""],
+  "\\ddots": ["\\ddots", "\u22f1", "\u22f1", tt.BIN, ""],
+  "\\iff": ["\\iff", "\\iff", "\\iff", tt.LOGIC, ""],
+  "\\land": ["\\land", "\\land", "\\land", tt.BIN, ""],
+  "\\lor": ["\\lor", "\\lor", "\\lor", tt.BIN, ""],
+  "\\ngtr": ["\\ngtr", "\\ngtr", "\u226f", tt.REL, ""],
+  "\\nless": ["\\nless", "\\nless", "\u226E", tt.REL, ""],
+  "\\nleq": ["\\nleq", "\\nleq", "\u2270", tt.REL, ""],
+  "\\ngeq": ["\\ngeq", "\\ngeq", "\u2271", tt.REL, ""],
+  "\\in": ["\\in", "∈", "∈", tt.REL, ""],
+  "\\notin": ["\\notin", "∉", "∉", tt.REL, ""],
+  "\\subset": ["\\subset", "⊂", "⊂", tt.REL, ""],
+  "\\subseteq": ["\\subseteq", "⊆", "⊆", tt.REL, ""],
+  "\\nsubset": ["\\nsubset", "⊄", "⊄", tt.REL, ""],
+  "\\nsubseteq": ["\\nsubseteq", "⊈", "⊈", tt.REL, ""],
+  "\\supset": ["\\supset", "⊃", "⊃", tt.REL, ""],
+  "\\left.": ["\\left.", "\\left.", "{:", tt.LEFTBRACKET, "\\right."],
+  "\\right.": ["\\right.", "\\right.", ":}", tt.RIGHTBRACKET, ""],
+  "\\mod": ["\\mod", "\\mod", "\\mod", tt.BIN, ""],
+  "\\lim": ["\\lim", "\\lim", "\\lim", tt.ORD, ""],
+  "\\diamond": ["\\diamond", "\\diamond", "\\diamond", tt.ORD, ""],
+  "\\square": ["\\square", "\\square", "\\square", tt.ORD, ""],
+  "\\int": ["\\int", "\\displaystyle\\int", "\u222B", tt.BIG_OPERATOR, ""],
+  "\\iint": ["\\iint", "\\displaystyle\\iint", "\u222C", tt.BIG_OPERATOR, ""],
+  "\\iiint": ["\\iiint", "\\displaystyle\\iiint", "\\iiint", tt.BIG_OPERATOR, ""],
+  "\\oint": ["\\oint", "\\displaystyle\\oint", "\u222E", tt.BIG_OPERATOR, ""],
+  "\\oiint": ["\\oiint", "\\displaystyle\\oiint", "\\oiint", tt.BIG_OPERATOR, ""],
+  "\\oiiint": ["\\oiiint", "\\displaystyle\\oiiint", "\\oiiint", tt.BIG_OPERATOR, ""],
+  "\\over": ["\\over", "\\dfrac{", "\\over", tt.DIV],
+  "\\sum": ["\\sum", "\\displaystyle\\sum", "\u2211", tt.BIG_OPERATOR, ""],
+  "\\prod": ["\\prod", "\\displaystyle\\prod", "\\prod", tt.BIG_OPERATOR, ""],
+  "\\quad": ["\\quad", "\\quad", "\\quad", tt.SPACE, ""],
+  "\\qquad": ["\\qquad", "\\qquad", "\\qquad", tt.SPACE, ""]
 });
 
 const accents = new Set([
@@ -4249,7 +4384,6 @@ const mathOperators = new Set([
   "exp",
   "gcd",
   "lg",
-  "lim",
   "ln",
   "log",
   "max",
@@ -4285,16 +4419,19 @@ const unaries = new Set([
   "clap",
   "color",
   "llap",
+  "longdiv",
   "mathclap",
   "not",
   "operatorname",
   "phantom",
+  "phase",
   "pu",
   "rlap",
   "sout",
-  "sqrt",
   "tag",
+  "text",
   "textbf",
+  "textcircled",
   "textit",
   "textmd",
   "textnormal",
@@ -4324,6 +4461,45 @@ const unaries = new Set([
   "xtwoheadrightarrow"
 ]);
 
+const greek = {
+  alpha: "α",
+  beta: "β",
+  chi: "χ",
+  delta: "δ",
+  Delta: "Δ",
+  epsilon: "ε",
+  varepsilon: "\u025B",
+  eta: "\u03B7",
+  gamma: "γ",
+  Gamma: "Γ",
+  iota: "\u03B9",
+  kappa: "\u03BA",
+  lambda: "λ",
+  Lambda: "Λ",
+  mu: "μ",
+  nu: "\u03BD",
+  omega: "ω",
+  Omega: "Ω",
+  phi: "\u03D5",
+  varphi: "\u03C6",
+  Phi: "\u03A6",
+  pi: "π",
+  Pi: "Π",
+  psi: "ψ",
+  Psi: "Ψ",
+  rho: "ρ",
+  sigma: "σ",
+  Sigma: "Σ",
+  tau: "τ",
+  theta: "θ",
+  vartheta: "\u03D1",
+  Theta: "Θ",
+  upsilon: "\u03C5",
+  xi: "\u03BE",
+  Xi: "\u039E",
+  zeta: "\u03B6"
+};
+
 const binaries = new Set([
   "dfrac",
   "frac",
@@ -4340,26 +4516,26 @@ const texREL = new Set([
   "Bumpeq", "Colonapprox", "Coloneq", "Coloneqq", "Colonsim", "Darr", "Doteq", "Downarrow",
   "Eqcolon", "Eqqcolon", "Harr", "Larr", "Leftarrow", "Leftrightarrow", "Lleftarrow",
   "Longleftarrow", "Longleftrightarrow", "Longrightarrow", "Lrarr", "Lsh", "Rarr",
-  "Rightarrow", "Rrightarrow", "Rsh", "Supset", "Subset", "Uarr", "Uparrow", "Updownarrow",
-  "Vdash", "Vvdash", "approx", "approxeq", "asymp", "backepsilon", "backsim", "backsimeq",
+  "Rrightarrow", "Rsh", "Supset", "Subset", "Uarr", "Uparrow", "Updownarrow",
+  "Vdash", "Vvdash", "approxeq", "asymp", "backepsilon", "backsim", "backsimeq",
   "between", "bowtie", "bumpeq", "circeq", "circlearrowleft", "circlearrowright",
-  "colonapprox", "coloneq", "coloneqq", "colonsim", "cong", "curlyeqprec", "curlyeqsucc",
+  "colonapprox", "coloneq", "coloneqq", "colonsim", "curlyeqprec", "curlyeqsucc",
   "curvearrowleft", "curvearrowright", "dArr", "darr", "dashleftarrow", "dashrightarrow",
   "dashv", "dblcolon", "doteq", "doteqdot", "downarrow", "downdownarrows", "downharpoonleft",
   "downharpoonright", "eqcirc", "eqcolon", "eqqcolon", "eqsim", "eqslantgtr", "eqslantless",
-  "equiv", "fallingdotseq", "frown", "ge", "geq", "geqq", "geqslant", "gets", "gg", "ggg",
+  "fallingdotseq", "frown", "geqq", "geqslant", "gets", "gg", "ggg",
   "gggtr", "gnapprox", "gneq", "gneqq", "gnsim", "gt", "gtrapprox", "gtreqless", "gtreqqless",
-  "gtrless", "gtrsim", "gvertneqq", "hArr", "harr", "hookleftarrow", "hookrightarrow", "iff",
-  "impliedby", "implies", "in", "isin", "Join", "gets", "impliedby", "implies", "in",
-  "lArr", "larr", "le", "leadsto", "leftarrow", "leftarrowtail", "leftharpoondown",
+  "gtrless", "gtrsim", "gvertneqq", "hArr", "harr", "hookleftarrow", "hookrightarrow",
+  "impliedby", "implies", "isin", "Join", "gets", "impliedby", "implies",
+  "lArr", "larr", "leadsto", "leftarrow", "leftarrowtail", "leftharpoondown",
   "leftharpoonup", "leftleftarrows", "leftrightarrow", "leftrightarrows", "leftrightharpoons",
-  "leftrightsquigarrow", "leq", "leqq", "leqslant", "lessapprox", "lesseqgtr", "lesseqqgtr",
+  "leftrightsquigarrow", "leqq", "leqslant", "lessapprox", "lesseqgtr", "lesseqqgtr",
   "lessgtr", "lesssim", "ll", "lll", "llless", "lnapprox", "lneq", "lneqq", "lnsim",
   "longleftarrow", "longleftrightarrow", "longmapsto", "longrightarrow", "looparrowleft",
   "looparrowright", "lrArr", "lrarr", "lt", "lvertneqq", "mapsto", "mid", "models",
   "multimap", "nLeftarrow", "nLeftrightarrow", "nRightarrow", "nVDash", "nVdash", "ncong",
-  "ne", "nearrow", "neq", "nexists", "ngeq", "ngeqq", "ngeqslant", "ngtr", "ni", "nleftarrow",
-  "nleftrightarrow", "nleq", "nleqq", "nleqslant", "nless", "nmid", "notin", "notni",
+  "nearrow", "neq", "nexists", "ngeq", "ngeqq", "ngeqslant", "ngtr", "ni", "nleftarrow",
+  "nleftrightarrow", "nleq", "nleqq", "nleqslant", "nless", "nmid", "notni",
   "nparallel", "nprec", "npreceq", "nrightarrow", "nshortmid", "nshortparallel", "nsim",
   "nsubseteq", "nsubseteqq", "nsucc", "nsucceq", "nsupseteq", "nsupseteqq", "ntriangleleft",
   "ntrianglelefteq", "ntriangleright", "ntrianglerighteq", "nvDash", "nvdash", "nwarrow",
@@ -4380,7 +4556,7 @@ const texREL = new Set([
 
 const superRegEx = /^⁻?[²³¹⁰⁴⁵⁶⁷⁸⁹]+/;
 
-const cloneToken$1 = tkn => [tkn[0], tkn[1], tkn[2], tkn[3]];
+const cloneToken$1 = tkn => [tkn[0], tkn[1], tkn[2], tkn[3], tkn[4]];
 
 const accentFromChar = Object.freeze({
   "\u0300": "\\grave",
@@ -4457,21 +4633,21 @@ const lexOneWord = (str, prevToken) => {
     } else if (/^\(/.test(fc)) {
       // word is followed by an open paren. Treat it as a function name
       return (prevToken.ttype === tt.ACCENT)
-        ? [match, match + "}{", tt.FUNCTION, ""]
+        ? [match, match + "}{", match + "}{", tt.FUNCTION, ""]
         : match === "sqrt"
-        ? [match, "\\sqrt", tt.UNARY, ""]
+        ? [match, "\\sqrt", "√", tt.UNARY, ""]
         : match === "f"
-        ? [match, match, tt.FUNCTION, ""]
+        ? [match, match, "f", tt.FUNCTION, ""]
         : mathOperators.has(match)
-        ? [match, "\\" + match, tt.FUNCTION, ""]
-        : [match, "\\operatorname{" + groupSubscript(match) + "}", tt.FUNCTION, ""]
+        ? [match, "\\" + match, match, tt.FUNCTION, ""]
+        : [match, "\\operatorname{" + groupSubscript(match) + "}", match, tt.FUNCTION, ""]
     } else if (prevToken.ttype === tt.ACCESSOR) {
-      return [match, match, tt.PROPERTY, ""]
+      return [match, match, match, tt.PROPERTY, ""]
     } else if (/[_\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]/.test(match)) {
       let identifier = "";
       if (match.indexOf("_") === -1) {
         identifier = checkForTrailingAccent(match);
-        return [match, identifier, (match.length > 2) ? tt.LONGVAR : tt.VAR, ""]
+        return [match, identifier, match, (match.length > 2) ? tt.LONGVAR : tt.VAR, ""]
       } else {
         const segments = match.split("_");
         for (let i = segments.length - 1; i >= 0; i--) {
@@ -4492,18 +4668,19 @@ const lexOneWord = (str, prevToken) => {
           // This helps Cambria Math to supply the correct size radical.
           identifier = identifier.slice(0, pos) + "{" + identifier.slice(pos) + "}";
         }
-        return [match, identifier, (segments[0].length > 1) ? tt.LONGVAR : tt.VAR, ""]
+        return [match, identifier, match, (segments[0].length > 1) ? tt.LONGVAR : tt.VAR, ""]
       }
     } else if (match.length === 2 & match.charAt(0) === "\uD835") {
-      return [match, match, tt.VAR, ""]
+      return [match, match, match, tt.VAR, ""]
     } else if (match.length > 1) {
-      return [match, match, tt.LONGVAR, ""]
+      return [match, match, match, tt.LONGVAR, ""]
     } else {
       // Return a single character variable name
       if (match.charAt(0) === "\uD835") {
-        return [match.substring(0, 2), match.substring(0, 2), tt.VAR, ""]
+        return [match.substring(0, 2), match.substring(0, 2),
+          match.substring(0, 2), tt.VAR, ""]
       } else {
-        return [match.charAt(0), match.charAt(0), tt.VAR, ""]
+        return [match.charAt(0), match.charAt(0), match.charAt(0), tt.VAR, ""]
       }
     }
   }
@@ -4511,13 +4688,16 @@ const lexOneWord = (str, prevToken) => {
 
 // Support a unit name written w/o a space after a number
 const unitStartRegEx = /^(?:[A-Za-z°ʹ″$£¥₨₪€ÅΩ℃℉ΩKÅ]|ʹʹ)/;
-const unitNameRegEx = /^(((?:[A-Za-z][A-Za-zōö]*\$?|[°ʹ″$£¥₨₪€ÅΩ℃℉ΩKÅ]|ʹʹ)(?:(?:(?:(?:\^|\^-)[1-9][0-9]*)|(?:\^\(-?[1-9][0-9]*\))|⁻?[¹²³\u2074-\u2079][⁰¹²³\u2074-\u2079]*))?)(?:[*·.•×]\2)*)(?:\/\1)?/;
+const unitAndExpo = "(?:(?:[A-Za-z][A-Za-zōö]*\\$?|[°ʹ″$£¥₨₪€ÅΩ℃℉ΩKÅ]|ʹʹ)(?:(?:(?:(?:\\^|\\^-)"
+  + "[1-9][0-9]*)|(?:\\^\\(-?[1-9][0-9]*\\))|⁻?[¹²³\\u2074-\\u2079][⁰¹²³\\u2074-\\u2079]*))?)";
+const productOfUnits = "(?:" + unitAndExpo + "(?:[*·.•×]" + unitAndExpo + ")*)";
+const unitNameRegEx = new RegExp("^" + productOfUnits + "(?:\\/" + productOfUnits + ")?");
 const lexUnitName = str => {
   const match = unitNameRegEx.exec(str);
-  return [match[0], unitTeXFromString(match[0]), tt.UNIT, ""]
+  return [match[0], unitTeXFromString(match[0]), match[0], tt.UNIT, ""]
 };
 
-const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
+const lex = (str, formats, prevToken, inRealTime = false) => {
   // Get the next token in str. Return an array with the token's information:
   // [input, TeX output, type, associated close delimiter]
   let pos = 0;
@@ -4529,9 +4709,9 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     pos = str.indexOf('"""', 3);
     if (pos > 0) {
       st = str.slice(3, pos);
-      return ['"""' + st + '"""', st, tt.MACRO, ""]
+      return ['"""' + st + '"""', st, st, tt.MACRO, ""]
     } else {
-      return [str, str.slice(3), tt.MACRO, ""]
+      return [str, str.slice(3), str.slice(3), tt.MACRO, ""]
     }
   }
 
@@ -4541,9 +4721,9 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     if (pos > 0) {
       // Disallow \r or \n by truncating the string.
       st = str.substring(1, pos).replace(/\r?\n.*/, "");
-      return ['"' + st + '"', st, tt.STRING, ""]
+      return ['"' + st + '"', st, st, tt.STRING, ""]
     } else {
-      return [str, str.replace(/\r?\n.*/, ""), tt.STRING, ""]
+      return [str, str.replace(/\r?\n.*/, ""), str.replace(/\r?\n.*/, ""), tt.STRING, ""]
     }
   }
 
@@ -4558,7 +4738,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     if (pos > -1) {
       st = st.slice(0, pos);
     }
-    return [`#${st}`, `\\text{\\texttt{ \\#${st}}}`, tt.COMMENT, ""]
+    return [`#${st}`, `\\text{\\texttt{ \\#${st}}}`, `#${st}`, tt.COMMENT, ""]
   }
 
   if (/^``/.test(str)) {
@@ -4571,9 +4751,9 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
       tex = DataFrame.quickDisplay(st);
     } else {
       const dataStructure = DataFrame.dataFrameFromTSV(st);
-      tex = DataFrame.display(dataStructure.value, "h3", decimalFormat);
+      tex = DataFrame.display(dataStructure.value, "h3", formats.decimalFormat);
     }
-    return ["``" + inputStr + "``", tex, tt.DATAFRAME, ""]
+    return ["``" + inputStr + "``", tex, inputStr, tt.DATAFRAME, ""]
   }
 
   if (str.charAt(0) === '`') {
@@ -4583,21 +4763,27 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     if (pos > 0) {
       // Disallow \r or \n by truncating the string.
       st = str.substring(1, pos).replace(/\r?\n.*/, "");
-      return ['`' + st + '`', st, tt.RICHTEXT, ""]
+      return ['`' + st + '`', st, st, tt.RICHTEXT, ""]
     } else {
-      return [str, str.replace(/\r?\n.*/, ""), tt.RICHTEXT, ""]
+      return [str, str.replace(/\r?\n.*/, ""), str, tt.RICHTEXT, ""]
     }
   }
 
   if (unitRegEx.test(str)) {
-    // String between single quotation marks. That signals a tt.UNIT.
+    // String between single quotation marks. That signals a tt.UNIT or a tt.DATE.
     pos = str.indexOf("'", 1);
     if (pos > 0) {
       st = str.substring(1, pos);
-      return ["'" + st + "'", unitTeXFromString(st), tt.UNIT, ""]
+      const strWithDelimiters = "'" + st + "'";
+      if (dateRegEx.test(str)) {
+        const dateTex = dateDisplayFromIsoString(strWithDelimiters, formats.dateFormat, true);
+        return [strWithDelimiters, dateTex, st, tt.DATE, ""]
+      } else {
+        return [strWithDelimiters, unitTeXFromString(st), st, tt.UNIT, ""]
+      }
     } else {
       // One of the unambiguous unit symbols, like ° or Å
-      return [str.charAt(0), str.charAt(0), tt.UNIT, ""]
+      return [str.charAt(0), str.charAt(0), str.charAt(0), tt.UNIT, ""]
     }
   }
 
@@ -4606,28 +4792,36 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
   if (matchObj) {
     // TeX control word, starting with backslash. e.g. \, or \circ
     const match = matchObj[0];
-    st = match.substring(1);
+    st = match.slice(1);
     if (accents.has(st)) {
-      return [match, match, tt.ACCENT, ""]
+      return [match, match, match, tt.ACCENT, ""]
     }
     if (unaries.has(st)) {
-      return [match, match, tt.UNARY, ""]
+      return [match, match, match, tt.UNARY, ""]
     }
     if (colors.has(st)) {
-      return [match, "\\textcolor{" + st + "}", tt.UNARY, ""]
+      return [match, "\\textcolor{" + st + "}", match, tt.UNARY, ""]
     }
     if (binaries.has(st)) {
-      return [match, match, tt.BINARY, ""]
+      return [match, match, match, tt.BINARY, ""]
     }
     if (texREL.has(st)) {
-      return [match, match, tt.REL, ""]
+      return [match, match, match, tt.REL, ""]
     }
     const texFunc = texFunctions[match];
     if (texFunc) {
       return cloneToken$1(texFunc)
     }
+    if (mathOperators.has(st)) {
+      return [match, match, st, tt.FUNCTION, ""]
+    }
+    if (greek[st]) {
+      const ch = greek[st];
+      return [match, ch, ch, tt.VAR, ""]
+    }
+
     // default case is a mathord. So I have not enumerated any ORDs
-    return [match, match, tt.ORD, ""]
+    return [match, match, match, tt.ORD, ""]
   }
 
   if (minusRegEx.test(str)) {
@@ -4636,23 +4830,23 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
       const numParts = str.match(numberRegEx$5);
       if (numParts) {
         // numbers
-        st = texFromNumStr(numParts, decimalFormat);
-        return [numParts[0], st, tt.NUM, ""]
+        st = texFromNumStr(numParts, formats.decimalFormat);
+        return [numParts[0], st, numParts[0], tt.NUM, ""]
       }
     }
-    return ["-", "-", tt.ADD, ""]
+    return ["-", "-", "-", tt.ADD, ""]
   }
 
   const numParts = str.match(numberRegEx$5);
   if (numParts) {
     // numbers
-    st = texFromNumStr(numParts, decimalFormat);
-    return [numParts[0], st, tt.NUM, ""]
+    st = texFromNumStr(numParts, formats.decimalFormat);
+    return [numParts[0], st, numParts[0], tt.NUM, ""]
   }
 
   // Before lexing for a word, find underscores before a group
   if (/^_[([{]/.test(str)) {
-    return ["_", "_", tt.SUB, ""]
+    return ["_", "_", "_", tt.SUB, ""]
   }
 
   const word = lexOneWord(str, prevToken);
@@ -4660,7 +4854,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
 
   const nums = superRegEx.exec(str);
   if (nums) {
-    return [nums[0], nums[0], tt.SUPCHAR, ""]
+    return [nums[0], nums[0], nums[0], tt.SUPCHAR, ""]
   }
 
   //return maximal initial substring of str that appears in misc names
@@ -4668,7 +4862,7 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
   if (matchObj) {
     const match = matchObj[0];
     for (let i = match.length; i >= 1; i--) {
-      st = match.substr(0, i);
+      st = match.slice(0, i);
       if (miscSymbols[st]) { return cloneToken$1(miscSymbols[st]) }
     }
   }
@@ -4679,9 +4873,9 @@ const lex = (str, decimalFormat, prevToken, inRealTime = false) => {
     prevToken.ttype === tt.STRING || prevToken.input === "]" || prevToken.input === ")" ||
     prevToken.ttype === tt.PROPERTY)) {
     // Suppress the spacing of the accessor dot.
-    return [".", "{.}", tt.ACCESSOR, ""]
+    return [".", "{.}", ",", tt.ACCESSOR, ""]
   }
-  return [c1, addTextEscapes(c1), tt.VAR, ""]
+  return [c1, addTextEscapes(c1), c1, tt.VAR, ""]
 };
 
 /*
@@ -4698,11 +4892,11 @@ const builtInFunctions = new Set([
   "acsch", "angle", "asec", "asecd", "asech", "asin", "asind", "asinh", "atan", "atan2",
   "atand", "atanh", "binomial", "ceil", "conj", "cos", "cosd", "cosh",
   "cot", "cotd", "coth", "count", "csc", "cscd", "csch", "exp",
-  "factorial", "fetch", "findmax", "floor", "format", "gamma", "gcd", "hcat",
+  "factorial", "fetch", "findmax", "floor", "gamma", "gcd", "hcat",
   "hypot", "imag", "isnan", "length", "lerp", "ln", "log", "log10", "log2", "lfact", "lgamma",
-  "logn", "mod", "number", "ones", "real", "rem", "rms", "round", "roundSig", "roundn", "sec",
-  "secd", "sech", "sech", "sign", "sin", "sind", "sinh", "startSvg", "string", "tan", "tand",
-  "tanh", "tanh", "trace", "transpose", "vcat", "zeros", "Γ"
+  "logn", "mod", "number", "ones", "real", "rem", "rms", "round", "roundSig", "roundn",
+  "savedate", "sec", "secd", "sech", "sech", "sign", "sin", "sind", "sinh", "startSvg",
+  "string", "tan", "tand", "tanh", "tanh", "today", "trace", "transpose", "vcat", "zeros", "Γ"
 ]);
 
 const builtInReducerFunctions = new Set(["accumulate", "beamDiagram", "dataframe",
@@ -4724,6 +4918,7 @@ const checkForUnaryMinus = (token, prevToken) => {
     case tt.NUM:
     case tt.ORD:
     case tt.VAR:
+    case tt.DATE:
     case tt.RIGHTBRACKET:
     case tt.LONGVAR:
     case tt.PROPERTY:
@@ -4766,6 +4961,7 @@ const numFromSupChars = str => {
 const colorSpecRegEx = /^(#([a-f0-9]{6}|[a-f0-9]{3})|[a-z]+|\([^)]+\))/i;
 const accentRegEx = /^(?:.|\uD835.)[\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]_/;
 const spreadsheetCellRegEx = /^[A-Z](\d+|_end)$/;
+const dfracRegEx = /\\dfrac{/g;
 
 const factorsAfterSpace = /^[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133\uD835]/;
 const factors = /^[[({√∛∜]/;
@@ -4785,7 +4981,7 @@ const setUpIf = (rpn, tokenInput, exprStack, delim) => {
 
 const functionExpoRegEx = /^[\^⁻⁰¹²³\u2074-\u2079]/;
 
-const openParenRegEx$1 = /^ *\(/;
+const openParenRegEx$2 = /^ *\(/;
 
 const exponentOfFunction = (str, decimalFormat, isCalc) => {
   // As in: sin²()
@@ -4793,8 +4989,8 @@ const exponentOfFunction = (str, decimalFormat, isCalc) => {
   if (str.charAt(0) !== "^") {
     expoInput = /^⁻?[⁰¹²³\u2074-\u2079⁻]+/.exec(str)[0];
     expoInput = expoInput.split("").map(ch => numeralFromSuperScript(ch)).join("");
-  } else if (!openParenRegEx$1.test(str.slice(1))) {
-    expoInput = lex(str.slice(1), decimalFormat, { input: "", output: "", ttype: 50 })[0];
+  } else if (!openParenRegEx$2.test(str.slice(1))) {
+    expoInput = lex(str.slice(1), { decimalFormat }, { input: "", output: "", ttype: 50 })[0];
   } else {
     // The exponent is in parens. Find its extent.
     expoInput = "(";
@@ -4820,10 +5016,10 @@ const exponentOfFunction = (str, decimalFormat, isCalc) => {
     : expoInput;
 
   if (isCalc) {
-    const expoOutput = parse$1(parseInput, decimalFormat, true);
+    const expoOutput = parse$1(parseInput, { decimalFormat }, true);
     return [expoInput, "{" + expoOutput[0] + "}", expoOutput[1]]
   } else {
-    const expoTex = parse$1(parseInput, decimalFormat, false);
+    const expoTex = parse$1(parseInput, { decimalFormat }, false);
     return [expoInput, "{" + expoTex + "}", ""]
   }
 };
@@ -4894,7 +5090,7 @@ const nextCharIsFactor = (str, tokenType, isFollowedBySpace) => {
       return true
     } else {
       if (factors.test(fc) || (isFollowedBySpace && factorsAfterSpace.test(fc))) {
-        fcMeetsTest = !/^(if|and|atop|or|else|elseif|otherwise|not|for|in|while|end)\b/.test(st);
+        fcMeetsTest = !/^(if|and|atop|or|else|elseif|modulo|otherwise|not|for|in|while|end)\b/.test(st);
       }
     }
   }
@@ -4910,11 +5106,12 @@ const cloneToken = token => {
   }
 };
 
-const endOfOrd = new Set([tt.ORD, tt.VAR, tt.NUM, tt.LONGVAR, tt.RIGHTBRACKET, tt.SUPCHAR]);
+const endOfOrd = new Set([tt.ORD, tt.VAR, tt.NUM, tt.DATE, tt.LONGVAR,
+  tt.RIGHTBRACKET, tt.SUPCHAR]);
 
 // The RegEx below is equal to /^\s+/ except it omits \n, \t, and the no-break space \xa0.
 // I use \xa0 to precede the combining arrow accent character \u20D7.
-const leadingSpaceRegEx$2 = /^[ \f\r\v\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+/;
+const leadingSpaceRegEx$3 = /^[ \f\r\v\u1680\u2000-\u200a\u2028\u2029\u202f\u205f\u3000\ufeff]+/;
 const leadingLaTeXSpaceRegEx = /^(˽|\\quad|\\qquad)+/;
 const sumRegEx$1 = /\\∑_¿([^\xa0]+)([^=]+)\xa0=(\xa0[^^]+)\xa0\^\xa0([^∑]+)\xa0∑/;
 
@@ -4928,7 +5125,7 @@ const rpnPrecFromType = [
       13, 17, 16, -1, 15,
       14, 10,  3,  2, 11,
       -1, -1,  4,  3, -1,
-      -1, -1, -1
+      -1, -1, -1, -1
 ];
 
 const texPrecFromType = [
@@ -4939,8 +5136,8 @@ const texPrecFromType = [
        2,  2,  1,  1,  1,
        2, -1, 15,  2, 14,
       13,  9, -1,  1, -1,
-      15, -1,  1,  -1, 2,
-       2,  2,  2
+      15, -1,  1, -1,  2,
+       2,  2,  2,  2
 ];
 /* eslint-enable indent-legacy */
 
@@ -4979,7 +5176,7 @@ const dDISTRIB = 10; //         A probability distribution defined by a confiden
 
 const parse$1 = (
   str,
-  decimalFormat = "1,000,000.",
+  formats = { decimalFormat: "1,000,000.", dateFormat: "yyy-mm-dd" },
   isCalc = false,     // true when parsing the blue echo of an expression
   inRealTime = false, // true when updating a rendering with every keystroke in the editor.
   sheetName = ""      // The RPN for a spreadsheet cell differs from other variables.
@@ -4990,6 +5187,7 @@ const parse$1 = (
   let token = {};
   let prevToken = { input: "", output: "", ttype: 50 };
   const dependencies = [];
+  const exponentPrec = rpnPrecFromType[tt.SUP];
   let mustLex = true;
   let mustAlign = false;
   let posOfPrevRun = 0;
@@ -5022,7 +5220,9 @@ const parse$1 = (
       while (rpnStack.length > 0) {
         const topPrec = rpnStack[rpnStack.length - 1].prec;
         //                         exponents, from right to left.
-        if (topPrec < rpnPrec || (topPrec === 13 && rpnPrec === 13)) { break }
+        if (topPrec < rpnPrec || (topPrec === exponentPrec && rpnPrec === exponentPrec)) {
+          break
+        }
         const symbol = rpnStack.pop().symbol;
         if (symbol === "→") {
           rpn = rpn.slice(0, posArrow + 1) + '"'
@@ -5157,7 +5357,7 @@ const parse$1 = (
   };
 
   // With the closed functions out of the way, execute the main parse loop.
-  str = str.replace(leadingSpaceRegEx$2, ""); //       trim leading white space from string
+  str = str.replace(leadingSpaceRegEx$3, ""); //       trim leading white space from string
   str = str.replace(/\s+$/, ""); //                  trim trailing white space
 
   while (str.length > 0) {
@@ -5212,12 +5412,12 @@ const parse$1 = (
     if (mustLex) {
       const tkn = prevToken.ttype === tt.NUM && !isFollowedBySpace && unitStartRegEx.test(str)
         ? lexUnitName(str)                                // something like the "m" in "5m"
-        : lex(str, decimalFormat, prevToken, inRealTime);  // default
-      token = { input: tkn[0], output: tkn[1], ttype: tkn[2], closeDelim: tkn[3] };
+        : lex(str, formats, prevToken, inRealTime);  // default
+      token = { input: tkn[0], output: tkn[1], ttype: tkn[3], closeDelim: tkn[4] };
       str = str.substring(token.input.length);
-      isFollowedBySpace = leadingSpaceRegEx$2.test(str) || /^(˽|\\quad|\\qquad)+/.test(str);
+      isFollowedBySpace = leadingSpaceRegEx$3.test(str) || /^(˽|\\quad|\\qquad)+/.test(str);
       isFollowedBySpaceOrNewline = /^[ \n]/.test(str);
-      str = str.replace(leadingSpaceRegEx$2, "");
+      str = str.replace(leadingSpaceRegEx$3, "");
       followedByFactor = nextCharIsFactor(str, token.ttype, isFollowedBySpace);
     }
 
@@ -5231,7 +5431,7 @@ const parse$1 = (
       case tt.SPACE: //      spaces and newlines
       case tt.BIN: //        infix math operators that render but don't calc, e.g. \bowtie
       case tt.ADD: //        infix add/subtract operators, + -
-      case tt.MULT: //       infix mult/divide operators, × * · // ÷
+      case tt.MULT: //       infix mult/divide operators, × * · // ÷ modulo \bmod
       case tt.REL: //        relational operators, e.g  < == →
       case tt.BIG_OPERATOR: { // int, sum, lim, etc
         if (token.output.length > 0 && "- +".indexOf(token.output) > -1) {
@@ -5300,11 +5500,16 @@ const parse$1 = (
 
       case tt.NUM:
       case tt.ORD:
+      case tt.DATE:
         popTexTokens(2, okToAppend);
         if (isCalc) {
           // Numbers and ORDs get appended directly onto rpn. Pass -1 to suppress an rpn pop.
           popRpnTokens(-1);
-          rpn += token.ttype === tt.NUM ? rationalRPN(token.input) : token.input;
+          rpn += token.ttype === tt.NUM
+            ? rationalRPN(token.input)
+            : token.ttype === tt.DATE
+            ? dateRPN(token.input)
+            : token.input;
         }
         if (isPrecededBySpace) { posOfPrevRun = tex.length; }
         if (isCalc &&
@@ -5343,7 +5548,7 @@ const parse$1 = (
         const ch = token.input.charAt(0);
         if (isCalc) { rpn += ch + token.output + ch; }
         if (isPrecededBySpace) { posOfPrevRun = tex.length; }
-        token.output = token.output === "`" ? "`" : parse$1(token.output, decimalFormat, false);
+        token.output = token.output === "`" ? "`" : parse$1(token.output, formats, false);
         tex += "{" + token.output + "}";
         okToAppend = true;
         break
@@ -5514,6 +5719,9 @@ const parse$1 = (
         } else if (token.input === "/" || token.input === "\\over") {
           // displaystyle fraction
           texStack.push({ prec: 2, pos: op.pos, ttype: tt.DIV, closeDelim: "}" });
+          // If the fraction contains other fractions, convert them from \dfrac to \frac
+          tex = tex.slice(0, op.pos) + tex.slice(op.pos).replace(dfracRegEx, "\\frac{");
+          // Wrap with \dfrac
           tex = tex.substring(0, op.pos) + "\\dfrac{" + tex.substring(op.pos) + "}{";
         } else {
           // atop, for binomials
@@ -5603,7 +5811,8 @@ const parse$1 = (
         posOfPrevRun = tex.length;
         // Is there an exponent on the function name?
         if (functionExpoRegEx.test(str)) {
-          const [expoInput, expoTex, expoRPN] = exponentOfFunction(str, decimalFormat, isCalc);
+          // eslint-disable-next-line max-len
+          const [expoInput, expoTex, expoRPN] = exponentOfFunction(str, formats.decimalFormat, isCalc);
           if (isCalc && expoRPN === `®-1/1` && trigFunctions.has(token.input)) {
             // Inverse trig function.
             token.input = "a" + token.input;
@@ -5728,8 +5937,8 @@ const parse$1 = (
         break
 
       case tt.FACTORIAL:
-        popTexTokens(14, true);
-        texStack.push({ prec: 14, pos: op.pos, ttype: tt.FACTORIAL, closeDelim: "" });
+        popTexTokens(12, true);
+        texStack.push({ prec: 12, pos: op.pos, ttype: tt.FACTORIAL, closeDelim: "" });
         if (isCalc) {
           popRpnTokens(rpnPrecFromType[tt.FACTORIAL]);
           rpn += tokenSep + token.output;
@@ -5888,6 +6097,10 @@ const parse$1 = (
             ? "p"
             : delim.name === "{:"
             ? ""
+            : delim.name === "|"
+            ? "v"
+            : delim.name === "‖"
+            ? "V"
             : "B";
           delim.open = `\\begin{${ch}matrix}`;
           delim.close = `\\end{${ch}matrix}`;
@@ -6070,13 +6283,14 @@ const parse$1 = (
           isRightDelim =
             texStack[texStack.length - 1].ttype === tt.LEFTRIGHT ||
             texStack[texStack.length - 1].closeDelim === "\u27E9" || // Dirac ket
-            texStack[texStack.length - 1].closeDelim === "\\right." ||
-            texStack[texStack.length - 1].closeDelim === "\\end{vmatrix}";
+            texStack[texStack.length - 1].closeDelim === "\\right.";
         }
         if (isRightDelim) {
           // Treat as a right delimiter
-          topDelim.close = token.input === "|" ? "|" : "‖";
-          texStack[texStack.length - 1].closeDelim = topDelim.close;
+          if (topDelim.delimType !== dMATRIX) {
+            topDelim.close = token.input === "|" ? "|" : "\\|";
+            texStack[texStack.length - 1].closeDelim = topDelim.close;
+          }
           popTexTokens(0, okToAppend);
           delims.pop();
           if (isCalc) {
@@ -6096,15 +6310,15 @@ const parse$1 = (
             prec: 0,
             pos: tex.length,
             ttype: tt.LEFTRIGHT,
-            closeDelim: token.input === "|" ? "|" : "‖"
+            closeDelim: token.input === "|" ? "|" : "\\|"
           });
 
           delims.push({
             delimType: dPAREN,
             name: token.input,
             isTall: false,
-            open: token.input === "|" ? "|" : "‖",
-            close: token.input === "|" ? "|" : "‖",
+            open: token.input === "|" ? "|" : "\\|",
+            close: token.input === "|" ? "|" : "\\|",
             numArgs: 1,
             numRows: 1,
             rpnPos: rpn.length,
@@ -6115,7 +6329,7 @@ const parse$1 = (
             rpnStack.push({ prec: 0, symbol: token.output });
           }
 
-          tex += token.input === "|" ? "|" : "‖";
+          tex += token.input === "|" ? "|" : "\\|";
           posOfPrevRun = tex.length;
           okToAppend = false;
         }
@@ -6345,6 +6559,7 @@ function insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat) {
   } else if (attrs.dtype === dt.TUPLE) {
     let i = 0;
     for (const value of attrs.value.values()) {
+      if (value.name) { value.name = attrs.name[i]; }
       hurmetVars[attrs.name[i]] = value;
       if (changedVars) { changedVars.add(attrs.name[i]); }
       i += 1;
@@ -6491,8 +6706,9 @@ const map = Object.freeze({
   range
 });
 
-const endRegEx = /^[A-Z]_end$/;
+const endRegEx = /_end$/;
 const alphaRegEx = /^[A-Z]$/;
+const cellParts = /^([^\d]+)(\d+)?$/;
 const intRegEx = /^\d+$/;
 
 function propertyFromDotAccessor(parent, index, unitAware) {
@@ -6506,9 +6722,50 @@ function propertyFromDotAccessor(parent, index, unitAware) {
   } else if (parent.dtype === dt.SPREADSHEET) {
     let key = index.value;
     if (endRegEx.test(key)) {
-      key = key.slice(0, 1) + Object.keys(parent.rowMap).length;
+      // Return the cell at the bottom of a column
+      key = key.slice(0, -4);
+      if (!alphaRegEx.test(key)) { key = parent.columnMap[key]; }
+      key = key + Object.keys(parent.rowMap).length;
+      return fromAssignment(parent.value[key], unitAware)
     }
-    return fromAssignment(parent.value[key], unitAware)
+    if (key in parent.columnMap || alphaRegEx.test(key)) {
+      // Return data from one column, in a column vector
+      const colIndex = alphaRegEx.test(key) ? key : parent.columnMap[key];
+      const v = [];
+      let unit = null;
+      let dtype = null;
+      if (parent.value[colIndex + "1"].dtype & dt.RATIONAL) {
+        for (let i = 1; i < parent.numRows; i++) {
+          const cell = parent.value[colIndex + i];
+          if (!(cell.dtype & dt.RATIONAL)) {
+            return errorOprnd("NANEL", cell.name)
+          }
+          if (unitAware) {
+            v.push(cell.value.inBaseUnits);
+          } else {
+            v.push(cell.value.plain);
+          }
+        }
+        unit = unitAware
+          ? parent.units[parent.unitMap[colIndex.codePointAt(0) - 65]]
+          : allZeros;
+        dtype = dt.RATIONAL + dt.COLUMNVECTOR;
+      } else {
+        for (let i = 1; i < parent.numRows; i++) {
+          v.push(parent.value[colIndex + i].value);
+        }
+        dtype = parent.value[colIndex + "1"].dtype + dt.COLUMNVECTOR;
+      }
+      return { value: v, unit, dtype }
+    } else {
+      const parts = key.match(cellParts);
+      const colIndex = parts[1];
+      if (parts[2]) {
+        return fromAssignment(parent.value[colIndex + parts[2]], unitAware)
+      } else {
+        return errorOprnd("BAD_SHT_KEY", key)
+      }
+    }
 
   } else if ((parent.dtype === dt.STRING || (parent.dtype & dt.ARRAY)) &&
     index.dtype === dt.RATIONAL) {
@@ -6653,10 +6910,10 @@ const negatedComp = {
   "⩵": ["≠", "≠"],
   "==": ["≠", "≠"],
   "≠": ["==", "=="],
-  ">": ["\\ngtr", "!>"],
-  "<": ["\\nless", "!<"],
-  "≤": ["\\nleq", "!≤"],
-  "≥": ["\\ngeq", "!≥"],
+  ">": ["\\ngtr ", "!>"],
+  "<": ["\\nless ", "!<"],
+  "≤": ["\\nleq ", "!≤"],
+  "≥": ["\\ngeq ", "!≥"],
   "∋": ["∌", "∌"],
   "∈": ["∉", "∉"],
   "⊂": ["⊄", "⊄"],
@@ -6668,12 +6925,13 @@ const negatedComp = {
   "in": ["∉", "∉"],
   "!in": ["in", "in"],
   "!=": ["==", "=="],
-  "=>": ["\\ngeq", "!≥"],
-  "<=": ["\\ngeq", "!≥"]
+  "=>": ["\\ngeq ", "!≥"],
+  "<=": ["\\ngeq ", "!≥"]
 };
 
-const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAware) => {
+const formatResult = (stmt, result, formatSpec, formats, assert, isUnitAware) => {
   if (!result) { return stmt }
+  const decimalFormat = formats.decimalFormat;
 
   if (result.dtype === dt.DRAWING) {
     stmt.resultdisplay = result.value;
@@ -6707,12 +6965,13 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
           ",\\text{ ok }✓";
         altResultDisplay = stmt.entry.replace(testRegEx$1, "") + ", ok ✓";
       } else {
-        const op = compRegEx.exec(stmt.rpn).slice(1);
+        const op = compRegEx.exec(stmt.rpn)[0].slice(1);
         const negOp = negatedComp[op];
         if (assert) {
           const assertStr = assert.value.replace(/\.$/, "");
+          const addendum = stmt.entry.replace(testRegEx$1, "").replace(op, negOp[0]);
           resultDisplay = "\\colorbox{Salmon}{" + assertStr + ", but $" +
-              parse$1(stmt.entry.replace(testRegEx$1, "").replace(op, negOp[0])) + "$}";
+              parse$1(addendum) + "$}";
           altResultDisplay = assertStr + ", but " +
               stmt.entry.replace(testRegEx$1, "").replace(op, negOp[1]);
         } else {
@@ -6779,7 +7038,7 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
       altResultDisplay = result.value;
 
     } else if (result.dtype & dt.RICHTEXT) {
-      resultDisplay = parse$1(result.value, decimalFormat, false);
+      resultDisplay = parse$1(result.value, formats, false);
       altResultDisplay = result.value;
 
     } else if (result.dtype & dt.BOOLEAN) {
@@ -6789,6 +7048,15 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
     } else if (result.dtype === dt.COMPLEX) {
       const z = result.value;
       [resultDisplay, altResultDisplay] = Cpx.display(z, formatSpec, decimalFormat);
+
+    } else if (result.dtype === dt.DATE) {
+      resultDisplay = formatDate(result.value, formats.dateFormat);
+      if (resultDisplay.dtype && resultDisplay.dtype === dt.ERROR) {
+        resultDisplay = "\textcolor{firebrick}{\\text{" + resultDisplay.value + "}}";
+        altResultDisplay = resultDisplay.value;
+      } else {
+        altResultDisplay = resultDisplay.slice(26, -2);
+      }
 
     } else if (result.value.plain) {
       resultDisplay = format(result.value.plain, formatSpec, decimalFormat);
@@ -6818,7 +7086,9 @@ const formatResult = (stmt, result, formatSpec, decimalFormat, assert, isUnitAwa
     }
 
     // Write the string to be plugged into echos of dependent nodes
-    stmt.resultdisplay = stmt.resulttemplate.replace(/(\? *\??|@ *@?|%%?)/, resultDisplay);
+    const resultCapture = /(\? *\??|@ *@?|%%?)/.exec(stmt.resulttemplate);
+    stmt.resultdisplay = stmt.resulttemplate.slice(0, resultCapture.index) + resultDisplay +
+      stmt.resulttemplate.slice(resultCapture.index + resultCapture[0].length);
 
     // Write the TeX for this node
     if (stmt.resulttemplate.indexOf("@") > -1) {
@@ -6883,9 +7153,9 @@ const testValue = oprnd => {
  */
 
 const varRegEx = /〖[^〗]*〗/;
-const openParenRegEx = /(?:[([{|‖]|[^\\][,;:](?:\\:)?)$/;
+const openParenRegEx$1 = /(?:[([{|‖]|[^\\][,;:](?:\\:)?)$/;
 
-const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
+const plugValsIntoEcho = (str, vars, unitAware, formatSpec, formats) => {
   // For each variable name in the echo string, substitute a value.
   // The parser surrounded those names with 〖〗 delimiters.
   let match;
@@ -6916,7 +7186,7 @@ const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
           if (!hvar) { return errorOprnd("V_NAME", propName) }
           const stmt = { resulttemplate: "@", altresulttemplate: "@" };
           hvar.resultdisplay = formatResult(stmt, hvar, formatSpec, null,
-                decimalFormat).resultdisplay;
+                formats).resultdisplay;
         }
       }
     } else if (!vars[varName] && varName === "T") {
@@ -6954,7 +7224,7 @@ const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
     let isParened = false; // Is the match already nested inside parens?
     if (pos > 0) {
       const pStr = str.slice(0, pos).trim();
-      if (openParenRegEx.test(pStr)) {
+      if (openParenRegEx$1.test(pStr)) {
         const fStr = str.slice(pos + varName.length + 2).trim();
         isParened = fStr.length > 0 && /^([)|‖\]},;:]|\\right)/.test(fStr);
       } else if (/^\\begin{[bp]matrix}/.test(hvar.resultdisplay)) {
@@ -6963,7 +7233,8 @@ const plugValsIntoEcho = (str, vars, unitAware, formatSpec, decimalFormat) => {
     }
     needsParens = needsParens && !isParened;
 
-    if (hvar.dtype === dt.DATAFRAME || (hvar.dtype & dt.MAP)) {
+    if (hvar.dtype === dt.DATAFRAME || (hvar.dtype & dt.MAP)
+        || hvar.resultdisplay.slice(0, 1) === "!") {
       display = "\\mathrm{" + parse$1(vars[varName].name) + "}";
     } else {
       display = hvar.resultdisplay;
@@ -8035,7 +8306,7 @@ const unary = {
         for (let i = 0; i < m.length; i++) {
           sum = Rnl.add(sum, sumOfSquares(m[i]));
         }
-        return sum.sqrt()
+        return Rnl.sqrt(sum)
       }
     },
     negate(m)    { return m.map(row => row.map(e => Rnl.negate(e))) },
@@ -8134,7 +8405,10 @@ const dtype = {
   // return the resulting data type.
   scalar: {
     scalar(t0, t1, tkn)     {
-      return (tkn === "&" || tkn === "hcat" || tkn === "hcat")
+      if (t0 === dt.DATE || t1 === dt.DATE) {
+        return t0 === t1 ? dt.RATIONAL : dt.DATE
+      }
+      return (tkn === "&" || tkn === "hcat" || tkn === "vcat")
         ? t0 + ((tkn === "&" || tkn === "hcat") ? dt.ROWVECTOR : dt.COLUMNVECTOR )
         : t0
     },
@@ -8165,7 +8439,11 @@ const dtype = {
       ? t0
       : t0 - dt.COLUMNVECTOR + dt.MATRIX
     },
-    columnVector(t0, t1, tkn) { return tkn === "&" ? t0 - dt.COLUMNVECTOR + dt.MATRIX : t0 },
+    columnVector(t0, t1, tkn) {
+      return tkn === "&" || tkn === "hcat"
+        ? t0 - dt.COLUMNVECTOR + dt.MATRIX
+        : t0
+    },
     matrix(t0, t1, tkn) { return t1 }
   },
   matrix: {
@@ -8204,6 +8482,7 @@ const binary = {
           ? Cpx.power([x, Rnl.zero], y)
           : Rnl.power(x, y)
       },
+      modulo(x, y)   { return Rnl.mod(x, y) },
       hypot(x, y)    { return Rnl.hypot(x, y) },
       rem(x, y)      { return Rnl.rem(x, y) },
       and(x, y)      { return x && y },
@@ -8231,6 +8510,7 @@ const binary = {
       multiply(x, v) { return v.map(e => Rnl.multiply(x, e)) },
       divide(x, v)   { return v.map(e => Rnl.divide(x, e)) },
       power(x, v)    { return v.map(e => Rnl.power(x, e)) },
+      modulo(x, v)   { return v.map(e => Rnl.mod(x, e)) },
       rem(x, v)      { return v.map(e => Rnl.rem(x, e)) },
       and(x, v)      { return v.map(e => x && e) },
       or(x, v)       { return v.map(e => x || e) },
@@ -8245,6 +8525,7 @@ const binary = {
       multiply(x, m) { return m.map(row => row.map(e => Rnl.multiply(x, e))) },
       divide(x, m)   { return m.map(row => row.map(e => Rnl.divide(x, e))) },
       power(x, m)    { return m.map(row => row.map(e => Rnl.power(x, e))) },
+      modulo(x, m)   { return m.map(row => row.map(e => Rnl.mod(x, e))) },
       rem(x, m)      { return m.map(row => row.map(e => Rnl.rem(x, e))) },
       and(x, m)      { return m.map(row => row.map(e => x && e)) },
       or(x, m)       { return m.map(row => row.map(e => x || e)) },
@@ -8303,6 +8584,13 @@ const binary = {
       power(scalar, map) {
         map.data =  map.data.map(col => Rnl.isRational(col[0])
           ? col.map(e => Rnl.power(scalar, e))
+          : col
+        );
+        return map
+      },
+      modulo(scalar, map) {
+        map.data =  map.data.map(col => Rnl.isRational(col[0])
+          ? col.map(e => Rnl.mod(scalar, e))
           : col
         );
         return map
@@ -8373,6 +8661,7 @@ const binary = {
       multiply(v, x) { return v.map(e => Rnl.multiply(e, x)) },
       divide(v, x)   { return v.map(e => Rnl.divide(e, x)) },
       power(v, x)    { return v.map(e => Rnl.power(e, x)) },
+      modulo(v, x)   { return v.map(e => Rnl.mod(e, x)) },
       rem(v, x)      { return v.map(e => Rnl.rem(e, x)) },
       and(v, x)      { return v.map(e => e && x) },
       or(v, x)       { return v.map(e => e || x) },
@@ -8424,7 +8713,7 @@ const binary = {
       },
       modulo(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
-        return x.map((e, i) => Rnl.modulo(e, y[i]))
+        return x.map((e, i) => Rnl.mod(e, y[i]))
       },
       and(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
@@ -8477,7 +8766,7 @@ const binary = {
         return errorOprnd("MIS_ELNUM")
       },
       modulo(x, y) {
-        if (x.length === 1 && y.length === 1) { return [Rnl.modulo(x[0], y[0])] }
+        if (x.length === 1 && y.length === 1) { return [Rnl.mod(x[0], y[0])] }
         return errorOprnd("MIS_ELNUM")
       },
       and(x, y) {
@@ -8522,6 +8811,10 @@ const binary = {
       power(v, m) {
         if (v.length !== m[0].length) { return errorOprnd("MIS_ELNUM") }
         return m.map(row => row.map((e, i) => Rnl.power(v[i], e)))
+      },
+      modulo(v, m) {
+        if (v.length !== m[0].length) { return errorOprnd("MIS_ELNUM") }
+        return m.map(row => row.map((e, i) => Rnl.mod(v[i], e)))
       },
       concat(v, m) {
         if (v.length !== m[0].length) { return errorOprnd("BAD_CONCAT") }
@@ -8574,7 +8867,7 @@ const binary = {
         return errorOprnd("MIS_ELNUM")
       },
       modulo(x, y) {
-        if (x.length === 1 && y.length === 1) { return [Rnl.modulo(x[0], y[0])] }
+        if (x.length === 1 && y.length === 1) { return [Rnl.mod(x[0], y[0])] }
         return errorOprnd("MIS_ELNUM")
       },
       and(x, y) {
@@ -8632,6 +8925,10 @@ const binary = {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
         return x.map((e, i) => Rnl.power(e, y[i]))
       },
+      modulo(x, y) {
+        if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
+        return x.map((e, i) => Rnl.mod(e, y[i]))
+      },
       rem(x, y) {
         if (x.length !== y.length) { return errorOprnd("MIS_ELNUM") }
         return x.map((e, i) => Rnl.rem(e, y[i]))
@@ -8680,6 +8977,10 @@ const binary = {
         if (v.length !== m.length) { return errorOprnd("MIS_ELNUM") }
         return m.map((row, i) => row.map(e => Rnl.power(v[i], e)))
       },
+      mod(v, m) {
+        if (v.length !== m.length) { return errorOprnd("MIS_ELNUM") }
+        return m.map((row, i) => row.map(e => Rnl.mod(v[i], e)))
+      },
       concat(v, m) {
         if (v.length !== m.length) { return errorOprnd("MIS_ELNUM") }
         return m.map((row, i) => [v[i], ...row])
@@ -8719,6 +9020,13 @@ const binary = {
       power(vector, map) {
         map.data =  map.data.map(col => Rnl.isRational(col[0])
           ? col.map((e, i) => Rnl.power(vector[i], e))
+          : col
+        );
+        return map
+      },
+      modulo(vector, map) {
+        map.data =  map.data.map(col => Rnl.isRational(col[0])
+          ? col.map((e, i) => Rnl.mod(vector[i], e))
           : col
         );
         return map
@@ -8768,7 +9076,8 @@ const binary = {
         }
         return m.map(row => row.map(e => Rnl.power(e, x)))
       },
-      rem(m, x)   { return m.map(row => row.map(e => Rnl.rem(e, x))) }
+      modulo(m, x) { return m.map(row => row.map(e => Rnl.mod(e, x))) },
+      rem(m, x)    { return m.map(row => row.map(e => Rnl.rem(e, x))) }
     },
     rowVector: {
       add(m, v)      { return m.map(row => row.map((e, i) => Rnl.add(e, v[i]) )) },
@@ -8777,7 +9086,8 @@ const binary = {
       circ(m, v) { return m.map(row => row.map((e, i) => Rnl.multiply(e, v[i]) )) },
       divide(m, v)   { return m.map(row => row.map((e, i) => Rnl.divide(e, v[i]) )) },
       power(m, v)    { return m.map(row => row.map((e, i) => Rnl.power(e, v[i]) )) },
-      modulo(m, v)   { return m.map(row => row.map((e, i) => Rnl.modulo(e, v[i]) )) },
+      modulo(m, v)   { return m.map(row => row.map((e, i) => Rnl.mod(e, v[i]) )) },
+      rem(m, v)      { return m.map(row => row.map((e, i) => Rnl.rem(e, v[i]) )) },
       unshift(m, v) {
         if (m[0].length !== v.length) { return errorOprnd("MIS_ELNUM") }
         return [...m, v]
@@ -8794,7 +9104,8 @@ const binary = {
       circ(m, v) { return m.map((row, i) => row.map(e => Rnl.multiply(e, v[i]) )) },
       divide(m, v)   { return m.map((row, i) => row.map(e => Rnl.divide(e, v[i]) )) },
       power(m, v)    { return m.map((row, i) => row.map(e => Rnl.power(e, v[i]) )) },
-      rem(m, v)   { return m.map((row, i) => row.map(e => Rnl.rem(e, v[i]) )) },
+      modulo(m, v)   { return m.map((row, i) => row.map(e => Rnl.mod(e, v[i]) )) },
+      rem(m, v)      { return m.map((row, i) => row.map(e => Rnl.rem(e, v[i]) )) },
       concat(m, v) {
         if (m.length !== v.length) { return errorOprnd("MIS_ELNUM") }
         return m.map((row, i) => [...row, v[i]])
@@ -8838,6 +9149,11 @@ const binary = {
         if (x.length !== y.length)       { return errorOprnd("MIS_ELNUM") }
         if (x[0].length !== y[0].length) { return errorOprnd("MIS_ELNUM") }
         return x.map((m, i) => m.map((n, j) => Rnl.power(n, y[i][j])))
+      },
+      modulo(x, y) {
+        if (x.length !== y.length)       { return errorOprnd("MIS_ELNUM") }
+        if (x[0].length !== y[0].length) { return errorOprnd("MIS_ELNUM") }
+        return x.map((m, i) => m.map((n, j) => Rnl.mod(n, y[i][j])))
       },
       rem(x, y) {
         if (x.length !== y.length)       { return errorOprnd("MIS_ELNUM") }
@@ -8930,6 +9246,13 @@ const binary = {
         );
         return map
       },
+      modulo(map, scalar) {
+        map.data =  map.data.map(col => Rnl.isRational(col[0])
+          ? col.map(e => Rnl.mod(e, scalar))
+          : col
+        );
+        return map
+      },
       rem(map, scalar) {
         map.data =  map.data.map(col => Rnl.isRational(col[0])
           ? col.map(e => Rnl.rem(e, scalar))
@@ -8991,6 +9314,13 @@ const binary = {
       power(map, vector) {
         map.data =  map.data.map(col => Rnl.isRational(col[0])
           ? col.map((e, i) => Rnl.power(e, vector[i]))
+          : col
+        );
+        return map
+      },
+      modulo(map, vector) {
+        map.data =  map.data.map(col => Rnl.isRational(col[0])
+          ? col.map((e, i) => Rnl.mod(e, vector[i]))
           : col
         );
         return map
@@ -9228,12 +9558,387 @@ const textRange = (str, index) => {
   return { value, unit: null, dtype: dt.STRING }
 };
 
+/*
+ * teXtoCalc.js
+ * This file takes a text string and compiles from TeX to Hurmet calculation format.
+ *
+*/
+
+// Delimiter types
+const PAREN = 1; // default
+const FRAC = 2;
+const TFRAC = 4;
+const BINARY = 8;
+const ENV = 16;  // environment
+const CASES = 32;
+const SUB = 64;
+
+const  charAccents = {
+  "\\bar": "\u0304",
+  "\\grave": "\u0300",
+  "\\acute": "\u0301",
+  "\\hat": "\u0302",
+  "\\tilde": "\u0303",
+  "\\dot": "\u0307",
+  "\\ddot": "\u0308",
+  "\\mathring": "\u030A",
+  "\\check": "\u030C",
+  "\\underline": "\u0332",
+  "\\overleftharpoon": "\u20d0",
+  "\\overrightharpoon": "\u20d1",
+  "\\overleftarrow": "\u20d6",
+  "\\vec": "\u20d7",
+  "\\overleftrightarrow": "\u20e1"
+};
+const openParenRegEx = /^ *(?:\\(?:left|big|Big|bigg|Bigg))? *\(/;
+const leadingSpaceRegEx$2 = /^\s+/;
+const trailingSpaceRegEx$1 = / +$/;
+const inlineFracRegEx = /^\/(?!\/)/;
+const ignoreRegEx = /^\\(left(?!\.)|right(?!\.)|middle|big|Big|bigg|Bigg)/;
+const subRegEx = /^\("([A-Za-z\u0391-\u03c9][A-Za-z0-9\u0391-\u03c9]*)"$/;
+const enviroRegEx = /^\\begin\{(?:(cases)|(|p|b|B|v|V)matrix)\}/;
+const endEnviroRegEx = /^\\end\{(?:cases|(?:|p|b|B|v|V)matrix)\}/;
+// eslint-disable-next-line max-len
+const greekAlternatives = "Alpha|Beta|Gamma|Delta|Epsilon|Zeta|Eta|Theta|Iota|Kappa|Lambda|Mu|Nu|Xi|Omicron|Pi|Rho|Sigma|Tau|Upsilon|Phi|Chi|Psi|Omega|alpha|beta|gamma|delta|epsilon|zeta|eta|theta|iota|kappa|lambda|mu|nu|xi|omicron|pi|rho|sigma|tau|upsilon|phi|chi|psi|omega|varphi";
+const greekRegEx = RegExp("^\\\\(" + greekAlternatives + ")\\b");
+// eslint-disable-next-line max-len
+const bracedCharRegEx = RegExp("^\\{([A-Za-z0-9\u0391-\u03c9]|\\\\(" + greekAlternatives + "))\\}");
+const greekLetters = {
+  Alpha: "Α",
+  Beta: "Β",
+  Gamma: "Γ",
+  Delta: "Δ",
+  Epsilon: "Ε",
+  Zeta: "Ζ",
+  Eta: "Η",
+  Theta: "Θ",
+  Iota: "Ι",
+  Kappa: "Κ",
+  Lambda: "Λ",
+  Mu: "Μ",
+  Nu: "Ν",
+  Xi: "Ξ",
+  Omicron: "Ο",
+  Pi: "Π",
+  Rho: "Ρ",
+  Sigma: "Σ",
+  Tau: "Τ",
+  Upsilon: "Υ",
+  Phi: "Φ",
+  Chi: "Χ",
+  Psi: "Ψ",
+  Omega: "Ω",
+  alpha: "α",
+  beta: "β",
+  gamma: "γ",
+  delta: "δ",
+  epsilon: "ε",
+  zeta: "ζ",
+  eta: "η",
+  theta: "θ",
+  iota: "ι",
+  kappa: "κ",
+  lambda: "λ",
+  mu: "μ",
+  nu: "ν",
+  xi: "ξ",
+  omicron: "ο",
+  pi: "π",
+  rho: "ρ",
+  sigma: "σ",
+  tau: "τ",
+  upsilon: "υ",
+  phi: "ϕ",
+  chi: "χ",
+  psi: "ψ",
+  omega: "ω",
+  varphi: "φ"
+};
+
+const matrices = {
+  m: ["{:", ":}"],
+  p: ["(", ")"],
+  b: ["[", "]"],
+  B: ["{", "}"],
+  v: ["|", "|"],
+  V: ["‖", "‖"]
+};
+
+const eatOneChar = str => {
+  str = str.slice(1);
+  str = str.replace(leadingSpaceRegEx$2, "");
+  return str
+};
+
+const eatMatch = (str, match) => {
+  str = str.slice(match[0].length);
+  str = str.replace(leadingSpaceRegEx$2, "");
+  return str
+};
+
+const texToCalc = str => {
+  // Variable definitions
+  let calc = "";
+  let token = {};
+  let prevToken = { input: "", output: "", ttype: 50 };
+  const delims = [{ ch: "", pos: -1, type: 0 }] ; // delimiter stack
+  let splitLongVars = true;
+
+  // Trim the input string
+  str = str.replace(leadingSpaceRegEx$2, ""); //       trim leading white space from string
+  str = str.replace(/\s+$/, ""); //                  trim trailing white space
+
+  // Execute the main parse loop.
+  while (str.length > 0) {
+    // Get the next token.
+
+    while (str.length > 0 && str.charAt(0) === "'") {
+      // The lexer will not handle an apostrophe properly. Lex it locally.
+      calc += "′";
+      str = eatOneChar(str);
+    }
+
+    while (inlineFracRegEx.test(str)) {
+      calc += "\u2215"; // ∕
+      str = eatOneChar(str);
+    }
+
+    while (str.length > 0 && str.charAt(0) === "\n") {
+      calc += "\n";
+      str = eatOneChar(str);
+    }
+
+    while (greekRegEx.test(str)) {
+      const greekFunction = greekRegEx.exec(str)[0];
+      calc += greekLetters[greekFunction.slice(1)] + " ";
+      str = str.slice(greekFunction.length);
+      str = str.replace(leadingSpaceRegEx$2, "");
+    }
+
+    while (enviroRegEx.test(str)) {
+      const match = enviroRegEx.exec(str);
+      if (match[1]) {
+        // {cases} environment
+        delims.push({ ch: ":}", pos: calc.length, type: ENV + CASES });
+        calc += "{";
+      } else {
+        const matrixType = match[2] ? match[2] : "m";
+        delims.push({ ch: matrices[matrixType][1], pos: calc.length, type: ENV });
+        calc += matrices[matrixType][0];
+      }
+      str = eatMatch(str, match);
+    }
+
+    while (endEnviroRegEx.test(str)) {
+      const match = endEnviroRegEx.exec(str);
+      const delim = delims.pop();
+      if (match[0].indexOf("cases") > -1) {
+        // {cases} environment. Clean up the if statements
+        let casesText = calc.slice(delim.pos + 1);
+        casesText = casesText.replace(/"if *"/g, "if ");
+        calc = calc.slice(0, delim.pos + 1) + casesText;
+      }
+      calc += delim.ch;
+      str = eatMatch(str, match);
+    }
+
+    while (ignoreRegEx.test(str)) {
+      const match = ignoreRegEx.exec(str);
+      str = eatMatch(str, match);
+    }
+
+    const tkn = lex(str, { decimalFormat: "10000000.", dateFormat: "yyyy-mm-dd" }, prevToken);
+    token = { input: tkn[0], output: tkn[2], ttype: tkn[3], closeDelim: tkn[4] };
+    str = str.slice(token.input.length);
+    str = str.replace(leadingSpaceRegEx$2, "");
+
+    switch (token.ttype) {
+      case tt.SPACE: //      spaces and newlines
+        calc += token.output;
+        break
+
+      case tt.SUPCHAR:
+        if (calc.slice(-1) === " ") { calc = calc.slice(0, -1); }
+        calc += token.output;
+        break
+
+      case tt.SUB:
+      case tt.SUP:
+        calc += token.output;
+        if (str.length > 0 && str.charAt(0) === "{") {
+          const delimType = token.ttype === tt.SUB ? SUB : PAREN;
+          delims.push({ ch: ")", pos: calc.length, type: delimType });
+          calc += "(";
+          str = eatOneChar(str);
+        }
+        break
+
+      case tt.NUM:
+      case tt.ORD:
+      case tt.VAR:
+      case tt.ADD: //        infix add/subtract operators, + -
+      case tt.MULT: //       infix mult/divide operators, × * · // ÷
+      case tt.REL: //        relational operators, e.g  < == →
+      case tt.BIN: //    infix math operators that render but don't calc, e.g. \bowtie
+      case tt.BIG_OPERATOR:  // integral, sum, etc
+      case tt.FACTORIAL:
+        if (token.input === "&" && (delims[delims.length - 1].type & ENV)) {
+          // Write a comma separator for environments (except cases)
+          if (delims[delims.length - 1].type === ENV) {
+            calc += ", ";
+          }
+        } else {
+          calc += token.output + " ";
+        }
+        break
+
+      case tt.LONGVAR:
+        calc += splitLongVars ? token.output.split("").join(" ") + " " : token.output;
+        break
+
+      case tt.ACCENT: {
+        if (charAccents[token.input] && bracedCharRegEx.test(str)) {
+          delims.push({ ch: charAccents[token.input], pos: calc.length, type: PAREN });
+          str = eatOneChar(str);
+        } else if ( token.input === "\\mathrm") {
+          splitLongVars = false;
+          delims.push({ ch: '', pos: calc.length, type: PAREN });
+          str = eatOneChar(str);
+        } else {
+          calc += token.output;
+          if (str.length > 0 && str.charAt(0) === "{") {
+            calc += "(";
+            delims.push( { ch: ")", pos: calc.length, type: PAREN });
+            str = eatOneChar(str);
+          }
+        }
+        break
+      }
+
+      case tt.UNARY: {
+        if (token.input === "\\text") {
+          delims.push({ ch: '"', pos: calc.length, type: PAREN });
+          calc += '"';
+          splitLongVars = false;
+          str =  str.slice(1);
+        } else {
+          calc += token.output;
+          if (str.length > 0 && str.charAt(0) === "{") {
+            delims.push({ ch: ")", pos: calc.length, type: PAREN });
+            calc +=  '(';
+            str = eatOneChar(str);
+          }
+        }
+        break
+      }
+
+      case tt.BINARY: {
+        const pos = calc.length;
+        if (token.input === "\\frac" || token.input === "\\dfrac") {
+          calc += "(";
+          delims.push({ ch: ")/(", pos, type: FRAC });
+        } else if (token.input === "\\tfrac") {
+          calc += "(";
+          delims.push({ ch: ")//(", pos, type: TFRAC });
+        } else {
+          calc += token.input + "{";
+          delims.push({ ch: "}{", pos, type: BINARY });
+        }
+        str = eatOneChar(str);
+        break
+      }
+
+      case tt.DIV: {
+        const pos = delims[delims.length - 1].pos;
+        calc = calc.slice(0, pos) + "(" + calc.slice(pos + 1);
+        delims.pop();
+        calc += token.input === "\\over" ? ")/(" : ")" + token.input + "(";
+        delims.push({ ch: ")", pos: calc.length - 1, type: PAREN });
+        break
+      }
+
+      case tt.FUNCTION: {
+        calc += token.output;
+        const pos = calc.length;
+        const match = openParenRegEx.exec(str);
+        if (match) {
+          calc += "(";
+          delims.push({ ch: ")", pos, type: PAREN });
+          str = eatMatch(str, match);
+        } else {
+          calc += " ";
+        }
+        break
+      }
+
+      case tt.LEFTBRACKET: {
+        delims.push({ ch: token.closeDelim, pos: calc.length, type: PAREN });
+        calc += token.output;
+        break
+      }
+
+      case tt.SEP: {
+        const inEnvironment = (delims[delims.length - 1].type & ENV);
+        if (token.input === "//" && inEnvironment) {
+          calc += ";";
+        } else {
+          calc += token.output;
+        }
+        break
+      }
+
+      case tt.RIGHTBRACKET: {
+        const delim = delims.pop();
+        calc = calc.replace(trailingSpaceRegEx$1, "");
+        if (/ $/.test(calc)) { calc = calc.slice(0, -1); }
+        if (delim.type === FRAC) {
+          calc += ") / (";
+          str = eatOneChar(str);
+          delims.push({ ch: ")", pos: calc.length - 1, type: PAREN });
+        } else if (delim.type === TFRAC) {
+          calc += ")//(";
+          str = eatOneChar(str);
+          delims.push({ ch: ")", pos: calc.length - 1, type: PAREN });
+        } else if (delim.type === BINARY) {
+          calc += "}{";
+          str = eatOneChar(str);
+          delims.push({ ch: "}", pos: calc.length - 1, type: PAREN });
+        } else if (delim.type === SUB) {
+          let subText = calc.slice(delim.pos);
+          if (subRegEx.test(subText)) {
+            // Replace _("subscript") with _subscript
+            subText = subText.replace(subRegEx, "$1");
+            calc = calc.slice(0, delim.pos) + subText + " ";
+          } else {
+            calc += delim.ch + " ";
+          }
+        } else {
+          calc += delim.ch + " ";
+        }
+        if (delim.ch === '"' || delim.ch === "") { splitLongVars = true; }
+        break
+      }
+
+      default:
+        calc += token.output;
+    }
+
+    prevToken = cloneToken(token);
+  }
+  calc = calc.replace(/ {2,}/g, " "); // Replace multiple spaces with single space.
+  calc = calc.replace(/\s+(?=[_^'′!)}\]〗])/g, ""); // Delete spaces before right delims
+  calc = calc.replace(/\s+$/, ""); //                 Delete trailing space
+
+  return calc
+};
+
 const CR_NEWLINE_R = /\r\n?/g;
 const FORMFEED_R = /\f/g;
 const CLASS_R = /(?:^| )\.([a-z-]+)(?: |&|$)/;
-const tableClassRegEx = /(?:^| )\.([a-z- ]+)(?: colWidths=| width=| float=|&|$)/;
+const tableClassRegEx = /(?:^| )\.(?:([a-z-]+)(?: |$)|"([^"]+)")/;
 const floatRegEx = /float="(left|right)"/;
 const WIDTH_R = /(?:^| )width="?([\d.a-z]+"?)(?: |$)/;
+const ALT_R = /(?:^| )alt="([A-Za-z\d ]+)"(?: |$)/;
 const COL_WIDTHS_R = /(?:^| )colWidths="([^"]*)"/;
 const ID_R = /(?:^| )#([A-Za-z][A-Za-z0-9]*)(?: |$)/;
 const leadingSpaceRegEx$1 = /^ +/;
@@ -9278,9 +9983,52 @@ const unescapeUrl = function(rawUrlString) {
 
 const isNotAnInteger = str => isNaN(str) || Number(str) % 1 !== 0;
 
+const indentRegEx = /^ +/;
+const insertNewlines = str => {
+  // Lists are unlike other blocks in one respect.
+  // A list might not have a preceding blank line, if the list is inside another list.
+  // Since the RegEx patterns all depend on that blank line, we will scan the top-level
+  // list and insert blank lines where needed.
+  const lines = str.split("\n");
+  let numLines = lines.length;
+  let i = 0;
+  let prevIndent = 0;
+  let prevLineWasEmpty = true;
+  while (i < numLines) {
+    const line = lines[i];
+    const isEmptyLine = (line === "");
+    if (!isEmptyLine) {
+      if (LIST_ITEM_PREFIX_R.test(line)) {
+        const match = indentRegEx.exec(line);
+        const indent = match ? match[0].length : 0;
+        if (indent !== prevIndent && !prevLineWasEmpty) {
+          // This line starts a new list and needs a preceeding blank line
+          lines.splice(i, 0, "");
+          i += 1;
+          numLines += 1;
+          prevLineWasEmpty = true;
+          continue
+        }
+        prevIndent = indent;
+      }
+    }
+    prevLineWasEmpty = isEmptyLine;
+    i += 1;
+  }
+  return lines.join("\n")
+};
+
 const parseList = (str, state) => {
-  const items = str.replace(LIST_BLOCK_END_R, "\n").match(LIST_ITEM_R);
+  if (!state.inList) {
+    // This is a top-level list.
+    str = str.replace(LIST_BLOCK_END_R, "\n");
+    str = insertNewlines(str);
+  }
+  const items = str.match(LIST_ITEM_R);
   const isTight = !/\n\n/.test(str.replace(/\n*$/, ""));
+  // Backup our state for restoration afterwards.
+  const oldStateList = state.inList;
+  state.inList = true;
   const itemContent = items.map(function(item, i) {
     // We need to see how far indented this item is:
     const prefixCapture = LIST_ITEM_PREFIX_R.exec(item);
@@ -9296,14 +10044,8 @@ const parseList = (str, state) => {
       // remove the bullet:
       .replace(LIST_ITEM_PREFIX_R, "");
 
-    // backup our state for restoration afterwards. We're going to
-    // want to set state._list to true, and state.inline depending
-    // on our list's looseness.
+    // Backup our state for restoration afterwards.
     const oldStateInline = state.inline;
-    const oldStateList = state._list;
-    state._list = true;
-    const oldStateTightness = state.isTight;
-    state.isTight = isTight;
 
     // Parse the list item
     state.inline = isTight;
@@ -9315,11 +10057,10 @@ const parseList = (str, state) => {
 
     // Restore our state before returning
     state.inline = oldStateInline;
-    state._list = oldStateList;
-    state.isTight = oldStateTightness;
     return result;
   });
 
+  state.inList = oldStateList;
   return itemContent
 };
 
@@ -9348,7 +10089,9 @@ const TABLES = (function() {
     // Get CSS class, ID, and column widths, if any.
     if (!directives && align === "") { return ["", "", null] }
     const userDefClass = tableClassRegEx.exec(directives);
-    let myClass = (userDefClass) ? userDefClass[1] : "";
+    let myClass = userDefClass
+      ? (userDefClass[1] ? userDefClass[1] : userDefClass[2] )
+      : "";
     const isSpreadsheet = myClass && myClass.split(" ").includes("spreadsheet");
     if (align.length > 0) { myClass += (myClass.length > 0 ? " " : "") + align; }
     const userDefId = ID_R.exec(directives);
@@ -9691,6 +10434,7 @@ const linkIndex = marks => {
 // Pattern to find Hurmet calculation results.
 // This will be replaced in the entry with the display selector.
 const resultRegEx = /〔[^〕]*〕/;
+const drawRegEx$1 = /^draw\(/;
 
 const parseRef = function(capture, state, refNode) {
   // Handle implicit refs: [title][<ref>], ![alt or caption][<ref>]
@@ -9706,9 +10450,11 @@ const parseRef = function(capture, state, refNode) {
         { type: "figcaption", content: parseInline(refNode.attrs.alt, state) }
       ] };
       refNode.content[0].attrs.src = def.target;
+      if (def.attrs.alt) { refNode.content[0].attrs.alt = def.attrs.alt; }
     } else if (refNode.type === "image") {
-      if (def.target.indexOf("\n") > -1) {
-        refNode = { type: "calculation", attrs: { entry: def.target } };
+      if (drawRegEx$1.test(def.target)) {
+        const entry = def.target.replace(/\\n/g, "\n");
+        return { type: "calculation", attrs: { entry } }
       } else {
         refNode.attrs = def.attrs;
         refNode.attrs.src = def.target;
@@ -9735,7 +10481,7 @@ const parseTextMark = (capture, state, mark) => {
   return text
 };
 
-const BLOCK_HTML = /^ *(?:<(head|h[1-6]|p|pre|script|style|table)[\s>][\s\S]*?(?:<\/\1>[^\n]*\n)|<(?:\/?(?:!DOCTYPE html|body|li|br|hr|(?:div|article|details|input|label|ul|ol|dl|main|nav)(?: (?:class|for|id|style|type)=(["'])[A-Za-z0-9_.:;\- ]+\2){0,2})|\/?html(?: lang=(["'])[a-z]+\3)?)>[^\n]*?(?:\n|$))/;
+const BLOCK_HTML = /^ *(?:<(head|h[1-6]|p|pre|label|script|style|table)[\s>][\s\S]*?(?:<\/\1>[^\n]*\n)|<(?:\/?(?:!DOCTYPE html|body|li|br|hr|(?:div|article|details|input|ul|ol|dl|main|nav)(?: (?:class|id|name|style|type)=(["'])[A-Za-z0-9_.:;\- ]+\2){0,2})|\/?html(?: lang=(["'])[a-z]+\3)?)>[^\n]*?(?:\n|$))/;
 
 // Rules must be applied in a specific order, so use a Map instead of an object.
 const rules = new Map();
@@ -9767,7 +10513,7 @@ rules.set("lheading", {
 });
 rules.set("heading", {
   isLeaf: false,
-  match: blockRegex(/^ *(#{1,6})([^\n]+?)#* *(?:\n *)+\n/),
+  match: blockRegex(/^ *(#{1,6})([^\n]+?)#*\n*\n/),
   parse: function(capture, state) {
     return {
       attrs: { level: capture[1].length },
@@ -9831,20 +10577,25 @@ rules.set("blockquote", {
 });
 rules.set("ordered_list", {
   isLeaf: false,
-  // Hurmet accepts lists w/o a preceding blank line, so the list RegEx
-  // is an anyScopeRegex. parse() will test if a list is a the beginning of a line.
-  match: anyScopeRegex(/^( {0,3})(\d{1,9}[.)]) [\s\S]+?(?:\n{2,}(?! )(?!\1(?:\d{1,9}\.) )\n*|\s*$)/),
+  match: blockRegex(/^( {0,3})(?:(?:(\d{1,9})|([A-Z])|([a-z]))[.)]) [\s\S]+?(?:\n{2,}(?! )(?!\1(?:\d{1,9}\.) )\n*|\s*$)/),
   parse: function(capture, state) {
-    const start = Number(capture[2].replace(/\) *$/, "").trim());
-    return { attrs: { order: start }, content: parseList(capture[0], state, capture[1]) }
+    const start = capture[2]
+      ? Number(capture[2])
+      : capture[3]
+      ? capture[3].codePointAt(0) - 64
+      : capture[4].codePointAt(0) - 96;
+    const className = capture[2] ? "decimal" : capture[3] ? "upper-alpha" : "lower-alpha";
+    return {
+      attrs: { class: className, order: start },
+      content: parseList(capture[0], state)
+    }
   }
 });
 rules.set("bullet_list", {
   isLeaf: false,
-  // See note above re: anyScopeRegex
-  match: anyScopeRegex(/^( {0,3})([*+-]) [\s\S]+?(?:\n{2,}(?! )(?!\1(?:[*+-]) )\n*|\s*$)/),
+  match: blockRegex(/^( {0,3})([*+-]) [\s\S]+?(?:\n{2,}(?! )(?!\1(?:[*+-]) )\n*|\s*$)/),
   parse: function(capture, state) {
-    return { content: parseList(capture[0], state, capture[1]) }
+    return { content: parseList(capture[0], state) }
   }
 });
 rules.set("special_div", {
@@ -9903,10 +10654,15 @@ rules.set("dd", {  // description details
 });
 rules.set("displayTeX", {
   isLeaf: true,
-  match: blockRegex(/^\$\$\n?((?:\\[\s\S]|[^\\])+?)\n?\$\$ *(?:\n|$)/),
+  match: blockRegex(/^ *(?:\$\$\n? *((?:\\[\s\S]|[^\\])+?)\n?\$\$|\\\[\n? *((?:\\[\s\S]|[^\\])+?)\n?\\\]) *(?:\n|$)/),
   parse: function(capture, state) {
-    const tex = capture[1].trim();
-    return { type: "tex", attrs: { tex, displayMode: true } }
+    const tex = (capture[1] ? capture[1] : capture[2]).trim();
+    if (state.convertTex) {
+      const entry = texToCalc(tex);
+      return { type: "calculation", attrs: { entry, displayMode: true } }
+    } else {
+      return { type: "tex", attrs: { tex, displayMode: true } }
+    }
   }
 });
 rules.set("newline", {
@@ -9923,9 +10679,37 @@ rules.set("emptyParagraph", {
 });
 rules.set("paragraph", {
   isLeaf: false,
-  match: blockRegex(/^((?:[^\n]|\n(?! *\n))+)(?:\n *)+\n/),
+  match: blockRegex(/^((?:[^\n]|\n(?!(?: *\n|(?=[*+-] )|(?=(?:\d{1,9}|[A-Za-z])[.)] ))))+)\n(?:(?: *\n)+|(?=[*+-] )|(?=(?:\d{1,9}|[A-Za-z])[.)] ))/),
   parse: function(capture, state) {
     return { type: "paragraph", content: parseInline(capture[1], state) }
+  }
+});
+// Position tex ahead of escape in order to capture \[...\] math.
+rules.set("tex", {
+  isLeaf: true,
+  match: inlineRegex(/^(?:\\\[((?:\\[\s\S]|[^\\])+?)\\\]|\$\$((?:\\[\s\S]|[^\\])+?)\$\$|\\\(((?:\\[\s\S]|[^\\])+?)\\\)|\$(`+)((?:(?:\\[\s\S]|[^\\])+?)?)\4\$(?![0-9$])|\$(?!\s|\$)((?:(?:\\[\s\S]|[^\\])+?)?)(?<=[^\s\\$])\$(?![0-9$]))/),
+  parse: function(capture, state) {
+    if (capture[1] || capture[2]) {
+      const tex = (capture[1] ? capture[1] : capture[2]).trim();
+      if (state.convertTex) {
+        const entry = texToCalc(tex);
+        return { type: "calculation", attrs: { entry, displayMode: true } }
+      } else {
+        return { type: "tex", attrs: { tex, displayMode: true } }
+      }
+    } else {
+      const tex = (capture[3]
+        ? capture[3]
+        : capture[5]
+        ? capture[5]
+        : capture[6]).trim();
+      if (state.convertTex) {
+        const entry = texToCalc(tex);
+        return { type: "calculation", attrs: { entry, displayMode: false } }
+      } else {
+        return { type: "tex", attrs: { tex, displayMode: false } }
+      }
+    }
   }
 });
 rules.set("escape", {
@@ -9934,7 +10718,7 @@ rules.set("escape", {
   // escaping anything else provides a very flexible escape mechanism,
   // regardless of how this grammar is extended.
   isLeaf: true,
-  match: inlineRegex(/^\\([^0-9A-Za-z\s])/),
+  match: inlineRegex(/^\\([^0-9A-Za-z()\s])/),
   parse: function(capture, state) {
     return {
       type: "text",
@@ -10025,19 +10809,6 @@ rules.set("code", {
     return [{ type: "text", text, marks: [{ type: "code" }] }]
   }
 });
-rules.set("tex", {
-  isLeaf: true,
-  match: inlineRegex(/^(?:\$\$((?:\\[\s\S]|[^\\])+?)\$\$|\$(?!\s|$)((?:(?:\\[\s\S]|[^\\])+?)?)(?<=[^\s\\$])\$(?![0-9$]))/),
-  parse: function(capture, state) {
-    if (capture[1]) {
-      const tex = capture[1].trim();
-      return { type: "tex", attrs: { tex, displayMode: true } }
-    } else {
-      const tex = capture[2].trim();
-      return { type: "tex", attrs: { tex, displayMode: false } }
-    }
-  }
-});
 rules.set("calculation", {
   isLeaf: true,
   match: anyScopeRegex(/^(?:¢(\?\?|\?|%%|%|@@|@)?(`+)([\s\S]*?[^`])\2(?!`)|¢¢(\?\?|\?|%%|%|@@|@)?\n?((?:\\[\s\S]|[^\\])+?)\n?¢¢)/),
@@ -10095,6 +10866,13 @@ rules.set("superscript", {
     return parseTextMark(capture[1], state, "superscript" )
   }
 });
+rules.set("carat", {
+  isLeaf: true,
+  match: inlineRegex(/^\^((?:\\[\s\S]|[^\\])+?)\^/),
+  parse: function(capture, state) {
+    return parseTextMark(capture[1], state, "superscript" )
+  }
+});
 rules.set("subscript", {
   isLeaf: true,
   match: inlineRegex(/^<sub>([\s\S]*?)<\/sub>/),
@@ -10108,7 +10886,8 @@ rules.set("tilde", {
   parse: function(capture, state) {
     return parseTextMark(capture[1], state, "subscript" )
   }
-});rules.set("underline", {
+});
+rules.set("underline", {
   isLeaf: true,
   match: inlineRegex(/^<u>([\s\S]*?)<\/u>/),
   parse: function(capture, state) {
@@ -10142,7 +10921,7 @@ rules.set("span", {
 rules.set("text", {
   // We break on symbol characters, double newlines, or double-space-newlines.
   isLeaf: true,
-  match: anyScopeRegex(/^[\s\S]+?(?=[_*`#>|\\\-+=![({$¢¶<~+:]|\n\n| {2,}\n|\d+[.)]|\w+:\S|$)/),
+  match: anyScopeRegex(/^[\s\S]+?(?=[_*`#>|\\\-+=![({$¢¶<~^+:]|\n\n| {2,}\n|\d+[.)]|\w+:\S|$)/),
   parse: function(capture, state) {
     return {
       text: capture[0].replace(/\n/g, " ")
@@ -10150,8 +10929,6 @@ rules.set("text", {
   }
 });
 
-const lists = ["bullet_list", "ordered_list"];
-const LIST_LOOKBEHIND_R = /(?:\n)( *)$/;
 
 const parse = (source, state) => {
   if (!state.inline) { source += "\n\n"; }
@@ -10167,25 +10944,7 @@ const parse = (source, state) => {
       if (capture) {
         rule = currRule;
         ruleName = currRuleName;
-
-        if (lists.includes(ruleName)) {
-          // Lists are complicated because we do not require a blank line before a list.
-          const prevCaptureStr = state.prevCapture == null ? "" : state.prevCapture;
-          const isStartOfLineCapture = LIST_LOOKBEHIND_R.test(prevCaptureStr);
-          if (isStartOfLineCapture) {
-            if (state.inline) {
-              // We matched a list that does not have a preceding blank line.
-              // Finish the current block element before beginning the list.
-              state.remainder = capture[0];
-              return result
-            } else {
-              break
-            }
-          }
-        } else {
-          break
-        }
-
+        break
       }
     }
     const parsed = rule.parse(capture, state);
@@ -10197,11 +10956,6 @@ const parse = (source, state) => {
     }
     state.prevCapture = capture[0];
     source = source.substring(capture[0].length);
-    if (state.remainder) {
-      // Prepend a list.
-      source = state.remainder + "\n\n" + source;
-      state.remainder = "";
-    }
   }
   return result
 };
@@ -10222,8 +10976,8 @@ const parseInline = function(content, state) {
 };
 
 
-// recognize a `*` `-`, `+`, `1.`, `2.`... list bullet
-const LIST_BULLET = "(?:[*+-]|\\d+[\\.\\)])";
+// recognize a `*` `-`, `+`, `1.`, `2.`, `A.`, `a,`... list bullet
+const LIST_BULLET = "(?:[*+-]|(?:\\d+|[A-Za-z])[\\.\\)])";
 // recognize the start of a list item:
 // leading space plus a bullet plus a space (`   * `)
 const LIST_ITEM_PREFIX = "( *)(" + LIST_BULLET + ") +";
@@ -10299,7 +11053,8 @@ const populateTOC = ast => {
 
 const metadataRegEx = /^---+\n((?:[A-Za-z0-9][A-Za-z0-9 _-]*:[^\n]+\n(?:[ \t]+[^\n]+\n)*)+)---+\n/;
 const metadataItemRegEx = /^[A-Za-z0-9][A-Za-z0-9 _-]*:[^\n]+\n(?:[ \t]+[^\n]+\n)*/;
-const hurmetMetadataNames = ["decimalFormat", "fontSize", "pageSize"];
+const hurmetMetadataNames = ["decimalFormat", "dateFormat", "fontSize",
+  "pageSize", "saveDate"];
 
 const parseMetadata = str => {
   const metadata = {};
@@ -10320,7 +11075,7 @@ const parseMetadata = str => {
 const dateMessageRegEx = /^date:([^\n]+)\nmessage:([^\n]+)\n/;
 
 const inlineMd2ast = md => {
-  const state = { inline: true, _defs: {}, prevCapture: "", remainder: "", inHtml: false };
+  const state = { inline: true, _defs: {}, prevCapture: "", inList: false, inHtml: false };
   const ast = parse(md, state);
   if (Array.isArray(ast) && ast.length > 0 && ast[0].type === "null") {
     ast.shift();
@@ -10329,7 +11084,7 @@ const inlineMd2ast = md => {
   return ast
 };
 
-const md2ast = (md, inHtml = false) => {
+const md2ast = (md, inHtml = false, convertTex = false) => {
   // First, check for a metadata preamble
   let metadata = false;
   if (metadataRegEx.test(md)) {
@@ -10341,27 +11096,30 @@ const md2ast = (md, inHtml = false) => {
   // Second, get all the link reference definitions
   const state = {
     inline: false,
+    inList: false,
     _defs: {},
     footnotes: [],
     prevCapture: "",
-    remainder: "",
-    inHtml
+    inHtml,
+    convertTex
   };
-  const defRegEx = /\n *\[([^\]\n]+)\]: *(?:¢(`+)([\s\S]*?[^`])\2(?!`)|<?([^\n>]*)>? *(?:\n\{([^\n}]*)\})?)(?=\n)/gm;
+  const defRegEx = /\n *\[([^\]\n]+)\]: *([^\n]*) *(?:\n\{([^\n}]*)\})?(?=\n)/gm;
   const footnoteDefRegEx = /\n *\[\^\d+\]: *([^\n]*)(?=\n)/gm;
   let capture;
   while ((capture = defRegEx.exec(md)) !== null) {
     const def = capture[1].replace(/\s+/g, " ");
-    const target = capture[4] || capture[3].trim();
-    const directives = capture[5] || "";
+    const target = capture[2].trim();
+    const directives = capture[3] || "";
 
     const attrs = isNotAnInteger(def) ? { alt: def } : {};
     if (directives) {
       const matchClass = CLASS_R.exec(directives);
       const matchWidth = WIDTH_R.exec(directives);
+      const matchAlt = ALT_R.exec(directives);
       const matchID = ID_R.exec(directives);
       if (matchClass) { attrs.class = matchClass[1]; }
       if (matchWidth) { attrs.width = matchWidth[1]; }
+      if (matchAlt)   { attrs.alt = matchAlt[1]; }
       if (matchID)    { attrs.id = matchID[1]; }
     }
     state._defs[def] = { target, attrs };
@@ -10812,39 +11570,30 @@ const functions$1 = {
   path(svgOprnd, args) {
     const svg = svgOprnd.value;
     const attrs = svg.temp;
-    if (args[0].dtype !== dt.STRING) {
-      args = rationals2numbers(args);
-    }
     const node = { tag: "path", attrs: {} };
     // Get the "d" attribute of a path
     let str = "";
-    for (let i = 0; i < args.length; i++) {
-      const el = args[i];
-      if (i === 0) {
-        if (el.dtype && el.dtype === dt.STRING) {
-          str = args[i].value;
-        } else {
-          str += "M" + pointText(el, attrs);
+    if (args[0].dtype && args[0].dtype === dt.STRING) {
+      str = args[0].value;
+    } else {
+      const segs = rationals2numbers(args[0].value);
+      if (segs[0].length === 2) {
+        // A path made up of line segments
+        str = "M" + pointText(segs[0], attrs) + " L";
+        for (let i = 1; i < segs.length; i++) {
+          str += " " + pointText(segs[i], attrs);
         }
-      } else if (typeof el[0] === "number") {
-        if (el.length === 2) {
-          str += " L" + pointText(el, attrs);
-        } else if (el.length === 3) {
-          str += " M" + pointText(el, attrs);
-        } else if (el.length === 5) {
-          const r = String(el[2] * attrs.xunitlength);
-          const sweep = String(el[3]);
-          str += ` A${r},${r} 0 0 ${sweep} ${pointText(el, attrs)}`;
-        }
-      } else if (el[0].length === 2) {
-        for (let j = 0; j < el.length; j++) {
-          str +=  " L" + pointText(el[j], attrs);
-        }
-      } else if (el[0].length === 5) {
-        for (let j = 0; j < el.length; j++) {
-          const r = String(el[j][2] * attrs.xunitlength);
-          const sweep = String(el[j][3]);
-          str += ` A${r},${r} 0 0 ${sweep} ${pointText(el[j], attrs)}`;
+      } else if (segs[0].length === 3) {
+        // Some segments are circular arcs.
+        str = "M" + pointText(segs[0], attrs);
+        for (let i = 1; i < segs.length; i++) {
+          if (segs[i][2] === 0) {
+            str += " L" + pointText(segs[i], attrs);
+          } else {
+            const r = String(Math.abs(segs[i][2]) * attrs.xunitlength);
+            const sweep = Math.sign(segs[i][2]) > 0 ? 0 : 1;
+            str += ` A${r},${r} 0 0 ${sweep} ${pointText(segs[i], attrs)}`;
+          }
         }
       }
     }
@@ -10867,16 +11616,16 @@ const functions$1 = {
         }
       }
     } else if (attrs.marker === "arrow" || attrs.marker === "arrowdot") {
-      const lastEl = args[args.length - 1];
-      if (typeof lastEl[0] !== "number") {
-        const end = lastEl[lastEl.length - 1];
-        arrowhead(svg, lastEl[lastEl.length - 2], end);
+      const segs = rationals2numbers(args[0].value);
+      if (typeof segs[0] !== "number") {
+        const end = segs[segs.length - 1];
+        arrowhead(svg, segs[segs.length - 2], end);
         if (attrs.marker === "arrowdot") {
           svg.children.push(markerDot(end, attrs, attrs.markerstroke, attrs.markerfill));
         }
-      } else if (typeof lastEl[0] === "number") {
+      } else if (typeof segs[0] === "number") {
         const prevEl = args[args.length - 2];
-        const end = lastEl;
+        const end = segs;
         let start;
         if (typeof prevEl[0] === "number") {
           start = prevEl;
@@ -11042,17 +11791,11 @@ const functions$1 = {
     const marker = svgOprnd.value.temp.marker;
     svgOprnd.value.temp.marker = "arrow";
     svgOprnd.value.temp.isDim = true;
-    const startPoint = {
-      value: clone(plistOprnd.value[plistOprnd.value.length - 1]),
-      unit: null,
-      dtype: dt.RATIONAL + dt.ROWVECTOR
-    };
     const plistCopy = clone(plistOprnd); // Copy to an un-frozen object.
-    plistCopy.value.pop();
     plistCopy.value.reverse();
-    svgOprnd = this.path(svgOprnd, [startPoint, plistCopy]);
-    const p = rationals2numbers(startPoint.value);
-    const q = rationals2numbers(plistCopy.value[0]);
+    svgOprnd = this.path(plistCopy);
+    const p = rationals2numbers(plistCopy.value[0]);
+    const q = rationals2numbers(plistCopy.value[plistCopy.value.length - 1]);
     let pos = "right";
     if (Math.abs(p[0] - q[0]) >= Math.abs(p[1] - q[1])) {
       pos = p[0] >= q[0] ? "right" : "left";
@@ -14074,7 +14817,7 @@ const binaryShapesOf = (o1, o2) => {
 };
 
 const matrixMults = { "×": "cross", "·": "dot", "∘": "circ", ".*": "circ",
-  "*": "multiply", "∗": "multiply", "⌧": "multiply" };
+  "*": "multiply", "∗": "multiply", "⌧": "multiply", "modulo": "modulo" };
 
 const nextToken = (tokens, i) => {
   if (tokens.length < i + 2) { return undefined }
@@ -14084,19 +14827,19 @@ const nextToken = (tokens, i) => {
 // array of function names that return a real number from a complex argument.
 const arfn = ["abs", "angle", "imag", "real", "Γ", "gamma"];
 
-const stringFromOperand = (oprnd, decimalFormat) => {
+const stringFromOperand = (oprnd, formats) => {
   return oprnd.dtype === dt.STRING
     ? oprnd.value
     : oprnd.dtype === dt.RATIONAL
-    ? format(oprnd.value, "h15", decimalFormat)
+    ? format(oprnd.value, "h15", formats.decimalFormat)
     : isMatrix(oprnd.dtype)
-    ? Matrix.displayAlt(oprnd, "h15", decimalFormat)
+    ? Matrix.displayAlt(oprnd, "h15", formats)
     : (oprnd.dtype & dt.MAP)
-    ? DataFrame.displayAlt(oprnd.value, "h15", decimalFormat)
+    ? DataFrame.displayAlt(oprnd.value, "h15", formats)
     : oprnd.value
 };
 
-const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
+const evalRpn = (rpn, vars, formats, unitAware, lib) => {
   // This is the function that does calculations with the rpn string.
   const tokens = rpn.split("\u00A0");
   const stack = [];
@@ -14106,7 +14849,7 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
     const ch = tkn.charAt(0);
 
     if (ch === "®") {
-      // A rational number.
+      // A rational number.⌾
       const r = new Array(2);
       const pos = tkn.indexOf("/");
       r[0] = BigInt(tkn.slice(1, pos));   // numerator
@@ -14117,6 +14860,14 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
       num.unit.expos = allZeros;
       num.dtype = dt.RATIONAL;
       stack.push(Object.freeze(num));
+
+    } else if (ch === "⌾") {
+      const date = Object.create(null);
+      date.value = [BigInt(tkn.slice(1)), BigInt(1)];
+      date.unit = Object.create(null);
+      date.unit.expos = [0, 0, 1, 0, 0, 0, 0, 0],
+      date.dtype = dt.DATE;
+      stack.push(Object.freeze(date));
 
     } else if (ch === "©") {
       // A complex number.
@@ -14242,8 +14993,8 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           const o2 = stack.pop();
           const o1 = stack.pop();
           const op = tkn === "+" || tkn === ".+" ? "add" : "subtract";
-          if (!(((o1.dtype & dt.RATIONAL) || (o1.dtype & dt.COMPLEX)) &&
-                ((o2.dtype & dt.RATIONAL) || (o2.dtype & dt.COMPLEX)))) {
+          if (!(((o1.dtype & dt.RATIONAL) || (o1.dtype & dt.DATE) || (o1.dtype & dt.COMPLEX))
+           && ((o2.dtype & dt.RATIONAL) || (o2.dtype & dt.DATE) || (o2.dtype & dt.COMPLEX)))) {
             return errorOprnd("NAN_OP")
           }
           if (unitAware) {
@@ -14289,8 +15040,8 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           if ((tkn === "*" || tkn === "∗")
                && o1.dtype === dt.STRING && o1.dtype === dt.STRING) {
             // Julia's string concatenation operator
-            const str1 = stringFromOperand(o1, decimalFormat);
-            const str2 = stringFromOperand(o2, decimalFormat);
+            const str1 = stringFromOperand(o1, formats);
+            const str2 = stringFromOperand(o2, formats);
             return { value: str1 + str2, unit: null, dtype: dt.STRING }
           }
           if (!(((o1.dtype & dt.RATIONAL) || (o1.dtype & dt.COMPLEX)) &&
@@ -14390,6 +15141,22 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           break
         }
 
+        case "modulo": {
+          if (unitAware) { return errorOprnd( "UNIT_UN", "modulo" ) }
+          const o2 = stack.pop();
+          const o1 = stack.pop();
+          if (!(o1.dtype & dt.RATIONAL) || !(o2.dtype & dt.RATIONAL)) {
+            return errorOprnd("NAN_OP")
+          }
+          const [shape1, shape2, _] = binaryShapesOf(o1, o2);
+          const result = Object.create(null);
+          result.unit = allZeros;
+          result.dtype = Operators.dtype[shape1][shape2](o1.dtype, o2.dtype, "modulo");
+          result.value = Operators.binary[shape1][shape2]["modulo"](o1.value, o2.value);
+          stack.push(Object.freeze(result));
+          break
+        }
+
         case "&":
         case "hcat":
         case "vcat": {
@@ -14400,8 +15167,8 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           const [shape1, shape2, _] = binaryShapesOf(o1, o2);
           let o3 = Object.create(null);
           if (o1.dtype === dt.STRING && o1.dtype === dt.STRING) {
-            const str1 = stringFromOperand(o1, decimalFormat);
-            const str2 = stringFromOperand(o2, decimalFormat);
+            const str1 = stringFromOperand(o1, formats);
+            const str2 = stringFromOperand(o2, formats);
             o3.value = str1 + str2;
             o3.unit = null;
             o3.dtype = dt.STRING;
@@ -14659,7 +15426,8 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
         }
 
         case "|":
-        case "‖": {
+        case "‖":
+        case "\\|": {
             // Find |x| or ‖x‖
           const o1 = stack.pop();
           if (!((o1.dtype & dt.RATIONAL) || o1.dtype === dt.COMPLEX)) {
@@ -14841,6 +15609,20 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           output.value = Object.freeze(value);
           output.dtype = dtype;
           stack.push(Object.freeze(output));
+          break
+        }
+
+        case "today":
+        case "savedate" : {
+          if (tkn === "savedate" && !vars["@savedate"]) {
+            return errorOprnd("UNSAVED")
+          }
+          const oprnd = { unit: { expos: [0, 0, 1, 0, 0, 0, 0, 0] }, dtype: dt.DATE };
+          const numSeconds = tkn === "today"
+            ? dateInSecondsFromToday()
+            : dateInSecondsFromIsoString("'" + vars["@savedate"] + "'");
+          oprnd.value = Rnl.fromNumber(numSeconds);
+          stack.push(oprnd);
           break
         }
 
@@ -15091,13 +15873,6 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           break
         }
 
-        case "format": {
-          const formatSpec = stack.pop().value;
-          const str = format(stack.pop().value, formatSpec);
-          stack.push({ value: str, unit: null, dtype: dt.STRING });
-          break
-        }
-
         case "lerp": {
           // linear interpolation function
           const args = new Array(3);
@@ -15148,7 +15923,7 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           let oprnd;
           if (vars.svg && (functionName === "plot" || (draw.functions[functionName]))) {
             if (functionName === "plot") {
-              args.splice(1, 0, decimalFormat);
+              args.splice(1, 0, formats.decimalFormat);
               oprnd = plot(...args);
             } else if (functionName === "path") {
               oprnd = draw.functions[functionName](args[0], args.slice(1));
@@ -15162,16 +15937,16 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
             const udf = lib[functionName];
             if (udf === undefined) { return errorOprnd("F_NAME", functionName) }
             if (udf.dtype === dt.ERROR) { return udf }
-            oprnd = evalCustomFunction(udf, args, decimalFormat, unitAware, lib);
+            oprnd = evalCustomFunction(udf, args, formats, unitAware, lib);
             i += 1;
           } else if (lib && lib[functionName]) {
             // A module, "lib", was passed to this instance of evalRpn().
             const udf = lib[functionName];
-            oprnd = evalCustomFunction(udf, args, decimalFormat, unitAware, lib);
+            oprnd = evalCustomFunction(udf, args, formats, unitAware, lib);
           } else if (vars[functionName] && vars[functionName].dtype === dt.MODULE) {
             // User-defined function from a calculation node.
             const udf = vars[functionName]["value"];
-            oprnd = evalCustomFunction(udf, args, decimalFormat, unitAware);
+            oprnd = evalCustomFunction(udf, args, formats, unitAware);
           } else {
             return errorOprnd("BAD_FUN_NM", functionName)
           }
@@ -15290,7 +16065,7 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
             const val = Operators.condition[shapeOf(conditions[j])](conditions[j].value);
             if (val) {
               const rpnLocal = tokens[i + j + 1].replace(/§/g, "\u00A0");
-              const oprnd = evalRpn(rpnLocal, vars, decimalFormat, unitAware, lib);
+              const oprnd = evalRpn(rpnLocal, vars, formats, unitAware, lib);
               if (oprnd.dtype === dt.ERROR) { return oprnd }
               stack.push(oprnd);
               break
@@ -15326,8 +16101,13 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
               output.unit.expos = o1.unit.expos.map((e, j) => e + unit.expos[j]);
               output.value = Matrix.convertToBaseUnits(o1, unit.gauge, unit.factor);
             } else if (o1.dtype & dt.MAP) {
-              output.unit = unitFromUnitName(o1.unit);
+              output.unit = unit;
               output.value = o1.value;
+              output.value.data = map.convertToBaseUnits(
+                o1.value.data,
+                unit.gauge,
+                unit.factor
+              );
             } else {
               output.unit.expos = o1.unit.expos.map((e, j) => e + unit.expos[j]);
               output.value = Rnl.multiply(Rnl.add(o1.value, unit.gauge), unit.factor);
@@ -15418,7 +16198,7 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
           let sum = Rnl.zero;
           while (Rnl.lessThanOrEqualTo(index, endOfRange)) {
             vars[parameter] = { value: index, unit: allZeros, dtype: dt.RATIONAL };
-            const localResult = evalRpn(rpnLocal, vars, decimalFormat, false);
+            const localResult = evalRpn(rpnLocal, vars, formats, false);
             sum = Rnl.add(sum, localResult.value);
             index = Rnl.add(index, Rnl.one);
           }
@@ -15455,7 +16235,7 @@ const evalRpn = (rpn, vars, decimalFormat, unitAware, lib) => {
   return oprnd
 };
 
-const plot = (svg, decimalFormat, fun, numPoints, xMin, xMax) => {
+const plot = (svg, formats, fun, numPoints, xMin, xMax) => {
   // Plot a function.
   // To avoid a circular reference, this function has to be here instead of in draw.js.
   const attrs = svg.value.temp;
@@ -15471,39 +16251,42 @@ const plot = (svg, decimalFormat, fun, numPoints, xMin, xMax) => {
   let funResult;
   let pathValue;
   if (fun.value.dtype && fun.value.dtype === dt.MODULE) {
-    funResult = evalCustomFunction(fun.value, [arg], decimalFormat, false);
+    funResult = evalCustomFunction(fun.value, [arg], formats, false);
     pathValue = arg.value.map((e, i) => [e, funResult.value[i]]);
   } else if (fun.dtype === dt.STRING) {
     if (/§matrix§1§2$/.test(fun.value)) {
       arg.name = "t";
-      pathValue = evalRpn(fun.value.replace(/§/g, "\xa0"), { t: arg }, decimalFormat, false).value;
+      pathValue = evalRpn(fun.value.replace(/§/g, "\xa0"), { t: arg }, formats, false).value;
     } else {
       arg.name = "x";
-      funResult = evalRpn(fun.value.replace(/§/g, "\xa0"), { x: arg }, decimalFormat, false);
+      funResult = evalRpn(fun.value.replace(/§/g, "\xa0"), { x: arg }, formats, false);
       pathValue = arg.value.map((e, i) => [e, funResult.value[i]]);
     }
   } else ;
-  const point = { value: pathValue[0], unit: null, dtype: dt.ROWVECTOR + dt.RATIONAL };
-  const pth = { value: pathValue.slice(1), unit: null, dtype: dt.MATRIX + dt.RATIONAL };
-  return draw.functions.path(svg, [point, pth])
+  const path = { value: pathValue, unit: null, dtype: dt.MATRIX + dt.RATIONAL };
+  return draw.functions.path(svg, [path])
 };
 
 const elementFromIterable = (iterable, index, step) => {
   // A helper function. This is called by `for` loops in evalCustomFunction()
   let value;
   let nextIndex = Rnl.increment(index);
+  const i = Rnl.toNumber(index);
   let dtype = 0;
   if (iterable.dtype === dt.RANGE) {
     value = index;
     nextIndex = Rnl.add(index, step);
     dtype = dt.RATIONAL;
-  } else if ((iterable.dtype === dt.STRING) &&
-    iterable.value[Rnl.fromNumber(index)] === "\uD835") {
-    value = Rnl.fromNumber(iterable.value[index] + iterable.value[index + 1]);
-    nextIndex = Rnl.add(index, 2);
+  } else if (iterable.dtype === dt.STRING) {
+    if (iterable.value.slice(i - 1, i) === "\uD835") {
+      value = "\uD835" + iterable.value.slice(i + 1, i + 2);
+      nextIndex = Rnl.add(index, 1);
+    } else {
+      value = iterable.value.slice(i, i + 1);
+    }
     dtype = dt.STRING;
   } else {
-    value = iterable.value[Rnl.toNumber(index)];
+    value = iterable.value[i];
     dtype = (iterable.dtype & dt.STRING)
       ? dt.STRING
       : (iterable.dtype & dt.ROWVECTOR)
@@ -15518,7 +16301,7 @@ const elementFromIterable = (iterable, index, step) => {
 
 const loopTypes = ["while", "for"];
 
-const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
+const evalCustomFunction = (udf, args, formats, isUnitAware, lib) => {
   // UDF stands for "user-defined function"
   // lib is short for library. If not omitted, it contains a module with more functions.
 
@@ -15553,7 +16336,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
     switch (stype) {
       case "statement": {
         if (control[level].condition) {
-          const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+          const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
           if (result.dtype === dt.ERROR) {
             // eslint-disable-next-line no-console
             console.log(statement.rpn);
@@ -15562,7 +16345,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
           if (statement.name) {
             statement.resultdisplay = isUnitAware ? "!!" : "!";
             const [stmt, _] = conditionResult(statement, result, isUnitAware);
-            insertOneHurmetVar(vars, stmt, null, decimalFormat);
+            insertOneHurmetVar(vars, stmt, null, formats);
           }
         }
         break
@@ -15570,7 +16353,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
 
       case "if": {
         if (control[level].condition) {
-          const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+          const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
           if (result.dtype === dt.ERROR) { return result }
           const val = Operators.condition[shapeOf(result)](result.value);
           control.push({
@@ -15590,7 +16373,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
           i = control[level].endOfBlock;
           control.pop();
         } else {
-          const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+          const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
           if (result.dtype === dt.ERROR) { return result }
           const val = Operators.condition[shapeOf(result)](result.value);
           control[control.length - 1].condition = val;
@@ -15615,7 +16398,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
             rpn: statement.rpn,
             endOfBlock: statement.endOfBlock
           };
-          const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+          const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
           if (result.dtype === dt.ERROR) { return result }
           const val = Operators.condition[shapeOf(result)](result.value);
           cntrl.condition = val;
@@ -15641,9 +16424,9 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
           const tokens = statement.rpn.split("\u00A0");
           ctrl.dummyVariable = tokens.shift().slice(1);
           const iterable = evalRpn(tokens.join("\u00A0"), vars,
-                                   decimalFormat, isUnitAware, lib);
+                                   formats, isUnitAware, lib);
           ctrl.index = (iterable.dtype & dt.RANGE) ? iterable.value[0] : Rnl.fromNumber(0);
-          ctrl.step = (iterable.dtype & dt.RANGE) ? iterable.value[1] : Rnl.fromNumber(0);
+          ctrl.step = (iterable.dtype & dt.RANGE) ? iterable.value[1] : Rnl.fromNumber(1);
           ctrl.endIndex = (iterable.dtype & dt.RANGE)
             ? iterable.value[2]
             : Rnl.fromNumber(iterable.value.length - 1);
@@ -15683,7 +16466,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
           if (i < control[level].endOfBlock) { i = control[level].endOfBlock; }
           control.pop();
         } else if (control[level].type === "while") {
-          const result = evalRpn(control[level].rpn, vars, decimalFormat, isUnitAware, lib);
+          const result = evalRpn(control[level].rpn, vars, formats, isUnitAware, lib);
           if (result.dtype === dt.ERROR) { return result }
           control[level].condition = result.value;
           if (control[level].condition) {
@@ -15717,7 +16500,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
       case "return":
         if (control[level].condition) {
           if (statement.rpn) {
-            const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+            const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
             return result
           } else {
             return { value: Rnl.zero, unit: allZeros, dtype: dt.RATIONAL }
@@ -15728,7 +16511,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
       case "print":
         if (control[level].condition) {
           if (statement.rpn) {
-            const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+            const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
             if (result.dtype === dt.ERROR) { return result }
             const msg = result.dtype === dt.RATIONAL
               ? Rnl.toNumber(result.value)
@@ -15748,7 +16531,7 @@ const evalCustomFunction = (udf, args, decimalFormat, isUnitAware, lib) => {
       case "throw":
         if (control[level].condition) {
           if (statement.rpn) {
-            const result = evalRpn(statement.rpn, vars, decimalFormat, isUnitAware, lib);
+            const result = evalRpn(statement.rpn, vars, formats, isUnitAware, lib);
             return { value: result.value, unit: null, dtype: dt.ERROR }
           } else {
             return { value: statement.rpn, unit: null, dtype: dt.ERROR }
@@ -15783,7 +16566,7 @@ const spreadsheetSum = (sheet, index, unitAware) => {
   let sum = Rnl.zero;
   if (/^[A-Z]$/.test(index)) {
     // Sum a column
-    const L = Object.keys(sheet.rowMap).length;
+    const L = sheet.numRows - 1; // Do not include the top row.
     for (let i = 1; i <= L - 1; i++) {
       const cellOprnd = fromAssignment(sheet.value[index + String(i)], unitAware);
       if (cellOprnd.dtype === dt.ERROR) { return cellOprnd }
@@ -15818,12 +16601,16 @@ const conditionResult = (stmt, oprnd, unitAware) => {
   }
 
   // Check unit compatibility.
-  if (result.dtype !== dt.ERROR && unitAware && stmt.altresulttemplate.indexOf("!") === -1 &&
+  if (result.dtype !== dt.ERROR && unitAware && stmt.resultdisplay.indexOf("!") === -1 &&
     (stmt.unit && stmt.unit.expos ||
       (result.unit && result.unit.expos && Array.isArray(result.unit.expos)))) {
-    const expos = (stmt.unit && stmt.unit.expos) ? stmt.unit.expos : allZeros;
+    const expos = result.dtype === dt.DATE && stmt.unit === undefined
+      ? [0, 0, 1, 0, 0, 0, 0, 0]
+      : stmt.unit && stmt.unit.expos
+      ? stmt.unit.expos
+      : allZeros;
     if (!unitsAreCompatible(result.unit.expos, expos)) {
-      const message = stmt.unit.expos ? "UNIT_RES" : "UNIT_MISS";
+      const message = stmt.unit && stmt.unit.expos ? "UNIT_RES" : "UNIT_MISS";
       result = errorOprnd(message);
     }
   }
@@ -15917,15 +16704,18 @@ const conditionResult = (stmt, oprnd, unitAware) => {
   return [stmt, result]
 };
 
-const evaluateDrawing = (stmt, vars, decimalFormat = "1,000,000.") => {
-  // eslint-disable-next-line no-prototype-builtins
+const evaluateDrawing = (
+  stmt,
+  vars,
+  formats = { decimalFormat: "1,000,000.", dateFormat: "yyyy-mm-dd" }
+) => {
   const udf = stmt.value;
   const args = [];
   for (let i = 0; i < udf.parameters.length; i++) {
     const argName = udf.parameters[i].name;
-    args.push(evalRpn("¿" + argName, vars, decimalFormat, false, {}));
+    args.push(evalRpn("¿" + argName, vars, formats, false, {}));
   }
-  const funcResult = evalCustomFunction(udf, args, decimalFormat, false, {});
+  const funcResult = evalCustomFunction(udf, args, formats, false, {});
   if (funcResult.dtype === dt.ERROR) {
     stmt.error = true;
     stmt.tex = "\\textcolor{firebrick}{\\text{" + funcResult.value + "}}";
@@ -15938,7 +16728,11 @@ const evaluateDrawing = (stmt, vars, decimalFormat = "1,000,000.") => {
   return stmt
 };
 
-const evaluate = (stmt, vars, decimalFormat = "1,000,000.") => {
+const evaluate = (
+  stmt,
+  vars,
+  formats = { decimalFormat: "1,000,000.", dateFormat: "yyyy-mm-dd" }
+) => {
   stmt.tex = stmt.template ? stmt.template : "";
   stmt.alt = stmt.altTemplate ? stmt.altTemplate : "";
   const isUnitAware = /\?\?|!!|%%|@@|¡¡/.test(stmt.resulttemplate);
@@ -15946,8 +16740,7 @@ const evaluate = (stmt, vars, decimalFormat = "1,000,000.") => {
   const formatSpec = vars.format ? vars.format.value : "h15";
 
   if (stmt.tex.indexOf("〖") > -1) {
-    // eslint-disable-next-line max-len
-    const eqnWithVals = plugValsIntoEcho(stmt.tex, vars, isUnitAware, formatSpec, decimalFormat);
+    const eqnWithVals = plugValsIntoEcho(stmt.tex, vars, isUnitAware, formatSpec, formats);
     if (eqnWithVals.dtype && eqnWithVals.dtype === dt.ERROR) {
       const [newStmt, _] = errorResult(stmt, eqnWithVals);
       return newStmt
@@ -15957,13 +16750,13 @@ const evaluate = (stmt, vars, decimalFormat = "1,000,000.") => {
   }
 
   if (stmt.rpn) {
-    let oprnd = evalRpn(stmt.rpn, vars, decimalFormat, isUnitAware);
+    let oprnd = evalRpn(stmt.rpn, vars, formats, isUnitAware);
     if (oprnd.dtype === dt.ERROR) { [stmt, oprnd] = errorResult(stmt, oprnd); return stmt}
-    let result;
-    [stmt, result] = conditionResult(stmt, oprnd, isUnitAware);
+    let result
+    ;[stmt, result] = conditionResult(stmt, oprnd, isUnitAware);
     if (stmt.error) { return stmt }
     const assert = vars.assert ? vars.assert : null;
-    stmt = formatResult(stmt, result, formatSpec, decimalFormat, assert, isUnitAware);
+    stmt = formatResult(stmt, result, formatSpec, formats, assert, isUnitAware);
   }
   return stmt
 };
@@ -16022,7 +16815,7 @@ const literalWithUnit = (oprnd, tex, unitStr) => {
   }
 };
 
-const valueFromLiteral = (str, name, decimalFormat) => {
+const valueFromLiteral = (str, name, formats) => {
   // Read a literal string and return a value
   // The return should take the form: [value, unit, dtype, resultDisplay]
 
@@ -16041,17 +16834,17 @@ const valueFromLiteral = (str, name, decimalFormat) => {
   } else if (/^\x22.+\x22/.test(str)) {
     // str contains text between quotation marks
     if (name === "format") {
-      return parseFormatSpec(str.slice(1, -1).trim())
+      return validateFormatSpec(str.slice(1, -1).trim())
     } else {
-      const tex = parse$1(str, decimalFormat);
+      const tex = parse$1(str, formats);
       return [str.slice(1, -1), undefined, dt.STRING, tex]
     }
 
   } else if (matrixRegEx.test(str)) {
     // We're processing a matrix
     const matrixStr = matrixRegEx.exec(str)[0];
-    const [tex, rpn, _] = parse$1(matrixStr, decimalFormat, true);
-    const oprnd = evalRpn(rpn, {}, decimalFormat, false, {});
+    const [tex, rpn, _] = parse$1(matrixStr, formats, true);
+    const oprnd = evalRpn(rpn, {}, formats, false, {});
     const unitStr = str.slice(matrixStr.length).trim();
     return literalWithUnit(oprnd, tex, unitStr)
 
@@ -16063,7 +16856,7 @@ const valueFromLiteral = (str, name, decimalFormat) => {
     const oprnd = DataFrame.dataFrameFromTSV(tsv);
     if (oprnd.dtype === dt.DATAFRAME) {
       return [oprnd.value, oprnd.unit, dt.DATAFRAME,
-        DataFrame.display(oprnd.value, "h3", decimalFormat)]
+        DataFrame.display(oprnd.value, "h3", formats.decimalFormat)]
     } else {
       // It's a Hurmet Map
       const unitStr = str.slice(pos + 2).trim();
@@ -16080,12 +16873,12 @@ const valueFromLiteral = (str, name, decimalFormat) => {
         };
       }
       return [oprnd.value, unit, oprnd.dtype,
-        DataFrame.display(oprnd.value, "h3", decimalFormat) + "\\;" + unitDisplay]
+        DataFrame.display(oprnd.value, "h3", formats.decimalFormat) + "\\;" + unitDisplay]
     }
 
   } else if (complexRegEx.test(str)) {
     // str is a complex number.
-    const resultDisplay = parse$1(str, decimalFormat);
+    const resultDisplay = parse$1(str, formats);
     const parts = str.match(complexRegEx);
     let realPart;
     let imPart;
@@ -16104,14 +16897,19 @@ const valueFromLiteral = (str, name, decimalFormat) => {
     }
     return [[realPart, imPart], allZeros, dt.COMPLEX, resultDisplay]
 
+  } else if (dateRegEx$1.test(str)) {
+    const rnlDate = [BigInt(dateInSecondsFromIsoString(str)), BigInt(1)];
+    const dateTex = formatDate(rnlDate, formats.dateFormat);
+    return [rnlDate, { expos: [0, 0, 1, 0, 0, 0, 0, 0] }, dt.DATE, dateTex]
+
   } else {
     const match = numberRegEx$3.exec(str);
     if (match) {
       // str begins with a number.
       const numStr = match[0];
       const unitStr = str.slice(numStr.length).trim();
-      const [tex, rpn, _] = parse$1(numStr, decimalFormat, true);
-      const oprnd = evalRpn(rpn, {}, decimalFormat, false, {});
+      const [tex, rpn, _] = parse$1(numStr, formats, true);
+      const oprnd = evalRpn(rpn, {}, formats, false, {});
       return literalWithUnit(oprnd, tex, unitStr)
 
     } else {
@@ -16161,7 +16959,7 @@ const stripComment = str => {
   return str.trim()
 };
 
-const scanModule = (str, decimalFormat) => {
+const scanModule = (str, formats) => {
   // Scan the code and break it down into individual lines of code.
   // Assemble the lines into functions and assign each function to parent.
   const parent = Object.create(null);
@@ -16179,13 +16977,13 @@ const scanModule = (str, decimalFormat) => {
 
     if (functionRegEx.test(line) || drawRegEx.test(line)) {
       // This line starts a new function.
-      const [funcObj, endLineNum] = scanFunction(lines, decimalFormat, i);
+      const [funcObj, endLineNum] = scanFunction(lines, formats, i);
       if (funcObj.dtype && funcObj.dtype === dt.ERROR) { return funcObj }
       parent[funcObj.name] = funcObj;
       i = endLineNum;
     } else if (testForStatement(line)) {
       // This line starts a Hurmet assignment.
-      const [stmt, endLineNum] = scanAssignment(lines, decimalFormat, i);
+      const [stmt, endLineNum] = scanAssignment(lines, formats, i);
       parent[stmt.name] = stmt;
       i = endLineNum;
     }
@@ -16203,7 +17001,7 @@ const handleTSV = (expression, lines, startLineNum) => {
   }
 };
 
-const scanFunction = (lines, decimalFormat, startLineNum) => {
+const scanFunction = (lines, formats, startLineNum) => {
   const line1 = stripComment(lines[startLineNum]);
   let isDraw = line1.charAt(0) === "d";
   const posParen = line1.indexOf("(");
@@ -16223,7 +17021,7 @@ const scanFunction = (lines, decimalFormat, startLineNum) => {
     const name = parts[0];
     let defaultVal = { name, value: null, dtype: null };
     if (parts[1]) {
-      const [value, unit, dtype, resultDisplay] = valueFromLiteral(parts[1], "", decimalFormat);
+      const [value, unit, dtype, resultDisplay] = valueFromLiteral(parts[1], "", formats);
       defaultVal = { name, value, unit, dtype, resultDisplay };
     }
     parameters.push({ name, default: defaultVal });
@@ -16303,8 +17101,10 @@ const scanFunction = (lines, decimalFormat, startLineNum) => {
     let rpn = "";
     let _;
     if (expression) {
-      [, rpn, _] = parse$1(expression, decimalFormat, true);
-      if (name === "for") { rpn = rpn.replace(/\u00a0in\u00a0/, "\u00a0"); }
+      [, rpn, _] = parse$1(expression, formats, true);
+      if (name === "for") {
+        rpn = rpn.replace(/\u00a0in\u00a0/, "\u00a0").replace(/\u00a0in$/, "");
+      }
     }
     const stype = isStatement ? "statement" : name;
     if (isStatement && /[,;]/.test(name)) {
@@ -16336,7 +17136,7 @@ const scanFunction = (lines, decimalFormat, startLineNum) => {
   return [errorOprnd("END_MISS", functionName), 0]
 };
 
-const scanAssignment = (lines, decimalFormat, iStart) => {
+const scanAssignment = (lines, formats, iStart) => {
   let prevLineEndedInContinuation = false;
   let str = "";
   let iEnd = iStart;
@@ -16381,7 +17181,7 @@ const scanAssignment = (lines, decimalFormat, iStart) => {
     }
     iEnd = j;
   }
-  const [value, unit, dtype, resultDisplay] = valueFromLiteral(trailStr, name, decimalFormat);
+  const [value, unit, dtype, resultDisplay] = valueFromLiteral(trailStr, name, formats);
   const stmt = { name, value, unit, dtype, resultDisplay };
   return [stmt, iEnd]
 };
@@ -16416,19 +17216,22 @@ const scanAssignment = (lines, decimalFormat, iStart) => {
 
 const containsOperator = /[+\-×·*∘⌧/^%‰&√!¡|‖&=<>≟≠≤≥∈∉⋐∧∨⊻¬]|\xa0(function|mod|\\atop|root|sum|abs|cos|sin|tan|acos|asin|atan|sec|csc|cot|asec|acsc|acot|exp|log|ln|log10|log2|cosh|sinh|tanh|sech|csch|coth|acosh|asinh|atanh|asech|acsch|acoth|gamma|Γ|lgamma|logΓ|lfact|cosd|sind|tand|acosd|asind|atand|secd|cscd|cotd|asecd|acscd|acotd|real|imag|angle|Char|round|sqrt|sign|\?{}|%|⎾⏋|⎿⏌|\[\]|\(\))\xa0/;
 const mustDoCalculation = /^(``.+``|[$$£¥\u20A0-\u20CF]?(\?{1,2}|@{1,2}|%{1,2}|!{1,2})[^=!(?@%!{})]*)$/;
-const assignDataFrameRegEx = /^[^=]+=\s*``[\s\S]+`` *\n/;
+const assignDataFrameRegEx = /^[^=]+=\s*``[\s\S]+``\s*$/;
 const currencyRegEx = /^[$£¥\u20A0-\u20CF]/;
 const matrixOfNames = /^[([](?:[A-Za-zıȷ\u0391-\u03C9\u03D5\u210B\u210F\u2110\u2112\u2113\u211B\u212C\u2130\u2131\u2133]|(?:\uD835[\uDC00-\udc33\udc9c-\udcb5]))[A-Za-z0-9_\u0391-\u03C9\u03D5\u0300-\u0308\u030A\u030C\u0332\u20d0\u20d1\u20d6\u20d7\u20e1]*′*[,;].+[)\]]$/;
 const isKeyWord = /^(π|true|false|root|if|else|elseif|and|or|otherwise|mod|for|while|break|return|throw)$/;
 const testRegEx = /^(@{1,2})test /;
 
-const shortcut = (str, decimalFormat) => {
+const shortcut = (str, formats) => {
   // No calculation in str. Parse it just for presentation.
-  const tex = parse$1(str, decimalFormat);
+  const tex = parse$1(str, formats);
   return { entry: str, tex, alt: str }
 };
 
-const compile = (inputStr, decimalFormat = "1,000,000.") => {
+const compile = (
+  inputStr,
+  formats = { decimalFormat: "1,000,000.", dateFormat: "yyyy-mm-dd" }
+) => {
   let leadStr = "";
   let mainStr = "";
   let trailStr = "";
@@ -16464,7 +17267,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
       const posParen = inputStr.indexOf("(");
       name = inputStr.slice(posFn + 8, posParen).trim();
     }
-    const module = scanModule(inputStr, decimalFormat);
+    const module = scanModule(inputStr, formats);
     const isError = module.dtype && module.dtype === dt.ERROR;
     if (isError) {
       // eslint-disable-next-line no-alert
@@ -16486,7 +17289,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
 
   if (testRegEx.test(inputStr)) {
     str = str.replace(testRegEx, "").trim();
-    const [_, rpn, dependencies] = parse$1(str, decimalFormat, true);
+    const [_, rpn, dependencies] = parse$1(str, formats, true);
     const resulttemplate = testRegEx.exec(inputStr)[1];
     return { entry: inputStr, template: "", rpn, dependencies, resulttemplate,
       altresulttemplate: resulttemplate, resultdisplay: "" }
@@ -16537,7 +17340,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
             if (isKeyWord.test(candidate) || !isValidIdentifier$1.test(candidate)) {
               // leadStr is not a list of valid identifiers.
               // So this isn't a valid calculation statement. Let's finish early.
-              return shortcut(str, decimalFormat)
+              return shortcut(str, formats)
             }
           }
           // multiple assignment.
@@ -16568,18 +17371,18 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
       // input has form:  name = trailStr
       name = mainStr;
       if (trailStr === "") {
-        const tex = parse$1(str, decimalFormat);
+        const tex = parse$1(str, formats);
         return { entry: str, tex, alt: str }
       }
     } else {
       // input has form:  mainStr = trailStr.
       // It almost works as an assignment statment, but mainStr is not a valid identifier.
       // So we'll finish early.
-      return shortcut(str, decimalFormat)
+      return shortcut(str, formats)
     }
   } else {
     // str contains no "=" character. Let's fnish early.
-    return shortcut(str, decimalFormat)
+    return shortcut(str, formats)
   }
 
   if (expression.length > 0) {
@@ -16591,7 +17394,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
 
     } else {
       // Parse the expression. Stop short of doing the calculation.
-      [echo, rpn, dependencies] = parse$1(expression, decimalFormat, true);
+      [echo, rpn, dependencies] = parse$1(expression, formats, true);
 
       // Shoulld we display an echo of the expression, with values shown for each variable?
       if (suppressResultDisplay || displayResultOnly || echo.indexOf("〖") === -1
@@ -16632,9 +17435,9 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
     } else {
       if (unit) {
         resultDisplay = trailStr.trim().replace(/([^ ?!@%]+)$/, "'" + "$1" + "'");
-        resultDisplay = parse$1(resultDisplay, decimalFormat).replace(/\\%/g, "%").replace("@ @", "@@");
+        resultDisplay = parse$1(resultDisplay, formats).replace(/\\%/g, "%").replace("@ @", "@@");
       } else {
-        resultDisplay = parse$1(trailStr, decimalFormat).replace(/\\%/g, "%").replace("@ @", "@@");
+        resultDisplay = parse$1(trailStr, formats).replace(/\\%/g, "%").replace("@ @", "@@");
       }
       resultDisplay = resultDisplay.replace(/\\text\{(\?\??|%%?)\}/, "$1");
       resultDisplay = resultDisplay.replace(/([?%]) ([?%])/, "$1" + "$2");
@@ -16643,9 +17446,9 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
   } else {
     // trailStr may be a static value in an assignment statement.
     // Check if trailStr is a valid literal.
-    [value, unit, dtype, resultDisplay] = valueFromLiteral(trailStr, name, decimalFormat);
+    [value, unit, dtype, resultDisplay] = valueFromLiteral(trailStr, name, formats);
 
-    if (dtype === dt.ERROR) { return shortcut(str, decimalFormat) }
+    if (dtype === dt.ERROR) { return shortcut(str, formats) }
     rpn = "";
   }
 
@@ -16653,7 +17456,7 @@ const compile = (inputStr, decimalFormat = "1,000,000.") => {
   let eqn = "";
   let altEqn = "";
   if (!displayResultOnly) {
-    eqn = parse$1(mainStr, decimalFormat);
+    eqn = parse$1(mainStr, formats);
     if (mustAlign) {
       eqn = "\\begin{aligned}" + eqn;
       const pos = eqn.indexOf("=");
@@ -16713,13 +17516,13 @@ const calculate = (
   entry,
   vars = {},
   inDraftMode = false,
-  decimalFormat = "1,000,000."
+  formats = { decimalFormat: "1,000,000.", dateFormat: "yyyy-mm-dd" }
 ) => {
-  let attrs = compile(entry, decimalFormat);
+  let attrs = compile(entry, formats);
   if (attrs.rpn) {
-    attrs = evaluate(clone(attrs), vars, decimalFormat);
+    attrs = evaluate(clone(attrs), vars, formats);
   } else if (attrs.dtype && attrs.dtype === dt.DRAWING) {
-    attrs = evaluateDrawing(attrs, vars, decimalFormat);
+    attrs = evaluateDrawing(attrs, vars, formats);
   }
   if (attrs.name) {
     insertOneHurmetVar(vars, attrs);
@@ -16746,6 +17549,7 @@ const sanitizeUrl = function(url) {
     ) {
       return null;
     }
+  // eslint-disable-next-line no-unused-vars
   } catch (e) {
     // decodeURIComponent sometimes throws a URIError
     // See `decodeURIComponent('a%AFc');`
@@ -16903,7 +17707,7 @@ const nodes = {
   newline(node)    { return "\n" },
   horizontal_rule(node) { return "<hr>\n" },
   ordered_list(node) {
-    const attributes = node.attrs.order !== 1 ? { start: node.attrs.order } : undefined;
+    const attributes = { class: node.attrs.class, start: node.attrs.order };
     return htmlTag("ol", ast2html(node.content), attributes) + "\n"
   },
   bullet_list(node)  { return htmlTag("ul", ast2html(node.content)) + "\n" },
@@ -17137,16 +17941,16 @@ const md2html = (md, inHtml = false) => {
 /* eslint-disable no-alert */
 
 const numberRegEx$2 = new RegExp(Rnl.numberPattern);
-const cellRefRegEx = /"[A-Z][1-9]\d*"/g;
+const cellRefRegEx = /"[A-Z][1-9]+"/g;
+const innerRefRegEx = /^(?:[A-Z](?:\d+|_end)|up|left)$/;
 const sumRegEx = /¿(up|left)([\xa0§])sum[\xa0§]1(?=[\xa0§]|$)/g;
 
 // Compile a spreadsheet cell.
 
 const compileCell = (attrs, sheetAttrs, unit, previousAttrs,
-                            decimalFormat = "1,000,000.") => {
+                            formats = "1,000,000.") => {
   const newAttrs = { entry: attrs.entry, name: attrs.name };
   const entry = attrs.entry;
-  const numRows = Object.keys(sheetAttrs.rowMap).length;
   if (entry.length === 0) {
     newAttrs.value = null;
     newAttrs.dtype = dt.NULL;
@@ -17155,7 +17959,13 @@ const compileCell = (attrs, sheetAttrs, unit, previousAttrs,
     const expression = entry.replace(/^==?/, "").trim();
     // TODO: Revise the parser to handle spreadsheet cell names & sheetname
     // eslint-disable-next-line prefer-const
-    let [_, rpn, dependencies] = parse$1(expression, decimalFormat, true, false, sheetAttrs.name);
+    let [_, rpn, dependencies] = parse$1(expression, formats, true, false, sheetAttrs.name);
+    const outerDependencies = new Set();
+    for (const dependency of dependencies) {
+      if (!innerRefRegEx.test(dependency)) {
+        outerDependencies.add(dependency);
+      }
+    }
 
     // Implement sum(up) and sum(left)
     // Orig RPN:    ¿up sum 1
@@ -17169,10 +17979,14 @@ const compileCell = (attrs, sheetAttrs, unit, previousAttrs,
     }
 
     newAttrs.rpn = rpn;
-    newAttrs.dependencies = dependencies;
+    newAttrs.dependencies = outerDependencies.size > 0
+      ? [...(outerDependencies.values())]
+      : [];
     newAttrs.resulttemplate = (entry.length > 1 &&  entry.slice(1, 2) === "=")
       ? "@@"
       : "@";
+    newAttrs.altresulttemplate = newAttrs.resulttemplate;
+    newAttrs.resultdisplay = newAttrs.resulttemplate;
     newAttrs.unit = unit ? unit : { factor: Rnl.one, gauge: Rnl.zero, expos: allZeros };
   } else if (entry === '"' || entry === '“') {
     // The ditto of the previous cell
@@ -17181,12 +17995,14 @@ const compileCell = (attrs, sheetAttrs, unit, previousAttrs,
       const matches = arrayOfRegExMatches(cellRefRegEx, rpn);
       for (let i = matches.length - 1; i >= 0; i--) {
         const match = matches[i];
-        const rowNum = Math.min(numRows, Number(match.value.slice(2, -1)) + 1);
+        const rowNum = Math.min(sheetAttrs.numRows - 1, Number(match.value.slice(2, -1)) + 1);
         rpn = rpn.slice(0, match.index + 2) + String(rowNum)
-            + rpn.slice(match.index + match.length - 1);
+            + rpn.slice(match.index + match.length - String(rowNum).length);
       }
       newAttrs.rpn = rpn;
       newAttrs.resulttemplate = previousAttrs.resulttemplate;
+      newAttrs.altresulttemplate = newAttrs.resulttemplate;
+      newAttrs.resultdisplay = newAttrs.resulttemplate;
       newAttrs.unit = previousAttrs.unit;
     } else {
       newAttrs.value = previousAttrs.value;
@@ -17214,7 +18030,7 @@ const compileCell = (attrs, sheetAttrs, unit, previousAttrs,
       newAttrs.dtype = dt.BOOLEAN;
     } else if (complexRegEx.test(entry)) {
       // eslint-disable-next-line no-unused-vars
-      const [value, unit, dtype, _] = valueFromLiteral(entry, attrs.name, decimalFormat);
+      const [value, unit, dtype, _] = valueFromLiteral(entry, attrs.name, formats);
       newAttrs.value = value;
       newAttrs.dtype = dtype;
     } else {
@@ -17227,19 +18043,21 @@ const compileCell = (attrs, sheetAttrs, unit, previousAttrs,
 
 // Compile a spreadsheet
 
-const compileSheet = (table, decimalFormat = "1,000,000") => {
+const compileSheet = (table, formats) => {
   // The cell entries and the sheet name are already known.
   // Proceed to compile the rest of the table and cell attributes.
   // Stop short of calculations.
+  table.attrs.numRows = table.content.length;
   table.attrs.columnMap = {};
   table.attrs.rowMap = {};
   table.attrs.unitMap = [];
   table.attrs.units = {};
-  table.attrs.dependencies = {};
+  table.attrs.dependencies = [];
   table.attrs.dtype = dt.SPREADSHEET;
   if (table.content[0].type === "colGroup") { table.content.shift(); }
 
   const numRows = table.content.length;
+  table.attrs.numRows = numRows;
   const numCols = table.content[0].content.length;
   // Proceed column-wise thru the table.
   for (let j = 0; j < numCols; j++) {
@@ -17282,9 +18100,16 @@ const compileSheet = (table, decimalFormat = "1,000,000") => {
           ? table.attrs.units[table.attrs.unitMap[j]]
           : null;
         newCell.attrs = compileCell(newCell.attrs, table.attrs, unit, previousAttrs,
-                                    decimalFormat);
+                                    formats);
         previousAttrs = newCell.attrs;
         previousAttrs.unit = unit;
+        if (newCell.attrs.dependencies) {
+          for (const d of newCell.attrs.dependencies) {
+            if (!table.attrs.dependencies.includes(d)) {
+              table.attrs.dependencies.push(d);
+            }
+          }
+        }
       }
       table.content[i].content[j].content = [newCell];
     }
@@ -17329,8 +18154,8 @@ const compileSheet = (table, decimalFormat = "1,000,000") => {
 *
 * But now consider a user who wants to Undo twice. The first Undo retreats to a condition in
 * which a cell is open. The user thinks a second Undo will change the PM document. But no!
-* Because the cell is open, the CodeMirror plain text editor is active and the Undo is captured
-* by CodeMirror. An Undo affects CodeMirror but not the outer document. It's very confusing!
+* Because the cell is open, the codejar plain text editor is active and the Undo is captured
+* by codejar. An Undo affects codejar but not the outer document. It's very confusing!
 * So the Undo should return to a condition in which the cell is closed. That's why I change
 * the PM state.selection object _before_ I create the PM transaction. I don't want an Undo to
 * open that cell and so I don't want the Undo to finish with the selection point inside the
@@ -17349,11 +18174,11 @@ const urlFromEntry = entry => {
 };
 
 // Helper function.
-const processFetchedString = (entry, text, hurmetVars, decimalFormat) => {
+const processFetchedString = (entry, text, hurmetVars, formats) => {
   const attrs = Object.create(null);
   attrs.entry = entry;
   attrs.name = entry.replace(/=.+$/, "").trim();
-  let str = parse$1(entry.replace(/\s*=\s*[$$£¥\u20A0-\u20CF]?(?:!{1,2}).*$/, ""), decimalFormat);
+  let str = parse$1(entry.replace(/\s*=\s*[$$£¥\u20A0-\u20CF]?(?:!{1,2}).*$/, ""), formats);
   const url = urlFromEntry(entry);
   if (/\.(?:tsv|txt)$/.test(url)) {
     // Shorten the URL.
@@ -17371,7 +18196,7 @@ const processFetchedString = (entry, text, hurmetVars, decimalFormat) => {
     return attrs
   }
   const data = importRegEx.test(entry)
-    ? scanModule(text, decimalFormat)     // import code
+    ? scanModule(text, formats)     // import code
     : DataFrame.dataFrameFromTSV(text);    // fetch data
 
   // Append the data to attrs
@@ -17419,7 +18244,7 @@ const workWithFetchedTexts = (
   view,
   doc,
   inDraftMode,
-  decimalFormat,
+  formats,
   isCalcAll,
   nodeAttrs,
   curPos,
@@ -17443,11 +18268,11 @@ const workWithFetchedTexts = (
     const entry = isCalcAll
       ? doc.nodeAt(pos).attrs.entry
       : nodeAttrs.entry;
-    const attrs = processFetchedString(entry, texts[i], hurmetVars, decimalFormat);
+    const attrs = processFetchedString(entry, texts[i], hurmetVars, formats);
     attrs.inDraftMode = inDraftMode;
     tr.replaceWith(pos, pos + 1, state.schema.nodes.calculation.createAndFill(attrs));
     if (attrs.name) {
-      insertOneHurmetVar(hurmetVars, attrs, null, decimalFormat);
+      insertOneHurmetVar(hurmetVars, attrs, null, formats.decimalFormat);
     }
   }
   // There. Fetches are done and are loaded into the document.
@@ -17469,7 +18294,10 @@ const workAsync = (
   // Here we fetch the remote data.
   const doc = view.state.doc;
   const inDraftMode = doc.attrs.inDraftMode;
-  const decimalFormat = doc.attrs.decimalFormat;
+  const formats = {
+    decimalFormat: doc.attrs.decimalFormat,
+    dateFormat: doc.attrs.dateFormat
+  };
 
   if (!navigator.onLine) {
     const texts = [];
@@ -17480,7 +18308,7 @@ const workAsync = (
         }
       });
     }
-    workWithFetchedTexts(view, doc, inDraftMode, decimalFormat, isCalcAll,
+    workWithFetchedTexts(view, doc, inDraftMode, formats, isCalcAll,
       nodeAttrs, curPos, hurmetVars, fetchPositions, texts);
   } else {
     Promise.all(
@@ -17506,7 +18334,7 @@ const workAsync = (
         return r.text()
       }))
     }).then((texts) => {
-      workWithFetchedTexts(view, doc, inDraftMode, decimalFormat, isCalcAll,
+      workWithFetchedTexts(view, doc, inDraftMode, formats, isCalcAll,
         nodeAttrs, curPos, hurmetVars, fetchPositions, texts);
     });
   }
@@ -17524,7 +18352,10 @@ const proceedAfterFetch = (
   //   1. After remote, fetched data has been processed, or
   //   2. After we know that no fetch statements need be processed.
   const doc = view.state.doc;
-  const decimalFormat = doc.attrs.decimalFormat;
+  const formats = {
+    decimalFormat: doc.attrs.decimalFormat,
+    dateFormat: doc.attrs.dateFormat
+  };
   const calcSchema = view.state.schema.nodes.calculation;
   // Create a set to track which variable have a changed value.
   const changedVars = isCalcAll ? null : new Set();
@@ -17541,7 +18372,7 @@ const proceedAfterFetch = (
               hurmetVars[key] =  value;
             });
           } else {
-            insertOneHurmetVar(hurmetVars, attrs, null, decimalFormat);
+            insertOneHurmetVar(hurmetVars, attrs, null, formats.decimalFormat);
           }
         }
       } else if (("dtype" in node.attrs) && node.attrs.dtype === dt.SPREADSHEET) {
@@ -17564,7 +18395,7 @@ const proceedAfterFetch = (
     // Hoist any user-defined functions located below the selection.
     doc.nodesBetween(curPos + 1, doc.content.size, function(node, pos) {
       if (node.type.name === "calculation" && node.attrs.dtype === dt.MODULE) {
-        insertOneHurmetVar(hurmetVars, node.attrs, null, decimalFormat);
+        insertOneHurmetVar(hurmetVars, node.attrs, null, formats.decimalFormat);
       }
     });
 
@@ -17577,10 +18408,12 @@ const proceedAfterFetch = (
           // Do the calculation of the cell.
           if (attrs.rpn || (nodeAttrs.dtype && nodeAttrs.dtype === dt.DRAWING)) {
             attrs = attrs.dtype && attrs.dtype === dt.DRAWING
-              ? evaluateDrawing(attrs, hurmetVars, decimalFormat)
-              : evaluate(attrs, hurmetVars, decimalFormat);
+              ? evaluateDrawing(attrs, hurmetVars, formats)
+              : evaluate(attrs, hurmetVars, formats);
           }
-          if (attrs.name) { insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat); }
+          if (attrs.name) {
+            insertOneHurmetVar(hurmetVars, attrs, changedVars, formats.decimalFormat);
+          }
         } catch (err) {
           attrs.tex = "\\text{" + attrs.entry + " = " + err + "}";
         }
@@ -17596,14 +18429,17 @@ const proceedAfterFetch = (
         hurmetVars[sheetName] = sheet;
         const numRows = table.content.length;
         const numCols = table.content[0].content.length;
+        table.attrs.rowMap = {};
         // Proceed column-wise thru the table.
         for (let j = 0; j < numCols; j++) {
           for (let i = 1; i < numRows; i++) {
             const cell = table.content[i].content[j].content[0];
             if (cell.attrs.rpn) {
-              cell.attrs.altresulttemplate = cell.attrs.resulttemplate;
-              cell.attrs = evaluate(cell.attrs, hurmetVars, decimalFormat);
+              cell.attrs = evaluate(cell.attrs, hurmetVars, formats);
               cell.attrs.display = cell.attrs.alt;
+              if (j === 0) { table.attrs.rowMap[cell.attrs.alt] = i; }
+            } else if (j === 0 && typeof cell.attrs.value === "string") {
+              table.attrs.rowMap[cell.attrs.value] = i;
             }
             hurmetVars[sheetName].value[cell.attrs.name] = cell.attrs;
           }
@@ -17624,7 +18460,7 @@ const proceedAfterFetch = (
       if (notFetched) {
         const entry = node.attrs.entry;
         let attrs = isCalcAll
-          ? compile(entry, decimalFormat)
+          ? compile(entry, formats)
           : clone(node.attrs);
         attrs.displayMode = node.attrs.displayMode;
         const mustRedraw = attrs.dtype && attrs.dtype === dt.DRAWING &&
@@ -17634,11 +18470,11 @@ const proceedAfterFetch = (
             if (attrs.rpn || mustRedraw) {
               attrs.error = false;
               attrs = attrs.rpn // attrs.dtype && attrs.dtype === dt.DRAWING
-                ? evaluate(attrs, hurmetVars, decimalFormat)
-                : evaluateDrawing(attrs, hurmetVars, decimalFormat);
+                ? evaluate(attrs, hurmetVars, formats)
+                : evaluateDrawing(attrs, hurmetVars, formats);
             }
             if (attrs.name) {
-              insertOneHurmetVar(hurmetVars, attrs, changedVars, decimalFormat);
+              insertOneHurmetVar(hurmetVars, attrs, changedVars, formats.decimalFormat);
             }
           } catch (err) {
             attrs.tex = "\\text{" + attrs.entry + " = " + err + "}";
@@ -17647,7 +18483,7 @@ const proceedAfterFetch = (
             tr.replaceWith(pos, pos + 1, calcSchema.createAndFill(attrs));
           }
         } else if (attrs.name && attrs.value) {
-          insertOneHurmetVar(hurmetVars, attrs, null, decimalFormat);
+          insertOneHurmetVar(hurmetVars, attrs, null, formats.decimalFormat);
         }
       } else if (node.attrs.name && !(isCalcAll && node.attrs.isFetch)) {
         if (node.attrs.name) {
@@ -17656,7 +18492,7 @@ const proceedAfterFetch = (
               hurmetVars[key] =  value;
             });
           } else {
-            insertOneHurmetVar(hurmetVars, node.attrs, null, decimalFormat);
+            insertOneHurmetVar(hurmetVars, node.attrs, null, formats.decimalFormat);
           }
         }
       }
@@ -17664,28 +18500,39 @@ const proceedAfterFetch = (
                 && pos !== curPos) {
       // Calculate all the cells in a spreadsheet
       let table = clone(node.toJSON());
+      let mustCalc = false;
       if (isCalcAll) {
-        table = compileSheet(table, decimalFormat);
-      }
-      const sheetName = table.attrs.name;
-      hurmetVars[sheetName] = table.attrs;
-      hurmetVars[sheetName].value = {};
-      const numRows = table.content.length;
-      const numCols = table.content[0].content.length;
-      // Proceed column-wise thru the table.
-      for (let j = 0; j < numCols; j++) {
-        for (let i = 1; i < numRows; i++) {
-          const cell = table.content[i].content[j].content[0];
-          if (cell.attrs.rpn) {
-            cell.attrs.altresulttemplate = cell.attrs.resulttemplate;
-            cell.attrs = evaluate(cell.attrs, hurmetVars, decimalFormat);
-            cell.attrs.display = cell.attrs.alt;
-          }
-          hurmetVars[sheetName].value[cell.attrs.name] = cell.attrs;
+        table = compileSheet(table, formats);
+        mustCalc = true;
+      } else {
+        for (const varName of table.attrs.dependencies) {
+          if (changedVars.has(varName)) { mustCalc = true; break }
         }
       }
-      if (!isCalcAll) { changedVars.add(sheetName); }
-      tr.replaceWith(pos, pos + node.nodeSize, view.state.schema.nodeFromJSON(table));
+      if (mustCalc) {
+        const sheetName = table.attrs.name;
+        hurmetVars[sheetName] = table.attrs;
+        hurmetVars[sheetName].value = {};
+        const numRows = table.content.length;
+        const numCols = table.content[0].content.length;
+        table.attrs.rowMap = {};
+        // Proceed column-wise thru the table.
+        for (let j = 0; j < numCols; j++) {
+          for (let i = 1; i < numRows; i++) {
+            const cell = table.content[i].content[j].content[0];
+            if (cell.attrs.rpn) {
+              cell.attrs = evaluate(cell.attrs, hurmetVars, formats);
+              cell.attrs.display = cell.attrs.alt;
+              if (j === 0) { table.attrs.rowMap[cell.attrs.alt] = i; }
+            } else if (j === 0 && typeof cell.attrs.value === "string") {
+              table.attrs.rowMap[cell.attrs.value] = i;
+            }
+            hurmetVars[sheetName].value[cell.attrs.name] = cell.attrs;
+          }
+        }
+        if (!isCalcAll) { changedVars.add(sheetName); }
+        tr.replaceWith(pos, pos + node.nodeSize, view.state.schema.nodeFromJSON(table));
+      }
     }
   });
 
@@ -17718,6 +18565,7 @@ function updateCalculations(
     const tr = state.tr;
     try {
       tr.replaceWith(curPos, curPos + 1, calcSchema.createAndFill(nodeAttrs));
+    // eslint-disable-next-line no-unused-vars
     } catch (err) {
       // nada
     } finally {
@@ -17730,6 +18578,11 @@ function updateCalculations(
   // Create an object in which we'll hold variable values.
   const hurmetVars = Object.create(null);
   hurmetVars.format = { value: "h15" }; // default rounding format
+  hurmetVars["@savedate"] = doc.attrs.saveDate;
+  const formats = {
+    decimalFormat: doc.attrs.decimalFormat,
+    dateFormat: doc.attrs.dateFormat
+  };
 
   // Get an array of all the URLs called by fetch statements.
   const urls = [];
@@ -17750,11 +18603,11 @@ function updateCalculations(
           urls.push(urlFromEntry(entry));
           fetchPositions.push(pos);
         } else if (/^function /.test(entry)) {
-          node.attrs = compile(entry, doc.attrs.decimalFormat);
-          insertOneHurmetVar(hurmetVars, node.attrs, null, doc.attrs.decimalFormat);
+          node.attrs = compile(entry, formats);
+          insertOneHurmetVar(hurmetVars, node.attrs, null, formats.decimalFormat);
         }
       } else if (node.attrs.isFetch || (node.attrs.dtype && node.attrs.dtype === dt.MODULE)) {
-        insertOneHurmetVar(hurmetVars, node.attrs, null, doc.attrs.decimalFormat);
+        insertOneHurmetVar(hurmetVars, node.attrs, null, formats.decimalFormat);
       }
     });
   }
@@ -17834,7 +18687,11 @@ async function updateCalcs(doc) {
   // Create an object in which we'll hold variable values.
   const hurmetVars = Object.create(null);
   hurmetVars.format = { value: "h15" }; // default rounding format
-  const decimalFormat = doc.attrs ? doc.attrs.decimalFormat : '1,000,000.';
+  hurmetVars["@savedate"] = doc.attrs.saveDate;
+  const formats = {
+    decimalFormat: doc.attrs.decimalFormat,
+    dateFormat: doc.attrs.dateFormat
+  };
 
   // Create an array of all the calculation nodes in the document
   const calcNodes = [];
@@ -17850,8 +18707,8 @@ async function updateCalcs(doc) {
       urls.push(helpers.urlFromEntry(entry));
       callers.push(node);
     } else if (/^function /.test(entry)) {
-      node.attrs = compile(entry, decimalFormat);
-      insertOneHurmetVar(hurmetVars, node.attrs, null, decimalFormat);
+      node.attrs = compile(entry, formats);
+      insertOneHurmetVar(hurmetVars, node.attrs, null, formats.decimalFormat);
     }
   }
 
@@ -17863,14 +18720,14 @@ async function updateCalcs(doc) {
       const node = callers[i];
       const entry = node.attrs.entry;
       // When we modify a node, we are also mutating the container doc.
-      node.attrs = helpers.processFetchedString(entry, texts[i], hurmetVars, decimalFormat);
+      node.attrs = helpers.processFetchedString(entry, texts[i], hurmetVars, formats);
       if (node.attrs.name) {
         if (node.attrs.name === "importedParameters") {
           Object.entries(node.attrs.value).forEach(([key, value]) => {
             hurmetVars[key] =  value;
           });
         } else {
-          insertOneHurmetVar(hurmetVars, node.attrs, null, decimalFormat);
+          insertOneHurmetVar(hurmetVars, node.attrs, null, formats.decimalFormat);
         }
       }
     }
@@ -17880,37 +18737,43 @@ async function updateCalcs(doc) {
   // Make a pass through the calculation nodes and calculate each result.
   try {
     for (const node of calcNodes) {
-      if (node.attrs.type === "calculation") {
+      if (node.type === "calculation") {
         if (!helpers.fetchRegEx.test(node.attrs.entry)) {
           const entry = node.attrs.entry;
-          let attrs = compile(entry, decimalFormat);
+          let attrs = compile(entry, formats);
           attrs.displayMode = node.attrs.displayMode;
           const mustDraw = attrs.dtype && attrs.dtype === dt.DRAWING;
           if (attrs.rpn || mustDraw) {
             attrs = attrs.rpn
-              ? evaluate(attrs, hurmetVars, decimalFormat)
-              : evaluateDrawing(attrs, hurmetVars, decimalFormat);
+              ? evaluate(attrs, hurmetVars, formats)
+              : evaluateDrawing(attrs, hurmetVars, formats);
           }
-          if (attrs.name) { insertOneHurmetVar(hurmetVars, attrs, null, decimalFormat); }
+          if (attrs.name) {
+            insertOneHurmetVar(hurmetVars, attrs, null, formats.decimalFormat);
+          }
           // When we modify a node, we are also mutating the container doc.
           node.attrs = attrs;
         }
       } else if ("dtype" in node.attrs && node.attrs.dtype === dt.SPREADSHEET) {
         // node is a spreadsheet
-        const sheet = compileSheet(node, decimalFormat);
+        const sheet = compileSheet(node, formats);
         const sheetName = sheet.attrs.name;
         hurmetVars[sheetName] = sheet.attrs;
         hurmetVars[sheetName].value = {};
         const numRows = sheet.content.length;
         const numCols = sheet.content[0].content.length;
+        sheet.attrs.rowMap = {};
         // Proceed column-wise thru the sheet.
         for (let j = 0; j < numCols; j++) {
           for (let i = 1; i < numRows; i++) {
             const cell = sheet.content[i].content[j].content[0];
             if (cell.attrs.rpn) {
               cell.attrs.altresulttemplate = cell.attrs.resulttemplate;
-              cell.attrs = evaluate(cell.attrs, hurmetVars, decimalFormat);
+              cell.attrs = evaluate(cell.attrs, hurmetVars, formats);
               cell.attrs.display = cell.attrs.alt;
+              if (j === 0) { sheet.attrs.rowMap[cell.attrs.alt] = i; }
+            } else if (j === 0 && typeof cell.attrs.value === "string") {
+              sheet.attrs.rowMap[cell.attrs.value] = i;
             }
             hurmetVars[sheetName].value[cell.attrs.name] = cell.attrs;
           }
@@ -18197,6 +19060,7 @@ var utils = {
  * This is a module for storing settings passed into Temml. It correctly handles
  * default settings.
  */
+
 
 /**
  * The main Settings object
@@ -18490,7 +19354,7 @@ class Span {
   }
 }
 
-class TextNode$1 {
+let TextNode$1 = class TextNode {
   constructor(text) {
     this.text = text;
   }
@@ -18500,7 +19364,7 @@ class TextNode$1 {
   toMarkup() {
     return utils.escape(this.text);
   }
-}
+};
 
 /*
  * This node represents an image embed (<img>) element.
@@ -18553,6 +19417,12 @@ class Img {
 }
 
 //
+/**
+ * These objects store data about MathML nodes.
+ * The `toNode` and `toMarkup` functions  create namespaced DOM nodes and
+ * HTML text markup respectively.
+ */
+
 
 function newDocumentFragment(children) {
   return new DocumentFragment(children);
@@ -18722,6 +19592,7 @@ var mathMLTree = {
 /**
  * This file provides support for building horizontal stretchy elements.
  */
+
 
 // TODO: Remove when Chromium stretches \widetilde & \widehat
 const estimatedWidth = node => {
@@ -19259,6 +20130,7 @@ defineSymbol(math, bin, "\u22d3", "\\Cup", true);
 defineSymbol(math, bin, "\u2a5e", "\\doublebarwedge", true);
 defineSymbol(math, bin, "\u229f", "\\boxminus", true);
 defineSymbol(math, bin, "\u229e", "\\boxplus", true);
+defineSymbol(math, bin, "\u29C4", "\\boxslash", true);
 defineSymbol(math, bin, "\u22c7", "\\divideontimes", true);
 defineSymbol(math, bin, "\u22c9", "\\ltimes", true);
 defineSymbol(math, bin, "\u22ca", "\\rtimes", true);
@@ -19643,6 +20515,10 @@ defineSymbol(math, op, "\u2210", "\\coprod");
 defineSymbol(math, op, "\u22c1", "\\bigvee");
 defineSymbol(math, op, "\u22c0", "\\bigwedge");
 defineSymbol(math, op, "\u2a04", "\\biguplus");
+defineSymbol(math, op, "\u2a04", "\\bigcupplus");
+defineSymbol(math, op, "\u2a03", "\\bigcupdot");
+defineSymbol(math, op, "\u2a07", "\\bigdoublevee");
+defineSymbol(math, op, "\u2a08", "\\bigdoublewedge");
 defineSymbol(math, op, "\u22c2", "\\bigcap");
 defineSymbol(math, op, "\u22c3", "\\bigcup");
 defineSymbol(math, op, "\u222b", "\\int");
@@ -19683,6 +20559,7 @@ defineSymbol(math, inner, "\u22f0", "\\iddots", true);
 defineSymbol(math, inner, "\u22ef", "\\@cdots", true);
 defineSymbol(math, inner, "\u22f1", "\\ddots", true);
 defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
+defineSymbol(text, textord, "\u22ee", "\\textvdots");
 defineSymbol(math, accent, "\u02ca", "\\acute");
 defineSymbol(math, accent, "\u0060", "\\grave");
 defineSymbol(math, accent, "\u00a8", "\\ddot");
@@ -20043,6 +20920,7 @@ function setLineBreaks(expression, wrapMode, isDisplayMode) {
  * entry point is the `buildMathML` function, which takes a parse tree from the
  * parser.
  */
+
 
 /**
  * Takes a symbol and converts it into a MathML text node after performing
@@ -20554,6 +21432,7 @@ defineFunction({
  * calculateSize to convert other units into CSS units.
  */
 
+
 const ptPerUnit = {
   // Convert to CSS (Postscipt) points, not TeX points
   // https://en.wikibooks.org/wiki/LaTeX/Lengths and
@@ -20988,7 +21867,7 @@ function parseCD(parser) {
   parser.gullet.beginGroup();
   parser.gullet.macros.set("\\cr", "\\\\\\relax");
   parser.gullet.beginGroup();
-  while (true) { // eslint-disable-line no-constant-condition
+  while (true) {
     // Get the parse nodes for the next row.
     parsedRows.push(parser.parseExpression(false, "\\\\"));
     parser.gullet.endGroup();
@@ -21378,6 +22257,7 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
+      isTextColor: true,
       body: ordargument(body)
     }
   },
@@ -21410,6 +22290,7 @@ defineFunction({
       type: "color",
       mode: parser.mode,
       color,
+      isTextColor: false,
       body
     }
   },
@@ -21442,6 +22323,7 @@ defineFunction({
 });
 
 // Row breaks within tabular environments, and line breaks at top level
+
 
 // \DeclareRobustCommand\\{...\@xnewline}
 defineFunction({
@@ -21852,10 +22734,8 @@ function checkDelimiter(delim, context) {
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
-    if (["/", "\u2044"].includes(symDelim.text)) { symDelim.text = "\u2215"; }
     if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨"; }
     if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩"; }
-    if (symDelim.text === "\\backslash") { symDelim.text = "\u2216"; }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
@@ -21863,6 +22743,9 @@ function checkDelimiter(delim, context) {
     throw new ParseError(`Invalid delimiter type '${delim.type}'`, delim);
   }
 }
+
+//                               /         \
+const needExplicitStretch = ["\u002F", "\u005C", "\\backslash", "\\vert", "|"];
 
 defineFunction({
   type: "delimsizing",
@@ -21916,8 +22799,7 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (group.delim === "\u2216" || group.delim === "\\vert" ||
-        group.delim === "|" || group.delim.indexOf("arrow") > -1) {
+    if (needExplicitStretch.includes(group.delim) || group.delim.indexOf("arrow") > -1) {
       // We have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true");
     }
@@ -22003,7 +22885,7 @@ defineFunction({
     const leftNode = new mathMLTree.MathNode("mo", [makeText(group.left, group.mode)]);
     leftNode.setAttribute("fence", "true");
     leftNode.setAttribute("form", "prefix");
-    if (group.left === "\u2216" || group.left.indexOf("arrow") > -1) {
+    if (group.left === "/" || group.left === "\u005C" || group.left.indexOf("arrow") > -1) {
       leftNode.setAttribute("stretchy", "true");
     }
     inner.unshift(leftNode);
@@ -22014,6 +22896,15 @@ defineFunction({
     rightNode.setAttribute("form", "postfix");
     if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
       rightNode.setAttribute("stretchy", "true");
+    }
+    if (group.body.length > 0) {
+      const lastElement = group.body[group.body.length - 1];
+      if (lastElement.type === "color" && !lastElement.isTextColor) {
+        // \color is a switch. If the last element is of type "color" then
+        // the user set the \color switch and left it on.
+        // A \right delimiter turns the switch off, but the delimiter itself gets the color.
+        rightNode.setAttribute("mathcolor", lastElement.color);
+      }
     }
     inner.push(rightNode);
 
@@ -22076,52 +22967,62 @@ const mathmlBuilder$8 = (group, style) => {
       padding$1()
     ]);
   } else {
-    node = new mathMLTree.MathNode("mrow", [buildGroup$1(group.body, style)]);
+    node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
   }
   switch (group.label) {
     case "\\overline":
-      node.style.padding = "0.1em 0 0 0";
-      node.style.borderTop = "0.065em solid";
+      node.setAttribute("notation", "top"); // for Firefox & WebKit
+      node.classes.push("tml-overline");    // for Chromium
       break
     case "\\underline":
-      node.style.padding = "0 0 0.1em 0";
-      node.style.borderBottom = "0.065em solid";
+      node.setAttribute("notation", "bottom");
+      node.classes.push("tml-underline");
       break
     case "\\cancel":
-      // We can't use an inline background-gradient. It does not work client-side.
-      // So set a class and put the rule in the external CSS file.
-      node.classes.push("tml-cancel");
+      node.setAttribute("notation", "updiagonalstrike");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "upstrike"]));
       break
     case "\\bcancel":
-      node.classes.push("tml-bcancel");
+      node.setAttribute("notation", "downdiagonalstrike");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "downstrike"]));
       break
-    /*
+    case "\\sout":
+      node.setAttribute("notation", "horizontalstrike");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "sout"]));
+      break
+    case "\\xcancel":
+      node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
+      node.classes.push("tml-xcancel");
+      break
     case "\\longdiv":
       node.setAttribute("notation", "longdiv");
+      node.classes.push("longdiv-top");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["longdiv-arc"]));
       break
     case "\\phase":
       node.setAttribute("notation", "phasorangle");
-      break */
-    case "\\angl":
-      node.style.padding = "0.03889em 0.03889em 0 0.03889em";
-      node.style.borderTop = "0.049em solid";
-      node.style.borderRight = "0.049em solid";
-      node.style.marginRight = "0.03889em";
+      node.classes.push("phasor-bottom");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["phasor-angle"]));
       break
-    case "\\sout":
-      node.style.backgroundImage = 'linear-gradient(black, black)';
-      node.style.backgroundRepeat = 'no-repeat';
-      node.style.backgroundSize = '100% 1.5px';
-      node.style.backgroundPosition = '0 center';
+    case "\\textcircled":
+      node.setAttribute("notation", "circle");
+      node.classes.push("circle-pad");
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["textcircle"]));
+      break
+    case "\\angl":
+      node.setAttribute("notation", "actuarial");
+      node.classes.push("actuarial");
       break
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
-      node.style = { padding: "3pt 0 3pt 0", border: "1px solid" };
+      node.setAttribute("notation", "box");
+      node.classes.push("tml-box");
       node.setAttribute("scriptlevel", "0");
       node.setAttribute("displaystyle", "true");
       break
     case "\\fbox":
-      node.style = { padding: "3pt", border: "1px solid" };
+      node.setAttribute("notation", "box");
+      node.classes.push("tml-fbox");
       break
     case "\\fcolorbox":
     case "\\colorbox": {
@@ -22134,14 +23035,11 @@ const mathmlBuilder$8 = (group, style) => {
       const style = { padding: "3pt 0 3pt 0" };
 
       if (group.label === "\\fcolorbox") {
-        style.border = "0.06em solid " + String(group.borderColor);
+        style.border = "0.0667em solid " + String(group.borderColor);
       }
       node.style = style;
       break
     }
-    case "\\xcancel":
-      node.classes.push("tml-xcancel");
-      break
   }
   if (group.backgroundColor) {
     node.setAttribute("mathbackground", group.backgroundColor);
@@ -22234,8 +23132,8 @@ defineFunction({
 
 defineFunction({
   type: "enclose",
-  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline", "\\boxed"],
-   // , "\\phase", "\\longdiv"
+  names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline",
+    "\\boxed", "\\longdiv", "\\phase"],
   props: {
     numArgs: 1
   },
@@ -22256,6 +23154,28 @@ defineFunction({
   names: ["\\underline"],
   props: {
     numArgs: 1,
+    allowedInText: true
+  },
+  handler({ parser, funcName }, args) {
+    const body = args[0];
+    return {
+      type: "enclose",
+      mode: parser.mode,
+      label: funcName,
+      body
+    };
+  },
+  mathmlBuilder: mathmlBuilder$8
+});
+
+
+defineFunction({
+  type: "enclose",
+  names: ["\\textcircled"],
+  props: {
+    numArgs: 1,
+    argTypes: ["text"],
+    allowedInArgument: true,
     allowedInText: true
   },
   handler({ parser, funcName }, args) {
@@ -22295,6 +23215,9 @@ function defineEnvironment({ type, names, props, handler, mathmlBuilder }) {
 }
 
 // In TeX, there are actually three sets of dimensions, one for each of
+// textstyle, scriptstyle, and scriptscriptstyle.  These are
+// provided in the the arrays below, in that order.
+//
 
 // Math style is not quite the same thing as script level.
 const StyleLevel = {
@@ -22320,6 +23243,7 @@ function defineMacro(name, body) {
  * Predefined macros for Temml.
  * This can be used to define some commands in terms of others.
  */
+
 const macros = _macros;
 
 //////////////////////////////////////////////////////////////////////
@@ -22554,7 +23478,7 @@ defineMacro("\\underbar", "\\underline{\\text{#1}}");
 // \kern6\p@\hbox{.}\hbox{.}\hbox{.}}}
 // We'll call \varvdots, which gets a glyph from symbols.js.
 // The zero-width rule gets us an equivalent to the vertical 6pt kern.
-defineMacro("\\vdots", "{\\varvdots\\rule{0pt}{15pt}}");
+defineMacro("\\vdots", "\\TextOrMath{\\textvdots}{{\\varvdots\\rule{0pt}{15pt}}}\\relax");
 defineMacro("\u22ee", "\\vdots");
 
 // {array} environment gaps
@@ -23037,6 +23961,7 @@ defineMacro("\\standardstate", "\\text{\\tiny\\char`⦵}");
  *    4. The ~bond forms are composed entirely of \rule elements.
  *    5. Two dashes in _getBond are wrapped in braces to suppress spacing. i.e., {-}
  *    6. The electron dot uses \textbullet instead of \bullet.
+ *    7. \smash[T] has been removed. (WebKit hides anything inside \smash{…})
  *
  *    This code, as other Temml code, is released under the MIT license.
  * 
@@ -24449,8 +25374,12 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
             res += "{\\vphantom{X}}";
             res += "^{\\hphantom{"+(b5.b||"")+"}}_{\\hphantom{"+(b5.p||"")+"}}";
             res += "{\\vphantom{X}}";
-            res += "^{\\smash[t]{\\vphantom{2}}\\mathllap{"+(b5.b||"")+"}}";
-            res += "_{\\vphantom{2}\\mathllap{\\smash[t]{"+(b5.p||"")+"}}}";
+            // In the next two lines, I've removed \smash[t] (ron)
+            // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+            //res += "^{\\smash[t]{\\vphantom{2}}\\mathllap{"+(b5.b||"")+"}}";
+            res += "^{\\vphantom{2}\\mathllap{"+(b5.b||"")+"}}";
+            //res += "_{\\vphantom{2}\\mathllap{\\smash[t]{"+(b5.p||"")+"}}}";
+            res += "_{\\vphantom{2}\\mathllap{"+(b5.p||"")+"}}";
           }
           //
           // o
@@ -24470,7 +25399,10 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
               res += "^{"+b5.d+"}";
             }
             if (b5.q) {
-              res += "_{\\smash[t]{"+b5.q+"}}";
+              // In the next line, I've removed \smash[t] (ron)
+              // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+              //res += "_{\\smash[t]{"+b5.q+"}}";
+              res += "_{"+b5.q+"}";
             }
           } else if (buf.dType === 'oxidation') {
             if (b5.d) {
@@ -24482,14 +25414,20 @@ defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\mathrlap
               // TODO: Reinstate \vphantom{X} when the Firefox bug is fixed.
 //              res += "{\\vphantom{X}}";
               res += "{{}}";
-              res += "_{\\smash[t]{"+b5.q+"}}";
+              // In the next line, I've removed \smash[t] (ron)
+              // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+              //res += "_{\\smash[t]{"+b5.q+"}}";
+              res += "_{"+b5.q+"}";
             }
           } else {
             if (b5.q) {
               // TODO: Reinstate \vphantom{X} when the Firefox bug is fixed.
 //              res += "{\\vphantom{X}}";
               res += "{{}}";
-              res += "_{\\smash[t]{"+b5.q+"}}";
+              // In the next line, I've removed \smash[t] (ron)
+              // TODO: Revert \smash[t] when WebKit properly renders <mpadded> w/height="0"
+              //res += "_{\\smash[t]{"+b5.q+"}}";
+              res += "_{"+b5.q+"}";
             }
             if (b5.d) {
               // TODO: Reinstate \vphantom{X} when the Firefox bug is fixed.
@@ -25024,7 +25962,6 @@ function parseArray(
   // Test for \hline at the top of the array.
   hLinesBeforeRow.push(getHLines(parser));
 
-  // eslint-disable-next-line no-constant-condition
   while (true) {
     // Parse each cell in its own group (namespace)
     let cell = parser.parseExpression(false, singleRow ? "\\end" : "\\\\");
@@ -26726,6 +27663,7 @@ defineFunction({
 
 // Horizontal spacing commands
 
+
 // TODO: \hskip and \mskip should support plus and minus in lengths
 
 defineFunction({
@@ -27329,6 +28267,13 @@ const mathmlBuilder$2 = (group, style) => {
     node = new MathNode("mo", [makeText(group.name, group.mode)]);
     if (noSuccessor.includes(group.name)) {
       node.setAttribute("largeop", "false");
+    } else if (group.limits) {
+      // This is a workaround for a MathML/Chromium bug.
+      // This is being applied to singleCharBigOps, which are not really stretchy.
+      // But by setting the stretchy attribute, Chromium will vertically center
+      // big ops around the math axis. This is needed since STIX TWO does not do so.
+      // TODO: Remove this hack when MathML & Chromium fix their problem.
+      node.setAttribute("stretchy", "true");
     } else {
       node.setAttribute("movablelimits", "false");
     }
@@ -27378,6 +28323,9 @@ const singleCharBigOps = {
   "\u2a04": "\\biguplus",
   "\u2a05": "\\bigsqcap",
   "\u2a06": "\\bigsqcup",
+  "\u2a03": "\\bigcupdot",
+  "\u2a07": "\\bigdoublevee",
+  "\u2a08": "\\bigdoublewedge",
   "\u2a09": "\\bigtimes"
 };
 
@@ -27388,8 +28336,12 @@ defineFunction({
     "\\bigvee",
     "\\bigwedge",
     "\\biguplus",
+    "\\bigcupplus",
+    "\\bigcupdot",
     "\\bigcap",
     "\\bigcup",
+    "\\bigdoublevee",
+    "\\bigdoublewedge",
     "\\intop",
     "\\prod",
     "\\sum",
@@ -28952,9 +29904,12 @@ const styleWithFont = (group, style) => {
     return style.withTextFontFamily(textFontFamilies[font]);
   } else if (textFontWeights[font]) {
     return style.withTextFontWeight(textFontWeights[font]);
-  } else {
-    return style.withTextFontShape(textFontShapes[font]);
+  } else if (font === "\\emph") {
+    return style.fontShape === "textit"
+      ? style.withTextFontShape("textup")
+      : style.withTextFontShape("textit")
   }
+  return style.withTextFontShape(textFontShapes[font])
 };
 
 defineFunction({
@@ -28972,7 +29927,8 @@ defineFunction({
     "\\textmd",
     // Font Shapes
     "\\textit",
-    "\\textup"
+    "\\textup",
+    "\\emph"
   ],
   props: {
     numArgs: 1,
@@ -29112,6 +30068,7 @@ class Token {
  * kinds.
  */
 
+
 /* The following tokenRegex
  * - matches typical whitespace (but not NBSP etc.) using its first two groups
  * - does not match any control character \x00-\x1f except whitespace
@@ -29219,6 +30176,7 @@ class Lexer {
  * `set` takes time proportional to the depth of group nesting.
  */
 
+
 class Namespace {
   /**
    * Both arguments are optional.  The first argument is an object of
@@ -29321,6 +30279,7 @@ class Namespace {
  * This file contains the “gullet” where macros are expanded
  * until only non-macro tokens remain.
  */
+
 
 // List of commands that act like macros but aren't defined as a macro,
 // function, or symbol.  Used in `isDefined`.
@@ -30396,6 +31355,7 @@ class Parser {
    */
   parseExpression(breakOnInfix, breakOnTokenText, breakOnMiddle) {
     const body = [];
+    this.prevAtomType = "";
     // Keep adding atoms to the body until we can't parse any more atoms (either
     // we reached the end, a }, or a \right)
     while (true) {
@@ -31393,7 +32353,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.27";
+const version = "0.10.32";
 
 function postProcess(block) {
   const labelMap = {};
@@ -31442,6 +32402,14 @@ function postProcess(block) {
 }
 
 /* eslint no-console:0 */
+/**
+ * This is the main entry point for Temml. Here, we expose functions for
+ * rendering expressions either to DOM nodes or to markup strings.
+ *
+ * We also expose the ParseError class to check if errors thrown from Temml are
+ * errors in the expression, or errors in javascript handling.
+ */
+
 
 /**
  * @type {import('./temml').render}
@@ -31619,8 +32587,9 @@ var temml = {
  * Some of Hurmet’s exported functions are valuable only to the Hurmet.org web page.
  * If you wish to use Hurmet’s math parsing and/or calculation abilities,
  * the two functions you want are:
- *   parse(entry: string, decimalFormat?: string)
- *   calculate(entry: string, vars?: Object, draftMode?: boolean, decimalFormat?: string)
+ *   parse(entry: string, formats?: { decimalFormat: string, dateFormat: string })
+ *   calculate(entry: string, vars?: Object, draftMode?: boolean,
+ *             formats?: { decimalFormat: string, dateFormat: string })
  *
  *   parse() returns a TeX string.
  *   calculate() returns either a TeX string or a string in Hurmet calculation syntax.

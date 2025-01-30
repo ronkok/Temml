@@ -1724,7 +1724,7 @@ If you know the shape of a character, but not its name,
 |\varXi|$\varXi$ || ams |
 |\vb|$\vb{a}$ |`\vb{a}`| physics extension |
 |\vcentcolon|$\vcentcolon$ |||
-|\vcenter|(Not supported)|||
+|\vcenter|$a+\left(\vcenter{\frac{\frac a b}c}\right)$|`a+\left(\vcenter{\frac{\frac a b}c}\right)`||
 |\Vdash|$\Vdash$ || ams |
 |\VDash|$\VDash$ || MnSymbol |
 |\vDash|$\vDash$ || ams |

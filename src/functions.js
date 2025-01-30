@@ -56,4 +56,5 @@ import "./functions/tag";
 import "./functions/text";
 // import "./functions/tip";
 // import "./functions/toggle";
+import "./functions/vcenter";
 import "./functions/verb";
