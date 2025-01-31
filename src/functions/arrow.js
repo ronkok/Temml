@@ -12,12 +12,19 @@ const padding = width => {
   return node
 }
 
-const paddedNode = (group, lspace = 0.3, rspace = 0) => {
+const paddedNode = (group, lspace = 0.3, rspace = 0, mustSmash = false) => {
   if (group == null && rspace === 0) { return padding(lspace) }
   const row = group ? [group] : [];
   if (lspace !== 0)   { row.unshift(padding(lspace)) }
   if (rspace > 0) { row.push(padding(rspace)) }
-  return new mathMLTree.MathNode("mrow", row)
+  if (mustSmash) {
+    // Used for the bottom arrow in a {CD} environment
+    const mpadded = new mathMLTree.MathNode("mpadded", row)
+    mpadded.setAttribute("height", "0")
+    return mpadded
+  } else {
+    return new mathMLTree.MathNode("mrow", row)
+  }
 }
 
 const labelSize = (size, scriptLevel) =>  Number(size) / emScale(scriptLevel);
@@ -57,7 +64,8 @@ const munderoverNode = (fName, body, below, style) => {
     (body.body.body || body.body.length > 0))
   if (gotUpper) {
     let label =  mml.buildGroup(body, labelStyle)
-    label = paddedNode(label, space, space)
+    const mustSmash = (fName === "\\\\cdrightarrow" || fName === "\\\\cdleftarrow")
+    label = paddedNode(label, space, space, mustSmash)
     // Since Firefox does not support minsize, stack a invisible node
     // on top of the label. Its width will serve as a min-width.
     // TODO: Refactor this after Firefox supports minsize.

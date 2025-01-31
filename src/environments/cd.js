@@ -218,18 +218,23 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    let label = new mathMLTree.MathNode("mrow", [mml.buildGroup(group.label, style)]);
-    label = new mathMLTree.MathNode("mpadded", [label]);
-    label.setAttribute("width", "0");
-    if (group.side === "left") {
-      label.setAttribute("lspace", "-1width");
+    if (group.label.body.length === 0) {
+      return new mathMLTree.MathNode("mrow", style)  // empty label
     }
-    // We have to guess at vertical alignment. We know the arrow is 1.8em tall,
-    // But we don't know the height or depth of the label.
-    label.setAttribute("voffset", "0.7em");
-    label = new mathMLTree.MathNode("mstyle", [label]);
-    label.setAttribute("displaystyle", "false");
-    label.setAttribute("scriptlevel", "1");
+    // Abuse an <mtable> to create vertically centered content.
+    const mtd = new mathMLTree.MathNode("mtd", [mml.buildGroup(group.label, style)])
+    mtd.style.padding = "0"
+    const mtr = new mathMLTree.MathNode("mtr", [mtd])
+    const mtable = new mathMLTree.MathNode("mtable", [mtr])
+    const label = new mathMLTree.MathNode("mpadded", [mtable])
+    // Set the label width to zero so that the arrow will be centered under the corner cell.
+    label.setAttribute("width", "0")
+    label.setAttribute("displaystyle", "false")
+    label.setAttribute("scriptlevel", "1")
+    if (group.side === "left") {
+      label.style.display = "flex"
+      label.style.justifyContent = "flex-end"
+    }
     return label;
   }
 });
