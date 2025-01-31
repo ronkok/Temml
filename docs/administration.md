@@ -384,19 +384,36 @@ Temml [function support page](https://temml.org/docs/en/supported.html).
 The rest of you, stay here. This section identifies functions that browsers render
 poorly.
 
-| Item                     | Chromium | Gecko<br>(Firefox) | WebKit<br>(Safari) | Examples                    |
-|:-----------------------------|:--------:|:---------:|:---------:|:-----------------------------------------:|
-| Renders well on first paint  | ✓        | ✓         | bad¹      | $\hat{E}\;\; \overrightarrow{ABCD}$       |
-| Accents                      | ✓        | ✓         | bad²      | $\hat{𝖺}$                                 |
-| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int \frac a b$             |
-| \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                        |
-| \cancel, \bcancel, \xcancel  | meh⁵     | meh⁵      | meh⁵      | $\cancel{5}$                              |
-| Tag placement                | ✓        | ✓         | poor⁶     | $$x\tag{tag}$$                            |
-| Extensible arrows            | poor⁷    | ✓         | bad<sup>7, 8</sup> | $\;\;\;A \xrightharpoonup{\text{note}} B\;\;\;$  |
-| Radical height               | ✓        | meh⁹      | meh⁹      | $\sqrt{f_c}$                              |
-| Size 4 radicals              | meh¹⁰    | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$             |
-| Line-breaking                | ✓        | ✓         | bad¹¹     |                                           |
-| \smash                       | ✓        | ✓         | bad¹²     | $x\smash{y}z$                             |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
+|                              |          | (Firefox) | (Safari)  |                                     |
++:=============================+:========:+:=========:+:=========:+:===================================:+
+| Renders well on first paint  | ✓        | ✓         | bad¹      | $\hat{E}\;\; \overrightarrow{ABCD}$ |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Accents                      | ✓        | ✓         | bad²      |  $\hat{𝖺}$                         |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                  |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Tag placement                | ✓        | ✓         | poor⁵     | $$x\tag{tag}$$                      |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Extensible arrows            | poor⁶    | ✓         | bad⁶      | $A \xrightharpoonup{\text{note}} B$ |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Radical height               | ✓        | meh⁷      | meh⁷      | $\sqrt{f_c}$                        |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Size 4 radicals              | meh⁸     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Line-breaking                | ✓        | ✓         | bad⁹      |                                     |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹⁰     | $x\smash{y}z$                       |
+| CD environment               |          |           |           |                                     |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Tall parens at big operators | bad¹¹    | ✓         | ✓         | $$\left(\sum_{x=0}^n x\right)^2$$   |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| `=` does not get operator \  | meh      | meh       | ✓         | $\text{ab}=\text{cd}$               |
+| spacing when between text    |          |           |           |                                     |
++------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
@@ -414,26 +431,24 @@ Notes:
 
 4.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-5.  Because Chromium does not support `<enclose>`, Temml uses background images for
-    \cancel. It may not print properly.
-
-6.  WebKit mis-locates tags and AMS automatic equation numbers because it
+5.  WebKit mis-locates tags and AMS automatic equation numbers because it
     ignores `width: 100%` on an `<mtable>`.
 
-7.  Chromium and WebKit system font extensible arrows have notes placed too high.
-    Some do not stretch in Cambria Math. Again, Latin Modern is okay.
+6.  Chromium and WebKit system font extensible arrows have notes placed too high.
+    Some do not stretch in Cambria Math. Again, Latin Modern is okay. \
+    WebKit fails to stretch most extensible arrows.
 
-8.  WebKit fails to stretch most extensible arrows.
-
-9.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+7.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-10. In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+8.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-11. Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-12. WebKit hides anything inside `\smash{…}`. Root cause: WebKit does not implement
-    `<mpadded>` correctly.
+10. WebKit fails to render anything inside the `<mpadded>` element.
+
+11. Chromium does not grow delimiters when they surround a big operator. In the example,
+    note that the outer exponent is at the correct height. Something odd is going on.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
