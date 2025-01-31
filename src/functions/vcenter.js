@@ -10,13 +10,13 @@ defineFunction({
   props: {
     numArgs: 1,
     argTypes: ["original"],
-    allowedInText: false,
+    allowedInText: false
   },
-  handler({parser}, args) {
+  handler({ parser }, args) {
     return {
       type: "vcenter",
       mode: parser.mode,
-      body: args[0],
+      body: args[0]
     };
   },
   mathmlBuilder(group, style) {
@@ -25,6 +25,6 @@ defineFunction({
     mtd.style.padding = "0"
     const mtr = new mathMLTree.MathNode("mtr", [mtd])
     return new mathMLTree.MathNode("mtable", [mtr])
-  },
+  }
 });
 
