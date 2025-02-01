@@ -134,6 +134,40 @@ export class TextNode {
   }
 }
 
+// Create an <a href="…"> node.
+export class AnchorNode {
+  constructor(href, classes, children) {
+    this.href = href;
+    this.classes = classes;
+    this.children = children || [];
+  }
+
+  toNode() {
+    const node = document.createElement("a")
+    node.setAttribute("href", this.href)
+    if (this.classes.length > 0) {
+      node.className = createClass(this.classes)
+    }
+    for (let i = 0; i < this.children.length; i++) {
+      node.appendChild(this.children[i].toNode());
+    }
+    return node
+  }
+
+  toMarkup() {
+    let markup = `<a href='${utils.escape(this.href)}'`
+    if (this.classes.length > 0) {
+      markup += ` class="${utils.escape(createClass(this.classes))}"`
+    }
+    markup += ">"
+    for (let i = 0; i < this.children.length; i++) {
+      markup += this.children[i].toMarkup();
+    }
+    markup += "</a>"
+    return markup
+  }
+}
+
 /*
  * This node represents an image embed (<img>) element.
  */

@@ -52,6 +52,10 @@ export function postProcess(block) {
       if (str.charAt(0) !== "(") { str = "(" + str }
       if (str.slice(-1) !== ")") { str =  str + ")" }
     }
-    ref.textContent = str
+    const mtext = document.createElementNS("http://www.w3.org/1998/Math/MathML", "mtext")
+    mtext.appendChild(document.createTextNode(str))
+    const math =  document.createElementNS("http://www.w3.org/1998/Math/MathML", "math")
+    math.appendChild(mtext)
+    ref.appendChild(math)
   })
 }

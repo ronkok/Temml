@@ -11,6 +11,7 @@ import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"
 import { MathNode, TextNode } from "./mathMLTree"
 import { DocumentFragment } from "./tree"
 import setLineBreaks from "./linebreaking"
+import { AnchorNode } from "./domTree"
 
 /**
  * Takes a symbol and converts it into a MathML text node after performing
@@ -290,7 +291,12 @@ export default function buildMathML(tree, texExpression, style, settings) {
     tree = tree[0].body
   }
 
-  const expression = buildExpression(tree, style);
+  const expression = buildExpression(tree, style)
+
+  if (expression.length === 1 && expression[0] instanceof AnchorNode) {
+    return expression[0]
+  }
+
   const wrap = (settings.displayMode || settings.annotate) ? "none" : settings.wrap
 
   const n1 = expression.length === 0 ? null : expression[0]

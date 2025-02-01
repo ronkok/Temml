@@ -236,6 +236,11 @@ a {
   color: black;
 }
 
+.hurmet-tex a {
+  text-decoration: none;
+  color: #0000EE;
+}
+
 pre {
   margin: 0px;
   padding: 12px 12px 12px 12px;

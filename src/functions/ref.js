@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import { AnchorNode } from "../domTree";
 import { invalidIdRegEx } from "./label";
 
 defineFunction({
@@ -18,11 +18,9 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    // Create an empty text node. Set a class and an href.
+    // Create an empty <a> node. Set a class and an href attribute.
     // The post-processor will populate with the target's tag or equation number.
     const classes = group.funcName === "\\ref" ? ["tml-ref"] : ["tml-ref", "tml-eqref"]
-    const node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("")], classes)
-    node.setAttribute("href", "#" + group.string)
-    return node
+    return new AnchorNode("#" + group.string, classes, null)
   }
 });

@@ -1,6 +1,7 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import { assertNodeType } from "../parseNode";
 import { MathNode } from "../mathMLTree";
+import { AnchorNode } from "../domTree";
 import * as mml from "../buildMathML";
 import ParseError from "../ParseError";
 
@@ -33,12 +34,9 @@ defineFunction({
     };
   },
   mathmlBuilder: (group, style) => {
-    let math = mml.buildExpressionRow(group.body, style);
-    if (!(math instanceof MathNode)) {
-      math = new MathNode("mrow", [math]);
-    }
-    math.setAttribute("href", group.href);
-    return math;
+    const math = new MathNode("math", [mml.buildExpressionRow(group.body, style)])
+    const anchorNode = new AnchorNode(group.href, [], [math])
+    return anchorNode
   }
 });
 
