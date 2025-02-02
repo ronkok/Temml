@@ -367,23 +367,25 @@ the command names in red (which you can configure via the `errorColor`
 an option of `trust: true`; you can also enable just some of the commands
 or for just some URLs via the `trust` [option](administration.html#options).
 
-+:=====================================+:===============================================+
-| $\href{https://temml.org/}{\Temml}$  | `\href{https://temml.org/}{\Temml}`            |
-+--------------------------------------+------------------------------------------------+
-| $\url{https://temml.org/}$           | `\url{https://temml.org/}`                     |
-+--------------------------------------+------------------------------------------------+
-| $\includegraphics[height=1em,        | `\includegraphics[height=1em,`\                |
-|  totalheight=1.2em, width=1.2em,     | `totalheight=1.2em,width=1.2em, alt=sphere]`\  |
-|  alt=sphere]{../sphere.jpg}$         | `{../sphere.jpg}`                              |
-+--------------------------------------+------------------------------------------------+
-| $\id{idName}{x}$                     | `\id{idName}{x}`                               |
-+--------------------------------------+------------------------------------------------+
-| $\class{class-name}{x}$              | `\class{class-name}{x}`                        |
-+--------------------------------------+------------------------------------------------+
-| $\style{color: red;}{x}$             | `\style{color: red;}{x}`                       |
-+--------------------------------------+------------------------------------------------+
-| $\data{datum1=a, datum2=b}{x}$       | `\data{datum1=a, datum2=b}{x}`                 |
-+--------------------------------------+------------------------------------------------+
++:=====================================+:===============================================+:===========+
+| $\href{https://temml.org/}{\Temml}$  | `\href{https://temml.org/}{\Temml}`            | Deprecated |
++--------------------------------------+------------------------------------------------+------------+
+| $\url{https://temml.org/}$           | `\url{https://temml.org/}`                     | Deprecated |
++--------------------------------------+------------------------------------------------+------------+
+| $\includegraphics[height=1em,        | `\includegraphics[height=1em,`\                |            |
+|  totalheight=1.2em, width=1.2em,     | `totalheight=1.2em,width=1.2em, alt=sphere]`\  |            |
+|  alt=sphere]{../sphere.jpg}$         | `{../sphere.jpg}`                              |            |
++--------------------------------------+------------------------------------------------+------------+
+| $\id{idName}{x}$                     | `\id{idName}{x}`                               |            |
++--------------------------------------+------------------------------------------------+------------+
+| $\class{class-name}{x}$              | `\class{class-name}{x}`                        |            |
++--------------------------------------+------------------------------------------------+------------+
+| $\style{color: red;}{x}$             | `\style{color: red;}{x}`                       |            |
++--------------------------------------+------------------------------------------------+------------+
+| $\data{datum1=a, datum2=b}{x}$       | `\data{datum1=a, datum2=b}{x}`                 |            |
++--------------------------------------+------------------------------------------------+------------+
+
+In April, Temml will no longer support the `\href` and `\url` functions.
 
 ## Letters
 
