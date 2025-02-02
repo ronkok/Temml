@@ -312,14 +312,15 @@ are not inside math delimiters such as `$$…$$`. They are display-mode only.
 | \begin{split}    |    `a &=b+c\\`\        |    a&=b+c \\       |    `d+e&=f`\              |
 |   a &=b+c\\      |    `&=e+f`\            |    d+e&=f          | `\end{align}`             |
 |   &=e+f          | `\end{split}`\         | \end{align}        |                           |
-| \end{split}      | `\end{equation}`       | $$                 |                           |
+| \end{split}      | `\label{eqn}`\         | $$                 |                           |
+| \label{eqn}      | `\end{equation}`       |                    |                           |
 | \end{equation}   |                        |                    |                           |
 | $$               |                        |                    |                           |
 +------------------+------------------------+--------------------+---------------------------+
 | $$               | `\begin{gather}`\      | $$                 | `\begin{alignat}{2}`\     |
 | \begin{gather}   |    `a=b \\`\           | \begin{alignat}{2} |    `10&x+ &3&y = 2 \\`\   |
-|    a=b \\        |    `e=b+c`\            |  10&x+ &3&y = 2 \\ |    `3&x+&13&y = 4`\       |
-|    e=b+c         | `\end{gather}`         |  3&x+&13&y = 4     | `\end{alignat}`           |
+|   a=b \\         |    `e=b+c \label{g}`\  |  10&x+ &3&y = 2 \\ |    `3&x+&13&y = 4`\       |
+|   e=b+c\label{g} | `\end{gather}`         |  3&x+&13&y = 4     | `\end{alignat}`           |
 | \end{gather}     |                        | \end{alignat}      |                           |
 | $$               |                        | $$                 |                           |
 +------------------+------------------------+--------------------+---------------------------+
@@ -355,6 +356,10 @@ are not inside math delimiters such as `$$…$$`. They are display-mode only.
 Acceptable horizontal line separators are: `\\` and `\cr`.
 
 Temml supports `\tag{…}`, `\notag`, and `\nonumber` to modify equation numbering.
+
+Functions `\ref` and `\eqref` will return an HTML `<a>` element that displays the automatic
+equation number from a `\label` location in an AMS environment.  Examples: $\ref{eqn}$ from
+code: `\ref{eqn}` and $\eqref{g}$  from code: `\eqref{g}`.
 
 The `{array}` environment does not yet support `\cline` or `\multicolumn`.
 

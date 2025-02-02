@@ -6,7 +6,7 @@
   <title>Environment Tests</title>
   <link rel="stylesheet" href="../docs/docStyles.css">
   <link rel="stylesheet" type="text/css" href="../assets/Temml-Latin-Modern.css">
-  <script src="./temmlPostProcess.js"></script>
+  <script src="../assets/temml.min.js"></script>
   <style>
     body{font-size: 18px}
     table tr > td:nth-of-type(2),
@@ -16,6 +16,18 @@
 </head>
 
 <body>
+<main id="main" class="latin-modern">
+
+The Temml [supported functions page][1] includes working examples of some
+environments, but there are several _other_ Temml environments that are only
+referenced in that page, not fully displayed.
+
+This test page shows more of the environments.
+
+[1]: ../docs/en/supported.html
+
+First, verify a \ref: $\ref{eqn}$ from code: `\ref{eqn}` and an \eqref: $\eqref{g}$
+from code: `\eqref{g}`) that point to `\label`s in the environments below.
 
 ## Environments
 
@@ -89,7 +101,8 @@
 | \begin{split}     |    `a &=b+c\\`\        |    10&x+ &3&y = 2 \\   |    `3&x+&13&y = 4`\       |
 |   a &=b+c\\       |    `&=e+f`\            |    3&x+&13&y = 4       | `\end{align}`             |
 |   &=e+f           | `\end{split}`\         | \end{align}            |                           |
-| \end{split}       | `\end{equation}`       | $$                     |                           |
+| \end{split}       |  `\label{eqn}`\        | $$                     |                           |
+| \label{eqn}       | `\end{equation}`       |                        |                           |
 | \end{equation}    |                        |                        |                           |
 | $$                |                        |                        |                           |
 +-------------------+------------------------+------------------------+---------------------------+
@@ -109,8 +122,8 @@
 +-------------------+------------------------+------------------------+---------------------------+
 | $$                | `\begin{gather}`\      | $$                     | `\begin{alignat}{2}`\     |
 | \begin{gather}    |    `a=b \\`\           | \begin{alignat}{2}     |    `10&x+ &3&y = 2 \\`\   |
-|    a=b \\         |    `e=b+c`\            |  10&x+ &3&y = 2 \\     |    `3&x+&13&y = 4`\       |
-|    e=b+c          | `\end{gather}`         |  3&x+&13&y = 4         | `\end{alignat}`           |
+|    a=b \\         |    `e=b+c \label{g}`\  |  10&x+ &3&y = 2 \\     |    `3&x+&13&y = 4`\       |
+|   e=b+c \label{g} | `\end{gather}`         |  3&x+&13&y = 4         | `\end{alignat}`           |
 | \end{gather}      |                        | \end{alignat}          |                           |
 | $$                |                        | $$                     |                           |
 +-------------------+------------------------+------------------------+---------------------------+
@@ -139,5 +152,11 @@
 +-------------------+------------------------+------------------------+---------------------------+
 
 
+
+<script>
+temml.postProcess(document.getElementById("main"))
+</script>
+
+</main>
 </body>
 </html>
