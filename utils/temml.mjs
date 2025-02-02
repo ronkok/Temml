@@ -499,6 +499,40 @@ let TextNode$1 = class TextNode {
   }
 };
 
+// Create an <a href="…"> node.
+class AnchorNode {
+  constructor(href, classes, children) {
+    this.href = href;
+    this.classes = classes;
+    this.children = children || [];
+  }
+
+  toNode() {
+    const node = document.createElement("a");
+    node.setAttribute("href", this.href);
+    if (this.classes.length > 0) {
+      node.className = createClass(this.classes);
+    }
+    for (let i = 0; i < this.children.length; i++) {
+      node.appendChild(this.children[i].toNode());
+    }
+    return node
+  }
+
+  toMarkup() {
+    let markup = `<a href='${utils.escape(this.href)}'`;
+    if (this.classes.length > 0) {
+      markup += ` class="${utils.escape(createClass(this.classes))}"`;
+    }
+    markup += ">";
+    for (let i = 0; i < this.children.length; i++) {
+      markup += this.children[i].toMarkup();
+    }
+    markup += "</a>";
+    return markup
+  }
+}
+
 /*
  * This node represents an image embed (<img>) element.
  */
@@ -1528,7 +1562,7 @@ defineSymbol(math, open, "\u27e8", "\\langle", true);
 defineSymbol(math, open, "\u27ea", "\\lAngle", true);
 defineSymbol(math, open, "\u2989", "\\llangle", true);
 defineSymbol(math, open, "|", "\\lvert");
-defineSymbol(math, open, "\u2016", "\\lVert");
+defineSymbol(math, open, "\u2016", "\\lVert", true);
 defineSymbol(math, textord, "!", "\\oc"); // cmll package
 defineSymbol(math, textord, "?", "\\wn");
 defineSymbol(math, textord, "\u2193", "\\shpos");
@@ -1692,7 +1726,7 @@ defineSymbol(math, inner, "\u22f0", "\\iddots", true);
 defineSymbol(math, inner, "\u22ef", "\\@cdots", true);
 defineSymbol(math, inner, "\u22f1", "\\ddots", true);
 defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
-defineSymbol(text, textord, "\u22ee", "\\textvdots");
+defineSymbol(text, textord, "\u22ee", "\\varvdots");
 defineSymbol(math, accent, "\u02ca", "\\acute");
 defineSymbol(math, accent, "\u0060", "\\grave");
 defineSymbol(math, accent, "\u00a8", "\\ddot");
@@ -2145,61 +2179,6 @@ const consolidateText = mrow => {
   }
 };
 
-const numberRegEx$1 = /^[0-9]$/;
-const isDotOrComma = (node, followingNode) => {
-  return ((node.type === "textord" && node.text === ".") ||
-    (node.type === "atom" && node.text === ",")) &&
-    // Don't consolidate if there is a space after the comma.
-    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
-};
-const consolidateNumbers = expression => {
-  // Consolidate adjacent numbers. We want to return <mn>1,506.3</mn>,
-  // not <mn>1</mn><mo>,</mo><mn>5</mn><mn>0</mn><mn>6</mn><mi>.</mi><mn>3</mn>
-  if (expression.length < 2) { return }
-  const nums = [];
-  let inNum = false;
-  // Find adjacent numerals
-  for (let i = 0; i < expression.length; i++) {
-    const node = expression[i];
-    if (node.type === "textord" && numberRegEx$1.test(node.text)) {
-      if (!inNum) { nums.push({ start: i }); }
-      inNum = true;
-    } else {
-      if (inNum) { nums[nums.length - 1].end = i - 1; }
-      inNum = false;
-    }
-  }
-  if (inNum) { nums[nums.length - 1].end = expression.length - 1; }
-
-  // Determine if numeral groups are separated by a comma or dot.
-  for (let i = nums.length - 1; i > 0; i--) {
-    if (nums[i - 1].end === nums[i].start - 2 &&
-      isDotOrComma(expression[nums[i].start - 1], expression[nums[i].start])) {
-      // Merge the two groups.
-      nums[i - 1].end = nums[i].end;
-      nums.splice(i, 1);
-    }
-  }
-
-  // Consolidate the number nodes
-  for (let i = nums.length - 1; i >= 0; i--) {
-    for (let j = nums[i].start + 1; j <= nums[i].end; j++) {
-      expression[nums[i].start].text += expression[j].text;
-    }
-    expression.splice(nums[i].start + 1, nums[i].end - nums[i].start);
-    // Check if the <mn> is followed by a numeric base in a supsub, e.g. the "3" in 123^4
-    // If so, merge the first <mn> into the base.
-    if (expression.length > nums[i].start + 1) {
-      const nextTerm = expression[nums[i].start + 1];
-      if (nextTerm.type === "supsub" && nextTerm.base && nextTerm.base.type === "textord" &&
-          numberRegEx$1.test(nextTerm.base.text)) {
-        nextTerm.base.text = expression[nums[i].start].text + nextTerm.base.text;
-        expression.splice(nums[i].start, 1);
-      }
-    }
-  }
-};
-
 /**
  * Wrap the given array of nodes in an <mrow> node if needed, i.e.,
  * unless the array has length 1.  Always returns a single node.
@@ -2220,6 +2199,39 @@ const makeRow = function(body, semisimple = false) {
     }
   }
   return new mathMLTree.MathNode("mrow", body);
+};
+
+/**
+ * Check for <mi>.</mi> which is how a dot renders in MathML,
+ * or <mo separator="true" lspace="0em" rspace="0em">,</mo>
+ * which is how a braced comma {,} renders in MathML
+ */
+function isNumberPunctuation(group) {
+  if (!group) {
+    return false
+  }
+  if (group.type === 'mi' && group.children.length === 1) {
+    const child = group.children[0];
+    return child instanceof TextNode && child.text === '.'
+  } else if (group.type === "mtext" && group.children.length === 1) {
+    const child = group.children[0];
+    return child instanceof TextNode && child.text === '\u2008' // punctuation space
+  } else if (group.type === 'mo' && group.children.length === 1 &&
+    group.getAttribute('separator') === 'true' &&
+    group.getAttribute('lspace') === '0em' &&
+    group.getAttribute('rspace') === '0em') {
+    const child = group.children[0];
+    return child instanceof TextNode && child.text === ','
+  } else {
+    return false
+  }
+}
+const isComma = (expression, i) => {
+  const node = expression[i];
+  const followingNode = expression[i + 1];
+  return (node.type === "atom" && node.text === ",") &&
+    // Don't consolidate if there is a space after the comma.
+    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
 };
 
 const isRel = item => {
@@ -2245,11 +2257,16 @@ const buildExpression = function(expression, style, semisimple = false) {
     return [group];
   }
 
-  consolidateNumbers(expression);
-
   const groups = [];
+  const groupArray = [];
+  let lastGroup;
   for (let i = 0; i < expression.length; i++) {
-    const group = buildGroup$1(expression[i], style);
+    groupArray.push(buildGroup$1(expression[i], style));
+  }
+
+  for (let i = 0; i < groupArray.length; i++) {
+    const group = groupArray[i];
+
     // Suppress spacing between adjacent relations
     if (i < expression.length - 1 && isRel(expression[i]) && isRel(expression[i + 1])) {
       group.setAttribute("rspace", "0em");
@@ -2257,9 +2274,39 @@ const buildExpression = function(expression, style, semisimple = false) {
     if (i > 0 && isRel(expression[i]) && isRel(expression[i - 1])) {
       group.setAttribute("lspace", "0em");
     }
+
+    // Concatenate numbers
+    if (group.type === 'mn' && lastGroup && lastGroup.type === 'mn') {
+      // Concatenate <mn>...</mn> followed by <mi>.</mi>
+      lastGroup.children.push(...group.children);
+      continue
+    } else if (isNumberPunctuation(group) && lastGroup && lastGroup.type === 'mn') {
+      // Concatenate <mn>...</mn> followed by <mi>.</mi>
+      lastGroup.children.push(...group.children);
+      continue
+    } else if (lastGroup && lastGroup.type === "mn" && i < groupArray.length - 1 &&
+      groupArray[i + 1].type === "mn" && isComma(expression, i)) {
+      lastGroup.children.push(...group.children);
+      continue
+    } else if (group.type === 'mn' && isNumberPunctuation(lastGroup)) {
+      // Concatenate <mi>.</mi> followed by <mn>...</mn>
+      group.children = [...lastGroup.children, ...group.children];
+      groups.pop();
+    } else if ((group.type === 'msup' || group.type === 'msub') &&
+        group.children.length >= 1 && lastGroup &&
+        (lastGroup.type === 'mn' || isNumberPunctuation(lastGroup))) {
+      // Put preceding <mn>...</mn> or <mi>.</mi> inside base of
+      // <msup><mn>...base...</mn>...exponent...</msup> (or <msub>)
+      const base = group.children[0];
+      if (base instanceof MathNode && base.type === 'mn' && lastGroup) {
+        base.children = [...lastGroup.children, ...base.children];
+        groups.pop();
+      }
+    }
     groups.push(group);
+    lastGroup = group;
   }
-  return groups;
+  return groups
 };
 
 /**
@@ -2321,6 +2368,11 @@ function buildMathML(tree, texExpression, style, settings) {
   }
 
   const expression = buildExpression(tree, style);
+
+  if (expression.length === 1 && expression[0] instanceof AnchorNode) {
+    return expression[0]
+  }
+
   const wrap = (settings.displayMode || settings.annotate) ? "none" : settings.wrap;
 
   const n1 = expression.length === 0 ? null : expression[0];
@@ -2344,6 +2396,9 @@ function buildMathML(tree, texExpression, style, settings) {
 
   if (settings.xml) {
     math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
+  }
+  if (wrapper.style.width) {
+    math.style.width = "100%";
   }
   if (settings.displayMode) {
     math.setAttribute("display", "block");
@@ -2676,12 +2731,19 @@ const padding$2 = width => {
   return node
 };
 
-const paddedNode = (group, lspace = 0.3, rspace = 0) => {
+const paddedNode = (group, lspace = 0.3, rspace = 0, mustSmash = false) => {
   if (group == null && rspace === 0) { return padding$2(lspace) }
   const row = group ? [group] : [];
   if (lspace !== 0)   { row.unshift(padding$2(lspace)); }
   if (rspace > 0) { row.push(padding$2(rspace)); }
-  return new mathMLTree.MathNode("mrow", row)
+  if (mustSmash) {
+    // Used for the bottom arrow in a {CD} environment
+    const mpadded = new mathMLTree.MathNode("mpadded", row);
+    mpadded.setAttribute("height", "0");
+    return mpadded
+  } else {
+    return new mathMLTree.MathNode("mrow", row)
+  }
 };
 
 const labelSize = (size, scriptLevel) =>  Number(size) / emScale(scriptLevel);
@@ -2721,7 +2783,8 @@ const munderoverNode = (fName, body, below, style) => {
     (body.body.body || body.body.length > 0));
   if (gotUpper) {
     let label =  buildGroup$1(body, labelStyle);
-    label = paddedNode(label, space, space);
+    const mustSmash = (fName === "\\\\cdrightarrow" || fName === "\\\\cdleftarrow");
+    label = paddedNode(label, space, space, mustSmash);
     // Since Firefox does not support minsize, stack a invisible node
     // on top of the label. Its width will serve as a min-width.
     // TODO: Refactor this after Firefox supports minsize.
@@ -3144,18 +3207,23 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    let label = new mathMLTree.MathNode("mrow", [buildGroup$1(group.label, style)]);
-    label = new mathMLTree.MathNode("mpadded", [label]);
-    label.setAttribute("width", "0");
-    if (group.side === "left") {
-      label.setAttribute("lspace", "-1width");
+    if (group.label.body.length === 0) {
+      return new mathMLTree.MathNode("mrow", style)  // empty label
     }
-    // We have to guess at vertical alignment. We know the arrow is 1.8em tall,
-    // But we don't know the height or depth of the label.
-    label.setAttribute("voffset", "0.7em");
-    label = new mathMLTree.MathNode("mstyle", [label]);
+    // Abuse an <mtable> to create vertically centered content.
+    const mtd = new mathMLTree.MathNode("mtd", [buildGroup$1(group.label, style)]);
+    mtd.style.padding = "0";
+    const mtr = new mathMLTree.MathNode("mtr", [mtd]);
+    const mtable = new mathMLTree.MathNode("mtable", [mtr]);
+    const label = new mathMLTree.MathNode("mpadded", [mtable]);
+    // Set the label width to zero so that the arrow will be centered under the corner cell.
+    label.setAttribute("width", "0");
     label.setAttribute("displaystyle", "false");
     label.setAttribute("scriptlevel", "1");
+    if (group.side === "left") {
+      label.style.display = "flex";
+      label.style.justifyContent = "flex-end";
+    }
     return label;
   }
 });
@@ -3745,10 +3813,13 @@ defineFunction({
     // replacement text, enclosed in '{' and '}' and properly nested
     const { tokens } = parser.gullet.consumeArg();
 
-    parser.gullet.macros.set(
-      name,
-      { tokens, numArgs }
-    );
+    if (!(funcName === "\\providecommand" && parser.gullet.macros.has(name))) {
+      // Ignore \providecommand
+      parser.gullet.macros.set(
+        name,
+        { tokens, numArgs }
+      );
+    }
 
     return { type: "internal", mode: parser.mode };
 
@@ -3842,6 +3913,7 @@ const delimiters = [
   "\\vert",
   "\\|",
   "\\Vert",
+  "\u2016",
   "\\uparrow",
   "\\Uparrow",
   "\\downarrow",
@@ -4611,7 +4683,7 @@ defineMacro("\\underbar", "\\underline{\\text{#1}}");
 // \kern6\p@\hbox{.}\hbox{.}\hbox{.}}}
 // We'll call \varvdots, which gets a glyph from symbols.js.
 // The zero-width rule gets us an equivalent to the vertical 6pt kern.
-defineMacro("\\vdots", "\\TextOrMath{\\textvdots}{{\\varvdots\\rule{0pt}{15pt}}}\\relax");
+defineMacro("\\vdots", "{\\varvdots\\rule{0pt}{15pt}}");
 defineMacro("\u22ee", "\\vdots");
 
 // {array} environment gaps
@@ -8074,6 +8146,7 @@ defineFunction({
     "\\mathfrak",
     "\\mathscr",
     "\\mathsf",
+    "\\mathsfit",
     "\\mathtt",
 
     // aliases
@@ -8143,10 +8216,19 @@ const mathmlBuilder$5 = (group, style) => {
     ? style.withLevel(StyleLevel.SCRIPT)
     : style.withLevel(StyleLevel.SCRIPTSCRIPT);
 
-  let node = new mathMLTree.MathNode("mfrac", [
-    buildGroup$1(group.numer, childOptions),
-    buildGroup$1(group.denom, childOptions)
-  ]);
+  // Chromium (wrongly) continues to shrink fractions beyond scriptscriptlevel.
+  // So we check for levels that Chromium shrinks too small.
+  // If necessary, set an explicit fraction depth.
+  const numer = buildGroup$1(group.numer, childOptions);
+  const denom = buildGroup$1(group.denom, childOptions);
+  if (style.level === 3) {
+    numer.style.mathDepth = "2";
+    numer.setAttribute("scriptlevel", "2");
+    denom.style.mathDepth = "2";
+    denom.setAttribute("scriptlevel", "2");
+  }
+
+  let node = new mathMLTree.MathNode("mfrac", [numer, denom]);
 
   if (!group.hasBarLine) {
     node.setAttribute("linethickness", "0px");
@@ -8539,12 +8621,9 @@ defineFunction({
     };
   },
   mathmlBuilder: (group, style) => {
-    let math = buildExpressionRow(group.body, style);
-    if (!(math instanceof MathNode)) {
-      math = new MathNode("mrow", [math]);
-    }
-    math.setAttribute("href", group.href);
-    return math;
+    const math = new MathNode("math", [buildExpressionRow(group.body, style)]);
+    const anchorNode = new AnchorNode(group.href, [], [math]);
+    return anchorNode
   }
 });
 
@@ -9416,13 +9495,6 @@ const mathmlBuilder$2 = (group, style) => {
     node = new MathNode("mo", [makeText(group.name, group.mode)]);
     if (noSuccessor.includes(group.name)) {
       node.setAttribute("largeop", "false");
-    } else if (group.limits) {
-      // This is a workaround for a MathML/Chromium bug.
-      // This is being applied to singleCharBigOps, which are not really stretchy.
-      // But by setting the stretchy attribute, Chromium will vertically center
-      // big ops around the math axis. This is needed since STIX TWO does not do so.
-      // TODO: Remove this hack when MathML & Chromium fix their problem.
-      node.setAttribute("stretchy", "true");
     } else {
       node.setAttribute("movablelimits", "false");
     }
@@ -10057,12 +10129,10 @@ defineFunction({
     };
   },
   mathmlBuilder(group, style) {
-    // Create an empty text node. Set a class and an href.
+    // Create an empty <a> node. Set a class and an href attribute.
     // The post-processor will populate with the target's tag or equation number.
     const classes = group.funcName === "\\ref" ? ["tml-ref"] : ["tml-ref", "tml-eqref"];
-    const node = new mathMLTree.MathNode("mtext", [new mathMLTree.TextNode("")], classes);
-    node.setAttribute("href", "#" + group.string);
-    return node
+    return new AnchorNode("#" + group.string, classes, null)
   }
 });
 
@@ -10109,6 +10179,8 @@ defineFunction({
   props: {
     numArgs: 2,
     numOptionalArgs: 1,
+    allowedInText: true,
+    allowedInMath: true,
     argTypes: ["size", "size", "size"]
   },
   handler({ parser }, args, optArgs) {
@@ -10401,16 +10473,25 @@ defineFunctionBuilders({
       ? [buildGroup$1(group.base.body[0], style)]
       : [buildGroup$1(group.base, style)];
 
+    // Note regarding scriptstyle level.
+    // (Sub|super)scripts should not shrink beyond MathML scriptlevel 2 aka \scriptscriptstyle
+    // Ref: https://w3c.github.io/mathml-core/#the-displaystyle-and-scriptlevel-attributes
+    // (BTW, MathML scriptlevel 2 is equal to Temml level 3.)
+    // But Chromium continues to shrink the (sub|super)scripts. So we explicitly set scriptlevel 2.
+
     const childStyle = style.inSubOrSup();
     if (group.sub) {
-      children.push(buildGroup$1(group.sub, childStyle));
+      const sub = buildGroup$1(group.sub, childStyle);
+      if (style.level === 3) { sub.setAttribute("scriptlevel", "2"); }
+      children.push(sub);
     }
 
     if (group.sup) {
       const sup = buildGroup$1(group.sup, childStyle);
+      if (style.level === 3) { sup.setAttribute("scriptlevel", "2"); }
       const testNode = sup.type === "mrow" ? sup.children[0] : sup;
       if ((testNode && testNode.type === "mo" && testNode.classes.includes("tml-prime"))
-        && group.base && group.base.text && group.base.text === "f") {
+        && group.base && group.base.text && "fF".indexOf(group.base.text) > -1) {
         // Chromium does not address italic correction on prime.  Prevent f′ from overlapping.
         testNode.classes.push("prime-pad");
       }
@@ -10637,6 +10718,8 @@ const getVariant = function(group, style) {
       return "script"
     case "mathsf":
       return "sans-serif"
+    case "mathsfit":
+      return "sans-serif-italic"
     case "mathtt":
       return "monospace"
   }
@@ -11098,6 +11181,32 @@ defineFunction({
     const newStyle = styleWithFont(group, style);
     const mrow = buildExpressionRow(group.body, newStyle);
     return consolidateText(mrow)
+  }
+});
+
+// \vcenter:  Vertically center the argument group on the math axis.
+
+defineFunction({
+  type: "vcenter",
+  names: ["\\vcenter"],
+  props: {
+    numArgs: 1,
+    argTypes: ["original"],
+    allowedInText: false
+  },
+  handler({ parser }, args) {
+    return {
+      type: "vcenter",
+      mode: parser.mode,
+      body: args[0]
+    };
+  },
+  mathmlBuilder(group, style) {
+    // Use a math table to create vertically centered content.
+    const mtd = new mathMLTree.MathNode("mtd", [buildGroup$1(group.body, style)]);
+    mtd.style.padding = "0";
+    const mtr = new mathMLTree.MathNode("mtr", [mtd]);
+    return new mathMLTree.MathNode("mtable", [mtr])
   }
 });
 
@@ -13367,9 +13476,11 @@ class Style {
   constructor(data) {
     // Style.level can be 0 | 1 | 2 | 3, which correspond to
     //       displaystyle, textstyle, scriptstyle, and scriptscriptstyle.
-    // style.level does not directly set MathML's script level. MathML does that itself.
-    // We use style.level to track, not set, math style so that we can get the
-    // correct scriptlevel when needed in supsub.js, mathchoice.js, or for dimensions in em.
+    // style.level usually does not directly set MathML's script level. MathML does that itself.
+    // However, Chromium does not stop shrinking after scriptscriptstyle, so we do explicitly
+    // set a scriptlevel attribute in those conditions.
+    // We also use style.level to track math style so that we can get the correct
+    // scriptlevel when needed in supsub.js, mathchoice.js, or for dimensions in em.
     this.level = data.level;
     this.color = data.color;  // string | void
     // A font family applies to a group of fonts (i.e. SansSerif), while a font
@@ -13493,39 +13604,47 @@ class Style {
 }
 
 /* Temml Post Process
- * Perform two tasks not done by Temml when it created each individual Temml <math> element.
- * Given a block,
- *   1. At each AMS auto-numbered environment, assign an id.
- *   2. Populate the text contents of each \ref & \eqref
+ * Populate the text contents of each \ref & \eqref
  *
  * As with other Temml code, this file is released under terms of the MIT license.
  * https://mit-license.org/
  */
 
-const version = "0.10.32";
+const version = "0.10.33";
 
 function postProcess(block) {
   const labelMap = {};
   let i = 0;
 
   // Get a collection of the parents of each \tag & auto-numbered equation
-  const parents = block.getElementsByClassName("tml-tageqn");
-  for (const parent of parents) {
-    const eqns = parent.getElementsByClassName("tml-eqn");
-    if (eqns. length > 0 ) {
-      // AMS automatically numbered equation.
-      // Assign an id.
-      i += 1;
-      eqns[0].id = "tml-eqn-" + i;
-      // No need to write a number into the text content of the element.
-      // A CSS counter does that even if this postProcess() function is not used.
+  const amsEqns = document.getElementsByClassName('tml-eqn');
+  for (let parent of amsEqns) {
+    // AMS automatically numbered equation.
+    // Assign an id.
+    i += 1;
+    parent.setAttribute("id", "tml-eqn-" + String(i));
+    // No need to write a number into the text content of the element.
+    // A CSS counter has done that even if this postProcess() function is not used.
+
+    // Find any \label that refers to an AMS eqn number.
+    while (true) {
+      const labels = parent.getElementsByClassName("tml-label");
+      if (labels.length > 0) {
+        parent.setAttribute("id", labels[0].id);
+        labelMap[labels[0].id] = String(i);
+        break
+      } else {
+        if (parent.tagName === "mtable") { break }
+        parent = parent.parentElement;
+      }
     }
-    // If there is a \label, add it to labelMap
+  }
+
+  // Find \labels associated with \tag
+  const taggedEqns = document.getElementsByClassName('tml-tageqn');
+  for (const parent of taggedEqns) {
     const labels = parent.getElementsByClassName("tml-label");
-    if (labels.length === 0) { continue }
-    if (eqns.length > 0) {
-      labelMap[labels[0].id] = String(i);
-    } else {
+    if (labels.length > 0) {
       const tags = parent.getElementsByClassName("tml-tag");
       if (tags.length > 0) {
         labelMap[labels[0].id] = tags[0].textContent;
@@ -13536,17 +13655,22 @@ function postProcess(block) {
   // Populate \ref & \eqref text content
   const refs = block.getElementsByClassName("tml-ref");
   [...refs].forEach(ref => {
-    let str = labelMap[ref.getAttribute("href").slice(1)];
+    const attr = ref.getAttribute("href");
+    let str = labelMap[attr.slice(1)];
     if (ref.className.indexOf("tml-eqref") === -1) {
       // \ref. Omit parens.
       str = str.replace(/^\(/, "");
-      str = str.replace(/\($/, "");
-    }  {
+      str = str.replace(/\)$/, "");
+    } else {
       // \eqref. Include parens
       if (str.charAt(0) !== "(") { str = "(" + str; }
       if (str.slice(-1) !== ")") { str =  str + ")"; }
     }
-    ref.textContent = str;
+    const mtext = document.createElementNS("http://www.w3.org/1998/Math/MathML", "mtext");
+    mtext.appendChild(document.createTextNode(str));
+    const math =  document.createElementNS("http://www.w3.org/1998/Math/MathML", "math");
+    math.appendChild(mtext);
+    ref.appendChild(math);
   });
 }
 

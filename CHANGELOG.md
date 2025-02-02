@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.33] = 2025-02-02
+
+### Fixed
+
+- Enable \rule in text mode
+- Explicitly set scriptlevel of deeply nested (sub|super)scripts
+- Explicitly set math-depth level of deeply nested fractions
+- Make Unicode ‖ responsive to \left & \right
+- Fix \providecommand so that it does not redefine an existing macro
+- Improve consolidation of numbers into <mn> elements
+- Set CSS width:100% on <math> when a tag is present
+- Improve vertical alignment of labels in CD environment
+- Set \ref & \eqref to return an <a> element
+- Fix \ref & \eqref when targeted on AMS environments
+
+### Added
+
+- Support \mathsfit
+- Support \vcenter
+
+### Deprecated
+
+- HTML \href and \url
+
+### Removed
+
+- Revert large operator workaround
+
 ## [0.10.32] = 2024-11-30
 
 ### Fixed

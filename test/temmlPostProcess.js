@@ -5,39 +5,47 @@
 })(this, (function (exports) { 'use strict';
 
   /* Temml Post Process
-   * Perform two tasks not done by Temml when it created each individual Temml <math> element.
-   * Given a block,
-   *   1. At each AMS auto-numbered environment, assign an id.
-   *   2. Populate the text contents of each \ref & \eqref
+   * Populate the text contents of each \ref & \eqref
    *
    * As with other Temml code, this file is released under terms of the MIT license.
    * https://mit-license.org/
    */
 
-  const version = "0.10.32";
+  const version = "0.10.33";
 
   function postProcess(block) {
     const labelMap = {};
     let i = 0;
 
     // Get a collection of the parents of each \tag & auto-numbered equation
-    const parents = block.getElementsByClassName("tml-tageqn");
-    for (const parent of parents) {
-      const eqns = parent.getElementsByClassName("tml-eqn");
-      if (eqns. length > 0 ) {
-        // AMS automatically numbered equation.
-        // Assign an id.
-        i += 1;
-        eqns[0].id = "tml-eqn-" + i;
-        // No need to write a number into the text content of the element.
-        // A CSS counter does that even if this postProcess() function is not used.
+    const amsEqns = document.getElementsByClassName('tml-eqn');
+    for (let parent of amsEqns) {
+      // AMS automatically numbered equation.
+      // Assign an id.
+      i += 1;
+      parent.setAttribute("id", "tml-eqn-" + String(i));
+      // No need to write a number into the text content of the element.
+      // A CSS counter has done that even if this postProcess() function is not used.
+
+      // Find any \label that refers to an AMS eqn number.
+      while (true) {
+        const labels = parent.getElementsByClassName("tml-label");
+        if (labels.length > 0) {
+          parent.setAttribute("id", labels[0].id);
+          labelMap[labels[0].id] = String(i);
+          break
+        } else {
+          if (parent.tagName === "mtable") { break }
+          parent = parent.parentElement;
+        }
       }
-      // If there is a \label, add it to labelMap
+    }
+
+    // Find \labels associated with \tag
+    const taggedEqns = document.getElementsByClassName('tml-tageqn');
+    for (const parent of taggedEqns) {
       const labels = parent.getElementsByClassName("tml-label");
-      if (labels.length === 0) { continue }
-      if (eqns.length > 0) {
-        labelMap[labels[0].id] = String(i);
-      } else {
+      if (labels.length > 0) {
         const tags = parent.getElementsByClassName("tml-tag");
         if (tags.length > 0) {
           labelMap[labels[0].id] = tags[0].textContent;
@@ -48,17 +56,22 @@
     // Populate \ref & \eqref text content
     const refs = block.getElementsByClassName("tml-ref");
     [...refs].forEach(ref => {
-      let str = labelMap[ref.getAttribute("href").slice(1)];
+      const attr = ref.getAttribute("href");
+      let str = labelMap[attr.slice(1)];
       if (ref.className.indexOf("tml-eqref") === -1) {
         // \ref. Omit parens.
         str = str.replace(/^\(/, "");
-        str = str.replace(/\($/, "");
-      }  {
+        str = str.replace(/\)$/, "");
+      } else {
         // \eqref. Include parens
         if (str.charAt(0) !== "(") { str = "(" + str; }
         if (str.slice(-1) !== ")") { str =  str + ")"; }
       }
-      ref.textContent = str;
+      const mtext = document.createElementNS("http://www.w3.org/1998/Math/MathML", "mtext");
+      mtext.appendChild(document.createTextNode(str));
+      const math =  document.createElementNS("http://www.w3.org/1998/Math/MathML", "math");
+      math.appendChild(mtext);
+      ref.appendChild(math);
     });
   }
 
