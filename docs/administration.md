@@ -409,8 +409,6 @@ poorly.
 |\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹⁰     | $x\smash{y}z$                       |
 | CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Tall parens at big operators | bad¹¹    | ✓         | ✓         | $$\left(\sum_{x=0}^n x\right)^2$$   |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
 | `=` does not get operator \  | meh      | meh       | ✓         | $\text{ab}=\text{cd}$               |
 | spacing when between text    |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
@@ -446,9 +444,6 @@ Notes:
 9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
 10. WebKit fails to render anything inside the `<mpadded>` element.
-
-11. Chromium does not grow delimiters when they surround a big operator. In the example,
-    note that the outer exponent is at the correct height. Something odd is going on.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
