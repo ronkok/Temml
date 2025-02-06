@@ -1685,6 +1685,9 @@ const test = () => {
   new Expect(r`\begin{equation}a=b+c\end{equation}`).toBuild(displayMode())
   new Expect(r`\begin{split}a &=b+c\\&=e+f\end{split}`).toBuild(displayMode())
 
+  assertion = "AMS environment should fail if there are two tags in one row"
+  new Expect(r`\begin{align}\tag{1}x+y\tag{2}\end{align}`).toNotParse(displayMode())
+
   assertion = "{equation} should fail if argument contains two columns."
   new Expect(r`\\begin{equation}a &=b+c\end{equation}`).toNotParse(displayMode())
   assertion = "{split} should fail if argument contains three columns."

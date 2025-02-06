@@ -127,6 +127,7 @@ function parseArray(
   const rowGaps = [];
   const tags = [];
   let rowTag;
+  let numTags = 0
   const hLinesBeforeRow = [];
 
   // Test for \hline at the top of the array.
@@ -140,11 +141,12 @@ function parseArray(
       // Check if the author wrote a \tag{} inside this cell.
       for (let i = 0; i < cell.length; i++) {
         if (cell[i].type === "envTag" || cell[i].type === "noTag") {
+          numTags += 1
+          if (numTags > 1) { throw new ParseError(("Multiple \\tags in one row")) }
           // Get the contents of the \text{} nested inside the \env@Tag{}
           rowTag = cell[i].type === "envTag"
             ? cell.splice(i, 1)[0].body.body[0]
             : { body: null };
-          break
         }
       }
     }
@@ -208,6 +210,7 @@ function parseArray(
       row = [];
       rowTag = null;
       body.push(row);
+      numTags = 0
     } else {
       throw new ParseError("Expected & or \\\\ or \\cr or \\end", parser.nextToken);
     }
@@ -287,9 +290,11 @@ const mathmlBuilder = function(group, style) {
       }
       row.push(mtd)
     }
-    // Fill out a short row with empty <mtd> elements.
-    for (let k = 0; k < group.cols.length - rw.length; k++) {
-      row.push(new mathMLTree.MathNode("mtd", [], style))
+    if (group.cols) {
+      // Fill out a short row with empty <mtd> elements.
+      for (let k = 0; k < group.cols.length - rw.length; k++) {
+        row.push(new mathMLTree.MathNode("mtd", [], style))
+      }
     }
     if (group.addEqnNum) {
       row.unshift(glue(group));
