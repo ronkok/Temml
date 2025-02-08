@@ -263,16 +263,36 @@ const glue = _ => {
   return new mathMLTree.MathNode("mtd", [], [], { padding: "0", width: "50%" })
 }
 
+const labelContainers = ["mrow", "mtd", "mtable", "mtr"];
+const getLabel = parent => {
+  for (const node of parent.children) {
+    if (node.type && labelContainers.includes(node.type)) {
+      if (node.classes && node.classes[0] === "tml-label") {
+        const label = node.label
+        return label
+      } else {
+        const label = getLabel(node)
+        if (label) { return label }
+      }
+    } else if (!node.type) {
+      const label = getLabel(node)
+      if (label) { return label }
+    }
+  }
+}
+
 const taggedExpression = (expression, tag, style, leqno) => {
   tag = buildExpressionRow(tag[0].body, style)
   tag = consolidateText(tag)
   tag.classes.push("tml-tag")
 
+  const label = getLabel(expression) // from a \label{} function.
   expression = new mathMLTree.MathNode("mtd", [expression])
   const rowArray = [glue(), expression, glue()]
   rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right")
   rowArray[leqno ? 0 : 2].children.push(tag)
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"])
+  if (label) { mtr.setAttribute("id", label) }
   const table = new mathMLTree.MathNode("mtable", [mtr])
   table.style.width = "100%"
   table.setAttribute("displaystyle", "true")

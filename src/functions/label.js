@@ -22,7 +22,7 @@ defineFunction({
     // Return a no-width, no-ink element with an HTML id.
     const node = new mathMLTree.MathNode("mrow", [], ["tml-label"])
     if (group.string.length > 0) {
-      node.setAttribute("id", group.string)
+      node.setLabel(group.string)
     }
     return node
   }

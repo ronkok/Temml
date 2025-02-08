@@ -88,28 +88,24 @@ See also [letters](#letters)
 
 ## Annotation
 
-+:=================================+:===================================================+
-| $\cancel{5}$  `\cancel{5}`       | $\overbrace{a+b+c}^{\text{note}}$                  |
-|                                  |  `\overbrace{a+b+c}^{\text{note}}`                 |
-+----------------------------------+----------------------------------------------------+
-| $\bcancel{5}$  `\bcancel{5}`     | $\underbrace{a+b+c}_{\text{note}}$                 |
-|                                  |  `\underbrace{a+b+c}_{\text{note}}`                |
-+----------------------------------+----------------------------------------------------+
-| $\xcancel{ABC}$  `\xcancel{ABC}` | $\boxed{\pi=\frac c d}$                            |
-|                                  |  `\boxed{\pi=\frac c d}`                           |
-+----------------------------------+----------------------------------------------------+
-| $\sout{abc}$  `\sout{abc}`       |                                                    |
-|                                  |                                                    |
-+----------------------------------+----------------------------------------------------+
-| $\ref{tag1}$  `\ref{tag1}`       |                                                    |
-|                                  |                                                    |
-+----------------------------------+----------------------------------------------------+
-| $$                               | `\tag{hi} x+y^{2x} \label{tag1}`                   |
-| \tag{hi} x+y^{2x} \label{tag1}   |                                                    |
-| $$                               |                                                    |
-+----------------------------------+----------------------------------------------------+
-| $$\tag*{bye} x+y^{2x}$$          | `\tag*{bye} x+y^{2x}`                              |
-+----------------------------------+----------------------------------------------------+
++:=====================================+:====================================+
+| $\cancel{5}$  `\cancel{5}`           | $\overbrace{a+b+c}^{\text{note}}$   |
+|                                      |  `\overbrace{a+b+c}^{\text{note}}`  |
++--------------------------------------+-------------------------------------+
+| $\bcancel{5}$  `\bcancel{5}`         | $\underbrace{a+b+c}_{\text{note}}$  |
+|                                      |  `\underbrace{a+b+c}_{\text{note}}` |
++--------------------------------------+-------------------------------------+
+| $\xcancel{ABC}$  `\xcancel{ABC}`     | $\boxed{\pi=\frac c d}$             |
+|                                      |  `\boxed{\pi=\frac c d}`            |
++--------------------------------------+-------------------------------------+
+| $\sout{abc}$  `\sout{abc}`           |                                     |
++--------------------------------------+-------------------------------------+
+| $\ref{tag1}$  `\ref{tag1}`           |                                     |
++--------------------------------------+-------------------------------------+
+| $$ \tag{hi} x+y^{2x} \label{tag1} $$ | `\tag{hi} x+y^{2x} \label{tag1}`    |
++--------------------------------------+-------------------------------------+
+| $$\tag*{bye} x+y^{2x}$$              | `\tag*{bye} x+y^{2x}`               |
++--------------------------------------+-------------------------------------+
 
 Also some [environments](#environments) have automatic equation numbering.
 
@@ -117,8 +113,10 @@ A `\label{…}` may be placed anywhere and will create an HTML id matching the
 `\label{…}` argument. That argument may contain only the characters `A-Za-z0-9_-`.
 
 On sites where Temml fields are updated dynamically, `\ref{…}` may not be
-supported. Other Temml functions update only the local field. `\ref{…}` must
-make two passes through the entire document. Some sites may choose not to do this.
+supported. Other Temml functions update only the local field. `\ref{…}` and `eqref`
+must make two passes through the entire document. Some sites may choose not to do this.
+`\label` always creates an `id `, so you can write your own `<a>` element if
+`\ref` is not available.
 
 ## Color
 
@@ -357,9 +355,10 @@ Acceptable horizontal line separators are: `\\` and `\cr`.
 
 Temml supports `\tag{…}`, `\notag`, and `\nonumber` to modify equation numbering.
 
-Functions `\ref` and `\eqref` will return an HTML `<a>` element that displays the automatic
-equation number from a `\label` location in an AMS environment.  Examples: $\ref{eqn}$ from
-code: `\ref{eqn}` and $\eqref{g}$  from code: `\eqref{g}`.
+Functions `\ref` and `\eqref` will return an HTML `<a>` element that displays the `\tag` or auto-tag at a
+`\label` location.  Examples: $\ref{eqn}$ from code: `\ref{eqn}` and $\eqref{g}$  from code: `\eqref{g}`.
+(Note: `\ref` and `\eqref` may not be supported by some sites. They take longer to run than other
+Temml functions.)
 
 The `{array}` environment does not yet support `\cline` or `\multicolumn`.
 

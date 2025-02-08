@@ -3,6 +3,7 @@ import { parseCD } from "./cd";
 import defineFunction from "../defineFunction";
 import mathMLTree from "../mathMLTree";
 import { Span } from "../domTree"
+import { Token } from "../Token";
 import { StyleLevel } from "../constants"
 import ParseError from "../ParseError";
 import { assertNodeType, assertSymbolNodeType } from "../parseNode";
@@ -57,31 +58,28 @@ const arrayGaps = macros => {
   return [arraystretch, arraycolsep]
 }
 
-const getTag = (group, style, rowNum) => {
-  let tag
-  const tagContents = group.tags.shift()
-  if (tagContents) {
-    // The author has written a \tag or a \notag in this row.
-    if (tagContents.body) {
-      tag = mml.buildExpressionRow(tagContents.body, style, true)
-      tag.classes = ["tml-tag"]
-    } else {
-      // \notag. Return an empty span.
-      tag = new mathMLTree.MathNode("mtext", [], [])
-      return tag
+const checkCellForLabels = cell => {
+  // Check if the author wrote a \tag{} inside this cell.
+  let rowLabel = ""
+  for (let i = 0; i < cell.length; i++) {
+    if (cell[i].type === "label") {
+      if (rowLabel) { throw new ParseError(("Multiple \\labels in one row")) }
+      rowLabel = cell[i].string
     }
-  } else if (group.envClasses.includes("multline") &&
-    ((group.leqno && rowNum !== 0) || (!group.leqno && rowNum !== group.body.length - 1))) {
-    // A multiline that does not receive a tag. Return an empty cell.
-    tag = new mathMLTree.MathNode("mtext", [], [])
-    return tag
-  } else {
-    // AMS automatcally numbered equaton.
-    // Insert a class so the element can be populated by a CSS counter.
-    // WebKit will display the CSS counter only inside a span.
-    tag = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])])
   }
-  return tag
+  return rowLabel
+}
+
+// autoTag (an argument to parseArray) can be one of three values:
+// * undefined: Regular (not-top-level) array; no tags on each row
+// * true: Automatic equation numbering, overridable by \tag
+// * false: Tags allowed on each row, but no automatic numbering
+// This function *doesn't* work with the "split" environment name.
+function getAutoTag(name) {
+  if (name.indexOf("ed") === -1) {
+    return name.indexOf("*") === -1;
+  }
+  // return undefined;
 }
 
 /**
@@ -95,7 +93,7 @@ function parseArray(
   {
     cols, // [{ type: string , align: l|c|r|null }]
     envClasses, // align(ed|at|edat) | array | cases | cd | small | multline
-    addEqnNum,      // boolean
+    autoTag,        // boolean
     singleRow,      // boolean
     emptySingleRow, // boolean
     maxNumCols,     // number
@@ -111,13 +109,6 @@ function parseArray(
     // TODO: provide helpful error when \cr is used outside array environment
     parser.gullet.macros.set("\\cr", "\\\\\\relax");
   }
-  if (addEqnNum) {
-    parser.gullet.macros.set("\\tag", "\\@ifstar\\envtag@literal\\envtag@paren")
-    parser.gullet.macros.set("\\envtag@paren", "\\env@tag{{(\\text{#1})}}");
-    parser.gullet.macros.set("\\envtag@literal", "\\env@tag{\\text{#1}}")
-    parser.gullet.macros.set("\\notag", "\\env@notag");
-    parser.gullet.macros.set("\\nonumber", "\\env@notag")
-  }
 
   // Start group for first cell
   parser.gullet.beginGroup();
@@ -125,10 +116,32 @@ function parseArray(
   let row = [];
   const body = [row];
   const rowGaps = [];
-  const tags = [];
-  let rowTag;
-  let numTags = 0
+  const labels = [];
+
   const hLinesBeforeRow = [];
+
+  const tags = (autoTag != null ? [] : undefined);
+
+  // amsmath uses \global\@eqnswtrue and \global\@eqnswfalse to represent
+  // whether this row should have an equation number.  Simulate this with
+  // a \@eqnsw macro set to 1 or 0.
+  function beginRow() {
+    if (autoTag) {
+      parser.gullet.macros.set("\\@eqnsw", "1", true);
+    }
+  }
+  function endRow() {
+    if (tags) {
+      if (parser.gullet.macros.get("\\df@tag")) {
+        tags.push(parser.subparse([new Token("\\df@tag")]));
+        parser.gullet.macros.set("\\df@tag", undefined, true);
+      } else {
+        tags.push(Boolean(autoTag) &&
+            parser.gullet.macros.get("\\@eqnsw") === "1");
+      }
+    }
+  }
+  beginRow();
 
   // Test for \hline at the top of the array.
   hLinesBeforeRow.push(getHLines(parser));
@@ -136,20 +149,6 @@ function parseArray(
   while (true) {
     // Parse each cell in its own group (namespace)
     let cell = parser.parseExpression(false, singleRow ? "\\end" : "\\\\");
-
-    if (addEqnNum && !rowTag) {
-      // Check if the author wrote a \tag{} inside this cell.
-      for (let i = 0; i < cell.length; i++) {
-        if (cell[i].type === "envTag" || cell[i].type === "noTag") {
-          numTags += 1
-          if (numTags > 1) { throw new ParseError(("Multiple \\tags in one row")) }
-          // Get the contents of the \text{} nested inside the \env@Tag{}
-          rowTag = cell[i].type === "envTag"
-            ? cell.splice(i, 1)[0].body.body[0]
-            : { body: null };
-        }
-      }
-    }
     parser.gullet.endGroup();
     parser.gullet.beginGroup();
 
@@ -178,6 +177,7 @@ function parseArray(
       }
       parser.consume();
     } else if (next === "\\end") {
+      endRow()
       // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
       // the last line is empty.  However, AMS environments keep the
       // empty row if it's the only one.
@@ -185,6 +185,7 @@ function parseArray(
       if (row.length === 1 && cell.body.length === 0 && (body.length > 1 || !emptySingleRow)) {
         body.pop();
       }
+      labels.push(checkCellForLabels(cell.body))
       if (hLinesBeforeRow.length < body.length + 1) {
         hLinesBeforeRow.push([]);
       }
@@ -200,17 +201,17 @@ function parseArray(
       if (parser.gullet.future().text !== " ") {
         size = parser.parseSizeGroup(true);
       }
-      rowGaps.push(size ? size.value : null);
+      rowGaps.push(size ? size.value : null)
+      endRow()
 
-      tags.push(rowTag)
+      labels.push(checkCellForLabels(cell.body))
 
       // check for \hline(s) following the row separator
       hLinesBeforeRow.push(getHLines(parser));
 
       row = [];
-      rowTag = null;
       body.push(row);
-      numTags = 0
+      beginRow();
     } else {
       throw new ParseError("Expected & or \\\\ or \\cr or \\end", parser.nextToken);
     }
@@ -221,8 +222,6 @@ function parseArray(
   // End array group defining \cr
   parser.gullet.endGroup();
 
-  tags.push(rowTag)
-
   return {
     type: "array",
     mode: parser.mode,
@@ -231,9 +230,10 @@ function parseArray(
     rowGaps,
     hLinesBeforeRow,
     envClasses,
-    addEqnNum,
+    autoTag,
     scriptLevel,
     tags,
+    labels,
     leqno,
     arraystretch,
     arraycolsep
@@ -296,19 +296,38 @@ const mathmlBuilder = function(group, style) {
         row.push(new mathMLTree.MathNode("mtd", [], style))
       }
     }
-    if (group.addEqnNum) {
-      row.unshift(glue(group));
-      row.push(glue(group));
-      const tag = getTag(group, style.withLevel(cellLevel), i)
-      if (group.leqno) {
-        row[0].children.push(tag)
-        row[0].classes.push("tml-left")
-      } else {
-        row[row.length - 1].children.push(tag)
-        row[row.length - 1].classes.push("tml-right")
+    if (group.tags) {
+      const tag = group.tags[i];
+      let tagElement
+      if (tag === true) {  // automatic numbering
+        tagElement = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])])
+      } else if (tag === false) {
+        // \nonumber/\notag or starred environment
+        tagElement = new mathMLTree.MathNode("mtext", [], [])
+      } else {  // manual \tag
+        tagElement = mml.buildExpressionRow(tag[0].body, style.withLevel(cellLevel), true)
+        tagElement = mml.consolidateText(tagElement)
+        tagElement.classes = ["tml-tag"]
+      }
+      if (tagElement) {
+        row.unshift(glue(group))
+        row.push(glue(group))
+        if (group.leqno) {
+          row[0].children.push(tagElement)
+          row[0].classes.push("tml-left")
+        } else {
+          row[row.length - 1].children.push(tagElement)
+          row[row.length - 1].classes.push("tml-right")
+        }
       }
     }
     const mtr = new mathMLTree.MathNode("mtr", row, [])
+    const label = group.labels.shift()
+    if (label && group.tags && group.tags[i]) {
+      mtr.setAttribute("id", label)
+      if (Array.isArray(group.tags[i])) { mtr.classes.push("tml-tageqn") }
+    }
+
     // Write horizontal rules
     if (i === 0 && hlines[0].length > 0) {
       if (hlines[0].length === 2) {
@@ -366,7 +385,7 @@ const mathmlBuilder = function(group, style) {
       if (j === numCols - 1 && hand === 1) { return "0" }
       if (group.envClasses[0] !== "align") { return sidePadding }
       if (hand === 1) { return "0" }
-      if (group.addEqnNum) {
+      if (group.autoTag) {
         return (j % 2) ? "1" : "0"
       } else {
         return (j % 2) ? "0" : "1"
@@ -391,7 +410,7 @@ const mathmlBuilder = function(group, style) {
           // TODO: Remove -webkit- when Chromium no longer needs it.
           row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")]
         }
-        if (group.addEqnNum) {
+        if (group.autoTag) {
           const k = group.leqno ? 0 : row.children.length - 1
           row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")]
         }
@@ -419,7 +438,7 @@ const mathmlBuilder = function(group, style) {
   let table = new mathMLTree.MathNode("mtable", tbl)
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true") }
 
-  if (group.addEqnNum || group.envClasses.includes("multline")) {
+  if (group.autoTag || group.envClasses.includes("multline")) {
     table.style.width = "100%"
   }
 
@@ -449,7 +468,7 @@ const mathmlBuilder = function(group, style) {
         row.children[0].style.borderLeft = sep
       }
     }
-    let iCol = group.addEqnNum ? 0 : -1
+    let iCol = group.autoTag ? 0 : -1
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
         const colAlign = alignMap[cols[i].align];
@@ -491,7 +510,7 @@ const mathmlBuilder = function(group, style) {
       }
     }
   }
-  if (group.addEqnNum) {
+  if (group.autoTag) {
      // allow for glue cells on each side
     align = "left " + (align.length > 0 ? align : "center ") + "right "
   }
@@ -515,13 +534,14 @@ const alignedHandler = function(context, args) {
   if (context.envName.indexOf("ed") === -1) {
     validateAmsEnvironmentContext(context);
   }
+  const isSplit = context.envName === "split";
   const cols = [];
   const res = parseArray(
     context.parser,
     {
       cols,
-      addEqnNum: context.envName === "align" || context.envName === "alignat",
       emptySingleRow: true,
+      autoTag: isSplit ? undefined : getAutoTag(context.envName),
       envClasses: ["abut", "jot"], // set row spacing & provisional column spacing
       maxNumCols: context.envName === "split" ? 2 : undefined,
       leqno: context.parser.settings.leqno
@@ -845,7 +865,7 @@ defineEnvironment({
     const res = {
       cols: [],
       envClasses: ["abut", "jot"],
-      addEqnNum: context.envName === "gather",
+      autoTag: getAutoTag(context.envName),
       emptySingleRow: true,
       leqno: context.parser.settings.leqno
     };
@@ -863,7 +883,7 @@ defineEnvironment({
   handler(context) {
     validateAmsEnvironmentContext(context);
     const res = {
-      addEqnNum: context.envName === "equation",
+      autoTag: getAutoTag(context.envName),
       emptySingleRow: true,
       singleRow: true,
       maxNumCols: 1,
@@ -884,7 +904,7 @@ defineEnvironment({
   handler(context) {
     validateAmsEnvironmentContext(context);
     const res = {
-      addEqnNum: context.envName === "multline",
+      autoTag: context.envName === "multline",
       maxNumCols: 1,
       envClasses: ["jot", "multline"],
       leqno: context.parser.settings.leqno

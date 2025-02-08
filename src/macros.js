@@ -463,8 +463,10 @@ defineMacro("\\tag@literal", (context) => {
   if (context.macros.get("\\df@tag")) {
     throw new ParseError("Multiple \\tag");
   }
-  return "\\def\\df@tag{\\text{#1}}";
+  return "\\gdef\\df@tag{\\text{#1}}";
 });
+defineMacro("\\notag", "\\nonumber");
+defineMacro("\\nonumber", "\\gdef\\@eqnsw{0}")
 
 // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
 //   {\operator@font mod}\penalty900

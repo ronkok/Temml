@@ -24,12 +24,12 @@ referenced in that page, not fully displayed.
 
 This test page shows more of the environments.
 
+Also, there is a section [below][2] on `\tag`s, `\label`s, and `\ref`s.
+
 [1]: ../docs/en/supported.html
+[2]: #tags-labels-and-refs
 
-First, verify a \ref: $\ref{eqn}$ from code: `\ref{eqn}` and an \eqref: $\eqref{g}$
-from code: `\eqref{g}`) that point to `\label`s in the environments below.
-
-## Environments
+### Environments
 
 +:=====================:+:===========================+:==========================:+:=============================+
 | $\begin{matrix}       | `\begin{matrix}`\          | $\begin{array}{cc}         | `\begin{array}{cc}`\         |
@@ -142,16 +142,76 @@ from code: `\eqref{g}`) that point to `\label`s in the environments below.
 | \end{CD}          |                        |                        |                           |
 | $$                |                        |                        |                           |
 +-------------------+------------------------+------------------------+---------------------------+
-| $$                | `\begin{CD}`\          | $$                     | `\begin{multline}`\       |
-| \begin{CD}        |   `A  @>a>>  B  \\`\   | \begin{multline}       |    `\rm uno \\`\          |
-|   A @>a>> B \\    | `@VbVV    @AAcA \\`\   |    \rm uno \\          |    `\rm dos \\`\          |
-| @VbVV @AAcA\\     |   `C  @=   D`\         |    \rm dos \\          |    `\rm tres`\            |
-|   C @= D          | `\end{CD}`             |    \rm tres            | `\end{multline}`          |
-| \end{CD}          |                        | \end{multline}         |                           |
-| $$                |                        | $$                     |                           |
+| $$                | `\begin{gather}`\      | $$                     | `\begin{multline}`\       |
+| \begin{gather}    | `  a=b \notag \\`\     | \begin{multline}       |    `\rm uno \\`\          |
+|   a=b \notag\\    | `  e=b+c \\`\          |    \rm uno \\          |    `\rm dos \\`\          |
+|   e=b+c\\         | `\end{gather}`         |    \rm dos \\          |    `\rm tres`\            |
+| \end{gather}      |                        |    \rm tres            | `\end{multline}`          |
+| $$                |                        | \end{multline}         |                           |
+|                   |                        | $$                     |                           |
++-------------------+------------------------+------------------------+---------------------------+
+| $$                | `\begin{gather}` \     |                        |                           |
+| \begin{gather}    | `   a=b \nonumber\\` \ |                        |                           |
+|   a=b \nonumber\\ | `   e=b+c\\` \         |                        |                           |
+|   e=b+c\\         | `\end{gather}`         |                        |                           |
+| \end{gather}      |                        |                        |                           |
+| $$                |                        |                        |                           |
 +-------------------+------------------------+------------------------+---------------------------+
 
+### Tags, Labels, and Refs
 
+Here, we’ll show tests of tags, labels, and refs as they interact with environments.
+Some tags are already visible above, those being the AMS auto-numbers.
+There are also two labels above that we can target with refs. The first ref is: $\ref{eqn}$, which
+is an instance of the code: `\ref{eqn}`. Then we have $\eqref{g}$, created via `\eqref{g}`.
+
+While we are looking at AMS environments, let’s show a case in which a tag over-writes
+the automatic number.
+
++:=================:+:=======================+
+| $$                | `\begin{gather}`\      |
+| \begin{gather}    |    `a=b \tag{90}\\`\   |
+|    a=b \tag{90}\\ |    `e=b+c `\           |
+|   e=b+c           | `\end{gather}`         |
+| \end{gather}      |                        |
+| $$                |                        |
++-------------------+------------------------+
+
+Let's add a label to that one:
+
++:============================:+:==================================+
+| $$                           | `\begin{gather}`\                 |
+| \begin{gather}               |    `a=b \tag{91} \label{g2}\\`\   |
+|    a=b \tag{91} \label{g2}\\ |    `e=b+c `\                      |
+|   e=b+c                      | `\end{gather}`                    |
+| \end{gather}                 |                                   |
+| $$                           |                                   |
++------------------------------+-----------------------------------+
+
+...and show an eqref to the label: $\eqref{g2}$, via the code: `\eqref{g2}`.
+
+Next, we have a non-AMS environment with a tag:
+
++:=====================:+:===========================+
+| $$\begin{matrix}      | `\begin{matrix}`\          |
+|  a & b \tag{hi!} \\   |    `a & b \tag{hi!} \\`\   |
+|  c & d                |    `c & d`\                |
+|  \end{matrix}$$       | `\end{matrix}`             |
++-----------------------+----------------------------+
+
+The tag is applied to the entire math zone, not just one row. That is
+consistent with LaTeX. We can then add a label:
+
++:===============================:+:===================================+
+| $$\begin{matrix}                | `\begin{matrix}`\                  |
+|  a & b \tag{yo!} \label{m} \\   |    `a & b \tag{yo!} \label{m} \\`\ |
+|  c & d                          |    `c & d`\                        |
+|  \end{matrix}$$                 | `\end{matrix}`                     |
++---------------------------------+------------------------------------+
+
+Now an eqref to that label: $\eqref{m}$, via the code: `\eqref{m}`.
+
+¶
 
 <script>
 temml.postProcess(document.getElementById("main"))

@@ -190,6 +190,8 @@ export function parseCD(parser) {
     type: "array",
     mode: "math",
     body,
+    tags: null,
+    labels: new Array(body.length + 1).fill(""),
     envClasses: ["jot", "cd"],
     cols: [],
     hLinesBeforeRow: new Array(body.length + 1).fill([])

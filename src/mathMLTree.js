@@ -25,6 +25,7 @@ export class MathNode {
     this.children = children || [];
     this.classes = classes || [];
     this.style = style || {};   // Used for <mstyle> elements
+    this.label = "";
   }
 
   /**
@@ -40,6 +41,10 @@ export class MathNode {
    */
   getAttribute(name) {
     return this.attributes[name];
+  }
+
+  setLabel(value) {
+    this.label = value
   }
 
   /**
