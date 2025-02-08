@@ -290,11 +290,10 @@ const mathmlBuilder = function(group, style) {
       }
       row.push(mtd)
     }
-    if (group.cols) {
-      // Fill out a short row with empty <mtd> elements.
-      for (let k = 0; k < group.cols.length - rw.length; k++) {
-        row.push(new mathMLTree.MathNode("mtd", [], style))
-      }
+    const numColumns = group.body[0].length
+    // Fill out a short row with empty <mtd> elements.
+    for (let k = 0; k < numColumns - rw.length; k++) {
+      row.push(new mathMLTree.MathNode("mtd", [], style))
     }
     if (group.tags) {
       const tag = group.tags[i];
