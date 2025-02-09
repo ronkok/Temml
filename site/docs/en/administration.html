@@ -191,7 +191,6 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>Size 4 radicals</td><td>meh⁸</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad⁹</td><td><p></p></td></tr>
 <tr><td>\smash, \mathllap, \mathrlap,<br> CD environment</td><td>✓</td><td>✓</td><td>bad¹⁰</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr>
-<tr><td>Tall parens at big operators</td><td>bad¹¹</td><td>✓</td><td>✓</td><td><p class='hurmet-tex' data-entry='\left(\sum_{x=0}^n x\right)^2'><math display="block" class="tml-display" style="display:block math;"><msup><mrow><mo fence="true" form="prefix">(</mo><mrow><munderover><mo movablelimits="false">∑</mo><mrow><mi>x</mi><mo>=</mo><mn>0</mn></mrow><mi>n</mi></munderover></mrow><mi>x</mi><mo fence="true" form="postfix">)</mo></mrow><mn>2</mn></msup></math></p></td></tr>
 <tr><td><code>=</code> does not get operator <br>spacing when between text</td><td>meh</td><td>meh</td><td>✓</td><td><span class='hurmet-tex' data-entry='\text{ab}=\text{cd}'><math><mrow><mtext>ab</mtext><mo>=</mo></mrow><mrow><mtext>cd</mtext></mrow></math></span></td></tr></table>
 <p>Notes:</p>
 <ol class="decimal" start="1"><li><p>There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation.</p>
@@ -208,8 +207,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
 <li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
 <li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
-<li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li>
-<li><p>Chromium does not grow delimiters when they surround a big operator. In the example, note that the outer exponent is at the correct height. Something odd is going on.</p></li></ol>
+<li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li></ol>
 <p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
@@ -218,7 +216,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><a href='https://temml.org/'><math><mrow><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></a></span>    v0.10.33</p>
+<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><a href='https://temml.org/'><math><mrow><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></a></span>    v0.10.34</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p></li>
 <li><p><a href='#installation'>Installation</a></p></li>
