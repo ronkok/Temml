@@ -226,10 +226,25 @@ math > mrow {
   padding: 0.5ex 0ex;
 }
 
-/* Avoid flex-wrap in Firefox */
+/* Default mtd top padding is 0.5ex per MathML-Core and user-agent CSS */
+/* We adjust for jot and small */
+mtable.tml-jot mtd {
+  padding-top: 0.7ex;
+  padding-bottom: 0.7ex;
+}
+mtable.tml-small mtd {
+  padding-top: 0.35ex;
+  padding-bottom: 0.35ex;
+}
+
+/* Firefox */
 @-moz-document url-prefix() {
+  /* Avoid flex-wrap */
   math { display: inline; }
   math > mrow { padding: 0 }
+  /* Adjust Firefox spacing between array rows */
+  mtd, mtable.tml-small mtd { padding-top: 0; padding-bottom: 0; }
+  mtable.tml-jot mtd { padding-top: 0.2ex; padding-bottom: 0.ex; }
 }
 
 /* AMS environment auto-numbering via CSS counter. */

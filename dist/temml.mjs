@@ -607,6 +607,7 @@ class MathNode {
     this.children = children || [];
     this.classes = classes || [];
     this.style = style || {};   // Used for <mstyle> elements
+    this.label = "";
   }
 
   /**
@@ -622,6 +623,10 @@ class MathNode {
    */
   getAttribute(name) {
     return this.attributes[name];
+  }
+
+  setLabel(value) {
+    this.label = value;
   }
 
   /**
@@ -1540,7 +1545,7 @@ defineSymbol(math, mathord, "\u03db", "\\stigma", true);
 defineSymbol(math, mathord, "\u2aeb", "\\Bot");
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
-defineSymbol(math, bin, "*", "*");
+defineSymbol(math, bin, "\u2217", "*");
 defineSymbol(math, bin, "\u2044", "/", true);
 defineSymbol(math, bin, "\u2044", "\u2044");
 defineSymbol(math, bin, "\u2212", "-", true);
@@ -2339,16 +2344,36 @@ const glue$1 = _ => {
   return new mathMLTree.MathNode("mtd", [], [], { padding: "0", width: "50%" })
 };
 
+const labelContainers = ["mrow", "mtd", "mtable", "mtr"];
+const getLabel = parent => {
+  for (const node of parent.children) {
+    if (node.type && labelContainers.includes(node.type)) {
+      if (node.classes && node.classes[0] === "tml-label") {
+        const label = node.label;
+        return label
+      } else {
+        const label = getLabel(node);
+        if (label) { return label }
+      }
+    } else if (!node.type) {
+      const label = getLabel(node);
+      if (label) { return label }
+    }
+  }
+};
+
 const taggedExpression = (expression, tag, style, leqno) => {
   tag = buildExpressionRow(tag[0].body, style);
   tag = consolidateText(tag);
   tag.classes.push("tml-tag");
 
+  const label = getLabel(expression); // from a \label{} function.
   expression = new mathMLTree.MathNode("mtd", [expression]);
   const rowArray = [glue$1(), expression, glue$1()];
   rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right");
   rowArray[leqno ? 0 : 2].children.push(tag);
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
+  if (label) { mtr.setAttribute("id", label); }
   const table = new mathMLTree.MathNode("mtable", [mtr]);
   table.style.width = "100%";
   table.setAttribute("displaystyle", "true");
@@ -3179,6 +3204,8 @@ function parseCD(parser) {
     type: "array",
     mode: "math",
     body,
+    tags: null,
+    labels: new Array(body.length + 1).fill(""),
     envClasses: ["jot", "cd"],
     cols: [],
     hLinesBeforeRow: new Array(body.length + 1).fill([])
@@ -4419,6 +4446,75 @@ function defineEnvironment({ type, names, props, handler, mathmlBuilder }) {
   }
 }
 
+/**
+ * Lexing or parsing positional information for error reporting.
+ * This object is immutable.
+ */
+class SourceLocation {
+  constructor(lexer, start, end) {
+    this.lexer = lexer; // Lexer holding the input string.
+    this.start = start; // Start offset, zero-based inclusive.
+    this.end = end;     // End offset, zero-based exclusive.
+  }
+
+  /**
+   * Merges two `SourceLocation`s from location providers, given they are
+   * provided in order of appearance.
+   * - Returns the first one's location if only the first is provided.
+   * - Returns a merged range of the first and the last if both are provided
+   *   and their lexers match.
+   * - Otherwise, returns null.
+   */
+  static range(first, second) {
+    if (!second) {
+      return first && first.loc;
+    } else if (!first || !first.loc || !second.loc || first.loc.lexer !== second.loc.lexer) {
+      return null;
+    } else {
+      return new SourceLocation(first.loc.lexer, first.loc.start, second.loc.end);
+    }
+  }
+}
+
+/**
+ * Interface required to break circular dependency between Token, Lexer, and
+ * ParseError.
+ */
+
+/**
+ * The resulting token returned from `lex`.
+ *
+ * It consists of the token text plus some position information.
+ * The position information is essentially a range in an input string,
+ * but instead of referencing the bare input string, we refer to the lexer.
+ * That way it is possible to attach extra metadata to the input string,
+ * like for example a file name or similar.
+ *
+ * The position information is optional, so it is OK to construct synthetic
+ * tokens if appropriate. Not providing available position information may
+ * lead to degraded error reporting, though.
+ */
+class Token {
+  constructor(
+    text, // the text of this token
+    loc
+  ) {
+    this.text = text;
+    this.loc = loc;
+  }
+
+  /**
+   * Given a pair of tokens (this and endToken), compute a `Token` encompassing
+   * the whole input range enclosed by these two.
+   */
+  range(
+    endToken, // last token of the range, inclusive
+    text // the text of the newly constructed token
+  ) {
+    return new Token(text, SourceLocation.range(this, endToken));
+  }
+}
+
 // In TeX, there are actually three sets of dimensions, one for each of
 // textstyle, scriptstyle, and scriptscriptstyle.  These are
 // provided in the the arrays below, in that order.
@@ -4903,8 +4999,10 @@ defineMacro("\\tag@literal", (context) => {
   if (context.macros.get("\\df@tag")) {
     throw new ParseError("Multiple \\tag");
   }
-  return "\\def\\df@tag{\\text{#1}}";
+  return "\\gdef\\df@tag{\\text{#1}}";
 });
+defineMacro("\\notag", "\\nonumber");
+defineMacro("\\nonumber", "\\gdef\\@eqnsw{0}");
 
 // \renewcommand{\bmod}{\nonscript\mskip-\medmuskip\mkern5mu\mathbin
 //   {\operator@font mod}\penalty900
@@ -7108,32 +7206,29 @@ const arrayGaps = macros => {
   return [arraystretch, arraycolsep]
 };
 
-const getTag = (group, style, rowNum) => {
-  let tag;
-  const tagContents = group.tags.shift();
-  if (tagContents) {
-    // The author has written a \tag or a \notag in this row.
-    if (tagContents.body) {
-      tag = buildExpressionRow(tagContents.body, style, true);
-      tag.classes = ["tml-tag"];
-    } else {
-      // \notag. Return an empty span.
-      tag = new mathMLTree.MathNode("mtext", [], []);
-      return tag
+const checkCellForLabels = cell => {
+  // Check if the author wrote a \tag{} inside this cell.
+  let rowLabel = "";
+  for (let i = 0; i < cell.length; i++) {
+    if (cell[i].type === "label") {
+      if (rowLabel) { throw new ParseError(("Multiple \\labels in one row")) }
+      rowLabel = cell[i].string;
     }
-  } else if (group.envClasses.includes("multline") &&
-    ((group.leqno && rowNum !== 0) || (!group.leqno && rowNum !== group.body.length - 1))) {
-    // A multiline that does not receive a tag. Return an empty cell.
-    tag = new mathMLTree.MathNode("mtext", [], []);
-    return tag
-  } else {
-    // AMS automatcally numbered equaton.
-    // Insert a class so the element can be populated by a CSS counter.
-    // WebKit will display the CSS counter only inside a span.
-    tag = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])]);
   }
-  return tag
+  return rowLabel
 };
+
+// autoTag (an argument to parseArray) can be one of three values:
+// * undefined: Regular (not-top-level) array; no tags on each row
+// * true: Automatic equation numbering, overridable by \tag
+// * false: Tags allowed on each row, but no automatic numbering
+// This function *doesn't* work with the "split" environment name.
+function getAutoTag(name) {
+  if (name.indexOf("ed") === -1) {
+    return name.indexOf("*") === -1;
+  }
+  // return undefined;
+}
 
 /**
  * Parse the body of the environment, with rows delimited by \\ and
@@ -7146,7 +7241,7 @@ function parseArray(
   {
     cols, // [{ type: string , align: l|c|r|null }]
     envClasses, // align(ed|at|edat) | array | cases | cd | small | multline
-    addEqnNum,      // boolean
+    autoTag,        // boolean
     singleRow,      // boolean
     emptySingleRow, // boolean
     maxNumCols,     // number
@@ -7162,13 +7257,6 @@ function parseArray(
     // TODO: provide helpful error when \cr is used outside array environment
     parser.gullet.macros.set("\\cr", "\\\\\\relax");
   }
-  if (addEqnNum) {
-    parser.gullet.macros.set("\\tag", "\\@ifstar\\envtag@literal\\envtag@paren");
-    parser.gullet.macros.set("\\envtag@paren", "\\env@tag{{(\\text{#1})}}");
-    parser.gullet.macros.set("\\envtag@literal", "\\env@tag{\\text{#1}}");
-    parser.gullet.macros.set("\\notag", "\\env@notag");
-    parser.gullet.macros.set("\\nonumber", "\\env@notag");
-  }
 
   // Start group for first cell
   parser.gullet.beginGroup();
@@ -7176,9 +7264,32 @@ function parseArray(
   let row = [];
   const body = [row];
   const rowGaps = [];
-  const tags = [];
-  let rowTag;
+  const labels = [];
+
   const hLinesBeforeRow = [];
+
+  const tags = (autoTag != null ? [] : undefined);
+
+  // amsmath uses \global\@eqnswtrue and \global\@eqnswfalse to represent
+  // whether this row should have an equation number.  Simulate this with
+  // a \@eqnsw macro set to 1 or 0.
+  function beginRow() {
+    if (autoTag) {
+      parser.gullet.macros.set("\\@eqnsw", "1", true);
+    }
+  }
+  function endRow() {
+    if (tags) {
+      if (parser.gullet.macros.get("\\df@tag")) {
+        tags.push(parser.subparse([new Token("\\df@tag")]));
+        parser.gullet.macros.set("\\df@tag", undefined, true);
+      } else {
+        tags.push(Boolean(autoTag) &&
+            parser.gullet.macros.get("\\@eqnsw") === "1");
+      }
+    }
+  }
+  beginRow();
 
   // Test for \hline at the top of the array.
   hLinesBeforeRow.push(getHLines(parser));
@@ -7186,19 +7297,6 @@ function parseArray(
   while (true) {
     // Parse each cell in its own group (namespace)
     let cell = parser.parseExpression(false, singleRow ? "\\end" : "\\\\");
-
-    if (addEqnNum && !rowTag) {
-      // Check if the author wrote a \tag{} inside this cell.
-      for (let i = 0; i < cell.length; i++) {
-        if (cell[i].type === "envTag" || cell[i].type === "noTag") {
-          // Get the contents of the \text{} nested inside the \env@Tag{}
-          rowTag = cell[i].type === "envTag"
-            ? cell.splice(i, 1)[0].body.body[0]
-            : { body: null };
-          break
-        }
-      }
-    }
     parser.gullet.endGroup();
     parser.gullet.beginGroup();
 
@@ -7227,6 +7325,7 @@ function parseArray(
       }
       parser.consume();
     } else if (next === "\\end") {
+      endRow();
       // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
       // the last line is empty.  However, AMS environments keep the
       // empty row if it's the only one.
@@ -7234,6 +7333,7 @@ function parseArray(
       if (row.length === 1 && cell.body.length === 0 && (body.length > 1 || !emptySingleRow)) {
         body.pop();
       }
+      labels.push(checkCellForLabels(cell.body));
       if (hLinesBeforeRow.length < body.length + 1) {
         hLinesBeforeRow.push([]);
       }
@@ -7250,15 +7350,16 @@ function parseArray(
         size = parser.parseSizeGroup(true);
       }
       rowGaps.push(size ? size.value : null);
+      endRow();
 
-      tags.push(rowTag);
+      labels.push(checkCellForLabels(cell.body));
 
       // check for \hline(s) following the row separator
       hLinesBeforeRow.push(getHLines(parser));
 
       row = [];
-      rowTag = null;
       body.push(row);
+      beginRow();
     } else {
       throw new ParseError("Expected & or \\\\ or \\cr or \\end", parser.nextToken);
     }
@@ -7269,8 +7370,6 @@ function parseArray(
   // End array group defining \cr
   parser.gullet.endGroup();
 
-  tags.push(rowTag);
-
   return {
     type: "array",
     mode: parser.mode,
@@ -7279,9 +7378,10 @@ function parseArray(
     rowGaps,
     hLinesBeforeRow,
     envClasses,
-    addEqnNum,
+    autoTag,
     scriptLevel,
     tags,
+    labels,
     leqno,
     arraystretch,
     arraycolsep
@@ -7338,19 +7438,43 @@ const mathmlBuilder$7 = function(group, style) {
       }
       row.push(mtd);
     }
-    if (group.addEqnNum) {
-      row.unshift(glue(group));
-      row.push(glue(group));
-      const tag = getTag(group, style.withLevel(cellLevel), i);
-      if (group.leqno) {
-        row[0].children.push(tag);
-        row[0].classes.push("tml-left");
-      } else {
-        row[row.length - 1].children.push(tag);
-        row[row.length - 1].classes.push("tml-right");
+    const numColumns = group.body[0].length;
+    // Fill out a short row with empty <mtd> elements.
+    for (let k = 0; k < numColumns - rw.length; k++) {
+      row.push(new mathMLTree.MathNode("mtd", [], style));
+    }
+    if (group.autoTag) {
+      const tag = group.tags[i];
+      let tagElement;
+      if (tag === true) {  // automatic numbering
+        tagElement = new mathMLTree.MathNode("mtext", [new Span(["tml-eqn"])]);
+      } else if (tag === false) {
+        // \nonumber/\notag or starred environment
+        tagElement = new mathMLTree.MathNode("mtext", [], []);
+      } else {  // manual \tag
+        tagElement = buildExpressionRow(tag[0].body, style.withLevel(cellLevel), true);
+        tagElement = consolidateText(tagElement);
+        tagElement.classes = ["tml-tag"];
+      }
+      if (tagElement) {
+        row.unshift(glue(group));
+        row.push(glue(group));
+        if (group.leqno) {
+          row[0].children.push(tagElement);
+          row[0].classes.push("tml-left");
+        } else {
+          row[row.length - 1].children.push(tagElement);
+          row[row.length - 1].classes.push("tml-right");
+        }
       }
     }
     const mtr = new mathMLTree.MathNode("mtr", row, []);
+    const label = group.labels.shift();
+    if (label && group.tags && group.tags[i]) {
+      mtr.setAttribute("id", label);
+      if (Array.isArray(group.tags[i])) { mtr.classes.push("tml-tageqn"); }
+    }
+
     // Write horizontal rules
     if (i === 0 && hlines[0].length > 0) {
       if (hlines[0].length === 2) {
@@ -7374,16 +7498,17 @@ const mathmlBuilder$7 = function(group, style) {
   }
 
   if (group.envClasses.length > 0) {
-    let pad = group.envClasses.includes("jot")
-      ? "0.7" // 0.5ex + 0.09em top & bot padding
-      : group.envClasses.includes("small")
-      ? "0.35"
-      : "0.5"; // 0.5ex default top & bot padding
     if (group.arraystretch && group.arraystretch !== 1) {
       // In LaTeX, \arraystretch is a factor applied to a 12pt strut height.
       // It defines a baseline to baseline distance.
       // Here, we do an approximation of that approach.
-      pad = String(1.4 * group.arraystretch - 0.8);
+      const pad = String(1.4 * group.arraystretch - 0.8) + "ex";
+      for (let i = 0; i < tbl.length; i++) {
+        for (let j = 0; j < tbl[i].children.length; j++) {
+          tbl[i].children[j].style.paddingTop = pad;
+          tbl[i].children[j].style.paddingBottom = pad;
+        }
+      }
     }
     let sidePadding = group.envClasses.includes("abut")
       ? "0"
@@ -7397,7 +7522,7 @@ const mathmlBuilder$7 = function(group, style) {
     let sidePadUnit = "em";
     if (group.arraycolsep) {
       const arraySidePad = calculateSize(group.arraycolsep, style);
-      sidePadding = arraySidePad.number;
+      sidePadding = arraySidePad.number.toFixed(4);
       sidePadUnit = arraySidePad.unit;
     }
 
@@ -7408,18 +7533,18 @@ const mathmlBuilder$7 = function(group, style) {
       if (j === numCols - 1 && hand === 1) { return "0" }
       if (group.envClasses[0] !== "align") { return sidePadding }
       if (hand === 1) { return "0" }
-      if (group.addEqnNum) {
+      if (group.autoTag) {
         return (j % 2) ? "1" : "0"
       } else {
         return (j % 2) ? "0" : "1"
       }
     };
 
-    // Padding
+    // Side padding
     for (let i = 0; i < tbl.length; i++) {
       for (let j = 0; j < tbl[i].children.length; j++) {
-        tbl[i].children[j].style.padding = `${pad}ex ${sidePad(j, 1)}${sidePadUnit}`
-          + ` ${pad}ex ${sidePad(j, 0)}${sidePadUnit}`;
+        tbl[i].children[j].style.paddingLeft = `${sidePad(j, 0)}${sidePadUnit}`;
+        tbl[i].children[j].style.paddingRight = `${sidePad(j, 1)}${sidePadUnit}`;
       }
     }
 
@@ -7433,13 +7558,13 @@ const mathmlBuilder$7 = function(group, style) {
           // TODO: Remove -webkit- when Chromium no longer needs it.
           row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")];
         }
-        if (group.addEqnNum) {
+        if (group.autoTag) {
           const k = group.leqno ? 0 : row.children.length - 1;
           row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")];
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
-        row.children[1].style.padding = row.children[1].style.padding.replace(/0em$/, "1em");
+        row.children[1].style.paddingLeft = "1em";
       }
 
       if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
@@ -7459,9 +7584,17 @@ const mathmlBuilder$7 = function(group, style) {
   }
 
   let table = new mathMLTree.MathNode("mtable", tbl);
+  if (group.envClasses.length > 0) {
+    // Top & bottom padding
+    if (group.envClasses.includes("jot")) {
+      table.classes.push("tml-jot");
+    } else if (group.envClasses.includes("small")) {
+      table.classes.push("tml-small");
+    }
+  }
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true"); }
 
-  if (group.addEqnNum || group.envClasses.includes("multline")) {
+  if (group.autoTag || group.envClasses.includes("multline")) {
     table.style.width = "100%";
   }
 
@@ -7491,7 +7624,7 @@ const mathmlBuilder$7 = function(group, style) {
         row.children[0].style.borderLeft = sep;
       }
     }
-    let iCol = group.addEqnNum ? 0 : -1;
+    let iCol = group.autoTag ? 0 : -1;
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
         const colAlign = alignMap[cols[i].align];
@@ -7533,7 +7666,7 @@ const mathmlBuilder$7 = function(group, style) {
       }
     }
   }
-  if (group.addEqnNum) {
+  if (group.autoTag) {
      // allow for glue cells on each side
     align = "left " + (align.length > 0 ? align : "center ") + "right ";
   }
@@ -7557,13 +7690,14 @@ const alignedHandler = function(context, args) {
   if (context.envName.indexOf("ed") === -1) {
     validateAmsEnvironmentContext(context);
   }
+  const isSplit = context.envName === "split";
   const cols = [];
   const res = parseArray(
     context.parser,
     {
       cols,
-      addEqnNum: context.envName === "align" || context.envName === "alignat",
       emptySingleRow: true,
+      autoTag: isSplit ? undefined : getAutoTag(context.envName),
       envClasses: ["abut", "jot"], // set row spacing & provisional column spacing
       maxNumCols: context.envName === "split" ? 2 : undefined,
       leqno: context.parser.settings.leqno
@@ -7885,7 +8019,7 @@ defineEnvironment({
     const res = {
       cols: [],
       envClasses: ["abut", "jot"],
-      addEqnNum: context.envName === "gather",
+      autoTag: getAutoTag(context.envName),
       emptySingleRow: true,
       leqno: context.parser.settings.leqno
     };
@@ -7903,7 +8037,7 @@ defineEnvironment({
   handler(context) {
     validateAmsEnvironmentContext(context);
     const res = {
-      addEqnNum: context.envName === "equation",
+      autoTag: getAutoTag(context.envName),
       emptySingleRow: true,
       singleRow: true,
       maxNumCols: 1,
@@ -7924,7 +8058,7 @@ defineEnvironment({
   handler(context) {
     validateAmsEnvironmentContext(context);
     const res = {
-      addEqnNum: context.envName === "multline",
+      autoTag: context.envName === "multline",
       maxNumCols: 1,
       envClasses: ["jot", "multline"],
       leqno: context.parser.settings.leqno
@@ -8981,7 +9115,7 @@ defineFunction({
     // Return a no-width, no-ink element with an HTML id.
     const node = new mathMLTree.MathNode("mrow", [], ["tml-label"]);
     if (group.string.length > 0) {
-      node.setAttribute("id", group.string);
+      node.setLabel(group.string);
     }
     return node
   }
@@ -11243,75 +11377,6 @@ const makeVerb = (group) => group.body.replace(/ /g, group.star ? "\u2423" : "\x
 /** Include this to ensure that all functions are defined. */
 
 const functions = _functions;
-
-/**
- * Lexing or parsing positional information for error reporting.
- * This object is immutable.
- */
-class SourceLocation {
-  constructor(lexer, start, end) {
-    this.lexer = lexer; // Lexer holding the input string.
-    this.start = start; // Start offset, zero-based inclusive.
-    this.end = end;     // End offset, zero-based exclusive.
-  }
-
-  /**
-   * Merges two `SourceLocation`s from location providers, given they are
-   * provided in order of appearance.
-   * - Returns the first one's location if only the first is provided.
-   * - Returns a merged range of the first and the last if both are provided
-   *   and their lexers match.
-   * - Otherwise, returns null.
-   */
-  static range(first, second) {
-    if (!second) {
-      return first && first.loc;
-    } else if (!first || !first.loc || !second.loc || first.loc.lexer !== second.loc.lexer) {
-      return null;
-    } else {
-      return new SourceLocation(first.loc.lexer, first.loc.start, second.loc.end);
-    }
-  }
-}
-
-/**
- * Interface required to break circular dependency between Token, Lexer, and
- * ParseError.
- */
-
-/**
- * The resulting token returned from `lex`.
- *
- * It consists of the token text plus some position information.
- * The position information is essentially a range in an input string,
- * but instead of referencing the bare input string, we refer to the lexer.
- * That way it is possible to attach extra metadata to the input string,
- * like for example a file name or similar.
- *
- * The position information is optional, so it is OK to construct synthetic
- * tokens if appropriate. Not providing available position information may
- * lead to degraded error reporting, though.
- */
-class Token {
-  constructor(
-    text, // the text of this token
-    loc
-  ) {
-    this.text = text;
-    this.loc = loc;
-  }
-
-  /**
-   * Given a pair of tokens (this and endToken), compute a `Token` encompassing
-   * the whole input range enclosed by these two.
-   */
-  range(
-    endToken, // last token of the range, inclusive
-    text // the text of the newly constructed token
-  ) {
-    return new Token(text, SourceLocation.range(this, endToken));
-  }
-}
 
 /**
  * The Lexer class handles tokenizing the input in various ways. Since our
@@ -13610,7 +13675,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.10.33";
+const version = "0.10.34";
 
 function postProcess(block) {
   const labelMap = {};
@@ -13626,15 +13691,15 @@ function postProcess(block) {
     // No need to write a number into the text content of the element.
     // A CSS counter has done that even if this postProcess() function is not used.
 
-    // Find any \label that refers to an AMS eqn number.
+    // Find any \label that refers to an AMS automatic eqn number.
     while (true) {
+      if (parent.tagName === "mtable") { break }
       const labels = parent.getElementsByClassName("tml-label");
       if (labels.length > 0) {
-        parent.setAttribute("id", labels[0].id);
-        labelMap[labels[0].id] = String(i);
+        const id = parent.attributes.id.value;
+        labelMap[id] = String(i);
         break
       } else {
-        if (parent.tagName === "mtable") { break }
         parent = parent.parentElement;
       }
     }
@@ -13647,7 +13712,8 @@ function postProcess(block) {
     if (labels.length > 0) {
       const tags = parent.getElementsByClassName("tml-tag");
       if (tags.length > 0) {
-        labelMap[labels[0].id] = tags[0].textContent;
+        const id = parent.attributes.id.value;
+        labelMap[id] = tags[0].textContent;
       }
     }
   }

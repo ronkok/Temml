@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.10.34] = 2025-02-09
+
+### Fixed
+
+- Asterisk
+- \tag inside a non-AMS environment
+- \tag to over-ride an AMS auto-equation number
+- \label id is placed at the correct vertical alignment
+- Post-process is no longer needed for \label, only for \ref and \eqref
+- Workaround to prevent Firefox extra spacing between environment rows
+
 ## [0.10.33] = 2025-02-02
 
 ### Fixed

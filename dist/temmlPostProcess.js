@@ -11,7 +11,7 @@
    * https://mit-license.org/
    */
 
-  const version = "0.10.33";
+  const version = "0.10.34";
 
   function postProcess(block) {
     const labelMap = {};
@@ -27,15 +27,15 @@
       // No need to write a number into the text content of the element.
       // A CSS counter has done that even if this postProcess() function is not used.
 
-      // Find any \label that refers to an AMS eqn number.
+      // Find any \label that refers to an AMS automatic eqn number.
       while (true) {
+        if (parent.tagName === "mtable") { break }
         const labels = parent.getElementsByClassName("tml-label");
         if (labels.length > 0) {
-          parent.setAttribute("id", labels[0].id);
-          labelMap[labels[0].id] = String(i);
+          const id = parent.attributes.id.value;
+          labelMap[id] = String(i);
           break
         } else {
-          if (parent.tagName === "mtable") { break }
           parent = parent.parentElement;
         }
       }
@@ -48,7 +48,8 @@
       if (labels.length > 0) {
         const tags = parent.getElementsByClassName("tml-tag");
         if (tags.length > 0) {
-          labelMap[labels[0].id] = tags[0].textContent;
+          const id = parent.attributes.id.value;
+          labelMap[id] = tags[0].textContent;
         }
       }
     }
