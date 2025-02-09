@@ -295,7 +295,7 @@ const mathmlBuilder = function(group, style) {
     for (let k = 0; k < numColumns - rw.length; k++) {
       row.push(new mathMLTree.MathNode("mtd", [], style))
     }
-    if (group.tags) {
+    if (group.autoTag) {
       const tag = group.tags[i];
       let tagElement
       if (tag === true) {  // automatic numbering
@@ -350,16 +350,17 @@ const mathmlBuilder = function(group, style) {
   }
 
   if (group.envClasses.length > 0) {
-    let pad = group.envClasses.includes("jot")
-      ? "0.7" // 0.5ex + 0.09em top & bot padding
-      : group.envClasses.includes("small")
-      ? "0.35"
-      : "0.5" // 0.5ex default top & bot padding
     if (group.arraystretch && group.arraystretch !== 1) {
       // In LaTeX, \arraystretch is a factor applied to a 12pt strut height.
       // It defines a baseline to baseline distance.
       // Here, we do an approximation of that approach.
-      pad = String(1.4 * group.arraystretch - 0.8)
+      const pad = String(1.4 * group.arraystretch - 0.8) + "ex"
+      for (let i = 0; i < tbl.length; i++) {
+        for (let j = 0; j < tbl[i].children.length; j++) {
+          tbl[i].children[j].style.paddingTop = pad
+          tbl[i].children[j].style.paddingBottom = pad
+        }
+      }
     }
     let sidePadding = group.envClasses.includes("abut")
       ? "0"
@@ -373,7 +374,7 @@ const mathmlBuilder = function(group, style) {
     let sidePadUnit = "em"
     if (group.arraycolsep) {
       const arraySidePad = calculateSize(group.arraycolsep, style)
-      sidePadding = arraySidePad.number
+      sidePadding = arraySidePad.number.toFixed(4)
       sidePadUnit = arraySidePad.unit
     }
 
@@ -391,11 +392,11 @@ const mathmlBuilder = function(group, style) {
       }
     }
 
-    // Padding
+    // Side padding
     for (let i = 0; i < tbl.length; i++) {
       for (let j = 0; j < tbl[i].children.length; j++) {
-        tbl[i].children[j].style.padding = `${pad}ex ${sidePad(j, 1)}${sidePadUnit}`
-          + ` ${pad}ex ${sidePad(j, 0)}${sidePadUnit}`
+        tbl[i].children[j].style.paddingLeft = `${sidePad(j, 0)}${sidePadUnit}`
+        tbl[i].children[j].style.paddingRight = `${sidePad(j, 1)}${sidePadUnit}`
       }
     }
 
@@ -415,7 +416,7 @@ const mathmlBuilder = function(group, style) {
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
-        row.children[1].style.padding = row.children[1].style.padding.replace(/0em$/, "1em")
+        row.children[1].style.paddingLeft = "1em"
       }
 
       if (group.envClasses.includes("cases") || group.envClasses.includes("subarray")) {
@@ -435,6 +436,14 @@ const mathmlBuilder = function(group, style) {
   }
 
   let table = new mathMLTree.MathNode("mtable", tbl)
+  if (group.envClasses.length > 0) {
+    // Top & bottom padding
+    if (group.envClasses.includes("jot")) {
+      table.classes.push("tml-jot")
+    } else if (group.envClasses.includes("small")) {
+      table.classes.push("tml-small")
+    }
+  }
   if (group.scriptLevel === "display") { table.setAttribute("displaystyle", "true") }
 
   if (group.autoTag || group.envClasses.includes("multline")) {

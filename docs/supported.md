@@ -360,6 +360,10 @@ Functions `\ref` and `\eqref` will return an HTML `<a>` element that displays th
 (Note: `\ref` and `\eqref` may not be supported by some sites. They take longer to run than other
 Temml functions.)
 
+Temml CSS contains a work-around for a Firefox bug that inserts extra space between
+environment rows. The Temml work-around is effective for all environment functions except
+`\renewcommand{\arraystretch}`.
+
 The `{array}` environment does not yet support `\cline` or `\multicolumn`.
 
 ## HTML
