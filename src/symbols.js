@@ -670,7 +670,7 @@ defineSymbol(math, mathord, "\u03db", "\\stigma", true);
 defineSymbol(math, mathord, "\u2aeb", "\\Bot");
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
-defineSymbol(math, bin, "*", "*");
+defineSymbol(math, bin, "\u2217", "*");
 defineSymbol(math, bin, "\u2044", "/", true);
 defineSymbol(math, bin, "\u2044", "\u2044");
 defineSymbol(math, bin, "\u2212", "-", true);

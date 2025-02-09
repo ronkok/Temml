@@ -307,6 +307,12 @@ const test = () => {
     new Expect(nodes[i].type).toBe("atom");
     new Expect(nodes[i].family).toBe("bin");
   }
+  assertion = "Asterisk, *, should render as U+2217 in math mode"
+  markup = temml.renderToString(r`*, \ast, x^*, x^\ast`)
+  new Expect(markup.indexOf("*")).toBe(-1)
+  assertion = "Asterisk, *, should render as U+002A in text mode"
+  markup = temml.renderToString(r`\text{*}`)
+  new Expect(markup.indexOf("*") > -1).toBe(true)
 
   assertion = "Parser should change bins to opens when they should be unary"
   nodes = parse(r`a = -1 \ast (-4) \pm {+5} + \sin -2 x^{-2} \ast 3 \sum -c + \dots + d`)
