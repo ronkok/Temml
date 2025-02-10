@@ -1574,7 +1574,7 @@ The other units are absolute and are not affected by either script level or font
 
 <br>
 
-<p class="reduced" style="text-align: center">Copyright © 2021-2024 Ron Kok.
+<p class="reduced" style="text-align: center">Copyright © 2021-2025 Ron Kok.
 Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
