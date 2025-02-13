@@ -58,7 +58,7 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
     }
     block.push(node);
     if (node.type && node.type === "mo" && node.children.length === 1 &&
-        !Object.hasOwn(node.attributes, "movablelimits")) {
+        !Object.prototype.hasOwnProperty.call(node.attributes, "movablelimits")) {
       const ch = node.children[0].text
       if (openDelims.indexOf(ch) > -1) {
         level += 1
