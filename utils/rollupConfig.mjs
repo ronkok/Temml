@@ -14,15 +14,5 @@ export default [
   {
     input: "./src/postProcess.js",
     output: { format: "umd", name: "temml", file: "./test/temmlPostProcess.js" }
-  },
-  {
-    input: "./contrib/auto-render/auto-render.js",
-    external: ["temml"],
-    output: {
-      format: "iife",
-      name: "renderMathInElement",
-      file: "./contrib/auto-render/test/auto-render.js",
-      globals: { temml: "temml" }
-    }
   }
 ];

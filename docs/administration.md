@@ -53,7 +53,142 @@ of `temml.min.js`.
 
 # API
 
-### Overview
+### In-Browser, One Element
+
+To render one `<math>` element into one DOM element, call `temml.render` with a TeX
+expression and a DOM element to render into:
+
+```js
+temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
+```
+
+To render in display mode, the call would look be:
+
+```js
+temml.render("c = \\pm\\sqrt{a^2 + b^2}", element, { displayMode: true });
+```
+
+If the element you provide is a `<math>` element, Temml will populate it.
+Otherwise, it will create a new `<math>` element and make it a child
+of the element you provide.
+
+### In-Browser, Bulk
+
+Breaking Change Notice: `renderMathInElement` is now part of `temml.js`. No
+extension is necessary.
+
+The `renderMathInElement` function is typically used to render all of the math in
+the text of a running HTML document. It searches all of the text in a given element
+for your chosen delimiters, and renders the math in place.
+
+A typical call might look like this:
+
+```js
+<script>temml.renderMathInElement(document.main, { fences: "$+" })</script>
+```
+
+<details><summary>Auto-render details</summary>
+
+In an auto-render document, authors write LaTeX within math delimiters.
+The default delimiters are:
+
+- \$\$…\$\$
+- \\(…\\)
+- \\begin{equation}…\\end{equation}
+- \\begin{equation\*}…\\end{equation*}
+- \\begin{align}…\\end{align}
+- \\begin{align\*}…\\end{align*}
+- \\begin{alignat}…\\end{alignat}
+- \\begin{alignat\*}…\\end{alignat*}
+- \\begin{gather}…\\end{gather}
+- \\begin{gather\*}…\\end{gather*}
+- \\begin{CD}…\\end{CD}
+- \\ref{…}
+- \\eqref{…}
+- \\[…\\]
+
+The items beginning with `\begin{equation}` and ending with `\eqref{…}` are
+from AMS LaTeX.
+
+You can use the `fences` option to customize the recognized delimiters.
+
+| fences<br>key | \$\$…\$\$ | \$\`…\`\$ | \$…\$ | \\\[…\\] | \\(…\\) | AMS   |
+|---------------|-----------|-----------|-------|----------|---------|-------|
+| default       | ✓         |           |       | ✓        | ✓       | ✓     |
+| $             | ✓         | ✓         | ✓     |          |         |       |
+| $+            | ✓         | ✓         | ✓     |          |         | ✓     |
+| (             |           |           |       | ✓        | ✓       |       |
+| (+            |           |           |       | ✓        | ✓       | ✓     |
+| ams           |           |           |       |          |         | ✓     |
+| all           | ✓         | ✓         | ✓     | ✓        | ✓       | ✓     |
+
+<details><summary>…or you can use the <code>delimiters</code> option instead of the <code>fences</code> option to further customize your delimiters:</summary>
+
+The property of a `delimiters` option is a detailed list of delimiters. Here is the default:
+
+```
+delimiters: [
+  { left: "$$", right: "$$", display: true },
+  { left: "\\(", right: "\\)", display: false },
+  { left: "\\begin{equation}", right: "\\end{equation}", display: true },
+  { left: "\\begin{equation*}", right: "\\end{equation*}", display: true },
+  { left: "\\begin{align}", right: "\\end{align}", display: true },
+  { left: "\\begin{align*}", right: "\\end{align*}", display: true },
+  { left: "\\begin{alignat}", right: "\\end{alignat}", display: true },
+  { left: "\\begin{alignat*}", right: "\\end{alignat*}", display: true },
+  { left: "\\begin{gather}", right: "\\end{gather}", display: true },
+  { left: "\\begin{gather*}", right: "\\end{gather*}", display: true },
+  { left: "\\begin{CD}", right: "\\end{CD}", display: true },
+  { left: "\\[", right: "\\]", display: true }
+];
+```
+
+If you want to add support for inline math via `$…$`, be sure to list it
+**after** `$$…$$`. Because rules are processed in order, putting a `$` rule first would
+match `$$` and treat as an empty math expression.
+
+</details>
+
+The `renderMathInElement` function recognizes an options object as it’s second argument. This
+is demonstrated above with `fences`. The options argument can include any [option](#options)
+used by the `temml.render` function. It also recognizes `fences` or `delimiters` and the
+following options:
+
+- `ignoredTags`: This is a list of DOM node types to ignore when recursing
+  through. The default value is
+  `["script", "noscript", "style", "textarea", "pre", "code", "option"]`.
+
+- `ignoredClasses`: This is a list of DOM node class names to ignore when
+  recursing through. By default, this value is not set.
+
+- `errorCallback`: A callback method returning a message and an error stack
+  in case of an critical error during rendering. The default uses `console.error`.
+
+- `preProcess`: A callback function, `(math: string) => string`, used to process
+  math expressions before rendering.
+
+</details>
+
+### Server-Side
+
+To generate a `<math>` element on the server or to generate an MathML string of the
+rendered math, you can use `temml.renderToString`:
+
+```js
+const temml = require('./temml.cjs');  // if in Node.js
+const mathML = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
+```
+
+...and for display mode:
+
+```js
+const mathML = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}", { displayMode: true });
+```
+
+### Macro persistence
+
+Authors can write their own macros, but you decide whether macros should
+persist between calls to `temml.render`.
 
 Say that you have an HTMLCollection of elements whose contents should be
 converted from TeX strings to math. The code for such a conversion
@@ -120,31 +255,6 @@ temml.postProcess(document.body);
 
 </details>
 
-Below, we examine the parts of that code.
-
-### In-Browser
-
-To render math in one DOM element, call `temml.render` with a TeX expression
-and a DOM element to render into:
-
-```js
-temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
-```
-
-If the element you provide is a `<math>` element, Temml will populate it.
-Otherwise, it will create a new `<math>` element and make it a child
-of the element you provide.
-
-### Server-Side
-
-To generate MathML on the server or to generate an MathML string of the
-rendered math, you can use `temml.renderToString`:
-
-```js
-const temml = require('./temml.cjs');  // if in Node.js
-const mathML = temml.renderToString("c = \\pm\\sqrt{a^2 + b^2}");
-```
-
 ### Preamble
 
 To give document-wide scope to a set of macros or colors, define them in a preamble.
@@ -172,13 +282,13 @@ temml.render(
 );
 ```
 
-Available options are:
+<details><summary>Available options are:</summary>
 
 - `displayMode`: `boolean`. If `true` the math will be rendered in display mode, which will put the math in display style (so `\int` and `\sum` are large, for example), and will center the math on the page on its own line. If `false` the math will be rendered in inline mode. (default: `false`)
 
 - `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.
 
-- `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. (default: `false`)
+- `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: `annotate` must be true if you want the `copy-tex` extension to be effective. (default: `false`)
 
 - `wrap`: (`"tex"` | `"="` | `"none"`).  A mode for soft line breaks in non-display
   mode math. The `tex` option sets a soft line break after every top-level relation and
@@ -228,17 +338,25 @@ Available options are:
   - Allow all commands but forbid specific protocol: `trust: (context) => context.protocol !== 'file'`
   - Allow certain commands with specific protocols: `trust: (context) => ['\\url', '\\href'].includes(context.command) && ['http', 'https', '_relative'].includes(context.protocol)`
 
-## Post Process
+</details>
 
-The `postProcess` function implements the AMS functions `\ref` and `\label`.
+## \ref and \eqref
+
+If you are using `temml.renderMathInElement`, you can ignore this section.
+`renderMathInElement` handles this automatically.
+
+The `postProcess` function implements the AMS functions `\ref` and `\eqref`.
 It should be called outside of any loop.
 
 The main Temml functions, `temml.render` and `temml.renderToString`, each
 operate on only one element at a time. In contrast, the `postProcess` function
-makes two passes through the entire document. If you choose not to support
-`\ref`, `postProcess` can be omitted.
+makes two passes through the entire document. One pass finds the `\labels`
+written in a document and the second pass populates `\ref` and `\eqref` with the
+tags or auto-numbers associated with each label.
 
-If Temml is used server-side, `\ref` and `\label` are still implemented at
+If you choose not to support `\ref` and `\eqref`, `postProcess` can be omitted.
+
+If Temml is used server-side, `\ref` and `\eqref` are still implemented at
 runtime with client-side JavaScript. A small file, `temmlPostProcess.js`, is
 provided to be installed in place of `temml.min.js`. It exposes one function:
 
@@ -246,11 +364,8 @@ provided to be installed in place of `temml.min.js`. It exposes one function:
 temml.postProcess(document.body)
 ```
 
-If you do not provide a runtime `postProcess`, everything in Temml will work except `\ref`.
-
-If you use the [auto-render extension][], it includes the post-processor nuances.
-
-[auto-render extension]: https://github.com/ronkok/Temml/tree/main/contrib/auto-render
+If you do not provide a runtime `postProcess`, everything in Temml will work
+except `\ref` and `\eqref`.
 
 # Fonts
 
@@ -271,7 +386,7 @@ with `Temml.woff2`.
 
 Sadly, this option has rendering issues. Chrome botches extensible arrows and it
 will fail to stretch the `∫` symbol on Windows. Android does not currently
-provide a font with a MATH table, so it has many problems.
+provide a system font with a MATH table, so it has many problems.
 
 **Asana** and **Libertinus** have some of the same rendering problems as Cambria Math,
 although Asana does contain its own roundhand glyphs.
@@ -302,7 +417,7 @@ math { font-size: 125%; }
 
 # Equation numbering
 
-In order to place automatic equation numbering in certain AMS environments,
+In order to place automatic equation numbers in certain AMS environments,
 Temml contains these CSS rules:
 
 ```
@@ -332,13 +447,11 @@ CSS has overwritten the Temml counter-reset.
 
 More Temml functionality can be added via the following extensions:
 
-* [auto-render][]: Find and render all math in a running HTML page.
-* [copy-tex][]: When users select and copy <math> elements, copies their LaTeX source to the clipboard
+* [copy-tex][]: When users select and copy `<math>` elements, copies their LaTeX source to the clipboard
 * [mhchem][]: Write beautiful chemical equations easily.
 * [physics][]: Implement much of the LaTeX `physics` package.
 * [texvc][]: Support functions used in wikimedia.
 
-[auto-render]: https://github.com/ronkok/Temml/tree/main/contrib/auto-render
 [copy-tex]: https://github.com/ronkok/Temml/tree/main/contrib/copy-tex
 [mhchem]: https://github.com/ronkok/Temml/tree/main/contrib/mhchem
 [physics]: https://github.com/ronkok/Temml/tree/main/contrib/texvc
@@ -359,7 +472,7 @@ To install extensions for browser use, include the appropriate file from the
 
 The extension reference must come after the reference to `temml.min.js`.
 
-For server-side use, just use `temml.cjs` or `temml.mjs` instead of `temml.min.js`.
+For server-side use, use `temml.cjs` or `temml.mjs` instead of `temml.min.js`.
 `temml.cjs` and `temml.mjs` both include `mhchem`, `physics`, and `texvc`.
 
 # Security
@@ -469,12 +582,13 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.34
 * [Installation](#installation)
 * [API](#api)
 
-    * [Overview](#overview)
-    * [In Browser](#in-browser)
-    * [Server Side](#server-side)
+    * [In-Browser, One Element](#in-browser-one-element)
+    * [In-Browser, Bulk](#in-browser-bulk)
+    * [Server-Side](#server-side)
+    * [Macro Persistence](#macro-persistence)
     * [Preamble](#preamble)
     * [Options](#options)
-    * [Post Process](#post-process)
+    * [\ref and \eqref](#\ref-and-\eqref)
 
 * [Fonts](#fonts)
 * [Equation numbering](#equation-numbering)
