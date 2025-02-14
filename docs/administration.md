@@ -62,7 +62,7 @@ expression and a DOM element to render into:
 temml.render("c = \\pm\\sqrt{a^2 + b^2}", element);
 ```
 
-To render in display mode, the call would look be:
+To render in display mode, the call would be:
 
 ```js
 temml.render("c = \\pm\\sqrt{a^2 + b^2}", element, { displayMode: true });
@@ -501,25 +501,23 @@ poorly.
 | Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
 |                              |          | (Firefox) | (Safari)  |                                     |
 +:=============================+:========:+:=========:+:=========:+:===================================:+
-| Renders well on first paint  | ✓        | ✓         | bad¹      | $\hat{E}\;\; \overrightarrow{ABCD}$ |
+| Accents                      | ✓        | ✓         | bad¹      |  $\hat{𝖺}$                         |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Accents                      | ✓        | ✓         | bad²      |  $\hat{𝖺}$                         |
+| Integral, ∫, in display mode | meh²     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
+| \left( x \right)             | ✓        | ✓         | meh³      | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                  |
+| Tag placement                | ✓        | ✓         | poor⁴     | $$x\tag{tag}$$                      |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Tag placement                | ✓        | ✓         | poor⁵     | $$x\tag{tag}$$                      |
+| Extensible arrows            | poor⁵    | ✓         | poor⁵     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor⁶    | ✓         | bad⁶      | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh⁶      | meh⁶      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁷      | meh⁷      | $\sqrt{f_c}$                        |
+| Size 4 radicals              | meh⁷     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁸     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Line-breaking                | ✓        | ✓         | bad⁸      |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁹      |                                     |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹⁰     | $x\smash{y}z$                       |
+|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad⁹      | $x\smash{y}z$                       |
 | CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | `=` does not get operator \  | meh      | meh       | ✓         | $\text{ab}=\text{cd}$               |
@@ -528,35 +526,27 @@ poorly.
 
 Notes:
 
-1.  There are several items that WebKit places correctly only after a page refresh, or sometimes only after a back-button navigation.
-    + accent height
-    + accent italic correction
-    + extensible accents
-    + extensible arrows
-    + height of ‖ in {Vmatrix} environment
-
-2.  WebKit renders some accents too high even after a page refresh.
+1.  WebKit renders some accents too high.
     Temml does some work to mitigate this. It’s not enough.
 
-3.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
+2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
-4.  WebKit mis-aligns short parentheses, given a \left and \right.
+3.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-5.  WebKit mis-locates tags and AMS automatic equation numbers because it
+4.  WebKit mis-locates tags and AMS automatic equation numbers because it
     ignores `width: 100%` on an `<mtable>`.
 
-6.  Chromium and WebKit system font extensible arrows have notes placed too high.
-    Some do not stretch in Cambria Math. Again, Latin Modern is okay. \
-    WebKit fails to stretch most extensible arrows.
+5.  Chromium and WebKit system font extensible arrows have notes placed too high.
+    Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 
-7.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+6.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-8.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+7.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+8.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-10. WebKit fails to render anything inside the `<mpadded>` element.
+9.  WebKit fails to render anything inside the `<mpadded>` element.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
@@ -574,7 +564,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.10.34
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.11.00
 
 <h3><a href="#top">Contents</a></h3>
 

@@ -54,11 +54,6 @@ fs.copyFile('site/assets/mhchem.min.js', 'contrib/mhchem/mhchem.min.js', (err) =
   if (err) { throw err }
 })
 
-fs.copyFile('contrib/auto-render/test/auto-render.js', 'contrib/auto-render/dist/auto-render.js',
-(err) => {
-  if (err) { throw err }
-})
-
 fs.copyFile('temml.d.ts', 'dist/temml.d.ts',
 (err) => {
   if (err) { throw err }

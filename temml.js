@@ -19,6 +19,7 @@ import { Span, TextNode } from "./src/domTree";
 import { defineSymbol } from "./src/symbols";
 import defineMacro from "./src/defineMacro";
 import { postProcess, version } from "./src/postProcess";
+import { renderMathInElement } from "./src/auto-render"
 
 /**
  * @type {import('./temml').render}
@@ -144,6 +145,11 @@ export default {
    * for sending to the client.
    */
   renderToString,
+  /**
+   * Finds all the math delimiters in a given element of a running HTML document
+   * and converts the contents of each instance into a <math> element.
+   */
+  renderMathInElement,
   /**
    * Post-process an entire HTML block.
    * Writes AMS auto-numbers and implements \ref{}.

@@ -22,6 +22,8 @@ export function render(
 
 export function renderToString(expression: string, options?: Options): string;
 
+export function renderMathInElement(block: any): void;
+
 export function generateParseTree(expression: string, options?: Options): any;
 
 export function definePreamble(expression: string, options?: Options): any;
@@ -48,6 +50,7 @@ declare const Temml: {
   version: string;
   render: typeof render;
   renderToString: typeof renderToString;
+  renderMathInElement: typeof renderMathInElement;
   postProcess: typeof postProcess;
   ParseError: typeof ParseError;
   definePreamble: typeof definePreamble;

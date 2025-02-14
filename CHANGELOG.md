@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.00] = 2025-02-13
+
+### Breaking Change
+
+- `renderMathInElement()` is now part of Temml proper. The previous `auto-render`
+  extension is no longer necessary.\
+  The call to this function must now be: `temml.renderMathInElement()`, not
+  `renderMathInElement()`.
+
+- Documentation for `renderMathInElement()` is now in the Temml [Installation](https://temml.org/docs/en/administration) page, not in a `contrib` folder.
+
+### Added
+
+- `renderMathInElement()` has a new option: `fences`, which eases the selection
+  of recognized math delimiters. See [the docs](https://temml.org/docs/en/administration#in-browser-bulk).
+
+- `renderMathInElement()` now recognizes AMS functions `\ref` and `\eqref`.
+
+### Fixed
+
+- Revised an internal call to `Object.hasOwn` to enable older versions of Safari.
+
 ## [0.10.34] = 2025-02-09
 
 ### Fixed
