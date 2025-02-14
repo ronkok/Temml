@@ -84,7 +84,9 @@ for your chosen delimiters, and renders the math in place.
 A typical call might look like this:
 
 ```js
-<script>temml.renderMathInElement(document.main, { fences: "$+" })</script>
+<script>
+   temml.renderMathInElement(document.main, { fences: "$+" })
+</script>
 ```
 
 <details><summary>Auto-render details</summary>

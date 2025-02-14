@@ -38,7 +38,9 @@
 <p>Breaking Change Notice: <code>renderMathInElement</code> is now part of <code>temml.js</code>. No extension is necessary.</p>
 <p>The <code>renderMathInElement</code> function is typically used to render all of the math in the text of a running HTML document. It searches all of the text in a given element for your chosen delimiters, and renders the math in place.</p>
 <p>A typical call might look like this:</p>
-<pre><code>&lt;script&gt;temml.renderMathInElement(document.main, { fences: &quot;$+&quot; })&lt;/script&gt;</code></pre><details><summary>Auto-render details</summary>
+<pre><code>&lt;script&gt;
+   temml.renderMathInElement(document.main, { fences: &quot;$+&quot; })
+&lt;/script&gt;</code></pre><details><summary>Auto-render details</summary>
 <p>In an auto-render document, authors write LaTeX within math delimiters. The default delimiters are:</p>
 <ul><li class="tight"><p>$$…$$</p></li>
 <li class="tight"><p>\(…\)</p></li>
