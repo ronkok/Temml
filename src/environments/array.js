@@ -349,20 +349,23 @@ const mathmlBuilder = function(group, style) {
     tbl.push(mtr);
   }
 
-  if (group.envClasses.length > 0) {
-    if (group.arraystretch && group.arraystretch !== 1) {
-      // In LaTeX, \arraystretch is a factor applied to a 12pt strut height.
-      // It defines a baseline to baseline distance.
-      // Here, we do an approximation of that approach.
-      const pad = String(1.4 * group.arraystretch - 0.8) + "ex"
-      for (let i = 0; i < tbl.length; i++) {
-        for (let j = 0; j < tbl[i].children.length; j++) {
-          tbl[i].children[j].style.paddingTop = pad
-          tbl[i].children[j].style.paddingBottom = pad
-        }
+  if (group.arraystretch && group.arraystretch !== 1) {
+    // In LaTeX, \arraystretch is a factor applied to a 12pt strut height.
+    // It defines a baseline to baseline distance.
+    // Here, we do an approximation of that approach.
+    const pad = String(1.4 * group.arraystretch - 0.8) + "ex"
+    for (let i = 0; i < tbl.length; i++) {
+      for (let j = 0; j < tbl[i].children.length; j++) {
+        tbl[i].children[j].style.paddingTop = pad
+        tbl[i].children[j].style.paddingBottom = pad
       }
     }
-    let sidePadding = group.envClasses.includes("abut")
+  }
+
+  let sidePadding
+  let sidePadUnit
+  if (group.envClasses.length > 0) {
+    sidePadding = group.envClasses.includes("abut")
       ? "0"
       : group.envClasses.includes("cases")
       ? "0"
@@ -371,13 +374,14 @@ const mathmlBuilder = function(group, style) {
       : group.envClasses.includes("cd")
       ? "0.25"
       : "0.4" // default side padding
-    let sidePadUnit = "em"
-    if (group.arraycolsep) {
-      const arraySidePad = calculateSize(group.arraycolsep, style)
-      sidePadding = arraySidePad.number.toFixed(4)
-      sidePadUnit = arraySidePad.unit
-    }
-
+    sidePadUnit = "em"
+  }
+  if (group.arraycolsep) {
+    const arraySidePad = calculateSize(group.arraycolsep, style)
+    sidePadding = arraySidePad.number.toFixed(4)
+    sidePadUnit = arraySidePad.unit
+  }
+  if (sidePadding) {
     const numCols = tbl.length === 0 ? 0 : tbl[0].children.length
 
     const sidePad = (j, hand) => {
@@ -399,7 +403,18 @@ const mathmlBuilder = function(group, style) {
         tbl[i].children[j].style.paddingRight = `${sidePad(j, 1)}${sidePadUnit}`
       }
     }
+  }
+  if (group.envClasses.length === 0) {
+    // Set zero padding on side of the matrix
+    for (let i = 0; i < tbl.length; i++) {
+      tbl[i].children[0].style.paddingLeft = "0em"
+      if (tbl[i].children.length === tbl[0].children.length) {
+        tbl[i].children[tbl[i].children.length - 1].style.paddingRight = "0em"
+      }
+    }
+  }
 
+  if (group.envClasses.length > 0) {
     // Justification
     const align = group.envClasses.includes("align") || group.envClasses.includes("alignat")
     for (let i = 0; i < tbl.length; i++) {
@@ -423,14 +438,6 @@ const mathmlBuilder = function(group, style) {
         for (const cell of row.children) {
           cell.classes.push("tml-left")
         }
-      }
-    }
-  } else {
-    // Set zero padding on side of the matrix
-    for (let i = 0; i < tbl.length; i++) {
-      tbl[i].children[0].style.paddingLeft = "0em"
-      if (tbl[i].children.length === tbl[0].children.length) {
-        tbl[i].children[tbl[i].children.length - 1].style.paddingRight = "0em"
       }
     }
   }
@@ -672,7 +679,7 @@ defineEnvironment({
   mathmlBuilder
 });
 
-// The matrix environments of amsmath builds on the array environment
+// The matrix environments of amsmath build on the array environment
 // of LaTeX, which is discussed above.
 // The mathtools package adds starred versions of the same environments.
 // These have an optional argument to choose left|center|right justification.
@@ -732,6 +739,10 @@ defineEnvironment({
     const res = parseArray(context.parser, payload, "text")
     res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign })
     const [arraystretch, arraycolsep] = arrayGaps(context.parser.gullet.macros)
+    res.arraystretch = arraystretch
+    if (arraycolsep && !(arraycolsep === 6 && arraycolsep === "pt")) {
+      res.arraycolsep = arraycolsep
+    }
     return delimiters
       ? {
         type: "leftright",
@@ -739,9 +750,7 @@ defineEnvironment({
         body: [res],
         left: delimiters[0],
         right: delimiters[1],
-        rightColor: undefined, // \right uninfluenced by \color in array
-        arraystretch,
-        arraycolsep
+        rightColor: undefined // \right uninfluenced by \color in array
       }
       : res;
   },
