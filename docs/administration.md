@@ -369,6 +369,14 @@ temml.postProcess(document.body)
 If you do not provide a runtime `postProcess`, everything in Temml will work
 except `\ref` and `\eqref`.
 
+## Version
+
+To get the current version of Temml running in the browser, open the console and type:
+
+```
+temml.version
+```
+
 # Fonts
 
 Temml has several different pre-written CSS files. You should use only one and
@@ -581,6 +589,7 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.11.00
     * [Preamble](#preamble)
     * [Options](#options)
     * [\ref and \eqref](#\ref-and-\eqref)
+    * [Version](#version)
 
 * [Fonts](#fonts)
 * [Equation numbering](#equation-numbering)

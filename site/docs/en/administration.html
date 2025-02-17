@@ -192,7 +192,9 @@ temml.postProcess(document.body);</code></pre></details>
 <p>If you choose not to support <code>\ref</code> and <code>\eqref</code>, <code>postProcess</code> can be omitted.</p>
 <p>If Temml is used server-side, <code>\ref</code> and <code>\eqref</code> are still implemented at runtime with client-side JavaScript. A small file, <code>temmlPostProcess.js</code>, is provided to be installed in place of <code>temml.min.js</code>. It exposes one function:</p>
 <pre><code>temml.postProcess(document.body)</code></pre><p>If you do not provide a runtime <code>postProcess</code>, everything in Temml will work except <code>\ref</code> and <code>\eqref</code>.</p>
-<h1 id='fonts'>Fonts</h1>
+<h2 id='version'>Version</h2>
+<p>To get the current version of Temml running in the browser, open the console and type:</p>
+<pre><code>temml.version</code></pre><h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
 <p><strong>Latin Modern</strong> will provide the best quality rendering. It is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. For best results, you must also serve a small (10kb) <code>Temml.woff2</code> file. Then you’ll get support for <code>\mathscr{…}</code> and you’ll get primes at the correct vertical alignment in Chrome and Edge.</p>
 <p><strong>Temml-Local.css</strong> is the light-weight option. It calls two fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, or <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16). It also needs to be augmented with <code>Temml.woff2</code>.</p>
@@ -284,7 +286,8 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li class="tight"><p><a href='#macro-persistence'>Macro Persistence</a></p></li>
 <li class="tight"><p><a href='#preamble'>Preamble</a></p></li>
 <li class="tight"><p><a href='#options'>Options</a></p></li>
-<li class="tight"><p><a href='#\ref-and-\eqref'>\ref and \eqref</a></p></li></ul></li>
+<li class="tight"><p><a href='#\ref-and-\eqref'>\ref and \eqref</a></p></li>
+<li class="tight"><p><a href='#version'>Version</a></p></li></ul></li>
 <li><p><a href='#fonts'>Fonts</a></p></li>
 <li><p><a href='#equation-numbering'>Equation numbering</a></p></li>
 <li><p><a href='#extensions'>Extensions</a></p></li>
