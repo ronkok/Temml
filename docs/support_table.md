@@ -318,6 +318,11 @@ If you know the shape of a character, but not its name,
 +---------------------+--------------------------+--------------------------+-------------------+
 | \boldsymbol         | $\boldsymbol{AaBb}$      | `\boldsymbol{AaBb}`      | ams               |
 +---------------------+--------------------------+--------------------------+-------------------+
+| \bordermatrix       | $\bordermatrix{          | `\bordermatrix{`\        |                   |
+|                     |   & 1 & 2 & 3 \cr        |     `& 1 & 2 & 3 \cr`\   |                   |
+|                     |  1 & A & B & C \cr       |    `1 & A & B & C \cr`\  |                   |
+|                     |  2 & D & E & F \cr}$     |    `2 & D & E & F \cr}`  |                   |
++---------------------+--------------------------+--------------------------+-------------------+
 | \bot                | $\bot$                   |                          |                   |
 +---------------------+--------------------------+--------------------------+-------------------+
 | \Bot                | $\Bot$                   |                          | cmll              |
@@ -927,7 +932,7 @@ If you know the shape of a character, but not its name,
 |\mathstrut|$\sqrt{\mathstrut a}$ |`\sqrt{\mathstrut a}`||
 |\mathtip|(Not supported)|See `\texttip`||
 |\mathtt|$\mathtt{AaBb123}$ |`\mathtt{AaBb123}`||
-|\matrix|(Not supported)|See `{matrix}`||
+|\matrix| $\matrix{a & b \\c & d}$  | `\matrix{a & b \\c & d}` ||
 |{matrix}|$\begin{matrix}a&b\\c&d\end{matrix}$ |`\begin{matrix}`<br>   `a & b \\`<br>   `c & d`<br>`\end{matrix}`| ams |
 |{matrix*}|$\begin{matrix*}[r] -1 & 3\\ 2 & -4 \end{matrix*}$ |`\begin{matrix*}[r]`<br>   `-1 & 3 \\`<br>   `2 & -4`<br>`\end{matrix*}`| mathtools |
 |\matrixel|$\matrixel{n}{A}{m}$ |`\matrixel{n}{A}{m}`| physics extension |

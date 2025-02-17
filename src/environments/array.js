@@ -1,5 +1,6 @@
 import defineEnvironment from "../defineEnvironment";
 import { parseCD } from "./cd";
+import { bordermatrixParseTree } from "./borderTree.js"
 import defineFunction from "../defineFunction";
 import mathMLTree from "../mathMLTree";
 import { Span } from "../domTree"
@@ -103,6 +104,7 @@ function parseArray(
 },
   scriptLevel
 ) {
+  const endToken = envClasses && envClasses.includes("bordermatrix") ? "}" : "\\end"
   parser.gullet.beginGroup();
   if (!singleRow) {
     // \cr is equivalent to \\ without the optional size argument (see below)
@@ -176,7 +178,7 @@ function parseArray(
         }
       }
       parser.consume();
-    } else if (next === "\\end") {
+    } else if (next === endToken) {
       endRow()
       // Arrays terminate newlines with `\crcr` which consumes a `\cr` if
       // the last line is empty.  However, AMS environments keep the
@@ -213,7 +215,7 @@ function parseArray(
       body.push(row);
       beginRow();
     } else {
-      throw new ParseError("Expected & or \\\\ or \\cr or \\end", parser.nextToken);
+      throw new ParseError("Expected & or \\\\ or \\cr or " + endToken, parser.nextToken);
     }
   }
 
@@ -346,7 +348,25 @@ const mathmlBuilder = function(group, style) {
         })
       }
     }
-    tbl.push(mtr);
+
+    // Check for \hphantom \from \bordermatrix
+    let mustSquashRow = true
+    for (let j = 0; j < mtr.children.length; j++) {
+      const child = mtr.children[j].children[0];
+      if (!(child && child.type === "mpadded" && child.attributes.height === "0px")) {
+        mustSquashRow = false
+        break
+      }
+    }
+    if (mustSquashRow) {
+      // All the cell contents are \hphantom. Squash the padding.
+      for (let j = 0; j < mtr.children.length; j++) {
+        mtr.children[j].style.paddingTop = "0"
+        mtr.children[j].style.paddingBottom = "0"
+      }
+    }
+
+    tbl.push(mtr)
   }
 
   if (group.arraystretch && group.arraystretch !== 1) {
@@ -753,6 +773,28 @@ defineEnvironment({
         rightColor: undefined // \right uninfluenced by \color in array
       }
       : res;
+  },
+  mathmlBuilder
+});
+
+defineEnvironment({
+  type: "array",
+  names: ["bordermatrix"],
+  props: {
+    numArgs: 0
+  },
+  handler(context) {
+    const payload = { cols: [], envClasses: ["bordermatrix"] }
+    const res = parseArray(context.parser, payload, "text")
+    if (context.envName === "bordermatrix") {
+      return bordermatrixParseTree(res, context.delimiters)
+    } else {
+      // Support \matrix{}
+      res.cols = new Array(res.body[0].length).fill({ type: "align", align: "c" })
+      res.envClasses = [];
+      res.arraystretch = 1
+      return res
+    }
   },
   mathmlBuilder
 });

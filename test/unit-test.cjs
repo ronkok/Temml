@@ -1016,6 +1016,14 @@ const test = () => {
   new Expect(r`\begin{matrix}a&b\\ [c]&d\end{matrix}`).toParse()
   new Expect(r`a\\ [b]`).toParse()
 
+  assertion = "A \\bordermatrix parser should work"
+  new Expect(r`\bordermatrix{ &1&2 \cr 1&A&B\cr 2&C&D}`).toParse()
+  new Expect(r`\bordermatrix{ &1&2 \cr 1&A&B\cr 2&C&D}`).toBuild()
+  new Expect(r`\bordermatrix[{[]}]{ &1&2 \cr 1&A&B\cr 2&C&D}`).toParse()
+  new Expect(r`\bordermatrix[{[]}]{ &1&2 \cr 1&A&B\cr 2&C&D}`).toBuild()
+  new Expect(r`\matrix{ &1&2 \cr 1&A&B\cr 2&C&D}`).toParse()
+  new Expect(r`\matrix{ &1&2 \cr 1&A&B\cr 2&C&D}`).toBuild()
+
   assertion = "A sqrt parser should work"
   const sqrt = r`\sqrt{x}`;
   const missingGroup = r`\sqrt`;
