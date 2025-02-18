@@ -290,7 +290,7 @@ temml.render(
 
 - `macros`: `object`. A collection of custom macros. The easy way to create them is via a preamble, noted just above. Alternatively, you can provide a set of key-value pairs in which each key is a new Temml function name and each value is the expansion of the macro.  Example: `macros: {"\\R": "\\mathbb{R}"}`.
 
-- `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: `annotate` must be true if you want the `copy-tex` extension to be effective. (default: `false`)
+- `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: `annotate` must be true if you want the `copy-tex` extension to be effective. Also not: Auto-linebreaks will not work if annotation is true. (default: `false`)
 
 - `wrap`: (`"tex"` | `"="` | `"none"`).  A mode for soft line breaks in non-display
   mode math. The `tex` option sets a soft line break after every top-level relation and
