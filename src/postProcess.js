@@ -66,6 +66,7 @@ export function postProcess(block) {
     mtext.appendChild(document.createTextNode(str))
     const math =  document.createElementNS("http://www.w3.org/1998/Math/MathML", "math")
     math.appendChild(mtext)
+    ref.textContent = ''
     ref.appendChild(math)
   })
 }
