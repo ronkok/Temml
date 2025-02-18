@@ -11,7 +11,7 @@
    * https://mit-license.org/
    */
 
-  const version = "0.11.00";
+  const version = "0.11.01";
 
   function postProcess(block) {
     const labelMap = {};
@@ -72,6 +72,7 @@
       mtext.appendChild(document.createTextNode(str));
       const math =  document.createElementNS("http://www.w3.org/1998/Math/MathML", "math");
       math.appendChild(mtext);
+      ref.textContent = '';
       ref.appendChild(math);
     });
   }
