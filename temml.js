@@ -104,7 +104,7 @@ const renderError = function(error, expression, options) {
   if (options.throwOnError || !(error instanceof ParseError)) {
     throw error;
   }
-  const node = new Span(["temml-error"], [new TextNode(expression + "\n" + error.toString())]);
+  const node = new Span(["temml-error"], [new TextNode(expression + "\n\n" + error.toString())]);
   node.style.color = options.errorColor
   node.style.whiteSpace = "pre-line"
   return node;

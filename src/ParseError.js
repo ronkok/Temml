@@ -27,7 +27,7 @@ class ParseError {
       if (start === input.length) {
         error += " at end of input: ";
       } else {
-        error += " at position " + (start + 1) + ": ";
+        error += " at position " + (start + 1) + ": \n";
       }
 
       // Underline token in question using combining underscores
