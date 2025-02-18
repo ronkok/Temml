@@ -30,13 +30,13 @@ const phantom = (body, type) => {
  * bottom.
  *
  * We also create a left {matrix} with a single column that contains
- * elements shifted out of the baseTree. The left {matrix} also
+ * elements shifted out of the matrix. The left {matrix} also
  * contains \vphantom copies of the other {pmatrix} elements.
  * As before, this ensures consistent row heights of left and main.
  */
 
-export const bordermatrixParseTree = (baseTree, delimiters) => {
-  const body = baseTree.body
+export const bordermatrixParseTree = (matrix, delimiters) => {
+  const body = matrix.body
   body[0].shift() // dispose of top left cell
 
   // Create an array for the left column
@@ -106,20 +106,6 @@ export const bordermatrixParseTree = (baseTree, delimiters) => {
     body: [topRow]       // Default level is "script".
   }
 
-  const matrix = {
-    type: "array",
-    mode: "math",
-    body: body,
-    cols: new Array(body.length).fill({ type: "align", align: "c" }),
-    rowGaps: new Array(body.length - 1).fill(null),
-    hLinesBeforeRow: new Array(body.length + 1).fill().map(() => []),
-    envClasses: [],
-    scriptLevel: "text",
-    arraystretch: 1,
-    labels: new Array(body.length).fill(""),
-    arraycolsep: null
-  }
-
   const container = {
     type: "leftright",
     mode: "math",
@@ -144,7 +130,7 @@ export const bordermatrixParseTree = (baseTree, delimiters) => {
   const mover = {
     type: "supsub",  // We're using the MathML equivalent
     mode: "math",    // of TeX \overset.
-    base: base,  // That keeps the {pmatrix} aligned with
+    base: base,      // That keeps the {pmatrix} aligned with
     sup: topWrapper, // the math centerline.
     sub: null
   }

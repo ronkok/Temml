@@ -786,15 +786,11 @@ defineEnvironment({
   handler(context) {
     const payload = { cols: [], envClasses: ["bordermatrix"] }
     const res = parseArray(context.parser, payload, "text")
-    if (context.envName === "bordermatrix") {
-      return bordermatrixParseTree(res, context.delimiters)
-    } else {
-      // Support \matrix{}
-      res.cols = new Array(res.body[0].length).fill({ type: "align", align: "c" })
-      res.envClasses = [];
-      res.arraystretch = 1
-      return res
-    }
+    res.cols = new Array(res.body[0].length).fill({ type: "align", align: "c" })
+    res.envClasses = [];
+    res.arraystretch = 1
+    if (context.envName === "matrix") { return res}
+    return bordermatrixParseTree(res, context.delimiters)
   },
   mathmlBuilder
 });
