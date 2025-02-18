@@ -511,23 +511,25 @@ poorly.
 | Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
 |                              |          | (Firefox) | (Safari)  |                                     |
 +:=============================+:========:+:=========:+:=========:+:===================================:+
-| Accents                      | ✓        | ✓         | bad¹      |  $\hat{𝖺}$                         |
+| Renders well on first paint  | ✓        | ✓         | bad¹      | $\vec{E}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Integral, ∫, in display mode | meh²     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
+| Accents                      | ✓        | ✓         | bad²      |  $\hat{𝖺}$                         |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| \left( x \right)             | ✓        | ✓         | meh³      | $\left( x \right)$                  |
+| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Tag placement                | ✓        | ✓         | poor⁴     | $$x\tag{tag}$$                      |
+| \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor⁵    | ✓         | poor⁵     | $A \xrightharpoonup{\text{note}} B$ |
+| Tag placement                | ✓        | ✓         | poor⁵     | $$x\tag{tag}$$                      |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁶      | meh⁶      | $\sqrt{f_c}$                        |
+| Extensible arrows            | poor⁶    | ✓         | poor⁶     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁷     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Radical height               | ✓        | meh⁷      | meh⁷      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁸      |                                     |
+| Size 4 radicals              | meh⁸     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad⁹      | $x\smash{y}z$                       |
+| Line-breaking                | ✓        | ✓         | bad⁹      |                                     |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹⁰     | $x\smash{y}z$                       |
 | CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | `=` does not get operator \  | meh      | meh       | ✓         | $\text{ab}=\text{cd}$               |
@@ -536,27 +538,29 @@ poorly.
 
 Notes:
 
-1.  WebKit renders some accents too high.
+1.  WebKit renders some things correctly only after a page refresh.
+
+2.  WebKit renders some accents too high.
     Temml does some work to mitigate this. It’s not enough.
 
-2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
+3.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
-3.  WebKit mis-aligns short parentheses, given a \left and \right.
+4.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-4.  WebKit mis-locates tags and AMS automatic equation numbers because it
+5.  WebKit mis-locates tags and AMS automatic equation numbers because it
     ignores `width: 100%` on an `<mtable>`.
 
-5.  Chromium and WebKit system font extensible arrows have notes placed too high.
+6.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math. Again, Latin Modern is okay.
 
-6.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+7.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-7.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+8.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-8.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-9.  WebKit fails to render anything inside the `<mpadded>` element.
+10. WebKit fails to render anything inside the `<mpadded>` element.
 
 Another issue if you are targeting mobile: Android has not provided a math
 system font. They are planning to add a MATH table to the Noto Sans font. I
