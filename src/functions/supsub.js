@@ -19,7 +19,7 @@ const symbolRegEx = /^m(over|under|underover)$/
 defineFunctionBuilders({
   type: "supsub",
   mathmlBuilder(group, style) {
-    // Is the inner group a relevant horizonal brace?
+    // Is the inner group a relevant horizontal brace?
     let isBrace = false
     let isOver
     let isSup
