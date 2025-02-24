@@ -895,7 +895,7 @@ defineSymbol(text, accent, "\u02d9", "\\."); // dot above
 defineSymbol(text, accent, "\u00b8", "\\c"); // cedilla
 defineSymbol(text, accent, "\u02da", "\\r"); // ring above
 defineSymbol(text, accent, "\u02c7", "\\v"); // caron
-defineSymbol(text, accent, "\u00a8", '\\"'); // diaresis
+defineSymbol(text, accent, "\u00a8", '\\"'); // diaeresis
 defineSymbol(text, accent, "\u02dd", "\\H"); // double acute
 defineSymbol(math, accent, "\u02ca", "\\'"); // acute
 defineSymbol(math, accent, "\u02cb", "\\`"); // grave
@@ -907,7 +907,7 @@ defineSymbol(math, accent, "\u02d9", "\\."); // dot above
 defineSymbol(math, accent, "\u00b8", "\\c"); // cedilla
 defineSymbol(math, accent, "\u02da", "\\r"); // ring above
 defineSymbol(math, accent, "\u02c7", "\\v"); // caron
-defineSymbol(math, accent, "\u00a8", '\\"'); // diaresis
+defineSymbol(math, accent, "\u00a8", '\\"'); // diaeresis
 defineSymbol(math, accent, "\u02dd", "\\H"); // double acute
 
 // These ligatures are detected and created in Parser.js's `formLigatures`.
