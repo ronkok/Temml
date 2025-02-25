@@ -197,15 +197,16 @@ temml.postProcess(document.body);</code></pre></details>
 <pre><code>temml.version</code></pre><h1 id='fonts'>Fonts</h1>
 <p>Temml has several different pre-written CSS files. You should use only one and by that choice, you also choose a math font. There are several math fonts available and each has different advantages.</p>
 <p><strong>Latin Modern</strong> will provide the best quality rendering. It is a clone of Computer Modern and so is very home-like for readers accustomed to LaTeX documents. For best results, you must also serve a small (10kb) <code>Temml.woff2</code> file. Then you’ll get support for <code>\mathscr{…}</code> and you’ll get primes at the correct vertical alignment in Chrome and Edge.</p>
-<p><strong>Temml-Local.css</strong> is the light-weight option. It calls two fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, or <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16). It also needs to be augmented with <code>Temml.woff2</code>.</p>
-<p>Sadly, this option has rendering issues. Chrome botches extensible arrows and it will fail to stretch the <code>∫</code> symbol on Windows. Android does not currently provide a system font with a MATH table, so it has many problems.</p>
+<p><strong>Temml-Local.css</strong> is the light-weight option. It calls three fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16), or <em>NotoSans Math</em>, which I think comes pre-installed in Android. The first two need to be augmented with <code>Temml.woff2</code>.</p>
+<p>Sadly, this option has rendering issues. Chrome botches extensible arrows and it will fail to stretch the <code>∫</code> symbol on Windows.</p>
 <p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
-<p><strong>Fira Math</strong> is a sans-serif math font.</p>
+<p><strong>NotoSans Math</strong> is a sans-serif math font from Google. Chromium fails to stretch extensible arrows in this font. It&#x27;s a big file to ship. Otherwise, it is a pretty solid effort. <code>Temml.woff2</code> is not needed.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
 <ul><li class="tight"><p>Temml.woff2 can be downloaded with the latest Temml <a href='https://github.com/ronkok/Temml/releases'>release</a>.</p></li>
 <li class="tight"><p>STIXTwoMath-Regular.woff2 is located at the STIX <a href='https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2'>repository</a>.</p></li>
 <li class="tight"><p>LibertinusMath-Regular.woff2 is located at the Libertinus <a href='https://github.com/alerque/libertinus'>repository</a>.</p></li>
+<li class="tight"><p>NotoSansMath-Regular.ttf is located at the NotoSansMath <a href='https://github.com/notofonts/math/releases'>repository</a>.</p></li>
 <li class="tight"><p>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p></li></ul>
 <p>If you want a different math font size, you can add a rule to your own page&#x27;s CSS, like this example:</p>
 <pre><code>math { font-size: 125%; }</code></pre><h1 id='equation-numbering'>Equation numbering</h1>
@@ -264,12 +265,11 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.</p></li>
 <li><p>WebKit mis-aligns short parentheses, given a \left and \right.</p></li>
 <li><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
-<li><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math. Again, Latin Modern is okay.</p></li>
+<li><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.</p></li>
 <li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
 <li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
 <li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
 <li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li></ol>
-<p>Another issue if you are targeting mobile: Android has not provided a math system font. They are planning to add a MATH table to the Noto Sans font. I don’t think it has shipped.</p>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
 <p class="reduced">Copyright © 2021-2025 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>

@@ -389,19 +389,20 @@ documents. For best results, you must also serve a small
 (10kb) `Temml.woff2` file. Then you’ll get support for `\mathscr{…}` and you’ll
 get primes at the correct vertical alignment in Chrome and Edge.
 
-**Temml-Local.css** is the light-weight option. It calls two fonts: _Cambria
-Math_, which comes pre-installed in Windows, or _STIX TWO_, which comes
-pre-installed in iOS and MacOS (as of Safari 16). It also needs to be augmented
-with `Temml.woff2`.
+**Temml-Local.css** is the light-weight option. It calls three fonts: _Cambria
+Math_, which comes pre-installed in Windows, _STIX TWO_, which comes
+pre-installed in iOS and MacOS (as of Safari 16), or _NotoSans Math_, which I
+think comes pre-installed in Android. The first two need to be augmented with `Temml.woff2`.
 
 Sadly, this option has rendering issues. Chrome botches extensible arrows and it
-will fail to stretch the `∫` symbol on Windows. Android does not currently
-provide a system font with a MATH table, so it has many problems.
+will fail to stretch the `∫` symbol on Windows.
 
 **Asana** and **Libertinus** have some of the same rendering problems as Cambria Math,
 although Asana does contain its own roundhand glyphs.
 
-**Fira Math** is a sans-serif math font.
+**NotoSans Math** is a sans-serif math font from Google. Chromium fails to stretch
+extensible arrows in this font. It’s a big file to ship. Otherwise, it is a pretty solid effort.
+`Temml.woff2` is not needed.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
@@ -411,14 +412,16 @@ Where to find font files:
 - Temml.woff2 can be downloaded with the latest Temml [release][].
 - STIXTwoMath-Regular.woff2 is located at the STIX [repository][STIX].
 - LibertinusMath-Regular.woff2 is located at the Libertinus [repository][Libertinus].
+- NotoSansMath-Regular.ttf is located at the NotoSansMath [repository][Noto].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
 [release]: https://github.com/ronkok/Temml/releases
 [STIX]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
 [Libertinus]: https://github.com/alerque/libertinus
+[Noto]: https://github.com/notofonts/math/releases
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
-If you want a different math font size, you can add a rule to your own page's
+If you want a different math font size, you can add a rule to your own page’s
 CSS, like this example:
 
 ```css
@@ -551,7 +554,7 @@ Notes:
     ignores `width: 100%` on an `<mtable>`.
 
 6.  Chromium and WebKit system font extensible arrows have notes placed too high.
-    Some do not stretch in Cambria Math. Again, Latin Modern is okay.
+    Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
 
 7.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
@@ -561,10 +564,6 @@ Notes:
 9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
 10. WebKit fails to render anything inside the `<mpadded>` element.
-
-Another issue if you are targeting mobile: Android has not provided a math
-system font. They are planning to add a MATH table to the Noto Sans font. I
-don’t think it has shipped.
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 

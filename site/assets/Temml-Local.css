@@ -12,7 +12,7 @@ Unicode range 1D49C to 1D4B5.
 }
 
 math {
-  font-family: "Cambria Math", 'STIXTwoMath-Regular', math;
+  font-family: "Cambria Math", 'STIXTwoMath-Regular', 'NotoSansMath-Regular', math;
   font-style: normal;
   font-weight: normal;
   line-height: normal;
@@ -33,6 +33,11 @@ math * {
 /* Next line is active in Firefox and Safari.
  * Not in Chromium, which recognizes display: "block math" written inline. */
 math.tml-display { display: block; }
+
+*.mathcal {
+  /* NotoSans */
+  font-feature-settings: 'ss01';
+}
 
 math .mathscr {
   font-family: "Temml";

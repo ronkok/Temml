@@ -1,24 +1,13 @@
 /*
-Fira Math fonts are released under the SIL OPEN FONT LICENSE Version 1.1.
+Noto Math fonts are released under the SIL OPEN FONT LICENSE Version 1.1.
 
-The Fira Math WOFF2 font has been obtained from
-http://www.gust.org.pl/projects/e-foundry/
-
-The Temml.woff2 is a clone of KaTeX_Script-Regular, except that the code points
-have been changed from ASCII to Unicode Mathematical Alphanumeric Symbols Script capitals,
-Unicode range 1D49C to 1D4B5.
+The NotoMath font has been obtained from
+https://fonts.google.com/noto/specimen/Noto+Sans+Math
 */
 
 @font-face {
-  font-family: 'Temml';
-  src: url('Temml.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: Fira Math;
-  src: url('FiraMath-Regular.woff2');
+  font-family: NotoSans Math;
+  src: url('NotoSansMath-Regular.ttf');
 }
 
 math {
@@ -40,20 +29,24 @@ math * {
 }
 
 math {
-  font-family: "Fira Math", math;
+  font-family: "NotoSans Math", math;
 }
 
 /* Next line is active in Firefox and Safari.
  * Not in Chromium, which recognizes display: "block math" written inline. */
 math.tml-display { display: block; }
 
-*.mathscr {
-  font-family: "Temml";
+math .mathscr {
+  font-family: "ssty1";
+}
+
+*.mathcal {
+  font-feature-settings: 'ss01';
 }
 
 /* Chromium prime alignment */
 mo.tml-prime {
-  font-family: Temml;
+  font-feature-settings: 'ssty';
 }
 
 /* Prevent f' from overlapping in Chromium */
