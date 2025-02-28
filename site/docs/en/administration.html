@@ -200,7 +200,7 @@ temml.postProcess(document.body);</code></pre></details>
 <p><strong>Temml-Local.css</strong> is the light-weight option. It calls three fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16), or <em>NotoSans Math</em>, which I think comes pre-installed in Android. The first two need to be augmented with <code>Temml.woff2</code>.</p>
 <p>Sadly, this option has rendering issues. Chrome botches extensible arrows and it will fail to stretch the <code>∫</code> symbol on Windows.</p>
 <p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
-<p><strong>NotoSans Math</strong> is a sans-serif math font from Google. Chromium fails to stretch extensible arrows in this font. It&#x27;s a big file to ship. Otherwise, it is a pretty solid effort. <code>Temml.woff2</code> is not needed.</p>
+<p><strong>NotoSans Math</strong> is a sans-serif math font from Google. Chromium fails to stretch extensible arrows in this font. It’s a big file to ship. Otherwise, it is a pretty solid effort. <code>Temml.woff2</code> is not needed.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
 <ul><li class="tight"><p>Temml.woff2 can be downloaded with the latest Temml <a href='https://github.com/ronkok/Temml/releases'>release</a>.</p></li>
@@ -208,7 +208,7 @@ temml.postProcess(document.body);</code></pre></details>
 <li class="tight"><p>LibertinusMath-Regular.woff2 is located at the Libertinus <a href='https://github.com/alerque/libertinus'>repository</a>.</p></li>
 <li class="tight"><p>NotoSansMath-Regular.ttf is located at the NotoSansMath <a href='https://github.com/notofonts/math/releases'>repository</a>.</p></li>
 <li class="tight"><p>The other fonts can be downloaded at <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p></li></ul>
-<p>If you want a different math font size, you can add a rule to your own page&#x27;s CSS, like this example:</p>
+<p>If you want a different math font size, you can add a rule to your own page’s CSS, like this example:</p>
 <pre><code>math { font-size: 125%; }</code></pre><h1 id='equation-numbering'>Equation numbering</h1>
 <p>In order to place automatic equation numbers in certain AMS environments, Temml contains these CSS rules:</p>
 <pre><code>.tml-eqn::before {

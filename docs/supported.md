@@ -1648,6 +1648,7 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.11.01
   <option value="STIX2">STIX TWO</option>
   <option value="Libertinus">Libertinus</option>
   <option value="NotoSans">NotoSans</option>
+  <option value="Fira">Fira</option>
 </select>
 <script>
   function updateMathFont() {
