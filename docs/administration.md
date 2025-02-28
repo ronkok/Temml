@@ -404,6 +404,10 @@ although Asana does contain its own roundhand glyphs.
 extensible arrows in this font. It’s a big file to ship. Otherwise, it is a pretty solid effort.
 `Temml.woff2` is not needed.
 
+**FiraMath** is a sans-serif font similar to NotoSans. FiraMath’s advantage over NotoSans is
+that [Mathematical OpenType Fonts][] has a `woff2` version that is _much_ smaller than NotoSans’s
+`ttf` file. 
+
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
 
