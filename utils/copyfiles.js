@@ -22,10 +22,6 @@ fs.copyFile('site/assets/Temml-Libertinus.css', 'dist/Temml-Libertinus.css', (er
   if (err) { throw err }
 })
 
-fs.copyFile('site/assets/Temml-Fira.css', 'dist/Temml-Fira.css', (err) => {
-  if (err) { throw err }
-})
-
 fs.copyFile('site/assets/Temml-NotoSans.css', 'dist/Temml-NotoSans.css', (err) => {
   if (err) { throw err }
 })

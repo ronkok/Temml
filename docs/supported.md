@@ -1647,7 +1647,6 @@ $\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.11.01
   <option value="Asana">Asana</option>
   <option value="STIX2">STIX TWO</option>
   <option value="Libertinus">Libertinus</option>
-  <option value="Fira">Fira Math</option>
   <option value="NotoSans">NotoSans</option>
 </select>
 <script>
