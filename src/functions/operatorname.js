@@ -19,7 +19,7 @@ const mathmlBuilder = (group, style) => {
   for (let i = 0; i < expression.length; i++) {
     let node = expression[i]
     if (node instanceof mathMLTree.MathNode) {
-      if (node.type === "mrow" && node.children.length === 1 &&
+      if ((node.type === "mrow" || node.type === "mpadded") && node.children.length === 1 &&
           node.children[0] instanceof mathMLTree.MathNode) {
         node = node.children[0]
       }
