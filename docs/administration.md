@@ -534,6 +534,8 @@ poorly.
 |\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹⁰     | $x\smash{y}z$                       |
 | CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
+| Flattened circumflex accent  | poor¹¹   | poor¹¹    | poor¹¹    | $\hat{a}$                           |
++------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
@@ -560,6 +562,8 @@ Notes:
 9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
 10. WebKit fails to render anything inside the `<mpadded>` element.
+
+11. All browsers fail to flatten a circumflex accent in any font other than Latin Modern. 
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 
