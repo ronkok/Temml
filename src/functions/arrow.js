@@ -6,7 +6,7 @@ import * as mml from "../buildMathML";
 
 // Helper functions
 
-const padding = width => {
+export const padding = width => {
   const node = new mathMLTree.MathNode("mspace")
   node.setAttribute("width", width + "em")
   return node

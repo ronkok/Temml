@@ -1,6 +1,7 @@
 import { defineFunctionBuilders } from "../defineFunction";
 import mathMLTree from "../mathMLTree";
 import * as mml from "../buildMathML";
+import { padding } from "./arrow";
 
 // Operator ParseNodes created in Parser.js from symbol Groups in src/symbols.js.
 
@@ -47,6 +48,14 @@ defineFunctionBuilders({
       // ":" is not in the MathML operator dictionary. Give it BIN spacing.
       node.attributes.lspace = "0.2222em"
       node.attributes.rspace = "0.2222em"
+    } else if (group.needsSpacing) {
+      // Fix a MathML bug that occurs when a <mo> is between two <mtext> elements.
+      if (group.family === "bin") {
+        return new mathMLTree.MathNode("mrow", [padding(0.222), node, padding(0.222)])
+      } else {
+        // REL spacing
+        return new mathMLTree.MathNode("mrow", [padding(0.2778), node, padding(0.2778)])
+      }
     }
     return node;
   }

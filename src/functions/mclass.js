@@ -1,17 +1,12 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import symbols from "../symbols";
 import mathMLTree from "../mathMLTree";
-import utils from "../utils";
+import utils from "../utils.js"
+import { padding } from "./arrow";
 
 import * as mml from "../buildMathML";
 
 const textAtomTypes = ["text", "textord", "mathord", "atom"]
-
-const padding = width => {
-  const node = new mathMLTree.MathNode("mspace")
-  node.setAttribute("width", width + "em")
-  return node
-}
 
 function mathmlBuilder(group, style) {
   let node;

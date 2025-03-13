@@ -926,7 +926,12 @@ export default class Parser {
           family,
           loc,
           text
-        };
+        }
+        if ((family === "rel" || family === "bin") && this.prevAtomType === "text") {
+          if (/^ *\\text/.test(loc.lexer.input.slice(loc.end))) {
+            s.needsSpacing = true  // Fix a MathML bug.
+          }
+        }
       } else {
         if (asciiFromScript[text]) {
           // Unicode 14 disambiguates chancery from roundhand.

@@ -545,6 +545,10 @@ const test = () => {
   new Expect(markup).toContain("lspace")
   new Expect(markup).toContain("rspace")
 
+  assertion = "A <mo> between two <mtext>s should get operator spacing"
+  markup = temml.renderToString(r`\text{abc} = \text{def}`)
+  new Expect(markup).toContain('<mspace width="0.2778em"></mspace><mo>=</mo><mspace width="0.2778em">')
+
   assertion = "A space should be placed between certain atom types and a math operator"
   new Expect(temml.renderToString(r`d\sin`)).toContain('<mspace width="0.1667em">')
   new Expect(temml.renderToString(r`\text{d}\sin`)).toContain('<mspace width="0.1667em">')
