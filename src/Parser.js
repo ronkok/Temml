@@ -17,6 +17,7 @@ import unicodeSymbols from /*preval*/ "./unicodeSymbols";
 
 const binLeftCancellers = ["bin", "op", "open", "punct", "rel"];
 const sizeRegEx = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/
+const textRegEx = /^ *\\text/
 
 /**
  * This file contains the parser used to parse out a TeX expression from the
@@ -928,7 +929,7 @@ export default class Parser {
           text
         }
         if ((family === "rel" || family === "bin") && this.prevAtomType === "text") {
-          if (/^ *\\text/.test(loc.lexer.input.slice(loc.end))) {
+          if (textRegEx.test(loc.lexer.input.slice(loc.end))) {
             s.needsSpacing = true  // Fix a MathML bug.
           }
         }
