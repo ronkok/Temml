@@ -1335,6 +1335,8 @@ const test = () => {
   assertion = "A font tree-builder should render wide characters with <mi> and with the correct font"
   markup = temml.renderToString("𝐀").replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mi>𝐀</mi>');
+  markup = temml.renderToString(r`\mathord{\text{abc}}`).replace(mathTagRegEx, "");
+  new Expect(markup).toBe('<mi>abc</mi>');
 
   assertion = "A parser should throw an error when the expression is of the wrong type"
   new Expect([1, 2]).toNotParse()

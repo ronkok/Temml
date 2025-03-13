@@ -128,14 +128,19 @@ defineFunction({
         break
       }
     }
-    return {
-      type: "mclass",
-      mode: parser.mode,
-      mclass: "m" + funcName.slice(5),
-      body: ordargument(mustPromote ? mord : body),
-      isCharacterBox,
-      mustPromote
-    };
+    if (mustPromote && funcName === "\\mathord" && mord.type === "mathord"
+                    && mord.text.length > 1) {
+      return mord
+    } else {
+      return {
+        type: "mclass",
+        mode: parser.mode,
+        mclass: "m" + funcName.slice(5),
+        body: ordargument(mustPromote ? mord : body),
+        isCharacterBox,
+        mustPromote
+      };
+    }
   },
   mathmlBuilder
 });
