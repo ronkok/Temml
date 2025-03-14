@@ -2753,17 +2753,17 @@ var temml = (function () {
 
   // Helper functions
 
-  const padding$2 = width => {
+  const padding$1 = width => {
     const node = new mathMLTree.MathNode("mspace");
     node.setAttribute("width", width + "em");
     return node
   };
 
   const paddedNode = (group, lspace = 0.3, rspace = 0, mustSmash = false) => {
-    if (group == null && rspace === 0) { return padding$2(lspace) }
+    if (group == null && rspace === 0) { return padding$1(lspace) }
     const row = group ? [group] : [];
-    if (lspace !== 0)   { row.unshift(padding$2(lspace)); }
-    if (rspace > 0) { row.push(padding$2(rspace)); }
+    if (lspace !== 0)   { row.unshift(padding$1(lspace)); }
+    if (rspace > 0) { row.push(padding$1(rspace)); }
     if (mustSmash) {
       // Used for the bottom arrow in a {CD} environment
       const mpadded = new mathMLTree.MathNode("mpadded", row);
@@ -2890,8 +2890,8 @@ var temml = (function () {
       const node = munderoverNode(group.name, group.body, group.below, style);
       // Create operator spacing for a relation.
       const row = [node];
-      row.unshift(padding$2(0.2778));
-      row.push(padding$2(0.2778));
+      row.unshift(padding$1(0.2778));
+      row.push(padding$1(0.2778));
       return new mathMLTree.MathNode("mrow", row)
     }
   });
@@ -2966,13 +2966,13 @@ var temml = (function () {
         botNode.setAttribute("width", "0.5em");
         wrapper = new mathMLTree.MathNode(
           "mpadded",
-          [padding$2(0.2778), botNode, raiseNode, padding$2(0.2778)]
+          [padding$1(0.2778), botNode, raiseNode, padding$1(0.2778)]
         );
       } else {
         raiseNode.setAttribute("width", (group.name === "\\equilibriumRight" ? "0.5em" : "0"));
         wrapper = new mathMLTree.MathNode(
           "mpadded",
-          [padding$2(0.2778), raiseNode, botArrow, padding$2(0.2778)]
+          [padding$1(0.2778), raiseNode, botArrow, padding$1(0.2778)]
         );
       }
 
@@ -6170,7 +6170,7 @@ var temml = (function () {
     }
   });
 
-  const padding$1 = _ => {
+  const padding = _ => {
     const node = new mathMLTree.MathNode("mspace");
     node.setAttribute("width", "3pt");
     return node
@@ -6183,9 +6183,9 @@ var temml = (function () {
       // Firefox does not reliably add side padding.
       // Insert <mspace>
       node = new mathMLTree.MathNode("mrow", [
-        padding$1(),
+        padding(),
         buildGroup$1(group.body, style),
-        padding$1()
+        padding()
       ]);
     } else {
       node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
@@ -7585,12 +7585,6 @@ var temml = (function () {
 
   const textAtomTypes = ["text", "textord", "mathord", "atom"];
 
-  const padding = width => {
-    const node = new mathMLTree.MathNode("mspace");
-    node.setAttribute("width", width + "em");
-    return node
-  };
-
   function mathmlBuilder$3(group, style) {
     let node;
     const inner = buildExpression(group.body, style);
@@ -7626,17 +7620,17 @@ var temml = (function () {
         if (doSpacing ) {
           if (group.mclass === "mbin") {
             // medium space
-            node.children.unshift(padding(0.2222));
-            node.children.push(padding(0.2222));
+            node.children.unshift(padding$1(0.2222));
+            node.children.push(padding$1(0.2222));
           } else if (group.mclass === "mrel") {
             // thickspace
-            node.children.unshift(padding(0.2778));
-            node.children.push(padding(0.2778));
+            node.children.unshift(padding$1(0.2778));
+            node.children.push(padding$1(0.2778));
           } else if (group.mclass === "mpunct") {
-            node.children.push(padding(0.1667));
+            node.children.push(padding$1(0.1667));
           } else if (group.mclass === "minner") {
-            node.children.unshift(padding(0.0556));  // 1 mu is the most likely option
-            node.children.push(padding(0.0556));
+            node.children.unshift(padding$1(0.0556));  // 1 mu is the most likely option
+            node.children.push(padding$1(0.0556));
           }
         }
       } else {
@@ -7706,14 +7700,19 @@ var temml = (function () {
           break
         }
       }
-      return {
-        type: "mclass",
-        mode: parser.mode,
-        mclass: "m" + funcName.slice(5),
-        body: ordargument(mustPromote ? mord : body),
-        isCharacterBox,
-        mustPromote
-      };
+      if (mustPromote && funcName === "\\mathord" && mord.type === "mathord"
+                      && mord.text.length > 1) {
+        return mord
+      } else {
+        return {
+          type: "mclass",
+          mode: parser.mode,
+          mclass: "m" + funcName.slice(5),
+          body: ordargument(mustPromote ? mord : body),
+          isCharacterBox,
+          mustPromote
+        };
+      }
     },
     mathmlBuilder: mathmlBuilder$3
   });
@@ -8275,7 +8274,7 @@ var temml = (function () {
     for (let i = 0; i < expression.length; i++) {
       let node = expression[i];
       if (node instanceof mathMLTree.MathNode) {
-        if (node.type === "mrow" && node.children.length === 1 &&
+        if ((node.type === "mrow" || node.type === "mpadded") && node.children.length === 1 &&
             node.children[0] instanceof mathMLTree.MathNode) {
           node = node.children[0];
         }
@@ -9076,6 +9075,14 @@ var temml = (function () {
         // ":" is not in the MathML operator dictionary. Give it BIN spacing.
         node.attributes.lspace = "0.2222em";
         node.attributes.rspace = "0.2222em";
+      } else if (group.needsSpacing) {
+        // Fix a MathML bug that occurs when a <mo> is between two <mtext> elements.
+        if (group.family === "bin") {
+          return new mathMLTree.MathNode("mrow", [padding$1(0.222), node, padding$1(0.222)])
+        } else {
+          // REL spacing
+          return new mathMLTree.MathNode("mrow", [padding$1(0.2778), node, padding$1(0.2778)])
+        }
       }
       return node;
     }
@@ -9443,7 +9450,9 @@ var temml = (function () {
         node.setAttribute("mathvariant", "normal");
         if (text.text.length === 1) {
           // A Firefox bug will apply spacing here, but there should be none. Fix it.
-          node = new mathMLTree.MathNode("mrow", [node]);
+          node = new mathMLTree.MathNode("mpadded", [node]);
+          node.setAttribute("lspace", "0");
+          node.setAttribute("rspace", "0");
         }
       }
       return node
@@ -10822,6 +10831,7 @@ var temml = (function () {
 
   const binLeftCancellers = ["bin", "op", "open", "punct", "rel"];
   const sizeRegEx = /([-+]?) *(\d+(?:\.\d*)?|\.\d+) *([a-z]{2})/;
+  const textRegEx = /^ *\\text/;
 
   /**
    * This file contains the parser used to parse out a TeX expression from the
@@ -11732,6 +11742,11 @@ var temml = (function () {
             loc,
             text
           };
+          if ((family === "rel" || family === "bin") && this.prevAtomType === "text") {
+            if (textRegEx.test(loc.lexer.input.slice(loc.end))) {
+              s.needsSpacing = true;  // Fix a MathML bug.
+            }
+          }
         } else {
           if (asciiFromScript[text]) {
             // Unicode 14 disambiguates chancery from roundhand.
@@ -11989,7 +12004,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.11.01";
+  const version = "0.11.02";
 
   function postProcess(block) {
     const labelMap = {};

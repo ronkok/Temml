@@ -401,7 +401,7 @@ will fail to stretch the `∫` symbol on Windows.
 although Asana does contain its own roundhand glyphs.
 
 **NotoSans Math** is a sans-serif math font from Google. I think it comes bundled with Android.
-Chromium fails to stretch extensible arrows in this font.
+Chromium fails to stretch delimiters and extensible arrows in this font.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
@@ -536,6 +536,9 @@ poorly.
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | Flattened circumflex accent  | poor¹¹   | poor¹¹    | poor¹¹    | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
+| Stretchy parentheses in      | bad¹²    | ✓         | bad¹²     |                                     |
+| NotoSans Math                |          |           |           |                                     |
++------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
@@ -563,7 +566,10 @@ Notes:
 
 10. WebKit fails to render anything inside the `<mpadded>` element.
 
-11. All browsers fail to flatten a circumflex accent in any font other than Latin Modern. 
+11. All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
+
+12. Chromium does not stretch delimiters in NotoSans Math. WebKit does not stretch parentheses
+    or arrows.
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 
@@ -577,7 +583,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.11.01
+$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.11.02
 
 <h3><a href="#top">Contents</a></h3>
 

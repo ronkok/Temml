@@ -200,7 +200,7 @@ temml.postProcess(document.body);</code></pre></details>
 <p><strong>Temml-Local.css</strong> is the light-weight option. It calls three fonts: <em>Cambria Math</em>, which comes pre-installed in Windows, <em>STIX TWO</em>, which comes pre-installed in iOS and MacOS (as of Safari 16), or <em>NotoSans Math</em>, which I think comes pre-installed in Android. The first two need to be augmented with <code>Temml.woff2</code>.</p>
 <p>Sadly, this option has rendering issues. Chrome botches extensible arrows and it will fail to stretch the <code>∫</code> symbol on Windows.</p>
 <p><strong>Asana</strong> and <strong>Libertinus</strong> have some of the same rendering problems as Cambria Math, although Asana does contain its own roundhand glyphs.</p>
-<p><strong>NotoSans Math</strong> is a sans-serif math font from Google. I think it comes bundled with Android. Chromium fails to stretch extensible arrows in this font.</p>
+<p><strong>NotoSans Math</strong> is a sans-serif math font from Google. I think it comes bundled with Android. Chromium fails to stretch delimiters and extensible arrows in this font.</p>
 <p>Several other math fonts exist and you can try them out at Frédéric Wang’s <a href='https://fred-wang.github.io/MathFonts/'>Mathematical OpenType Fonts</a>.</p>
 <p>Where to find font files:</p>
 <ul><li class="tight"><p>Temml.woff2 can be downloaded with the latest Temml <a href='https://github.com/ronkok/Temml/releases'>release</a>.</p></li>
@@ -258,7 +258,8 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <tr><td>Size 4 radicals</td><td>meh⁸</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
 <tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad⁹</td><td><p></p></td></tr>
 <tr><td>\smash, \mathllap, \mathrlap,<br> CD environment</td><td>✓</td><td>✓</td><td>bad¹⁰</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr>
-<tr><td><code>=</code> does not get operator <br>spacing when between text</td><td>meh</td><td>meh</td><td>✓</td><td><span class='hurmet-tex' data-entry='\text{ab}=\text{cd}'><math><mrow><mtext>ab</mtext><mo>=</mo></mrow><mrow><mtext>cd</mtext></mrow></math></span></td></tr></table>
+<tr><td>Flattened circumflex accent</td><td>poor¹¹</td><td>poor¹¹</td><td>poor¹¹</td><td><span class='hurmet-tex' data-entry='\hat{a}'><math><mover><mi>a</mi><mo stretchy="false" class="tml-xshift" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr>
+<tr><td>Stretchy parentheses in NotoSans Math</td><td>bad¹²</td><td>✓</td><td>bad¹²</td><td><p></p></td></tr></table>
 <p>Notes:</p>
 <ol class="decimal" start="1"><li><p>WebKit renders some things correctly only after a page refresh.</p></li>
 <li><p>WebKit renders some accents too high. Temml does some work to mitigate this. It’s not enough.</p></li>
@@ -269,7 +270,9 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
 <li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
 <li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
-<li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li></ol>
+<li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li>
+<li><p>All browsers fail to flatten a circumflex accent in any font other than Latin Modern.</p></li>
+<li><p>Chromium does not stretch delimiters in NotoSans Math. WebKit does not stretch parentheses or arrows.</p></li></ol>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
 <p class="reduced">Copyright © 2021-2025 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
@@ -277,7 +280,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><a href='https://temml.org/'><math><mrow><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></a></span>    v0.11.01</p>
+<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><a href='https://temml.org/'><math><mrow><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></a></span>    v0.11.02</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p></li>
 <li><p><a href='#installation'>Installation</a></p></li>
