@@ -155,7 +155,7 @@ math {
     width: 90%;
   }
   article, #input, #output, #title, #copyright {
-    width: 100%;
+    width: calc(100% - 2px);
   }
   .ioArea {
     width: 93%
