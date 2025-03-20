@@ -37,7 +37,7 @@ math {
 math.tml-display { display: block; }
 
 math .mathscr {
-  font-family: "ssty1";
+  font-feature-settings: "ssty";
 }
 
 *.mathcal {
