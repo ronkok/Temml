@@ -4,7 +4,7 @@ export interface Options {
   leqno?: boolean;
   throwOnError?: boolean;
   errorColor?: string;
-  macros?: Record<string, string>;
+  macros?: Record<string, any>;
   wrap?: "tex" | "=" | "none";
   xml?: boolean;
   colorIsTextColor?: boolean;
@@ -16,7 +16,7 @@ export interface Options {
 
 export function render(
   expression: string,
-  baseNode: HTMLElement,
+  baseNode: HTMLElement | MathMLElement,
   options?: Options,
 ): void;
 
