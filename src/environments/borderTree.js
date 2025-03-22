@@ -47,7 +47,7 @@ export const bordermatrixParseTree = (matrix, delimiters) => {
     // A vphantom with contents from the pmatrix, to set minimum cell height
     const phantomBody = [];
     for (let j = 0; j < body[i].length; j++) {
-      phantomBody.push(structuredClone(body[i][j]))
+      phantomBody.push(body[i][j])
     }
     leftColumnBody[i - 1].push(phantom(phantomBody, "vphantom"))
   }
@@ -55,18 +55,18 @@ export const bordermatrixParseTree = (matrix, delimiters) => {
   // Create an array for the top row
   const topRowBody = new Array(body.length).fill().map(() => [])
   for (let j = 0; j < body[0].length; j++) {
-    topRowBody[0].push(structuredClone(body[0][j]))
+    topRowBody[0].push(body[0][j])
   }
   // Copy the rest of the pmatrix, but squashed via \hphantom
   for (let i = 1; i < body.length; i++) {
     for (let j = 0; j < body[0].length; j++) {
-      topRowBody[i].push(phantom(structuredClone(body[i][j]).body, "hphantom"))
+      topRowBody[i].push(phantom(body[i][j].body, "hphantom"))
     }
   }
 
   // Squash the top row of the main {pmatrix}
   for (let j = 0; j < body[0].length; j++) {
-    body[0][j] = phantom(structuredClone(body[0][j]).body, "hphantom")
+    body[0][j] = phantom(body[0][j].body, "hphantom")
   }
 
   // Now wrap the arrays in the proper parse nodes.
