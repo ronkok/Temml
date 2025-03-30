@@ -34,9 +34,9 @@ const mathmlBuilder = (group, style) => {
     const mi = mathGroup.children[0].children[0];
     delete mi.attributes.mathvariant
     for (let i = 1; i < mathGroup.children.length; i++) {
-      mi.children[0].text += mathGroup.children[i].type === "mn"
-        ? mathGroup.children[i].children[0].text
-        : mathGroup.children[i].children[0].children[0].text
+      mi.children[0].text += mathGroup.children[i].children[0].children
+        ? mathGroup.children[i].children[0].children[0].text
+        : mathGroup.children[i].children[0].text
     }
     // Wrap in a <mrow> to prevent the same Firefox bug.
     const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"))
