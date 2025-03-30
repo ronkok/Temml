@@ -2,12 +2,12 @@
 Noto Math fonts are released under the SIL OPEN FONT LICENSE Version 1.1.
 
 The NotoMath font has been obtained from
-https://gwfh.mranftl.com/fonts/noto-sans-math?subsets=math
+https://github.com/notofonts/math
 */
 
 @font-face {
   font-family: NotoSans Math;
-  src: url('noto-sans-math-v15-math-regular.woff2');
+  src: url('NotoSansMath-Regular.ttf');
 }
 
 math {
