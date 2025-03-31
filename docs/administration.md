@@ -417,7 +417,7 @@ Where to find font files:
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
 [release]: https://github.com/ronkok/Temml/releases
-[STIX]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
+[STIX]: https://github.com/stipub/stixfonts/releases
 [Libertinus]: https://github.com/alerque/libertinus
 [Noto]: https://github.com/notofonts/math
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
