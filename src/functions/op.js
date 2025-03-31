@@ -120,8 +120,13 @@ defineFunction({
     "\u2a00",
     "\u2a01",
     "\u2a02",
+    "\u2a03",
     "\u2a04",
-    "\u2a06"
+    "\u2a05",
+    "\u2a06",
+    "\u2a07",
+    "\u2a08",
+    "\u2a09"
   ],
   props: {
     numArgs: 0
