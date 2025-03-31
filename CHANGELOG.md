@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.03] = 2025-03-30
+
+### Fixed
+
+- Fix \bordermatrix
+- Fix type definitions for TypeScript
+- Fix a \mathrm group that includes π
+- Write valid MathML for \mathrm w/single character
+- Update STIX font to fix large operator vertical alignment
+- Revert to ttf version of NotoSansMath, for better rendering
+- Fix operator spacing for 6 Unicode large operators
+
+### Added
+
+- Add several non-ASCII letters
+
 ## [0.11.02] = 2025-03-14
 
 ### Fixed

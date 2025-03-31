@@ -1,6 +1,6 @@
 {
   "name": "temml",
-  "version": "0.11.02",
+  "version": "0.11.03",
   "description": "TeX to MathML conversion in JavaScript.",
   "main": "dist/temml.js",
   "engines": {

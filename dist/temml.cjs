@@ -1183,9 +1183,6 @@ defineSymbol(math, textord, "\u29eb", "\\blacklozenge");
 defineSymbol(math, textord, "\u2605", "\\bigstar");
 defineSymbol(math, textord, "\u2222", "\\sphericalangle", true);
 defineSymbol(math, textord, "\u2201", "\\complement", true);
-// unicode-math maps U+F0 to \matheth. We map to AMS function \eth
-defineSymbol(math, textord, "\u00f0", "\\eth", true);
-defineSymbol(text, textord, "\u00f0", "\u00f0");
 defineSymbol(math, textord, "\u2571", "\\diagup");
 defineSymbol(math, textord, "\u2572", "\\diagdown");
 defineSymbol(math, textord, "\u25a1", "\\square");
@@ -1545,6 +1542,46 @@ defineSymbol(math, mathord, "\u03e1", "\\sampi", true);
 defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
 defineSymbol(math, mathord, "\u03db", "\\stigma", true);
 defineSymbol(math, mathord, "\u2aeb", "\\Bot");
+
+// unicode-math maps U+F0 to \matheth. We map to AMS function \eth
+defineSymbol(math, textord, "\u00f0", "\\eth", true); // ð
+defineSymbol(text, textord, "\u00f0", "\u00f0");
+// Extended ASCII and non-ASCII Letters
+defineSymbol(math, textord, "\u00C5", "\\AA"); // Å
+defineSymbol(text, textord, "\u00C5", "\\AA", true);
+defineSymbol(math, textord, "\u00C6", "\\AE", true); // Æ
+defineSymbol(text, textord, "\u00C6", "\\AE", true);
+defineSymbol(math, textord, "\u00D0", "\\DH", true); // Ð
+defineSymbol(text, textord, "\u00D0", "\\DH", true);
+defineSymbol(math, textord, "\u00DE", "\\TH", true); // Þ
+defineSymbol(text, textord, "\u00DE", "\\TH", true);
+defineSymbol(math, textord, "\u00DF", "\\ss", true); // ß
+defineSymbol(text, textord, "\u00DF", "\\ss", true);
+defineSymbol(math, textord, "\u00E5", "\\aa"); // å
+defineSymbol(text, textord, "\u00E5", "\\aa", true);
+defineSymbol(math, textord, "\u00E6", "\\ae", true); // æ
+defineSymbol(text, textord, "\u00E6", "\\ae", true);
+defineSymbol(math, textord, "\u00F0", "\\dh"); // ð
+defineSymbol(text, textord, "\u00F0", "\\dh", true);
+defineSymbol(math, textord, "\u00FE", "\\th", true); // þ
+defineSymbol(text, textord, "\u00FE", "\\th", true);
+defineSymbol(math, textord, "\u0110", "\\DJ", true); // Đ
+defineSymbol(text, textord, "\u0110", "\\DJ", true);
+defineSymbol(math, textord, "\u0111", "\\dj", true); // đ
+defineSymbol(text, textord, "\u0111", "\\dj", true);
+defineSymbol(math, textord, "\u0141", "\\L", true); // Ł
+defineSymbol(text, textord, "\u0141", "\\L", true);
+defineSymbol(math, textord, "\u0141", "\\l", true); // ł
+defineSymbol(text, textord, "\u0141", "\\l", true);
+defineSymbol(math, textord, "\u014A", "\\NG", true); // Ŋ
+defineSymbol(text, textord, "\u014A", "\\NG", true);
+defineSymbol(math, textord, "\u014B", "\\ng", true); // ŋ
+defineSymbol(text, textord, "\u014B", "\\ng", true);
+defineSymbol(math, textord, "\u0152", "\\OE", true); // Œ
+defineSymbol(text, textord, "\u0152", "\\OE", true);
+defineSymbol(math, textord, "\u0153", "\\oe", true); // œ
+defineSymbol(text, textord, "\u0153", "\\oe", true);
+
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "\u2217", "*");
@@ -1753,13 +1790,8 @@ defineSymbol(math, textord, "\u0131", "\u0131");
 defineSymbol(math, textord, "\u0237", "\u0237");
 defineSymbol(text, textord, "\u0131", "\\i", true);
 defineSymbol(text, textord, "\u0237", "\\j", true);
-defineSymbol(text, textord, "\u00df", "\\ss", true);
-defineSymbol(text, textord, "\u00e6", "\\ae", true);
-defineSymbol(text, textord, "\u0153", "\\oe", true);
 defineSymbol(text, textord, "\u00f8", "\\o", true);
 defineSymbol(math, mathord, "\u00f8", "\\o", true);
-defineSymbol(text, textord, "\u00c6", "\\AE", true);
-defineSymbol(text, textord, "\u0152", "\\OE", true);
 defineSymbol(text, textord, "\u00d8", "\\O", true);
 defineSymbol(math, mathord, "\u00d8", "\\O", true);
 defineSymbol(text, accent, "\u02ca", "\\'"); // acute
@@ -3347,7 +3379,7 @@ const bordermatrixParseTree = (matrix, delimiters) => {
     // A vphantom with contents from the pmatrix, to set minimum cell height
     const phantomBody = [];
     for (let j = 0; j < body[i].length; j++) {
-      phantomBody.push(structuredClone(body[i][j]));
+      phantomBody.push(body[i][j]);
     }
     leftColumnBody[i - 1].push(phantom(phantomBody, "vphantom"));
   }
@@ -3355,18 +3387,18 @@ const bordermatrixParseTree = (matrix, delimiters) => {
   // Create an array for the top row
   const topRowBody = new Array(body.length).fill().map(() => []);
   for (let j = 0; j < body[0].length; j++) {
-    topRowBody[0].push(structuredClone(body[0][j]));
+    topRowBody[0].push(body[0][j]);
   }
   // Copy the rest of the pmatrix, but squashed via \hphantom
   for (let i = 1; i < body.length; i++) {
     for (let j = 0; j < body[0].length; j++) {
-      topRowBody[i].push(phantom(structuredClone(body[i][j]).body, "hphantom"));
+      topRowBody[i].push(phantom(body[i][j].body, "hphantom"));
     }
   }
 
   // Squash the top row of the main {pmatrix}
   for (let j = 0; j < body[0].length; j++) {
-    body[0][j] = phantom(structuredClone(body[0][j]).body, "hphantom");
+    body[0][j] = phantom(body[0][j].body, "hphantom");
   }
 
   // Now wrap the arrays in the proper parse nodes.
@@ -8447,9 +8479,9 @@ const mathmlBuilder$6 = (group, style) => {
     const mi = mathGroup.children[0].children[0];
     delete mi.attributes.mathvariant;
     for (let i = 1; i < mathGroup.children.length; i++) {
-      mi.children[0].text += mathGroup.children[i].type === "mn"
-        ? mathGroup.children[i].children[0].text
-        : mathGroup.children[i].children[0].children[0].text;
+      mi.children[0].text += mathGroup.children[i].children[0].children
+        ? mathGroup.children[i].children[0].children[0].text
+        : mathGroup.children[i].children[0].text;
     }
     // Wrap in a <mrow> to prevent the same Firefox bug.
     const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"));
@@ -9943,8 +9975,13 @@ defineFunction({
     "\u2a00",
     "\u2a01",
     "\u2a02",
+    "\u2a03",
     "\u2a04",
-    "\u2a06"
+    "\u2a05",
+    "\u2a06",
+    "\u2a07",
+    "\u2a08",
+    "\u2a09"
   ],
   props: {
     numArgs: 0
@@ -11365,7 +11402,6 @@ defineFunctionBuilders({
         // A Firefox bug will apply spacing here, but there should be none. Fix it.
         node = new mathMLTree.MathNode("mpadded", [node]);
         node.setAttribute("lspace", "0");
-        node.setAttribute("rspace", "0");
       }
     }
     return node
@@ -13917,7 +13953,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.11.02";
+const version = "0.11.03";
 
 function postProcess(block) {
   const labelMap = {};
