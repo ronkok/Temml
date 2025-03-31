@@ -522,6 +522,8 @@ If you know the shape of a character, but not its name,
 |\derivative|$\derivative{x}{y}$|`\derivative{x}{y}`| physics extension |
 |\det|$\det$|||
 |\dfrac|$\dfrac{a-1}{b-1}$|`\dfrac{a-1}{b-1}`| ams |
+|\DH|$\DH$|||
+|\dh|$\dh$|||
 |\diameter|$\diameter$|| stix |
 |\differential|$\differential$|`\differential`| physics extension |
 |\diagdown|$\diagdown$|| ams |
@@ -539,6 +541,8 @@ If you know the shape of a character, but not its name,
 |\div|$\div$|||
 |\divergence|$\divergence$|`\divergence`| physics extension |
 |\divideontimes|$\divideontimes$|| ams |
+|\DJ|$\DJ$|||
+|\dj|$\dj$|||
 |\dot|$\dot x$|`\dot x`||
 |\Doteq|$\Doteq$|| ams |
 |\doteq|$\doteq$|||
@@ -789,8 +793,8 @@ If you know the shape of a character, but not its name,
 
 | Function             |  Rendered                  | Source or Comment |  Package  |
 |----------------------|----------------------------|-------------------|-----------|
-| \L                   | (Not supported)            |                   |           |
-| \l                   | (Not supported)            |                   |           |
+| \L                   | $\L$                       |                   |           |
+| \l                   | $\l$                       |                   |           |
 | \Lambda              | $\Lambda$                  |                   |           |
 | \lambda              | $\lambda$                  |                   |           |
 | \label               | | `\label{idName}`<br>Creates an HTML id.<br>Characters limited to: `A-Za-z0-9_-`| |
@@ -998,6 +1002,8 @@ If you know the shape of a character, but not its name,
 |\newextarrow|(Not supported)|| extpfeil |
 |\newline|$a\newline b$ |`a\newline b`||
 |\nexists|$\nexists$ || ams |
+|\NG|$\NG$|||
+|\ng|$\ng$|||
 |\ngeq|$\ngeq$ || ams |
 |\ngeqq|$\ngeqq$ || ams |
 |\ngeqslant|$\ngeqslant$ || ams |
@@ -1580,6 +1586,7 @@ If you know the shape of a character, but not its name,
 |\textvisiblespace|$\text{\textvisiblespace}$|`\text{\textvisiblespace}`||
 |\tfrac|$\tfrac ab$|`\tfrac ab`| ams |
 |\tg|$\tg$|||
+|\TH|$\TH$|||
 |\th|$\th$|||
 |\therefore|$\therefore$|| ams |
 |\Theta|$\Theta$|||

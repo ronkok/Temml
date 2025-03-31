@@ -306,9 +306,6 @@ defineSymbol(math, textord, "\u29eb", "\\blacklozenge");
 defineSymbol(math, textord, "\u2605", "\\bigstar");
 defineSymbol(math, textord, "\u2222", "\\sphericalangle", true);
 defineSymbol(math, textord, "\u2201", "\\complement", true);
-// unicode-math maps U+F0 to \matheth. We map to AMS function \eth
-defineSymbol(math, textord, "\u00f0", "\\eth", true);
-defineSymbol(text, textord, "\u00f0", "\u00f0");
 defineSymbol(math, textord, "\u2571", "\\diagup");
 defineSymbol(math, textord, "\u2572", "\\diagdown");
 defineSymbol(math, textord, "\u25a1", "\\square");
@@ -668,6 +665,46 @@ defineSymbol(math, mathord, "\u03e1", "\\sampi", true);
 defineSymbol(math, mathord, "\u03da", "\\Stigma", true);
 defineSymbol(math, mathord, "\u03db", "\\stigma", true);
 defineSymbol(math, mathord, "\u2aeb", "\\Bot");
+
+// unicode-math maps U+F0 to \matheth. We map to AMS function \eth
+defineSymbol(math, textord, "\u00f0", "\\eth", true); // ð
+defineSymbol(text, textord, "\u00f0", "\u00f0");
+// Extended ASCII and non-ASCII Letters
+defineSymbol(math, textord, "\u00C5", "\\AA") // Å
+defineSymbol(text, textord, "\u00C5", "\\AA", true)
+defineSymbol(math, textord, "\u00C6", "\\AE", true) // Æ
+defineSymbol(text, textord, "\u00C6", "\\AE", true)
+defineSymbol(math, textord, "\u00D0", "\\DH", true) // Ð
+defineSymbol(text, textord, "\u00D0", "\\DH", true)
+defineSymbol(math, textord, "\u00DE", "\\TH", true) // Þ
+defineSymbol(text, textord, "\u00DE", "\\TH", true)
+defineSymbol(math, textord, "\u00DF", "\\ss", true) // ß
+defineSymbol(text, textord, "\u00DF", "\\ss", true)
+defineSymbol(math, textord, "\u00E5", "\\aa") // å
+defineSymbol(text, textord, "\u00E5", "\\aa", true)
+defineSymbol(math, textord, "\u00E6", "\\ae", true) // æ
+defineSymbol(text, textord, "\u00E6", "\\ae", true)
+defineSymbol(math, textord, "\u00F0", "\\dh") // ð
+defineSymbol(text, textord, "\u00F0", "\\dh", true)
+defineSymbol(math, textord, "\u00FE", "\\th", true) // þ
+defineSymbol(text, textord, "\u00FE", "\\th", true)
+defineSymbol(math, textord, "\u0110", "\\DJ", true) // Đ
+defineSymbol(text, textord, "\u0110", "\\DJ", true)
+defineSymbol(math, textord, "\u0111", "\\dj", true) // đ
+defineSymbol(text, textord, "\u0111", "\\dj", true)
+defineSymbol(math, textord, "\u0141", "\\L", true) // Ł
+defineSymbol(text, textord, "\u0141", "\\L", true)
+defineSymbol(math, textord, "\u0141", "\\l", true) // ł
+defineSymbol(text, textord, "\u0141", "\\l", true)
+defineSymbol(math, textord, "\u014A", "\\NG", true) // Ŋ
+defineSymbol(text, textord, "\u014A", "\\NG", true)
+defineSymbol(math, textord, "\u014B", "\\ng", true) // ŋ
+defineSymbol(text, textord, "\u014B", "\\ng", true)
+defineSymbol(math, textord, "\u0152", "\\OE", true) // Œ
+defineSymbol(text, textord, "\u0152", "\\OE", true)
+defineSymbol(math, textord, "\u0153", "\\oe", true) // œ
+defineSymbol(text, textord, "\u0153", "\\oe", true)
+
 defineSymbol(math, bin, "\u2217", "\u2217", true);
 defineSymbol(math, bin, "+", "+");
 defineSymbol(math, bin, "\u2217", "*");
@@ -876,13 +913,8 @@ defineSymbol(math, textord, "\u0131", "\u0131");
 defineSymbol(math, textord, "\u0237", "\u0237");
 defineSymbol(text, textord, "\u0131", "\\i", true);
 defineSymbol(text, textord, "\u0237", "\\j", true);
-defineSymbol(text, textord, "\u00df", "\\ss", true);
-defineSymbol(text, textord, "\u00e6", "\\ae", true);
-defineSymbol(text, textord, "\u0153", "\\oe", true);
 defineSymbol(text, textord, "\u00f8", "\\o", true);
 defineSymbol(math, mathord, "\u00f8", "\\o", true);
-defineSymbol(text, textord, "\u00c6", "\\AE", true);
-defineSymbol(text, textord, "\u0152", "\\OE", true);
 defineSymbol(text, textord, "\u00d8", "\\O", true);
 defineSymbol(math, mathord, "\u00d8", "\\O", true);
 defineSymbol(text, accent, "\u02ca", "\\'"); // acute

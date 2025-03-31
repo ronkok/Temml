@@ -2241,6 +2241,8 @@ const test = () => {
     r`\grave u\acute u\hat u\ddot u` +
     r`\acute y\ddot y`
   )
+  new Expect(r`\AA\AE\DH\O\TH\ss\aa\ae\dh\o\th\DJ\dj\L\l\NG\ng\OE\oe`).toBuild()
+  new Expect(r`\text{\AA\AE\DH\O\TH\ss\aa\ae\dh\o\DJ\dj\L\l\NG\ng\OE\oe}`).toBuild()
     
   assertion = "Unicode accents should parse Latin-1 letters in text mode"
   new Expect(temml.renderToString(r`\text{ÀÁÂÃÄÅÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåèéêëìíîïñòóôõöùúûüýÿ}`))
