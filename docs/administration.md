@@ -401,7 +401,9 @@ will fail to stretch the `∫` symbol on Windows.
 although Asana does contain its own roundhand glyphs.
 
 **NotoSans Math** is a sans-serif math font from Google. I think it comes bundled with Android.
-Chromium fails to stretch delimiters and extensible arrows in this font.
+Chromium fails to stretch extensible arrows in this font. NOTE: Temml’s NotoSans
+CSS file calls the `ttf` version of the font, not the `woff2` version. The `woff2` version
+has many rendering issues.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
@@ -411,13 +413,13 @@ Where to find font files:
 - Temml.woff2 can be downloaded with the latest Temml [release][].
 - STIXTwoMath-Regular.woff2 is located at the STIX [repository][STIX].
 - LibertinusMath-Regular.woff2 is located at the Libertinus [repository][Libertinus].
-- NotoSansMath-Regular.woff2 is located at [Google webfonts][Noto].
+- NotoSansMath-Regular.ttf is located at the NotoSansMath [repository][Noto].
 - The other fonts can be downloaded at [Mathematical OpenType Fonts][].
 
 [release]: https://github.com/ronkok/Temml/releases
 [STIX]: https://github.com/stipub/stixfonts/blob/master/fonts/static_otf_woff2/STIXTwoMath-Regular.woff2
 [Libertinus]: https://github.com/alerque/libertinus
-[Noto]: https://gwfh.mranftl.com/fonts/noto-sans-math?subsets=math
+[Noto]: https://github.com/notofonts/math
 [Mathematical OpenType Fonts]: https://fred-wang.github.io/MathFonts/
 
 If you want a different math font size, you can add a rule to your own page’s
