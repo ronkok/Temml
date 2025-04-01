@@ -295,7 +295,7 @@ const mathmlBuilder = function(group, style) {
     const numColumns = group.body[0].length
     // Fill out a short row with empty <mtd> elements.
     for (let k = 0; k < numColumns - rw.length; k++) {
-      row.push(new mathMLTree.MathNode("mtd", [], style))
+      row.push(new mathMLTree.MathNode("mtd", [], [], style))
     }
     if (group.autoTag) {
       const tag = group.tags[i];
