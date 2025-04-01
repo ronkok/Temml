@@ -757,7 +757,9 @@ defineEnvironment({
       }
     }
     const res = parseArray(context.parser, payload, "text")
-    res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign })
+    res.cols = res.body.length > 0
+      ? new Array(res.body[0].length).fill({ type: "align", align: colAlign })
+      : [];
     const [arraystretch, arraycolsep] = arrayGaps(context.parser.gullet.macros)
     res.arraystretch = arraystretch
     if (arraycolsep && !(arraycolsep === 6 && arraycolsep === "pt")) {
@@ -786,7 +788,9 @@ defineEnvironment({
   handler(context) {
     const payload = { cols: [], envClasses: ["bordermatrix"] }
     const res = parseArray(context.parser, payload, "text")
-    res.cols = new Array(res.body[0].length).fill({ type: "align", align: "c" })
+    res.cols = res.body.length > 0
+      ? new Array(res.body[0].length).fill({ type: "align", align: "c" })
+      : [];
     res.envClasses = [];
     res.arraystretch = 1
     if (context.envName === "matrix") { return res}

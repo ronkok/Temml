@@ -1667,6 +1667,10 @@ const test = () => {
   new Expect(r`f(a,b)=\begin{cases}a+1&\text{if }b\text{ is odd}\\a&\text{if }b=0\\a-1&\text{otherwise}\end{cases}`).toParse()
   new Expect(r`f(a,b)=\begin{cases}a+1&\text{if }b\text{ is odd}\\a&\text{if }b=0\\a-1&\text{otherwise}\end{cases}`).toBuild()
 
+  assertion = "An empty matrix environment should build"
+  new Expect(r`\begin{pmatrix}\end{pmatrix}`).toParse()
+  new Expect(r`\begin{pmatrix}\end{pmatrix}`).toBuild()
+
   assertion = "An environment should fill out a short row with empty cells, with correct CSS classes."
   new Expect(r`\begin{cases}0{,}8-0{,}32x & \text{ für } & 0\leq x\leq2{,}5\\0 & \text { sonst} \end{cases}`).toParse()
   new Expect(r`\begin{cases}0{,}8-0{,}32x & \text{ für } & 0\leq x\leq2{,}5\\0 & \text { sonst} \end{cases}`).toBuild()
