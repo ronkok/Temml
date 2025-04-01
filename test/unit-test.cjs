@@ -525,7 +525,7 @@ const test = () => {
   new Expect(node.type).toBe("array")
   new Expect(node.body.length).toBe(3)
 
-  assertion = "A \color parser should interact properly with a \\right delimiter"
+  assertion = "A \\color parser should interact properly with a \\right delimiter"
   new Expect(r`\left(\color{red}1\right)`).toParse()
   // A \right delimiter gets the color.
   new Expect(temml.renderToString(r`\left(\color{red}1\right)`)).toContain('mathcolor="#ff0000">)</mo>')
@@ -535,6 +535,10 @@ const test = () => {
   new Expect(temml.renderToString(r`\left(\color{red}\right)`)).toContain('mathcolor="#ff0000">)</mo>')
   new Expect(r`\left(\textcolor{red}\right)`).toNotParse()
   new Expect(r`\left(\color{red}\right)`).toNotParse(new Settings({ colorIsTextColor: true }))
+
+  assertion = "A \\color parser should not fail, given an empty fragment."
+  new Expect(r`101\cdot \color{cc0000}30 \color{000000}`).toParse()
+  new Expect(r`101\cdot \color{cc0000}30 \color{000000}`).toBuild()
 
   assertion = "A semi-simple group builder should not affect spacing of operators"
   markup = temml.renderToString(r`1\begingroup + 2 *\endgroup 3`)

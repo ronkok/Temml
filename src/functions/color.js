@@ -156,6 +156,9 @@ const mathmlBuilder = (group, style) => {
   // So instead of wrapping the group in an <mstyle>, we apply
   // the color individually to each node and return a document fragment.
   let expr = mml.buildExpression(group.body, style.withColor(group.color))
+  if (expr.length === 0) {
+    expr.push(new mathMLTree.MathNode("mrow"))
+  }
   expr = expr.map(e => {
     e.style.color = group.color
     return e
