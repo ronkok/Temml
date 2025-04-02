@@ -306,7 +306,7 @@ temml.render(
 
 - `colorIsTextColor`: `boolean`. In LaTeX, `\color` is a switch, but in early versions of MathJax and KaTeX, `\color` applied its color to a second argument, the way that LaTeX `\textcolor` works. Set option `colorIsTextColor` to `true` if you want `\color` to work like early MathJax or KaTeX. (default: `false`)
 
-- 'throwOnError': `boolean`. If true, Temml will throw parse errors to the console. If false, Temml will write the parse error to the output of the `render()` function. (default: false)
+- `throwOnError`: `boolean`. If true, Temml will throw parse errors to the console. If false, Temml will write the parse error to the output of the `render()` function. (default: false)
 
 - `errorColor`: `string`. A color string given in the format `"#XXX"` or `"#XXXXXX"`. This option determines the color that unsupported commands and invalid LaTeX are rendered in. (default: `#b22222`)
 
