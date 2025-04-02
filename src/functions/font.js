@@ -30,7 +30,7 @@ const mathmlBuilder = (group, style) => {
   // Check if it is possible to consolidate elements into a single <mi> element.
   if (isLongVariableName(group, font)) {
     // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
-    // wraps <mi> elements with <mrow>s to work around a Firefox bug.
+    // wraps <mi> elements with <mpadded>s to work around a Firefox bug.
     const mi = mathGroup.children[0].children[0].children
       ? mathGroup.children[0].children[0]
       : mathGroup.children[0];
@@ -40,9 +40,10 @@ const mathmlBuilder = (group, style) => {
         ? mathGroup.children[i].children[0].children[0].text
         : mathGroup.children[i].children[0].text
     }
-    // Wrap in a <mrow> to prevent the same Firefox bug.
-    const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"))
-    return new mathMLTree.MathNode("mrow", [bogus, mi])
+    // Wrap in a <mpadded> to prevent the same Firefox bug.
+    const mpadded = new mathMLTree.MathNode("mpadded", [mi])
+    mpadded.setAttribute("lspace", "0")
+    return mpadded
   }
   let canConsolidate = mathGroup.children[0].type === "mo"
   for (let i = 1; i < mathGroup.children.length; i++) {
