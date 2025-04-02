@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.04] = 2025-04-02
+
+### Fixed
+
+- Fill out short environment rows w/empty cells w/correct classes
+- Enable \color when given an empty fragment
+- Enable an empty matrix environment
+- Fix \mathrm with a Greek letter in the argument
+
 ## [0.11.03] = 2025-03-30
 
 ### Fixed

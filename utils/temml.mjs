@@ -6464,7 +6464,7 @@ const mathmlBuilder$9 = function(group, style) {
     const numColumns = group.body[0].length;
     // Fill out a short row with empty <mtd> elements.
     for (let k = 0; k < numColumns - rw.length; k++) {
-      row.push(new mathMLTree.MathNode("mtd", [], style));
+      row.push(new mathMLTree.MathNode("mtd", [], [], style));
     }
     if (group.autoTag) {
       const tag = group.tags[i];
@@ -6924,7 +6924,9 @@ defineEnvironment({
       }
     }
     const res = parseArray(context.parser, payload, "text");
-    res.cols = new Array(res.body[0].length).fill({ type: "align", align: colAlign });
+    res.cols = res.body.length > 0
+      ? new Array(res.body[0].length).fill({ type: "align", align: colAlign })
+      : [];
     const [arraystretch, arraycolsep] = arrayGaps(context.parser.gullet.macros);
     res.arraystretch = arraystretch;
     if (arraycolsep && !(arraycolsep === 6 && arraycolsep === "pt")) {
@@ -6953,7 +6955,9 @@ defineEnvironment({
   handler(context) {
     const payload = { cols: [], envClasses: ["bordermatrix"] };
     const res = parseArray(context.parser, payload, "text");
-    res.cols = new Array(res.body[0].length).fill({ type: "align", align: "c" });
+    res.cols = res.body.length > 0
+      ? new Array(res.body[0].length).fill({ type: "align", align: "c" })
+      : [];
     res.envClasses = [];
     res.arraystretch = 1;
     if (context.envName === "matrix") { return res}
@@ -7387,6 +7391,9 @@ const mathmlBuilder$8 = (group, style) => {
   // So instead of wrapping the group in an <mstyle>, we apply
   // the color individually to each node and return a document fragment.
   let expr = buildExpression(group.body, style.withColor(group.color));
+  if (expr.length === 0) {
+    expr.push(new mathMLTree.MathNode("mrow"));
+  }
   expr = expr.map(e => {
     e.style.color = group.color;
     return e
@@ -8473,17 +8480,20 @@ const mathmlBuilder$6 = (group, style) => {
   // Check if it is possible to consolidate elements into a single <mi> element.
   if (isLongVariableName(group, font)) {
     // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
-    // wraps <mi> elements with <mrow>s to work around a Firefox bug.
-    const mi = mathGroup.children[0].children[0];
+    // wraps <mi> elements with <mpadded>s to work around a Firefox bug.
+    const mi = mathGroup.children[0].children[0].children
+      ? mathGroup.children[0].children[0]
+      : mathGroup.children[0];
     delete mi.attributes.mathvariant;
     for (let i = 1; i < mathGroup.children.length; i++) {
       mi.children[0].text += mathGroup.children[i].children[0].children
         ? mathGroup.children[i].children[0].children[0].text
         : mathGroup.children[i].children[0].text;
     }
-    // Wrap in a <mrow> to prevent the same Firefox bug.
-    const bogus = new mathMLTree.MathNode("mtext", new mathMLTree.TextNode("\u200b"));
-    return new mathMLTree.MathNode("mrow", [bogus, mi])
+    // Wrap in a <mpadded> to prevent the same Firefox bug.
+    const mpadded = new mathMLTree.MathNode("mpadded", [mi]);
+    mpadded.setAttribute("lspace", "0");
+    return mpadded
   }
   let canConsolidate = mathGroup.children[0].type === "mo";
   for (let i = 1; i < mathGroup.children.length; i++) {
@@ -13951,7 +13961,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.11.03";
+const version = "0.11.04";
 
 function postProcess(block) {
   const labelMap = {};
