@@ -1245,6 +1245,7 @@ const test = () => {
   new Expect(r`\uptheta\varDelta`).toParse(strictSettings())
   new Expect(r`\uptheta\varDelta`).toBuild()
   new Expect(r`\mathrm{rπh}`).toBuild()
+  new Expect(r`\mathrm{μs}`).toBuild()
 
   assertion = "A \\boldsymbol builder should work"
   new Expect(temml.renderToString(r`\boldsymbol{A}`)).toContain("𝑨")

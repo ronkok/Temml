@@ -31,7 +31,9 @@ const mathmlBuilder = (group, style) => {
   if (isLongVariableName(group, font)) {
     // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
     // wraps <mi> elements with <mrow>s to work around a Firefox bug.
-    const mi = mathGroup.children[0].children[0];
+    const mi = mathGroup.children[0].children[0].children
+      ? mathGroup.children[0].children[0]
+      : mathGroup.children[0];
     delete mi.attributes.mathvariant
     for (let i = 1; i < mathGroup.children.length; i++) {
       mi.children[0].text += mathGroup.children[i].children[0].children
