@@ -5,7 +5,8 @@ defineFunction({
   names: ["\\relax"],
   props: {
     numArgs: 0,
-    allowedInText: true
+    allowedInText: true,
+    allowedInArgument: true
   },
   handler({ parser }) {
     return {

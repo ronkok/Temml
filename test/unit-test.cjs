@@ -372,6 +372,7 @@ const test = () => {
   new Expect(`_2`).toParse();
   new Expect(`^3_2`).toParse();
   new Expect(`_2^3`).toParse();
+  new Expect(r`\hskip1em\relax^2`).toParse()
 
   let node = parse("x^2")[0]
   new Expect(node.type).toBe("supsub");
@@ -423,6 +424,10 @@ const test = () => {
   new Expect("x^{}_2").toBuild();
   new Expect("x^2_{}").toBuild();
   new Expect("x_{}").toBuild();
+
+  assertion = "A subsup parser should skip \\relax in super/subscripts"
+  new Expect(r`x^\relax 2`).toParseLike(`x^2`)
+  new Expect(r`x_\relax 2`).toParseLike(`x_2`)
 
   assertion = "Deeply nested super and subscripts should have explicit scriptlevel"
   nodes = build("2^{2^{2^{^2}}}")
@@ -1927,6 +1932,9 @@ const test = () => {
     "\\bar": "",
   }}))
 
+  assertion = "A Macro expander should treat \\relax as empty argument"
+  new Expect(r`\text{\foo\relax x}`).toParseLike(r`\text{(,x)}`, new Settings({macros: { "\\foo": "(#1,#2)" }}))
+
   assertion = "A macro expander should allow for space function arguments"
   new Expect(r`\frac\bar\bar`).toParseLike(r`\frac{}{}`, new Settings({macros: { "\\bar": " " }}))
 
@@ -2127,6 +2135,7 @@ const test = () => {
   new Expect(r`\argmax`).toParseLike(r`\operatorname*{arg\,max}`)
 
   assertion = "A macro expander should expand \\bra and \ket as expected"
+  new Expect(r`\Braket{ ϕ | \frac{∂^2}{∂ t^2} | ψ }`).toParse()
   new Expect(r`\bra{\phi}`).toParseLike(r`\mathinner{\langle{\phi}|}`)
   new Expect(r`\ket{\psi}`).toParseLike(r`\mathinner{|{\psi}\rangle}`)
   new Expect(r`\braket{\phi|\psi}`).toParseLike(r`\mathinner{\langle{\phi|\psi}\rangle}`)

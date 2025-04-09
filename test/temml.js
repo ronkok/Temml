@@ -8657,7 +8657,8 @@ var temml = (function () {
     names: ["\\relax"],
     props: {
       numArgs: 0,
-      allowedInText: true
+      allowedInText: true,
+      allowedInArgument: true
     },
     handler({ parser }) {
       return {
@@ -11073,6 +11074,7 @@ var temml = (function () {
         if (!atom) {
           break;
         } else if (atom.type === "internal") {
+          // Internal nodes do not appear in parse tree
           continue;
         }
         body.push(atom);
@@ -11147,7 +11149,11 @@ var temml = (function () {
       const symbol = symbolToken.text;
       this.consume();
       this.consumeSpaces(); // ignore spaces before sup/subscript argument
-      const group = this.parseGroup(name);
+      // Skip over allowed internal nodes such as \relax
+      let group;
+      do {
+        group = this.parseGroup(name);
+      } while (group.type && group.type === "internal")
 
       if (!group) {
         throw new ParseError("Expected group after '" + symbol + "'", symbolToken);
@@ -11191,9 +11197,15 @@ var temml = (function () {
       // \left(x\right)^2 work correctly.
       const base = this.parseGroup("atom", breakOnTokenText);
 
+      // Internal nodes (e.g. \relax) cannot support super/subscripts.
+      // Instead we will pick up super/subscripts with blank base next round.
+      if (base && base.type === "internal") {
+        return base
+      }
+
       // In text mode, we don't have superscripts or subscripts
       if (this.mode === "text") {
-        return base;
+        return base
       }
 
       // Note that base may be empty (i.e. null) at this point.
