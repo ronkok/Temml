@@ -4,6 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
+   <link rel="icon" href="../../assets/favicon.svg">
    <link rel="stylesheet" href="../../assets/Temml-Latin-Modern.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../assets/temml.min.js"></script>
@@ -136,7 +137,7 @@ must make two passes through the entire document. Some sites may choose not to d
 | $\fcolorbox{red}{aqua}{A}$   |  `{\color{sortaGreen} F=ma}`                |
 |  `\fcolorbox{red}{aqua}{A}`  |                                             |
 +------------------------------+---------------------------------------------+
-{colWidths="300 370"}
+{colWidths="320 370"}
 
 `\definecolor` functions can be included in a [preamble](administration.html#preamble).
 If so, their color definitions will have document-wide scope.

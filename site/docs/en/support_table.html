@@ -4,6 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Support Table</title>
+   <link rel="icon" href="../../assets/favicon.svg">
    <link rel="stylesheet" href="../../assets/Temml-Latin-Modern.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../assets/temml.min.js"></script>

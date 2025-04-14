@@ -4,6 +4,7 @@
    <meta charset="utf-8">
    <meta name="viewport" content="width=device-width, initial-scale=1">
    <title>Temml Functions</title>
+   <link rel="icon" href="../../assets/favicon.svg">
    <link rel="stylesheet" href="../../assets/Temml-Latin-Modern.css">
    <link rel="stylesheet" href="../docStyles.css">
    <script src="../../assets/temml.min.js"></script>
@@ -51,7 +52,7 @@
 <p>On sites where Temml fields are updated dynamically, <code>\ref{…}</code> may not be supported. Other Temml functions update only the local field. <code>\ref{…}</code> and <code>eqref</code> must make two passes through the entire document. Some sites may choose not to do this. <code>\label</code> always creates an <code>id</code>, so you can write your own <code>&lt;a&gt;</code> element if <code>\ref</code> is not available.</p>
 <h2 id='color'>Color</h2>
 <table>
-<colgroup><col style="width: 300px"><col style="width: 370px"></colgroup>
+<colgroup><col style="width: 320px"><col style="width: 370px"></colgroup>
 <tr><td><span class='hurmet-tex' data-entry='\color{blue} F=ma'><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></span>  <code>{\color{blue} F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[RGB]{255,0,255} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[RGB]{255,0,255} F=ma}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\textcolor{blue}{F=ma}'><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></span>  <code>\textcolor{blue}{F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[rgb]{1,0,1} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[rgb]{1,0,1} F=ma}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\textcolor{#228B22}{F=ma}'><math><mrow><mi style="color:#228B22;">F</mi><mo style="color:#228B22;">=</mo></mrow><mrow><mi style="color:#228B22;">m</mi><mi style="color:#228B22;">a</mi></mrow></math></span>  <code>\textcolor{#228B22}{F=ma}</code></td><td><span class='hurmet-tex' data-entry='\color[HTML]{ff00ff} F=ma'><math><mrow><mi style="color:#ff00ff;">F</mi><mo style="color:#ff00ff;">=</mo></mrow><mrow><mi style="color:#ff00ff;">m</mi><mi style="color:#ff00ff;">a</mi></mrow></math></span>  <code>{\color[HTML]{ff00ff} F=ma}</code></td></tr>
