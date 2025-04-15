@@ -1600,7 +1600,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.11.04
+$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.11.05
 
 <h3><a href="#top">Contents</a></h3>
 

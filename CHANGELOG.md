@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.05] = 2025-04-015
+
+### Fixed
+
+- Enable \relax in base or exponent of super/subscript
+
+### Changed
+
+- Move display style width: 100% from inline CSS to external CSS
+
 ## [0.11.04] = 2025-04-02
 
 ### Fixed
