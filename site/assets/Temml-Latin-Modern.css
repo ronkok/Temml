@@ -46,9 +46,12 @@ math {
   font-family: "Latin Modern Math", math;
 }
 
-/* Next line is active in Firefox and Safari.
+/* display: block is necessary in Firefox and Safari.
  * Not in Chromium, which recognizes display: "block math" written inline. */
-math.tml-display { display: block; }
+ math.tml-display {
+  display: block;
+  width: 100%;
+}
 
 *.mathscr {
   font-family: "Temml";

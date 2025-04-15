@@ -2457,9 +2457,6 @@ var temml = (function () {
     if (settings.xml) {
       math.setAttribute("xmlns", "http://www.w3.org/1998/Math/MathML");
     }
-    if (wrapper.style.width) {
-      math.style.width = "100%";
-    }
     if (settings.displayMode) {
       math.setAttribute("display", "block");
       math.style.display = "block math"; // necessary in Chromium.
