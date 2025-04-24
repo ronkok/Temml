@@ -772,10 +772,12 @@ var temml = (function () {
   // TODO: Remove when Chromium stretches \widetilde & \widehat
   const estimatedWidth = node => {
     let width = 0;
-    if (node.body) {
+    if (node.body && Array.isArray(node.body)) {
       for (const item of node.body) {
         width += estimatedWidth(item);
       }
+    } else if (node.body) {
+      width += estimatedWidth(node.body);
     } else if (node.type === "supsub") {
       width += estimatedWidth(node.base);
       if (node.sub) { width += 0.7 * estimatedWidth(node.sub); }
@@ -12059,7 +12061,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.11.05";
+  const version = "0.11.06";
 
   function postProcess(block) {
     const labelMap = {};
