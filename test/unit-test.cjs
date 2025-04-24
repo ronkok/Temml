@@ -1464,6 +1464,8 @@ const test = () => {
   new Expect(parse(r`\vec x`)[0].type).toBe("accent");
   new Expect(parse(r`\vec x^2`)[0].type).toBe("supsub");
   new Expect(r`\widehat{x}`).toParse();
+  new Expect(r`\widehat{xy}`).toParse();
+  new Expect(r`\widehat{\mathbf{Y}}`).toParse();
   new Expect(r`\widecheck{x}`).toParse();
   new Expect(r`\overrightarrow{x}`).toParse();
 
@@ -1476,6 +1478,9 @@ const test = () => {
   new Expect(r`\vec{x}^2`).toBuild();
   new Expect(r`\vec{x}_2`).toBuild();
   new Expect(r`\vec{x}_2^2`).toBuild();
+  new Expect(r`\widehat{x}`).toBuild();
+  new Expect(r`\widehat{xy}`).toBuild();
+  new Expect(r`\widehat{\mathbf{Y}}`).toBuild();
   new Expect(build(r`\vec x`)[0].type).toBe("mover");
 
   assertion = "An extensible arrow builder should work"
