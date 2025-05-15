@@ -516,63 +516,53 @@ poorly.
 | Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
 |                              |          | (Firefox) | (Safari)  |                                     |
 +:=============================+:========:+:=========:+:=========:+:===================================:+
-| Renders well on first paint  | ✓        | ✓         | bad¹      | $\vec{E}$                           |
+| Accents                      | ✓        | ✓         | bad¹      |  $\hat{𝖺}$                         |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Accents                      | ✓        | ✓         | bad²      |  $\hat{𝖺}$                         |
+| Integral, ∫, in display mode | meh²     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Integral, ∫, in display mode | meh³     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
+| \left( x \right)             | ✓        | ✓         | meh³      | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| \left( x \right)             | ✓        | ✓         | meh⁴      | $\left( x \right)$                  |
+| Tag placement                | ✓        | ✓         | poor⁴     | $$x\tag{tag}$$                      |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Tag placement                | ✓        | ✓         | poor⁵     | $$x\tag{tag}$$                      |
+| Extensible arrows            | poor⁵    | ✓         | poor⁵     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor⁶    | ✓         | poor⁶     | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh⁶      | meh⁶      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁷      | meh⁷      | $\sqrt{f_c}$                        |
+| Size 4 radicals              | meh⁷     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁸     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Line-breaking                | ✓        | ✓         | bad⁸      |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁹      |                                     |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹⁰     | $x\smash{y}z$                       |
+|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad⁹      | $x\smash{y}z$                       |
 | CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Flattened circumflex accent  | poor¹¹   | poor¹¹    | poor¹¹    | $\hat{a}$                           |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-| Stretchy parentheses in      | bad¹²    | ✓         | bad¹²     |                                     |
-| NotoSans Math                |          |           |           |                                     |
+| Flattened circumflex accent  | poor¹⁰   | poor¹⁰    | poor¹⁰    | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
-1.  WebKit renders some things correctly only after a page refresh.
-
-2.  WebKit renders some accents too high.
+1.  WebKit renders some accents too high.
     Temml does some work to mitigate this. It’s not enough.
 
-3.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
+2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
-4.  WebKit mis-aligns short parentheses, given a \left and \right.
+3.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-5.  WebKit mis-locates tags and AMS automatic equation numbers because it
+4.  WebKit mis-locates tags and AMS automatic equation numbers because it
     ignores `width: 100%` on an `<mtable>`.
 
-6.  Chromium and WebKit system font extensible arrows have notes placed too high.
+5.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
 
-7.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+6.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-8.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+7.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-9.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+8.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-10. WebKit fails to render anything inside the `<mpadded>` element.
+9.  WebKit fails to render anything inside the `<mpadded>` element.
 
-11. All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
-
-12. Chromium does not stretch delimiters in NotoSans Math. WebKit does not stretch parentheses
-    or arrows.
+10. All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 

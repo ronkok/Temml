@@ -249,21 +249,18 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <th>Gecko <br>(Firefox)</th>
 <th>WebKit <br>(Safari)</th>
 <th>Examples</th></tr>
-<tr><td>Renders well on first paint</td><td>✓</td><td>✓</td><td>bad¹</td><td><span class='hurmet-tex' data-entry='\vec{E}'><math><mover><mi>E</mi><mo stretchy="false" style="transform:scale(0.75) translate(10%, 30%);">→</mo></mover></math></span></td></tr>
-<tr><td>Accents</td><td>✓</td><td>✓</td><td>bad²</td><td><span class='hurmet-tex' data-entry='\hat{𝖺}'><math><mover><mi>𝖺</mi><mo stretchy="false" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr>
-<tr><td>Integral, ∫, in display mode</td><td>meh³</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\displaystyle\int \frac a b'><math><mstyle scriptlevel="0" displaystyle="true"><mo movablelimits="false">∫</mo><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle></math></span></td></tr>
-<tr><td>\left( x \right)</td><td>✓</td><td>✓</td><td>meh⁴</td><td><span class='hurmet-tex' data-entry='\left( x \right)'><math><mrow><mo fence="true" form="prefix">(</mo><mi>x</mi><mo fence="true" form="postfix">)</mo></mrow></math></span></td></tr>
-<tr><td>Tag placement</td><td>✓</td><td>✓</td><td>poor⁵</td><td><p class='hurmet-tex' data-entry='x\tag{tag}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" style="width:100%;"><mtr class="tml-tageqn"><mtd style="padding:0;width:50%;"></mtd><mtd><mrow><mi>x</mi></mrow></mtd><mtd class="tml-right" style="padding:0;width:50%;"><mtext class="tml-tag">(tag)</mtext></mtd></mtr></mtable></math></p></td></tr>
-<tr><td>Extensible arrows</td><td>poor⁶</td><td>✓</td><td>poor⁶</td><td><span class='hurmet-tex' data-entry='A \xrightharpoonup{\text{note}} B'><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">⇀</mo><mover><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></span></td></tr>
-<tr><td>Radical height</td><td>✓</td><td>meh⁷</td><td>meh⁷</td><td><span class='hurmet-tex' data-entry='\sqrt{f_c}'><math><msqrt><msub><mi>f</mi><mi>c</mi></msub></msqrt></math></span></td></tr>
-<tr><td>Size 4 radicals</td><td>meh⁸</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
-<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad⁹</td><td><p></p></td></tr>
-<tr><td>\smash, \mathllap, \mathrlap,<br> CD environment</td><td>✓</td><td>✓</td><td>bad¹⁰</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr>
-<tr><td>Flattened circumflex accent</td><td>poor¹¹</td><td>poor¹¹</td><td>poor¹¹</td><td><span class='hurmet-tex' data-entry='\hat{a}'><math><mover><mi>a</mi><mo stretchy="false" class="tml-xshift" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr>
-<tr><td>Stretchy parentheses in NotoSans Math</td><td>bad¹²</td><td>✓</td><td>bad¹²</td><td><p></p></td></tr></table>
+<tr><td>Accents</td><td>✓</td><td>✓</td><td>bad¹</td><td><span class='hurmet-tex' data-entry='\hat{𝖺}'><math><mover><mi>𝖺</mi><mo stretchy="false" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr>
+<tr><td>Integral, ∫, in display mode</td><td>meh²</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\displaystyle\int \frac a b'><math><mstyle scriptlevel="0" displaystyle="true"><mo movablelimits="false">∫</mo><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle></math></span></td></tr>
+<tr><td>\left( x \right)</td><td>✓</td><td>✓</td><td>meh³</td><td><span class='hurmet-tex' data-entry='\left( x \right)'><math><mrow><mo fence="true" form="prefix">(</mo><mi>x</mi><mo fence="true" form="postfix">)</mo></mrow></math></span></td></tr>
+<tr><td>Tag placement</td><td>✓</td><td>✓</td><td>poor⁴</td><td><p class='hurmet-tex' data-entry='x\tag{tag}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" style="width:100%;"><mtr class="tml-tageqn"><mtd style="padding:0;width:50%;"></mtd><mtd><mrow><mi>x</mi></mrow></mtd><mtd class="tml-right" style="padding:0;width:50%;"><mtext class="tml-tag">(tag)</mtext></mtd></mtr></mtable></math></p></td></tr>
+<tr><td>Extensible arrows</td><td>poor⁵</td><td>✓</td><td>poor⁵</td><td><span class='hurmet-tex' data-entry='A \xrightharpoonup{\text{note}} B'><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">⇀</mo><mover><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></span></td></tr>
+<tr><td>Radical height</td><td>✓</td><td>meh⁶</td><td>meh⁶</td><td><span class='hurmet-tex' data-entry='\sqrt{f_c}'><math><msqrt><msub><mi>f</mi><mi>c</mi></msub></msqrt></math></span></td></tr>
+<tr><td>Size 4 radicals</td><td>meh⁷</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
+<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad⁸</td><td><p></p></td></tr>
+<tr><td>\smash, \mathllap, \mathrlap,<br> CD environment</td><td>✓</td><td>✓</td><td>bad⁹</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr>
+<tr><td>Flattened circumflex accent</td><td>poor¹⁰</td><td>poor¹⁰</td><td>poor¹⁰</td><td><span class='hurmet-tex' data-entry='\hat{a}'><math><mover><mi>a</mi><mo stretchy="false" class="tml-xshift" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr></table>
 <p>Notes:</p>
-<ol class="decimal" start="1"><li><p>WebKit renders some things correctly only after a page refresh.</p></li>
-<li><p>WebKit renders some accents too high. Temml does some work to mitigate this. It’s not enough.</p></li>
+<ol class="decimal" start="1"><li><p>WebKit renders some accents too high. Temml does some work to mitigate this. It’s not enough.</p></li>
 <li><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.</p></li>
 <li><p>WebKit mis-aligns short parentheses, given a \left and \right.</p></li>
 <li><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
@@ -272,8 +269,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
 <li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
 <li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li>
-<li><p>All browsers fail to flatten a circumflex accent in any font other than Latin Modern.</p></li>
-<li><p>Chromium does not stretch delimiters in NotoSans Math. WebKit does not stretch parentheses or arrows.</p></li></ol>
+<li><p>All browsers fail to flatten a circumflex accent in any font other than Latin Modern.</p></li></ol>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
 <p class="reduced">Copyright © 2021-2025 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
