@@ -7082,88 +7082,6 @@ var temml = (function () {
   });
 
   defineFunction({
-    type: "href",
-    names: ["\\href"],
-    props: {
-      numArgs: 2,
-      argTypes: ["url", "original"],
-      allowedInText: true
-    },
-    handler: ({ parser, token }, args) => {
-      const body = args[1];
-      const href = assertNodeType(args[0], "url").url;
-
-      if (
-        !parser.settings.isTrusted({
-          command: "\\href",
-          url: href
-        })
-      ) {
-        throw new ParseError(`Function "\\href" is not trusted`, token)
-      }
-
-      return {
-        type: "href",
-        mode: parser.mode,
-        href,
-        body: ordargument(body)
-      };
-    },
-    mathmlBuilder: (group, style) => {
-      const math = new MathNode("math", [buildExpressionRow(group.body, style)]);
-      const anchorNode = new AnchorNode(group.href, [], [math]);
-      return anchorNode
-    }
-  });
-
-  defineFunction({
-    type: "href",
-    names: ["\\url"],
-    props: {
-      numArgs: 1,
-      argTypes: ["url"],
-      allowedInText: true
-    },
-    handler: ({ parser, token }, args) => {
-      const href = assertNodeType(args[0], "url").url;
-
-      if (
-        !parser.settings.isTrusted({
-          command: "\\url",
-          url: href
-        })
-      ) {
-        throw new ParseError(`Function "\\url" is not trusted`, token)
-      }
-
-      const chars = [];
-      for (let i = 0; i < href.length; i++) {
-        let c = href[i];
-        if (c === "~") {
-          c = "\\textasciitilde";
-        }
-        chars.push({
-          type: "textord",
-          mode: "text",
-          text: c
-        });
-      }
-      const body = {
-        type: "text",
-        mode: parser.mode,
-        font: "\\texttt",
-        body: chars
-      };
-      return {
-        type: "href",
-        mode: parser.mode,
-        href,
-        body: ordargument(body)
-      };
-    }
-  });
-
-  defineFunction({
     type: "html",
     names: ["\\class", "\\id", "\\style", "\\data"],
     props: {
@@ -7420,17 +7338,24 @@ var temml = (function () {
     },
     mathmlBuilder(group, style) {
       const dimension = calculateSize(group.dimension, style);
-      const ch = dimension.unit === "em" ? spaceCharacter(dimension.number) : "";
+      const ch = dimension.number > 0 && dimension.unit === "em"
+        ? spaceCharacter(dimension.number)
+        : "";
       if (group.mode === "text" && ch.length > 0) {
         const character = new mathMLTree.TextNode(ch);
         return new mathMLTree.MathNode("mtext", [character]);
       } else {
-        const node = new mathMLTree.MathNode("mspace");
-        node.setAttribute("width", dimension.number + dimension.unit);
-        if (dimension.number < 0) {
+        if (dimension.number >= 0) {
+          const node = new mathMLTree.MathNode("mspace");
+          node.setAttribute("width", dimension.number + dimension.unit);
+          return node
+        } else {
+          // Don't use <mspace> or <mpadded> because
+          // WebKit recognizes negative left margin only on a <mrow> element
+          const node = new mathMLTree.MathNode("mrow");
           node.style.marginLeft = dimension.number + dimension.unit;
+          return node
         }
-        return node;
       }
     }
   });
@@ -12061,7 +11986,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.11.06";
+  const version = "0.11.07";
 
   function postProcess(block) {
     const labelMap = {};

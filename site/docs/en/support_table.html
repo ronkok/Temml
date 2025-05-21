@@ -20,16 +20,16 @@
 <body>
 <main id="main" class="sptable">
 <h1 id='support-table'>Support Table</h1>
-<p><strong>Temml</strong> is a JavaScript library that converts TeX math-mode functions to MathML. This page provides an alphabetically sorted list of TeX functions that Temml supports and some functions that it does not support. There is a similar page, with functions <a href='supported.html'>sorted by type</a>.</p>
+<p><strong>Temml</strong> is a JavaScript library that converts TeX math-mode functions to MathML. This page provides an alphabetically sorted list of TeX functions that Temml supports and some functions that it does not support. There is a similar page, with functions <a href="supported.html">sorted by type</a>.</p>
 <p>Some functions are provided by an extension and are listed as such. They will be available only in pages that include the extension.</p>
-<p>If you know the shape of a character, but not its name, <a href='http://detexify.kirelabs.org/classify.html'>Detexify</a> can help.</p>
+<p>If you know the shape of a character, but not its name, <a href="http://detexify.kirelabs.org/classify.html">Detexify</a> can help.</p>
 <h2 id='symbols'>Symbols</h2>
 <table><tr><th>Function</th>
 <th>Rendered</th>
 <th>Source or Comment</th>
 <th>Package</th></tr>
 <tr><td>!</td><td><span class='hurmet-tex' data-entry='n!'><math><mrow><mi>n</mi><mo form="postfix" stretchy="false">!</mo></mrow></math></span></td><td><code>n!</code></td><td></td></tr>
-<tr><td>\!</td><td><span class='hurmet-tex' data-entry='a\!b'><math><mrow><mi>a</mi><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mi>b</mi></mrow></math></span></td><td><code>a\!b</code></td><td></td></tr>
+<tr><td>\!</td><td><span class='hurmet-tex' data-entry='a\!b'><math><mrow><mi>a</mi><mrow style="margin-left:-0.1667em;"></mrow><mi>b</mi></mrow></math></span></td><td><code>a\!b</code></td><td></td></tr>
 <tr><td>#</td><td><span class='hurmet-tex' data-entry='\def\bar#1{#1^2} \bar{y}'><math><msup><mi>y</mi><mn>2</mn></msup></math></span></td><td><code>\def\bar#1{#1^2} \bar{y}</code></td><td></td></tr>
 <tr><td>\#</td><td><span class='hurmet-tex' data-entry='\#'><math><mi>#</mi></math></span></td><td></td><td></td></tr>
 <tr><td>%</td><td></td><td><code>%this is a comment</code></td><td></td></tr>
@@ -96,8 +96,8 @@
 <tr><td>\alpha</td><td><span class='hurmet-tex' data-entry='\alpha'><math><mi>α</mi></math></span></td><td></td><td></td></tr>
 <tr><td>\amalg</td><td><span class='hurmet-tex' data-entry='\amalg'><math><mo lspace="0em" rspace="0em">⨿</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\And</td><td><span class='hurmet-tex' data-entry='\And'><math><mo lspace="0em" rspace="0em">&amp;</mo></math></span></td><td></td><td></td></tr>
-<tr><td>\and</td><td><span class="no-sup">Not supported</span></td><td><a href='https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax'>Deprecated</a></td><td>texvc</td></tr>
-<tr><td>\ang</td><td><span class="no-sup">Not supported</span></td><td><a href='https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax'>Deprecated</a></td><td>texvc</td></tr>
+<tr><td>\and</td><td><span class="no-sup">Not supported</span></td><td><a href="https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax">Deprecated</a></td><td>texvc</td></tr>
+<tr><td>\ang</td><td><span class="no-sup">Not supported</span></td><td><a href="https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax">Deprecated</a></td><td>texvc</td></tr>
 <tr><td>\angl</td><td><span class='hurmet-tex' data-entry='a_{\angl n}'><math><msub><mi>a</mi><menclose notation="actuarial" class="actuarial"><mi>n</mi></menclose></msub></math></span></td><td><code>a_{\angl n}</code></td><td>actuarialangle</td></tr>
 <tr><td>\angln</td><td><span class='hurmet-tex' data-entry='a_\angln'><math><msub><mi>a</mi><menclose notation="actuarial" class="actuarial"><mi>n</mi></menclose></msub></math></span></td><td><code>a_\angln</code></td><td>actuarialangle</td></tr>
 <tr><td>\angle</td><td><span class='hurmet-tex' data-entry='\angle'><math><mi>∠</mi></math></span></td><td></td><td></td></tr>
@@ -263,7 +263,7 @@
 <table><tr><th>Function</th>
 <th>Rendered</th>
 <th>Source or Comment</th></tr>
-<tr><td>\C</td><td><span class="no-sup">Not supported</span></td><td><a href='https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax'>Deprecated</a></td><td>texvc</td></tr>
+<tr><td>\C</td><td><span class="no-sup">Not supported</span></td><td><a href="https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax">Deprecated</a></td><td>texvc</td></tr>
 <tr><td>\c</td><td><span class='hurmet-tex' data-entry='\text{\c{c}}'><math><munder><mtext>c</mtext><mo stretchy="false" style="math-style:normal;math-depth:0;">¸</mo></munder></math></span></td><td><code>\text{\c{c}}</code></td><td></td></tr>
 <tr><td>\cal</td><td><span class='hurmet-tex' data-entry='{\cal AaBb}'><math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">𝒶</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒷</mi></mrow></math></span></td><td><code>{\cal AaBb}</code></td><td></td></tr>
 <tr><td>\cancel</td><td><span class='hurmet-tex' data-entry='\cancel{5}'><math><menclose notation="updiagonalstrike"><mn>5</mn><mrow class="tml-cancel upstrike"></mrow></menclose></math></span></td><td><code>\cancel{5}</code></td><td>cancel</td></tr>
@@ -431,7 +431,7 @@
 <tr><td>\dots</td><td><span class='hurmet-tex' data-entry='x_1 + \dots + x_n'><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo></mrow><mrow><mo>⋯</mo></mrow><mrow><mo>+</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></span></td><td><code>x_1 + \dots + x_n</code></td><td></td></tr>
 <tr><td>\dotsb</td><td><span class='hurmet-tex' data-entry='x_1 +\dotsb + x_n'><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo></mrow><mrow><mo>⋯</mo></mrow><mrow><mo>+</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></span></td><td><code>x_1 +\dotsb + x_n</code></td><td>ams</td></tr>
 <tr><td>\dotsc</td><td><span class='hurmet-tex' data-entry='x,\dotsc,y'><math><mrow><mi>x</mi><mo separator="true">,</mo></mrow><mrow><mo>…</mo></mrow><mrow><mo separator="true">,</mo></mrow><mrow><mi>y</mi></mrow></math></span></td><td><code>x,\dotsc,y</code></td><td>ams</td></tr>
-<tr><td>\dotsi</td><td><p class='hurmet-tex' data-entry='\int_{A_1}\int_{A_2}\dotsi'><math display="block" class="tml-display" style="display:block math;"><mrow><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>1</mn></msub></msub><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>2</mn></msub></msub><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow></math></p></td><td><code>\int_{A_1}\int_{A_2}\dotsi</code></td><td>ams</td></tr>
+<tr><td>\dotsi</td><td><p class='hurmet-tex' data-entry='\int_{A_1}\int_{A_2}\dotsi'><math display="block" class="tml-display" style="display:block math;"><mrow><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>1</mn></msub></msub><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>2</mn></msub></msub><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow></math></p></td><td><code>\int_{A_1}\int_{A_2}\dotsi</code></td><td>ams</td></tr>
 <tr><td>\dotsm</td><td><span class='hurmet-tex' data-entry='x_1 x_2 \dotsm x_n'><math><mrow><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>⋯</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></span></td><td><code>$x_1 x_2 \dotsm x_n</code></td><td>ams</td></tr>
 <tr><td>\dotso</td><td><span class='hurmet-tex' data-entry='\dotso'><math><mo lspace="0em" rspace="0em">…</mo></math></span></td><td></td><td>ams</td></tr>
 <tr><td>\doublebarvee</td><td><span class='hurmet-tex' data-entry='\doublebarvee'><math><mo lspace="0em" rspace="0em">⩢</mo></math></span></td><td></td><td>stix</td></tr>
@@ -589,14 +589,14 @@
 <tr><td>\hookrightarrow</td><td><span class='hurmet-tex' data-entry='\hookrightarrow'><math><mo stretchy="false" lspace="0em" rspace="0em">↪</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\hourglass</td><td><span class='hurmet-tex' data-entry='\hourglass'><math><mo lspace="0em" rspace="0em">⧖</mo></math></span></td><td></td><td>stix</td></tr>
 <tr><td>\hphantom</td><td><span class='hurmet-tex' data-entry='a\hphantom{bc}d'><math><mrow><mi>a</mi><mpadded height="0px" depth="0px"><mphantom><mi>b</mi><mi>c</mi></mphantom></mpadded><mi>d</mi></mrow></math></span></td><td><code>a\hphantom{bc}d</code></td><td></td></tr>
-<tr><td>\href</td><td><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\Temml}'><a href='https://temml.org/'><math><mrow><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mrow></math></a></span></td><td><code>\href{https://temml.org/}{\Temml}</code><br>Requires<code>trust</code><a href='options.md'>option</a></td><td>href</td></tr>
+<tr><td>\href</td><td><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\Temml}'><math><mrow><mtext style="color:#b22222;">\href</mtext><mrow><mi>h</mi><mi>t</mi><mi>t</mi><mi>p</mi><mi>s</mi><mo lspace="0.2222em" rspace="0.2222em">:</mo><mi>/</mi><mi>/</mi><mi>t</mi><mi>e</mi><mi>m</mi><mi>m</mi><mi>l</mi><mi>.</mi><mi>o</mi><mi>r</mi><mi>g</mi><mi>/</mi></mrow><mrow><mtext>T</mtext><mrow style="margin-left:-0.2em;"></mrow><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mrow><mtext>M</mtext><mrow style="margin-left:-0.08em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mtext>L</mtext></mrow></mrow></mrow></math></span></td><td><code>\href{https://temml.org/}{\Temml}</code><br>Requires<code>trust</code><a href="options.md">option</a></td><td>href</td></tr>
 <tr><td>\hskip</td><td><span class='hurmet-tex' data-entry='w\hskip1em i\hskip2em d'><math><mrow><mi>w</mi><mspace width="1em"></mspace><mi>i</mi><mspace width="2em"></mspace><mi>d</mi></mrow></math></span></td><td><code>w\hskip1em i\hskip2em d</code></td><td></td></tr>
 <tr><td>\hslash</td><td><span class='hurmet-tex' data-entry='\hslash'><math><mi>ℏ</mi></math></span></td><td></td><td>ams</td></tr>
 <tr><td>\hspace</td><td><span class='hurmet-tex' data-entry='s\hspace{7ex} k'><math><mrow><mi>s</mi><mspace width="3.017em"></mspace><mi>k</mi></mrow></math></span></td><td><code>s\hspace{7ex} k</code></td><td></td></tr>
-<tr><td>\class</td><td><span class='hurmet-tex' data-entry='\class{foo}{x}'><math><mi class="foo">x</mi></math></span></td><td><code>\class{foo}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href='options.md'>option</a></td><td></td></tr>
-<tr><td>\data</td><td><span class='hurmet-tex' data-entry='\data{foo=a, bar=b}{x}'><math><mi data-foo="a" data-bar="b">x</mi></math></span></td><td><code>\data{foo=a, bar=b}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href='options.md'>option</a></td><td></td></tr>
-<tr><td>\id</td><td><span class='hurmet-tex' data-entry='\id{bar}{x}'><math><mi id="bar">x</mi></math></span></td><td><code>\id{bar}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href='options.md'>option</a></td><td></td></tr>
-<tr><td>\style</td><td><span class='hurmet-tex' data-entry='\style{color: red;}{x}'><math><mi style="color: red;">x</mi></math></span></td><td><code>\style{color: red;}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href='options.md'>option</a></td><td></td></tr>
+<tr><td>\class</td><td><span class='hurmet-tex' data-entry='\class{foo}{x}'><math><mi class="foo">x</mi></math></span></td><td><code>\class{foo}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href="options.md">option</a></td><td></td></tr>
+<tr><td>\data</td><td><span class='hurmet-tex' data-entry='\data{foo=a, bar=b}{x}'><math><mi data-foo="a" data-bar="b">x</mi></math></span></td><td><code>\data{foo=a, bar=b}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href="options.md">option</a></td><td></td></tr>
+<tr><td>\id</td><td><span class='hurmet-tex' data-entry='\id{bar}{x}'><math><mi id="bar">x</mi></math></span></td><td><code>\id{bar}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href="options.md">option</a></td><td></td></tr>
+<tr><td>\style</td><td><span class='hurmet-tex' data-entry='\style{color: red;}{x}'><math><mi style="color: red;">x</mi></math></span></td><td><code>\style{color: red;}{x}</code><br>Must enable<code>trust</code> and disable<code>strict</code><a href="options.md">option</a></td><td></td></tr>
 <tr><td>\huge</td><td><span class='hurmet-tex' data-entry='\huge huge'><math><mstyle mathsize="2.0740em"><mi>h</mi><mi>u</mi><mi>g</mi><mi>e</mi></mstyle></math></span></td><td><code>\huge huge</code></td><td></td></tr>
 <tr><td>\Huge</td><td><span class='hurmet-tex' data-entry='\Huge Huge'><math><mstyle mathsize="2.4880em"><mi>H</mi><mi>u</mi><mi>g</mi><mi>e</mi></mstyle></math></span></td><td><code>\Huge Huge</code></td><td></td></tr></table>
 <h2 id='i'>I</h2>
@@ -605,7 +605,7 @@
 <th>Source or Comment</th>
 <th>Package</th></tr>
 <tr><td>\i</td><td><span class='hurmet-tex' data-entry='\text{\i}'><math><mtext>ı</mtext></math></span></td><td><code>\text{\i}</code></td><td></td></tr>
-<tr><td>\idotsint</td><td><span class='hurmet-tex' data-entry='\int\idotsint\int'><math><mrow><mo movablelimits="false">∫</mo><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow><mrow><mo movablelimits="false">∫</mo></mrow></math></span></td><td><code>\int\idotsint\int</code></td><td>ams</td></tr>
+<tr><td>\idotsint</td><td><span class='hurmet-tex' data-entry='\int\idotsint\int'><math><mrow><mo movablelimits="false">∫</mo><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow><mrow><mo movablelimits="false">∫</mo></mrow></math></span></td><td><code>\int\idotsint\int</code></td><td>ams</td></tr>
 <tr><td>\iddots</td><td><span class='hurmet-tex' data-entry='\iddots'><math><mo lspace="0em" rspace="0em">⋰</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\if</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
 <tr><td>\iff</td><td><span class='hurmet-tex' data-entry='A\iff B'><math><mrow><mi>A</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟺</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>B</mi></mrow></math></span></td><td><code>A\iff B</code></td><td></td></tr>
@@ -657,7 +657,7 @@
 <tr><td>\Kappa</td><td><span class='hurmet-tex' data-entry='\Kappa'><math><mpadded lspace="0"><mi mathvariant="normal">Κ</mi></mpadded></math></span></td><td></td><td></td></tr>
 <tr><td>\kappa</td><td><span class='hurmet-tex' data-entry='\kappa'><math><mi>κ</mi></math></span></td><td></td><td></td></tr>
 <tr><td>\ker</td><td><span class='hurmet-tex' data-entry='\ker'><math><mrow><mi>ker</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow></math></span></td><td></td><td></td></tr>
-<tr><td>\kern</td><td><span class='hurmet-tex' data-entry='I\kern-2.5pt R'><math><mrow><mi>I</mi><mspace width="-2.4907pt" style="margin-left:-2.4907pt;"></mspace><mi>R</mi></mrow></math></span></td><td><code>I\kern-2.5pt R</code></td><td></td></tr>
+<tr><td>\kern</td><td><span class='hurmet-tex' data-entry='I\kern-2.5pt R'><math><mrow><mi>I</mi><mrow style="margin-left:-2.4907pt;"></mrow><mi>R</mi></mrow></math></span></td><td><code>I\kern-2.5pt R</code></td><td></td></tr>
 <tr><td>\Ket</td><td><span class='hurmet-tex' data-entry='\Ket{\psi}'><math><mrow><mo fence="true" form="prefix">|</mo><mi>ψ</mi><mo fence="true" form="postfix">⟩</mo></mrow></math></span></td><td><code>\Ket{\psi}</code></td><td>braket</td></tr>
 <tr><td>\ket</td><td><span class='hurmet-tex' data-entry='\ket{\psi}'><math><mpadded><mi>|</mi><mi>ψ</mi><mo form="postfix" stretchy="false">⟩</mo></mpadded></math></span></td><td><code>\ket{\psi}</code></td><td>braket</td></tr>
 <tr><td>\ketbra</td><td><span class='hurmet-tex' data-entry='\ketbra{a}{b}'><math><mrow><mrow><mo fence="true" form="prefix">|</mo><mi>a</mi><mo fence="true" form="postfix">⟩</mo></mrow><mrow><mo fence="true" form="prefix">⟨</mo><mi>b</mi><mo fence="true" form="postfix">|</mo></mrow></mrow></math></span></td><td><code>\ketbra{a}{b}</code></td><td>physics extension</td></tr>
@@ -684,7 +684,7 @@
 <tr><td>\large</td><td><span class='hurmet-tex' data-entry='\large large'><math><mstyle mathsize="1.2000em"><mi>l</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi></mstyle></math></span></td><td><code>\large large</code></td><td></td></tr>
 <tr><td>\Large</td><td><span class='hurmet-tex' data-entry='\Large Large'><math><mstyle mathsize="1.4400em"><mi>L</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi></mstyle></math></span></td><td><code>\Large Large</code></td><td></td></tr>
 <tr><td>\LARGE</td><td><span class='hurmet-tex' data-entry='\LARGE LARGE'><math><mstyle mathsize="1.7280em"><mi>L</mi><mi>A</mi><mi>R</mi><mi>G</mi><mi>E</mi></mstyle></math></span></td><td><code>\LARGE LARGE</code></td><td></td></tr>
-<tr><td>\LaTeX</td><td><span class='hurmet-tex' data-entry='\LaTeX'><math><mrow><mtext>L</mtext><mspace width="-0.35em" style="margin-left:-0.35em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="1" displaystyle="false"><mtext>A</mtext></mstyle></mstyle></mpadded><mspace width="-0.15em" style="margin-left:-0.15em;"></mspace><mtext>T</mtext><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mspace width="-0.125em" style="margin-left:-0.125em;"></mspace><mtext>X</mtext></mrow></math></span></td><td></td><td></td></tr>
+<tr><td>\LaTeX</td><td><span class='hurmet-tex' data-entry='\LaTeX'><math><mrow><mtext>L</mtext><mrow style="margin-left:-0.35em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="1" displaystyle="false"><mtext>A</mtext></mstyle></mstyle></mpadded><mrow style="margin-left:-0.15em;"></mrow><mtext>T</mtext><mrow style="margin-left:-0.1667em;"></mrow><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mrow style="margin-left:-0.125em;"></mrow><mtext>X</mtext></mrow></math></span></td><td></td><td></td></tr>
 <tr><td>\lBrace</td><td><span class='hurmet-tex' data-entry='\lBrace'><math><mo form="prefix" stretchy="false" lspace="0em" rspace="0em">⦃</mo></math></span></td><td></td><td>stix</td></tr>
 <tr><td>\lbrace</td><td><span class='hurmet-tex' data-entry='\lbrace'><math><mo form="prefix" stretchy="false" lspace="0em" rspace="0em">{</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\lbrack</td><td><span class='hurmet-tex' data-entry='\lbrack'><math><mo form="prefix" stretchy="false" lspace="0em" rspace="0em">[</mo></math></span></td><td></td><td></td></tr>
@@ -747,7 +747,6 @@
 <tr><td>\lnot</td><td><span class='hurmet-tex' data-entry='\lnot'><math><mo form="prefix" stretchy="false" lspace="0em" rspace="0em">¬</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\lnsim</td><td><span class='hurmet-tex' data-entry='\lnsim'><math><mo lspace="0em" rspace="0em">⋦</mo></math></span></td><td></td><td>ams</td></tr>
 <tr><td>\log</td><td><span class='hurmet-tex' data-entry='\log'><math><mrow><mi>log</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow></math></span></td><td></td><td></td></tr>
-<tr><td>\long</td><td></td><td></td><td></td></tr>
 <tr><td>\longdiv</td><td><span class='hurmet-tex' data-entry='\longdiv{40.0}'><math><menclose notation="longdiv" class="longdiv-top"><mn>40.0</mn><mrow class="longdiv-arc"></mrow></menclose></math></span></td><td><code>\longdiv{40.0}</code></td><td></td></tr>
 <tr><td>\Longleftarrow</td><td><span class='hurmet-tex' data-entry='\Longleftarrow'><math><mo stretchy="false" lspace="0em" rspace="0em">⟸</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\longleftarrow</td><td><span class='hurmet-tex' data-entry='\longleftarrow'><math><mo stretchy="false" lspace="0em" rspace="0em">⟵</mo></math></span></td><td></td><td></td></tr>
@@ -863,13 +862,13 @@
 <tr><td>\Nand</td><td><span class='hurmet-tex' data-entry='\Nand'><math><mo lspace="0em" rspace="0em">⊼</mo></math></span></td><td></td><td>stix</td></tr>
 <tr><td>\natnums</td><td><span class='hurmet-tex' data-entry='\natnums'><math><mi>ℕ</mi></math></span></td><td></td><td>texvc extension</td></tr>
 <tr><td>\natural</td><td><span class='hurmet-tex' data-entry='\natural'><math><mi>♮</mi></math></span></td><td></td><td></td></tr>
-<tr><td>\negmedspace</td><td><span class='hurmet-tex' data-entry='a\negmedspace b'><math><mrow><mi>a</mi><mspace width="-0.2222em" style="margin-left:-0.2222em;"></mspace><mi>b</mi></mrow></math></span></td><td><code>a\negmedspace b</code></td><td>ams</td></tr>
+<tr><td>\negmedspace</td><td><span class='hurmet-tex' data-entry='a\negmedspace b'><math><mrow><mi>a</mi><mrow style="margin-left:-0.2222em;"></mrow><mi>b</mi></mrow></math></span></td><td><code>a\negmedspace b</code></td><td>ams</td></tr>
 <tr><td>\ncong</td><td><span class='hurmet-tex' data-entry='\ncong'><math><mo lspace="0em" rspace="0em">≆</mo></math></span></td><td></td><td>ams</td></tr>
 <tr><td>\ne</td><td><span class='hurmet-tex' data-entry='\ne'><math><mo lspace="0em" rspace="0em">≠</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\nearrow</td><td><span class='hurmet-tex' data-entry='\nearrow'><math><mo stretchy="false" lspace="0em" rspace="0em">↗</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\neg</td><td><span class='hurmet-tex' data-entry='\neg'><math><mo form="prefix" stretchy="false" lspace="0em" rspace="0em">¬</mo></math></span></td><td></td><td></td></tr>
-<tr><td>\negthickspace</td><td><span class='hurmet-tex' data-entry='a\negthickspace b'><math><mrow><mi>a</mi><mspace width="-0.2778em" style="margin-left:-0.2778em;"></mspace><mi>b</mi></mrow></math></span></td><td><code>a\negthickspace b</code></td><td>ams</td></tr>
-<tr><td>\negthinspace</td><td><span class='hurmet-tex' data-entry='a\negthinspace b'><math><mrow><mi>a</mi><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mi>b</mi></mrow></math></span></td><td><code>a\negthinspace b</code></td><td>ams</td></tr>
+<tr><td>\negthickspace</td><td><span class='hurmet-tex' data-entry='a\negthickspace b'><math><mrow><mi>a</mi><mrow style="margin-left:-0.2778em;"></mrow><mi>b</mi></mrow></math></span></td><td><code>a\negthickspace b</code></td><td>ams</td></tr>
+<tr><td>\negthinspace</td><td><span class='hurmet-tex' data-entry='a\negthinspace b'><math><mrow><mi>a</mi><mrow style="margin-left:-0.1667em;"></mrow><mi>b</mi></mrow></math></span></td><td><code>a\negthinspace b</code></td><td>ams</td></tr>
 <tr><td>\neq</td><td><span class='hurmet-tex' data-entry='\neq'><math><mo lspace="0em" rspace="0em">≠</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\newcommand</td><td><span class='hurmet-tex' data-entry='\newcommand\chk{\checkmark} \chk'><math><mi>✓</mi></math></span></td><td><code>\newcommand\chk{\checkmark} \chk</code></td><td>newcommand</td></tr>
 <tr><td>\newenvironment</td><td><span class="no-sup">Not supported</span></td><td></td><td></td></tr>
@@ -996,10 +995,10 @@
 <th>Source or Comment</th>
 <th>Package</th></tr>
 <tr><td>\P</td><td><span class='hurmet-tex' data-entry='\text{\P}'><math><mtext>¶</mtext></math></span></td><td><code>\text{\P}</code> or<code>\P</code></td><td></td></tr>
-<tr><td>\pagecolor</td><td><span class="no-sup">Not supported</span></td><td><a href='https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax'>Deprecated</a></td><td>texvc</td></tr>
+<tr><td>\pagecolor</td><td><span class="no-sup">Not supported</span></td><td><a href="https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax">Deprecated</a></td><td>texvc</td></tr>
 <tr><td>\parallel</td><td><span class='hurmet-tex' data-entry='\parallel'><math><mo lspace="0em" rspace="0em">∥</mo></math></span></td><td></td><td></td></tr>
 <tr><td>\parr</td><td><span class='hurmet-tex' data-entry='\parr'><math><mo lspace="0em" rspace="0em">⅋</mo></math></span></td><td></td><td>cmll</td></tr>
-<tr><td>\part</td><td><span class="no-sup">Not supported</span></td><td><a href='https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax'>Deprecated</a></td><td>texvc</td></tr>
+<tr><td>\part</td><td><span class="no-sup">Not supported</span></td><td><a href="https://en.wikipedia.org/wiki/Help:Displaying_a_formula#Deprecated_syntax">Deprecated</a></td><td>texvc</td></tr>
 <tr><td>\partial</td><td><span class='hurmet-tex' data-entry='\partial'><math><mi>∂</mi></math></span></td><td></td><td></td></tr>
 <tr><td>\partialderivative</td><td><span class='hurmet-tex' data-entry='\partialderivative{x}{y}'><math><mfrac><mrow><mi>∂</mi><mi>x</mi></mrow><mrow><mi>∂</mi><mi>y</mi></mrow></mfrac></math></span></td><td><code>\partialderivative{x}{y}</code></td><td>physics extension</td></tr>
 <tr><td>\pb</td><td><span class='hurmet-tex' data-entry='\pb{x}{y}'><math><mrow><mo fence="true" form="prefix">{</mo><mi>x</mi><mo separator="true">,</mo><mi>y</mi><mo fence="true" form="postfix">}</mo></mrow></math></span></td><td><code>\pb{x}{y}</code></td><td>physics extension</td></tr>
@@ -1301,7 +1300,7 @@ a &=b+c\\
 <tr><td>\Tau</td><td><span class='hurmet-tex' data-entry='\Tau'><math><mpadded lspace="0"><mi mathvariant="normal">Τ</mi></mpadded></math></span></td><td></td><td></td></tr>
 <tr><td>\tau</td><td><span class='hurmet-tex' data-entry='\tau'><math><mi>τ</mi></math></span></td><td></td><td></td></tr>
 <tr><td>\tbinom</td><td><span class='hurmet-tex' data-entry='\tbinom n k'><math><mstyle displaystyle="false" scriptlevel="0"><mrow><mo fence="true">(</mo><mfrac linethickness="0px"><mi>n</mi><mi>k</mi></mfrac><mo fence="true">)</mo></mrow></mstyle></math></span></td><td><code>\tbinom n k</code></td><td>ams</td></tr>
-<tr><td>\TeX</td><td><span class='hurmet-tex' data-entry='\TeX'><math><mrow><mtext>T</mtext><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mspace width="-0.125em" style="margin-left:-0.125em;"></mspace><mtext>X</mtext></mrow></math></span></td><td></td><td></td></tr>
+<tr><td>\TeX</td><td><span class='hurmet-tex' data-entry='\TeX'><math><mrow><mtext>T</mtext><mrow style="margin-left:-0.1667em;"></mrow><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mrow style="margin-left:-0.125em;"></mrow><mtext>X</mtext></mrow></math></span></td><td></td><td></td></tr>
 <tr><td>\text</td><td><span class='hurmet-tex' data-entry='\text{ yes }\&\text{ no }'><math><mrow><mtext> yes </mtext><mi>&amp;</mi><mtext> no </mtext></mrow></math></span></td><td><code>\text{ yes }\&amp;\text{ no }</code></td><td></td></tr>
 <tr><td>\textasciitilde</td><td><span class='hurmet-tex' data-entry='\text{\textasciitilde}'><math><mtext>~</mtext></math></span></td><td><code>\text{\textasciitilde}</code></td><td></td></tr>
 <tr><td>\textasciicircum</td><td><span class='hurmet-tex' data-entry='\text{\textasciicircum}'><math><mtext>^</mtext></math></span></td><td><code>\text{\textasciicircum}</code></td><td></td></tr>
@@ -1443,7 +1442,6 @@ a &=b+c\\
 <tr><td>\upxi</td><td><span class='hurmet-tex' data-entry='\upxi'><math><mpadded lspace="0"><mi mathvariant="normal">ξ</mi></mpadded></math></span></td><td></td><td>upgreek</td></tr>
 <tr><td>\upzeta</td><td><span class='hurmet-tex' data-entry='\upzeta'><math><mpadded lspace="0"><mi mathvariant="normal">ζ</mi></mpadded></math></span></td><td></td><td>upgreek</td></tr>
 <tr><td>\urcorner</td><td><span class='hurmet-tex' data-entry='\urcorner'><math><mo form="postfix" stretchy="false" lspace="0em" rspace="0em">⌝</mo></math></span></td><td></td><td>ams</td></tr>
-<tr><td>\url</td><td><span class='hurmet-tex' data-entry='\footnotesize\url{https://temml.org/}'><math><mstyle mathsize="0.8000em"><a href='https://temml.org/'><math><mtext>𝚑𝚝𝚝𝚙𝚜://𝚝𝚎𝚖𝚖𝚕.𝚘𝚛𝚐/</mtext></math></a></mstyle></math></span></td><td><code>\url{https://temml.org/}</code><br>Requires<code>trust</code><a href='options.md'>option</a></td><td></td></tr>
 <tr><td>\utilde</td><td><span class='hurmet-tex' data-entry='\utilde{AB}'><math><munder><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true" class="tml-crooked-3" style="math-depth:0;">~</mo></munder></math></span></td><td><code>\utilde{AB}</code></td><td>undertilde</td></tr></table>
 <h2 id='v'>V</h2>
 <table><tr><th>Function</th>
@@ -1588,38 +1586,38 @@ a &=b+c\\
 <tr><td>\Zeta</td><td><span class='hurmet-tex' data-entry='\Zeta'><math><mpadded lspace="0"><mi mathvariant="normal">Ζ</mi></mpadded></math></span></td><td></td><td></td></tr>
 <tr><td>\zeta</td><td><span class='hurmet-tex' data-entry='\zeta'><math><mi>ζ</mi></math></span></td><td></td><td></td></tr></table>
 <br>
-<p class="reduced">Copyright © 2021-2025 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
+<p>align &lt;p class=&quot;reduced&quot;&gt;Copyright © 2021-2025 Ron Kok. Released under the &lt;a href=&quot;https://opensource.org/licenses/MIT&quot;&gt;MIT License&lt;/a&gt;&lt;/p&gt;</p>
 <br>
 </main>
 <nav>
 <div id="sidebar" class="narrow">
-<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><a href='https://temml.org/'><math><mrow><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></a></span>    v0.11.06</p>
+<p><a href="https://temml.org/"><span class='hurmet-tex' data-entry='\Large\Temml'><math><mstyle mathsize="1.4400em"><mtext>T</mtext><mrow style="margin-left:-0.2em;"></mrow><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mrow><mtext>M</mtext><mrow style="margin-left:-0.08em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mtext>L</mtext></mrow></mstyle></math></span></a>    v0.11.07</p>
 <div style="height:0.5em;"></div>
-<ul><li class="tight"><p><a href='#symbols'>Symbols</a></p></li>
-<li class="tight"><p><a href='#a'>A</a></p></li>
-<li class="tight"><p><a href='#b'>B</a></p></li>
-<li class="tight"><p><a href='#c'>C</a></p></li>
-<li class="tight"><p><a href='#d'>D</a></p></li>
-<li class="tight"><p><a href='#e'>E</a></p></li>
-<li class="tight"><p><a href='#f'>F</a></p></li>
-<li class="tight"><p><a href='#g'>G</a></p></li>
-<li class="tight"><p><a href='#h'>H</a></p></li>
-<li class="tight"><p><a href='#i'>I</a></p></li>
-<li class="tight"><p><a href='#jk'>JK</a></p></li>
-<li class="tight"><p><a href='#l'>L</a></p></li>
-<li class="tight"><p><a href='#m'>M</a></p></li>
-<li class="tight"><p><a href='#n'>N</a></p></li>
-<li class="tight"><p><a href='#o'>O</a></p></li>
-<li class="tight"><p><a href='#p'>P</a></p></li>
-<li class="tight"><p><a href='#q'>Q</a></p></li>
-<li class="tight"><p><a href='#r'>R</a></p></li>
-<li class="tight"><p><a href='#s'>S</a></p></li>
-<li class="tight"><p><a href='#t'>T</a></p></li>
-<li class="tight"><p><a href='#u'>U</a></p></li>
-<li class="tight"><p><a href='#v'>V</a></p></li>
-<li class="tight"><p><a href='#w'>W</a></p></li>
-<li class="tight"><p><a href='#x'>X</a></p></li>
-<li class="tight"><p><a href='#yz'>YZ</a></p></li></ul>
+<ul><li class="tight"><p><a href="#symbols">Symbols</a></p></li>
+<li class="tight"><p><a href="#a">A</a></p></li>
+<li class="tight"><p><a href="#b">B</a></p></li>
+<li class="tight"><p><a href="#c">C</a></p></li>
+<li class="tight"><p><a href="#d">D</a></p></li>
+<li class="tight"><p><a href="#e">E</a></p></li>
+<li class="tight"><p><a href="#f">F</a></p></li>
+<li class="tight"><p><a href="#g">G</a></p></li>
+<li class="tight"><p><a href="#h">H</a></p></li>
+<li class="tight"><p><a href="#i">I</a></p></li>
+<li class="tight"><p><a href="#jk">JK</a></p></li>
+<li class="tight"><p><a href="#l">L</a></p></li>
+<li class="tight"><p><a href="#m">M</a></p></li>
+<li class="tight"><p><a href="#n">N</a></p></li>
+<li class="tight"><p><a href="#o">O</a></p></li>
+<li class="tight"><p><a href="#p">P</a></p></li>
+<li class="tight"><p><a href="#q">Q</a></p></li>
+<li class="tight"><p><a href="#r">R</a></p></li>
+<li class="tight"><p><a href="#s">S</a></p></li>
+<li class="tight"><p><a href="#t">T</a></p></li>
+<li class="tight"><p><a href="#u">U</a></p></li>
+<li class="tight"><p><a href="#v">V</a></p></li>
+<li class="tight"><p><a href="#w">W</a></p></li>
+<li class="tight"><p><a href="#x">X</a></p></li>
+<li class="tight"><p><a href="#yz">YZ</a></p></li></ul>
 <ul style="border-top: 1px solid">
   <li><a href="supported.html">Support</a></li>
   <li><a href="administration.html">Installation</a></li>

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.07] = 2025-05-21
+
+### Fixed
+
+- Negative space, e.g. \kern-0.2em
+
+### Removed
+
+- \url
+- \href
+
 ## [0.11.06] = 2025-04-24
 
 ### Fixed

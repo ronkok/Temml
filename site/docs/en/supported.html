@@ -17,7 +17,7 @@
 <main id="main" class="latin-modern">
 <h1 id='supported-functions'>Supported Functions</h1>
 <p><strong>Temml</strong> is a JavaScript library that converts TeX math-mode functions to MathML. This page lists the TeX functions it supports, sorted into logical groups.</p>
-<p>There is a similar <a href='./support_table.html'>Support Table</a>, sorted alphabetically, that lists both supported and some un-supported functions.</p>
+<p>There is a similar <a href="./support_table.html">Support Table</a>, sorted alphabetically, that lists both supported and some un-supported functions.</p>
 <h2 id='accents'>Accents</h2>
 <table><tr><td><span class='hurmet-tex' data-entry="f'"><math><msup><mi>f</mi><mo lspace="0em" rspace="0em" class="tml-prime prime-pad">′</mo></msup></math></span>  <code>f&#x27;</code></td><td><span class='hurmet-tex' data-entry='\tilde{a}'><math><mover><mi>a</mi><mo stretchy="false" style="math-style:normal;math-depth:0;">~</mo></mover></math></span>  <code>\tilde{a}</code></td><td><span class='hurmet-tex' data-entry='\widetilde{ac}'><math><mover><mrow><mi>a</mi><mi>c</mi></mrow><mo stretchy="true" class="tml-crooked-2" style="math-style:normal;math-depth:0;">~</mo></mover></math></span>  <code>\widetilde{ac}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry="f''"><math><msup><mi>f</mi><mrow><mo lspace="0em" rspace="0em" class="tml-prime prime-pad">′</mo><mo lspace="0em" rspace="0em" class="tml-prime">′</mo></mrow></msup></math></span>  <code>f&#x27;&#x27;</code></td><td><span class='hurmet-tex' data-entry='\vec{F}'><math><mover><mi>F</mi><mo stretchy="false" style="transform:scale(0.75) translate(10%, 30%);">→</mo></mover></math></span>  <code>\vec{F}</code></td><td><span class='hurmet-tex' data-entry='\utilde{AB}'><math><munder><mrow><mi>A</mi><mi>B</mi></mrow><mo stretchy="true" class="tml-crooked-3" style="math-depth:0;">~</mo></munder></math></span>  <code>\utilde{AB}</code></td></tr>
@@ -38,7 +38,7 @@
 <table><tr><td><span class='hurmet-tex' data-entry="\text{\'{a}}"><math><mtext>á</mtext></math></span> <code>\&#x27;{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\~{a}}'><math><mtext>ã</mtext></math></span>  <code>\~{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\.{a}}'><math><mtext>ȧ</mtext></math></span> <code>\.{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\H{a}}'><math><mtext>a̋</mtext></math></span>  <code>\H{a}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\`{a}}'><math><mtext>à</mtext></math></span> <code>\`{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\={a}}'><math><mtext>ā</mtext></math></span>  <code>\={a}</code></td><td><span class='hurmet-tex' data-entry='\text{\"{a}}'><math><mtext>ä</mtext></math></span>  <code>\&quot;{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\v{a}}'><math><mtext>ǎ</mtext></math></span>  <code>\v{a}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\^{a}}'><math><mtext>â</mtext></math></span> <code>\^{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\u{a}}'><math><mtext>ă</mtext></math></span>  <code>\u{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\r{a}}'><math><mtext>å</mtext></math></span>  <code>\r{a}</code></td><td><span class='hurmet-tex' data-entry='\text{\c{c}}'><math><munder><mtext>c</mtext><mo stretchy="false" style="math-style:normal;math-depth:0;">¸</mo></munder></math></span>  <code>\c{c}</code></td></tr></table>
-<p>See also <a href='#letters'>letters</a></p>
+<p>See also <a href="#letters">letters</a></p>
 <h2 id='annotation'>Annotation</h2>
 <table><tr><td><span class='hurmet-tex' data-entry='\cancel{5}'><math><menclose notation="updiagonalstrike"><mn>5</mn><mrow class="tml-cancel upstrike"></mrow></menclose></math></span>  <code>\cancel{5}</code></td><td><span class='hurmet-tex' data-entry='\overbrace{a+b+c}^{\text{note}}'><math><mrow><mover><mover><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0;">⏞</mo></mover><mtext>note</mtext></mover></mrow></math></span>  <code>\overbrace{a+b+c}^{\text{note}}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\bcancel{5}'><math><menclose notation="downdiagonalstrike"><mn>5</mn><mrow class="tml-cancel downstrike"></mrow></menclose></math></span>  <code>\bcancel{5}</code></td><td><span class='hurmet-tex' data-entry='\underbrace{a+b+c}_{\text{note}}'><math><mrow><munder><munder><mrow><mi>a</mi><mo>+</mo><mi>b</mi><mo>+</mo><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0;">⏟</mo></munder><mtext>note</mtext></munder></mrow></math></span>  <code>\underbrace{a+b+c}_{\text{note}}</code></td></tr>
@@ -47,7 +47,7 @@
 <tr><td><span class='hurmet-tex' data-entry='\ref{tag1}'><a href='#tag1' class="tml-ref"></a></span>  <code>\ref{tag1}</code></td><td><p></p></td></tr>
 <tr><td><p class='hurmet-tex' data-entry='\tag{hi} x+y^{2x} \label{tag1}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" style="width:100%;"><mtr id="tag1" class="tml-tageqn"><mtd style="padding:0;width:50%;"></mtd><mtd><mrow><mi>x</mi><mo>+</mo><msup><mi>y</mi><mrow><mn>2</mn><mi>x</mi></mrow></msup><mrow class="tml-label"></mrow></mrow></mtd><mtd class="tml-right" style="padding:0;width:50%;"><mtext class="tml-tag">(hi)</mtext></mtd></mtr></mtable></math></p></td><td><code>\tag{hi} x+y^{2x} \label{tag1}</code></td></tr>
 <tr><td><p class='hurmet-tex' data-entry='\tag*{bye} x+y^{2x}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" style="width:100%;"><mtr class="tml-tageqn"><mtd style="padding:0;width:50%;"></mtd><mtd><mrow><mi>x</mi><mo>+</mo><msup><mi>y</mi><mrow><mn>2</mn><mi>x</mi></mrow></msup></mrow></mtd><mtd class="tml-right" style="padding:0;width:50%;"><mtext class="tml-tag">bye</mtext></mtd></mtr></mtable></math></p></td><td><code>\tag*{bye} x+y^{2x}</code></td></tr></table>
-<p>Also some <a href='#environments'>environments</a> have automatic equation numbering.</p>
+<p>Also some <a href="#environments">environments</a> have automatic equation numbering.</p>
 <p>A <code>\label{…}</code> may be placed anywhere and will create an HTML id matching the <code>\label{…}</code> argument. That argument may contain only the characters <code>A-Za-z0-9_-</code>.</p>
 <p>On sites where Temml fields are updated dynamically, <code>\ref{…}</code> may not be supported. Other Temml functions update only the local field. <code>\ref{…}</code> and <code>eqref</code> must make two passes through the entire document. Some sites may choose not to do this. <code>\label</code> always creates an <code>id</code>, so you can write your own <code>&lt;a&gt;</code> element if <code>\ref</code> is not available.</p>
 <h2 id='color'>Color</h2>
@@ -59,12 +59,12 @@
 <tr><td><span class='hurmet-tex' data-entry='\colorbox{aqua}{A}'><math><mrow mathbackground="aqua" style="padding:3pt 0 3pt 0;"><mspace width="3pt"></mspace><mtext>A</mtext><mspace width="3pt"></mspace></mrow></math></span>  <code>\colorbox{aqua}{A}</code></td><td rowspan="2"><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code><br> <span class='hurmet-tex' data-entry='\definecolor{sortaGreen}{RGB}{128,128,0}
  \color{sortaGreen} F=ma'><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo></mrow><mrow><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></span>  <code>{\color{sortaGreen} F=ma}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\fcolorbox{red}{aqua}{A}'><math><mrow mathbackground="aqua" style="padding:3pt 0 3pt 0;border:0.0667em solid #ff0000;"><mspace width="3pt"></mspace><mtext>A</mtext><mspace width="3pt"></mspace></mrow></math></span>  <code>\fcolorbox{red}{aqua}{A}</code></td></tr></table>
-<p><code>\definecolor</code> functions can be included in a <a href='administration.html#preamble'>preamble</a>. If so, their color definitions will have document-wide scope.</p>
+<p><code>\definecolor</code> functions can be included in a <a href="administration.html#preamble">preamble</a>. If so, their color definitions will have document-wide scope.</p>
 <p>Color functions can all take an optional argument to set the color model, as in the <code>xcolor</code> package. (Exception: <code>\definecolor</code>’s model argument is required.) Temml supports color models <code>HTML</code>, <code>RGB</code>, and <code>rgb</code>.</p>
 <p>If the color model is omitted, Temml color functions will accept:</p>
 <ul><li class="tight"><p><code>#rrggbb</code>, <code>#rgb</code>, or <code>rrggbb</code>.</p></li>
 <li class="tight"><p>A color name previously created by <code>\definecolor</code>.</p></li>
-<li class="tight"><p>Any of the standard HTML <a href='https://www.w3schools.com/colors/colors_names.asp'>predefined color names</a>.</p></li>
+<li class="tight"><p>Any of the standard HTML <a href="https://www.w3schools.com/colors/colors_names.asp">predefined color names</a>.</p></li>
 <li class="tight"><p>Any color from the following <code>xcolor</code> table.</p></li></ul>
 <br>
 <table><tr><td><span class='hurmet-tex' data-entry='{\color{Apricot}\rule{1em}{0.8em}}'><math><mrow><mspace mathbackground="#ffb484" width="1em" height="0.8em" style="color:#ffb484;"></mspace></mrow></math></span>   Apricot</td><td><span class='hurmet-tex' data-entry='{\color{ForestGreen}\rule{1em}{0.8em}}'><math><mrow><mspace mathbackground="#089c54" width="1em" height="0.8em" style="color:#089c54;"></mspace></mrow></math></span>   ForestGreen</td><td><span class='hurmet-tex' data-entry='{\color{olive}\rule{1em}{0.8em}}'><math><mrow><mspace mathbackground="#7F7F00" width="1em" height="0.8em" style="color:#7F7F00;"></mspace></mrow></math></span>   olive</td><td><span class='hurmet-tex' data-entry='{\color{RoyalPurple}\rule{1em}{0.8em}}'><math><mrow><mspace mathbackground="#683c9c" width="1em" height="0.8em" style="color:#683c9c;"></mspace></mrow></math></span>   RoyalPurple</td></tr>
@@ -200,17 +200,14 @@ i\in\Lambda\\
 <p>Temml CSS contains a work-around for a Firefox bug that inserts extra space between environment rows. The Temml work-around is effective for all environment functions except <code>\renewcommand{\arraystretch}</code>.</p>
 <p>The <code>{array}</code> environment does not yet support <code>\cline</code> or <code>\multicolumn</code>.</p>
 <h2 id='html'>HTML</h2>
-<p>The following &quot;raw HTML&quot; features are potentially dangerous for untrusted inputs, so they are disabled by default, and attempting to use them produces the command names in red (which you can configure via the <code>errorColor</code> <a href='administration.html#options'>option</a>).  To fully trust your LaTeX input, you need to pass an option of <code>trust: true</code>; you can also enable just some of the commands or for just some URLs via the <code>trust</code> <a href='administration.html#options'>option</a>.</p>
-<table><tr><td><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\Temml}'><a href='https://temml.org/'><math><mrow><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mrow></math></a></span></td><td><code>\href{https://temml.org/}{\Temml}</code></td><td>Deprecated</td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\url{https://temml.org/}'><a href='https://temml.org/'><math><mtext>𝚑𝚝𝚝𝚙𝚜://𝚝𝚎𝚖𝚖𝚕.𝚘𝚛𝚐/</mtext></math></a></span></td><td><code>\url{https://temml.org/}</code></td><td>Deprecated</td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\includegraphics[height=1em,
+<p>The following &quot;raw HTML&quot; features are potentially dangerous for untrusted inputs, so they are disabled by default, and attempting to use them produces the command names in red (which you can configure via the <code>errorColor</code> <a href="administration.html#options">option</a>).  To fully trust your LaTeX input, you need to pass an option of <code>trust: true</code>; you can also enable just some of the commands via the <code>trust</code> <a href="administration.html#options">option</a>.</p>
+<table><tr><td><span class='hurmet-tex' data-entry='\includegraphics[height=1em,
  totalheight=1.2em, width=1.2em,
- alt=sphere]{../sphere.jpg}'><math><mtext><img src='../sphere.jpg' alt='sphere' style="height:1.2em;width:1.2em;vertical-align:-0.19999999999999996em;"></mtext></math></span></td><td><code>\includegraphics[height=1em,</code><br><code>totalheight=1.2em,width=1.2em, alt=sphere]</code><br><code>{../sphere.jpg}</code></td><td><p></p></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\id{idName}{x}'><math><mi id="idName">x</mi></math></span></td><td><code>\id{idName}{x}</code></td><td><p></p></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\class{class-name}{x}'><math><mi class="class-name">x</mi></math></span></td><td><code>\class{class-name}{x}</code></td><td><p></p></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\style{color: red;}{x}'><math><mi style="color: red;">x</mi></math></span></td><td><code>\style{color: red;}{x}</code></td><td><p></p></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\data{datum1=a, datum2=b}{x}'><math><mi data-datum1="a" data-datum2="b">x</mi></math></span></td><td><code>\data{datum1=a, datum2=b}{x}</code></td><td><p></p></td></tr></table>
-<p>In April, Temml will no longer support the <code>\href</code> and <code>\url</code> functions.</p>
+ alt=sphere]{../sphere.jpg}'><math><mtext><img src='../sphere.jpg' alt='sphere' style="height:1.2em;width:1.2em;vertical-align:-0.19999999999999996em;"></mtext></math></span></td><td><code>\includegraphics[height=1em,</code><br><code>totalheight=1.2em,width=1.2em, alt=sphere]</code><br><code>{../sphere.jpg}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\id{idName}{x}'><math><mi id="idName">x</mi></math></span></td><td><code>\id{idName}{x}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\class{class-name}{x}'><math><mi class="class-name">x</mi></math></span></td><td><code>\class{class-name}{x}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\style{color: red;}{x}'><math><mi style="color: red;">x</mi></math></span></td><td><code>\style{color: red;}{x}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\data{datum1=a, datum2=b}{x}'><math><mi data-datum1="a" data-datum2="b">x</mi></math></span></td><td><code>\data{datum1=a, datum2=b}{x}</code></td></tr></table>
 <h2 id='letters'>Letters</h2>
 <p><strong>Greek Letters</strong></p>
 <table><tr><td><span class='hurmet-tex' data-entry='\Alpha'><math><mpadded lspace="0"><mi mathvariant="normal">Α</mi></mpadded></math></span>  <code>\Alpha</code></td><td><span class='hurmet-tex' data-entry='\Beta'><math><mpadded lspace="0"><mi mathvariant="normal">Β</mi></mpadded></math></span>  <code>\Beta</code></td><td><span class='hurmet-tex' data-entry='\Gamma'><math><mpadded lspace="0"><mi mathvariant="normal">Γ</mi></mpadded></math></span>  <code>\Gamma</code></td><td><span class='hurmet-tex' data-entry='\Delta'><math><mpadded lspace="0"><mi mathvariant="normal">Δ</mi></mpadded></math></span>  <code>\Delta</code></td><td><span class='hurmet-tex' data-entry='\Epsilon'><math><mpadded lspace="0"><mi mathvariant="normal">Ε</mi></mpadded></math></span>  <code>\Epsilon</code></td></tr>
@@ -311,7 +308,7 @@ i\in\Lambda\\
 <tr><td><code>\nobreakspace</code></td><td>non-breaking space</td><td><code>\negthickspace</code></td><td>– ⁵∕₁₈ em space</td></tr>
 <tr><td><code>\space</code></td><td>space</td><td></td><td></td></tr></table>
 <p><strong>Notes:</strong></p>
-<p><code>distance</code> will accept any of the <a href='#units'>Temml units</a>.</p>
+<p><code>distance</code> will accept any of the <a href="#units">Temml units</a>.</p>
 <p><code>\kern</code>, <code>\mkern</code>, <code>\mskip</code>, and <code>\hskip</code> accept unbraced distances, as in: <code>\kern1em</code>.</p>
 <p><code>\mkern</code> and <code>\mskip</code> will not work in text mode and both will write a console warning for any unit except <code>mu</code>.</p>
 <p><code>\rule{}{distance}</code> is valuable as a vertical strut.</p>
@@ -350,7 +347,7 @@ i\in\Lambda\\
  \foo a b + \foo c d</code></td></tr>
 <tr><td><code>\renewcommand</code></td><td colspan="2"><code>\renewcommand\macroname[numargs]{definition}</code></td></tr>
 <tr><td><code>\providecommand</code></td><td colspan="2"><code>\providecommand\macroname[numargs]{definition}</code></td></tr></table>
-<p>To create macros with document-wide scope, use <code>\gdef</code>, <code>\global\let</code>, or define a <a href='./administration.html#preamble'>preamble</a> in one of the Temml <a href='./administration.html#options'>rendering options</a>. (Global macros may be disabled for security reasons.)</p>
+<p>To create macros with document-wide scope, use <code>\gdef</code>, <code>\global\let</code>, or define a <a href="./administration.html#preamble">preamble</a> in one of the Temml <a href="./administration.html#options">rendering options</a>. (Global macros may be disabled for security reasons.)</p>
 <p>Macros accept up to nine arguments: #1, #2, etc.</p>
 <p>Available functions include:<br><code>\char</code> <code>\mathchoice</code> <code>\TextOrMath</code> <code>\@ifstar</code> <code>\@ifnextchar</code> <code>\@firstoftwo</code> <code>\@secondoftwo</code> <code>\relax</code> <code>\expandafter</code> <code>\noexpand</code></p>
 <p>@ is a valid character for commands, as if <code>\makeatletter</code> were in effect.</p>
@@ -584,11 +581,11 @@ i\in\Lambda\\
 <tr><td><span class='hurmet-tex' data-entry='\xtofrom{abc}'><math><mpadded voffset="-0.18em" height="-0.18em" depth="+0.18em"><mspace width="0.2778em"></mspace><mpadded voffset="0.3em" height="+0.3em" depth="-0.3em" width="0"><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mover><mrow><mspace width="0.4286em"></mspace><mrow><mi>a</mi><mi>b</mi><mi>c</mi></mrow><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover></mpadded><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">←</mo><mover><mrow><mspace width="0.4286em"></mspace><mpadded height="0px" depth="0px"><mphantom><mi>a</mi><mi>b</mi><mi>c</mi></mphantom></mpadded><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mpadded></math></span>  <code>\xtofrom{abc}</code></td><td><span class='hurmet-tex' data-entry='\xmapsto{abc}'><math><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">↦</mo><mover><mrow><mspace width="0.4286em"></mspace><mrow><mi>a</mi><mi>b</mi><mi>c</mi></mrow><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow></math></span>  <code>\xmapsto{abc}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\xlongequal{abc}'><math><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">=</mo><mover><mrow><mspace width="0.4286em"></mspace><mrow><mi>a</mi><mi>b</mi><mi>c</mi></mrow><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow></math></span>  <code>\xlongequal{abc}</code></td><td><p></p></td></tr></table>
 <p>All extensible arrows can take an optional argument in the same manner as <code>\xrightarrow[under]{over}</code>.</p>
-<h2 id='style-size-and-font'>Style, Size, and Font</h2>
+<h2 id='style,-size,-and-font'>Style, Size, and Font</h2>
 <h4 id='class-assignment'>Class Assignment</h4>
 <p>Override the usual spacing and semantic meaning of a character or fragment.</p>
 <table><tr><td><span class='hurmet-tex' data-entry='a = b'><math><mrow><mi>a</mi><mo>=</mo></mrow><mrow><mi>b</mi></mrow></math></span>   <code>a = b</code> <br><span class='hurmet-tex' data-entry='a \mathord = b\;\,'><math><mrow><mi>a</mi><mi>=</mi><mi>b</mi><mspace width="0.2778em"></mspace><mspace width="0.1667em"></mspace></mrow></math></span>   <code>a \mathord{=} b</code> <br><span class='hurmet-tex' data-entry='a \mathopen = b\;\,'><math><mrow><mi>a</mi><mo lspace="0em" rspace="0em">=</mo></mrow><mrow><mi>b</mi><mspace width="0.2778em"></mspace><mspace width="0.1667em"></mspace></mrow></math></span>   <code>a \mathopen{=} b</code> <br><span class='hurmet-tex' data-entry='a \mathclose = b\;\,'><math><mrow><mi>a</mi><mo lspace="0em" rspace="0em">=</mo></mrow><mrow><mi>b</mi><mspace width="0.2778em"></mspace><mspace width="0.1667em"></mspace></mrow></math></span>   <code>a \mathclose{=} b</code></td><td><span class='hurmet-tex' data-entry='a | b\;\,'><math><mrow><mi>a</mi><mi>|</mi><mi>b</mi><mspace width="0.2778em"></mspace><mspace width="0.1667em"></mspace></mrow></math></span>   <code>a | b</code> <br><span class='hurmet-tex' data-entry='a \mathpunct | b\;'><math><mrow><mi>a</mi><mo lspace="0em" rspace="0.1667em">|</mo></mrow><mrow><mi>b</mi><mspace width="0.2778em"></mspace></mrow></math></span>   <code>a \mathpunct{|} b</code> <br><span class='hurmet-tex' data-entry='a \mathop | b\;'><math><mrow><mi>a</mi><mo movablelimits="false" lspace="0.1667em" rspace="0.1667em">|</mo><mi>b</mi><mspace width="0.2778em"></mspace></mrow></math></span>   <code>a \mathop{|} b</code> <br><span class='hurmet-tex' data-entry='a \mathbin | b\,'><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">|</mo></mrow><mrow><mi>b</mi><mspace width="0.1667em"></mspace></mrow></math></span>   <code>a \mathbin{|} b</code> <br><span class='hurmet-tex' data-entry='a \mathrel | b'><math><mrow><mi>a</mi><mo lspace="0.2778em" rspace="0.2778em">|</mo></mrow><mrow><mi>b</mi></mrow></math></span>   <code>a \mathrel{|} b</code></td></tr></table>
-<p>See also <a href='#math-operators'>\operatorname</a>.</p>
+<p>See also <a href="#math-operators">\operatorname</a>.</p>
 <h4 id='font'>Font</h4>
 <table><tr><td><span class='hurmet-tex' data-entry='\mathrm{Ab0}'><math><mpadded lspace="0"><mi>Ab0</mi></mpadded></math></span>  <code>\mathrm{Ab0}</code></td><td><span class='hurmet-tex' data-entry='\mathbf{Ab0θ}'><math><mrow><mi>𝐀</mi><mi>𝐛</mi><mn>𝟎</mn><mi>𝛉</mi></mrow></math></span>  <code>\mathbf{Ab0θ}</code></td><td><span class='hurmet-tex' data-entry='\mathit{Ab0θ}'><math><mrow><mi>A</mi><mi>b</mi><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mn>0</mn></mstyle><mi>θ</mi></mrow></math></span>  <code>\mathit{Ab0θ}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\mathnormal{Ab0}'><math><mrow><mi>A</mi><mi>b</mi><mn>0</mn></mrow></math></span>  <code>\mathnormal{Ab0}</code></td><td><span class='hurmet-tex' data-entry='\textbf{Ab0θ}'><math><mtext>𝐀𝐛𝟎𝛉</mtext></math></span>  <code>\textbf{Ab0θ}</code></td><td><span class='hurmet-tex' data-entry='\textit{Ab0θ}'><math><mrow><mtext>𝐴𝑏</mtext><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mtext>0</mtext></mstyle><mtext>𝜃</mtext></mrow></math></span>  <code>\textit{Ab0θ}</code></td></tr>
@@ -621,18 +618,18 @@ i\in\Lambda\\
 <tr><td><span class='hurmet-tex' data-entry='\text{ABcd }ABcd'><math><mrow><mtext>ABcd </mtext><mi>A</mi><mi>B</mi><mi>c</mi><mi>d</mi></mrow></math></span></td><td> <code>\text{ABcd $ABcd$}</code></td></tr></table>
 <p><code>\text{…}</code> shifts its contents into text mode, but you can shift back into math mode by nesting <code>$…$</code>.</p>
 <h2 id='symbols-and-punctuation'>Symbols and Punctuation</h2>
-<table><tr><td><code>% comment</code></td><td><span class='hurmet-tex' data-entry='\dots'><math><mo lspace="0em" rspace="0em">…</mo></math></span>  <code>\dots</code></td><td><span class='hurmet-tex' data-entry='\TeX'><math><mrow><mtext>T</mtext><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mspace width="-0.125em" style="margin-left:-0.125em;"></mspace><mtext>X</mtext></mrow></math></span>  <code>\TeX</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\%'><math><mi>%</mi></math></span>  <code>\%</code></td><td><span class='hurmet-tex' data-entry='\cdots'><math><mo lspace="0em" rspace="0em">⋯</mo></math></span>  <code>\cdots</code></td><td><span class='hurmet-tex' data-entry='\LaTeX'><math><mrow><mtext>L</mtext><mspace width="-0.35em" style="margin-left:-0.35em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="1" displaystyle="false"><mtext>A</mtext></mstyle></mstyle></mpadded><mspace width="-0.15em" style="margin-left:-0.15em;"></mspace><mtext>T</mtext><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mspace width="-0.125em" style="margin-left:-0.125em;"></mspace><mtext>X</mtext></mrow></math></span>  <code>\LaTeX</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\#'><math><mi>#</mi></math></span>  <code>\#</code></td><td><span class='hurmet-tex' data-entry='\ddots'><math><mo lspace="0em" rspace="0em">⋱</mo></math></span>  <code>\ddots</code></td><td><span class='hurmet-tex' data-entry='\Temml'><math><mrow><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mrow></math></span>  <code>\Temml</code></td></tr>
+<table><tr><td><code>% comment</code></td><td><span class='hurmet-tex' data-entry='\dots'><math><mo lspace="0em" rspace="0em">…</mo></math></span>  <code>\dots</code></td><td><span class='hurmet-tex' data-entry='\TeX'><math><mrow><mtext>T</mtext><mrow style="margin-left:-0.1667em;"></mrow><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mrow style="margin-left:-0.125em;"></mrow><mtext>X</mtext></mrow></math></span>  <code>\TeX</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\%'><math><mi>%</mi></math></span>  <code>\%</code></td><td><span class='hurmet-tex' data-entry='\cdots'><math><mo lspace="0em" rspace="0em">⋯</mo></math></span>  <code>\cdots</code></td><td><span class='hurmet-tex' data-entry='\LaTeX'><math><mrow><mtext>L</mtext><mrow style="margin-left:-0.35em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="1" displaystyle="false"><mtext>A</mtext></mstyle></mstyle></mpadded><mrow style="margin-left:-0.15em;"></mrow><mtext>T</mtext><mrow style="margin-left:-0.1667em;"></mrow><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mrow style="margin-left:-0.125em;"></mrow><mtext>X</mtext></mrow></math></span>  <code>\LaTeX</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\#'><math><mi>#</mi></math></span>  <code>\#</code></td><td><span class='hurmet-tex' data-entry='\ddots'><math><mo lspace="0em" rspace="0em">⋱</mo></math></span>  <code>\ddots</code></td><td><span class='hurmet-tex' data-entry='\Temml'><math><mrow><mtext>T</mtext><mrow style="margin-left:-0.2em;"></mrow><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mrow><mtext>M</mtext><mrow style="margin-left:-0.08em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mtext>L</mtext></mrow></mrow></math></span>  <code>\Temml</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\&'><math><mi>&amp;</mi></math></span>  <code>\&amp;</code></td><td><span class='hurmet-tex' data-entry='\ldots'><math><mo lspace="0em" rspace="0em">…</mo></math></span>  <code>\ldots</code></td><td><span class='hurmet-tex' data-entry='\rule[6pt]{2ex}{1ex}'><math><mpadded height="+5.9776pt" voffset="5.9776pt"><mspace mathbackground="black" width="0.862em" height="0.431em"></mspace></mpadded></math></span> <code>\rule[6pt]{2ex}{1ex}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\_'><math><mi>_</mi></math></span>  <code>\_</code></td><td><span class='hurmet-tex' data-entry='\vdots'><math><mrow><mi>⋮</mi><mspace width="0pt" height="14.944pt"></mspace></mrow></math></span>  <code>\vdots</code></td><td><span class='hurmet-tex' data-entry='\surd'><math><msqrt><mpadded width="0px"><mphantom><mi>|</mi></mphantom></mpadded></msqrt></math></span>  <code>\surd</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\textunderscore}'><math><mtext>_</mtext></math></span> <code>\text{\textunderscore}</code></td><td><span class='hurmet-tex' data-entry='\iddots'><math><mo lspace="0em" rspace="0em">⋰</mo></math></span>  <code>\iddots</code></td><td><span class='hurmet-tex' data-entry='\infty'><math><mi>∞</mi></math></span>  <code>\infty</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{--}'><math><mtext>–</mtext></math></span>  <code>\text{--}</code></td><td><span class='hurmet-tex' data-entry='\dotsb'><math><mo lspace="0em" rspace="0em">⋯</mo></math></span>  <code>\dotsb</code></td><td><span class='hurmet-tex' data-entry='\checkmark'><math><mi>✓</mi></math></span>  <code>\checkmark</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\textendash}'><math><mtext>–</mtext></math></span> <code>\text{\textendash}</code></td><td><span class='hurmet-tex' data-entry='\dotsc'><math><mo lspace="0em" rspace="0em">…</mo></math></span>  <code>\dotsc</code></td><td><span class='hurmet-tex' data-entry='\ballotx'><math><mi>✗</mi></math></span>  <code>\ballotx</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\text{---}'><math><mtext>—</mtext></math></span>  <code>\text{---}</code></td><td><span class='hurmet-tex' data-entry='\dotsi'><math><mrow><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow></math></span>  <code>\dotsi</code></td><td><span class='hurmet-tex' data-entry='\dag'><math><mi>†</mi></math></span>  <code>\dagger</code> or <code>\dag</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\text{---}'><math><mtext>—</mtext></math></span>  <code>\text{---}</code></td><td><span class='hurmet-tex' data-entry='\dotsi'><math><mrow><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow></math></span>  <code>\dotsi</code></td><td><span class='hurmet-tex' data-entry='\dag'><math><mi>†</mi></math></span>  <code>\dagger</code> or <code>\dag</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\textemdash}'><math><mtext>—</mtext></math></span> <code>\text{\textemdash}</code></td><td><span class='hurmet-tex' data-entry='\dotsm'><math><mo lspace="0em" rspace="0em">⋯</mo></math></span>  <code>\dotsm</code></td><td><span class='hurmet-tex' data-entry='\text{\textdagger}'><math><mtext>†</mtext></math></span> <code>\text{\textdagger}</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\textasciitilde}'><math><mtext>~</mtext></math></span> <code>\text{\textasciitilde}</code></td><td><span class='hurmet-tex' data-entry='\dotso'><math><mo lspace="0em" rspace="0em">…</mo></math></span>  <code>\dotso</code></td><td><span class='hurmet-tex' data-entry='\ddagger'><math><mo lspace="0em" rspace="0em">‡</mo></math></span>  <code>\ddagger</code> or <code>\ddag</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\text{\textasciicircum}'><math><mtext>^</mtext></math></span> <code>\text{\textasciicircum}</code></td><td><span class='hurmet-tex' data-entry='\dotsi'><math><mrow><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow></math></span>  <code>\idotsin</code></td><td><span class='hurmet-tex' data-entry='\text{\textdaggerdbl}'><math><mtext>‡</mtext></math></span> <code>\text{\textdaggerdbl}</code></td></tr>
+<tr><td><span class='hurmet-tex' data-entry='\text{\textasciicircum}'><math><mtext>^</mtext></math></span> <code>\text{\textasciicircum}</code></td><td><span class='hurmet-tex' data-entry='\dotsi'><math><mrow><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow></math></span>  <code>\idotsin</code></td><td><span class='hurmet-tex' data-entry='\text{\textdaggerdbl}'><math><mtext>‡</mtext></math></span> <code>\text{\textdaggerdbl}</code></td></tr>
 <tr><td>$ <code>$     ``</code> ``</td><td><span class='hurmet-tex' data-entry='\mathellipsis'><math><mo lspace="0em" rspace="0em">…</mo></math></span> <code>\mathellipsis</code></td><td><span class='hurmet-tex' data-entry='\angle'><math><mi>∠</mi></math></span>  <code>\angle</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\text{\textquoteleft}'><math><mtext>‘</mtext></math></span> <code>text{\textquoteleft}</code></td><td><span class='hurmet-tex' data-entry='\text{\textellipsis}'><math><mo lspace="0em" rspace="0em">…</mo></math></span> <code>\text{\textellipsis}</code></td><td><span class='hurmet-tex' data-entry='\measuredangle'><math><mi>∡</mi></math></span>  <code>\measuredangle</code></td></tr>
 <tr><td><span class='hurmet-tex' data-entry='\lq'><math><mi>‘</mi></math></span>  <code>\lq</code></td><td><span class='hurmet-tex' data-entry='\Box'><math><mi>□</mi></math></span>  <code>\Box</code></td><td><span class='hurmet-tex' data-entry='\sphericalangle'><math><mi>∢</mi></math></span> <code>\sphericalangle</code></td></tr>
@@ -698,7 +695,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </main>
 <nav>
 <div id="sidebar">
-<p><span class='hurmet-tex' data-entry='\href{https://temml.org/}{\color{black}\Large\Temml}'><a href='https://temml.org/'><math><mrow><mstyle mathsize="1.4400em" style="color:black;"><mtext>T</mtext><mspace width="-0.2em" style="margin-left:-0.2em;"></mspace><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mrow><mtext>M</mtext><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mspace width="-0.08em" style="margin-left:-0.08em;"></mspace><mtext>L</mtext></mrow></mstyle></mrow></math></a></span>   v0.11.06</p>
+<p><a href="https://temml.org/"><span class='hurmet-tex' data-entry='{\Large\Temml}'><math><mstyle mathsize="1.4400em"><mtext>T</mtext><mrow style="margin-left:-0.2em;"></mrow><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mrow><mtext>M</mtext><mrow style="margin-left:-0.08em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mtext>L</mtext></mrow></mstyle></math></span></a>   v0.11.07</p>
 <h3><a href="#top">Contents</a></h3>
 <ul class="toc">
 <li><a href="#accents">Accents</a></li>
@@ -710,31 +707,31 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <li><a href="#letters">Letters</a></li>
 <li>
 <details><summary>Layout</summary>
-<ul><li class="tight"><p><a href='#line-breaks'>Line Breaks</a></p></li>
-<li class="tight"><p><a href='#reflect'>Reflect</a></p></li>
-<li class="tight"><p><a href='#vertical-layout'>Vertical Layout</a></p></li>
-<li class="tight"><p><a href='#overlap-and-spacing'>Overlap and Spacing</a></p></li></ul>
+<ul><li class="tight"><p><a href="#line-breaks">Line Breaks</a></p></li>
+<li class="tight"><p><a href="#reflect">Reflect</a></p></li>
+<li class="tight"><p><a href="#vertical-layout">Vertical Layout</a></p></li>
+<li class="tight"><p><a href="#overlap-and-spacing">Overlap and Spacing</a></p></li></ul>
 </details>
 </li>
 <li><a href="#logic-and-set-theory">Logic and Set Theory</a></li>
 <li><a href="#macros">Macros</a></li>
 <li>
 <details><summary>Operators</summary>
-<ul><li class="tight"><p><a href='#big-operators'>Big Operators</a></p></li>
-<li class="tight"><p><a href='#binary-operators'>Binary Operators</a></p></li>
-<li class="tight"><p><a href='#geometric-binary-operators'>Geometric Binary Ops</a></p></li>
-<li class="tight"><p><a href='#fractions-and-binomials'>Fractions and Binomials</a></p></li>
-<li class="tight"><p><a href='#math-operators'>Math Operators</a></p></li>
-<li class="tight"><p><a href='#enclosing-operators'>Enclosing Operators</a></p></li></ul>
+<ul><li class="tight"><p><a href="#big-operators">Big Operators</a></p></li>
+<li class="tight"><p><a href="#binary-operators">Binary Operators</a></p></li>
+<li class="tight"><p><a href="#geometric-binary-operators">Geometric Binary Ops</a></p></li>
+<li class="tight"><p><a href="#fractions-and-binomials">Fractions and Binomials</a></p></li>
+<li class="tight"><p><a href="#math-operators">Math Operators</a></p></li>
+<li class="tight"><p><a href="#enclosing-operators">Enclosing Operators</a></p></li></ul>
 </details>
 </li>
 <li><a href="#physics-and-chemistry">Physics and Chemistry</a></li>
 <li>
 <details><summary>Relations</summary>
-<ul><li class="tight"><p><a href='#relations'>Relations</a></p></li>
-<li class="tight"><p><a href='#negated-relations'>Negated Relations</a></p></li>
-<li class="tight"><p><a href='#arrows'>Arrows</a></p></li>
-<li class="tight"><p><a href='#extensible-arrows'>Extensible Arrows</a></p></li></ul>
+<ul><li class="tight"><p><a href="#relations">Relations</a></p></li>
+<li class="tight"><p><a href="#negated-relations">Negated Relations</a></p></li>
+<li class="tight"><p><a href="#arrows">Arrows</a></p></li>
+<li class="tight"><p><a href="#extensible-arrows">Extensible Arrows</a></p></li></ul>
 </details>
 </li>
 <li><a href="#style-size-and-font">Style, Size, and Font</a></li>
@@ -764,23 +761,23 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 </script>
 </p>
 <h3 id='elsewhere'>Elsewhere</h3>
-<ul><li class="tight"><p><a href='administration.html'>Installation</a></p></li>
-<li class="tight"><p><a href='support_table.html'>Support Table</a></p></li>
-<li class="tight"><p><a href='../../index.html'>Home</a></p></li></ul>
+<ul><li class="tight"><p><a href="administration.html">Installation</a></p></li>
+<li class="tight"><p><a href="support_table.html">Support Table</a></p></li>
+<li class="tight"><p><a href="../../index.html">Home</a></p></li></ul>
 </div>  <!-- sidebar -->
 </nav>
 <div id="mobile-nav">
   <input type="checkbox" id="checkbox_toggle">
   <label for="checkbox_toggle"><svg xmlns="http://www.w3.org/2000/svg" width="25.6" height="25.6"><path d="M4.8 12.05h16v1.6h-16zM4.8 7.25h16v1.6h-16zM4.8 16.85h16v1.6h-16z"/></svg></label>
-<ul><li class="tight"><p><a href='#accents'>Accents</a></p></li>
-<li class="tight"><p><a href='#delimiters'>Delimiters</a></p></li>
-<li class="tight"><p><a href='#environments'>Environments</a></p></li>
-<li class="tight"><p><a href='#letters'>Letters</a></p></li>
-<li class="tight"><p><a href='#layout'>Layout</a></p></li>
-<li class="tight"><p><a href='#operators'>Operators</a></p></li>
-<li class="tight"><p><a href='#relations'>Relations</a></p></li>
-<li class="tight"><p><a href='#style-size-and-font'>Style</a></p></li>
-<li class="tight"><p><a href='#symbols'>Symbols</a></p></li></ul>
+<ul><li class="tight"><p><a href="#accents">Accents</a></p></li>
+<li class="tight"><p><a href="#delimiters">Delimiters</a></p></li>
+<li class="tight"><p><a href="#environments">Environments</a></p></li>
+<li class="tight"><p><a href="#letters">Letters</a></p></li>
+<li class="tight"><p><a href="#layout">Layout</a></p></li>
+<li class="tight"><p><a href="#operators">Operators</a></p></li>
+<li class="tight"><p><a href="#relations">Relations</a></p></li>
+<li class="tight"><p><a href="#style-size-and-font">Style</a></p></li>
+<li class="tight"><p><a href="#symbols">Symbols</a></p></li></ul>
 </div>
 <script>temml.postProcess(document.getElementById("main"))</script>
 </body>

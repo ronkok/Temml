@@ -26,7 +26,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.11.06, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.11.07, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -67,7 +67,7 @@
           </tr>
           <tr>
             <td>\!</td>
-            <td><math><mrow><mi>a</mi><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mrow style="margin-left:-0.1667em;"></mrow><mi>b</mi></mrow></math></td>
             <td>\(a\!b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mtext> ⁣</mtext><mi>b</mi></mrow><annotation encoding="application/x-tex">a\!b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mspace width="0em"/><mi>b</mi></mrow><annotation encoding="TeX">a\!b</annotation></semantics></math></td>
@@ -2848,7 +2848,7 @@
           </tr>
           <tr>
             <td>\dotsi</td>
-            <td><math><mrow><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>1</mn></msub></msub><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>2</mn></msub></msub><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow></math></td>
+            <td><math><mrow><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>1</mn></msub></msub><msub><mo movablelimits="false">∫</mo><msub><mi>A</mi><mn>2</mn></msub></msub><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow></math></td>
             <td>\(\int_{A_1}\int_{A_2}\dotsi\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∫</mo><msub><mi>A</mi><mn>1</mn></msub></msub><msub><mo>∫</mo><msub><mi>A</mi><mn>2</mn></msub></msub><mtext> ⁣</mtext><mo>⋯</mo></mrow><annotation encoding="application/x-tex">\int_{A_1}\int_{A_2}\dotsi</annotation></semantics></math></span></td>
             <td data-tex="\int_{A_1}\int_{A_2}\dotsi"><span class="no-sup">Not supported</span></td>
@@ -3831,7 +3831,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\href</td>
-            <td><a href='https://www.mathjax.org/'><math><mtext>MathJax</mtext></math></a></td>
+            <td><span class="no-sup">Not supported</span></td>
             <td>\(\href{https://MathJax.org/}{\text{MathJax}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext href="https://MathJax.org/">MathJax</mtext></mrow><annotation encoding="application/x-tex">\href{https://MathJax.org/}{\text{MathJax}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -3935,7 +3935,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\idotsint</td>
-            <td><math><mrow><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mo>⋯</mo></mrow></math></td>
+            <td><math><mrow><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\idotsint"><span class="no-sup">Not supported</span></td>
@@ -4255,7 +4255,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\kern</td>
-            <td><math><mrow><mi>I</mi><mspace width="-2.4907pt" style="margin-left:-2.4907pt;"></mspace><mi>R</mi></mrow></math></td>
+            <td><math><mrow><mi>I</mi><mrow style="margin-left:-2.4907pt;"></mrow><mi>R</mi></mrow></math></td>
             <td>\(I\kern-2.5pt R\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>I</mi><mspace width="-0.25em"/><mi>R</mi></mrow><annotation encoding="application/x-tex">I\kern-2.5pt R</annotation></semantics></math></span></td>
             <td data-tex="I\kern-2.5pt R"><span class="no-sup">Not supported</span></td>
@@ -4431,7 +4431,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\LaTeX</td>
-            <td><math><mrow><mtext>L</mtext><mspace width="-0.35em" style="margin-left:-0.35em;"></mspace><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="1" displaystyle="false"><mtext>A</mtext></mstyle></mstyle></mpadded><mspace width="-0.15em" style="margin-left:-0.15em;"></mspace><mtext>T</mtext><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mspace width="-0.125em" style="margin-left:-0.125em;"></mspace><mtext>X</mtext></mrow></math></td>
+            <td><math><mrow><mtext>L</mtext><mrow style="margin-left:-0.35em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="1" displaystyle="false"><mtext>A</mtext></mstyle></mstyle></mpadded><mrow style="margin-left:-0.15em;"></mrow><mtext>T</mtext><mrow style="margin-left:-0.1667em;"></mrow><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mrow style="margin-left:-0.125em;"></mrow><mtext>X</mtext></mrow></math></td>
             <td>\(\LaTeX\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>LaTeX</mtext></mrow><annotation encoding="application/x-tex">\LaTeX</annotation></semantics></math></span></td>
             <td data-tex="\LaTeX"><span class="no-sup">Not supported</span></td>
@@ -5743,7 +5743,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\negmedspace</td>
-            <td><math><mrow><mi>a</mi><mspace width="-0.2222em" style="margin-left:-0.2222em;"></mspace><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mrow style="margin-left:-0.2222em;"></mrow><mi>b</mi></mrow></math></td>
             <td>\(a\negmedspace b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mtext> ⁣</mtext><mi>b</mi></mrow><annotation encoding="application/x-tex">a\negmedspace b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mspace width="-0.2222222222222222em"/><mi>b</mi></mrow><annotation encoding="TeX">a\negmedspace b</annotation></semantics></math></td>
@@ -5783,7 +5783,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\negthickspace</td>
-            <td><math><mrow><mi>a</mi><mspace width="-0.2778em" style="margin-left:-0.2778em;"></mspace><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mrow style="margin-left:-0.2778em;"></mrow><mi>b</mi></mrow></math></td>
             <td>\(a\negthickspace b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mtext> ⁣</mtext><mi>b</mi></mrow><annotation encoding="application/x-tex">a\negthickspace b</annotation></semantics></math></span></td>
             <td data-tex="a\negthickspace b"><span class="no-sup">Not supported</span></td>
@@ -5791,7 +5791,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\negthinspace</td>
-            <td><math><mrow><mi>a</mi><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mrow style="margin-left:-0.1667em;"></mrow><mi>b</mi></mrow></math></td>
             <td>\(a\negthinspace b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mtext> ⁣</mtext><mi>b</mi></mrow><annotation encoding="application/x-tex">a\negthinspace b</annotation></semantics></math></span></td>
             <td data-tex="a\negthinspace b"><span class="no-sup">Not supported</span></td>
@@ -8568,7 +8568,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\TeX</td>
-            <td><math><mrow><mtext>T</mtext><mspace width="-0.1667em" style="margin-left:-0.1667em;"></mspace><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mspace width="-0.125em" style="margin-left:-0.125em;"></mspace><mtext>X</mtext></mrow></math></td>
+            <td><math><mrow><mtext>T</mtext><mrow style="margin-left:-0.1667em;"></mrow><mpadded voffset="-0.2155em" style="padding:0 0 0.2155em 0;"><mstyle scriptlevel="0" displaystyle="false"><mtext>E</mtext></mstyle></mpadded><mrow style="margin-left:-0.125em;"></mrow><mtext>X</mtext></mrow></math></td>
             <td>\(\TeX\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>TeX</mtext></mrow><annotation encoding="application/x-tex">\TeX</annotation></semantics></math></span></td>
             <td data-tex="\TeX"><span class="no-sup">Not supported</span></td>
@@ -9623,7 +9623,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\url</td>
-            <td><a href='https://temml.org/'><math><mtext>𝚑𝚝𝚝𝚙𝚜://𝚝𝚎𝚖𝚖𝚕.𝚘𝚛𝚐/</mtext></math></a></td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext mathvariant="monospace" href="https://temml.org/">https://temml.org/</mtext></mrow><annotation encoding="application/x-tex">\url{https://temml.org/}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>

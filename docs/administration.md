@@ -75,9 +75,6 @@ of the element you provide.
 
 ### In-Browser, Bulk
 
-Breaking Change Notice: `renderMathInElement` is now part of `temml.js`. No
-extension is necessary.
-
 The `renderMathInElement` function is typically used to render all of the math in
 the text of a running HTML document. It searches all of the text in a given element
 for your chosen delimiters, and renders the math in place.
@@ -576,7 +573,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.11.06
+[$\Large\Temml$](https://temml.org/)    v0.11.07
 
 <h3><a href="#top">Contents</a></h3>
 

@@ -379,27 +379,21 @@ inputs, so they are disabled by default, and attempting to use them produces
 the command names in red (which you can configure via the `errorColor`
 [option](administration.html#options)).  To fully trust your LaTeX input, you need to pass
 an option of `trust: true`; you can also enable just some of the commands
-or for just some URLs via the `trust` [option](administration.html#options).
+via the `trust` [option](administration.html#options).
 
-+:=====================================+:===============================================+:===========+
-| $\href{https://temml.org/}{\Temml}$  | `\href{https://temml.org/}{\Temml}`            | Deprecated |
-+--------------------------------------+------------------------------------------------+------------+
-| $\url{https://temml.org/}$           | `\url{https://temml.org/}`                     | Deprecated |
-+--------------------------------------+------------------------------------------------+------------+
-| $\includegraphics[height=1em,        | `\includegraphics[height=1em,`\                |            |
-|  totalheight=1.2em, width=1.2em,     | `totalheight=1.2em,width=1.2em, alt=sphere]`\  |            |
-|  alt=sphere]{../sphere.jpg}$         | `{../sphere.jpg}`                              |            |
-+--------------------------------------+------------------------------------------------+------------+
-| $\id{idName}{x}$                     | `\id{idName}{x}`                               |            |
-+--------------------------------------+------------------------------------------------+------------+
-| $\class{class-name}{x}$              | `\class{class-name}{x}`                        |            |
-+--------------------------------------+------------------------------------------------+------------+
-| $\style{color: red;}{x}$             | `\style{color: red;}{x}`                       |            |
-+--------------------------------------+------------------------------------------------+------------+
-| $\data{datum1=a, datum2=b}{x}$       | `\data{datum1=a, datum2=b}{x}`                 |            |
-+--------------------------------------+------------------------------------------------+------------+
-
-In April, Temml will no longer support the `\href` and `\url` functions.
++:=====================================+:===============================================+
+| $\includegraphics[height=1em,        | `\includegraphics[height=1em,`\                |
+|  totalheight=1.2em, width=1.2em,     | `totalheight=1.2em,width=1.2em, alt=sphere]`\  |
+|  alt=sphere]{../sphere.jpg}$         | `{../sphere.jpg}`                              |
++--------------------------------------+------------------------------------------------+
+| $\id{idName}{x}$                     | `\id{idName}{x}`                               |
++--------------------------------------+------------------------------------------------+
+| $\class{class-name}{x}$              | `\class{class-name}{x}`                        |
++--------------------------------------+------------------------------------------------+
+| $\style{color: red;}{x}$             | `\style{color: red;}{x}`                       |
++--------------------------------------+------------------------------------------------+
+| $\data{datum1=a, datum2=b}{x}$       | `\data{datum1=a, datum2=b}{x}`                 |
++--------------------------------------+------------------------------------------------+
 
 ## Letters
 
@@ -1600,7 +1594,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$   v0.11.06
+[${\Large\Temml}$](https://temml.org/)   v0.11.07
 
 <h3><a href="#top">Contents</a></h3>
 

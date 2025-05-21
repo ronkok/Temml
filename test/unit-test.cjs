@@ -58,20 +58,9 @@ class Settings {
   }
 
   isTrusted(context) {
-    if (context.url && !context.protocol) {
-      context.protocol = utils.protocolFromUrl(context.url);
-    }
     const trust = typeof this.trust === "function" ? this.trust(context) : this.trust;
     return Boolean(trust);
   }
-}
-
-function getProtocolViaTrust(url) {
-  let protocol;
-  parse(`\\url{${url}}`, new Settings({
-    trust: context => protocol = context.protocol,
-  }));
-  return protocol;
 }
 
 // Strip positions from ParseNodes.
@@ -1750,86 +1739,6 @@ const test = () => {
   new Expect(r`\operatorname*{x*Π∑\Pi\sum\frac a b}\limits_2`).toBuild()
   assertion = "operatorname should consolidate contents when possible"
   new Expect(temml.renderToString(r`\operatorname{Max}`)).toContain("<mi>Max</mi>")
-
-  assertion = "href and url commands should build their input"
-  new Expect(r`\href{http://example.com/}{\sin}`).toParse(trustSettings())
-  new Expect("\\url{http://example.com/}").toParse(trustSettings())
-  assertion = "href and url commands should allow empty URLs"
-  new Expect(r`\href{}{example here}`).toParse(trustSettings())
-  new Expect("\\url{}").toParse(trustSettings())
-  new Expect(r`\href{http://example.com/}{\sin}`).toBuild(trustSettings())
-  new Expect("\\url{http://example.com/}").toBuild(trustSettings())
-  assertion = "href and url commands should allow empty URLs"
-  new Expect(r`\href{}{example here}`).toBuild(trustSettings())
-  new Expect("\\url{}").toBuild(trustSettings())
-  assertion = "href and url commands should allow single-character URLs"
-  new Expect(r`\href%end`).toParseLike("\\href{%}end", trustSettings())
-  new Expect("\\url%end").toParseLike("\\url{%}end", trustSettings())
-  new Expect("\\url%%end\n").toParseLike("\\url{%}", trustSettings())
-  new Expect("\\url end").toParseLike("\\url{e}nd", trustSettings())
-  new Expect("\\url%end").toParseLike("\\url {%}end", trustSettings())
-  assertion = "href and url commands should allow spaces ad single-character URLs"
-  new Expect(r`\href %end`).toParseLike("\\href{%}end", trustSettings())
-  new Expect("\\url %end").toParseLike("\\url{%}end", trustSettings())
-  assertion = "href and url commands should allow [#$%&~_^] without escaping"
-  let url = "http://example.org/~bar/#top?foo=$foo&bar=ba^r_boo%20baz";
-  node = parse(`\\href{${url}}{\\alpha}`, trustSettings())[0];
-  new Expect(node.href).toBe(url);
-  node = parse(`\\url{${url}}`, trustSettings())[0];
-  new Expect(node.href).toBe(url);
-  assertion = "href and url commands should allow balanced braces in url"
-  node = parse(`\\href{${url}}{\\alpha}`, trustSettings())[0];
-  new Expect(node.href).toBe(url);
-  url = "http://example.org/{{}t{oo}}";
-  node = parse(`\\href{${url}}{\\alpha}`, trustSettings())[0];
-  new Expect(node.href).toBe(url);
-  node = parse(`\\url{${url}}`, trustSettings())[0];
-  new Expect(node.href).toBe(url);
-  assertion = "href and url commands should not allow balanced braces in url"
-  new Expect(r`\href{http://example.com/{a}{bar}`).toNotParse(trustSettings())
-  new Expect(r`\href{http://example.com/}a}{bar}`).toNotParse(trustSettings())
-  new Expect(`\\url{http://example.com/{a}`).toNotParse(trustSettings())
-  new Expect(`\\url{http://example.com/}a}`).toNotParse(trustSettings())
-  assertion = "href and url commands should allow for escapes in [#$%&~_^]"
-  url = "http://example.org/~bar/#top?foo=$}foo{&bar=bar^r_boo%20baz";
-  url = url.replace(/([#$%&~_^{}])/g, '\\$1');
-  new Expect(`\\href{${url}}{\\alpha}`).toParse(trustSettings())
-  new Expect(`\\url{${url}}`).toParse(trustSettings());
-  new Expect(`\\href{${url}}{\\alpha}`).toBuild(trustSettings())
-  new Expect(`\\url{${url}}`).toBuild(trustSettings());
-  assertion = "href and url commands should allow comments after URLs"
-  new Expect("\\url{http://example.com/}%comment\n").toParse(trustSettings())
-  new Expect("\\url{http://example.com/}%comment\n").toBuild(trustSettings())
-
-  assertion = "href and url commands should allow  relative URLs when trust option is false"
-  markup = temml.renderToString("\\href{relative}{foo}")
-  new Expect(markup).toContain("#b22222") // color of error message
-
-  assertion = "href and url commands should not allow explicitly disallowed protocols"
-  new Expect("\\href{ftp://x}{foo}").toParse(new Settings({trust: (context) => context.protocol === "ftp"}))
-  new Expect("\\href{ftp://x}{foo}").toBuild(new Settings({trust: (context) => context.protocol === "ftp"}))
-  assertion = "href and url commands should allow all protocols when trust option is true"
-  new Expect("\\href{ftp://x}{foo}").toParse(trustSettings())
-  new Expect("\\href{ftp://x}{foo}").toBuild(trustSettings())
-  assertion = "href and url commands should not allow explicitly disallowed protocols"
-  new Expect("\\href{javascript:alert('x')}{foo}").toNotParse(new Settings({trust: context => context.protocol !== "javascript"}))
-  new Expect("\\href{JavaScript:alert('x')}{foo}").toNotParse(new Settings({trust: context => context.protocol !== "javascript"}))
-  new Expect("\\url{!:}").toNotParse()
-  new Expect("\\url{foo&colon;}").toNotParse()
-  new Expect("\\url{://foo}").toNotParse()
-
-  assertion = "href and url commands should get protocols correctly"
-  new Expect (getProtocolViaTrust("foo")).toBe("_relative")
-  new Expect (getProtocolViaTrust("Foo:")).toBe("foo")
-  new Expect (getProtocolViaTrust("Foo:bar")).toBe("foo")
-  new Expect (getProtocolViaTrust("JavaScript:")).toBe("javascript")
-  new Expect (getProtocolViaTrust("JavaScript:code")).toBe("javascript")
-  new Expect (getProtocolViaTrust("?query=string&colon=")).toBe("_relative")
-  new Expect (getProtocolViaTrust("#query=string&colon=")).toBe("_relative")
-  new Expect (getProtocolViaTrust("dir/file&colon")).toBe("_relative")
-  new Expect (getProtocolViaTrust("//foo")).toBe("_relative")
-  new Expect (getProtocolViaTrust("  \t http://")).toBe("http")
-  new Expect (getProtocolViaTrust("  \t http://foo")).toBe("http")
 
   assertion = "The symbol table integrity should treat certain symbols as synonyms"
   new Expect(`<`).toBuildLike(r`\lt`)

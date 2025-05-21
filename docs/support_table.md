@@ -873,7 +873,6 @@ If you know the shape of a character, but not its name,
 | \lnot                | $\lnot$                    | | |
 | \lnsim               | $\lnsim$                   | | ams |
 | \log                 | $\log$                     | | |
-| \long                |                            | | |
 | \longdiv             | $\longdiv{40.0}$           | `\longdiv{40.0}` ||
 | \Longleftarrow       | $\Longleftarrow$           | | |
 | \longleftarrow       | $\longleftarrow$           | | |
@@ -1686,7 +1685,6 @@ If you know the shape of a character, but not its name,
 | \upxi                | $\upxi$                     |                            | upgreek         |
 | \upzeta              | $\upzeta$                   |                            | upgreek         |
 | \urcorner            | $\urcorner$                 |                            | ams             |
-| \url                 | $\footnotesize\url{https://temml.org/}$ | `\url{https://temml.org/}`<br>Requires `trust` [option](options.md)| |
 | \utilde              | $\utilde{AB}$               | `\utilde{AB}`              |  undertilde     |
 
 ## V
@@ -1833,7 +1831,7 @@ If you know the shape of a character, but not its name,
 
 
 <br>
-
+align
 <p class="reduced">Copyright © 2021-2025 Ron Kok. Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a></p>
 
 <br>
@@ -1843,7 +1841,7 @@ If you know the shape of a character, but not its name,
 <nav>
 <div id="sidebar" class="narrow">
 
-$\href{https://temml.org/}{\color{black}\Large\Temml}$    v0.11.06
+[$\Large\Temml$](https://temml.org/)    v0.11.07
 
 <div style="height:0.5em;"></div>
 
