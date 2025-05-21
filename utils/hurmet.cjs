@@ -10549,7 +10549,16 @@ rules.set("link", {
   ),
   parse: function(capture, state) {
     const content = parseInline(capture[1], state);
-    return [{ type: "link", attrs: { href: unescapeUrl(capture[2]) }, content }]
+    if (content.length === 1 && content[0].type === "text") {
+      // From within Hurmet.org, all links can contain text only.
+      const textNode = parseTextMark(capture[1], state, "link" )[0];
+      const i = linkIndex(textNode.marks);
+      textNode.marks[i].attrs = { href: unescapeUrl(capture[2]) };
+      return textNode
+    } else {
+      // For use in creating HTML docs from Markdown.
+      return [{ type: "link", attrs: { href: unescapeUrl(capture[2]) }, content }]
+    }
   }
 });
 rules.set("image", {
