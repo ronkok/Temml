@@ -45,17 +45,24 @@ defineFunction({
   },
   mathmlBuilder(group, style) {
     const dimension = calculateSize(group.dimension, style);
-    const ch = dimension.unit === "em" ? spaceCharacter(dimension.number) : "";
+    const ch = dimension.number > 0 && dimension.unit === "em"
+      ? spaceCharacter(dimension.number)
+      : "";
     if (group.mode === "text" && ch.length > 0) {
       const character = new mathMLTree.TextNode(ch);
       return new mathMLTree.MathNode("mtext", [character]);
     } else {
-      const node = new mathMLTree.MathNode("mspace");
-      node.setAttribute("width", dimension.number + dimension.unit);
-      if (dimension.number < 0) {
+      if (dimension.number >= 0) {
+        const node = new mathMLTree.MathNode("mspace")
+        node.setAttribute("width", dimension.number + dimension.unit)
+        return node
+      } else {
+        // Don't use <mspace> or <mpadded> because
+        // WebKit recognizes negative left margin only on a <mrow> element
+        const node = new mathMLTree.MathNode("mrow")
         node.style.marginLeft = dimension.number + dimension.unit
+        return node
       }
-      return node;
     }
   }
 });
