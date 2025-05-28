@@ -162,6 +162,10 @@ defineFunction({
         mode: "text",
         text: base.text + combiningChar[context.funcName]
       }
+    } else if (context.funcName === "\\c" && mode === "text" && base.text
+        && base.text.length === 1) {
+      // combining cedilla
+      return { type: "textord", mode: "text", text: base.text + "\u0327" }
     } else {
       // Build up the accent
       return {
