@@ -44,6 +44,7 @@ import "./functions/ref";
 import "./functions/reflect";
 import "./functions/relax";
 import "./functions/rule";
+import "./functions/sfrac";
 import "./functions/sizing";
 import "./functions/smash";
 import "./functions/sqrt";

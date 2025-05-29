@@ -210,6 +210,10 @@ menclose {
   .tml-capshift { transform: translate(0px, 0.35em) }
 }
 
+.special-fraction {
+  font-family: 'STIX TWO', 'Times New Roman', Times, Tinos, serif;
+}
+
 /* flex-wrap for line-breaking in Chromium */
 math {
   display: inline-flex;

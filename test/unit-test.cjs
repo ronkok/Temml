@@ -610,6 +610,8 @@ const test = () => {
   new Expect(node.numer).toBeDefined();
   new Expect(node.denom).toBeDefined();
   new Expect(node.hasBarLine).toBe(false);
+  new Expect(r`2\,\sfrac 3 8`).toParse()
+  new Expect(r`2\,\sfrac 3 8`).toBuild()
 
   assertion = "A fraction builder should not over-shrink its  contents"
   nodes = build(r`\frac{2}{c +\frac{2}{d +\frac{2}{\frac 2 2}}}`)
