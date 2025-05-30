@@ -519,20 +519,18 @@ poorly.
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | \left( x \right)             | ✓        | ✓         | meh³      | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Tag placement                | ✓        | ✓         | poor⁴     | $$x\tag{tag}$$                      |
+| Extensible arrows            | poor⁴    | ✓         | poor⁴     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor⁵    | ✓         | poor⁵     | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh⁵      | meh⁵      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁶      | meh⁶      | $\sqrt{f_c}$                        |
+| Size 4 radicals              | meh⁶     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁷     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Line-breaking                | ✓        | ✓         | bad⁷      |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁸      |                                     |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad⁹      | $x\smash{y}z$                       |
+|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad⁸      | $x\smash{y}z$                       |
 | CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Flattened circumflex accent  | poor¹⁰   | poor¹⁰    | poor¹⁰    | $\hat{a}$                           |
+| Flattened circumflex accent  | poor⁹    | poor⁹     | poor⁹     | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
@@ -544,22 +542,19 @@ Notes:
 
 3.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-4.  WebKit mis-locates tags and AMS automatic equation numbers because it
-    ignores `width: 100%` on an `<mtable>`.
-
-5.  Chromium and WebKit system font extensible arrows have notes placed too high.
+4.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
 
-6.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+5.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-7.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+6.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-8.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+7.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-9.  WebKit fails to render anything inside the `<mpadded>` element.
+8.  WebKit fails to render anything inside the `<mpadded>` element.
 
-10. All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
+9.  All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 
