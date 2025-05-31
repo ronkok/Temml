@@ -555,7 +555,7 @@ If you know the shape of a character, but not its name,
 |\dotsb|$x_1 +\dotsb + x_n$ | `x_1 +\dotsb + x_n` | ams |
 |\dotsc|$x,\dotsc,y$|`x,\dotsc,y`| ams |
 |\dotsi|$$\int_{A_1}\int_{A_2}\dotsi$$|`\int_{A_1}\int_{A_2}\dotsi`| ams |
-|\dotsm|$x_1 x_2 \dotsm x_n$|`$x_1 x_2 \dotsm x_n`| ams |
+|\dotsm|$x_1 x_2 \dotsm x_n$|`x_1 x_2 \dotsm x_n`| ams |
 |\dotso|$\dotso$|| ams |
 |\doublebarvee|$\doublebarvee$|| stix |
 |\doublebarwedge|$\doublebarwedge$|| stix |
