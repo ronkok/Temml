@@ -145,7 +145,9 @@ export const binrelClass = (arg) => {
   // (by rendering separately and with {}s before and after, and measuring
   // the change in spacing).  We'll do roughly the same by detecting the
   // atom type directly.
-  const atom = arg.type === "ordgroup" && arg.body.length ? arg.body[0] : arg;
+  const atom = arg.type === "ordgroup" && arg.body.length && arg.body.length === 1
+    ? arg.body[0]
+    : arg;
   if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
     return "m" + atom.family;
   } else {
@@ -183,14 +185,25 @@ defineFunction({
     const baseArg = args[1];
     const shiftedArg = args[0];
 
+    let mclass
+    if (funcName !== "\\stackrel") {
+      // LaTeX applies \binrel spacing to \overset and \underset.
+      mclass = binrelClass(baseArg)
+    } else {
+      mclass = "mrel"  // for \stackrel
+    }
+
+    const baseType = mclass === "mrel" || mclass === "mbin"
+      ? "op"
+      : "ordgroup"
+
     const baseOp = {
-      type: "op",
+      type: baseType,
       mode: baseArg.mode,
       limits: true,
       alwaysHandleSupSub: true,
       parentIsSupSub: false,
       symbol: false,
-      stack: true,
       suppressBaseShift: funcName !== "\\stackrel",
       body: ordargument(baseArg)
     };
@@ -198,6 +211,7 @@ defineFunction({
     return {
       type: "supsub",
       mode: shiftedArg.mode,
+      stack: true,
       base: baseOp,
       sup: funcName === "\\underset" ? null : shiftedArg,
       sub: funcName === "\\underset" ? shiftedArg : null

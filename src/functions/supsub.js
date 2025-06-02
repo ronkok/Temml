@@ -35,7 +35,7 @@ defineFunctionBuilders({
       }
     }
 
-    if (group.base && !group.base.stack &&
+    if (group.base && !group.stack &&
       (group.base.type === "op" || group.base.type === "operatorname")) {
       group.base.parentIsSupSub = true
       appendApplyFunction = !group.base.symbol
@@ -43,7 +43,7 @@ defineFunctionBuilders({
       needsLeadingSpace = group.base.needsLeadingSpace
     }
 
-    const children = group.base && group.base.stack
+    const children = group.stack && group.base.body.length === 1
       ? [mml.buildGroup(group.base.body[0], style)]
       : [mml.buildGroup(group.base, style)];
 
@@ -96,7 +96,9 @@ defineFunctionBuilders({
       }
     } else if (!group.sup) {
       const base = group.base;
-      if (
+      if (group.stack) {
+        nodeType = "munder";
+      } else if (
         base &&
         base.type === "op" &&
         base.limits &&

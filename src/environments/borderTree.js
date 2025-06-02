@@ -122,7 +122,6 @@ export const bordermatrixParseTree = (matrix, delimiters) => {
     alwaysHandleSupSub: true,
     parentIsSupSub: true,
     symbol: false,
-    stack: true,
     suppressBaseShift: true,
     body: [container]
   }
@@ -130,6 +129,7 @@ export const bordermatrixParseTree = (matrix, delimiters) => {
   const mover = {
     type: "supsub",  // We're using the MathML equivalent
     mode: "math",    // of TeX \overset.
+    stack: true,
     base: base,      // That keeps the {pmatrix} aligned with
     sup: topWrapper, // the math centerline.
     sub: null

@@ -2149,10 +2149,6 @@ const test = () => {
   new Expect(parse("L\\@binrel{+}{x}R")[1].mclass).toBe("mbin")
   new Expect(parse("L\\@binrel{=}{x}R")[1].mclass).toBe("mrel")
   new Expect(parse("L\\@binrel{z}{x}R")[1].mclass).toBe("mord")
-  assertion = "\\@binrel automatic bin/rel/ord should base on just first character in group"
-  new Expect(parse("L\\@binrel{+x}xR")[1].mclass).toBe("mbin")
-  new Expect(parse("L\\@binrel{=x}xR")[1].mclass).toBe("mrel")
-  new Expect(parse("L\\@binrel{xx}xR")[1].mclass).toBe("mord")
 
   assertion = "A parser taking String objects should not fail on an empty String object"
   new Expect(new String("")).toParse()
