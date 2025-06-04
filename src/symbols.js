@@ -920,7 +920,7 @@ defineSymbol(math, mathord, "\u00d8", "\\O", true);
 defineSymbol(text, accent, "\u02ca", "\\'"); // acute
 defineSymbol(text, accent, "\u02cb", "\\`"); // grave
 defineSymbol(text, accent, "\u02c6", "\\^"); // circumflex
-defineSymbol(text, accent, "\u02dc", "\\~"); // tilde
+defineSymbol(text, accent, "\u007e", "\\~"); // tilde
 defineSymbol(text, accent, "\u02c9", "\\="); // macron
 defineSymbol(text, accent, "\u02d8", "\\u"); // breve
 defineSymbol(text, accent, "\u02d9", "\\."); // dot above
@@ -932,7 +932,7 @@ defineSymbol(text, accent, "\u02dd", "\\H"); // double acute
 defineSymbol(math, accent, "\u02ca", "\\'"); // acute
 defineSymbol(math, accent, "\u02cb", "\\`"); // grave
 defineSymbol(math, accent, "\u02c6", "\\^"); // circumflex
-defineSymbol(math, accent, "\u02dc", "\\~"); // tilde
+defineSymbol(math, accent, "\u007e", "\\~"); // tilde
 defineSymbol(math, accent, "\u02c9", "\\="); // macron
 defineSymbol(math, accent, "\u02d8", "\\u"); // breve
 defineSymbol(math, accent, "\u02d9", "\\."); // dot above

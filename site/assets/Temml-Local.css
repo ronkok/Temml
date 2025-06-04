@@ -206,8 +206,8 @@ menclose {
 
 /* Adjust WebKit accents */
 @supports (-webkit-backdrop-filter: blur(1px)) {
-  .tml-xshift { transform: translate(0px, 0.45em) }
-  .tml-capshift { transform: translate(0px, 0.35em) }
+  /* lower by x-height distance */
+  .tml-accent { transform: translate(0px, 0.431em); }
 }
 
 .special-fraction {
