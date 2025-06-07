@@ -14,6 +14,11 @@ import * as mml from "../buildMathML"
 // Helpers
 const symbolRegEx = /^m(over|under|underover)$/
 
+// From the KaTeX font metrics, identify letters that encroach on a superscript.
+const smallPad = "DHKLUcegorsuvxyzΠΥΨαδηιμνοτυχϵ"
+const mediumPad = "BCEFGIMNOPQRSTXZlpqtwΓΘΞΣΦΩβεζθξρςφψϑϕϱ"
+const largePad = "AJdfΔΛ"
+
 // Super scripts and subscripts, whose precise placement can depend on other
 // functions that precede them.
 defineFunctionBuilders({
@@ -63,11 +68,16 @@ defineFunctionBuilders({
     if (group.sup) {
       const sup = mml.buildGroup(group.sup, childStyle)
       if (style.level === 3) { sup.setAttribute("scriptlevel", "2") }
-      const testNode = sup.type === "mrow" ? sup.children[0] : sup
-      if ((testNode && testNode.type === "mo" && testNode.classes.includes("tml-prime"))
-        && group.base && group.base.text && "fF".indexOf(group.base.text) > -1) {
-        // Chromium does not address italic correction on prime.  Prevent f′ from overlapping.
-        testNode.classes.push("prime-pad")
+      if (group.base && group.base.text && group.base.text.length === 1) {
+        // Make an italic correction on the superscript.
+        const text = group.base.text
+        if (smallPad.indexOf(text) > -1) {
+          sup.classes.push("tml-small-pad")
+        } else if (mediumPad.indexOf(text) > -1) {
+          sup.classes.push("tml-medium-pad")
+        } else if (largePad.indexOf(text) > -1) {
+          sup.classes.push("tml-large-pad")
+        }
       }
       children.push(sup)
     }

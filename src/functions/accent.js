@@ -3,28 +3,55 @@ import mathMLTree from "../mathMLTree"
 import stretchy from "../stretchy"
 import * as mml from "../buildMathML"
 
+// Identify letters to which we'll attach a combining accent character
 const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳"
+
+// From the KaTeX font metrics, identify letters whose accents need a italic correction.
+const smallNudge = "DHKLUcegorsuvxyzΠΥΨαδηιμνοτυχϵ"
+const mediumNudge = "BCEGIMNOPQRSTXZlpqtwΓΘΞΣΦΩβεζθξρςφψϑϕϱ"
+const largeNudge = "AFJdfΔΛ"
 
 const mathmlBuilder = (group, style) => {
   const accentNode = group.isStretchy
     ? stretchy.accentNode(group)
     : new mathMLTree.MathNode("mo", [mml.makeText(group.label, group.mode)]);
-
+  if (!group.isStretchy) {
+    accentNode.setAttribute("stretchy", "false") // Keep Firefox from stretching \check
+  }
   if (group.label === "\\vec") {
     accentNode.style.transform = "scale(0.75) translate(10%, 30%)"
   } else {
     accentNode.style.mathDepth = "0" // not scriptstyle
   }
-  if (needWebkitShift.has(group.label)) {
-    accentNode.classes.push("tml-accent")
-  }
   const tag = group.label === "\\c" ? "munder" : "mover"
+  const needsWbkVertShift = needsWebkitVerticalShift.has(group.label)
+  if (tag === "mover" && group.mode === "math" && (!group.isStretchy) && group.base.text
+      && group.base.text.length === 1) {
+    const text = group.base.text
+    const wbkType = needsWbkVertShift ? "" : "h"
+    if (smallNudge.indexOf(text) > -1) {
+      accentNode.classes.push("chr-small-nudge")
+      accentNode.classes.push(`wbk-small-${wbkType}nudge`)
+    } else if (mediumNudge.indexOf(text) > -1) {
+      accentNode.classes.push("chr-medium-nudge")
+      accentNode.classes.push(`wbk-medium-${wbkType}nudge`)
+    } else if (largeNudge.indexOf(text) > -1) {
+      accentNode.classes.push("chr-large-nudge")
+      accentNode.classes.push(`wbk-large-${wbkType}nudge`)
+    } else if (needsWbkVertShift) {
+      accentNode.classes.push("wbk-accent")
+    }
+  } else if (needsWbkVertShift) {
+    // text-mode accents
+    accentNode.classes.push("wbk-accent")
+  }
   const node = new mathMLTree.MathNode(tag, [mml.buildGroup(group.base, style), accentNode]);
   return node;
 };
 
 const nonStretchyAccents = new Set([
   "\\acute",
+  "\\check",
   "\\grave",
   "\\ddot",
   "\\dddot",
@@ -39,15 +66,17 @@ const nonStretchyAccents = new Set([
   "\\mathring"
 ])
 
-const needWebkitShift = new Set([
+const needsWebkitVerticalShift = new Set([
   "\\acute",
   "\\bar",
   "\\breve",
+  "\\check",
   "\\dot",
   "\\ddot",
   "\\grave",
+  "\\hat",
   "\\mathring",
-  "\\'", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
+  "\\`", "\\'", "\\^", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
 ])
 
 const combiningChar = {

@@ -57,14 +57,48 @@ math {
   font-family: "Temml";
 }
 
-/* Chromium prime alignment */
-mo.tml-prime {
-  font-family: Temml;
+@supports (not (-moz-appearance: none)) {
+  /* Chromium and WebKit */
+  /* prime vertical alignment */
+  mo.tml-prime {
+    font-family: Temml;
+  }
+  /* Italic correction on superscripts */
+  .tml-small-pad {
+    padding-left: 0.05em;
+  }
+  .tml-medium-pad {
+    padding-left: 0.10em;
+  }
+  .tml-large-pad {
+    padding-left: 0.15em;
+  }
 }
 
-/* Prevent f' from overlapping in Chromium */
-mo.prime-pad {
-  padding-left: 0.08em;
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  /* WebKit vertical & italic correction on accents */
+  .wbk-accent {
+    /* lower by x-height distance */
+    transform: translate(0, 0.431em);
+  }
+  .wbk-small-nudge {
+    transform: translate(0.07em, 0.431em);
+  }
+  .wbk-medium-nudge {
+    transform: translate(0.14em, 0.431em);
+  }
+  .wbk-large-nudge {
+    transform: translate(0.21em, 0.431em);
+  }
+  .wbk-small-hnudge {
+    transform: translate(0.07em, 0);
+  }
+  .wbk-medium-hnudge {
+    transform: translate(0.14em, 0);
+  }
+  .wbk-large-hnudge {
+    transform: translate(0.21em, 0);
+  }
 }
 
 /* \cancel & \phase use background images. Get them to print. */
@@ -83,6 +117,17 @@ menclose {
 
 /* Styles for Chromium only */
 @supports (not (-webkit-backdrop-filter: blur(1px))) and (not (-moz-appearance: none)) {
+  /* Italic correction on accents */
+  .chr-small-nudge {
+    transform: translate(0.07em, 0);
+  }
+  .chr-medium-nudge {
+    transform: translate(0.14em, 0);
+  }
+  .chr-large-nudge {
+    transform: translate(0.21em, 0);
+  }
+
   /* MathML Core & Chromium do not support the MathML 3.0 element <menclose> attributes. */
   /* So use styles. */
   menclose {
@@ -214,12 +259,6 @@ menclose {
   .tml-left {
     text-align: -webkit-left;
   }
-}
-
-/* Adjust WebKit accents */
-@supports (-webkit-backdrop-filter: blur(1px)) {
-  /* lower by x-height distance */
-  .tml-accent { transform: translate(0px, 0.431em); }
 }
 
 .special-fraction {
