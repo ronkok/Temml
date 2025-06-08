@@ -213,10 +213,6 @@ menclose {
     clip-path: polygon(0.05em 100%, 0em calc(100% - 0.05em), calc(100% - 0.05em) 0em, 100% 0.05em);
   }
 
-  .tml-box {
-    padding: 3pt 0 3pt 0;
-    border: 1px solid;
-  }
   .tml-fbox {
     padding: 3pt;
     border: 1px solid;
