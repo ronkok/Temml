@@ -72,6 +72,9 @@ const stretchyCodePoint = {
   xtwoheadrightarrow: "\u21a0",
   xlongequal: "=",
   xrightleftarrows: "\u21c4",
+  xtofrom: "\u21c4",
+  xleftrightharpoons: "\u21cb",
+  xrightleftharpoons: "\u21cc",
   yields: "\u2192",
   yieldsLeft: "\u2190",
   mesomerism: "\u2194",
@@ -81,7 +84,9 @@ const stretchyCodePoint = {
   eqleftharpoondown: "\u21bd",
   "\\cdrightarrow": "\u2192",
   "\\cdleftarrow": "\u2190",
-  "\\cdlongequal": "="
+  "\\cdlongequal": "=",
+  yieldsLeftRight: "\u21c4",
+  chemequilibrium: "\u21cc"
 }
 
 const mathMLnode = function(label) {

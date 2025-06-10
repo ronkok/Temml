@@ -1653,8 +1653,8 @@ temml.__defineMacro("\\tripleDashBetweenDoubleLine", `\\kern0.075em\\mathrlap{\\
         case "<-": return "\\yieldsLeft";
         case "<->": return "\\mesomerism";
         case "<-->": return "\\yieldsLeftRight";
-        case "<=>": return "\\equilibrium";
-        case "\u21CC": return "\\equilibrium";
+        case "<=>": return "\\chemequilibrium";
+        case "\u21CC": return "\\chemequilibrium";
         case "<=>>": return "\\equilibriumRight";
         case "<<=>": return "\\equilibriumLeft";
         default:

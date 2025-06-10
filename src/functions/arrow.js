@@ -114,12 +114,17 @@ defineFunction({
     "\\xlongequal",
     "\\xtwoheadrightarrow",
     "\\xtwoheadleftarrow",
-    // The next 5 functions are here only to support mhchem
+    "\\xtofrom",              // expfeil
+    "\\xleftrightharpoons",   // mathtools
+    "\\xrightleftharpoons",   // mathtools
+    // The next 7 functions are here only to support mhchem
     "\\yields",
     "\\yieldsLeft",
     "\\mesomerism",
     "\\longrightharpoonup",
     "\\longleftharpoondown",
+    "\\yieldsLeftRight",
+    "\\chemequilibrium",
     // The next 3 functions are here only to support the {CD} environment.
     "\\\\cdrightarrow",
     "\\\\cdleftarrow",
@@ -150,26 +155,15 @@ defineFunction({
 });
 
 const arrowComponent = {
-  "\\xtofrom": ["\\xrightarrow", "\\xleftarrow"],
-  "\\xleftrightharpoons": ["\\xleftharpoonup", "\\xrightharpoondown"],
-  "\\xrightleftharpoons": ["\\xrightharpoonup", "\\xleftharpoondown"],
-  "\\yieldsLeftRight": ["\\yields", "\\yieldsLeft"],
-  // The next three all get the same harpoon glyphs. Only the lengths and paddings differ.
-  "\\equilibrium": ["\\longrightharpoonup", "\\longleftharpoondown"],
   "\\equilibriumRight": ["\\longrightharpoonup", "\\eqleftharpoondown"],
   "\\equilibriumLeft": ["\\eqrightharpoonup", "\\longleftharpoondown"]
 }
 
-// Browsers are not good at stretching a glyph that contains a pair of stacked arrows such as ⇄.
-// So we stack a pair of single arrows.
+// Math fonts do not have a single glyph for these two mhchem functions.
+// So we stack a pair of single harpoons.
 defineFunction({
   type: "stackedArrow",
   names: [
-    "\\xtofrom",              // expfeil
-    "\\xleftrightharpoons",   // mathtools
-    "\\xrightleftharpoons",   // mathtools
-    "\\yieldsLeftRight",      // mhchem
-    "\\equilibrium",          // mhchem
     "\\equilibriumRight",
     "\\equilibriumLeft"
   ],

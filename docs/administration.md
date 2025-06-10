@@ -513,7 +513,8 @@ poorly.
 | Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
 |                              |          | (Firefox) | (Safari)  |                                     |
 +:=============================+:========:+:=========:+:=========:+:===================================:+
-| Accents                      | ✓        | ✓         | bad¹      |  $\hat{𝖺}$                         |
+|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹      | $x\smash{y}z$                       |
+| CD environment               |          |           |           |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | Integral, ∫, in display mode | meh²     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
@@ -527,16 +528,12 @@ poorly.
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | Line-breaking                | ✓        | ✓         | bad⁷      |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad⁸      | $x\smash{y}z$                       |
-| CD environment               |          |           |           |                                     |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-| Flattened circumflex accent  | poor⁹    | poor⁹     | poor⁹     | $\hat{a}$                           |
+| Flattened circumflex accent  | poor⁸    | poor⁸     | poor⁸     | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
-1.  WebKit renders some accents too high.
-    Temml does some work to mitigate this. It’s not enough.
+1.  WebKit fails to render anything inside the `<mpadded>` element.
 
 2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
@@ -552,9 +549,7 @@ Notes:
 
 7.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-8.  WebKit fails to render anything inside the `<mpadded>` element.
-
-9.  All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
+8.  All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 
