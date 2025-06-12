@@ -318,10 +318,6 @@ temml.render(
 
 - `trust`: `boolean` or `function` (default: `false`). If `false` (do not trust input), prevent any commands like `\includegraphics` that could enable adverse behavior, rendering them instead in `errorColor`. If `true` (trust input), allow all such commands. Provide a custom function `handler(context)` to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:
 
-  - `{command: "\\url", url, protocol}`\
-    where `protocol` is a lowercased string like `"http"` or `"https"`
-    that appears before a colon, or `"_relative"` for relative URLs.
-  - `{command: "\\href", url, protocol}`
   - `{command: "\\includegraphics", url, protocol}`
   - `{command: "\\class", class}`
   - `{command: "\\id", id}`
@@ -331,12 +327,11 @@ temml.render(
   Here are some sample trust settings:
 
   - Forbid specific command: `trust: (context) => context.command !== '\\includegraphics'`
-  - Allow specific command: `trust: (context) => context.command === '\\url'`
-  - Allow multiple specific commands: `trust: (context) => ['\\url', '\\href'].includes(context.command)`
+  - Allow specific command: `trust: (context) => context.command === '\\class'`
+  - Allow multiple specific commands: `trust: (context) => ['\\id', '\\class'].includes(context.command)`
   - Allow all commands with a specific protocol: `trust: (context) => context.protocol === 'http'`
   - Allow all commands with specific protocols: `trust: (context) => ['http', 'https', '_relative'].includes(context.protocol)`
   - Allow all commands but forbid specific protocol: `trust: (context) => context.protocol !== 'file'`
-  - Allow certain commands with specific protocols: `trust: (context) => ['\\url', '\\href'].includes(context.command) && ['http', 'https', '_relative'].includes(context.protocol)`
 
 </details>
 
