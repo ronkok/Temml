@@ -169,21 +169,18 @@ temml.postProcess(document.body);</code></pre></details>
 <li><p><code>strict</code>: <code>boolean</code>. If <code>false</code> (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If <code>true</code> (LaTeX faithfulness mode), throw an error for any such transgressions. (default: <code>false</code>)</p></li>
 <li><p><code>xml</code>: <code>boolean</code>. If <code>true</code>, Temml will write a namespace into the <code>&lt;math&gt;</code> element. That namespace is <code>xmlns=&quot;http://www.w3.org/1998/Math/MathML&quot;</code>. Such a namespace is unnecessary for modern browsers but can be helpful for other user agents, such as Microsoft Word. (default: <code>false</code>)</p></li>
 <li><p><code>trust</code>: <code>boolean</code> or <code>function</code> (default: <code>false</code>). If <code>false</code> (do not trust input), prevent any commands like <code>\includegraphics</code> that could enable adverse behavior, rendering them instead in <code>errorColor</code>. If <code>true</code> (trust input), allow all such commands. Provide a custom function <code>handler(context)</code> to customize behavior depending on the context (command, arguments e.g. a URL, etc.).  A list of possible contexts:</p>
-<ul><li class="tight"><p><code>{command: &quot;\\url&quot;, url, protocol}</code><br>where <code>protocol</code> is a lowercased string like <code>&quot;http&quot;</code> or <code>&quot;https&quot;</code> that appears before a colon, or <code>&quot;_relative&quot;</code> for relative URLs.</p></li>
-<li class="tight"><p><code>{command: &quot;\\href&quot;, url, protocol}</code></p></li>
-<li class="tight"><p><code>{command: &quot;\\includegraphics&quot;, url, protocol}</code></p></li>
+<ul><li class="tight"><p><code>{command: &quot;\\includegraphics&quot;, url, protocol}</code></p></li>
 <li class="tight"><p><code>{command: &quot;\\class&quot;, class}</code></p></li>
 <li class="tight"><p><code>{command: &quot;\\id&quot;, id}</code></p></li>
 <li class="tight"><p><code>{command: &quot;\\style&quot;, style}</code></p></li>
 <li class="tight"><p><code>{command: &quot;\\data&quot;, attributes}</code></p></li></ul>
 <p>Here are some sample trust settings:</p>
 <ul><li class="tight"><p>Forbid specific command: <code>trust: (context) =&gt; context.command !== &#x27;\\includegraphics&#x27;</code></p></li>
-<li class="tight"><p>Allow specific command: <code>trust: (context) =&gt; context.command === &#x27;\\url&#x27;</code></p></li>
-<li class="tight"><p>Allow multiple specific commands: <code>trust: (context) =&gt; [&#x27;\\url&#x27;, &#x27;\\href&#x27;].includes(context.command)</code></p></li>
+<li class="tight"><p>Allow specific command: <code>trust: (context) =&gt; context.command === &#x27;\\class&#x27;</code></p></li>
+<li class="tight"><p>Allow multiple specific commands: <code>trust: (context) =&gt; [&#x27;\\id&#x27;, &#x27;\\class&#x27;].includes(context.command)</code></p></li>
 <li class="tight"><p>Allow all commands with a specific protocol: <code>trust: (context) =&gt; context.protocol === &#x27;http&#x27;</code></p></li>
 <li class="tight"><p>Allow all commands with specific protocols: <code>trust: (context) =&gt; [&#x27;http&#x27;, &#x27;https&#x27;, &#x27;_relative&#x27;].includes(context.protocol)</code></p></li>
-<li class="tight"><p>Allow all commands but forbid specific protocol: <code>trust: (context) =&gt; context.protocol !== &#x27;file&#x27;</code></p></li>
-<li class="tight"><p>Allow certain commands with specific protocols: <code>trust: (context) =&gt; [&#x27;\\url&#x27;, &#x27;\\href&#x27;].includes(context.command) &amp;&amp; [&#x27;http&#x27;, &#x27;https&#x27;, &#x27;_relative&#x27;].includes(context.protocol)</code></p></li></ul></li></ul>
+<li class="tight"><p>Allow all commands but forbid specific protocol: <code>trust: (context) =&gt; context.protocol !== &#x27;file&#x27;</code></p></li></ul></li></ul>
 </details>
 <h2 id='\ref-and-\eqref'>\ref and \eqref</h2>
 <p>If you are using <code>temml.renderMathInElement</code>, you can ignore this section. <code>renderMathInElement</code> handles this automatically.</p>
@@ -248,26 +245,22 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 <th>Gecko <br>(Firefox)</th>
 <th>WebKit <br>(Safari)</th>
 <th>Examples</th></tr>
-<tr><td>Accents</td><td>✓</td><td>✓</td><td>bad¹</td><td><span class='hurmet-tex' data-entry='\hat{𝖺}'><math><mover><mi>𝖺</mi><mo stretchy="false" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr>
+<tr><td>\smash, \mathllap, \mathrlap,<br> CD environment</td><td>✓</td><td>✓</td><td>bad¹</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr>
 <tr><td>Integral, ∫, in display mode</td><td>meh²</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\displaystyle\int \frac a b'><math><mstyle scriptlevel="0" displaystyle="true"><mo movablelimits="false">∫</mo><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle></math></span></td></tr>
 <tr><td>\left( x \right)</td><td>✓</td><td>✓</td><td>meh³</td><td><span class='hurmet-tex' data-entry='\left( x \right)'><math><mrow><mo fence="true" form="prefix">(</mo><mi>x</mi><mo fence="true" form="postfix">)</mo></mrow></math></span></td></tr>
-<tr><td>Tag placement</td><td>✓</td><td>✓</td><td>poor⁴</td><td><p class='hurmet-tex' data-entry='x\tag{tag}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" style="width:100%;"><mtr class="tml-tageqn"><mtd style="padding:0;width:50%;"></mtd><mtd><mrow><mi>x</mi></mrow></mtd><mtd class="tml-right" style="padding:0;width:50%;"><mtext class="tml-tag">(tag)</mtext></mtd></mtr></mtable></math></p></td></tr>
-<tr><td>Extensible arrows</td><td>poor⁵</td><td>✓</td><td>poor⁵</td><td><span class='hurmet-tex' data-entry='A \xrightharpoonup{\text{note}} B'><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">⇀</mo><mover><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></span></td></tr>
-<tr><td>Radical height</td><td>✓</td><td>meh⁶</td><td>meh⁶</td><td><span class='hurmet-tex' data-entry='\sqrt{f_c}'><math><msqrt><msub><mi>f</mi><mi>c</mi></msub></msqrt></math></span></td></tr>
-<tr><td>Size 4 radicals</td><td>meh⁷</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
-<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad⁸</td><td><p></p></td></tr>
-<tr><td>\smash, \mathllap, \mathrlap,<br> CD environment</td><td>✓</td><td>✓</td><td>bad⁹</td><td><span class='hurmet-tex' data-entry='x\smash{y}z'><math><mrow><mi>x</mi><mpadded height="0px" depth="0px"><mi>y</mi></mpadded><mi>z</mi></mrow></math></span></td></tr>
-<tr><td>Flattened circumflex accent</td><td>poor¹⁰</td><td>poor¹⁰</td><td>poor¹⁰</td><td><span class='hurmet-tex' data-entry='\hat{a}'><math><mover><mi>a</mi><mo stretchy="false" class="tml-xshift" style="math-style:normal;math-depth:0;">^</mo></mover></math></span></td></tr></table>
+<tr><td>Extensible arrows</td><td>poor⁴</td><td>✓</td><td>poor⁴</td><td><span class='hurmet-tex' data-entry='A \xrightharpoonup{\text{note}} B'><math><mrow><mi>A</mi><mrow><mspace width="0.2778em"></mspace><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">⇀</mo><mover><mrow><mspace width="0.4286em"></mspace><mtext>note</mtext><mspace width="0.4286em"></mspace></mrow><mspace width="3.5000em"></mspace></mover></mover><mspace width="0.2778em"></mspace></mrow><mi>B</mi></mrow></math></span></td></tr>
+<tr><td>Radical height</td><td>✓</td><td>meh⁵</td><td>meh⁵</td><td><span class='hurmet-tex' data-entry='\sqrt{f_c}'><math><msqrt><msub><mi>f</mi><mi>c</mi></msub></msqrt></math></span></td></tr>
+<tr><td>Size 4 radicals</td><td>meh⁶</td><td>✓</td><td>✓</td><td><span class='hurmet-tex' data-entry='\sqrt{\rule{}{6em}\kern2em}'><math><msqrt><mrow><mspace width="0pt" height="6em"></mspace><mspace width="2em"></mspace></mrow></msqrt></math></span></td></tr>
+<tr><td>Line-breaking</td><td>✓</td><td>✓</td><td>bad⁷</td><td><p></p></td></tr>
+<tr><td>Flattened circumflex accent</td><td>poor⁸</td><td>poor⁸</td><td>poor⁸</td><td><span class='hurmet-tex' data-entry='\hat{a}'><math><mover><mi>a</mi><mo stretchy="false" class="wbk-acc" style="math-depth:0;">^</mo></mover></math></span></td></tr></table>
 <p>Notes:</p>
-<ol class="decimal" start="1"><li><p>WebKit renders some accents too high. Temml does some work to mitigate this. It’s not enough.</p></li>
+<ol class="decimal" start="1"><li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li>
 <li><p>Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.</p></li>
 <li><p>WebKit mis-aligns short parentheses, given a \left and \right.</p></li>
-<li><p>WebKit mis-locates tags and AMS automatic equation numbers because it ignores <code>width: 100%</code> on an <code>&lt;mtable&gt;</code>.</p></li>
 <li><p>Chromium and WebKit system font extensible arrows have notes placed too high. Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.</p></li>
 <li><p>Firefox and WebKit sometimes select radicals that are too tall. (Root cause: They don’t cramp subscripts and superscripts.)</p></li>
 <li><p>In very tall radicals, Chromium does not accurately match the vinculum to the surd.</p></li>
 <li><p>Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.</p></li>
-<li><p>WebKit fails to render anything inside the <code>&lt;mpadded&gt;</code> element.</p></li>
 <li><p>All browsers fail to flatten a circumflex accent in any font other than Latin Modern.</p></li></ol>
 <p>You can suggest revisions to this page at the Temml <a href='https://github.com/ronkok/Temml/issues'>issues page</a>.</p>
 <br>
@@ -276,7 +269,7 @@ body { counter-reset: tmlEqnNo; }</code></pre><p>You can overwrite the <code>con
 </main>
 <nav>
 <div id="sidebar">
-<p><a href="https://temml.org/" title="https://temml.org/"><span class='hurmet-tex' data-entry='\Large\Temml'><math><mstyle mathsize="1.4400em"><mtext>T</mtext><mrow style="margin-left:-0.2em;"></mrow><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mrow><mtext>M</mtext><mrow style="margin-left:-0.08em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mtext>L</mtext></mrow></mstyle></math></span></a>    v0.11.07</p>
+<p><a href="https://temml.org/" title="https://temml.org/"><span class='hurmet-tex' data-entry='\Large\Temml'><math><mstyle mathsize="1.4400em"><mtext>T</mtext><mrow style="margin-left:-0.2em;"></mrow><mpadded voffset="-0.2em" style="padding:0 0 0.2em 0;"><mtext>E</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mrow><mtext>M</mtext><mrow style="margin-left:-0.08em;"></mrow><mpadded voffset="0.2em" style="padding:0.2em 0 0 0;"><mtext>M</mtext></mpadded><mrow style="margin-left:-0.08em;"></mrow><mtext>L</mtext></mrow></mstyle></math></span></a>    v0.11.08</p>
 <h3><a href="#top">Contents</a></h3>
 <ul><li><p><a href='#browser-support'>Browser Support</a></p></li>
 <li><p><a href='#installation'>Installation</a></p></li>

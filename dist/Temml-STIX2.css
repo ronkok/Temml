@@ -49,9 +49,64 @@ mo.tml-prime {
   font-feature-settings: 'ss04';
 }
 
-/* Prevent f' from overlapping in Chromium */
-mo.prime-pad {
-  padding-left: 0.08em;
+@supports (-moz-appearance: none) {
+  /* \vec w/o italic correction for Firefox */
+  .tml-vec {
+    transform: scale(0.75)
+  }
+}
+
+@supports (not (-moz-appearance: none)) {
+  /* Chromium and WebKit */
+  /* prime vertical alignment */
+  mo.tml-prime {
+    font-feature-settings: 'ss04';
+  }
+  /* Italic correction on superscripts */
+  .tml-sml-pad {
+    padding-left: 0.05em;
+  }
+  .tml-med-pad {
+    padding-left: 0.10em;
+  }
+  .tml-lrg-pad {
+    padding-left: 0.15em;
+  }
+}
+
+@supports (-webkit-backdrop-filter: blur(1px)) {
+  /* WebKit vertical & italic correction on accents */
+  .wbk-acc {
+    /* lower by x-height distance */
+    transform: translate(0em, 0.431em);
+  }
+  .wbk-sml {
+    transform: translate(0.07em, 0);
+  }
+  .wbk-sml-acc {
+    transform: translate(0.07em, 0.431em);
+  }
+  .wbk-sml-vec {
+    transform: scale(0.75) translate(0.07em, 0);
+  }
+  .wbk-med {
+    transform: translate(0.14em, 0);
+  }
+  .wbk-med-acc {
+    transform: translate(0.14em, 0.431em);
+  }
+  .wbk-med-vec {
+    transform: scale(0.75) translate(0.14em, 0);
+  }
+  .wbk-lrg {
+    transform: translate(0.21em, 0);
+  }
+  .wbk-lrg-acc {
+    transform: translate(0.21em, 0.431em);
+  }
+  .wbk-lrg-vec {
+    transform: scale(0.75) translate(0.21em, 0);
+  }
 }
 
 /* \cancel & \phase use background images. Get them to print. */
@@ -70,6 +125,25 @@ menclose {
 
 /* Styles for Chromium only */
 @supports (not (-webkit-backdrop-filter: blur(1px))) and (not (-moz-appearance: none)) {
+  /* Italic correction on accents */
+  .chr-sml {
+    transform: translate(0.07em, 0)
+  }
+  .chr-sml-vec {
+    transform: scale(0.75) translate(0.07em, 0)
+  }
+  .chr-med {
+    transform: translate(0.14em, 0)
+  }
+  .chr-med-vec {
+    transform: scale(0.75) translate(0.14em, 0)
+  }
+  .chr-lrg {
+    transform: translate(0.21em, 0)
+  }
+  .chr-lrg-vec {
+    transform: scale(0.75) translate(0.21em, 0)
+  }
   /* MathML Core & Chromium do not support the MathML 3.0 element <menclose> attributes. */
   /* So use styles. */
   menclose {
@@ -155,10 +229,6 @@ menclose {
     clip-path: polygon(0.05em 100%, 0em calc(100% - 0.05em), calc(100% - 0.05em) 0em, 100% 0.05em);
   }
 
-  .tml-box {
-    padding: 3pt 0 3pt 0;
-    border: 1px solid;
-  }
   .tml-fbox {
     padding: 3pt;
     border: 1px solid;
@@ -201,12 +271,6 @@ menclose {
   .tml-left {
     text-align: -webkit-left;
   }
-}
-
-/* Adjust WebKit accents */
-@supports (-webkit-backdrop-filter: blur(1px)) {
-  .tml-xshift { transform: translate(0px, 0.45em) }
-  .tml-capshift { transform: translate(0px, 0.35em) }
 }
 
 /* flex-wrap for line-breaking in Chromium */

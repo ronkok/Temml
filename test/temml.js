@@ -837,6 +837,9 @@ var temml = (function () {
     xtwoheadrightarrow: "\u21a0",
     xlongequal: "=",
     xrightleftarrows: "\u21c4",
+    xtofrom: "\u21c4",
+    xleftrightharpoons: "\u21cb",
+    xrightleftharpoons: "\u21cc",
     yields: "\u2192",
     yieldsLeft: "\u2190",
     mesomerism: "\u2194",
@@ -846,7 +849,9 @@ var temml = (function () {
     eqleftharpoondown: "\u21bd",
     "\\cdrightarrow": "\u2192",
     "\\cdleftarrow": "\u2190",
-    "\\cdlongequal": "="
+    "\\cdlongequal": "=",
+    yieldsLeftRight: "\u21c4",
+    chemequilibrium: "\u21cc"
   };
 
   const mathMLnode = function(label) {
@@ -1774,7 +1779,7 @@ var temml = (function () {
   defineSymbol(math, inner, "\u22f1", "\\ddots", true);
   defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
   defineSymbol(text, textord, "\u22ee", "\\varvdots");
-  defineSymbol(math, accent, "\u02ca", "\\acute");
+  defineSymbol(math, accent, "\u00b4", "\\acute");
   defineSymbol(math, accent, "\u0060", "\\grave");
   defineSymbol(math, accent, "\u00a8", "\\ddot");
   defineSymbol(math, accent, "\u2026", "\\dddot");
@@ -1800,7 +1805,7 @@ var temml = (function () {
   defineSymbol(text, accent, "\u02ca", "\\'"); // acute
   defineSymbol(text, accent, "\u02cb", "\\`"); // grave
   defineSymbol(text, accent, "\u02c6", "\\^"); // circumflex
-  defineSymbol(text, accent, "\u02dc", "\\~"); // tilde
+  defineSymbol(text, accent, "\u007e", "\\~"); // tilde
   defineSymbol(text, accent, "\u02c9", "\\="); // macron
   defineSymbol(text, accent, "\u02d8", "\\u"); // breve
   defineSymbol(text, accent, "\u02d9", "\\."); // dot above
@@ -1812,7 +1817,7 @@ var temml = (function () {
   defineSymbol(math, accent, "\u02ca", "\\'"); // acute
   defineSymbol(math, accent, "\u02cb", "\\`"); // grave
   defineSymbol(math, accent, "\u02c6", "\\^"); // circumflex
-  defineSymbol(math, accent, "\u02dc", "\\~"); // tilde
+  defineSymbol(math, accent, "\u007e", "\\~"); // tilde
   defineSymbol(math, accent, "\u02c9", "\\="); // macron
   defineSymbol(math, accent, "\u02d8", "\\u"); // breve
   defineSymbol(math, accent, "\u02d9", "\\."); // dot above
@@ -2469,46 +2474,61 @@ var temml = (function () {
     return math;
   }
 
+  // Identify letters to which we'll attach a combining accent character
   const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳";
-  const talls = "ABCDEFGHIJKLMNOPQRSTUVWXYZbdfhkltΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩβδλζφθψ"
-               + "𝐀𝐁𝐂𝐃𝐄𝐅𝐆𝐇𝐈𝐉𝐊𝐋𝐌𝐍𝐎𝐏𝐐𝐑𝐒𝐓𝐔𝐕𝐖𝐗𝐘𝐙𝐛𝐝𝐟𝐡𝐤𝐥𝐭";
-  const longSmalls = new Set(["\\alpha", "\\gamma", "\\delta", "\\epsilon", "\\eta", "\\iota",
-    "\\kappa", "\\mu", "\\nu", "\\pi", "\\rho", "\\sigma", "\\tau", "\\upsilon", "\\chi", "\\psi",
-    "\\omega", "\\imath", "\\jmath"]);
-  const longTalls = new Set(["\\Gamma", "\\Delta", "\\Sigma", "\\Omega", "\\beta", "\\delta",
-    "\\lambda", "\\theta", "\\psi"]);
+
+  // From the KaTeX font metrics, identify letters whose accents need a italic correction.
+  const smallNudge = "DHKLUcegorsuvxyzΠΥΨαδηιμνοτυχϵ";
+  const mediumNudge = "BCEGIMNOPQRSTXZlpqtwΓΘΞΣΦΩβεζθξρςφψϑϕϱ";
+  const largeNudge = "AFJdfΔΛ";
 
   const mathmlBuilder$a = (group, style) => {
     const accentNode = group.isStretchy
       ? stretchy.accentNode(group)
       : new mathMLTree.MathNode("mo", [makeText(group.label, group.mode)]);
-
-    if (group.label === "\\vec") {
-      accentNode.style.transform = "scale(0.75) translate(10%, 30%)";
-    } else {
-      accentNode.style.mathStyle = "normal";
-      accentNode.style.mathDepth = "0";
-      if (needWebkitShift.has(group.label) &&  utils.isCharacterBox(group.base)) {
-        let shift = "";
-        const ch = group.base.text;
-        if (smalls.indexOf(ch) > -1 || longSmalls.has(ch)) { shift = "tml-xshift"; }
-        if (talls.indexOf(ch) > -1  || longTalls.has(ch))  { shift = "tml-capshift"; }
-        if (shift) { accentNode.classes.push(shift); }
-      }
-    }
     if (!group.isStretchy) {
-      accentNode.setAttribute("stretchy", "false");
+      accentNode.setAttribute("stretchy", "false"); // Keep Firefox from stretching \check
     }
-
-    const node = new mathMLTree.MathNode((group.label === "\\c" ? "munder" : "mover"),
-      [buildGroup$1(group.base, style), accentNode]
-    );
-
+    if (group.label !== "\\vec") {
+      accentNode.style.mathDepth = "0"; // not scriptstyle
+      // Don't use attribute accent="true" because MathML Core eliminates a needed space.
+    }
+    const tag = group.label === "\\c" ? "munder" : "mover";
+    const needsWbkVertShift = needsWebkitVerticalShift.has(group.label);
+    if (tag === "mover" && group.mode === "math" && (!group.isStretchy) && group.base.text
+        && group.base.text.length === 1) {
+      const text = group.base.text;
+      const isVec = group.label === "\\vec";
+      const vecPostfix = isVec === "\\vec" ? "-vec" : "";
+      if (isVec) {
+        accentNode.classes.push("tml-vec"); // Firefox sizing of \vec arrow
+      }
+      const wbkPostfix = isVec ? "-vec" : needsWbkVertShift ? "-acc" : "";
+      if (smallNudge.indexOf(text) > -1) {
+        accentNode.classes.push(`chr-sml${vecPostfix}`);
+        accentNode.classes.push(`wbk-sml${wbkPostfix}`);
+      } else if (mediumNudge.indexOf(text) > -1) {
+        accentNode.classes.push(`chr-med${vecPostfix}`);
+        accentNode.classes.push(`wbk-med${wbkPostfix}`);
+      } else if (largeNudge.indexOf(text) > -1) {
+        accentNode.classes.push(`chr-lrg${vecPostfix}`);
+        accentNode.classes.push(`wbk-lrg${wbkPostfix}`);
+      } else if (isVec) {
+        accentNode.classes.push(`wbk-vec`);
+      } else if (needsWbkVertShift) {
+        accentNode.classes.push(`wbk-acc`);
+      }
+    } else if (needsWbkVertShift) {
+      // text-mode accents
+      accentNode.classes.push("wbk-acc");
+    }
+    const node = new mathMLTree.MathNode(tag, [buildGroup$1(group.base, style), accentNode]);
     return node;
   };
 
   const nonStretchyAccents = new Set([
     "\\acute",
+    "\\check",
     "\\grave",
     "\\ddot",
     "\\dddot",
@@ -2523,7 +2543,7 @@ var temml = (function () {
     "\\mathring"
   ]);
 
-  const needWebkitShift = new Set([
+  const needsWebkitVerticalShift = new Set([
     "\\acute",
     "\\bar",
     "\\breve",
@@ -2533,7 +2553,7 @@ var temml = (function () {
     "\\grave",
     "\\hat",
     "\\mathring",
-    "\\'", "\\^", "\\~", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
+    "\\`", "\\'", "\\^", "\\=", "\\u", "\\.", '\\"', "\\r", "\\H", "\\v"
   ]);
 
   const combiningChar = {
@@ -2547,7 +2567,8 @@ var temml = (function () {
     '\\"': "\u0308",
     "\\r": "\u030A",
     "\\H": "\u030B",
-    "\\v": "\u030C"
+    "\\v": "\u030C",
+    "\\c": "\u0327"
   };
 
   // Accents
@@ -2592,8 +2613,8 @@ var temml = (function () {
         type: "accent",
         mode: context.parser.mode,
         label: context.funcName,
-        isStretchy: isStretchy,
-        base: base
+        isStretchy,
+        base
       };
     },
     mathmlBuilder: mathmlBuilder$a
@@ -2620,21 +2641,25 @@ var temml = (function () {
       }
 
       if (mode === "text" && base.text && base.text.length === 1
-          && context.funcName in combiningChar  && smalls.indexOf(base.text) > -1) {
+          && context.funcName in combiningChar && smalls.indexOf(base.text) > -1) {
         // Return a combining accent character
         return {
           type: "textord",
           mode: "text",
           text: base.text + combiningChar[context.funcName]
         }
+      } else if (context.funcName === "\\c" && mode === "text" && base.text
+          && base.text.length === 1) {
+        // combining cedilla
+        return { type: "textord", mode: "text", text: base.text + "\u0327" }
       } else {
         // Build up the accent
         return {
           type: "accent",
-          mode: mode,
+          mode,
           label: context.funcName,
           isStretchy: false,
-          base: base
+          base
         }
       }
     },
@@ -2892,12 +2917,17 @@ var temml = (function () {
       "\\xlongequal",
       "\\xtwoheadrightarrow",
       "\\xtwoheadleftarrow",
-      // The next 5 functions are here only to support mhchem
+      "\\xtofrom",              // expfeil
+      "\\xleftrightharpoons",   // mathtools
+      "\\xrightleftharpoons",   // mathtools
+      // The next 7 functions are here only to support mhchem
       "\\yields",
       "\\yieldsLeft",
       "\\mesomerism",
       "\\longrightharpoonup",
       "\\longleftharpoondown",
+      "\\yieldsLeftRight",
+      "\\chemequilibrium",
       // The next 3 functions are here only to support the {CD} environment.
       "\\\\cdrightarrow",
       "\\\\cdleftarrow",
@@ -2928,26 +2958,15 @@ var temml = (function () {
   });
 
   const arrowComponent = {
-    "\\xtofrom": ["\\xrightarrow", "\\xleftarrow"],
-    "\\xleftrightharpoons": ["\\xleftharpoonup", "\\xrightharpoondown"],
-    "\\xrightleftharpoons": ["\\xrightharpoonup", "\\xleftharpoondown"],
-    "\\yieldsLeftRight": ["\\yields", "\\yieldsLeft"],
-    // The next three all get the same harpoon glyphs. Only the lengths and paddings differ.
-    "\\equilibrium": ["\\longrightharpoonup", "\\longleftharpoondown"],
     "\\equilibriumRight": ["\\longrightharpoonup", "\\eqleftharpoondown"],
     "\\equilibriumLeft": ["\\eqrightharpoonup", "\\longleftharpoondown"]
   };
 
-  // Browsers are not good at stretching a glyph that contains a pair of stacked arrows such as ⇄.
-  // So we stack a pair of single arrows.
+  // Math fonts do not have a single glyph for these two mhchem functions.
+  // So we stack a pair of single harpoons.
   defineFunction({
     type: "stackedArrow",
     names: [
-      "\\xtofrom",              // expfeil
-      "\\xleftrightharpoons",   // mathtools
-      "\\xrightleftharpoons",   // mathtools
-      "\\yieldsLeftRight",      // mhchem
-      "\\equilibrium",          // mhchem
       "\\equilibriumRight",
       "\\equilibriumLeft"
     ],
@@ -3454,7 +3473,6 @@ var temml = (function () {
       alwaysHandleSupSub: true,
       parentIsSupSub: true,
       symbol: false,
-      stack: true,
       suppressBaseShift: true,
       body: [container]
     };
@@ -3462,6 +3480,7 @@ var temml = (function () {
     const mover = {
       type: "supsub",  // We're using the MathML equivalent
       mode: "math",    // of TeX \overset.
+      stack: true,
       base: base,      // That keeps the {pmatrix} aligned with
       sup: topWrapper, // the math centerline.
       sub: null
@@ -6275,7 +6294,8 @@ var temml = (function () {
       case "\\boxed":
         // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
         node.setAttribute("notation", "box");
-        node.classes.push("tml-box");
+        node.style.padding = "padding: 3pt 0 3pt 0";
+        node.style.border = "1px solid";
         node.setAttribute("scriptlevel", "0");
         node.setAttribute("displaystyle", "true");
         break
@@ -7688,7 +7708,9 @@ var temml = (function () {
     // (by rendering separately and with {}s before and after, and measuring
     // the change in spacing).  We'll do roughly the same by detecting the
     // atom type directly.
-    const atom = arg.type === "ordgroup" && arg.body.length ? arg.body[0] : arg;
+    const atom = arg.type === "ordgroup" && arg.body.length && arg.body.length === 1
+      ? arg.body[0]
+      : arg;
     if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
       return "m" + atom.family;
     } else {
@@ -7726,14 +7748,25 @@ var temml = (function () {
       const baseArg = args[1];
       const shiftedArg = args[0];
 
+      let mclass;
+      if (funcName !== "\\stackrel") {
+        // LaTeX applies \binrel spacing to \overset and \underset.
+        mclass = binrelClass(baseArg);
+      } else {
+        mclass = "mrel";  // for \stackrel
+      }
+
+      const baseType = mclass === "mrel" || mclass === "mbin"
+        ? "op"
+        : "ordgroup";
+
       const baseOp = {
-        type: "op",
+        type: baseType,
         mode: baseArg.mode,
         limits: true,
         alwaysHandleSupSub: true,
         parentIsSupSub: false,
         symbol: false,
-        stack: true,
         suppressBaseShift: funcName !== "\\stackrel",
         body: ordargument(baseArg)
       };
@@ -7741,6 +7774,7 @@ var temml = (function () {
       return {
         type: "supsub",
         mode: shiftedArg.mode,
+        stack: true,
         base: baseOp,
         sup: funcName === "\\underset" ? null : shiftedArg,
         sub: funcName === "\\underset" ? shiftedArg : null
@@ -8642,6 +8676,71 @@ var temml = (function () {
     }
   });
 
+  const numRegEx = /^[0-9]$/;
+  const unicodeNumSubs = {
+    '0': '₀',
+    '1': '₁',
+    '2': '₂',
+    '3': '₃',
+    '4': '₄',
+    '5': '₅',
+    '6': '₆',
+    '7': '₇',
+    '8': '₈',
+    '9': '₉'
+  };
+  const unicodeNumSups = {
+    '0': '⁰',
+    '1': '¹',
+    '2': '²',
+    '3': '³',
+    '4': '⁴',
+    '5': '⁵',
+    '6': '⁶',
+    '7': '⁷',
+    '8': '⁸',
+    '9': '⁹'
+  };
+
+  defineFunction({
+    type: "sfrac",
+    names: ["\\sfrac"],
+    props: {
+      numArgs: 2,
+      allowedInText: true,
+      allowedInMath: true
+    },
+    handler({ parser }, args) {
+      let numerator = "";
+      for (const node of args[0].body) {
+        if (node.type !== "textord" || !numRegEx.test(node.text)) {
+          throw new ParseError("Numerator must be an integer.", node)
+        }
+        numerator += node.text;
+      }
+      let denominator = "";
+      for (const node of args[1].body) {
+        if (node.type !== "textord" || !numRegEx.test(node.text)) {
+          throw new ParseError("Denominator must be an integer.", node)
+        }
+        denominator += node.text;
+      }
+      return {
+        type: "sfrac",
+        mode: parser.mode,
+        numerator,
+        denominator
+      };
+    },
+    mathmlBuilder(group, style) {
+      const numerator = group.numerator.split('').map(c => unicodeNumSups[c]).join('');
+      const denominator = group.denominator.split('').map(c => unicodeNumSubs[c]).join('');
+      // Use a fraction slash.
+      const text = new mathMLTree.TextNode(numerator + "\u2044" + denominator, group.mode, style);
+      return new mathMLTree.MathNode("mn", [text], ["special-fraction"])
+    }
+  });
+
   // The size mappings are taken from TeX with \normalsize=10pt.
   // We don't have to track script level. MathML does that.
   const sizeMap = {
@@ -8859,6 +8958,11 @@ var temml = (function () {
   // Helpers
   const symbolRegEx = /^m(over|under|underover)$/;
 
+  // From the KaTeX font metrics, identify letters that encroach on a superscript.
+  const smallPad = "DHKLUcegorsuvxyzΠΥΨαδηιμνοτυχϵ";
+  const mediumPad = "BCEFGIMNOPQRSTXZlpqtwΓΘΞΣΦΩβεζθξρςφψϑϕϱ";
+  const largePad = "AJdfΔΛ";
+
   // Super scripts and subscripts, whose precise placement can depend on other
   // functions that precede them.
   defineFunctionBuilders({
@@ -8880,7 +8984,7 @@ var temml = (function () {
         }
       }
 
-      if (group.base && !group.base.stack &&
+      if (group.base && !group.stack &&
         (group.base.type === "op" || group.base.type === "operatorname")) {
         group.base.parentIsSupSub = true;
         appendApplyFunction = !group.base.symbol;
@@ -8888,7 +8992,7 @@ var temml = (function () {
         needsLeadingSpace = group.base.needsLeadingSpace;
       }
 
-      const children = group.base && group.base.stack
+      const children = group.stack && group.base.body.length === 1
         ? [buildGroup$1(group.base.body[0], style)]
         : [buildGroup$1(group.base, style)];
 
@@ -8908,11 +9012,16 @@ var temml = (function () {
       if (group.sup) {
         const sup = buildGroup$1(group.sup, childStyle);
         if (style.level === 3) { sup.setAttribute("scriptlevel", "2"); }
-        const testNode = sup.type === "mrow" ? sup.children[0] : sup;
-        if ((testNode && testNode.type === "mo" && testNode.classes.includes("tml-prime"))
-          && group.base && group.base.text && "fF".indexOf(group.base.text) > -1) {
-          // Chromium does not address italic correction on prime.  Prevent f′ from overlapping.
-          testNode.classes.push("prime-pad");
+        if (group.base && group.base.text && group.base.text.length === 1) {
+          // Make an italic correction on the superscript.
+          const text = group.base.text;
+          if (smallPad.indexOf(text) > -1) {
+            sup.classes.push("tml-sml-pad");
+          } else if (mediumPad.indexOf(text) > -1) {
+            sup.classes.push("tml-med-pad");
+          } else if (largePad.indexOf(text) > -1) {
+            sup.classes.push("tml-lrg-pad");
+          }
         }
         children.push(sup);
       }
@@ -8941,7 +9050,9 @@ var temml = (function () {
         }
       } else if (!group.sup) {
         const base = group.base;
-        if (
+        if (group.stack) {
+          nodeType = "munder";
+        } else if (
           base &&
           base.type === "op" &&
           base.limits &&
@@ -11986,7 +12097,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.11.07";
+  const version = "0.11.08";
 
   function postProcess(block) {
     const labelMap = {};

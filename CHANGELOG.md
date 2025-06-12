@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.08] = 2025-06-12
+
+### Fixed
+
+- \c vertical alignment
+- \boxed in Firefox
+- \overset when base contains multiple characters
+- WebKit accent vertical alignment
+- Accent and superscript italic correction in Chromium and WebKit
+- Fix \xtofrom, \xleftrightharpoons, and \xrightleftharpoons in WebKit
+
+### Added
+
+- Support \sfrac
+
 ## [0.11.07] = 2025-05-21
 
 ### Fixed
