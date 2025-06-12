@@ -18,32 +18,38 @@ const mathmlBuilder = (group, style) => {
   if (!group.isStretchy) {
     accentNode.setAttribute("stretchy", "false") // Keep Firefox from stretching \check
   }
-  if (group.label === "\\vec") {
-    accentNode.style.transform = "scale(0.75) translate(10%, 30%)"
-  } else {
+  if (group.label !== "\\vec") {
     accentNode.style.mathDepth = "0" // not scriptstyle
+    // Don't use attribute accent="true" because MathML Core eliminates a needed space.
   }
   const tag = group.label === "\\c" ? "munder" : "mover"
   const needsWbkVertShift = needsWebkitVerticalShift.has(group.label)
   if (tag === "mover" && group.mode === "math" && (!group.isStretchy) && group.base.text
       && group.base.text.length === 1) {
     const text = group.base.text
-    const wbkType = needsWbkVertShift ? "" : "h"
+    const isVec = group.label === "\\vec"
+    const vecPostfix = isVec === "\\vec" ? "-vec" : ""
+    if (isVec) {
+      accentNode.classes.push("tml-vec") // Firefox sizing of \vec arrow
+    }
+    const wbkPostfix = isVec ? "-vec" : needsWbkVertShift ? "-acc" : ""
     if (smallNudge.indexOf(text) > -1) {
-      accentNode.classes.push("chr-small-nudge")
-      accentNode.classes.push(`wbk-small-${wbkType}nudge`)
+      accentNode.classes.push(`chr-sml${vecPostfix}`)
+      accentNode.classes.push(`wbk-sml${wbkPostfix}`)
     } else if (mediumNudge.indexOf(text) > -1) {
-      accentNode.classes.push("chr-medium-nudge")
-      accentNode.classes.push(`wbk-medium-${wbkType}nudge`)
+      accentNode.classes.push(`chr-med${vecPostfix}`)
+      accentNode.classes.push(`wbk-med${wbkPostfix}`)
     } else if (largeNudge.indexOf(text) > -1) {
-      accentNode.classes.push("chr-large-nudge")
-      accentNode.classes.push(`wbk-large-${wbkType}nudge`)
+      accentNode.classes.push(`chr-lrg${vecPostfix}`)
+      accentNode.classes.push(`wbk-lrg${wbkPostfix}`)
+    } else if (isVec) {
+      accentNode.classes.push(`wbk-vec`)
     } else if (needsWbkVertShift) {
-      accentNode.classes.push("wbk-accent")
+      accentNode.classes.push(`wbk-acc`)
     }
   } else if (needsWbkVertShift) {
     // text-mode accents
-    accentNode.classes.push("wbk-accent")
+    accentNode.classes.push("wbk-acc")
   }
   const node = new mathMLTree.MathNode(tag, [mml.buildGroup(group.base, style), accentNode]);
   return node;

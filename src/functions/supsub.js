@@ -72,11 +72,11 @@ defineFunctionBuilders({
         // Make an italic correction on the superscript.
         const text = group.base.text
         if (smallPad.indexOf(text) > -1) {
-          sup.classes.push("tml-small-pad")
+          sup.classes.push("tml-sml-pad")
         } else if (mediumPad.indexOf(text) > -1) {
-          sup.classes.push("tml-medium-pad")
+          sup.classes.push("tml-med-pad")
         } else if (largePad.indexOf(text) > -1) {
-          sup.classes.push("tml-large-pad")
+          sup.classes.push("tml-lrg-pad")
         }
       }
       children.push(sup)

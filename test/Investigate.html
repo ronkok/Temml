@@ -4,66 +4,139 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1">
 	<title>Investigate</title>
-   <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Latin-Modern.css">
-   <link rel="stylesheet" type="text/css" href="main.css">   
+   <link rel="stylesheet" type="text/css" href="Temml-Latin-Modern.css">
    <script src="./temml.js"></script>
+   <style>
+      body {
+      margin: 0;
+      padding: 0;
+      font-size: 24px;
+      }
+
+      .math {
+          font-size: 24px;
+      }
+
+      #input {
+          margin: 0;
+          font-size: 100%;
+          width: 100%;
+          box-sizing: border-box;
+      }
+   </style>
 </head>
 
-  <p>Write a paragraph of stuff<math display="block" class="tml-display" style="display:block math;"><mi>a</mi></math> and more stuff.
-  </p>
-
-  <p>
-    <math>
-  <mrow>
-    <mn style="font-family: 'Times New Roman'">2 ³⁄₈</mn>
-  </mrow>
-  <mspace width="0.2778em"></mspace>
-  <mrow>
-    <mn>2</mn>
-    <mspace width="0.1667em"></mspace>
-    <mn style="font-family: 'Times New Roman'">3⁄8</mn>
-  </mrow>
-  <mspace width="0.2778em"></mspace>
-  <mrow>
-    <mn>2</mn>
-    <mspace width="0.1667em"></mspace>
-    <mn style="font-family: 'Times New Roman'">3⁄8</mn>
-  </mrow>
-    <mspace width="0.2778em"></mspace>
-  <mrow>
-    <mn>2</mn>
-    <mspace width="0.1389em"></mspace>
-    <mtext style="font-family: 'Times New Roman';">³⁄₈</mtext>
-  </mrow>
-    <mspace width="0.2778em"></mspace>
-  <mrow>
-    <mn>2</mn>
-    <mspace width="0.1389em"></mspace>
-    <mtext>³</mtext>
-    <mi style="font-family: 'Times New Roman';">⁄</mi>
-    <mtext>₈</mtext>
-  </mrow>
-    <mspace width="0.2778em"></mspace>
-    <mrow><mn>0</mn><mspace width="0.1667em"></mspace><mtext>³</mtext><mtext style="font-family: 'Times New Roman';">⁄</mtext><mtext>₈</mtext></mrow>
-    <mspace width="0.2778em"></mspace>
-    <mrow><mn>0</mn><mspace width="0.1667em"></mspace><mtext style="font-family: 'Times New Roman';">3⁄8</mtext></mrow>
-    <mspace width="0.2778em"></mspace>
-    <mrow><mn>0</mn><mspace width="0.1667em"></mspace><mtext>3⁄8</mtext></mrow>
-    <mspace width="0.2778em"></mspace>
-    <mrow>
-      <mn>2</mn>
-      <mspace width="0.1389em"></mspace>
-      <mn>³</mn>
-      <mrow style="margin-left:-0.1em;"></mrow>
-      <mi>/</mi>
-      <mrow style="margin-left:-0.05em;"></mrow>
-      <mn>₈</mn>
-    </mrow>
-  </math>
-  </p>
-  
 <p>
+  <math>
+  <mspace width="0.3667em"></mspace>
+  <mover>
+    <mi>F</mi>
+    <mo style="math-depth:0;" class="wbk-lrg-acc">˙</mo>
+  </mover>
+  <mspace width="0.3667em"></mspace>
+  <mover>
+    <mi>a</mi>
+    <mo style="math-depth:0;" class="wbk-acc">˙</mo>
+  </mover>
+  <mspace width="0.3667em"></mspace>
+  <mover>
+    <mi>F</mi>
+    <mo stretchy="false" style="math-depth:0;" class="wbk-lrg-vec">→</mo>
+  </mover>
+  <mspace width="0.3667em"></mspace>
+  <mover>
+    <mi>a</mi>
+    <mo stretchy="false" style="math-depth:0;">→</mo>
+  </mover>
+  <mspace width="0.1667em"></mspace>
+  <mover>
+    <mi>F</mi>
+    <mo stretchy="false" style="math-depth:0;">→</mo>
+  </mover>
+  <mspace width="0.3667em"></mspace>
+  <mover>
+    <mi>a</mi>
+    <mo stretchy="false" style="math-depth:0;">→</mo>
+  </mover>
+  <mspace width="0.1667em"></mspace>
+  <mover>
+    <mi>f</mi>
+    <mo stretchy="false" style="math-depth:0; transform: translate(0.39em, 0)">→</mo>
+  </mover>
+  <mspace width="0.1667em"></mspace>
+  <mover>
+    <mi>a</mi>
+    <mo stretchy="false" style="math-depth:0; transform: translate(0.24em, 0)">→</mo>
+  </mover>
+  <mspace width="0.3667em"></mspace>
+  <mspace width="0.1667em"></mspace>
+  <mover>
+    <mi>f</mi>
+    <mo stretchy="false" style="math-depth:0; transform: translate(0.39em, 0.431em)">→</mo>
+  </mover>
+  <mspace width="0.1667em"></mspace>
+  <mover>
+    <mi>a</mi>
+    <mo stretchy="false" style="math-depth:0; transform: translate(0.24em, 0.431em)">→</mo>
+  </mover>
+  <mspace width="0.3667em"></mspace>
+</math>
+</p>
 
+<p>
+  <math>
+  <!--\mathrlap, first element has zero width-->
+  <mrow style="width:0em; overflow:visible">
+    <mspace width="0.1667em"></mspace>
+    <mi>/</mi>
+  </mrow>
+  <mrow>
+    <mo lspace="0em" rspace="0em">=</mo>
+  </mrow>
+  <mspace width="0.1667em"></mspace>
+  <mstyle style="width:0em; overflow:visible">
+    <mspace width="0.1667em"></mspace>
+    <mi>/</mi>
+  </mstyle>
+  <mrow>
+    <mo lspace="0em" rspace="0em">=</mo>
+  </mrow>
+  <mspace width="0.1667em"></mspace>
+  <mrow>
+    <mo lspace="0em" rspace="0em">=</mo>
+  </mrow>
+  <!--\mathllap, element has zero width, overflow to left-->
+  <mrow style="direction: rtl; width: 0em; overflow: visible">
+    <mspace width="0.1667em"></mspace>
+    <mi>/</mi>
+  </mrow>
+</math>
+</p>
+
+<p>
+  <math>
+  <msup>
+    <mrow>
+      <mo symmetric="false">[</mo>
+      <mrow style="display: block; width: 4.5em;">
+        <mrow style="display: grid;
+                     grid-template-columns: 1.5em 1.5em 1.5em;
+                     grid-template-rows: 1.5em 1.5em;
+                     justify-items: center;
+                     align-items: center;">
+          <mn>12</mn>
+          <mn>34</mn>
+          <mn>56</mn>
+          <mn>7</mn>
+          <mn>8</mn>
+          <mn>9</mn>
+        </mrow>
+      </mrow>
+      <mo symmetric="false">]</mo>
+    </mrow>
+    <mi>α</mi>
+  </msup>
+</math>
 </p>
 
 </body>
