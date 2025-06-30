@@ -159,13 +159,25 @@ defineFunction({
   handler: (context, args) => {
     const delim = checkDelimiter(args[0], context);
 
-    return {
+    const delimNode = {
       type: "delimsizing",
       mode: context.parser.mode,
       size: delimiterSizes[context.funcName].size,
       mclass: delimiterSizes[context.funcName].mclass,
       delim: delim.text
-    };
+    }
+    const nextToken = context.parser.fetch().text
+    if (nextToken !== "^" && nextToken !== "_") {
+      return delimNode
+    } else {
+      // Chromium mis-renders a sized delim if it is the base of a supsub.
+      // So wrap it in a ordgroup.
+      return {
+        type: "ordgroup",
+        mode: "math",
+        body: [delimNode, { type: "ordgroup", mode: "math", body: [] }]
+      }
+    }
   },
   mathmlBuilder: (group) => {
     const children = [];

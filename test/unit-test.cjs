@@ -831,6 +831,8 @@ const test = () => {
   const bigParse = parse(bigDelim)[0];
   new Expect(smallParse.size).toBe(1);
   new Expect(bigParse.size).toBe(4);
+  const subBaseDelimParseNode = parse(r`\Big)^2`)[0];
+  new Expect(subBaseDelimParseNode.base.type).toBe('ordgroup') // not 'delimisizing'
 
   assertion = "An overline parser should work"
   const overline = r`\overline{x}`;
