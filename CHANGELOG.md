@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.09] = 2025-07-13
+
+### Fixed
+
+- Sized delim in base of a supsub, e.g., \Big)^2
+
 ## [0.11.08] = 2025-06-12
 
 ### Fixed
