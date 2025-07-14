@@ -22,11 +22,11 @@
   
     <h2 id="foreword">Foreword</h2>
 
-    <p>This page compares the MathML output from four TeX-to-MathML conversion libraries. You should use Firefox or Safari to view this page because they can render the MathML today. MathML will be viewable in Chrome and Edge <a href="https://www.igalia.com/2022/06/22/Intent-to-Ship-MathML.html" title="Chromium-MathML News">soon</a>.</p>
+    <p>This page compares the MathML output from four TeX-to-MathML conversion libraries, now readable in Chrome, Edge, Firefox, and Safari.</p>
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.11.09, MathJax 2.7.5, KaTeX 0.13.9, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.11.09, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -75,11 +75,11 @@
           </tr>
           <tr>
             <td>#</td>
-            <td>₮\def\bar#1{#1^2} \bar{y}₮</td>
-            <td>\(\def\bar#1{#1^2} \bar{y}\)</td>
-            <td>₭\def\bar#1{#1^2} \bar{y}₭</td>
-            <td data-tex="\def\bar#1{#1^2} \bar{y}"><span class="no-sup">Not supported</span></td>
-            <td><code>\def\bar#1{#1^2} \bar{y}</code></td>
+            <td>₮\def\ffoo#1{#1^2} \ffoo{y}₮</td>
+            <td>\(\def\ffoo#1{#1^2} \ffoo{y}\)</td>
+            <td>₭\def\ffoo#1{#1^2} \ffoo{y}₭</td>
+            <td data-tex="\def\ffoo#1{#1^2} \ffoo{y}"><span class="no-sup">Not supported</span></td>
+            <td><code>\def\ffoo#1{#1^2} \ffoo{y}</code></td>
           </tr>
           <tr>
             <td>\#</td>
@@ -731,11 +731,11 @@
           </tr>
           <tr>
             <td>\arraystretch</td>
-            <td>₮\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
-            <td>\(\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}\)</td>
-            <td>₭\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
-            <td>₸\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
-            <td><code>\renewcommand{\arraystretch}{1.5}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
+            <td>₮\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
+            <td>\(\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}\)</td>
+            <td>₭\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
+            <td>₸\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
+            <td><code>\newcommand{\arraystretch}{1.5}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
           </tr>
           <tr>
             <td>\Arrowvert</td>
@@ -1243,7 +1243,7 @@
           </tr>
           <tr>
             <td>\bigsqcap</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₮\bigsqcap₮</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td>₸\bigsqcap₸</td>
@@ -1423,7 +1423,7 @@
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td></td>
+            <td><code>\bordermatrix{ &1&2 \cr 1&A&B\cr 2&C&D}</code></td>
           </tr>
           <tr>
             <td>\bot</td>
@@ -1573,7 +1573,7 @@
             <td>\Braket</td>
             <td>₮\Braket{ϕ|\frac{∂^2}{∂ t^2}|ψ}₮</td>
             <td>Requires extenstion</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₭\Braket{ϕ|\frac{∂^2}{∂ t^2}|ψ}₭</td>
             <td data-tex="\Braket{ϕ|\frac{∂^2}{∂ t^2}|ψ}"><span class="no-sup">Not supported</span></td>
             <td><code>\Braket{ϕ|\frac{∂^2}{∂ t^2}|ψ}</code></td>
           </tr>
@@ -2519,7 +2519,7 @@
             <td>\ddddot</td>
             <td>₮\ddddot x₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₭\ddddot{x}₭</td>
             <td>₸\ddddot x₸</td>
             <td></td>
           </tr>
@@ -2527,7 +2527,7 @@
             <td>\dddot</td>
             <td>₮\dddot x₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₭\dddot{x}₭</td>
             <td>₸\dddot x₸</td>
             <td></td>
           </tr>
@@ -2993,7 +2993,7 @@
             <td>\emph</td>
             <td>₮\emph{Ab0}₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td></td>
+            <td>₭\emph{Ab0}₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\emph{Ab0}</code></td>
           </tr>
@@ -3447,11 +3447,11 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\gdef</td>
-            <td>₮\gdef\bar#1{#1^2} \bar{y} + \bar{y}₮</td>
+            <td>₮\gdef\bbar#1{#1^2} \bbar{y} + \bbar{y}₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td>₭\gdef\bar#1{#1^2} \bar{y} + \bar{y}₭</td>
-            <td data-tex="\gdef\bar#1{#1^2} \bar{y} + \bar{y}"><span class="no-sup">Not supported</span></td>
-            <td><code>\gdef\bar#1{#1^2} \bar{y} + \bar{y}</code></td>
+            <td>₭\gdef\bbar#1{#1^2} \bbar{y} + \bbar{y}₭</td>
+            <td data-tex="\gdef\bbar#1{#1^2} \bbar{y} + \bbar{y}"><span class="no-sup">Not supported</span></td>
+            <td><code>\gdef\bbar#1{#1^2} \bbar{y} + \bbar{y}</code></td>
           </tr>
           <tr>
             <td>\ge</td>
@@ -6033,7 +6033,7 @@ y &=& (x-1)^2 \\
             <td>\not</td>
             <td>₮\not =₮</td>
             <td>\(\not =\)</td>
-            <td>₭\not =₭</td>
+            <td>₭\not{=}₭</td>
             <td>₸\not =₸</td>
             <td><code>\not =</code></td>
           </tr>
@@ -7782,7 +7782,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\sfrac</td>
-            <td>₮\sfrac{3}{8}</td>
+            <td>₮\sfrac{3}{8}₮</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\sfrac{3}{8}"><span class="no-sup">Not supported</span></td>
