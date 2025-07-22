@@ -285,7 +285,6 @@ const mathmlBuilder = function(group, style) {
 
       if (group.envClasses.includes("multline")) {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center"
-        mtd.setAttribute("columnalign", align)
         if (align !== "center") {
           mtd.classes.push("tml-" + align)
         }
@@ -315,10 +314,8 @@ const mathmlBuilder = function(group, style) {
         row.push(glue(group))
         if (group.leqno) {
           row[0].children.push(tagElement)
-          row[0].classes.push("tml-left")
         } else {
           row[row.length - 1].children.push(tagElement)
-          row[row.length - 1].classes.push("tml-right")
         }
       }
     }
@@ -447,7 +444,7 @@ const mathmlBuilder = function(group, style) {
         }
         if (group.autoTag) {
           const k = group.leqno ? 0 : row.children.length - 1
-          row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")]
+          row.children[k].classes = [];  // Default is center.
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
@@ -478,7 +475,6 @@ const mathmlBuilder = function(group, style) {
   }
 
   // Column separator lines and column alignment
-  let align = "";
 
   if (group.cols && group.cols.length > 0) {
     const cols = group.cols;
@@ -507,7 +503,6 @@ const mathmlBuilder = function(group, style) {
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
         const colAlign = alignMap[cols[i].align];
-        align += colAlign
         iCol += 1
         for (const row of table.children) {
           if (colAlign.trim() !== "center" && iCol < row.children.length) {
@@ -544,15 +539,6 @@ const mathmlBuilder = function(group, style) {
         row.children[row.children.length - 1].style.paddingRight = "0.4em"
       }
     }
-  }
-  if (group.autoTag) {
-     // allow for glue cells on each side
-    align = "left " + (align.length > 0 ? align : "center ") + "right "
-  }
-  if (align) {
-    // Firefox reads this attribute, not the -webkit-left|right written above.
-    // TODO: When Chrome no longer needs "-webkit-", use CSS and delete the next line.
-    table.setAttribute("columnalign", align.trim())
   }
 
   if (group.envClasses.includes("small")) {

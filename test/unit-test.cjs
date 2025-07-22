@@ -2140,8 +2140,9 @@ const test = () => {
   assertion = "\\tag support should add tml-tageqn class"
   new Expect(temml.renderToString(r`\tag{hi}x+y`, displayMode())).toContain("tml-tageqn")
   assertion = "leqno rendering option should differ from default"
-  new Expect(temml.renderToString(r`\tag{hi}x+y`, new Settings({ displayMode: true, leqno: true }))).toContain('class="tml-left"')
-  new Expect(temml.renderToString(r`\tag{hi}x+y`,displayMode())).toNotContain("rspace")
+  // In the table row, read the left cell instead of the right cell.
+  node = build(r`\tag{hi}x+y`, new Settings({ displayMode: true, leqno: true }))[0].children[0].children[0].children[0];
+  new Expect(node.classes).toContain("tml-tag")
 
   assertion = "\\@binrel automatic bin/rel/ord should generate proper class"
   new Expect(parse("L\\@binrel+xR")[1].mclass).toBe("mbin")

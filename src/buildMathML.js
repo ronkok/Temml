@@ -283,13 +283,12 @@ const getLabel = parent => {
 
 const taggedExpression = (expression, tag, style, leqno) => {
   tag = buildExpressionRow(tag[0].body, style)
-  tag = consolidateText(tag)
-  tag.classes.push("tml-tag")
+  tag = consolidateText(tag)  // tag is now an <mtext> element
+  tag.classes.push("tml-tag") // to be available for \ref
 
   const label = getLabel(expression) // from a \label{} function.
   expression = new mathMLTree.MathNode("mtd", [expression])
-  const rowArray = [glue(), expression, glue()]
-  rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right")
+  const rowArray = [glue(), expression, glue()];
   rowArray[leqno ? 0 : 2].children.push(tag)
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"])
   if (label) { mtr.setAttribute("id", label) }
