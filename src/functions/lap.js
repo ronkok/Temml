@@ -40,7 +40,7 @@ defineFunction({
       const phantomInner = mml.buildExpression(ordargument(group.body), style);
       const phantom = new mathMLTree.MathNode("mphantom", phantomInner);
       strut = new mathMLTree.MathNode("mpadded", [phantom]);
-      strut.setAttribute("width", "0px");
+      strut.setAttribute("width", "0.1px")  // Don't use 0. WebKit would hide it.
     }
 
     const inner = mml.buildGroup(group.body, style)
@@ -69,7 +69,7 @@ defineFunction({
         node.style.justifyContent = "center"
       }
     }
-    node.setAttribute("width", "0px")
+    node.setAttribute("width", "0.1px") // Don't use 0. WebKit would hide it.
     return node
   }
 })

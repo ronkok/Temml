@@ -230,7 +230,7 @@ defineFunction({
     const mtable = new mathMLTree.MathNode("mtable", [mtr])
     const label = new mathMLTree.MathNode("mpadded", [mtable])
     // Set the label width to zero so that the arrow will be centered under the corner cell.
-    label.setAttribute("width", "0")
+    label.setAttribute("width", "0.1px") // Don't use 0. WebKit would hide it.
     label.setAttribute("displaystyle", "false")
     label.setAttribute("scriptlevel", "1")
     if (group.side === "left") {

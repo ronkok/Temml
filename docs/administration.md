@@ -508,43 +508,38 @@ poorly.
 | Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
 |                              |          | (Firefox) | (Safari)  |                                     |
 +:=============================+:========:+:=========:+:=========:+:===================================:+
-|\smash, \mathllap, \mathrlap,\| ✓        | ✓         | bad¹      | $x\smash{y}z$                       |
-| CD environment               |          |           |           |                                     |
+| \left( x \right)             | ✓        | ✓         | meh¹      | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | Integral, ∫, in display mode | meh²     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| \left( x \right)             | ✓        | ✓         | meh³      | $\left( x \right)$                  |
+| Extensible arrows            | poor³    | ✓         | poor³     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor⁴    | ✓         | poor⁴     | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh⁴      | meh⁴      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁵      | meh⁵      | $\sqrt{f_c}$                        |
+| Size 4 radicals              | meh⁵     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁶     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Line-breaking                | ✓        | ✓         | bad⁶      |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁷      |                                     |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-| Flattened circumflex accent  | poor⁸    | poor⁸     | poor⁸     | $\hat{a}$                           |
+| Flattened circumflex accent  | poor⁷    | poor⁷     | poor⁷     | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
-1.  WebKit fails to render anything inside the `<mpadded>` element.
+1.  WebKit mis-aligns short parentheses, given a \left and \right.
 
 2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
-3.  WebKit mis-aligns short parentheses, given a \left and \right.
-
-4.  Chromium and WebKit system font extensible arrows have notes placed too high.
+3.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
 
-5.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
+4.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts and superscripts.)
 
-6.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
+5.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 
-7.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
+6.  Automatic linebreaking (non-display mode) works in Chromium and Firefox. Not in WebKit.
 
-8.  All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
+7.  All browsers fail to flatten a circumflex accent in any font other than Latin Modern.
 
 You can suggest revisions to this page at the Temml [issues page](https://github.com/ronkok/Temml/issues).
 

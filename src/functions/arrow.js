@@ -20,7 +20,7 @@ const paddedNode = (group, lspace = 0.3, rspace = 0, mustSmash = false) => {
   if (mustSmash) {
     // Used for the bottom arrow in a {CD} environment
     const mpadded = new mathMLTree.MathNode("mpadded", row)
-    mpadded.setAttribute("height", "0")
+    mpadded.setAttribute("height", "0.1px") // Don't use 0. WebKit would hide it.
     return mpadded
   } else {
     return new mathMLTree.MathNode("mrow", row)
