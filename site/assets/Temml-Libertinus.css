@@ -133,6 +133,9 @@ menclose {
   text-align: left;
 }
 
+/* For CD labels that grow to the left in Firefox and WebKit */
+.tml-shift-left { margin-left:-200% }
+
 /* Styles for Chromium only */
 @supports (not (-webkit-backdrop-filter: blur(1px))) and (not (-moz-appearance: none)) {
   /* Italic correction on accents */
@@ -154,6 +157,10 @@ menclose {
   .chr-lrg-vec {
     transform: scale(0.75) translate(0.21em, 0)
   }
+
+  /* For CD labels that grow to the left */
+  .tml-shift-left { margin-left:-100% }
+
   /* MathML Core & Chromium do not support the MathML 3.0 element <menclose> attributes. */
   /* So use styles. */
   menclose {

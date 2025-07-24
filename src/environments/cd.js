@@ -224,7 +224,11 @@ defineFunction({
       return new mathMLTree.MathNode("mrow", style)  // empty label
     }
     // Abuse an <mtable> to create vertically centered content.
-    const mtd = new mathMLTree.MathNode("mtd", [mml.buildGroup(group.label, style)])
+    const mrow = mml.buildGroup(group.label, style)
+    if (group.side === "left") {
+      mrow.classes.push("tml-shift-left")
+    }
+    const mtd = new mathMLTree.MathNode("mtd", [mrow])
     mtd.style.padding = "0"
     const mtr = new mathMLTree.MathNode("mtr", [mtd])
     const mtable = new mathMLTree.MathNode("mtable", [mtr])
@@ -233,10 +237,6 @@ defineFunction({
     label.setAttribute("width", "0.1px") // Don't use 0. WebKit would hide it.
     label.setAttribute("displaystyle", "false")
     label.setAttribute("scriptlevel", "1")
-    if (group.side === "left") {
-      label.style.display = "flex"
-      label.style.justifyContent = "flex-end"
-    }
     return label;
   }
 });
