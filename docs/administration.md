@@ -508,24 +508,31 @@ poorly.
 | Item                         | Chromium | Gecko \   | WebKit \  | Examples                            |
 |                              |          | (Firefox) | (Safari)  |                                     |
 +:=============================+:========:+:=========:+:=========:+:===================================:+
-| \left( x \right)             | ✓        | ✓         | meh¹      | $\left( x \right)$                  |
+| \left( x \right)             | ✓        | ✓         | poor¹     | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Integral, ∫, in display mode | meh²     | ✓         | ✓         | $\displaystyle\int \frac a b$       |
+| Accents and \bordermatrix    | ✓        | ✓         | poor²     | $\bordermatrix{                     |
+|                              |          |           |           |     & 1 & 2 \cr                     |
+|                              |          |           |           |   1 & A & B \cr                     |
+|                              |          |           |           |   2 & C & D \cr}$                   |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor³    | ✓         | poor³     | $A \xrightharpoonup{\text{note}} B$ |
+| Integral, ∫, in display mode | poor³    | ✓         | ✓         | $\displaystyle\int \frac a b$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁴      | meh⁴      | $\sqrt{f_c}$                        |
+| Extensible arrows            | poor⁴    | ✓         | poor⁴     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁵     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Radical height               | ✓        | meh⁵      | meh⁵      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁶      |                                     |
+| Size 4 radicals              | meh⁶     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Flattened circumflex accent  | poor⁷    | poor⁷     | poor⁷     | $\hat{a}$                           |
+| Line-breaking                | ✓        | ✓         | bad⁷      |                                     |
++------------------------------+----------+-----------+-----------+-------------------------------------+
+| Flattened circumflex accent  | poor⁸    | poor⁸     | poor⁸     | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
 
 1.  WebKit mis-aligns short parentheses, given a \left and \right.
+
+2.  WebKit does not implement <mstyle scriptlevel="0">.
 
 2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
@@ -553,7 +560,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-[$\Large\Temml$](https://temml.org/)    v0.11.09
+[$\Large\Temml$](https://temml.org/)    v0.11.10
 
 <h3><a href="#top">Contents</a></h3>
 

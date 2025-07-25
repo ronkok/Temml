@@ -2403,13 +2403,12 @@ const getLabel = parent => {
 
 const taggedExpression = (expression, tag, style, leqno) => {
   tag = buildExpressionRow(tag[0].body, style);
-  tag = consolidateText(tag);
-  tag.classes.push("tml-tag");
+  tag = consolidateText(tag);  // tag is now an <mtext> element
+  tag.classes.push("tml-tag"); // to be available for \ref
 
   const label = getLabel(expression); // from a \label{} function.
   expression = new mathMLTree.MathNode("mtd", [expression]);
   const rowArray = [glue$1(), expression, glue$1()];
-  rowArray[leqno ? 0 : 2].classes.push(leqno ? "tml-left" : "tml-right");
   rowArray[leqno ? 0 : 2].children.push(tag);
   const mtr = new mathMLTree.MathNode("mtr", rowArray, ["tml-tageqn"]);
   if (label) { mtr.setAttribute("id", label); }
@@ -2820,7 +2819,7 @@ const paddedNode = (group, lspace = 0.3, rspace = 0, mustSmash = false) => {
   if (mustSmash) {
     // Used for the bottom arrow in a {CD} environment
     const mpadded = new mathMLTree.MathNode("mpadded", row);
-    mpadded.setAttribute("height", "0");
+    mpadded.setAttribute("height", "0.1px"); // Don't use 0. WebKit would hide it.
     return mpadded
   } else {
     return new mathMLTree.MathNode("mrow", row)
@@ -3312,19 +3311,19 @@ defineFunction({
       return new mathMLTree.MathNode("mrow", style)  // empty label
     }
     // Abuse an <mtable> to create vertically centered content.
-    const mtd = new mathMLTree.MathNode("mtd", [buildGroup$1(group.label, style)]);
+    const mrow = buildGroup$1(group.label, style);
+    if (group.side === "left") {
+      mrow.classes.push("tml-shift-left");
+    }
+    const mtd = new mathMLTree.MathNode("mtd", [mrow]);
     mtd.style.padding = "0";
     const mtr = new mathMLTree.MathNode("mtr", [mtd]);
     const mtable = new mathMLTree.MathNode("mtable", [mtr]);
     const label = new mathMLTree.MathNode("mpadded", [mtable]);
     // Set the label width to zero so that the arrow will be centered under the corner cell.
-    label.setAttribute("width", "0");
+    label.setAttribute("width", "0.1px"); // Don't use 0. WebKit would hide it.
     label.setAttribute("displaystyle", "false");
     label.setAttribute("scriptlevel", "1");
-    if (group.side === "left") {
-      label.style.display = "flex";
-      label.style.justifyContent = "flex-end";
-    }
     return label;
   }
 });
@@ -6472,7 +6471,6 @@ const mathmlBuilder$9 = function(group, style) {
 
       if (group.envClasses.includes("multline")) {
         const align = i === 0 ? "left" : i === numRows - 1 ? "right" : "center";
-        mtd.setAttribute("columnalign", align);
         if (align !== "center") {
           mtd.classes.push("tml-" + align);
         }
@@ -6502,10 +6500,8 @@ const mathmlBuilder$9 = function(group, style) {
         row.push(glue(group));
         if (group.leqno) {
           row[0].children.push(tagElement);
-          row[0].classes.push("tml-left");
         } else {
           row[row.length - 1].children.push(tagElement);
-          row[row.length - 1].classes.push("tml-right");
         }
       }
     }
@@ -6546,8 +6542,10 @@ const mathmlBuilder$9 = function(group, style) {
       }
     }
     if (mustSquashRow) {
-      // All the cell contents are \hphantom. Squash the padding.
+      // All the cell contents are \hphantom. Squash the cell.
       for (let j = 0; j < mtr.children.length; j++) {
+        mtr.children[j].style.display = "block";  // necessary in Firefox only
+        mtr.children[j].style.height = "0";       // necessary in Firefox only
         mtr.children[j].style.paddingTop = "0";
         mtr.children[j].style.paddingBottom = "0";
       }
@@ -6634,7 +6632,7 @@ const mathmlBuilder$9 = function(group, style) {
         }
         if (group.autoTag) {
           const k = group.leqno ? 0 : row.children.length - 1;
-          row.children[k].classes = ["tml-" + (group.leqno ? "left" : "right")];
+          row.children[k].classes = [];  // Default is center.
         }
       }
       if (row.children.length > 1 && group.envClasses.includes("cases")) {
@@ -6665,7 +6663,6 @@ const mathmlBuilder$9 = function(group, style) {
   }
 
   // Column separator lines and column alignment
-  let align = "";
 
   if (group.cols && group.cols.length > 0) {
     const cols = group.cols;
@@ -6694,7 +6691,6 @@ const mathmlBuilder$9 = function(group, style) {
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
         const colAlign = alignMap[cols[i].align];
-        align += colAlign;
         iCol += 1;
         for (const row of table.children) {
           if (colAlign.trim() !== "center" && iCol < row.children.length) {
@@ -6731,15 +6727,6 @@ const mathmlBuilder$9 = function(group, style) {
         row.children[row.children.length - 1].style.paddingRight = "0.4em";
       }
     }
-  }
-  if (group.autoTag) {
-     // allow for glue cells on each side
-    align = "left " + (align.length > 0 ? align : "center ") + "right ";
-  }
-  if (align) {
-    // Firefox reads this attribute, not the -webkit-left|right written above.
-    // TODO: When Chrome no longer needs "-webkit-", use CSS and delete the next line.
-    table.setAttribute("columnalign", align.trim());
   }
 
   if (group.envClasses.includes("small")) {
@@ -9382,7 +9369,7 @@ defineFunction({
       const phantomInner = buildExpression(ordargument(group.body), style);
       const phantom = new mathMLTree.MathNode("mphantom", phantomInner);
       strut = new mathMLTree.MathNode("mpadded", [phantom]);
-      strut.setAttribute("width", "0px");
+      strut.setAttribute("width", "0.1px");  // Don't use 0. WebKit would hide it.
     }
 
     const inner = buildGroup$1(group.body, style);
@@ -9411,7 +9398,7 @@ defineFunction({
         node.style.justifyContent = "center";
       }
     }
-    node.setAttribute("width", "0px");
+    node.setAttribute("width", "0.1px"); // Don't use 0. WebKit would hide it.
     return node
   }
 });
@@ -10787,6 +10774,11 @@ defineFunction({
   }
 });
 
+// Letters that are x-height w/o a descender.
+const xHeights = ['a', 'c', 'e', 'ı', 'm', 'n', 'o', 'r', 's', 'u', 'v', 'w', 'x', 'z', 'α',
+  'ε', 'ι', 'κ', 'ν', 'ο', 'π', 'σ', 'τ', 'υ', 'ω', '\\alpha', '\\epsilon', "\\iota",
+  '\\kappa', '\\nu', '\\omega', '\\pi', '\\tau', '\\omega'];
+
 defineFunction({
   type: "sqrt",
   names: ["\\sqrt"],
@@ -10797,6 +10789,20 @@ defineFunction({
   handler({ parser }, args, optArgs) {
     const index = optArgs[0];
     const body = args[0];
+    // Check if the body consists entirely of an x-height letter.
+    // TODO: Remove this check after Chromium is fixed.
+    if (body.body && body.body.length === 1 && body.body[0].text &&
+          xHeights.includes(body.body[0].text)) {
+      // Chromium does not put enough space above an x-height letter.
+      // Insert a strut.
+      body.body.push({
+        "type": "rule",
+        "mode": "math",
+        "shift": null,
+        "width": { "number": 0, "unit": "pt" },
+        "height": { "number": 0.5, "unit": "em" }
+      });
+    }
     return {
       type: "sqrt",
       mode: parser.mode,
@@ -14020,7 +14026,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.11.09";
+const version = "0.11.10";
 
 function postProcess(block) {
   const labelMap = {};

@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.10] = 2025-07-25
+
+### Fixed
+
+- Remove obsolete attribute columnalign
+- Fix \mathllap and \mathrlap in WebKit (Safari)
+- Fix CD environment labels that grow to the left in WebKit
+- Fix \bordermatrix in Firefox
+- Fix radical space above an x-height letter in Chromium
+
 ## [0.11.09] = 2025-07-13
 
 ### Fixed

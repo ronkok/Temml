@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="initial-scale=1">
 	<title>Investigate</title>
-   <link rel="stylesheet" type="text/css" href="Temml-Latin-Modern.css">
+   <link rel="stylesheet" type="text/css" href="../site/assets/Temml-Latin-Modern.css">
    <script src="./temml.js"></script>
    <style>
       body {
@@ -23,29 +23,25 @@
           width: 100%;
           box-sizing: border-box;
       }
+      .tml-eqn::before {
+    counter-increment: tmlEqnNo;
+    content: "(" counter(tmlEqnNo) ")";
+}
    </style>
 </head>
 
 <p>
   <math>
-  <msup>
     <mrow>
-      <mo fence="false" symmetric="true" minsize="1.80em" maxsize="1.80em">)</mo>
-      <mrow></mrow>
+      <mpadded width="0.1px">
+        <mrow>
+          <mspace width="0.1667em"></mspace>
+          <mi>/</mi>
+        </mrow>
+      </mpadded>
+      <mo lspace="0em" rspace="0em">=</mo>
     </mrow>
-    <mn>2</mn>
-  </msup>
-  <msup>
-    <mrow>
-      <mo fence="false" symmetric="true" minsize="1.65em" maxsize="1.65em">)</mo>
-      <mrow></mrow>
-    </mrow>
-    <mn>2</mn>
-  </msup>
-</math>
-</p>
-
-<p>
+  </math>
   <math>
   <!--\mathrlap, first element has zero width-->
   <mrow style="width:0; overflow-x:visible;">
@@ -73,6 +69,470 @@
     <mi>/</mi>
   </mrow>
 </math>
+</p>
+
+<p>
+  <math display="block" class="tml-display" style="display:block math;">
+    <mtable displaystyle="true" style="width:100%;">
+      <mtr id="eqn">
+        <mtd class="tml-right" style="padding:0;width:50%;padding-left:0em;padding-right:0em;"></mtd>
+        <mtd class="tml-left" style="padding-left:1em;padding-right:0em;">
+          <mrow>
+            <mtable displaystyle="true" class="tml-jot">
+              <mtr>
+                <mtd class="tml-right" style="padding-left:0em;padding-right:0em;">
+                  <mi>a</mi>
+                </mtd>
+                <mtd class="tml-left" style="padding-left:0em;padding-right:0em;">
+                  <mrow>
+                    <mo>=</mo>
+                    <mi>b</mi>
+                    <mo>+</mo>
+                    <mi>c</mi>
+                  </mrow>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd class="tml-right" style="padding-left:0em;padding-right:0em;">
+                  <mrow></mrow>
+                </mtd>
+                <mtd class="tml-left" style="padding-left:0em;padding-right:0em;">
+                  <mrow>
+                    <mo>=</mo>
+                    <mi>e</mi>
+                    <mo>+</mo>
+                    <mi>f</mi>
+                  </mrow>
+                </mtd>
+              </mtr>
+            </mtable>
+            <mrow class="tml-label"></mrow>
+          </mrow>
+        </mtd>
+        <mtd style="padding:0;width:50%;padding-left:0em;padding-right:0em;">
+          <mtext>
+            <span class="tml-eqn"></span>
+          </mtext>
+        </mtd>
+      </mtr>
+    </mtable>
+  </math>
+</p>
+
+<p>
+  <math display="block" class="tml-display" style="display:block math;">
+    <mrow>
+      <mtable>
+        <mtr>
+          <mtd style="padding-left:0em;padding-right:0.0400em;">
+            <mn>1</mn>
+          </mtd>
+          <mtd style="padding-left:0.0400em;padding-right:0em;">
+            <mpadded width="0px">
+              <mphantom>
+                <mi>A</mi>
+                <mi>B</mi>
+                <mi>C</mi>
+              </mphantom>
+            </mpadded>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd style="padding-left:0em;padding-right:0.0400em;">
+            <mn>2</mn>
+          </mtd>
+          <mtd style="padding-left:0.0400em;padding-right:0em;">
+            <mpadded width="0px">
+              <mphantom>
+                <mi>D</mi>
+                <mi>E</mi>
+                <mi>F</mi>
+              </mphantom>
+            </mpadded>
+          </mtd>
+        </mtr>
+      </mtable>
+      <mrow>
+        <mover>
+          <mrow>
+            <mo fence="true" form="prefix">(</mo>
+            <mtable>
+              <mtr>
+                <mtd style="padding-top:0;padding-bottom:0;padding-left:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mn>1</mn>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mn>2</mn>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;padding-right:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mn>3</mn>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="padding-left:0em;">
+                  <mi>A</mi>
+                </mtd>
+                <mtd>
+                  <mi>B</mi>
+                </mtd>
+                <mtd style="padding-right:0em;">
+                  <mi>C</mi>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="padding-left:0em;">
+                  <mi>D</mi>
+                </mtd>
+                <mtd>
+                  <mi>E</mi>
+                </mtd>
+                <mtd style="padding-right:0em;">
+                  <mi>F</mi>
+                </mtd>
+              </mtr>
+            </mtable>
+            <mo fence="true" form="postfix">)</mo>
+          </mrow>
+          <mstyle scriptlevel="0" displaystyle="false">
+            <mtable>
+              <mtr>
+                <mtd style="padding-left:0em;">
+                  <mn>1</mn>
+                </mtd>
+                <mtd>
+                  <mn>2</mn>
+                </mtd>
+                <mtd style="padding-right:0em;">
+                  <mn>3</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="padding-top:0;padding-bottom:0;padding-left:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>A</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>B</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;padding-right:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>C</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="padding-top:0;padding-bottom:0;padding-left:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>D</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>E</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;padding-right:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>F</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+              </mtr>
+            </mtable>
+          </mstyle>
+        </mover>
+      </mrow>
+    </mrow>
+  </math>
+</p>
+
+<p>
+  <math>
+    <mover>
+      <mn>123</mn>
+      <mstyle scriptlevel="0" displaystyle="true">
+        <mn>123</mn>
+      </mstyle>
+    </mover>
+  </math>
+</p>
+
+<p>
+  <math display="block" class="tml-display" style="display:block math;">
+    <mrow>
+      <mtable>
+        <mtr>
+          <mtd style="padding-left:0em;padding-right:0.0400em;">
+            <mn>1</mn>
+          </mtd>
+          <mtd style="padding-left:0.0400em;padding-right:0em;">
+            <mpadded width="0px">
+              <mphantom>
+                <mi>A</mi>
+                <mi>B</mi>
+                <mi>C</mi>
+              </mphantom>
+            </mpadded>
+          </mtd>
+        </mtr>
+        <mtr>
+          <mtd style="padding-left:0em;padding-right:0.0400em;">
+            <mn>2</mn>
+          </mtd>
+          <mtd style="padding-left:0.0400em;padding-right:0em;">
+            <mpadded width="0px">
+              <mphantom>
+                <mi>D</mi>
+                <mi>E</mi>
+                <mi>F</mi>
+              </mphantom>
+            </mpadded>
+          </mtd>
+        </mtr>
+      </mtable>
+      <mrow>
+        <mover>
+          <mrow>
+            <mo fence="true" form="prefix">(</mo>
+            <mtable>
+              <mtr>
+                <mtd style="padding-top:0;padding-bottom:0;padding-left:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mn>1</mn>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mn>2</mn>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="padding-top:0;padding-bottom:0;padding-right:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mn>3</mn>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="padding-left:0em;">
+                  <mi>A</mi>
+                </mtd>
+                <mtd>
+                  <mi>B</mi>
+                </mtd>
+                <mtd style="padding-right:0em;">
+                  <mi>C</mi>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="padding-left:0em;">
+                  <mi>D</mi>
+                </mtd>
+                <mtd>
+                  <mi>E</mi>
+                </mtd>
+                <mtd style="padding-right:0em;">
+                  <mi>F</mi>
+                </mtd>
+              </mtr>
+            </mtable>
+            <mo fence="true" form="postfix">)</mo>
+          </mrow>
+          <mstyle scriptlevel="0" displaystyle="false">
+            <mtable>
+              <mtr>
+                <mtd style="padding-left:0em;">
+                  <mn>1</mn>
+                </mtd>
+                <mtd>
+                  <mn>2</mn>
+                </mtd>
+                <mtd style="padding-right:0em;">
+                  <mn>3</mn>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="display:block;height:0;padding-top:0;padding-bottom:0;padding-left:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>A</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="display:block;height:0;padding-top:0;padding-bottom:0;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>B</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="display:block;height:0;padding-top:0;padding-bottom:0;padding-right:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>C</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+              </mtr>
+              <mtr>
+                <mtd style="display:block;height:0;padding-top:0;padding-bottom:0;padding-left:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>D</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="display:block;height:0;padding-top:0;padding-bottom:0;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>E</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+                <mtd style="display:block;height:0;padding-top:0;padding-bottom:0;padding-right:0em;">
+                  <mpadded height="0px" depth="0px">
+                    <mphantom>
+                      <mi>F</mi>
+                    </mphantom>
+                  </mpadded>
+                </mtd>
+              </mtr>
+            </mtable>
+          </mstyle>
+        </mover>
+      </mrow>
+    </mrow>
+  </math>
+</p>
+
+<p>
+  <math display="block" class="tml-display" style="display:block math;">
+    <mtable class="tml-jot">
+      <mtr>
+        <mtd style="padding-left:0em;padding-right:0.25em;">
+          <mstyle scriptlevel="0" displaystyle="true">
+            <mi>A</mi>
+          </mstyle>
+        </mtd>
+        <mtd style="padding-left:0.25em;padding-right:0.25em;">
+          <mrow>
+            <mspace width="0.2778em"></mspace>
+            <mover accent="false" style="height:1em;">
+              <mo stretchy="true" lspace="0" rspace="0">→</mo>
+              <mover>
+                <mrow height="0px">
+                  <mspace width="0.4286em"></mspace>
+                  <mi>a</mi>
+                  <mspace width="0.4286em"></mspace>
+                </mrow>
+                <mspace width="6.0000em"></mspace>
+              </mover>
+            </mover>
+            <mspace width="0.2778em"></mspace>
+          </mrow>
+        </mtd>
+        <mtd style="padding-left:0.25em;padding-right:0em;">
+          <mstyle scriptlevel="0" displaystyle="true">
+            <mi>B</mi>
+          </mstyle>
+        </mtd>
+      </mtr>
+      <mtr>
+        <mtd style="padding-left:0em;padding-right:0.25em;">
+          <mrow>
+            <mrow>
+              <mpadded width="0px" displaystyle="false" scriptlevel="1">
+                <mtable>
+                  <mtr>
+                    <mtd>
+                      <mrow style="margin-left:-200%">
+                          <mi>a</mi><mi>b</mi><mi>a</mi><mi>b</mi>
+                      </mrow>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </mpadded>
+              <mo fence="false" stretchy="true" symmetric="true" minsize="1.8em" maxsize="1.8em">↓</mo>
+              <mrow></mrow>
+            </mrow>
+          </mrow>
+        </mtd>
+        <mtd style="padding-left:0.25em;padding-right:0.25em;">
+          <mstyle scriptlevel="0" displaystyle="true"></mstyle>
+        </mtd>
+        <mtd style="padding-left:0.25em;padding-right:0em;">
+          <mrow>
+            <mrow>
+              <mrow></mrow>
+              <mo fence="false" stretchy="true" symmetric="true" minsize="1.8em" maxsize="1.8em">↑</mo>
+              <mpadded width="0.1px" displaystyle="false" scriptlevel="1">
+                <mtable>
+                  <mtr>
+                    <mtd style="padding:0;">
+                      <mi>c</mi>
+                    </mtd>
+                  </mtr>
+                </mtable>
+              </mpadded>
+            </mrow>
+          </mrow>
+        </mtd>
+      </mtr>
+      <mtr>
+        <mtd style="padding-left:0em;padding-right:0.25em;">
+          <mstyle scriptlevel="0" displaystyle="true">
+            <mi>C</mi>
+          </mstyle>
+        </mtd>
+        <mtd style="padding-left:0.25em;padding-right:0.25em;">
+          <mrow>
+            <mspace width="0.2778em"></mspace>
+            <mover accent="false" style="height:1em;">
+              <mo stretchy="true" lspace="0" rspace="0">=</mo>
+              <mspace width="4.2857em"></mspace>
+            </mover>
+            <mspace width="0.2778em"></mspace>
+          </mrow>
+        </mtd>
+        <mtd style="padding-left:0.25em;padding-right:0em;">
+          <mstyle scriptlevel="0" displaystyle="true">
+            <mi>D</mi>
+          </mstyle>
+        </mtd>
+      </mtr>
+    </mtable>
+  </math>
 </p>
 
 <p>
