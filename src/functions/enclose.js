@@ -71,7 +71,7 @@ const mathmlBuilder = (group, style) => {
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
       node.setAttribute("notation", "box")
-      node.style.padding = "padding: 3pt 0 3pt 0"
+      node.style.padding = "3pt 0 3pt 0"
       node.style.border = "1px solid"
       node.setAttribute("scriptlevel", "0")
       node.setAttribute("displaystyle", "true")
