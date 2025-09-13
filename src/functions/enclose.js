@@ -4,26 +4,8 @@ import { assertNodeType } from "../parseNode";
 import { colorFromSpec, validateColor } from "./color"
 import * as mml from "../buildMathML";
 
-const padding = _ => {
-  const node = new mathMLTree.MathNode("mspace")
-  node.setAttribute("width", "3pt")
-  return node
-}
-
 const mathmlBuilder = (group, style) => {
-  let node
-  if (group.label.indexOf("colorbox") > -1 || group.label === "\\boxed") {
-    // MathML core does not support +width attribute in <mpadded>.
-    // Firefox does not reliably add side padding.
-    // Insert <mspace>
-    node = new mathMLTree.MathNode("mrow", [
-      padding(),
-      mml.buildGroup(group.body, style),
-      padding()
-    ])
-  } else {
-    node = new mathMLTree.MathNode("menclose", [mml.buildGroup(group.body, style)])
-  }
+  const node = new mathMLTree.MathNode("menclose", [mml.buildGroup(group.body, style)])
   switch (group.label) {
     case "\\overline":
       node.setAttribute("notation", "top") // for Firefox & WebKit
@@ -71,7 +53,7 @@ const mathmlBuilder = (group, style) => {
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
       node.setAttribute("notation", "box")
-      node.style.padding = "padding: 3pt 0 3pt 0"
+      node.style.padding = "3pt"
       node.style.border = "1px solid"
       node.setAttribute("scriptlevel", "0")
       node.setAttribute("displaystyle", "true")
@@ -88,12 +70,10 @@ const mathmlBuilder = (group, style) => {
       //const fboxsep = 3; // 3 pt from LaTeX source2e
       //node.setAttribute("height", `+${2 * fboxsep}pt`)
       //node.setAttribute("voffset", `${fboxsep}pt`)
-      const style = { padding: "3pt 0 3pt 0" }
-
+      node.style.padding = "3pt"
       if (group.label === "\\fcolorbox") {
-        style.border = "0.0667em solid " + String(group.borderColor)
+        node.style.border = "0.0667em solid " + String(group.borderColor)
       }
-      node.style = style
       break
     }
   }
