@@ -833,6 +833,8 @@ const test = () => {
   new Expect(bigParse.size).toBe(4);
   const subBaseDelimParseNode = parse(r`\Big)^2`)[0];
   new Expect(subBaseDelimParseNode.base.type).toBe('ordgroup') // not 'delimisizing'
+  new Expect(r`\bigg{(}`).toParse(); // Delimiter sizing works with argument inside braces
+  new Expect(r`\bigg{(}`).toParseLike(r`\bigg(`);
 
   assertion = "An overline parser should work"
   const overline = r`\overline{x}`;

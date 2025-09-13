@@ -115,6 +115,9 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
+  if (delim.type === "ordgroup" && delim.body.length === 1) {
+    delim = delim.body[0]; // Unwrap the braces
+  }
   const symDelim = checkSymbolNodeType(delim)
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
