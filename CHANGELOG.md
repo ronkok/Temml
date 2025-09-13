@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.11.11] = 2025-09-13
+
+### Fixed
+
+- Padding in \boxed and \colorbox
+- Delimiter sizing, e.g., \bigg, works on an argument inside braces
+
 ## [0.11.10] = 2025-07-25
 
 ### Fixed

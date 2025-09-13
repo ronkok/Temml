@@ -2805,17 +2805,17 @@ const calculateSize = function(sizeValue, style) {
 
 // Helper functions
 
-const padding$1 = width => {
+const padding = width => {
   const node = new mathMLTree.MathNode("mspace");
   node.setAttribute("width", width + "em");
   return node
 };
 
 const paddedNode = (group, lspace = 0.3, rspace = 0, mustSmash = false) => {
-  if (group == null && rspace === 0) { return padding$1(lspace) }
+  if (group == null && rspace === 0) { return padding(lspace) }
   const row = group ? [group] : [];
-  if (lspace !== 0)   { row.unshift(padding$1(lspace)); }
-  if (rspace > 0) { row.push(padding$1(rspace)); }
+  if (lspace !== 0)   { row.unshift(padding(lspace)); }
+  if (rspace > 0) { row.push(padding(rspace)); }
   if (mustSmash) {
     // Used for the bottom arrow in a {CD} environment
     const mpadded = new mathMLTree.MathNode("mpadded", row);
@@ -2947,8 +2947,8 @@ defineFunction({
     const node = munderoverNode(group.name, group.body, group.below, style);
     // Create operator spacing for a relation.
     const row = [node];
-    row.unshift(padding$1(0.2778));
-    row.push(padding$1(0.2778));
+    row.unshift(padding(0.2778));
+    row.push(padding(0.2778));
     return new mathMLTree.MathNode("mrow", row)
   }
 });
@@ -3012,13 +3012,13 @@ defineFunction({
       botNode.setAttribute("width", "0.5em");
       wrapper = new mathMLTree.MathNode(
         "mpadded",
-        [padding$1(0.2778), botNode, raiseNode, padding$1(0.2778)]
+        [padding(0.2778), botNode, raiseNode, padding(0.2778)]
       );
     } else {
       raiseNode.setAttribute("width", (group.name === "\\equilibriumRight" ? "0.5em" : "0"));
       wrapper = new mathMLTree.MathNode(
         "mpadded",
-        [padding$1(0.2778), raiseNode, botArrow, padding$1(0.2778)]
+        [padding(0.2778), raiseNode, botArrow, padding(0.2778)]
       );
     }
 
@@ -7906,6 +7906,9 @@ const sizeToMaxHeight = [0, 1.2, 1.8, 2.4, 3.0];
 
 // Delimiter functions
 function checkDelimiter(delim, context) {
+  if (delim.type === "ordgroup" && delim.body.length === 1) {
+    delim = delim.body[0]; // Unwrap the braces
+  }
   const symDelim = checkSymbolNodeType(delim);
   if (symDelim && delimiters.includes(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
@@ -8137,26 +8140,8 @@ defineFunction({
   }
 });
 
-const padding = _ => {
-  const node = new mathMLTree.MathNode("mspace");
-  node.setAttribute("width", "3pt");
-  return node
-};
-
 const mathmlBuilder$7 = (group, style) => {
-  let node;
-  if (group.label.indexOf("colorbox") > -1 || group.label === "\\boxed") {
-    // MathML core does not support +width attribute in <mpadded>.
-    // Firefox does not reliably add side padding.
-    // Insert <mspace>
-    node = new mathMLTree.MathNode("mrow", [
-      padding(),
-      buildGroup$1(group.body, style),
-      padding()
-    ]);
-  } else {
-    node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
-  }
+  const node = new mathMLTree.MathNode("menclose", [buildGroup$1(group.body, style)]);
   switch (group.label) {
     case "\\overline":
       node.setAttribute("notation", "top"); // for Firefox & WebKit
@@ -8204,7 +8189,7 @@ const mathmlBuilder$7 = (group, style) => {
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
       node.setAttribute("notation", "box");
-      node.style.padding = "padding: 3pt 0 3pt 0";
+      node.style.padding = "3pt";
       node.style.border = "1px solid";
       node.setAttribute("scriptlevel", "0");
       node.setAttribute("displaystyle", "true");
@@ -8221,12 +8206,10 @@ const mathmlBuilder$7 = (group, style) => {
       //const fboxsep = 3; // 3 pt from LaTeX source2e
       //node.setAttribute("height", `+${2 * fboxsep}pt`)
       //node.setAttribute("voffset", `${fboxsep}pt`)
-      const style = { padding: "3pt 0 3pt 0" };
-
+      node.style.padding = "3pt";
       if (group.label === "\\fcolorbox") {
-        style.border = "0.0667em solid " + String(group.borderColor);
+        node.style.border = "0.0667em solid " + String(group.borderColor);
       }
-      node.style = style;
       break
     }
   }
@@ -9516,17 +9499,17 @@ function mathmlBuilder$3(group, style) {
       if (doSpacing ) {
         if (group.mclass === "mbin") {
           // medium space
-          node.children.unshift(padding$1(0.2222));
-          node.children.push(padding$1(0.2222));
+          node.children.unshift(padding(0.2222));
+          node.children.push(padding(0.2222));
         } else if (group.mclass === "mrel") {
           // thickspace
-          node.children.unshift(padding$1(0.2778));
-          node.children.push(padding$1(0.2778));
+          node.children.unshift(padding(0.2778));
+          node.children.push(padding(0.2778));
         } else if (group.mclass === "mpunct") {
-          node.children.push(padding$1(0.1667));
+          node.children.push(padding(0.1667));
         } else if (group.mclass === "minner") {
-          node.children.unshift(padding$1(0.0556));  // 1 mu is the most likely option
-          node.children.push(padding$1(0.0556));
+          node.children.unshift(padding(0.0556));  // 1 mu is the most likely option
+          node.children.push(padding(0.0556));
         }
       }
     } else {
@@ -11090,10 +11073,10 @@ defineFunctionBuilders({
     } else if (group.needsSpacing) {
       // Fix a MathML bug that occurs when a <mo> is between two <mtext> elements.
       if (group.family === "bin") {
-        return new mathMLTree.MathNode("mrow", [padding$1(0.222), node, padding$1(0.222)])
+        return new mathMLTree.MathNode("mrow", [padding(0.222), node, padding(0.222)])
       } else {
         // REL spacing
-        return new mathMLTree.MathNode("mrow", [padding$1(0.2778), node, padding$1(0.2778)])
+        return new mathMLTree.MathNode("mrow", [padding(0.2778), node, padding(0.2778)])
       }
     }
     return node;
@@ -14026,7 +14009,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.11.10";
+const version = "0.11.11";
 
 function postProcess(block) {
   const labelMap = {};

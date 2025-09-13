@@ -26,7 +26,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.11.10, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.11.11, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -1491,7 +1491,7 @@
           </tr>
           <tr>
             <td>\boxed</td>
-            <td><math><mrow notation="box" scriptlevel="0" displaystyle="true" style="padding:padding: 3pt 0 3pt 0;border:1px solid;"><mspace width="3pt"></mspace><mrow><mi>a</mi><mi>b</mi></mrow><mspace width="3pt"></mspace></mrow></math></td>
+            <td><math><menclose notation="box" scriptlevel="0" displaystyle="true" style="padding:3pt;border:1px solid;"><mrow><mi>a</mi><mi>b</mi></mrow></menclose></math></td>
             <td>\(\boxed{ab}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>a</mi><mi>b</mi></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{ab}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mrow><mi>a</mi><mi>b</mi></mrow></menclose><annotation encoding="TeX">\boxed{ab}</annotation></semantics></math></td>
@@ -2125,7 +2125,7 @@
           </tr>
           <tr>
             <td>\colorbox</td>
-            <td><math><mrow mathbackground="#ff0000" style="padding:3pt 0 3pt 0;"><mspace width="3pt"></mspace><mrow><mtext>B</mtext><mtext>l</mtext><mtext>a</mtext><mtext>c</mtext><mtext>k</mtext><mtext> </mtext><mtext>o</mtext><mtext>n</mtext><mtext> </mtext><mtext>r</mtext><mtext>e</mtext><mtext>d</mtext></mrow><mspace width="3pt"></mspace></mrow></math></td>
+            <td><math><menclose mathbackground="#ff0000" style="padding:3pt;"><mrow><mtext>B</mtext><mtext>l</mtext><mtext>a</mtext><mtext>c</mtext><mtext>k</mtext><mtext> </mtext><mtext>o</mtext><mtext>n</mtext><mtext> </mtext><mtext>r</mtext><mtext>e</mtext><mtext>d</mtext></mrow></menclose></math></td>
             <td>\(\colorbox{red}{Black on red}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mpadded width="+6pt" height="+6pt" lspace="3pt" voffset="3pt" mathbackground="red"><mtext>Black on red</mtext></mpadded></mrow><annotation encoding="application/x-tex">\colorbox{red}{Black on red}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -3287,7 +3287,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\fcolorbox</td>
-            <td><math><mrow mathbackground="aqua" style="padding:3pt 0 3pt 0;border:0.0667em solid #ff0000;"><mspace width="3pt"></mspace><mtext>A</mtext><mspace width="3pt"></mspace></mrow></math></td>
+            <td><math><menclose mathbackground="aqua" style="padding:3pt;border:0.0667em solid #ff0000;"><mtext>A</mtext></menclose></math></td>
             <td>\(\fcolorbox{red}{aqua}{A}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mpadded width="+6pt" height="+6pt" lspace="3pt" voffset="3pt" style="border: 0.04em solid red" mathbackground="aqua"><mtext>A</mtext></mpadded></mrow><annotation encoding="application/x-tex">\fcolorbox{red}{aqua}{A}</annotation></semantics></math></span></td>
             <td data-tex="\fcolorbox{red}{aqua}{A}"><span class="no-sup">Not supported</span></td>
