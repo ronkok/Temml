@@ -515,17 +515,15 @@ poorly.
 |                              |          |           |           |   1 & A & B \cr                     |
 |                              |          |           |           |   2 & C & D \cr}$                   |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Integral, ∫, in display mode | poor³    | ✓         | ✓         | $\displaystyle\int \frac a b$       |
+| Extensible arrows            | poor³    | ✓         | poor³     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Extensible arrows            | poor⁴    | ✓         | poor⁴     | $A \xrightharpoonup{\text{note}} B$ |
+| Radical height               | ✓        | meh⁴      | meh⁴      | $\sqrt{f_c}$                        |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Radical height               | ✓        | meh⁵      | meh⁵      | $\sqrt{f_c}$                        |
+| Size 4 radicals              | meh⁵     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Size 4 radicals              | meh⁶     | ✓         | ✓         | $\sqrt{\rule{}{6em}\kern2em}$       |
+| Line-breaking                | ✓        | ✓         | bad⁶      |                                     |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Line-breaking                | ✓        | ✓         | bad⁷      |                                     |
-+------------------------------+----------+-----------+-----------+-------------------------------------+
-| Flattened circumflex accent  | poor⁸    | poor⁸     | poor⁸     | $\hat{a}$                           |
+| Flattened circumflex accent  | poor⁷    | poor⁷     | poor⁷     | $\hat{a}$                           |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 
 Notes:
@@ -533,8 +531,6 @@ Notes:
 1.  WebKit mis-aligns short parentheses, given a \left and \right.
 
 2.  WebKit does not implement <mstyle scriptlevel="0">.
-
-2.  Chromium does not stretch a Cambria Math ∫ in display mode. Latin Modern is okay.
 
 3.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
