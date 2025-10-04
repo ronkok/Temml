@@ -387,16 +387,14 @@ Math_, which comes pre-installed in Windows, _STIX TWO_, which comes
 pre-installed in iOS and MacOS (as of Safari 16), or _NotoSans Math_, which I
 think comes pre-installed in Android. The first two need to be augmented with `Temml.woff2`.
 
-Sadly, this option has rendering issues. Chrome botches extensible arrows and it
-will fail to stretch the `∫` symbol on Windows.
+Sadly, this option has rendering issues. Chrome and WebKit both botch extensible arrows.
 
 **Asana** and **Libertinus** have some of the same rendering problems as Cambria Math,
 although Asana does contain its own roundhand glyphs.
 
 **NotoSans Math** is a sans-serif math font from Google. I think it comes bundled with Android.
-Chromium fails to stretch extensible arrows in this font. NOTE: Temml’s NotoSans
-CSS file calls the `ttf` version of the font, not the `woff2` version. The `woff2` version
-has many rendering issues.
+NOTE: Temml’s NotoSans CSS file calls the `ttf` version of the font, not the `woff2` version.
+The `woff2` version has many rendering issues.
 
 Several other math fonts exist and you can try them out at Frédéric Wang’s
 [Mathematical OpenType Fonts][].
