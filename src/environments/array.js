@@ -794,9 +794,8 @@ defineEnvironment({
     numArgs: 0
   },
   handler(context) {
-    const payload = { type: "small" };
+    const payload = { envClasses: ["small"] };
     const res = parseArray(context.parser, payload, "script");
-    res.envClasses = ["small"];
     return res;
   },
   mathmlBuilder
