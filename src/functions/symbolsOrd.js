@@ -1,7 +1,7 @@
 import { defineFunctionBuilders } from "../defineFunction"
 import { getVariant } from "../variant"
 import { variantChar, smallCaps } from "../replace"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import * as mml from "../buildMathML"
 
 // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in

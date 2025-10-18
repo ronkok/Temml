@@ -1,7 +1,7 @@
 // Horizontal spacing commands
 
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import { calculateSize } from "../units";
 import { assertNodeType } from "../parseNode";
 import ParseError from "../ParseError"

@@ -1,5 +1,5 @@
 import defineFunction, { ordargument } from "../defineFunction"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import { assertNodeType } from "../parseNode"
 import ParseError from "../ParseError"
 import * as mml from "../buildMathML"

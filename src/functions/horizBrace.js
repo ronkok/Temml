@@ -1,6 +1,6 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
-import stretchy from "../stretchy";
+import * as mathMLTree from "../mathMLTree";
+import * as stretchy from "../stretchy";
 import * as mml from "../buildMathML";
 
 const mathmlBuilder = (group, style) => {

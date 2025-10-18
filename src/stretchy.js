@@ -2,7 +2,7 @@
  * This file provides support for building horizontal stretchy elements.
  */
 
-import mathMLTree from "./mathMLTree"
+import * as mathMLTree from "./mathMLTree"
 
 // TODO: Remove when Chromium stretches \widetilde & \widehat
 const estimatedWidth = node => {
@@ -89,7 +89,7 @@ const stretchyCodePoint = {
   chemequilibrium: "\u21cc"
 }
 
-const mathMLnode = function(label) {
+export const mathMLnode = function(label) {
   const child = new mathMLTree.TextNode(stretchyCodePoint[label.slice(1)])
   const node = new mathMLTree.MathNode("mo", [child])
   node.setAttribute("stretchy", "true")
@@ -99,7 +99,7 @@ const mathMLnode = function(label) {
 const crookedWides = ["\\widetilde", "\\widehat", "\\widecheck", "\\utilde"]
 
 // TODO: Remove when Chromium stretches \widetilde & \widehat
-const accentNode = (group) => {
+export const accentNode = (group) => {
   const mo = mathMLnode(group.label)
   if (crookedWides.includes(group.label)) {
     const width = estimatedWidth(group.base)
@@ -112,9 +112,4 @@ const accentNode = (group) => {
     }
   }
   return mo
-}
-
-export default {
-  mathMLnode,
-  accentNode
 }

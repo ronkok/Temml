@@ -5,7 +5,7 @@
  * HTML text markup respectively.
  */
 
-import utils from "./utils";
+import * as utils from "./utils";
 import { DocumentFragment } from "./tree";
 import { createClass } from "./domTree";
 
@@ -172,9 +172,3 @@ export const wrapWithMstyle = expression => {
   }
   return node
 }
-
-export default {
-  MathNode,
-  TextNode,
-  newDocumentFragment
-};

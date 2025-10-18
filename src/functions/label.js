@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 
 // Limit valid characters to a small set, for safety.
 export const invalidIdRegEx = /[^A-Za-z_0-9-]/g

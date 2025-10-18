@@ -1,7 +1,7 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import symbols from "../symbols";
 import * as mml from "../buildMathML";
-import utils from "../utils"
+import * as utils from "../utils"
 
 defineFunction({
   type: "not",

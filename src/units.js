@@ -4,7 +4,7 @@
  */
 
 import ParseError from "./ParseError"
-import utils from "./utils"
+import * as utils from "./utils"
 
 const ptPerUnit = {
   // Convert to CSS (Postscipt) points, not TeX points

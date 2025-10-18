@@ -2,7 +2,7 @@ import defineFunction from "../defineFunction"
 import { calculateSize, validUnit } from "../units"
 import ParseError from "../ParseError"
 import { Img } from "../domTree"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import { assertNodeType } from "../parseNode"
 
 const sizeData = function(str) {

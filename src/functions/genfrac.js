@@ -1,5 +1,5 @@
 import defineFunction, { normalizeArgument } from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import { StyleLevel } from "../constants"
 import { assertNodeType } from "../parseNode";
 import { assert } from "../utils";

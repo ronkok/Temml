@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import ParseError from "../ParseError"
 
 const numRegEx = /^[0-9]$/
