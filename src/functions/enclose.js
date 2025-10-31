@@ -5,7 +5,8 @@ import { colorFromSpec, validateColor } from "./color"
 import * as mml from "../buildMathML";
 
 const mathmlBuilder = (group, style) => {
-  const node = new mathMLTree.MathNode("menclose", [mml.buildGroup(group.body, style)])
+  const tag = group.label === "\\boxed" ? "mrow" : "menclose"
+  const node = new mathMLTree.MathNode(tag, [mml.buildGroup(group.body, style)])
   switch (group.label) {
     case "\\overline":
       node.setAttribute("notation", "top") // for Firefox & WebKit
@@ -52,7 +53,6 @@ const mathmlBuilder = (group, style) => {
       break
     case "\\boxed":
       // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
-      node.setAttribute("notation", "box")
       node.style.padding = "3pt"
       node.style.border = "1px solid"
       node.setAttribute("scriptlevel", "0")
