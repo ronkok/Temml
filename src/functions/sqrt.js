@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import * as mml from "../buildMathML";
 
 // Letters that are x-height w/o a descender.

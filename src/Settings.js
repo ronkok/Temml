@@ -3,7 +3,7 @@
  * default settings.
  */
 
-import utils from "./utils";
+import * as utils from "./utils";
 
 /**
  * The main Settings object

@@ -1,6 +1,6 @@
 import defineFunction, { ordargument } from "../defineFunction"
 import defineMacro from "../defineMacro";
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import { spaceCharacter } from "./kern"
 import { ordTypes } from "./op"
 import { isDelimiter } from "./delimsizing"

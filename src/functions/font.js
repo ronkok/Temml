@@ -1,6 +1,6 @@
 import defineFunction, { normalizeArgument } from "../defineFunction"
 import * as mml from "../buildMathML"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 
 const isLongVariableName = (group, font) => {
   if (font !== "mathrm" || group.body.type !== "ordgroup" || group.body.body.length === 1) {

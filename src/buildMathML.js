@@ -4,7 +4,7 @@
  * parser.
  */
 
-import mathMLTree from "./mathMLTree"
+import * as mathMLTree from "./mathMLTree"
 import ParseError from "./ParseError"
 import symbols, { ligatures } from "./symbols"
 import { _mathmlGroupBuilders as groupBuilders } from "./defineFunction"

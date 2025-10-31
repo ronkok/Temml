@@ -1,5 +1,5 @@
 import { defineFunctionBuilders } from "../defineFunction"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import ParseError from "../ParseError"
 
 // A map of CSS-based spacing functions to their CSS class.

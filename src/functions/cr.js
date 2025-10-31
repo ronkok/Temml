@@ -1,7 +1,7 @@
 // Row breaks within tabular environments, and line breaks at top level
 
 import defineFunction from "../defineFunction"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import { calculateSize } from "../units"
 import { assertNodeType } from "../parseNode"
 

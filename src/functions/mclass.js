@@ -1,7 +1,7 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import symbols from "../symbols";
-import mathMLTree from "../mathMLTree";
-import utils from "../utils.js"
+import * as mathMLTree from "../mathMLTree";
+import * as utils from "../utils.js"
 import { padding } from "./arrow";
 
 import * as mml from "../buildMathML";

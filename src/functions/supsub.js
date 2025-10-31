@@ -1,6 +1,6 @@
 import { defineFunctionBuilders } from "../defineFunction"
 import { StyleLevel } from "../constants"
-import mathMLTree from "../mathMLTree"
+import * as mathMLTree from "../mathMLTree"
 import * as mml from "../buildMathML"
 
 /**

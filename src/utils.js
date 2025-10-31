@@ -7,14 +7,14 @@
 /**
  * Provide a default value if a setting is undefined
  */
-const deflt = function(setting, defaultIfUndefined) {
+export const deflt = function(setting, defaultIfUndefined) {
   return setting === undefined ? defaultIfUndefined : setting;
 };
 
 // hyphenate and escape adapted from Facebook's React under Apache 2 license
 
 const uppercase = /([A-Z])/g;
-const hyphenate = function(str) {
+export const hyphenate = function(str) {
   return str.replace(uppercase, "-$1").toLowerCase();
 };
 
@@ -31,7 +31,7 @@ const ESCAPE_REGEX = /[&><"']/g;
 /**
  * Escapes text to prevent scripting attacks.
  */
-function escape(text) {
+export function escape(text) {
   return String(text).replace(ESCAPE_REGEX, (match) => ESCAPE_LOOKUP[match]);
 }
 
@@ -40,7 +40,7 @@ function escape(text) {
  * cases, this will just be the group itself, but when ordgroups and colors have
  * a single element, we want to pull that out.
  */
-const getBaseElem = function(group) {
+export const getBaseElem = function(group) {
   if (group.type === "ordgroup") {
     if (group.body.length === 1) {
       return getBaseElem(group.body[0]);
@@ -65,7 +65,7 @@ const getBaseElem = function(group) {
  * with a single character in them. To decide if something is a character box,
  * we find its innermost group, and see if it is a single character.
  */
-const isCharacterBox = function(group) {
+export const isCharacterBox = function(group) {
   const baseElem = getBaseElem(group);
 
   // These are all the types of groups which hold single characters
@@ -112,16 +112,6 @@ export const protocolFromUrl = function(url) {
  * 1/6551.6em with our ptPerEm = 10):
  * http://www.ctex.org/documents/shredder/src/texbook.pdf#page=69
  */
-const round = function(n) {
+export const round = function(n) {
   return +n.toFixed(4);
-};
-
-export default {
-  deflt,
-  escape,
-  hyphenate,
-  getBaseElem,
-  isCharacterBox,
-  protocolFromUrl,
-  round
 };

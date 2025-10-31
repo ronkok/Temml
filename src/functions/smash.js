@@ -1,6 +1,6 @@
 // smash, with optional [tb], as in AMS
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import { assertNodeType } from "../parseNode";
 
 import * as mml from "../buildMathML";

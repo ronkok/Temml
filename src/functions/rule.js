@@ -1,5 +1,5 @@
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import { assertNodeType } from "../parseNode";
 import { calculateSize } from "../units";
 

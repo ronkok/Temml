@@ -2,7 +2,7 @@ import defineEnvironment from "../defineEnvironment";
 import { parseCD } from "./cd";
 import { bordermatrixParseTree } from "./borderTree.js"
 import defineFunction from "../defineFunction";
-import mathMLTree from "../mathMLTree";
+import * as mathMLTree from "../mathMLTree";
 import { Span } from "../domTree"
 import { Token } from "../Token";
 import { StyleLevel } from "../constants"
