@@ -290,10 +290,10 @@ temml.render(
 
 - `annotate`: `boolean`. If `true`, Temml will include an `<annotation>` element that contains the input TeX string. Note: `annotate` must be true if you want the `copy-tex` extension to be effective. Also note: Auto-linebreaks will not work if annotation is true. (default: `false`)
 
-- `wrap`: (`"tex"` | `"="` | `"none"`).  A mode for soft line breaks in non-display
+- `wrap`: (`"none"` | `"tex"` | `"="`).  A mode for soft line breaks in non-display
   mode math. The `tex` option sets a soft line break after every top-level relation and
   binary operator, per _The TeXbook_, page 173. The `=` option sets a soft line
-  break before the second and subsequent top-level `=` signs. `tex` is the default.
+  break before the second and subsequent top-level `=` signs. `none` is the default.
 
   Caveats: Soft line breaks work in Chromium and Firefox, but do not work in WebKit or Safari.
   Display mode math gets no soft line breaks. Annotated math gets no soft line

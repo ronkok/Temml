@@ -18,9 +18,9 @@ export default class Settings {
     this.throwOnError = utils.deflt(options.throwOnError, false);  // boolean
     this.errorColor = utils.deflt(options.errorColor, "#b22222");  // string
     this.macros = options.macros || {};
-    this.wrap = utils.deflt(options.wrap, "tex")                    // "tex" | "="
+    this.wrap = utils.deflt(options.wrap, "none")                   // "none" | "tex" | "="
     this.xml = utils.deflt(options.xml, false);                     // boolean
-    this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // booelean
+    this.colorIsTextColor = utils.deflt(options.colorIsTextColor, false);  // boolean
     this.strict = utils.deflt(options.strict, false);    // boolean
     this.trust = utils.deflt(options.trust, false);  // trust context. See html.js.
     this.maxSize = (options.maxSize === undefined

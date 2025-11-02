@@ -543,9 +543,29 @@ to a character in the range $\text{𝒜-𝒵}$.
 
 Hard line breaks are `\\` and `\newline`.
 
-Temml inserts soft line breaks per TeXbook p. 173 if not in display mode and
-no hard line breaks are employed. They work in Chromium and Firefox, but not
-in Safari.
+<br>
+
+<details><summary>Temml can insert soft line breaks, but only in some cases.</summary>
+
+Display mode math does not contain soft line breaks, because that is the TeX
+standard.
+
+In non-display mode:
+
+*   Default Temml does not insert soft line breaks. It turns out that the Temml
+    line-break method leads to incorrect operator spacing in a
+    few [edge cases](https://github.com/ronkok/Temml/issues/109).
+
+*   If the math expression contains no hard line breaks and the Temml rendering
+    options contain the option `wrap: "tex"`, Temml will insert soft line breaks
+    after top-level binary operators and relational operators, per TeXbook p. 173.
+
+*   If the Temml rendering options contain the option `wrap: "="`, Temml
+    will insert soft line breaks before the second and subsequent top-level `=` signs.
+
+Soft line breaks work in Chromium and Firefox, but not in Safari.
+
+</details>
 
 ### Reflect
 
