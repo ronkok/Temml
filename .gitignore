@@ -1,2 +1,6 @@
 node_modules
 .yarn
+.yarn/builds/
+.yarn/unplugged/
+.yarn/install-state.gz
+.pnp.*
