@@ -201,9 +201,9 @@ var temml = (function () {
       this.throwOnError = deflt(options.throwOnError, false);  // boolean
       this.errorColor = deflt(options.errorColor, "#b22222");  // string
       this.macros = options.macros || {};
-      this.wrap = deflt(options.wrap, "tex");                    // "tex" | "="
+      this.wrap = deflt(options.wrap, "none");                   // "none" | "tex" | "="
       this.xml = deflt(options.xml, false);                     // boolean
-      this.colorIsTextColor = deflt(options.colorIsTextColor, false);  // booelean
+      this.colorIsTextColor = deflt(options.colorIsTextColor, false);  // boolean
       this.strict = deflt(options.strict, false);    // boolean
       this.trust = deflt(options.trust, false);  // trust context. See html.js.
       this.maxSize = (options.maxSize === undefined
@@ -5046,9 +5046,8 @@ var temml = (function () {
       numArgs: 0
     },
     handler(context) {
-      const payload = { type: "small" };
+      const payload = { envClasses: ["small"] };
       const res = parseArray(context.parser, payload, "script");
-      res.envClasses = ["small"];
       return res;
     },
     mathmlBuilder: mathmlBuilder$9
@@ -6209,7 +6208,8 @@ var temml = (function () {
   });
 
   const mathmlBuilder$7 = (group, style) => {
-    const node = new MathNode("menclose", [buildGroup$1(group.body, style)]);
+    const tag = group.label === "\\boxed" ? "mrow" : "menclose";
+    const node = new MathNode(tag, [buildGroup$1(group.body, style)]);
     switch (group.label) {
       case "\\overline":
         node.setAttribute("notation", "top"); // for Firefox & WebKit
@@ -6256,7 +6256,6 @@ var temml = (function () {
         break
       case "\\boxed":
         // \newcommand{\boxed}[1]{\fbox{\m@th$\displaystyle#1$}} from amsmath.sty
-        node.setAttribute("notation", "box");
         node.style.padding = "3pt";
         node.style.border = "1px solid";
         node.setAttribute("scriptlevel", "0");
@@ -12077,7 +12076,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.11.11";
+  const version = "0.12.01";
 
   function postProcess(block) {
     const labelMap = {};

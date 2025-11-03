@@ -5,7 +5,7 @@ export interface Options {
   throwOnError?: boolean;
   errorColor?: string;
   macros?: Record<string, any>;
-  wrap?: "tex" | "=" | "none";
+  wrap?: "none" | "tex" | "=";
   xml?: boolean;
   colorIsTextColor?: boolean;
   strict?: boolean;
@@ -22,7 +22,7 @@ export function render(
 
 export function renderToString(expression: string, options?: Options): string;
 
-export function renderMathInElement(block: any): void;
+export function renderMathInElement(block: any, options?: Options): void;
 
 export function generateParseTree(expression: string, options?: Options): any;
 

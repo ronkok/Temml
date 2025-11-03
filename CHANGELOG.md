@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.12.01] = 2025-11-02
+
+### Fixed
+
+- `\boxed` in Firefox
+- Mistaken payload in smallmatrix parsing
+- Fix type defintion of `renderMathInElement`
+
+### Changed
+
+- BREAKING CHANGE: Rendering option `wrap` is now defaulted to `none`
+- Refactor `export default { ... }` to reduce bundle-size
+
 ## [0.11.11] = 2025-09-13
 
 ### Fixed
