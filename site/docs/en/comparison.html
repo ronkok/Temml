@@ -26,7 +26,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.11.11, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.12.01, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -43,7 +43,7 @@
         <tbody>
           <tr>
             <td>+</td>
-            <td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>+</mo><mi>b</mi></mrow></math></td>
             <td>\(a+b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a+b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mi>b</mi></mrow><annotation encoding="TeX">a+b</annotation></semantics></math></td>
@@ -51,7 +51,7 @@
           </tr>
           <tr>
             <td>-</td>
-            <td><math><mrow><mi>a</mi><mo>−</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>−</mo><mi>b</mi></mrow></math></td>
             <td>\(a-b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>−</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a-b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>−</mo><mi>b</mi></mrow><annotation encoding="TeX">a-b</annotation></semantics></math></td>
@@ -1395,7 +1395,7 @@
           </tr>
           <tr>
             <td>\bmod</td>
-            <td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">mod</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">mod</mo><mi>b</mi></mrow></math></td>
             <td>\(a \bmod b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mtext> </mtext><mo lspace="0.22em" rspace="0.22em"><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow></mo><mtext> </mtext><mi>b</mi></mrow><annotation encoding="application/x-tex">a \bmod b</annotation></semantics></math></span></td>
             <td data-tex="a \bmod b"><span class="no-sup">Not supported</span></td>
@@ -1491,7 +1491,7 @@
           </tr>
           <tr>
             <td>\boxed</td>
-            <td><math><menclose notation="box" scriptlevel="0" displaystyle="true" style="padding:3pt;border:1px solid;"><mrow><mi>a</mi><mi>b</mi></mrow></menclose></math></td>
+            <td><math><mrow scriptlevel="0" displaystyle="true" style="padding:3pt;border:1px solid;"><mrow><mi>a</mi><mi>b</mi></mrow></mrow></math></td>
             <td>\(\boxed{ab}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="false"><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>a</mi><mi>b</mi></mrow></mstyle></mstyle></mstyle></menclose></mrow><annotation encoding="application/x-tex">\boxed{ab}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mrow><mi>a</mi><mi>b</mi></mrow></menclose><annotation encoding="TeX">\boxed{ab}</annotation></semantics></math></td>
@@ -2093,7 +2093,7 @@
           </tr>
           <tr>
             <td>\coloneqq</td>
-            <td><math><mrow><mi>a</mi><mo>≔</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>≔</mo><mi>b</mi></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo><mi mathvariant="normal">≔</mi></mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a \coloneqq b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>≔</mo><mi>b</mi></mrow><annotation encoding="TeX">a \coloneqq b</annotation></semantics></math></td>
@@ -2560,7 +2560,7 @@
           </tr>
           <tr>
             <td>\def</td>
-            <td><math><mrow><msup><mi>x</mi><mn class="tml-sml-pad">2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>x</mi><mn class="tml-sml-pad">2</mn></msup></mrow></math></td>
+            <td><math><mrow><msup><mi>x</mi><mn class="tml-sml-pad">2</mn></msup><mo>+</mo><msup><mi>x</mi><mn class="tml-sml-pad">2</mn></msup></mrow></math></td>
             <td>\(\def\foo{x^2} \foo + \foo\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><msup><mi>x</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\def\foo{x^2} \foo + \foo</annotation></semantics></math></span></td>
             <td data-tex="\def\foo{x^2} \foo + \foo"><span class="no-sup">Not supported</span></td>
@@ -2568,7 +2568,7 @@
           </tr>
           <tr>
             <td>\definecolor</td>
-            <td><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo></mrow><mrow><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></td>
+            <td><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -2824,7 +2824,7 @@
           </tr>
           <tr>
             <td>\dots</td>
-            <td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo></mrow><mrow><mo>⋯</mo></mrow><mrow><mo>+</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td>
+            <td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td>
             <td>\(x_1 + \dots + x_n\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1 + \dots + x_n</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>…</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="TeX">x_1 + \dots + x_n</annotation></semantics></math></td>
@@ -2832,7 +2832,7 @@
           </tr>
           <tr>
             <td>\dotsb</td>
-            <td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo></mrow><mrow><mo>⋯</mo></mrow><mrow><mo>+</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td>
+            <td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td>
             <td>\(x_1 +\dotsb + x_n\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><mo>+</mo><mo>⋯</mo><mo>+</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1 +\dotsb + x_n</annotation></semantics></math></span></td>
             <td data-tex="x_1 +\dotsb + x_n"><span class="no-sup">Not supported</span></td>
@@ -2840,7 +2840,7 @@
           </tr>
           <tr>
             <td>\dotsc</td>
-            <td><math><mrow><mi>x</mi><mo separator="true">,</mo></mrow><mrow><mo>…</mo></mrow><mrow><mo separator="true">,</mo></mrow><mrow><mi>y</mi></mrow></math></td>
+            <td><math><mrow><mi>x</mi><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>y</mi></mrow></math></td>
             <td>\(x,\dotsc,y\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo separator="true">,</mo><mo>…</mo><mo separator="true">,</mo><mi>y</mi></mrow><annotation encoding="application/x-tex">x,\dotsc,y</annotation></semantics></math></span></td>
             <td data-tex="x,\dotsc,y"><span class="no-sup">Not supported</span></td>
@@ -2856,7 +2856,7 @@
           </tr>
           <tr>
             <td>\dotsm</td>
-            <td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>⋯</mo></mrow><mrow><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td>
+            <td><math><mrow><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>⋯</mo><msub><mi>x</mi><mi>n</mi></msub></mrow></math></td>
             <td>\(x_1 x_2 \dotsm x_n\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>x</mi><mn>1</mn></msub><msub><mi>x</mi><mn>2</mn></msub><mo>⋯</mo><msub><mi>x</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">x_1 x_2 \dotsm x_n</annotation></semantics></math></span></td>
             <td data-tex="x_1 x_2 \dotsm x_n"><span class="no-sup">Not supported</span></td>
@@ -3447,7 +3447,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\gdef</td>
-            <td><math><mrow><msup><mi>y</mi><mn class="tml-sml-pad">2</mn></msup><mo>+</mo></mrow><mrow><msup><mi>y</mi><mn class="tml-sml-pad">2</mn></msup></mrow></math></td>
+            <td><math><mrow><msup><mi>y</mi><mn class="tml-sml-pad">2</mn></msup><mo>+</mo><msup><mi>y</mi><mn class="tml-sml-pad">2</mn></msup></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>y</mi><mn>2</mn></msup><mo>+</mo><msup><mi>y</mi><mn>2</mn></msup></mrow><annotation encoding="application/x-tex">\gdef\bbar#1{#1^2} \bbar{y} + \bbar{y}</annotation></semantics></math></span></td>
             <td data-tex="\gdef\bbar#1{#1^2} \bbar{y} + \bbar{y}"><span class="no-sup">Not supported</span></td>
@@ -3607,7 +3607,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\gt</td>
-            <td><math><mrow><mi>a</mi><mo>&gt;</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow></math></td>
             <td>\(a \gt b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a \gt b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>&gt;</mo><mi>b</mi></mrow><annotation encoding="TeX">a \gt b</annotation></semantics></math></td>
@@ -3959,7 +3959,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\iff</td>
-            <td><math><mrow><mi>A</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟺</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>B</mi></mrow></math></td>
+            <td><math><mrow><mi>A</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟺</mo><mspace width="0.2778em"></mspace><mi>B</mi></mrow></math></td>
             <td>\(A\iff B\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mtext>  </mtext><mo>⟺</mo><mtext>  </mtext><mi>B</mi></mrow><annotation encoding="application/x-tex">A\iff B</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo stretchy="false">⟺</mo><mi>B</mi></mrow><annotation encoding="TeX">A\iff B</annotation></semantics></math></td>
@@ -4039,7 +4039,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\impliedby</td>
-            <td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟸</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>Q</mi></mrow></math></td>
+            <td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟸</mo><mspace width="0.2778em"></mspace><mi>Q</mi></mrow></math></td>
             <td>\(P\impliedby Q\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mtext>  </mtext><mo>⟸</mo><mtext>  </mtext><mi>Q</mi></mrow><annotation encoding="application/x-tex">P\impliedby Q</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">⇐</mo><mi>Q</mi></mrow><annotation encoding="TeX">P\impliedby Q</annotation></semantics></math></td>
@@ -4047,7 +4047,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\implies</td>
-            <td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟹</mo><mspace width="0.2778em"></mspace></mrow><mrow><mi>Q</mi></mrow></math></td>
+            <td><math><mrow><mi>P</mi><mspace width="0.2778em"></mspace><mo stretchy="false">⟹</mo><mspace width="0.2778em"></mspace><mi>Q</mi></mrow></math></td>
             <td>\(P\implies Q\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mtext>  </mtext><mo>⟹</mo><mtext>  </mtext><mi>Q</mi></mrow><annotation encoding="application/x-tex">P\implies Q</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>P</mi><mo stretchy="false">⇒</mo><mi>Q</mi></mrow><annotation encoding="TeX">P\implies Q</annotation></semantics></math></td>
@@ -4367,7 +4367,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\lAngle</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⟪</mo></mrow><mrow><mi>A</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td>
+            <td><math><mrow><mo form="prefix" stretchy="false">⟪</mo><mi>A</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -4807,7 +4807,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\llangle</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⦉</mo></mrow><mrow><mi>A</mi><mo form="postfix" stretchy="false">⦊</mo></mrow></math></td>
+            <td><math><mrow><mo form="prefix" stretchy="false">⦉</mo><mi>A</mi><mo form="postfix" stretchy="false">⦊</mo></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⟪</mo><mi>A</mi><mo stretchy="false">⟫</mo></mrow><annotation encoding="TeX">\llangle A\rrangle</annotation></semantics></math></td>
@@ -4815,7 +4815,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\llap</td>
-            <td><math><mrow><mo lspace="0em" rspace="0em">=</mo></mrow><mrow><mpadded lspace="-1width" width="0.1px" style="position:relative;"><mpadded width="0.1px"><mphantom><mi>/</mi><mspace width="0.1667em"></mspace></mphantom></mpadded><mrow style="position:absolute;right:0;bottom:0;"><mi>/</mi><mspace width="0.1667em"></mspace></mrow></mpadded></mrow></math></td>
+            <td><math><mrow><mo lspace="0em" rspace="0em">=</mo><mpadded lspace="-1width" width="0.1px" style="position:relative;"><mpadded width="0.1px"><mphantom><mi>/</mi><mspace width="0.1667em"></mspace></mphantom></mpadded><mrow style="position:absolute;right:0;bottom:0;"><mi>/</mi><mspace width="0.1667em"></mspace></mrow></mpadded></mrow></math></td>
             <td>\({=}\llap{/\,}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo lspace="0em" rspace="0em">=</mo><mpadded lspace="-1width" width="0px"><mrow><mtext>/</mtext><mtext> </mtext></mrow></mpadded></mrow><annotation encoding="application/x-tex">{=}\llap{/\,}</annotation></semantics></math></span></td>
             <td data-tex="{=}\llap{/\,}"><span class="no-sup">Not supported</span></td>
@@ -4831,7 +4831,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\llcorner</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⌞</mo></mrow><mrow><mi>a</mi><mo form="postfix" stretchy="false">⌟</mo></mrow></math></td>
+            <td><math><mrow><mo form="prefix" stretchy="false">⌞</mo><mi>a</mi><mo form="postfix" stretchy="false">⌟</mo></mrow></math></td>
             <td>\(\llcorner a \lrcorner\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo><mi mathvariant="normal">⌞</mi></mo><mi>a</mi><mo><mi mathvariant="normal">⌟</mi></mo></mrow><annotation encoding="application/x-tex">\llcorner a \lrcorner</annotation></semantics></math></span></td>
             <td data-tex="\llcorner"><span class="no-sup">Not supported</span></td>
@@ -5207,7 +5207,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathbin</td>
-            <td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">!</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo lspace="0.2222em" rspace="0.2222em">!</mo><mi>b</mi></mrow></math></td>
             <td>\(a\mathbin{!}b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo stretchy="false" lspace="0.22em" rspace="0.22em">!</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a\mathbin{!}b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo lspace="0.2222222222222222em" rspace="0.2222222222222222em">!</mo><mi>b</mi></mrow><annotation encoding="TeX">a\mathbin{!}b</annotation></semantics></math></td>
@@ -5239,7 +5239,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathclose</td>
-            <td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mo form="prefix" stretchy="false">(</mo><mi>b</mi><mo lspace="0em" rspace="0em">&gt;</mo><mo>+</mo><mi>c</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>+</mo><mo form="prefix" stretchy="false">(</mo><mi>b</mi><mo lspace="0em" rspace="0em">&gt;</mo><mo>+</mo><mi>c</mi></mrow></math></td>
             <td>\(a + (b\mathclose\gt + c\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mo stretchy="false">(</mo><mi>b</mi><mo lspace="0em" rspace="0em">&gt;</mo><mo>+</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + (b\mathclose\gt + c</annotation></semantics></math></span></td>
             <td data-tex="a + (b\mathclose\gt + c"><span class="no-sup">Not supported</span></td>
@@ -5303,7 +5303,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathopen</td>
-            <td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mo lspace="0em" rspace="0em">&lt;</mo></mrow><mrow><mi>b</mi><mo form="postfix" stretchy="false">)</mo><mo>+</mo><mi>c</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>+</mo><mo lspace="0em" rspace="0em">&lt;</mo><mi>b</mi><mo form="postfix" stretchy="false">)</mo><mo>+</mo><mi>c</mi></mrow></math></td>
             <td>\(a + \mathopen\lt b) + c\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mo lspace="0em" rspace="0em">&lt;</mo><mi>b</mi><mo stretchy="false">)</mo><mo>+</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">a + \mathopen\lt b) + c</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -5319,7 +5319,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathpunct</td>
-            <td><math><mrow><mi>A</mi><mo lspace="0em" rspace="0.1667em">−</mo></mrow><mrow><mi>B</mi></mrow></math></td>
+            <td><math><mrow><mi>A</mi><mo lspace="0em" rspace="0.1667em">−</mo><mi>B</mi></mrow></math></td>
             <td>\(A\mathpunct{-}B\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo lspace="0em" rspace="0.17em">−</mo><mi>B</mi></mrow><annotation encoding="application/x-tex">A\mathpunct{-}B</annotation></semantics></math></span></td>
             <td data-tex="A\mathpunct{-}B"><span class="no-sup">Not supported</span></td>
@@ -5335,7 +5335,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mathrel</td>
-            <td><math><mrow><mi>a</mi><mo lspace="0.2778em" rspace="0.2778em">#</mo></mrow><mrow><mi>b</mi></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo lspace="0.2778em" rspace="0.2778em">#</mo><mi>b</mi></mrow></math></td>
             <td>\(a \mathrel{\#} b\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo mathvariant="normal">#</mo><mi>b</mi></mrow><annotation encoding="application/x-tex">a \mathrel{\#} b</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo lspace="0.2777777777777778em" rspace="0.2777777777777778em">#</mo><mi>b</mi></mrow><annotation encoding="TeX">a \mathrel{#} b</annotation></semantics></math></td>
@@ -5559,7 +5559,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\mod</td>
-            <td><math><mrow><mn>3</mn><mo>≡</mo></mrow><mrow><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace><mpadded lspace="0"><mi>mod</mi></mpadded><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td>
+            <td><math><mrow><mn>3</mn><mo>≡</mo><mn>5</mn><mo></mo><mspace width="0.6667em"></mspace><mpadded lspace="0"><mi>mod</mi></mpadded><mspace width="0.1667em"></mspace><mspace width="0.1667em"></mspace><mn>2</mn></mrow></math></td>
             <td>\(3\equiv 5 \mod 2\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>3</mn><mo>≡</mo><mn>5</mn><mspace></mspace><mspace width="0.6667em"/><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">o</mi><mi mathvariant="normal">d</mi></mrow><mtext> </mtext><mtext> </mtext><mn>2</mn></mrow><annotation encoding="application/x-tex">3\equiv 5 \mod 2</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -6479,7 +6479,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\operatorname</td>
-            <td><math><mrow><mi>asin</mi><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
+            <td><math><mrow><mi>asin</mi><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
             <td>\(\operatorname{asin} x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">asin</mi><mo>⁡</mo><mi>x</mi></mrow><annotation encoding="application/x-tex">\operatorname{asin} x</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo lspace="0em" rspace="0.16666666666666666em">asin</mo><mi>x</mi></mrow><annotation encoding="TeX">\operatorname{asin} x</annotation></semantics></math></td>
@@ -6559,7 +6559,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\over</td>
-            <td><math><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>b</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>+</mo></mrow><mrow><mi>c</mi></mrow></math></td>
+            <td><math><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>b</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>+</mo><mi>c</mi></mrow></math></td>
             <td>\({a+1 \over b+2}+c\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>b</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>+</mo><mi>c</mi></mrow><annotation encoding="application/x-tex">{a+1 \over b+2}+c</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mrow><mi>a</mi><mo>+</mo><mn>1</mn></mrow><mrow><mi>b</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>+</mo><mi>c</mi></mrow><annotation encoding="TeX">{a+1 \over b+2}+c</annotation></semantics></math></td>
@@ -7015,7 +7015,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\projlim</td>
-            <td><math><mrow><msub><mi>proj lim</mi><mi>n</mi></msub><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
+            <td><math><mrow><msub><mi>proj lim</mi><mi>n</mi></msub><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
             <td>\(\projlim_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">proj lim</mi><mo>⁡</mo></mrow><mi>n</mi></msub><mi>x</mi></mrow><annotation encoding="application/x-tex">\projlim_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -7158,7 +7158,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\rAngle</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⟪</mo></mrow><mrow><mi>A</mi><mo form="postfix" stretchy="false">⟫</mo></mrow></math></td>
+            <td><math><mrow><mo form="prefix" stretchy="false">⟪</mo><mi>A</mi><mo form="postfix" stretchy="false">⟫</mo></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -7542,7 +7542,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\rrangle</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⦉</mo></mrow><mrow><mi>A</mi><mo form="postfix" stretchy="false">⦊</mo></mrow></math></td>
+            <td><math><mrow><mo form="prefix" stretchy="false">⦉</mo><mi>A</mi><mo form="postfix" stretchy="false">⦊</mo></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false">⟪</mo><mi>A</mi><mo stretchy="false">⟫</mo></mrow><annotation encoding="TeX">\llangle A\rrangle</annotation></semantics></math></td>
@@ -7694,7 +7694,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\scriptstyle</td>
-            <td><math><mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>+</mo></mrow><mrow><mstyle scriptlevel="1" displaystyle="false"><mfrac><mi>c</mi><mi>d</mi></mfrac></mstyle></mrow></math></td>
+            <td><math><mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>+</mo><mstyle scriptlevel="1" displaystyle="false"><mfrac><mi>c</mi><mi>d</mi></mfrac></mstyle></mrow></math></td>
             <td>\(\frac ab + {\scriptstyle \frac cd}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mi>a</mi><mi>b</mi></mfrac><mo>+</mo><mstyle scriptlevel="1" displaystyle="false"><mfrac><mi>c</mi><mi>d</mi></mfrac></mstyle></mrow><annotation encoding="application/x-tex">\frac ab + {\scriptstyle \frac cd}</annotation></semantics></math></span></td>
             <td data-tex="\frac ab + {\scriptstyle \frac cd}"><span class="no-sup">Not supported</span></td>
@@ -8672,7 +8672,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\textcolor</td>
-            <td><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo></mrow><mrow><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></td>
+            <td><math><mrow><mi style="color:#0000FF;">F</mi><mo style="color:#0000FF;">=</mo><mi style="color:#0000FF;">m</mi><mi style="color:#0000FF;">a</mi></mrow></math></td>
             <td>\(\textcolor{blue}{F=ma}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mstyle mathcolor="blue"><mi>F</mi><mo>=</mo><mi>m</mi><mi>a</mi></mstyle></mrow><annotation encoding="application/x-tex">\textcolor{blue}{F=ma}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9703,7 +9703,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\varinjlim</td>
-            <td><math><mrow><munder><mrow><munder><mi>lim</mi><mo stretchy="true" style="math-depth:0;">→</mo></munder></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
+            <td><math><mrow><munder><mrow><munder><mi>lim</mi><mo stretchy="true" style="math-depth:0;">→</mo></munder></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
             <td>\(\varinjlim\limits_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mrow><mi mathvariant="normal"><munder accentunder="true"><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="true">→</mo></munder></mi><mo>⁡</mo></mrow><mi>n</mi></munder><mi>x</mi></mrow><annotation encoding="application/x-tex">\varinjlim\limits_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9727,7 +9727,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\varliminf</td>
-            <td><math><mrow><munder><mrow><menclose notation="bottom" class="tml-underline"><mtext>lim</mtext></menclose></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
+            <td><math><mrow><munder><mrow><menclose notation="bottom" class="tml-underline"><mtext>lim</mtext></menclose></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
             <td>\(\varliminf\limits_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mrow><mi mathvariant="normal"><munder accentunder="true"><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="true">‾</mo></munder></mi><mo>⁡</mo></mrow><mi>n</mi></munder><mi>x</mi></mrow><annotation encoding="application/x-tex">\varliminf\limits_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9735,7 +9735,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\varlimsup</td>
-            <td><math><mrow><munder><mrow><menclose notation="top" class="tml-overline"><mtext>lim</mtext></menclose></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
+            <td><math><mrow><munder><mrow><menclose notation="top" class="tml-overline"><mtext>lim</mtext></menclose></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
             <td>\(\varlimsup\limits_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mrow><mi mathvariant="normal"><mover accent="true"><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="true">‾</mo></mover></mi><mo>⁡</mo></mrow><mi>n</mi></munder><mi>x</mi></mrow><annotation encoding="application/x-tex">\varlimsup\limits_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9791,7 +9791,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\varprojlim</td>
-            <td><math><mrow><munder><mrow><munder><mi>lim</mi><mo stretchy="true" style="math-depth:0;">←</mo></munder></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace></mrow><mrow><mi>x</mi></mrow></math></td>
+            <td><math><mrow><munder><mrow><munder><mi>lim</mi><mo stretchy="true" style="math-depth:0;">←</mo></munder></mrow><mi>n</mi></munder><mo>⁡</mo><mspace width="0.1667em"></mspace><mi>x</mi></mrow></math></td>
             <td>\(\varprojlim\limits_n x\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mrow><mi mathvariant="normal"><munder accentunder="true"><mrow><mi mathvariant="normal">l</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">m</mi></mrow><mo stretchy="true">←</mo></munder></mi><mo>⁡</mo></mrow><mi>n</mi></munder><mi>x</mi></mrow><annotation encoding="application/x-tex">\varprojlim\limits_n x</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -9943,7 +9943,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\vcenter</td>
-            <td><math><mrow><mi>a</mi><mo>+</mo></mrow><mrow><mrow><mo fence="true" form="prefix">(</mo><mtable><mtr><mtd style="padding:0;"><mfrac><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mfrac></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></mrow></math></td>
+            <td><math><mrow><mi>a</mi><mo>+</mo><mrow><mo fence="true" form="prefix">(</mo><mtable><mtr><mtd style="padding:0;"><mfrac><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mfrac></mtd></mtr></mtable><mo fence="true" form="postfix">)</mo></mrow></mrow></math></td>
             <td>\(a+\left(\vcenter{\frac{\frac a b}c}\right)\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>+</mo><mrow><mo fence="true">(</mo><mpadded class ="vcenter"><mfrac><mfrac><mi>a</mi><mi>b</mi></mfrac><mi>c</mi></mfrac></mpadded><mo fence="true">)</mo></mrow></mrow><annotation encoding="application/x-tex">a+\left(\vcenter{\frac{\frac a b}c}\right)</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
