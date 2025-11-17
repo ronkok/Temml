@@ -1504,8 +1504,10 @@ const test = () => {
   new Expect(r`\overbrace{x}`).toBuild()
   new Expect(r`\overbrace{x^2}`).toBuild()
   new Expect(r`\overbrace{x}^2`).toBuild()
+  new Expect(r`\overbracket{x}^2`).toBuild()
   new Expect(r`\overbrace x`).toBuild()
   new Expect(r`\underbrace{x}_2`).toBuild()
+  new Expect(r`\underbracket{x}_2`).toBuild()
   new Expect(r`\underbrace{x}_2^2`).toBuild()
   assertion = "A horizontal brace parser should be grouped more tightly than supsubs"
   new Expect(parse(r`\overbrace x^2`)[0].type).toBe("supsub")

@@ -23,7 +23,7 @@ import "./functions/envTag";
 import "./functions/font";
 import "./functions/genfrac";
 import "./functions/hbox";
-import "./functions/horizBrace";
+import "./functions/horizBracket";
 import "./functions/html";
 import "./functions/includegraphics";
 import "./functions/kern";

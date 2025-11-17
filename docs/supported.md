@@ -59,11 +59,14 @@ that lists both supported and some un-supported functions.
 | $\ddddot{a}$             | $\underbar{X}$           | $\underparen{AB}$                  |
 |  `\ddddot{a}`            |  `\underbar{X}`          |  `\underparen{AB}`                 |
 +--------------------------+--------------------------+------------------------------------+
-| $\grave{a}$  `\grave{a}` | $\mathring{g}$           | $\overbrace{AB}$                   |
-|                          |  `\mathring{g}`          |  `\overbrace{AB}`                  |
+| $\grave{a}$  `\grave{a}` | $\overbracket{AB}$       | $\overbrace{AB}$                   |
+|                          | `\overbracket{AB}`       |  `\overbrace{AB}`                  |
 +--------------------------+--------------------------+------------------------------------+
-| $\hat{\theta}$           | $\widehat{ac}$           | $\underbrace{AB}$                  |
-| `\hat{\theta}`           |  `\widehat{ac}`          |  `\underbrace{AB}`                 |
+| $\hat{\theta}$           | $\underbracket{AB}$      | $\underbrace{AB}$                  |
+| `\hat{\theta}`           | `\underbracket{AB}`      |  `\underbrace{AB}`                 |
++--------------------------+--------------------------+------------------------------------+
+| $\mathring{g}$           | $\widehat{ac}$           |                                    |
+| `\mathring{g}`           | `\widehat{ac}`           |                                    |
 +--------------------------+--------------------------+------------------------------------+
 | $f^{\dprime}$            | $f^{\trprime}$           | $f^{\qprime}$                      |
 | `f^{\dprime}`            | `f^{\trprime}`           | `f^{\qprime}`                      |
@@ -90,18 +93,20 @@ See also [letters](#letters)
 ## Annotation
 
 +:=====================================+:====================================+
-| $\cancel{5}$  `\cancel{5}`           | $\overbrace{a+b+c}^{\text{note}}$   |
+| $\cancel{5}$  `\cancel{5}`           | $\boxed{\pi=\frac c d}$             |
+|                                      | `\boxed{\pi=\frac c d}`             |
++--------------------------------------+-------------------------------------+
+| $\bcancel{5}$  `\bcancel{5}`         | $\overbrace{a+b+c}^{\text{note}}$   |
 |                                      |  `\overbrace{a+b+c}^{\text{note}}`  |
 +--------------------------------------+-------------------------------------+
-| $\bcancel{5}$  `\bcancel{5}`         | $\underbrace{a+b+c}_{\text{note}}$  |
-|                                      |  `\underbrace{a+b+c}_{\text{note}}` |
+| $\xcancel{ABC}$  `\xcancel{ABC}`     | $\underbrace{a+b+c}_{\text{note}}$  |
+|                                      | `\underbrace{a+b+c}_{\text{note}}`  |
 +--------------------------------------+-------------------------------------+
-| $\xcancel{ABC}$  `\xcancel{ABC}`     | $\boxed{\pi=\frac c d}$             |
-|                                      |  `\boxed{\pi=\frac c d}`            |
+| $\sout{abc}$  `\sout{abc}`           | $\overbracket{a+b+c}^{\text{note}}$ |
+|                                      | `\overbracket{a+b+c}^{\text{note}}` |
 +--------------------------------------+-------------------------------------+
-| $\sout{abc}$  `\sout{abc}`           |                                     |
-+--------------------------------------+-------------------------------------+
-| $\ref{tag1}$  `\ref{tag1}`           |                                     |
+| $\ref{tag1}$  `\ref{tag1}`           | $\underbracket{a+b+c}_{\text{note}}$|
+|                                      | `\underbracket{a+b+c}_{\text{note}}`|
 +--------------------------------------+-------------------------------------+
 | $$ \tag{hi} x+y^{2x} \label{tag1} $$ | `\tag{hi} x+y^{2x} \label{tag1}`    |
 +--------------------------------------+-------------------------------------+

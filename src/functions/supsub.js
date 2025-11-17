@@ -24,18 +24,18 @@ const largePad = "AJdfΔΛ"
 defineFunctionBuilders({
   type: "supsub",
   mathmlBuilder(group, style) {
-    // Is the inner group a relevant horizontal brace?
-    let isBrace = false
+    // Is the inner group a relevant horizontal brace or bracket?
+    let isBracket = false
     let isOver
     let isSup
     let appendApplyFunction = false
     let appendSpace = false
     let needsLeadingSpace = false
 
-    if (group.base && group.base.type === "horizBrace") {
+    if (group.base && group.base.type === "horizBracket") {
       isSup = !!group.sup
       if (isSup === group.base.isOver) {
-        isBrace = true
+        isBracket = true
         isOver = group.base.isOver
       }
     }
@@ -83,7 +83,7 @@ defineFunctionBuilders({
     }
 
     let nodeType;
-    if (isBrace) {
+    if (isBracket) {
       nodeType = isOver ? "mover" : "munder"
     } else if (!group.sub) {
       const base = group.base

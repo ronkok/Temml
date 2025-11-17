@@ -48,6 +48,8 @@ const stretchyCodePoint = {
   xrightarrow: "\u2192",
   underbrace: "\u23df",
   overbrace: "\u23de",
+  overbracket: "\u23b4",
+  underbracket: "\u23b5",
   overgroup: "\u23e0",
   overparen: "⏜",
   undergroup: "\u23e1",

@@ -1101,8 +1101,8 @@ If you know the shape of a character, but not its name,
 |\otimeshat|$\otimeshat$ || stix |
 |\outerproduct|$\outerproduct{a}{b}$ |`\outerproduct{a}{b}`| physics extension |
 |\over|${a+1 \over b+2}+c$ |`{a+1 \over b+2}+c`||
-|\overbrace|$\overbrace{x+⋯+x}^{n\text{ times}}$ |`\overbrace{x+⋯+x}^{n\text{ times}}`||
-|\overbracket|(Not supported)|||
+|\overbrace|$\overbrace{x+⋯+x}^{n\text{ times}}$ |`\overbrace{x+⋯+x}^{n\text{ times}}`| stix |
+|\overbracket|$\overbracket{x+⋯+x}^{n\text{ times}}$| `\overbracket{x+⋯+x}^{n\text{ times}}` | stix |
 |\overgroup|$\overgroup{AB}$ |`\overgroup{AB}`| MnSymbol |
 |\overleftarrow|$\overleftarrow{AB}$ |`\overleftarrow{AB}`| ams |
 |\overleftharpoon|$\overleftharpoon{AB}$ |`\overleftharpoon{AB}`| MnSymbol |
@@ -1635,8 +1635,8 @@ If you know the shape of a character, but not its name,
 | \uarr                | $\uarr$                     |                            | texvc extension |
 | \ulcorner            | $\ulcorner$                 |                            | ams             |
 | \underbar            | $\underbar{X}$              | `\underbar{X}`             |                 |
-| \underbrace          | $\underbrace{x+⋯+x}_{n\text{ times}}$ | `\underbrace{x+⋯+x}_{n\text{ times}}`| |
-| \underbracket        | (Not supported)             |                            |                 |
+| \underbrace          | $\underbrace{x+⋯+x}_{n\text{ times}}$   | `\underbrace{x+⋯+x}_{n\text{ times}}`| stix |
+| \underbracket        | $\underbracket{x+⋯+x}_{n\text{ times}}$ | `\underbracket{x+⋯+x}_{n\text{ times}}` |stix |
 | \undergroup          | $\undergroup{AB}$           | `\undergroup{AB}`          | MnSymbol        |
 | \underleftarrow      | $\underleftarrow{AB}$       | `\underleftarrow{AB}`      | ams             |
 | \underleftrightarrow | $\underleftrightarrow{AB}$  | `\underleftrightarrow{AB}` | ams             |

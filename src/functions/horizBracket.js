@@ -12,16 +12,16 @@ const mathmlBuilder = (group, style) => {
   ]);
 };
 
-// Horizontal stretchy braces
+// Horizontal stretchy brackets
 defineFunction({
-  type: "horizBrace",
-  names: ["\\overbrace", "\\underbrace"],
+  type: "horizBracket",
+  names: ["\\overbrace", "\\underbrace", "\\overbracket", "\\underbracket"],
   props: {
     numArgs: 1
   },
   handler({ parser, funcName }, args) {
     return {
-      type: "horizBrace",
+      type: "horizBracket",
       mode: parser.mode,
       label: funcName,
       isOver: /^\\over/.test(funcName),
