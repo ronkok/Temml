@@ -1165,6 +1165,9 @@ const test = () => {
   new Expect(r`\oint\nolimits_i^n`).toBuild();
   new Expect(r`\oiint\nolimits_i^n`).toBuild();
   new Expect(r`\oiiint\nolimits_i^n`).toBuild();
+  assertion = "A class assignment should build an operator"
+  new Expect(r`\mathop{\int}`).toBuild();
+  new Expect(r`\mathop \int`).toBuild();
 
   assertion = "A style change parser should work"
   new Expect(r`\displaystyle x`).toParse();
