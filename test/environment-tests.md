@@ -37,7 +37,7 @@ Also, there is a section [below][2] on `\tag`s, `\label`s, and `\ref`s.
 |  c & d                |    `c & d`\                | c & d                      |    `c & d`\                  |
 |  \end{matrix}$        | `\end{matrix}`             | \end{array}$               | `\end{array}`                |
 +-----------------------+----------------------------+----------------------------+------------------------------+
-| $\begin{matrix*}[r]   | `\begin{matrix*}`\         | $\begin{array}{cc}         | `\begin{darray}{cc}`\        |
+| $\begin{matrix*}      | `\begin{matrix*}`\         | $\begin{array}{cc}         | `\begin{darray}{cc}`\        |
 |  a & b \\             |    `a & b \\`\             | a & b \\                   |    `a & b \\`\               |
 |  1.2 & 3.5            |    `1.2 & 3.5`\            | c & d                      |    `c & d`\                  |
 |  \end{matrix*}$       | `\end{matrix*}`            | \end{array}$               | `\end{darray}`               |
@@ -198,6 +198,19 @@ Let's add a label to that one:
 
 ...and show an eqref to the label: $\eqref{g2}$, via the code: `\eqref{g2}`.
 
+Now we look at a starred AMS environment with a tag and a label:
+
++:============================:+:==================================+
+| $$                           | `\begin{align*}`\                 |
+| \begin{align*}               |  `a&=b+c \tag{t} \label{g3} \\`\  |
+| a&=b+c \tag{t} \label{g3} \\ |  `d+e&=f`\                        |
+| d+e&=f                       |  `\end{align*}`                   |
+| \end{align*}                 |                                   |
+| $$                           |                                   |
++------------------------------+-----------------------------------+
+
+...and show an eqref to the label: $\eqref{g3}$, via the code: `\eqref{g3}`.
+
 Next, we have a non-AMS environment with a tag:
 
 +:=====================:+:===========================+
@@ -207,8 +220,8 @@ Next, we have a non-AMS environment with a tag:
 |  \end{matrix}$$       | `\end{matrix}`             |
 +-----------------------+----------------------------+
 
-The tag is applied to the entire math zone, not just one row. That is
-consistent with LaTeX. We can then add a label:
+In a non-AMS environment, the tag is applied to the entire math zone,
+not just one row. That is consistent with LaTeX. We can then add a label:
 
 +:===============================:+:===================================+
 | $$\begin{matrix}                | `\begin{matrix}`\                  |

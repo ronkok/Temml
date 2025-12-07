@@ -267,6 +267,7 @@ const mathmlBuilder = function(group, style) {
   const tbl = [];
   const numRows = group.body.length
   const hlines = group.hLinesBeforeRow;
+  const tagIsPresent = (group.tags && group.tags.some((tag) => tag));
 
   for (let i = 0; i < numRows; i++) {
     const rw = group.body[i];
@@ -296,7 +297,7 @@ const mathmlBuilder = function(group, style) {
     for (let k = 0; k < numColumns - rw.length; k++) {
       row.push(new mathMLTree.MathNode("mtd", [], [], style))
     }
-    if (group.autoTag) {
+    if (tagIsPresent) {
       const tag = group.tags[i];
       let tagElement
       if (tag === true) {  // automatic numbering
@@ -408,7 +409,7 @@ const mathmlBuilder = function(group, style) {
       if (j === numCols - 1 && hand === 1) { return "0" }
       if (group.envClasses[0] !== "align") { return sidePadding }
       if (hand === 1) { return "0" }
-      if (group.autoTag) {
+      if (tagIsPresent) {
         return (j % 2) ? "1" : "0"
       } else {
         return (j % 2) ? "0" : "1"
@@ -444,7 +445,7 @@ const mathmlBuilder = function(group, style) {
           // TODO: Remove -webkit- when Chromium no longer needs it.
           row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")]
         }
-        if (group.autoTag) {
+        if (tagIsPresent) {
           const k = group.leqno ? 0 : row.children.length - 1
           row.children[k].classes = [];  // Default is center.
         }
@@ -501,7 +502,7 @@ const mathmlBuilder = function(group, style) {
         row.children[0].style.borderLeft = sep
       }
     }
-    let iCol = group.autoTag ? 0 : -1
+    let iCol = tagIsPresent ? 0 : -1
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
         const colAlign = alignMap[cols[i].align];
