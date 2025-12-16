@@ -4,8 +4,10 @@ import { assertNodeType } from "../parseNode";
 import { colorFromSpec, validateColor } from "./color"
 import * as mml from "../buildMathML";
 
+const boxTags = ["\\boxed", "\\fcolorbox", "\\colorbox"];
+
 const mathmlBuilder = (group, style) => {
-  const tag = group.label === "\\boxed" ? "mrow" : "menclose"
+  const tag = boxTags.includes(group.label) ? "mrow" : "menclose"
   const node = new mathMLTree.MathNode(tag, [mml.buildGroup(group.body, style)])
   switch (group.label) {
     case "\\overline":
@@ -65,13 +67,8 @@ const mathmlBuilder = (group, style) => {
       break
     case "\\fcolorbox":
     case "\\colorbox": {
-      // <menclose> doesn't have a good notation option for \colorbox.
-      // So use <mpadded> instead. Set some attributes that come
-      // included with <menclose>.
-      //const fboxsep = 3; // 3 pt from LaTeX source2e
-      //node.setAttribute("height", `+${2 * fboxsep}pt`)
-      //node.setAttribute("voffset", `${fboxsep}pt`)
-      node.style.padding = "3pt"
+      // Don't use <menclose>. WebKit would show a radical.
+      node.style.padding = "0.3em"  // 3 pt from LaTeX source2e for a 10pt font
       if (group.label === "\\fcolorbox") {
         node.style.border = "0.0667em solid " + String(group.borderColor)
       }
