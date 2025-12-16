@@ -115,3 +115,6 @@ export const protocolFromUrl = function(url) {
 export const round = function(n) {
   return +n.toFixed(4);
 };
+
+// Identify short letters. Used for accents and \cancelto.
+export const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳"

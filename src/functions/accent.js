@@ -2,9 +2,8 @@ import defineFunction, { normalizeArgument } from "../defineFunction"
 import * as mathMLTree from "../mathMLTree"
 import * as stretchy from "../stretchy"
 import * as mml from "../buildMathML"
+import { smalls } from "../utils"
 
-// Identify letters to which we'll attach a combining accent character
-const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳"
 
 // From the KaTeX font metrics, identify letters whose accents need a italic correction.
 const smallNudge = "DHKLUcegorsuvxyzΠΥΨαδηιμνοτυχϵ"

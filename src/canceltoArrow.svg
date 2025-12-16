@@ -1,0 +1,15 @@
+<svg xmlns='http://www.w3.org/2000/svg'>
+<!--See Temml CSS files for minified versions of this arrow.-->
+  <defs>
+    <marker id='arrowhead'
+      markerWidth='7' markerHeight='5'
+      refX='7' refY='2.5'
+      orient='auto'
+      markerUnits='strokeWidth'>
+      <path d='M0,0 L7,2.5 L0,5 z' fill='currentColor' stroke='none'/>
+    </marker>
+  </defs>
+  <line y1='100%' x2='100%' stroke='currentColor' stroke-width='0.06em'
+    vector-effect='non-scaling-stroke' marker-end='url(#arrowhead)'>
+  </line>
+</svg>

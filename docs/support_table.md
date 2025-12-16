@@ -390,6 +390,7 @@ If you know the shape of a character, but not its name,
 |\c|$\text{\c{c}}$|`\text{\c{c}}`||
 |\cal|${\cal AaBb}$|`{\cal AaBb}`||
 |\cancel|$\cancel{5}$|`\cancel{5}`| cancel |
+|\cancelto|$\cancel{6}{5}$|`\cancel{6}{5}`| cancel |
 |\Cap|$\Cap$|| ams |
 |\cap|$\cap$|||
 |\capbarcup|$\capbarcup$|| stix |

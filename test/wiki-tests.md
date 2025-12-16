@@ -939,6 +939,16 @@ the dot on the i below. It's fixed by a Temml CSS rule, so it renders properly.
 | 267 | \widetilde{U_i} | $\widetilde{U_i}$ |
 +-----+-----------------+-------------------+
 
+Next up are some tests of `\cancelto`, in various shapes.\
+Also note that adjacent math on either side is not displaced.
+
++=====+=============================+===============================+
+| 268 | 4\cancelto{6}{5}7\          | $4\cancelto{6}{5}7$\          |
+|     | 4\cancelto{6}{x}7\          | $4\cancelto{6}{x}7$\          |
+|     | 4\cancelto{6}{55}7\         | $4\cancelto{6}{55}7$\         |
+|     | \cancelto{0}{\frac{dx}{dy}} | $\cancelto{0}{\frac{dx}{dy}}$ |
++-----+-----------------------------+-------------------------------+
+
 
 <br>
 </body>

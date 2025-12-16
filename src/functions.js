@@ -10,7 +10,7 @@ import "./functions/accent";
 import "./functions/accentunder";
 import "./functions/arrow";
 import "./functions/bordermatrix"
-//import "./functions/cancelto";
+import "./functions/cancelto";
 import "./environments/cd";
 import "./functions/char";
 import "./functions/color";

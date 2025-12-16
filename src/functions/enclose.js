@@ -32,6 +32,7 @@ const mathmlBuilder = (group, style) => {
       node.setAttribute("notation", "updiagonalstrike downdiagonalstrike")
       node.classes.push("tml-xcancel")
       break
+    // cancelto is handled in cancelto.js
     case "\\longdiv":
       node.setAttribute("notation", "longdiv")
       node.classes.push("longdiv-top")

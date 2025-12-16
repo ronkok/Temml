@@ -102,15 +102,17 @@ See also [letters](#letters)
 | $\xcancel{ABC}$  `\xcancel{ABC}`     | $\underbrace{a+b+c}_{\text{note}}$  |
 |                                      | `\underbrace{a+b+c}_{\text{note}}`  |
 +--------------------------------------+-------------------------------------+
-| $\sout{abc}$  `\sout{abc}`           | $\overbracket{a+b+c}^{\text{note}}$ |
-|                                      | `\overbracket{a+b+c}^{\text{note}}` |
+| $\cancelto{6}{5}$                    | $\overbracket{a+b+c}^{\text{note}}$ |
+| `\cancelto{6}{5}`                    | `\overbracket{a+b+c}^{\text{note}}` |
 +--------------------------------------+-------------------------------------+
-| $\ref{tag1}$  `\ref{tag1}`           | $\underbracket{a+b+c}_{\text{note}}$|
+| $\sout{abc}$  `\sout{abc}`           | $\underbracket{a+b+c}_{\text{note}}$|
 |                                      | `\underbracket{a+b+c}_{\text{note}}`|
 +--------------------------------------+-------------------------------------+
-| $$ \tag{hi} x+y^{2x} \label{tag1} $$ | `\tag{hi} x+y^{2x} \label{tag1}`    |
+| $\ref{tag1}$  `\ref{tag1}`           | `\tag{hi} x+y^{2x} \label{tag1}`    |
 +--------------------------------------+-------------------------------------+
-| $$\tag*{bye} x+y^{2x}$$              | `\tag*{bye} x+y^{2x}`               |
+| $$ \tag{hi} x+y^{2x} \label{tag1} $$ | `\tag*{bye} x+y^{2x}`               |
++--------------------------------------+-------------------------------------+
+| $$\tag*{bye} x+y^{2x}$$              |                                     |
 +--------------------------------------+-------------------------------------+
 
 Also some [environments](#environments) have automatic equation numbering.

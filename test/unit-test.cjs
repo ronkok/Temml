@@ -1563,6 +1563,8 @@ const test = () => {
   new Expect(parse(r`\cancel{a b}`)[0].type).toBe("enclose")
   assertion = "A strike-through parser should be grouped more tightly than supsubs"
   new Expect(parse(r`\cancel x^2`)[0].type).toBe("supsub")
+  new Expect(r`\cancelto{5}{4}`).toParse()
+  new Expect(r`\cancelto{5}{4}`).toBuild()
 
   assertion = "An actuarial angle parser should not fail in math mode"
   new Expect(r`a_{\angl{n}}`).toParse()
