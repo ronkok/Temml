@@ -534,7 +534,7 @@ Notes:
     Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
 
 4.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
-    They don’t cramp subscripts and superscripts.)
+    They don’t cramp subscripts.)
 
 5.  In very tall radicals, Chromium does not accurately match the vinculum to the surd.
 

@@ -43,6 +43,13 @@ math.tml-display {
   width: 100%;
 }
 
+/* Cramped superscripts in WebKit */
+mfrac > :nth-child(2),
+msqrt,
+mover > :first-child {
+  math-shift: compact
+}
+
 .menclose {
   display: inline-block;
   position: relative;

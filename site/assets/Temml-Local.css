@@ -50,6 +50,13 @@ mo.tml-prime {
   font-family: Temml;
 }
 
+/* Cramped superscripts in WebKit */
+mfrac > :nth-child(2),
+msqrt,
+mover > :first-child {
+  math-shift: compact
+}
+
 .menclose {
   display: inline-block;
   position: relative;
