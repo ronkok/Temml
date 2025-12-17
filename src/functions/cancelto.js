@@ -69,6 +69,8 @@ defineFunction({
     }
     zeroWidthToNode.setAttribute("width", "0.1px") // Don't use 0. WebKit would hide it.
     const mover = new mathMLTree.MathNode("mover", [dummyNode, zeroWidthToNode])
-    return mml.makeRow([node, mover])
+    // Fix Firefox positioning.
+    const nudgeLeft = new mathMLTree.MathNode('mrow', [], ["ff-nudge-left"])
+    return mathMLTree.newDocumentFragment([mml.makeRow([node, mover]), nudgeLeft])
   }
 })
