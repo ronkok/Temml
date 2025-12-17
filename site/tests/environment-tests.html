@@ -27,10 +27,10 @@
 a & b \\
 c & d
 \end{array}'><math><mtable><mtr><mtd style="padding-left:0pt;padding-right:5.9776pt;"><mi>a</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0pt;"><mi>b</mi></mtd></mtr><mtr><mtd style="padding-left:0pt;padding-right:5.9776pt;"><mi>c</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0pt;"><mi>d</mi></mtd></mtr></mtable></math></span></td><td><code>\begin{array}{cc}</code><br>   <code>a &amp; b \\</code><br>   <code>c &amp; d</code><br><code>\end{array}</code></td></tr>
-<tr><td><span class='hurmet-tex' data-entry='\begin{matrix*}[r]
+<tr><td><span class='hurmet-tex' data-entry='\begin{matrix*}
  a & b \\
  1.2 & 3.5
- \end{matrix*}'><math><mtable><mtr><mtd class="tml-right" style="padding-left:0em;padding-right:5.9776pt;"><mi>a</mi></mtd><mtd class="tml-right" style="padding-left:5.9776pt;padding-right:0em;"><mi>b</mi></mtd></mtr><mtr><mtd class="tml-right" style="padding-left:0em;padding-right:5.9776pt;"><mn>1.2</mn></mtd><mtd class="tml-right" style="padding-left:5.9776pt;padding-right:0em;"><mn>3.5</mn></mtd></mtr></mtable></math></span></td><td><code>\begin{matrix*}</code><br>   <code>a &amp; b \\</code><br>   <code>1.2 &amp; 3.5</code><br><code>\end{matrix*}</code></td><td><span class='hurmet-tex' data-entry='\begin{array}{cc}
+ \end{matrix*}'><math><mtable><mtr><mtd style="padding-left:0em;padding-right:5.9776pt;"><mi>a</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0em;"><mi>b</mi></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:5.9776pt;"><mn>1.2</mn></mtd><mtd style="padding-left:5.9776pt;padding-right:0em;"><mn>3.5</mn></mtd></mtr></mtable></math></span></td><td><code>\begin{matrix*}</code><br>   <code>a &amp; b \\</code><br>   <code>1.2 &amp; 3.5</code><br><code>\end{matrix*}</code></td><td><span class='hurmet-tex' data-entry='\begin{array}{cc}
 a & b \\
 c & d
 \end{array}'><math><mtable><mtr><mtd style="padding-left:0pt;padding-right:5.9776pt;"><mi>a</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0pt;"><mi>b</mi></mtd></mtr><mtr><mtd style="padding-left:0pt;padding-right:5.9776pt;"><mi>c</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0pt;"><mi>d</mi></mtd></mtr></mtable></math></span></td><td><code>\begin{darray}{cc}</code><br>   <code>a &amp; b \\</code><br>   <code>c &amp; d</code><br><code>\end{darray}</code></td></tr>
@@ -180,12 +180,18 @@ i\in\Lambda\\
   e=b+c
 \end{gather}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" class="tml-jot" style="width:100%;"><mtr id="g2" class="tml-tageqn"><mtd style="padding:0;width:50%;padding-left:0em;padding-right:0em;"></mtd><mtd style="padding-left:0em;padding-right:0em;"><mrow><mi>a</mi><mo>=</mo><mi>b</mi><mrow class="tml-label"></mrow></mrow></mtd><mtd style="padding:0;width:50%;padding-left:0em;padding-right:0em;"><mtext class="tml-tag">(91)</mtext></mtd></mtr><mtr><mtd style="padding:0;width:50%;padding-left:0em;padding-right:0em;"></mtd><mtd style="padding-left:0em;padding-right:0em;"><mrow><mi>e</mi><mo>=</mo><mi>b</mi><mo>+</mo><mi>c</mi></mrow></mtd><mtd style="padding:0;width:50%;padding-left:0em;padding-right:0em;"><mtext><span class="tml-eqn"></span></mtext></mtd></mtr></mtable></math></p></td><td><code>\begin{gather}</code><br>   <code>a=b \tag{91} \label{g2}\\</code><br>   <code>e=b+c</code><br><code>\end{gather}</code></td></tr></table>
 <p>...and show an eqref to the label: <span class='hurmet-tex' data-entry='\eqref{g2}'><a href='#g2' class="tml-ref tml-eqref"></a></span>, via the code: <code>\eqref{g2}</code>.</p>
+<p>Now we look at a starred AMS environment with a tag and a label:</p>
+<table class="c1c"><tr><td><p class='hurmet-tex' data-entry='\begin{align*}
+a&=b+c \tag{t} \label{g3} \\
+d+e&=f
+\end{align*}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" class="tml-jot"><mtr id="g3" class="tml-tageqn"><mtd class="tml-right" style="padding:0;width:50%;padding-left:0em;padding-right:0em;"></mtd><mtd class="tml-right" style="padding-left:1em;padding-right:0em;"><mi>a</mi></mtd><mtd class="tml-left" style="padding-left:0em;padding-right:0em;"><mrow><mo>=</mo><mi>b</mi><mo>+</mo><mi>c</mi><mrow class="tml-label"></mrow></mrow></mtd><mtd style="padding:0;width:50%;padding-left:1em;padding-right:0em;"><mtext class="tml-tag">(t)</mtext></mtd></mtr><mtr><mtd class="tml-right" style="padding:0;width:50%;padding-left:0em;padding-right:0em;"></mtd><mtd class="tml-right" style="padding-left:1em;padding-right:0em;"><mrow><mi>d</mi><mo>+</mo><mi>e</mi></mrow></mtd><mtd class="tml-left" style="padding-left:0em;padding-right:0em;"><mrow><mo>=</mo><mi>f</mi></mrow></mtd><mtd style="padding:0;width:50%;padding-left:1em;padding-right:0em;"><mtext></mtext></mtd></mtr></mtable></math></p></td><td><code>\begin{align*}</code><br> <code>a&amp;=b+c \tag{t} \label{g3} \\</code><br> <code>d+e&amp;=f</code><br> <code>\end{align*}</code></td></tr></table>
+<p>...and show an eqref to the label: <span class='hurmet-tex' data-entry='\eqref{g3}'><a href='#g3' class="tml-ref tml-eqref"></a></span>, via the code: <code>\eqref{g3}</code>.</p>
 <p>Next, we have a non-AMS environment with a tag:</p>
 <table class="c1c"><tr><td><p class='hurmet-tex' data-entry='\begin{matrix}
  a & b \tag{hi!} \\
  c & d
  \end{matrix}'><math display="block" class="tml-display" style="display:block math;"><mtable displaystyle="true" style="width:100%;"><mtr class="tml-tageqn"><mtd style="padding:0;width:50%;"></mtd><mtd><mrow><mtable><mtr><mtd style="padding-left:0em;padding-right:5.9776pt;"><mi>a</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0em;"><mi>b</mi></mtd></mtr><mtr><mtd style="padding-left:0em;padding-right:5.9776pt;"><mi>c</mi></mtd><mtd style="padding-left:5.9776pt;padding-right:0em;"><mi>d</mi></mtd></mtr></mtable></mrow></mtd><mtd style="padding:0;width:50%;"><mtext class="tml-tag">(hi!)</mtext></mtd></mtr></mtable></math></p></td><td><code>\begin{matrix}</code><br>   <code>a &amp; b \tag{hi!} \\</code><br>   <code>c &amp; d</code><br><code>\end{matrix}</code></td></tr></table>
-<p>The tag is applied to the entire math zone, not just one row. That is consistent with LaTeX. We can then add a label:</p>
+<p>In a non-AMS environment, the tag is applied to the entire math zone, not just one row. That is consistent with LaTeX. We can then add a label:</p>
 <table class="c1c"><tr><td><p class='hurmet-tex' data-entry='\begin{matrix}
  a & b \tag{yo!} \label{m} \\
  c & d

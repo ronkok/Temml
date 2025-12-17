@@ -179,6 +179,9 @@ const round = function(n) {
   return +n.toFixed(4);
 };
 
+// Identify short letters. Used for accents and \cancelto.
+const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳";
+
 /**
  * This is a module for storing settings passed into Temml. It correctly handles
  * default settings.
@@ -794,6 +797,8 @@ const stretchyCodePoint = {
   xrightarrow: "\u2192",
   underbrace: "\u23df",
   overbrace: "\u23de",
+  overbracket: "\u23b4",
+  underbracket: "\u23b5",
   overgroup: "\u23e0",
   overparen: "⏜",
   undergroup: "\u23e1",
@@ -2448,9 +2453,6 @@ function buildMathML(tree, texExpression, style, settings) {
   }
   return math;
 }
-
-// Identify letters to which we'll attach a combining accent character
-const smalls = "acegıȷmnopqrsuvwxyzαγεηικμνοπρςστυχωϕ𝐚𝐜𝐞𝐠𝐦𝐧𝐨𝐩𝐪𝐫𝐬𝐮𝐯𝐰𝐱𝐲𝐳";
 
 // From the KaTeX font metrics, identify letters whose accents need a italic correction.
 const smallNudge = "DHKLUcegorsuvxyzΠΥΨαδηιμνοτυχϵ";
@@ -6432,6 +6434,7 @@ const mathmlBuilder$9 = function(group, style) {
   const tbl = [];
   const numRows = group.body.length;
   const hlines = group.hLinesBeforeRow;
+  const tagIsPresent = (group.tags && group.tags.some((tag) => tag));
 
   for (let i = 0; i < numRows; i++) {
     const rw = group.body[i];
@@ -6461,7 +6464,7 @@ const mathmlBuilder$9 = function(group, style) {
     for (let k = 0; k < numColumns - rw.length; k++) {
       row.push(new MathNode("mtd", [], [], style));
     }
-    if (group.autoTag) {
+    if (tagIsPresent) {
       const tag = group.tags[i];
       let tagElement;
       if (tag === true) {  // automatic numbering
@@ -6573,7 +6576,7 @@ const mathmlBuilder$9 = function(group, style) {
       if (j === numCols - 1 && hand === 1) { return "0" }
       if (group.envClasses[0] !== "align") { return sidePadding }
       if (hand === 1) { return "0" }
-      if (group.autoTag) {
+      if (tagIsPresent) {
         return (j % 2) ? "1" : "0"
       } else {
         return (j % 2) ? "0" : "1"
@@ -6609,7 +6612,7 @@ const mathmlBuilder$9 = function(group, style) {
           // TODO: Remove -webkit- when Chromium no longer needs it.
           row.children[j].classes = ["tml-" + (j % 2 ? "left" : "right")];
         }
-        if (group.autoTag) {
+        if (tagIsPresent) {
           const k = group.leqno ? 0 : row.children.length - 1;
           row.children[k].classes = [];  // Default is center.
         }
@@ -6666,7 +6669,7 @@ const mathmlBuilder$9 = function(group, style) {
         row.children[0].style.borderLeft = sep;
       }
     }
-    let iCol = group.autoTag ? 0 : -1;
+    let iCol = tagIsPresent ? 0 : -1;
     for (let i = iStart; i < iEnd; i++) {
       if (cols[i].type === "align") {
         const colAlign = alignMap[cols[i].align];
@@ -7189,6 +7192,78 @@ defineFunction({
     const result = env.handler(context);
     parser.expect("}", true);
     return result
+  }
+});
+
+defineFunction({
+  type: "cancelto",
+  names: ["\\cancelto"],
+  props: {
+    numArgs: 2
+  },
+  handler({ parser }, args) {
+    const to = args[0];
+    const body = args[1];
+    return {
+      type: "cancelto",
+      mode: parser.mode,
+      body,
+      to,
+      isCharacterBox: isCharacterBox(body)
+    };
+  },
+  mathmlBuilder(group, style) {
+    const fromNode = new MathNode(
+      "mrow",
+      [buildGroup$1(group.body, style)],
+      ["ff-narrow"] // A zero-width mrow.
+    );
+    // Write the arrow in a node written after the content.
+    // That way, the arrow will be an overlay on the content.
+    const phantom = new MathNode("mphantom", [buildGroup$1(group.body, style)]);
+    const arrow = new MathNode("mrow", [phantom], ["tml-cancelto"]);
+    if (group.isCharacterBox && smalls.indexOf(group.body.body[0].text) > -1) {
+      arrow.style.left = "0.1em";
+      arrow.style.width = "90%";
+    }
+    const node = new MathNode("mrow", [fromNode, arrow], ["menclose"]);
+    if (!group.isCharacterBox || /[f∫∑]/.test(group.body.body[0].text)) {
+      // Add 0.2em space to right of content to make room for the arrowhead.
+      phantom.style.paddingRight = "0.2em";
+    } else {
+      phantom.style.padding = "0.5ex 0.1em 0 0";
+      const strut = new MathNode('mspace', []);
+      strut.setAttribute('height', "0.85em");
+      fromNode.children.push(strut);
+    }
+
+    // Create the "to" value above and to the right of the arrow.
+    // First, we want a dummy node with the same height as the `from` content.
+    // We'll place the `to` node above the dummy to get the correct vertical alignment.
+    let dummyNode;
+    if (group.isCharacterBox) {
+      dummyNode = new MathNode('mspace', []);
+      dummyNode.setAttribute('height', "1em");
+    } else {
+      // Create a phantom node with the same content as the body.
+      const inner = buildGroup$1(group.body, style);
+      // The phantom node will be zero-width, so it won't affect horizontal spacing.
+      const zeroWidthNode = new MathNode("mpadded", [inner]);
+      zeroWidthNode.setAttribute("width", "0.1px"); // Don't use 0. WebKit would omit it.
+      dummyNode = new MathNode("mphantom", [zeroWidthNode]); // Hide it.
+    }
+    const toNode = buildGroup$1(group.to, style);
+    const zeroWidthToNode = new MathNode("mpadded", [toNode]);
+    if (!group.isCharacterBox || /[f∫∑]/.test(group.body.body[0].text)) {
+      const w = new MathNode("mspace", []);
+      w.setAttribute('width', "0.2em");
+      zeroWidthToNode.children.unshift(w);
+    }
+    zeroWidthToNode.setAttribute("width", "0.1px"); // Don't use 0. WebKit would hide it.
+    const mover = new MathNode("mover", [dummyNode, zeroWidthToNode]);
+    // Fix Firefox positioning.
+    const nudgeLeft = new MathNode('mrow', [], ["ff-nudge-left"]);
+    return newDocumentFragment([makeRow([node, mover]), nudgeLeft])
   }
 });
 
@@ -8118,8 +8193,10 @@ defineFunction({
   }
 });
 
+const boxTags = ["\\boxed", "\\fcolorbox", "\\colorbox"];
+
 const mathmlBuilder$7 = (group, style) => {
-  const tag = group.label === "\\boxed" ? "mrow" : "menclose";
+  const tag = boxTags.includes(group.label) ? "mrow" : "menclose";
   const node = new MathNode(tag, [buildGroup$1(group.body, style)]);
   switch (group.label) {
     case "\\overline":
@@ -8146,6 +8223,7 @@ const mathmlBuilder$7 = (group, style) => {
       node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
       node.classes.push("tml-xcancel");
       break
+    // cancelto is handled in cancelto.js
     case "\\longdiv":
       node.setAttribute("notation", "longdiv");
       node.classes.push("longdiv-top");
@@ -8178,13 +8256,8 @@ const mathmlBuilder$7 = (group, style) => {
       break
     case "\\fcolorbox":
     case "\\colorbox": {
-      // <menclose> doesn't have a good notation option for \colorbox.
-      // So use <mpadded> instead. Set some attributes that come
-      // included with <menclose>.
-      //const fboxsep = 3; // 3 pt from LaTeX source2e
-      //node.setAttribute("height", `+${2 * fboxsep}pt`)
-      //node.setAttribute("voffset", `${fboxsep}pt`)
-      node.style.padding = "3pt";
+      // Don't use <menclose>. WebKit would show a radical.
+      node.style.padding = "0.3em";  // 3 pt from LaTeX source2e for a 10pt font
       if (group.label === "\\fcolorbox") {
         node.style.border = "0.0667em solid " + String(group.borderColor);
       }
@@ -8953,16 +9026,16 @@ const mathmlBuilder$4 = (group, style) => {
   ]);
 };
 
-// Horizontal stretchy braces
+// Horizontal stretchy brackets
 defineFunction({
-  type: "horizBrace",
-  names: ["\\overbrace", "\\underbrace"],
+  type: "horizBracket",
+  names: ["\\overbrace", "\\underbrace", "\\overbracket", "\\underbracket"],
   props: {
     numArgs: 1
   },
   handler({ parser, funcName }, args) {
     return {
-      type: "horizBrace",
+      type: "horizBracket",
       mode: parser.mode,
       label: funcName,
       isOver: /^\\over/.test(funcName),
@@ -10118,7 +10191,8 @@ defineFunction({
     "\u2a1a"
   ],
   props: {
-    numArgs: 0
+    numArgs: 0,
+    allowedInArgument: true
   },
   handler({ parser, funcName }) {
     let fName = funcName;
@@ -10858,18 +10932,18 @@ const largePad = "AJdfΔΛ";
 defineFunctionBuilders({
   type: "supsub",
   mathmlBuilder(group, style) {
-    // Is the inner group a relevant horizontal brace?
-    let isBrace = false;
+    // Is the inner group a relevant horizontal brace or bracket?
+    let isBracket = false;
     let isOver;
     let isSup;
     let appendApplyFunction = false;
     let appendSpace = false;
     let needsLeadingSpace = false;
 
-    if (group.base && group.base.type === "horizBrace") {
+    if (group.base && group.base.type === "horizBracket") {
       isSup = !!group.sup;
       if (isSup === group.base.isOver) {
-        isBrace = true;
+        isBracket = true;
         isOver = group.base.isOver;
       }
     }
@@ -10917,7 +10991,7 @@ defineFunctionBuilders({
     }
 
     let nodeType;
-    if (isBrace) {
+    if (isBracket) {
       nodeType = isOver ? "mover" : "munder";
     } else if (!group.sub) {
       const base = group.base;
@@ -13987,7 +14061,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.12.01";
+const version = "0.12.02";
 
 function postProcess(block) {
   const labelMap = {};

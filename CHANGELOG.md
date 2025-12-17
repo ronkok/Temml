@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.12.02] = 2025-12-17
+
+### Fixed
+
+- \mathop <operator symbol>
+- \tag in a starred AMD environment
+- \colorbox in WebKit
+- CSS for cramped superscripts
+
+### Added
+
+- \overbracket & \underbracket
+- \cancelto
+
 ## [0.12.01] = 2025-11-02
 
 ### Fixed

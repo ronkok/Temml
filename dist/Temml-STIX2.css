@@ -49,10 +49,38 @@ mo.tml-prime {
   font-feature-settings: 'ss04';
 }
 
+/* Cramped superscripts in WebKit */
+mfrac > :nth-child(2),
+msqrt,
+mover > :first-child {
+  math-shift: compact
+}
+
+.menclose {
+  display: inline-block;
+  position: relative;
+  padding: 0.5ex 0ex;
+}
+.tml-cancelto {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.5ex 0ex;
+  background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg'><defs><marker id='a' markerHeight='5' markerUnits='strokeWidth' markerWidth='7' orient='auto' refX='7' refY='2.5'><path fill='currentColor' d='m0 0 7 2.5L0 5z'/></marker></defs><line x2='100%' y1='100%' stroke='currentColor' stroke-width='.06em' marker-end='url(%23a)' vector-effect='non-scaling-stroke'/></svg>");
+}
+
 @supports (-moz-appearance: none) {
   /* \vec w/o italic correction for Firefox */
   .tml-vec {
     transform: scale(0.75)
+  }
+  /* Fix \cancelto in Firefox */
+  .ff-narrow {
+    width: 0em;
+  }
+  .ff-nudge-left {
+    margin-left: -0.2em;
   }
 }
 
