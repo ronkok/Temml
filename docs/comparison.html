@@ -9,12 +9,74 @@
     <link rel="stylesheet" href="../katex.css">
     <link rel="stylesheet" href="../docStyles.css">
     <script src="../../assets/temml.min.js"></script>
+    <!-- See https://docs.mathjax.org/en/latest/output/mathml.html#mathml-output for the following MathJax script.  -->
     <style>
-        .mathHighlight { background-color:yellow; color:red; }
-        mjx-container[display="block"] { display: block; margin: 1em 0; }
-        th { background: white; position: sticky; top: 0 }
+    mjx-container[display="block"] {
+      display: block;
+      margin: 1em 0;
+    }
     </style>
-  </head>
+    <style id="mjx-explorer-styles"></style>
+    <script>
+    MathJax = {
+      //
+      //  Load only TeX input and the contextual menu
+      //
+      loader: {load: ['input/tex', 'a11y/explorer', 'ui/menu']},
+      startup: {
+        //
+        //  Set the styles needed for the expression explorer
+        //  and disable the assistive MathML menu
+        //
+        ready() {
+          MathJax.startup.defaultReady();
+          const doc = MathJax.startup.document;
+          const {StyleJsonSheet} = MathJax._.util.StyleJson;
+          const css = new StyleJsonSheet(doc.constructor.speechStyles);
+          const sheet = document.getElementById('mjx-explorer-styles');
+          sheet.textContent = css.cssText;
+          doc.menu.menu.findID('Options', 'AssistiveMml').disable();
+        },
+        //
+        //  Perform the initial typesetting (we don't have an output
+        //  jax, so this isn't done automatically).
+        //
+        pageReady() {
+          return MathJax.startup.document.renderPromise();
+        }
+      },
+      options: {
+        //
+        //  Override the usual typeset render action with one that generates MathML output
+        //
+        renderActions: {
+          assistiveMml: [],  // disable assistive mathml
+          typeset: [150,
+            (doc) => {for (math of doc.math) {MathJax.config.renderMathML(math, doc)}},
+            (math, doc) => MathJax.config.renderMathML(math, doc)
+          ]
+        },
+        //
+        //  Don't add assistive MathML
+        //
+        menuOptions: {
+          settings: {
+            assistiveMml: false,
+          }
+        }
+      },
+      //
+      // The action to use for rendering MathML
+      //
+      renderMathML(math, doc) {
+        math.typesetRoot = document.createElement('mjx-container');
+        math.typesetRoot.innerHTML = MathJax.startup.toMML(math.root);
+        math.display && math.typesetRoot.setAttribute('display', 'block');
+      }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/startup.js"></script>
+</head>
   
   <body>
     
@@ -26,7 +88,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.12.02, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.12.02, MathJax 4.0, KaTeX 0.16.27, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -132,7 +194,7 @@
           <tr>
             <td>\'</td>
             <td>₮\text{\'{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\'{a}}\)</td>
             <td>₭\text{\'{a}}₭</td>
             <td>₸\text{\'{a}}₸</td>
             <td><code>\text{\'{a}}</code></td>
@@ -164,7 +226,7 @@
           <tr>
             <td>\"</td>
             <td>₮\text{\"{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\"{a}}\)</td>
             <td>₭\text{\"{a}}₭</td>
             <td>₸\text{\"{a}}₸</td>
             <td><code>\text{\"{a}}</code></td>
@@ -172,10 +234,10 @@
           <tr>
             <td>\$</td>
             <td>₮\text{\textdollar}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\textdollar}\)</td>
             <td>₭\text{\textdollar}₭</td>
             <td>₸\text{\textdollar}₸</td>
-            <td></td>
+            <td>code>\text{\textdollar}</code></td>
           </tr>
           <tr>
             <td>\,</td>
@@ -188,7 +250,7 @@
           <tr>
             <td>\.</td>
             <td>₮\text{\.{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\.{a}}\)</td>
             <td>₭\text{\.{a}}₭</td>
             <td>₸\text{\.{a}}₸</td>
             <td><code>\text{\.{a}}</code></td>
@@ -228,7 +290,7 @@
           <tr>
             <td>\`</td>
             <td>₮\text{\'{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\'{a}}\)</td>
             <td>₭\text{\'{a}}₭</td>
             <td>₸\text{\'{a}}₸</td>
             <td><code>\text{\'{a}}</code></td>
@@ -244,7 +306,7 @@
           <tr>
             <td>\=</td>
             <td>₮\text{\={a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\={a}}\)</td>
             <td>₭\text{\={a}}₭</td>
             <td>₸\text{\={a}}₸</td>
             <td><code>\text{\={a}}</code></td>
@@ -340,7 +402,7 @@
           <tr>
             <td>\~</td>
             <td>₮\text{\~{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\~{a}}\)</td>
             <td>₭\text{\~{a}}₭</td>
             <td>₸\text{\~{a}}₸</td>
             <td><code>\text{\~{a}}</code></td>
@@ -372,7 +434,7 @@
           <tr>
             <td>\^</td>
             <td>₮\text{\^{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\^{a}}\)</td>
             <td>₭\text{\^{a}}₭</td>
             <td>₸\text{\^{a}}₸</td>
             <td><code>\text{\^{a}}</code></td>
@@ -1660,7 +1722,7 @@
           <tr>
             <td>\cal</td>
             <td>₮\cal ABC₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\cal ABC\)</td>
             <td>₭\cal ABC₭</td>
             <td data-tex="\cal"><span class="no-sup">Not supported</span></td>
             <td><code>\cal ABC</code></td>
@@ -1675,11 +1737,11 @@
           </tr>
           <tr>
             <td>\cancelto</td>
-            <td>₮\cancel{6}{5}₮</td>
+            <td>₮\cancelto{6}{5}₮</td>
             <td>\(\cancelto{6}{5}\)</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\cancelto{6}{5}"><span class="no-sup">Not supported</span></td>
-            <td><code>\cancel{6}{5}</code></td>
+            <td><code>\cancelto{6}{5}</code></td>
           </tr>
           <tr>
             <td>\Cap</td>
@@ -2517,19 +2579,19 @@
           </tr>
           <tr>
             <td>\ddddot</td>
-            <td>₮\ddddot x₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₮\ddddot{x}₮</td>
+            <td>\(\ddddot{x}\)</td>
             <td>₭\ddddot{x}₭</td>
             <td>₸\ddddot x₸</td>
-            <td></td>
+            <td><code>\ddddot{x}</code></td>
           </tr>
           <tr>
             <td>\dddot</td>
             <td>₮\dddot x₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\dddot{x}\)</td>
             <td>₭\dddot{x}₭</td>
             <td>₸\dddot x₸</td>
-            <td></td>
+            <td><code>\dddot{x}</code></td>
           </tr>
           <tr>
             <td>\ddot</td>
@@ -2569,10 +2631,10 @@
           <tr>
             <td>\definecolor</td>
             <td>₮\definecolor{sortaGreen}{RGB}{128,128,0} \color{sortaGreen} F=ma₮</td>
+            <td>\(\definecolor{sortaGreen}{RGB}{128,128,0} \color{sortaGreen} F=ma\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td></td>
+            <td><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code><br><code>\color{sortaGreen} F=ma</code></td>
           </tr>
           <tr>
             <td>\deg</td>
@@ -3936,14 +3998,14 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\idotsint</td>
             <td>₮\idotsint₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\idotsint\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\idotsint"><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
           <tr>
             <td>\iddots</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₮\iddots₮</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\iddots"><span class="no-sup">Not supported</span></td>
@@ -3983,8 +4045,8 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\iiiint</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>₮\iiiint₮</td>
+            <td>\(\iiiint\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -4367,7 +4429,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\lAngle</td>
-            <td>₮\lAngle A\rangle₮</td>
+            <td>₮\lAngle A\rAngle₮</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -7318,8 +7380,8 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\require</td>
-            <td>✓</td>
             <td><span class="no-sup">Not supported</span></td>
+            <td>✓</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -7639,7 +7701,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\S</td>
             <td>₮\text{\S}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\S}\)</td>
             <td>₭\text{\S}₭</td>
             <td>₸\text{\S}₸</td>
             <td><code>\text{\S}</code></td>
@@ -7879,10 +7941,10 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\sideset</td>
             <td>₮\sideset{_1^2}{_3^4}\sum₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\sideset{_1^2}{_3^4}\sum\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td>₸\sideset{_1^2}{_3^4}\sum₸</td>
-            <td></td>
+            <td><code>\sideset{_1^2}{_3^4}\sum</code></td>
           </tr>
           <tr>
             <td>\Sigma</td>
@@ -9009,7 +9071,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\Tiny</td>
             <td>₮{\Tiny A B}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\Tiny A B\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td>Non standard</td>
@@ -9200,7 +9262,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\u</td>
             <td>₮\text{\u{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\u{a}}\)</td>
             <td>₭\text{\u{a}}₭</td>
             <td>₸\text{\u{a}}₸</td>
             <td><code>\text{\u{a}}</code></td>
@@ -9304,7 +9366,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\underparen</td>
             <td>₮\underparen{abc}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\underparen{abc}\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\underparen{abc}"><span class="no-sup">Not supported</span></td>
             <td><code>\underparen{abc}</code></td>
@@ -9352,7 +9414,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upalpha</td>
             <td>₮\upalpha₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upalpha₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9376,7 +9438,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upbeta</td>
             <td>₮\upbeta₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upbeta₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9384,7 +9446,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upchi</td>
             <td>₮\upchi₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upchi₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9392,7 +9454,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\updelta</td>
             <td>₮\updelta₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\updelta₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9416,7 +9478,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upeta</td>
             <td>₮\upeta₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upeta₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9424,7 +9486,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upepsilon</td>
             <td>₮\upepsilon₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upepsilon₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9432,7 +9494,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upgamma</td>
             <td>₮\upgamma₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upgamma₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9456,7 +9518,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upiota</td>
             <td>₮\upiota₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upiota₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9464,7 +9526,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upkappa</td>
             <td>₮\upkappa₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upkappa₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9472,7 +9534,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uplambda</td>
             <td>₮\uplambda₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\uplambda₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9488,7 +9550,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upmu</td>
             <td>₮\upmu₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upmu₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9496,7 +9558,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upnu</td>
             <td>₮\upnu₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upnu₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9504,7 +9566,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upomega</td>
             <td>₮\upomega₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upomega₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9512,7 +9574,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upomicron</td>
             <td>₮\upomicron₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upomicron₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9520,7 +9582,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upphi</td>
             <td>₮\upphi₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upphi₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9528,7 +9590,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uppi</td>
             <td>₮\uppi₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\uppi₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9536,7 +9598,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uppsi</td>
             <td>₮\uppsi₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\uppsi₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9544,7 +9606,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uprho</td>
             <td>₮\uprho₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\uprho₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9560,7 +9622,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upsigma</td>
             <td>₮\upsigma₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upsigma₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9584,7 +9646,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uptau</td>
             <td>₮\uptau₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\uptau₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9592,7 +9654,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uptheta</td>
             <td>₮\uptheta₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\uptheta₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9608,7 +9670,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upupsilon</td>
             <td>₮\upupsilon₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upupsilon₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9616,7 +9678,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upxi</td>
             <td>₮\upxi₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upxi₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9624,7 +9686,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upzeta</td>
             <td>₮\upzeta₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td>₭\upzeta₭</td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9672,7 +9734,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\v</td>
             <td>₮\text{\v{a}}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\v{a}}\)</td>
             <td>₭\text{\v{a}}₭</td>
             <td>₸\text{\v{a}}₸</td>
             <td><code>\text{\v{a}}</code></td>

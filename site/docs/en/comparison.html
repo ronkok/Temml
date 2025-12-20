@@ -9,12 +9,74 @@
     <link rel="stylesheet" href="../katex.css">
     <link rel="stylesheet" href="../docStyles.css">
     <script src="../../assets/temml.min.js"></script>
+    <!-- See https://docs.mathjax.org/en/latest/output/mathml.html#mathml-output for the following MathJax script.  -->
     <style>
-        .mathHighlight { background-color:yellow; color:red; }
-        mjx-container[display="block"] { display: block; margin: 1em 0; }
-        th { background: white; position: sticky; top: 0 }
+    mjx-container[display="block"] {
+      display: block;
+      margin: 1em 0;
+    }
     </style>
-  </head>
+    <style id="mjx-explorer-styles"></style>
+    <script>
+    MathJax = {
+      //
+      //  Load only TeX input and the contextual menu
+      //
+      loader: {load: ['input/tex', 'a11y/explorer', 'ui/menu']},
+      startup: {
+        //
+        //  Set the styles needed for the expression explorer
+        //  and disable the assistive MathML menu
+        //
+        ready() {
+          MathJax.startup.defaultReady();
+          const doc = MathJax.startup.document;
+          const {StyleJsonSheet} = MathJax._.util.StyleJson;
+          const css = new StyleJsonSheet(doc.constructor.speechStyles);
+          const sheet = document.getElementById('mjx-explorer-styles');
+          sheet.textContent = css.cssText;
+          doc.menu.menu.findID('Options', 'AssistiveMml').disable();
+        },
+        //
+        //  Perform the initial typesetting (we don't have an output
+        //  jax, so this isn't done automatically).
+        //
+        pageReady() {
+          return MathJax.startup.document.renderPromise();
+        }
+      },
+      options: {
+        //
+        //  Override the usual typeset render action with one that generates MathML output
+        //
+        renderActions: {
+          assistiveMml: [],  // disable assistive mathml
+          typeset: [150,
+            (doc) => {for (math of doc.math) {MathJax.config.renderMathML(math, doc)}},
+            (math, doc) => MathJax.config.renderMathML(math, doc)
+          ]
+        },
+        //
+        //  Don't add assistive MathML
+        //
+        menuOptions: {
+          settings: {
+            assistiveMml: false,
+          }
+        }
+      },
+      //
+      // The action to use for rendering MathML
+      //
+      renderMathML(math, doc) {
+        math.typesetRoot = document.createElement('mjx-container');
+        math.typesetRoot.innerHTML = MathJax.startup.toMML(math.root);
+        math.display && math.typesetRoot.setAttribute('display', 'block');
+      }
+    };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/startup.js"></script>
+</head>
   
   <body>
     
@@ -26,7 +88,7 @@
 
     <p>MathJax and KaTeX of course also render math in other formats. This comparison is limited to MathML.</p>
   
-    <p>Versions used are: Temml 0.12.02, MathJax 2.7.5, KaTeX 0.16.22, and TeXZilla 1.0.2.0</p>
+    <p>Versions used are: Temml 0.12.02, MathJax 4.0, KaTeX 0.16.27, and TeXZilla 1.0.2.0</p>
     
       <h2 id="symbols">Symbols</h2>
       <table>
@@ -132,7 +194,7 @@
           <tr>
             <td>\'</td>
             <td><math><mtext>á</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\'{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&#x27;{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\'{a}}</code></td>
@@ -164,7 +226,7 @@
           <tr>
             <td>\"</td>
             <td><math><mtext>ä</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\"{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>¨</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&quot;{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\"{a}}</code></td>
@@ -172,10 +234,10 @@
           <tr>
             <td>\$</td>
             <td><math><mtext>$</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\textdollar}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>$</mtext></mrow><annotation encoding="application/x-tex">\text{\textdollar}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td></td>
+            <td>code>\text{\textdollar}</code></td>
           </tr>
           <tr>
             <td>\,</td>
@@ -188,7 +250,7 @@
           <tr>
             <td>\.</td>
             <td><math><mtext>ȧ</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\.{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˙</mo></mover></mrow><annotation encoding="application/x-tex">\text{\.{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\.{a}}</code></td>
@@ -228,7 +290,7 @@
           <tr>
             <td>\`</td>
             <td><math><mtext>á</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\'{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˊ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\&#x27;{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\'{a}}</code></td>
@@ -244,7 +306,7 @@
           <tr>
             <td>\=</td>
             <td><math><mtext>ā</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\={a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˉ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\={a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\={a}}</code></td>
@@ -340,7 +402,7 @@
           <tr>
             <td>\~</td>
             <td><math><mtext>ã</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\~{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˜</mo></mover></mrow><annotation encoding="application/x-tex">\text{\~{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\~{a}}</code></td>
@@ -372,7 +434,7 @@
           <tr>
             <td>\^</td>
             <td><math><mtext>â</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\^{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˆ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\^{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\^{a}}</code></td>
@@ -1660,7 +1722,7 @@
           <tr>
             <td>\cal</td>
             <td><math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒞</mi></mrow></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\cal ABC\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="script">A</mi><mi mathvariant="script">B</mi><mi mathvariant="script">C</mi></mrow><annotation encoding="application/x-tex">\cal ABC</annotation></semantics></math></span></td>
             <td data-tex="\cal"><span class="no-sup">Not supported</span></td>
             <td><code>\cal ABC</code></td>
@@ -1675,11 +1737,11 @@
           </tr>
           <tr>
             <td>\cancelto</td>
-            <td><math><mrow><menclose notation="updiagonalstrike"><mn>6</mn><mrow class="tml-cancel upstrike"></mrow></menclose><mn>5</mn></mrow></math></td>
+            <td><math><mrow><mrow><mrow class="menclose"><mrow class="ff-narrow"><mn>5</mn><mspace height="0.85em"></mspace></mrow><mrow class="tml-cancelto"><mphantom style="padding:0.5ex 0.1em 0 0;"><mn>5</mn></mphantom></mrow></mrow><mover><mspace height="1em"></mspace><mpadded width="0.1px"><mn>6</mn></mpadded></mover></mrow><mrow class="ff-nudge-left"></mrow></mrow></math></td>
             <td>\(\cancelto{6}{5}\)</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\cancelto{6}{5}"><span class="no-sup">Not supported</span></td>
-            <td><code>\cancel{6}{5}</code></td>
+            <td><code>\cancelto{6}{5}</code></td>
           </tr>
           <tr>
             <td>\Cap</td>
@@ -2518,18 +2580,18 @@
           <tr>
             <td>\ddddot</td>
             <td><math><mover><mi>x</mi><mo stretchy="false" class="chr-sml wbk-sml" style="math-depth:0;">….</mo></mover></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\ddddot{x}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi><mover><mo><mi>x</mi></mo><mpadded voffset="-0.1ex"><mstyle scriptlevel="0" displaystyle="false"><mstyle mathsize="1em"><mtext>....</mtext></mstyle></mstyle></mpadded></mover></mi></mrow><annotation encoding="application/x-tex">\ddddot{x}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⃜</mo><mi>x</mi></mrow><annotation encoding="TeX">\ddddot x</annotation></semantics></math></td>
-            <td></td>
+            <td><code>\ddddot{x}</code></td>
           </tr>
           <tr>
             <td>\dddot</td>
             <td><math><mover><mi>x</mi><mo stretchy="false" class="chr-sml wbk-sml" style="math-depth:0;">…</mo></mover></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\dddot{x}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi><mover><mo><mi>x</mi></mo><mpadded voffset="-0.1ex"><mstyle scriptlevel="0" displaystyle="false"><mstyle mathsize="1em"><mtext>...</mtext></mstyle></mstyle></mpadded></mover></mi></mrow><annotation encoding="application/x-tex">\dddot{x}</annotation></semantics></math></span></td>
             <td><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>⃛</mo><mi>x</mi></mrow><annotation encoding="TeX">\dddot x</annotation></semantics></math></td>
-            <td></td>
+            <td><code>\dddot{x}</code></td>
           </tr>
           <tr>
             <td>\ddot</td>
@@ -2569,10 +2631,10 @@
           <tr>
             <td>\definecolor</td>
             <td><math><mrow><mi style="color:#808000;">F</mi><mo style="color:#808000;">=</mo><mi style="color:#808000;">m</mi><mi style="color:#808000;">a</mi></mrow></math></td>
+            <td>\(\definecolor{sortaGreen}{RGB}{128,128,0} \color{sortaGreen} F=ma\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td></td>
+            <td><code>\definecolor{sortaGreen}{RGB}{128,128,0}</code><br><code>\color{sortaGreen} F=ma</code></td>
           </tr>
           <tr>
             <td>\deg</td>
@@ -3935,15 +3997,15 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\idotsint</td>
-            <td><math><mrow><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo></mrow></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><math><mrow><mo movablelimits="false">∫</mo><mrow style="margin-left:-0.1667em;"></mrow><mo>⋯</mo><mrow style="margin-left:-0.1667em;"></mrow><mo movablelimits="false">∫</mo></mrow></math></td>
+            <td>\(\idotsint\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\idotsint"><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
           <tr>
             <td>\iddots</td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><math><mo lspace="0em" rspace="0em">⋰</mo></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\iddots"><span class="no-sup">Not supported</span></td>
@@ -3983,8 +4045,8 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\iiiint</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><math><mo movablelimits="false" lspace="0em" rspace="0em">⨌</mo></math></td>
+            <td>\(\iiiint\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -4367,7 +4429,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\lAngle</td>
-            <td><math><mrow><mo form="prefix" stretchy="false">⟪</mo><mi>A</mi><mo form="postfix" stretchy="false">⟩</mo></mrow></math></td>
+            <td><math><mrow><mo form="prefix" stretchy="false">⟪</mo><mi>A</mi><mo form="postfix" stretchy="false">⟫</mo></mrow></math></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -7310,8 +7372,8 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\require</td>
-            <td>✓</td>
             <td><span class="no-sup">Not supported</span></td>
+            <td>✓</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -7631,7 +7693,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\S</td>
             <td><math><mtext>§</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\S}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mtext>§</mtext></mrow><annotation encoding="application/x-tex">\text{\S}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\S}</code></td>
@@ -7871,10 +7933,10 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\sideset</td>
             <td><math><mmultiscripts><mo movablelimits="false">∑</mo><mn>3</mn><mn>4</mn><mprescripts></mprescripts><mn style="text-align: left;">1</mn><mn style="text-align: left;">2</mn></mmultiscripts></math></td>
+            <td>\(\sideset{_1^2}{_3^4}\sum\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td></td>
+            <td><code>\sideset{_1^2}{_3^4}\sum</code></td>
           </tr>
           <tr>
             <td>\Sigma</td>
@@ -9001,7 +9063,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\Tiny</td>
             <td><math><mstyle mathsize="0.6000em"><mi>A</mi><mi>B</mi></mstyle></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\Tiny A B\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td>Non standard</td>
@@ -9192,7 +9254,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\u</td>
             <td><math><mtext>ă</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\u{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>˘</mo></mover></mrow><annotation encoding="application/x-tex">\text{\u{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\u{a}}</code></td>
@@ -9296,7 +9358,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\underparen</td>
             <td><math><munder><mrow><mi>a</mi><mi>b</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0;">⏝</mo></munder></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\underparen{abc}\)</td>
             <td><span class="no-sup">Not supported</span></td>
             <td data-tex="\underparen{abc}"><span class="no-sup">Not supported</span></td>
             <td><code>\underparen{abc}</code></td>
@@ -9344,7 +9406,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upalpha</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">α</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9368,7 +9430,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upbeta</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">β</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9376,7 +9438,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upchi</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">χ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9384,7 +9446,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\updelta</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">δ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9408,7 +9470,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upeta</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">η</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9416,7 +9478,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upepsilon</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ϵ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9424,7 +9486,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upgamma</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">γ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9448,7 +9510,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upiota</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ι</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9456,7 +9518,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upkappa</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">κ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9464,7 +9526,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uplambda</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">λ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9480,7 +9542,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upmu</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">μ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9488,7 +9550,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upnu</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ν</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9496,7 +9558,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upomega</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ω</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9504,7 +9566,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upomicron</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ο</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9512,7 +9574,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upphi</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ϕ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9520,7 +9582,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uppi</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">π</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9528,7 +9590,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uppsi</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ψ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9536,7 +9598,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uprho</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ρ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9552,7 +9614,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upsigma</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">σ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9576,7 +9638,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uptau</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">τ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9584,7 +9646,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\uptheta</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">θ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9600,7 +9662,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upupsilon</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">υ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9608,7 +9670,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upxi</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ξ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9616,7 +9678,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\upzeta</td>
             <td><math><mpadded lspace="0"><mi mathvariant="normal">ζ</mi></mpadded></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td><span class="no-sup">Needs upgreek package</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
@@ -9664,7 +9726,7 @@ y &=& (x-1)^2 \\
           <tr>
             <td>\v</td>
             <td><math><mtext>ǎ</mtext></math></td>
-            <td><span class="no-sup">Not supported</span></td>
+            <td>\(\text{\v{a}}\)</td>
             <td><span class="katex"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover accent="true"><mtext>a</mtext><mo>ˇ</mo></mover></mrow><annotation encoding="application/x-tex">\text{\v{a}}</annotation></semantics></math></span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\text{\v{a}}</code></td>
