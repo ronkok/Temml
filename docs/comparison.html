@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../katex.css">
     <link rel="stylesheet" href="../docStyles.css">
     <script src="../../assets/temml.min.js"></script>
-    <!-- See https://docs.mathjax.org/en/latest/output/mathml.html#mathml-output for the following MathJax script.  -->
     <style>
     mjx-container[display="block"] {
       display: block;
@@ -17,65 +16,6 @@
     }
     </style>
     <style id="mjx-explorer-styles"></style>
-    <script>
-    MathJax = {
-      //
-      //  Load only TeX input and the contextual menu
-      //
-      loader: {load: ['input/tex', 'a11y/explorer', 'ui/menu']},
-      startup: {
-        //
-        //  Set the styles needed for the expression explorer
-        //  and disable the assistive MathML menu
-        //
-        ready() {
-          MathJax.startup.defaultReady();
-          const doc = MathJax.startup.document;
-          const {StyleJsonSheet} = MathJax._.util.StyleJson;
-          const css = new StyleJsonSheet(doc.constructor.speechStyles);
-          const sheet = document.getElementById('mjx-explorer-styles');
-          sheet.textContent = css.cssText;
-          doc.menu.menu.findID('Options', 'AssistiveMml').disable();
-        },
-        //
-        //  Perform the initial typesetting (we don't have an output
-        //  jax, so this isn't done automatically).
-        //
-        pageReady() {
-          return MathJax.startup.document.renderPromise();
-        }
-      },
-      options: {
-        //
-        //  Override the usual typeset render action with one that generates MathML output
-        //
-        renderActions: {
-          assistiveMml: [],  // disable assistive mathml
-          typeset: [150,
-            (doc) => {for (math of doc.math) {MathJax.config.renderMathML(math, doc)}},
-            (math, doc) => MathJax.config.renderMathML(math, doc)
-          ]
-        },
-        //
-        //  Don't add assistive MathML
-        //
-        menuOptions: {
-          settings: {
-            assistiveMml: false,
-          }
-        }
-      },
-      //
-      // The action to use for rendering MathML
-      //
-      renderMathML(math, doc) {
-        math.typesetRoot = document.createElement('mjx-container');
-        math.typesetRoot.innerHTML = MathJax.startup.toMML(math.root);
-        math.display && math.typesetRoot.setAttribute('display', 'block');
-      }
-    };
-    </script>
-    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@4/startup.js"></script>
 </head>
   
   <body>
@@ -185,11 +125,11 @@
           </tr>
           <tr>
             <td>'</td>
-            <td>₮'₮</td>
-            <td>\('\)</td>
-            <td>₭'₭</td>
-            <td>₸'₸</td>
-            <td></td>
+            <td>₮f'₮</td>
+            <td>\(f'\)</td>
+            <td>₭f'₭</td>
+            <td>₸f'₸</td>
+            <td><code>f'</code></td>
           </tr>
           <tr>
             <td>\'</td>
@@ -593,7 +533,7 @@
           </tr>
           <tr>
             <td>\allowbreak</td>
-            <td>Supported</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
@@ -787,17 +727,17 @@
             <td>\arraycolsep</td>
             <td>₮\renewcommand{\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td>₭\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td>₸\arraycolsep}{12pt}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
             <td><code>\arraycolsep}{12pt}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
           </tr>
           <tr>
             <td>\arraystretch</td>
-            <td>₮\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
-            <td>\(\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}\)</td>
+            <td>₮\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₮</td>
+            <td>\(\renewcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}\)</td>
             <td>₭\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₭</td>
             <td>₸\newcommand{\arraystretch}{1.5}\begin{array}{cc}a&b\\c&d\end{array}₸</td>
-            <td><code>\newcommand{\arraystretch}{1.5}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
+            <td><code>\renewcommand{\arraystretch}{1.5}</code><br><code>\begin{array}{cc}</code><br>&nbsp;&nbsp;&nbsp;<code>a & b \\</code><br>&nbsp;&nbsp;&nbsp;<code>c & d</code><br><code>\end{array}</code></td>
           </tr>
           <tr>
             <td>\Arrowvert</td>
@@ -1792,16 +1732,6 @@
             <td><code>\begin{cases}</code><br>&nbsp;&nbsp;&nbsp;<code>a &\text{if } b  \\</code><br>&nbsp;&nbsp;&nbsp;<code>c &\text{if } d</code><br><code>\end{cases}</code></td>
           </tr>
           <tr>
-            <td>\cases</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td>\(\cases{ x  & \text{if } x\ge 0\\ -x & \text{if } x\lt 0}\)</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td>₸\cases{ x  & \text{if } x\ge 0\\ -x & \text{if } x\lt 0}₸</td>
-            <td><code>\cases{x  & \text{if } x\ge 0\\</code><br><code>
-              -x & \text{if } x\lt 0}</code>
-            </td>
-          </tr>
-          <tr>
             <td>{CD}</td>
             <td>₮₮\begin{CD} A @>a>> B\\@VbVV    @AAcA \\ C @= D\end{CD}₮₮</td>
             <td>\(\begin{CD} A @>a>> B\\@VbVV    @AAcA \\ C @= D\end{CD}\)</td>
@@ -1837,7 +1767,7 @@
             <td>\ce</td>
             <td>₮\ce{A\bond{~}B\bond{~-}C}₮</td>
             <td>\(\ce{A\bond{~}B\bond{~-}C}\)</td>
-            <td>₭\ce{A\bond{~}B\bond{~-}C}₭</td>
+            <td><span class="no-sup">Needs mhchem extension</span></td>
             <td data-tex="\ce{A\bond{~}B\bond{~-}C}"><span class="no-sup">Not supported</span></td>
             <td><code>\ce{A\bond{~}B\bond{~-}C}</code><br>Requires `mhchem` extension</td>
           </tr>
@@ -3893,7 +3823,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\href</td>
-            <td>₮\href{https://www.mathjax.org/}{\text{MathJax}}₮</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td>\(\href{https://MathJax.org/}{\text{MathJax}}\)</td>
             <td>₭\href{https://MathJax.org/}{\text{MathJax}}₭</td>
             <td><span class="no-sup">Not supported</span></td>
@@ -3917,43 +3847,11 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\hspace</td>
-            <td>₮s\hspace7ex k₮</td>
-            <td>\(s\hspace7ex k\)</td>
-            <td>₭s\hspace7ex k₭</td>
+            <td>₮s\hspace{7ex} k₮</td>
+            <td>\(s\hspace{7ex} k\)</td>
+            <td>₭s\hspace{7ex} k₭</td>
             <td data-tex="s\hspace7ex k"><span class="no-sup">Not supported</span></td>
-            <td><code>s\hspace7ex k</code></td>
-          </tr>
-          <tr>
-            <td>\htmlClass</td>
-            <td>₮\htmlClass{foo}{x}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><code>\htmlClass{foo}{x}</code></td>
-          </tr>
-          <tr>
-            <td>\htmlData</td>
-            <td>₮\htmlData{foo=a, bar=b}{x}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><code>\htmlData{foo=a, bar=b}{x}</code></td>
-          </tr>
-          <tr>
-            <td>\htmlId</td>
-            <td>₮\htmlId{bar}{x}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><code>\htmlId{bar}{x}</code></td>
-          </tr>
-          <tr>
-            <td>\htmlStyle</td>
-            <td>₮\htmlStyle{color: red;}{x}₮</td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><span class="no-sup">Not supported</span></td>
-            <td><code>\htmlStyle{color: red;}{x}}</code></td>
+            <td><code>s\hspace{7ex} k</code></td>
           </tr>
           <tr>
             <td>\huge</td>
@@ -5087,7 +4985,7 @@ y &=& (x-1)^2 \\
             <td>\lower</td>
             <td>₮l\lower 2pt{owe}r₮</td>
             <td>\(l\lower 2pt{owe}r\)</td>
-            <td>₭l\lower 2pt{owe}r₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>l\lower 2pt{owe}r</code></td>
           </tr>
@@ -7063,7 +6961,7 @@ y &=& (x-1)^2 \\
             <td>\prescript</td>
             <td>₮\prescript{a}{2}{\mathbf{C}}^{5+}_{2}₮</td>
             <td><span class="no-sup">Not supported</span></td>
-            <td>₭\prescript{a}{2}{\mathbf{C}}^{5+}_{2}₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><code>\prescript{a}{2}{\mathbf{C}}^{5+}_{2}</code></td>
           </tr>
@@ -7206,7 +7104,7 @@ y &=& (x-1)^2 \\
             <td>\raise</td>
             <td>₮h\raise{2pt}{ighe}r₮</td>
             <td>\(h\raise{2pt}{ighe}r\)</td>
-            <td>₭h\raise{2pt}{ighe}r₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td data-tex="h\raise{2pt}{ighe}r"><span class="no-sup">Not supported</span></td>
             <td><code>h\raise{2pt}{ighe}r</code></td>
           </tr>
@@ -9094,7 +8992,7 @@ y &=& (x-1)^2 \\
           </tr>
           <tr>
             <td>\toggle</td>
-            <td>₮\toggle{\text{Click Here}}{Ouch}\endtoggle₮</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td>₸\toggle{\text{Hey!}}{\text{Click Here}}₸</td>
@@ -9415,7 +9313,7 @@ y &=& (x-1)^2 \\
             <td>\upalpha</td>
             <td>₮\upalpha₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upalpha₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9439,7 +9337,7 @@ y &=& (x-1)^2 \\
             <td>\upbeta</td>
             <td>₮\upbeta₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upbeta₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9447,7 +9345,7 @@ y &=& (x-1)^2 \\
             <td>\upchi</td>
             <td>₮\upchi₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upchi₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9455,7 +9353,7 @@ y &=& (x-1)^2 \\
             <td>\updelta</td>
             <td>₮\updelta₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\updelta₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9479,7 +9377,7 @@ y &=& (x-1)^2 \\
             <td>\upeta</td>
             <td>₮\upeta₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upeta₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9487,7 +9385,7 @@ y &=& (x-1)^2 \\
             <td>\upepsilon</td>
             <td>₮\upepsilon₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upepsilon₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9495,7 +9393,7 @@ y &=& (x-1)^2 \\
             <td>\upgamma</td>
             <td>₮\upgamma₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upgamma₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9519,7 +9417,7 @@ y &=& (x-1)^2 \\
             <td>\upiota</td>
             <td>₮\upiota₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upiota₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9527,7 +9425,7 @@ y &=& (x-1)^2 \\
             <td>\upkappa</td>
             <td>₮\upkappa₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upkappa₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9535,7 +9433,7 @@ y &=& (x-1)^2 \\
             <td>\uplambda</td>
             <td>₮\uplambda₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\uplambda₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9551,7 +9449,7 @@ y &=& (x-1)^2 \\
             <td>\upmu</td>
             <td>₮\upmu₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upmu₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9559,7 +9457,7 @@ y &=& (x-1)^2 \\
             <td>\upnu</td>
             <td>₮\upnu₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upnu₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9567,7 +9465,7 @@ y &=& (x-1)^2 \\
             <td>\upomega</td>
             <td>₮\upomega₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upomega₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9575,7 +9473,7 @@ y &=& (x-1)^2 \\
             <td>\upomicron</td>
             <td>₮\upomicron₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upomicron₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9583,7 +9481,7 @@ y &=& (x-1)^2 \\
             <td>\upphi</td>
             <td>₮\upphi₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upphi₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9591,7 +9489,7 @@ y &=& (x-1)^2 \\
             <td>\uppi</td>
             <td>₮\uppi₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\uppi₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9599,7 +9497,7 @@ y &=& (x-1)^2 \\
             <td>\uppsi</td>
             <td>₮\uppsi₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\uppsi₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9607,7 +9505,7 @@ y &=& (x-1)^2 \\
             <td>\uprho</td>
             <td>₮\uprho₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\uprho₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9623,7 +9521,7 @@ y &=& (x-1)^2 \\
             <td>\upsigma</td>
             <td>₮\upsigma₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upsigma₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9631,7 +9529,7 @@ y &=& (x-1)^2 \\
             <td>\Upsilon</td>
             <td>₮\Upsilon₮</td>
             <td>\(\Upsilon\)</td>
-            <td>₭\Upsilon₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td>₸\Upsilon₸</td>
             <td></td>
           </tr>
@@ -9639,7 +9537,7 @@ y &=& (x-1)^2 \\
             <td>\upsilon</td>
             <td>₮\upsilon₮</td>
             <td>\(\upsilon\)</td>
-            <td>₭\upsilon₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td>₸\upsilon₸</td>
             <td></td>
           </tr>
@@ -9647,7 +9545,7 @@ y &=& (x-1)^2 \\
             <td>\uptau</td>
             <td>₮\uptau₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\uptau₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9655,7 +9553,7 @@ y &=& (x-1)^2 \\
             <td>\uptheta</td>
             <td>₮\uptheta₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\uptheta₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9671,7 +9569,7 @@ y &=& (x-1)^2 \\
             <td>\upupsilon</td>
             <td>₮\upupsilon₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upupsilon₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9679,7 +9577,7 @@ y &=& (x-1)^2 \\
             <td>\upxi</td>
             <td>₮\upxi₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upxi₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -9687,7 +9585,7 @@ y &=& (x-1)^2 \\
             <td>\upzeta</td>
             <td>₮\upzeta₮</td>
             <td><span class="no-sup">Needs upgreek package</span></td>
-            <td>₭\upzeta₭</td>
+            <td><span class="no-sup">Not supported</span></td>
             <td><span class="no-sup">Not supported</span></td>
             <td></td>
           </tr>
@@ -10658,24 +10556,6 @@ y &=& (x-1)^2 \\
     <script>
       temml.postProcess(document.body)
     </script>
-
-    <script type="text/x-mathjax-config">
-      MathJax.Hub.Config({
-        extensions: ["tex2jax.js"],
-        jax: ["input/TeX", "output/NativeMML"],
-        tex2jax: {
-          inlineMath: [ ["\\(","\\)"] ],
-          displayMath: [ ["\\[","\\]"] ],
-          processEscapes: true
-        },
-        TeX: {
-          extensions: ["autoload-all.js", "mediawiki-texvc.js"],
-          equationNumbers: { autoNumber: "AMS" }
-        },
-        "HTML-CSS": { fonts: ["TeX"] }
-      });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js"></script>
 
   </body>
 </html>

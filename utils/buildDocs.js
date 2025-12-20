@@ -1,4 +1,5 @@
 const fs = require("fs")  // Node.js file system
+const { JSDOM } = require('jsdom');
 const hurmet = require('./hurmet.cjs');
 const temml = require('./temml.cjs');
 const katex = require('./katex.min.js');
@@ -23,72 +24,73 @@ let admin = fs.readFileSync('./docs/administration.md').toString('utf8')
 admin =  hurmet.md2html(admin, true)
 fs.writeFileSync('./site/docs/en/administration.html', admin)
 
-// helper function for comparison page.
-const arrayOfRegExMatches = (regex, text) => {
-  if (regex.constructor !== RegExp) { throw new Error('not RegExp') }
-  const result = []
-  let match = null
-  // eslint-disable-next-line no-cond-assign
-  while (match = regex.exec(text)) {
-    result.push({
-      value: match[0],
-      index: match.index,
-      lastindex: match.index + match[0].length
-    })
-  }
-  return result
-}
-
 // Comparison page
 const temmlRegEx = /₮{1,2}[^₮]+₮{1,2}/g
-let macros = {};
-let comp = fs.readFileSync('./docs/comparison.html').toString('utf8')
-let matches = arrayOfRegExMatches(temmlRegEx, comp)
-for (let i = matches.length - 1; i >= 0; i--) {
-  const displayMode = matches[i].value.charAt(1) === "₮"
-  let tex = displayMode
-      ? matches[i].value.slice(2, -2).trim()
-      : matches[i].value.slice(1, -1).trim();
-  tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-  let math =  temml.renderToString(tex, { displayMode, trust: true, macros });
-  if (math.indexOf("#b22222") > -1) {
-    math = '<span class="no-sup">Not supported</span>'
-  }
-  comp = comp.slice(0, matches[i].index) + math + comp.slice(matches[i].lastindex);
-}
-
 const katexRegEx = /₭{1,2}[^₭]+₭{1,2}/g
-macros = {};
-matches = arrayOfRegExMatches(katexRegEx, comp)
-for (let i = matches.length - 1; i >= 0; i--) {
-  const displayMode = matches[i].value.charAt(1) === "₭"
-  let tex = displayMode
-      ? matches[i].value.slice(2, -2).trim()
-      : matches[i].value.slice(1, -1).trim();
-  tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-  let math = katex.renderToString(
-    tex,
-    { displayMode, output: "mathml", trust: true, strict: false, throwOnError: false, macros }
-  );
-  if (math.indexOf("#cc0000") > -1) {
-    math = '<span class="no-sup">Not supported</span>'
+const texzillaRegEx = /₸{1,2}[^₸]+₸{1,2}/g
+const temmlMacros = {};
+const katexMacros = {};
+const sourceComp = fs.readFileSync('./docs/comparison.html').toString('utf8')
+const sourceDom = new JSDOM(sourceComp);
+const sourceDocument = sourceDom.window.document;
+const targetComp = fs.readFileSync('./site/docs/en/comparison.html').toString('utf8')
+const targetDom = new JSDOM(targetComp);
+const targetDocument = targetDom.window.document;
+
+// Iterate through all the tables. Keep track of which cell we are in.
+// If the cell contains TeX code, render it with the appropriate libarary.
+// and replace the content of the target cell with the rendered MathML.
+
+const tables = sourceDocument.querySelectorAll('table');
+for (let tableIndex = 0; tableIndex < tables.length; tableIndex++) {
+  const sourceTable = tables[tableIndex];
+  const targetTable = targetDocument.querySelectorAll('table')[tableIndex];
+  const sourceRows = sourceTable.querySelectorAll('tr');
+  const targetRows = targetTable.querySelectorAll('tr');
+  for (let rowIndex = 0; rowIndex < sourceRows.length; rowIndex++) {
+    const sourceCells = sourceRows[rowIndex].querySelectorAll('td, th');
+    const targetCells = targetRows[rowIndex].querySelectorAll('td, th');
+    for (let cellIndex = 0; cellIndex < sourceCells.length; cellIndex++) {
+      const cellContent = sourceCells[cellIndex].innerHTML;
+      const targetCell = targetCells[cellIndex];
+      if (temmlRegEx.test(cellContent)) {
+        const displayMode = cellContent.charAt(1) === "₮"
+        let tex = displayMode
+          ? cellContent.slice(2, -2).trim()
+          : cellContent.slice(1, -1).trim();
+        tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
+        const mathML = temml.renderToString(tex, { displayMode, trust: true, temmlMacros });
+        targetCell.innerHTML = mathML;
+      } else if (katexRegEx.test(cellContent)) {
+        const displayMode = cellContent.charAt(1) === "₭"
+        let tex = displayMode
+          ? cellContent.slice(2, -2).trim()
+          : cellContent.slice(1, -1).trim();
+        tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
+        const mathML = katex.renderToString(tex, { displayMode, output: "mathml", strict: false, trust: true, katexMacros });
+        targetCell.innerHTML = mathML;
+      } else if (texzillaRegEx.test(cellContent)) {
+        const displayMode = cellContent.charAt(1) === "₸"
+        let tex = displayMode
+          ? cellContent.slice(2, -2).trim()
+          : cellContent.slice(1, -1).trim();
+        tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&")
+        let math = TeXZilla.toMathMLString(tex)
+        if (math.indexOf("error") > -1) {
+          math = '<span class="no-sup">Not supported</span>'
+        }
+        targetCell.innerHTML = math;
+      } else if (cellContent.trim().slice(0, 21) === '<span class="no-sup">') {
+        // Copy the "Not supported" span as is.
+        targetCell.innerHTML = cellContent;
+      } else if (cellIndex === 5) {
+        // Copy the content of the "Notes" column as is.
+        targetCell.innerHTML = cellContent;
+      }
+    }
   }
-  comp = comp.slice(0, matches[i].index) + math + comp.slice(matches[i].lastindex);
 }
 
-const texzillaRegEx = /₸{1,2}[^₸]+₸{1,2}/g
-matches = arrayOfRegExMatches(texzillaRegEx, comp)
-for (let i = matches.length - 1; i >= 0; i--) {
-  const displayMode = matches[i].value.charAt(1) === "₸"
-  let tex = displayMode
-      ? matches[i].value.slice(2, -2).trim()
-      : matches[i].value.slice(1, -1).trim();
-  tex = tex.replace(/&lt;/g, "<").replace(/&gt;/g, ">")
-  let math = TeXZilla.toMathMLString(tex)
-  if (math.indexOf("error") > -1) {
-    math = '<span class="no-sup">Not supported</span>'
-  }
-  comp = comp.slice(0, matches[i].index) + math + comp.slice(matches[i].lastindex);
-}
+const comp = targetDocument.documentElement.outerHTML;
 
 fs.writeFileSync('./site/docs/en/comparison.html', comp)
