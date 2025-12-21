@@ -18,6 +18,7 @@ const strictSettings = _ => new Settings({ strict: true });
 const displayMode = _ => new Settings({ displayMode: true });
 const trustSettings = _ => new Settings({ trust: true });
 const wrapSettings = str => new Settings({ wrap: str });
+const throwOnErrorSettings = _ => new Settings({ throwOnError: true });
 const mathTagRegEx = /<\/?math>/g;
 
 // tagging literal
@@ -390,6 +391,10 @@ const test = () => {
   new Expect(`x_x^x^x`).toNotParse();
   new Expect(`x^x_x_x`).toNotParse();
   new Expect(`x^x_x^x`).toNotParse();
+
+  assertion = "An invalid function name should throw when throwOnError is true"
+  new Expect(() => parse(r`\?`, throwOnErrorSettings())).toNotParse();
+  new Expect(() => parse(r`\notSupported`, throwOnErrorSettings())).toNotParse();
 
   assertion = "A subsup parser should work correctly with {}s"
   new Expect(`x^{2+3}`).toParse();

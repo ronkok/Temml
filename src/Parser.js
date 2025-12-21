@@ -816,6 +816,12 @@ export default class Parser {
       result = this.parseFunction(breakOnTokenText, name) || this.parseSymbol();
       if (result == null && text[0] === "\\" &&
           !Object.prototype.hasOwnProperty.call(implicitCommands, text )) {
+        if (this.settings.throwOnError) {
+          throw new ParseError("Unsupported function name: " + text, firstToken);
+        }
+        // For people getting dyanamically rendered math, it's better to
+        // show the unsupported command in red rather than panicking for every
+        // partially written expression.
         result = this.formatUnsupportedCmd(text);
         this.consume();
       }
