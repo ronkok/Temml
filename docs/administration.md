@@ -531,7 +531,7 @@ Notes:
 2.  WebKit does not implement <mstyle scriptlevel="0">.
 
 3.  Chromium and WebKit system font extensible arrows have notes placed too high.
-    Some do not stretch in Cambria Math or NotoSans. Again, Latin Modern is okay.
+    Some do not stretch in Cambria Math or NotoSans. Latin Modern is okay.
 
 4.  Firefox and WebKit sometimes select radicals that are too tall. (Root cause:
     They don’t cramp subscripts.)
