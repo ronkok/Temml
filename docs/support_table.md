@@ -732,12 +732,12 @@ If you know the shape of a character, but not its name,
 | Function         |  Rendered             | Source or Comment     |  Package          |
 |------------------|-----------------------|-----------------------|-------------------|
 | \i               | $\text{\i}$           | `\text{\i}`           |                   |
-| \idotsint        | $\int\idotsint\int$   | `\int\idotsint\int`   | ams              |
+| \idotsint        | $\idotsint$           | `\idotsint`           | ams               |
 | \iddots          | $\iddots$             |                       |                   |
-| \if              | (Not supported)        |                       |                   |
+| \if              | (Not supported)       |                       |                   |
 | \iff             | $A\iff B$             | `A\iff B`             |                   |
-| \ifmode          | (Not supported)        |                       |                   |
-| \ifx             | (Not supported)        |                       |                   |
+| \ifmode          | (Not supported)       |                       |                   |
+| \ifx             | (Not supported)       |                       |                   |
 | \iiiint          | $\iiiint$             |                       | ams               |
 | \iiint           | $\iiint$              |                       | ams               |
 | \iint            | $\iint$               |                       | ams               |

@@ -769,8 +769,8 @@ Temml has no `\par`, so `\long` is ignored.
 | $\intcup$  `\intcup` | $\intclockwise$          | $\bigtimes$ `\bigtimes`     | $\bigdoublewedge$             |
 |                      | `\intclockwise`          |                             | `\bigdoublewedge`             |
 +----------------------+--------------------------+-----------------------------+-------------------------------+
-
-$\sideset{_a^b}{_c^d}\sum$ `\sideset{_a^b}{_c^d}\sum`
+| $\idotsint$ `\idotsint`                         | $\sideset{_a^b}{_c^d}\sum$    `\sideset{_a^b}{_c^d}\sum`    |
++----------------------+--------------------------+-----------------------------+-------------------------------+
 
 Direct Input: <span class="direct">∫ ∬ ∭ ⨌ ∮ ∯ ∰ ⨖ ∲ ∏ ∐ ∑ ⋀ ⋁ ⋂ ⋃ ⨀ ⨁ ⨂ ⨄ ⨆ ⨅</span>
 
