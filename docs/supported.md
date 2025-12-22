@@ -1623,7 +1623,7 @@ Released under the <a href="https://opensource.org/licenses/MIT">MIT License</a>
 <nav>
 <div id="sidebar">
 
-[${\Large\Temml}$](https://temml.org/)   v0.12.02
+[${\Large\Temml}$](https://temml.org/)   v0.13.01
 
 <h3><a href="#top">Contents</a></h3>
 

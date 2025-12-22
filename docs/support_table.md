@@ -1844,7 +1844,7 @@ align
 <nav>
 <div id="sidebar" class="narrow">
 
-[$\Large\Temml$](https://temml.org/)    v0.12.02
+[$\Large\Temml$](https://temml.org/)    v0.13.01
 
 <div style="height:0.5em;"></div>
 

@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.13.01] = 2025-12-21
+
+### Fixed
+
+- \idotsint
+
+### Changed
+
+- When an unsupported function name is written, Temml will stop execution and
+  throw an error to the console if rendering option `throwOnError` is true. If
+  rendering option `throwOnError` is false, Temml will continue to return a
+  result with the name in red.
+
 ## [0.12.02] = 2025-12-17
 
 ### Fixed

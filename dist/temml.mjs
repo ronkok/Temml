@@ -3874,7 +3874,6 @@ const dotsByToken = {
   "\\iint": "\\dotsi",
   "\\iiint": "\\dotsi",
   "\\iiiint": "\\dotsi",
-  "\\idotsint": "\\dotsi",
   // Symbols whose definition starts with \DOTSX:
   "\\DOTSX": "\\dotsx"
 };
@@ -3956,7 +3955,7 @@ defineMacro("\\cdots", function(context) {
 defineMacro("\\dotsb", "\\cdots");
 defineMacro("\\dotsm", "\\cdots");
 defineMacro("\\dotsi", "\\!\\cdots");
-defineMacro("\\idotsint", "\\dotsi");
+defineMacro("\\idotsint", "\\int\\!\\cdots\\!\\int");
 // amsmath doesn't actually define \dotsx, but \dots followed by a macro
 // starting with \DOTSX implies \dotso, and then \extra@ detects this case
 // and forces the added `\,`.
@@ -13676,6 +13675,12 @@ class Parser {
       result = this.parseFunction(breakOnTokenText, name) || this.parseSymbol();
       if (result == null && text[0] === "\\" &&
           !Object.prototype.hasOwnProperty.call(implicitCommands, text )) {
+        if (this.settings.throwOnError) {
+          throw new ParseError("Unsupported function name: " + text, firstToken);
+        }
+        // For people getting dyanamically rendered math, it's better to
+        // show the unsupported command in red rather than panicking for every
+        // partially written expression.
         result = this.formatUnsupportedCmd(text);
         this.consume();
       }
@@ -14061,7 +14066,7 @@ class Style {
  * https://mit-license.org/
  */
 
-const version = "0.12.02";
+const version = "0.13.01";
 
 function postProcess(block) {
   const labelMap = {};

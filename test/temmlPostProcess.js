@@ -11,7 +11,7 @@
    * https://mit-license.org/
    */
 
-  const version = "0.12.02";
+  const version = "0.13.01";
 
   function postProcess(block) {
     const labelMap = {};
