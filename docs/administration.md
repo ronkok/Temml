@@ -528,7 +528,8 @@ Notes:
 
 1.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-2.  WebKit does not implement <mstyle scriptlevel="0">.
+2.  WebKit does not implement `<mstyle scriptlevel="0">`. So accents and the
+    top row of `\bordermatrix` are rendered too small.
 
 3.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math or NotoSans. Latin Modern is okay.
