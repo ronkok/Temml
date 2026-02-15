@@ -69,7 +69,7 @@ const renderToString = function(expression, options) {
 };
 
 /**
- * @type {import('./temml').generateParseTree}
+ * @type {import('./temml').__parse}
  * Parse an expression and return the parse tree.
  */
 const generateParseTree = function(expression, options) {
@@ -111,7 +111,7 @@ const renderError = function(error, expression, options) {
 };
 
 /**
- * @type {import('./temml').renderToMathMLTree}
+ * @type {import('./temml').__renderToMathMLTree}
  * Generates and returns the Temml build tree. This is used for advanced
  * use cases (like rendering to custom output).
  */
