@@ -1,5 +1,7 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', { value: true });
+
 /**
  * This is the ParseError class, which is the main error thrown by Temml
  * functions when something has gone wrong. This is used to distinguish internal
@@ -14410,7 +14412,7 @@ const renderMathInElement = function(elem, options) {
  * Parse and build an expression, and place that expression in the DOM node
  * given.
  */
-let render = function(expression, baseNode, options = {}) {
+exports.render = function(expression, baseNode, options = {}) {
   baseNode.textContent = "";
   const alreadyInMathElement = baseNode.tagName.toLowerCase() === "math";
   if (alreadyInMathElement) { options.wrap = "none"; }
@@ -14437,7 +14439,7 @@ if (typeof document !== "undefined") {
           "website has a suitable doctype."
       );
 
-    render = function() {
+    exports.render = function() {
       throw new ParseError("Temml doesn't work in quirks mode.");
     };
   }
@@ -14513,8 +14515,9 @@ const renderToMathMLTree = function(expression, options) {
   }
 };
 
+// CJS exports and ESM default export
 /** @type {import('./temml').default} */
-var temml$1 = {
+const Temml = {
   /**
    * Current Temml version
    */
@@ -14523,7 +14526,7 @@ var temml$1 = {
    * Renders the given LaTeX into MathML, and adds
    * it as a child to the specified DOM node.
    */
-  render,
+  render: exports.render,
   /**
    * Renders the given LaTeX into MathML string,
    * for sending to the client.
@@ -14576,4 +14579,14 @@ var temml$1 = {
   __defineMacro: defineMacro
 };
 
-module.exports = temml$1;
+exports.ParseError = ParseError;
+exports.__defineMacro = defineMacro;
+exports.__defineSymbol = defineSymbol;
+exports.__parse = generateParseTree;
+exports.__renderToMathMLTree = renderToMathMLTree;
+exports.default = Temml;
+exports.definePreamble = definePreamble;
+exports.postProcess = postProcess;
+exports.renderMathInElement = renderMathInElement;
+exports.renderToString = renderToString;
+exports.version = version;

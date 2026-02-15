@@ -129,8 +129,24 @@ const renderToMathMLTree = function(expression, options) {
   }
 };
 
+// ESM exports
+export {
+ version,
+ render,
+ renderToString,
+ renderMathInElement,
+ postProcess,
+ ParseError,
+ definePreamble,
+ generateParseTree as __parse,
+ renderToMathMLTree as __renderToMathMLTree,
+ defineSymbol as __defineSymbol,
+ defineMacro as __defineMacro
+};
+
+// CJS exports and ESM default export
 /** @type {import('./temml').default} */
-export default {
+const Temml = {
   /**
    * Current Temml version
    */
@@ -191,3 +207,5 @@ export default {
    */
   __defineMacro: defineMacro
 }
+
+export default Temml;
