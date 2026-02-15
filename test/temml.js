@@ -1,4 +1,4 @@
-var temml = (function () {
+var temml = (function (exports) {
   'use strict';
 
   /**
@@ -12497,7 +12497,7 @@ var temml = (function () {
    * Parse and build an expression, and place that expression in the DOM node
    * given.
    */
-  let render = function(expression, baseNode, options = {}) {
+  exports.render = function(expression, baseNode, options = {}) {
     baseNode.textContent = "";
     const alreadyInMathElement = baseNode.tagName.toLowerCase() === "math";
     if (alreadyInMathElement) { options.wrap = "none"; }
@@ -12524,7 +12524,7 @@ var temml = (function () {
             "website has a suitable doctype."
         );
 
-      render = function() {
+      exports.render = function() {
         throw new ParseError("Temml doesn't work in quirks mode.");
       };
     }
@@ -12600,8 +12600,9 @@ var temml = (function () {
     }
   };
 
+  // CJS exports and ESM default export
   /** @type {import('./temml').default} */
-  var temml$1 = {
+  const Temml = {
     /**
      * Current Temml version
      */
@@ -12610,7 +12611,7 @@ var temml = (function () {
      * Renders the given LaTeX into MathML, and adds
      * it as a child to the specified DOM node.
      */
-    render,
+    render: exports.render,
     /**
      * Renders the given LaTeX into MathML string,
      * for sending to the client.
@@ -12663,6 +12664,20 @@ var temml = (function () {
     __defineMacro: defineMacro
   };
 
-  return temml$1;
+  exports.ParseError = ParseError;
+  exports.__defineMacro = defineMacro;
+  exports.__defineSymbol = defineSymbol;
+  exports.__parse = generateParseTree;
+  exports.__renderToMathMLTree = renderToMathMLTree;
+  exports.default = Temml;
+  exports.definePreamble = definePreamble;
+  exports.postProcess = postProcess;
+  exports.renderMathInElement = renderMathInElement;
+  exports.renderToString = renderToString;
+  exports.version = version;
 
-})();
+  Object.defineProperty(exports, '__esModule', { value: true });
+
+  return exports;
+
+})({});
