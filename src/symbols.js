@@ -222,7 +222,7 @@ defineSymbol(math, mathord, "\u2295", "\\Earth");
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);
-// Symbol names preceeded by "@" each have a corresponding macro.
+// Symbol names preceded by "@" each have a corresponding macro.
 defineSymbol(math, rel, "\u2a87", "\\lneq", true);
 defineSymbol(math, rel, "\u2268", "\\lneqq", true);
 defineSymbol(math, rel, "\u2268\ufe00", "\\lvertneqq");
