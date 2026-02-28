@@ -18,7 +18,7 @@ const toHex = num => {
 
 // Colors from Tables 4.1 and 4.2 of the xcolor package.
 // Table 4.1 (lower case) RGB values are taken from chroma and xcolor.dtx.
-// Table 4.2 (Capitalizzed) values were sampled, because Chroma contains a unreliable
+// Table 4.2 (Capitalized) values were sampled, because Chroma contains a unreliable
 // conversion from cmyk to RGB. See https://tex.stackexchange.com/a/537274.
 const xcolors = JSON.parse(`{
   "Apricot": "#ffb484",
