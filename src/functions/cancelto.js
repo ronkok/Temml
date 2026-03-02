@@ -30,6 +30,7 @@ defineFunction({
     // That way, the arrow will be an overlay on the content.
     const phantom = new mathMLTree.MathNode("mphantom", [mml.buildGroup(group.body, style)])
     const arrow = new mathMLTree.MathNode("mrow", [phantom], ["tml-cancelto"])
+    arrow.style.color = style.color
     if (group.isCharacterBox && smalls.indexOf(group.body.body[0].text) > -1) {
       arrow.style.left = "0.1em"
       arrow.style.width = "90%"
@@ -61,6 +62,7 @@ defineFunction({
       dummyNode = new mathMLTree.MathNode("mphantom", [zeroWidthNode]) // Hide it.
     }
     const toNode = mml.buildGroup(group.to, style)
+    toNode.style.color = style.color
     const zeroWidthToNode = new mathMLTree.MathNode("mpadded", [toNode])
     if (!group.isCharacterBox || /[f∫∑]/.test(group.body.body[0].text)) {
       const w = new mathMLTree.MathNode("mspace", [])

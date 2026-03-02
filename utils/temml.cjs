@@ -1090,7 +1090,7 @@ defineSymbol(math, mathord, "\u2295", "\\Earth");
 
 // AMS Negated Binary Relations
 defineSymbol(math, rel, "\u226e", "\\nless", true);
-// Symbol names preceeded by "@" each have a corresponding macro.
+// Symbol names preceded by "@" each have a corresponding macro.
 defineSymbol(math, rel, "\u2a87", "\\lneq", true);
 defineSymbol(math, rel, "\u2268", "\\lneqq", true);
 defineSymbol(math, rel, "\u2268\ufe00", "\\lvertneqq");
@@ -7223,6 +7223,7 @@ defineFunction({
     // That way, the arrow will be an overlay on the content.
     const phantom = new MathNode("mphantom", [buildGroup$1(group.body, style)]);
     const arrow = new MathNode("mrow", [phantom], ["tml-cancelto"]);
+    arrow.style.color = style.color;
     if (group.isCharacterBox && smalls.indexOf(group.body.body[0].text) > -1) {
       arrow.style.left = "0.1em";
       arrow.style.width = "90%";
@@ -7254,6 +7255,7 @@ defineFunction({
       dummyNode = new MathNode("mphantom", [zeroWidthNode]); // Hide it.
     }
     const toNode = buildGroup$1(group.to, style);
+    toNode.style.color = style.color;
     const zeroWidthToNode = new MathNode("mpadded", [toNode]);
     if (!group.isCharacterBox || /[f∫∑]/.test(group.body.body[0].text)) {
       const w = new MathNode("mspace", []);
@@ -7312,7 +7314,7 @@ const toHex = num => {
 
 // Colors from Tables 4.1 and 4.2 of the xcolor package.
 // Table 4.1 (lower case) RGB values are taken from chroma and xcolor.dtx.
-// Table 4.2 (Capitalizzed) values were sampled, because Chroma contains a unreliable
+// Table 4.2 (Capitalized) values were sampled, because Chroma contains a unreliable
 // conversion from cmyk to RGB. See https://tex.stackexchange.com/a/537274.
 const xcolors = JSON.parse(`{
   "Apricot": "#ffb484",
@@ -13036,7 +13038,7 @@ class Parser {
    * Parses an "expression", which is a list of atoms.
    *
    * `breakOnInfix`: Should the parsing stop when we hit infix nodes? This
-   *                 happens when functions have higher precedence han infix
+   *                 happens when functions have higher precedence than infix
    *                 nodes in implicit parses.
    *
    * `breakOnTokenText`: The text of the token that the expression should end
