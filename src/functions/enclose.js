@@ -32,7 +32,7 @@ const mathmlBuilder = (group, style) => {
       break
     case "\\xcancel":
       node.setAttribute("notation", "updiagonalstrike downdiagonalstrike")
-      node.classes.push("tml-xcancel")
+      node.children.push(new mathMLTree.MathNode("mrow", [], ["tml-cancel", "tml-xcancel"]))
       break
     // cancelto is handled in cancelto.js
     case "\\longdiv":
