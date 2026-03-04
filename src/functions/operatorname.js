@@ -22,6 +22,14 @@ const mathmlBuilder = (group, style) => {
       if ((node.type === "mrow" || node.type === "mpadded") && node.children.length === 1 &&
           node.children[0] instanceof mathMLTree.MathNode) {
         node = node.children[0]
+      } else if (node.type === "mrow" && node.children.length === 2 &&
+                 node.children[0] instanceof mathMLTree.MathNode &&
+                 node.children[1] instanceof mathMLTree.MathNode &&
+                 node.children[1].type === "mspace" && !node.children[1].attributes.width &&
+                 node.children[1].children.length === 0) {
+        // This is a workaround for a Firefox bug that applies spacing to
+        // an <mi> with mathvariant="normal".
+        node = node.children[0];
       }
       switch (node.type) {
         case "mi":

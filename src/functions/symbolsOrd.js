@@ -41,8 +41,8 @@ defineFunctionBuilders({
       node.setAttribute("mathvariant", "normal")
       if (text.text.length === 1) {
         // A Firefox bug will apply spacing here, but there should be none. Fix it.
-        node = new mathMLTree.MathNode("mpadded", [node])
-        node.setAttribute("lspace", "0")
+        const mspace = new mathMLTree.MathNode("mspace", [])
+        node = new mathMLTree.MathNode("mrow", [node, mspace])
       }
     }
     return node
