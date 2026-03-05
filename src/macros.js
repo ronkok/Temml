@@ -694,7 +694,7 @@ defineMacro("\\upomega", "\\up@greek{\\omega}");
 // cmll package
 defineMacro("\\invamp", '\\mathbin{\\char"214b}')
 defineMacro("\\parr", '\\mathbin{\\char"214b}')
-defineMacro("\\upand", '\\mathbin{\\char"214b}')
+defineMacro("\\upand", '\\mathbin{\\char"214b}') // STIX package
 defineMacro("\\with", '\\mathbin{\\char"26}')
 defineMacro("\\multimapinv", '\\mathrel{\\char"27dc}')
 defineMacro("\\multimapboth", '\\mathrel{\\char"29df}')
