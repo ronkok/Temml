@@ -1652,7 +1652,7 @@ If you know the shape of a character, but not its name,
 | \unrhd               | $\unrhd$                    |                            | ams             |
 | \up                  | (Not supported)             |                            |                 |
 | \upalpha             | $\upalpha$                  |                            | upgreek         |
-| \upand               | $\upand$                    |                            | STIX            |
+| \upand               | $\upand$                    |                            | stix            |
 | \Uparrow             | $\Uparrow$                  |                            |                 |
 | \uparrow             | $\uparrow$                  |                            |                 |
 | \upbeta              | $\upbeta$                   |                            | upgreek         |

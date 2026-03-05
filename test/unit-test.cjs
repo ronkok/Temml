@@ -625,7 +625,6 @@ const test = () => {
   new Expect(markup).toContain('scriptlevel="0"')
   new Expect(markup).toNotContain('scriptlevel="2"')
 
-
   assertion = "An over/brace/brack parser should work"
   const simpleOver = r`1 \over x`;
   const complexOver = r`1+2i \over 3+4i`;

@@ -24,6 +24,7 @@ let admin = fs.readFileSync('./docs/administration.md').toString('utf8')
 admin =  hurmet.md2html(admin, true)
 fs.writeFileSync('./site/docs/en/administration.html', admin)
 
+/*
 // Comparison page
 const temmlRegEx = /₮{1,2}[^₮]+₮{1,2}/g
 const katexRegEx = /₭{1,2}[^₭]+₭{1,2}/g
@@ -94,3 +95,4 @@ for (let tableIndex = 0; tableIndex < tables.length; tableIndex++) {
 const comp = targetDocument.documentElement.outerHTML;
 
 fs.writeFileSync('./site/docs/en/comparison.html', comp)
+*/
