@@ -621,6 +621,10 @@ const test = () => {
   assertion = "A fraction builder should not over-shrink its  contents"
   nodes = build(r`\frac{2}{c +\frac{2}{d +\frac{2}{\frac 2 2}}}`)
   new Expect(nodes[0].children[1].children[2].children[1].children[2].children[1].style.mathDepth).toBe("2")
+  markup = temml.renderToString(r`x_{y_{\dfrac{a}{b}}}`)
+  new Expect(markup).toContain('scriptlevel="0"')
+  new Expect(markup).toNotContain('scriptlevel="2"')
+
 
   assertion = "An over/brace/brack parser should work"
   const simpleOver = r`1 \over x`;

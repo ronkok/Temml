@@ -9,22 +9,37 @@ import { calculateSize } from "../units";
 const stylArray = ["display", "text", "script", "scriptscript"];
 const scriptLevel = { auto: -1, display: 0, text: 0, script: 1, scriptscript: 2 };
 
+const adjustStyle = (functionSize, originalStyle) => {
+  // Figure out what style this fraction should be in based on the
+  // function used
+  let style = originalStyle;
+  if (functionSize === "display") {  //\tfrac or \cfrac
+    // Get display style as a default.
+    // If incoming style is sub/sup, use style.text() to get correct size.
+    const newSize = style.level >= StyleLevel.SCRIPT ? StyleLevel.TEXT : StyleLevel.DISPLAY;
+    style = style.withLevel(newSize)
+  } else if (functionSize === "text" &&
+    style.level === StyleLevel.DISPLAY) {
+    // We're in a \tfrac but incoming style is displaystyle, so:
+    style = style.withLevel(StyleLevel.TEXT);
+  } else if (functionSize === "auto") {
+    style = style.incrementLevel()
+  } else if (functionSize === "script") {
+    style = style.withLevel(StyleLevel.SCRIPT);
+  } else if (functionSize === "scriptscript") {
+    style = style.withLevel(StyleLevel.SCRIPTSCRIPT)
+  }
+  return style;
+};
+
 const mathmlBuilder = (group, style) => {
-  // Track the scriptLevel of the numerator and denominator.
-  // We may need that info for \mathchoice or for adjusting em dimensions.
-  const childOptions = group.scriptLevel === "auto"
-    ? style.incrementLevel()
-    : group.scriptLevel === "display"
-    ? style.withLevel(StyleLevel.TEXT)
-    : group.scriptLevel === "text"
-    ? style.withLevel(StyleLevel.SCRIPT)
-    : style.withLevel(StyleLevel.SCRIPTSCRIPT);
+  style = adjustStyle(group.scriptLevel, style)
 
   // Chromium (wrongly) continues to shrink fractions beyond scriptscriptlevel.
   // So we check for levels that Chromium shrinks too small.
   // If necessary, set an explicit fraction depth.
-  const numer = mml.buildGroup(group.numer, childOptions)
-  const denom = mml.buildGroup(group.denom, childOptions)
+  const numer = mml.buildGroup(group.numer, style)
+  const denom = mml.buildGroup(group.denom, style)
   if (style.level === 3) {
     numer.style.mathDepth = "2"
     numer.setAttribute("scriptlevel", "2")
@@ -77,6 +92,7 @@ const mathmlBuilder = (group, style) => {
 defineFunction({
   type: "genfrac",
   names: [
+    "\\cfrac",
     "\\dfrac",
     "\\frac",
     "\\tfrac",
@@ -100,6 +116,7 @@ defineFunction({
     let scriptLevel = "auto";
 
     switch (funcName) {
+      case "\\cfrac":
       case "\\dfrac":
       case "\\frac":
       case "\\tfrac":
@@ -126,15 +143,10 @@ defineFunction({
         throw new Error("Unrecognized genfrac command");
     }
 
-    switch (funcName) {
-      case "\\dfrac":
-      case "\\dbinom":
-        scriptLevel = "display";
-        break;
-      case "\\tfrac":
-      case "\\tbinom":
-        scriptLevel = "text";
-        break;
+    if (funcName === "\\cfrac" || funcName.startsWith("\\d")) {
+      scriptLevel = "display";
+    } else if (funcName.startsWith("\\t")) {
+      scriptLevel = "text";
     }
 
     return {
@@ -151,31 +163,6 @@ defineFunction({
     };
   },
   mathmlBuilder
-});
-
-defineFunction({
-  type: "genfrac",
-  names: ["\\cfrac"],
-  props: {
-    numArgs: 2
-  },
-  handler: ({ parser, funcName }, args) => {
-    const numer = args[0];
-    const denom = args[1];
-
-    return {
-      type: "genfrac",
-      mode: parser.mode,
-      continued: true,
-      numer,
-      denom,
-      hasBarLine: true,
-      leftDelim: null,
-      rightDelim: null,
-      scriptLevel: "display",
-      barSize: null
-    };
-  }
 });
 
 // Infix generalized fractions -- these are not rendered directly, but replaced
