@@ -23,7 +23,8 @@
 
 # Support Table
 
-**Temml** is a JavaScript library that converts TeX math-mode functions to MathML.
+**Temml** is a JavaScript library that converts TeX math-mode functions to
+[MathML Core](https://w3c.github.io/mathml-core/), for browser rendering.
 This page provides an alphabetically sorted list of TeX functions that Temml
 supports and some functions that it does not support. There is a similar page,
 with functions [sorted by type](supported.html).
