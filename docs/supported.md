@@ -1495,7 +1495,7 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | \$ ``` $     `` ``` \`\`           | $\mathellipsis$ `\mathellipsis`    | $\angle$  `\angle`                 |
 +------------------------------------+------------------------------------+------------------------------------+
 | $\text{\textquoteleft}$            | $\text{\textellipsis}$             | $\measuredangle$  `\measuredangle` |
-| `text{\textquoteleft}`             | `\text{\textellipsis}`             |                                    |
+| `\text{\textquoteleft}`            | `\text{\textellipsis}`             |                                    |
 +------------------------------------+------------------------------------+------------------------------------+
 | $\lq$  `\lq`                       | $\Box$  `\Box`                     | $\sphericalangle$                  |
 |                                    |                                    | `\sphericalangle`                  |
