@@ -3,7 +3,7 @@ import defineMacro from "../defineMacro";
 import * as mathMLTree from "../mathMLTree"
 import { spaceCharacter } from "./kern"
 import { ordTypes } from "./op"
-import { isDelimiter } from "./delimsizing"
+import { isDelimiter } from "./delimiter"
 
 import * as mml from "../buildMathML"
 

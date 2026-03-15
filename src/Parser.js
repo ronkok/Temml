@@ -9,7 +9,7 @@ import { uSubsAndSups, unicodeSubRegEx } from "./unicodeSupOrSub"
 import { asciiFromScript } from "./asciiFromScript"
 import SourceLocation from "./SourceLocation";
 import { Token } from "./Token";
-import { isDelimiter } from "./functions/delimsizing"
+import { isDelimiter } from "./functions/delimiter"
 
 // Pre-evaluate both modules as unicodeSymbols require String.normalize()
 import unicodeAccents from /*preval*/ "./unicodeAccents";
@@ -783,7 +783,7 @@ export default class Parser {
   ) {
     const firstToken = this.fetch();
     const text = firstToken.text;
-
+    if (name === "argument to '\\left'") { return this.parseSymbol() }
     let result;
     // Try to parse an open brace or \begingroup
     if (text === "{" || text === "\\begingroup" || text === "\\toggle") {
@@ -930,7 +930,8 @@ export default class Parser {
     let symbol;
     if (symbols[this.mode][text]) {
       let group = symbols[this.mode][text].group;
-      if (group === "bin" && binLeftCancellers.includes(this.prevAtomType)) {
+      if (group === "bin" &&
+        (binLeftCancellers.includes(this.prevAtomType) || this.prevAtomType === "")) {
         // Change from a binary operator to a unary (prefix) operator
         group = "open"
       }

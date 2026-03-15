@@ -306,14 +306,18 @@ const test = () => {
 
   assertion = "Parser should change bins to opens when they should be unary"
   nodes = parse(r`a = -1 \ast (-4) \pm {+5} + \sin -2 x^{-2} \ast 3 \sum -c + \dots + d`)
-  for (const i of [4, 9, 11, 16, 21, 23]) {
+  for (const i of [4, 6, 8, 13, 18, 20]) {
     new Expect(nodes[i].type).toBe("atom");
     new Expect(nodes[i].family).toBe("bin");
   }
-  for (const i of [2, 6, 13, 19]) {
-    new Expect(nodes[i].type).toBe("atom");
-    new Expect(nodes[i].family).toBe("open");
-  }
+  new Expect(nodes[2].type).toBe("atom");
+  new Expect(nodes[2].family).toBe("open");
+  new Expect(nodes[5].body[0].type).toBe("atom");
+  new Expect(nodes[5].body[0].family).toBe("open");
+  new Expect(nodes[7].body[0].type).toBe("atom");
+  new Expect(nodes[7].body[0].family).toBe("open");
+  new Expect(nodes[10].type).toBe("atom");
+  new Expect(nodes[10].family).toBe("open");
 
   assertion = "Parser should build a list of rels"
   nodes = parse(r`=<>\leq\geq\neq\nleq\ngeq\cong\in`)
@@ -822,6 +826,16 @@ const test = () => {
   node = parse(textTie)[0];
   new Expect(node.body[2].type).toBe("spacing");
 
+  assertion = "A delimiter parser should wrap paired delimiters in a mrow"
+  const pairedDelimMathML = temml.renderToString(r`( x + y ) + z`);
+  new Expect(pairedDelimMathML).toContain('</mrow><mo>+</mo><mi>z</mi>');
+  const nestedPairedDelimMathML = temml.renderToString(r`(( x + y ) + z)^2`);
+  new Expect(nestedPairedDelimMathML).toContain('</mrow><mo>+</mo><mi>z</mi><mo fence="true" form="postfix" stretchy="false">)</mo></mrow><mn>2</mn>');
+  assertion = "A delimiter parser should work with an unpaired delimiter"
+  new Expect(r`( x + y`).toParse();
+  new Expect(r`(a, b]`).toParse();
+  new Expect(r`\langle \phi \vert`).toParse();
+
   assertion = "A delimiter sizing parser should work"
   const normalDelim = r`\bigl |`;
   const notDelim = r`\bigl x`;
@@ -1315,7 +1329,7 @@ const test = () => {
   markup = temml.renderToString(r`\mathrm{R}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mrow><mi mathvariant="normal">R</mi><mspace></mspace></mrow>');
   markup = temml.renderToString(r`\nabla`).replace(mathTagRegEx, "");
-  new Expect(markup).toBe('<mo lspace="0em" rspace="0em">∇</mo>');
+  new Expect(markup).toBe('<mo form="prefix" stretchy="false" lspace="0em" rspace="0em">∇</mo>');
   markup = temml.renderToString(r`\mathord\nabla`).replace(mathTagRegEx, "");
   new Expect(markup).toBe('<mi mathvariant="normal">∇</mi>');
   markup = temml.renderToString(r`\mathcal{R}`).replace(mathTagRegEx, "");
@@ -1440,7 +1454,7 @@ const test = () => {
 
   assertion = "A bin parser should work"
   new Expect(parse('x + y')[1].family).toBe("bin")
-  new Expect(parse('+ x')[0].family).toBe("bin")
+  new Expect(parse('+ x')[0].family).toBe("open")
   new Expect(parse(r`x + + 2`)[3].type).toBe("textord");
   new Expect(parse(r`( + 2`)[2].type).toBe("textord");
   new Expect(parse(r`= + 2`)[2].type).toBe("textord");

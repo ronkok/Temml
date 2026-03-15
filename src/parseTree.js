@@ -8,11 +8,27 @@ const parseTree = function(toParse, settings) {
   if (!(typeof toParse === "string" || toParse instanceof String)) {
     throw new TypeError("Temml can only parse string typed expression")
   }
-  const parser = new Parser(toParse, settings)
-  // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
-  delete parser.gullet.macros.current["\\df@tag"]
+  let tree;
+  let parser;
+  try {
+    parser = new Parser(toParse, settings)
+    // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
+    delete parser.gullet.macros.current["\\df@tag"]
 
-  let tree = parser.parse()
+    tree = parser.parse()
+  } catch (error) {
+    if (error.toString() === "ParseError:  Unmatched delimiter") {
+      // Abandon the attempt to wrap delimiter pairs in an <mrow>.
+      // Try again, and put each delimiter into an <mo> element.
+      settings.wrapDelimiterPairs = false;
+      parser = new Parser(toParse, settings)
+      // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
+      delete parser.gullet.macros.current["\\df@tag"]
+      tree = parser.parse()
+    } else {
+      throw error;
+    }
+  }
 
   // LaTeX ignores a \tag placed outside an AMS environment.
   if (!(tree.length > 0 &&  tree[0].type && tree[0].type === "array" && tree[0].addEqnNum)) {

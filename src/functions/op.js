@@ -2,7 +2,7 @@
 import defineFunction, { ordargument } from "../defineFunction";
 import * as mathMLTree from "../mathMLTree";
 import * as mml from "../buildMathML";
-import { isDelimiter } from "./delimsizing"
+import { isDelimiter } from "./delimiter"
 
 // Some helpers
 

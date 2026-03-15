@@ -26,7 +26,41 @@ export const delimiterSizes = {
   "\\Bigg": { mclass: "mord", size: 4 }
 };
 
-export const delimiters = [
+export const leftToRight = {
+  "(": ")",
+  "\\lparen": "\\rparen",
+  "[": "]",
+  "\\lbrack": "\\rbrack",
+  "\\{": "\\}",
+  "\\lbrace": "\\rbrace",
+  "⦇": "⦈",
+  "\\llparenthesis": "\\rrparenthesis",
+  "\\lfloor": "\\rfloor",
+  "\u230a": "\u230b",
+  "\\lceil": "\\rceil",
+  "\u2308": "\u2309",
+  "\\langle": "\\rangle",
+  "\u27e8": "\u27e9",
+  "\\lAngle": "\\rAngle",
+  "\u27ea": "\u27eb",
+  "\\llangle": "\\rrangle",
+  "⦉": "⦊",
+  "\\lvert": "\\rvert",
+  "\\lVert": "\\rVert",
+  "\\lgroup": "\\rgroup",
+  "\u27ee": "\u27ef",
+  "\\lmoustache": "\\rmoustache",
+  "\u23b0": "\u23b1",
+  "\\llbracket": "\\rrbracket",
+  "\u27e6": "\u27e7",
+  "\\lBrace": "\\rBrace",
+  "\u2983": "\u2984"
+};
+
+export const leftDelimiterNames = new Set(Object.keys(leftToRight));
+export const rightDelimiterNames = new Set(Object.values(leftToRight));
+
+const delimiters = new Set([
   "(",
   "\\lparen",
   ")",
@@ -82,7 +116,7 @@ export const delimiters = [
   "\\llbracket",
   "\\rrbracket",
   "\u27e6",
-  "\u27e6",
+  "\u27e7",
   "\\lBrace",
   "\\rBrace",
   "\u2983",
@@ -101,12 +135,12 @@ export const delimiters = [
   "\\updownarrow",
   "\\Updownarrow",
   "."
-];
+]);
 
 // Export isDelimiter for benefit of parser.
-const dels = ["}", "\\left", "\\middle", "\\right"]
+const dels = new Set(["}", "\\left", "\\middle", "\\right"]);
 export const isDelimiter = str => str.length > 0 &&
-  (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str))
+  (delimiters.has(str) || delimiterSizes[str] || dels.has(str));
 
 // Metrics of the different sizes. Found by looking at TeX's output of
 // $\bigl| // \Bigl| \biggl| \Biggl| \showlists$
@@ -119,11 +153,11 @@ function checkDelimiter(delim, context) {
     delim = delim.body[0]; // Unwrap the braces
   }
   const symDelim = checkSymbolNodeType(delim)
-  if (symDelim && delimiters.includes(symDelim.text)) {
+  if (symDelim && delimiters.has(symDelim.text)) {
     // If a character is not in the MathML operator dictionary, it will not stretch.
     // Replace such characters w/characters that will stretch.
-    if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨" }
-    if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩" }
+    if (symDelim.text === "<" || symDelim.text === "\\lt") { symDelim.text = "⟨" }
+    if (symDelim.text === ">" || symDelim.text === "\\gt") { symDelim.text = "⟩" }
     return symDelim;
   } else if (symDelim) {
     throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
@@ -133,7 +167,16 @@ function checkDelimiter(delim, context) {
 }
 
 //                               /         \
-const needExplicitStretch = ["\u002F", "\u005C", "\\backslash", "\\vert", "|"];
+const needExplicitStretch = new Set(["\u002F", "\u005C", "\\backslash", "\u2216", "\\vert", "|"]);
+
+const makeFenceMo = (delim, mode, form, isStretchy) => {
+  const text = delim === "." ? "" : delim;
+  const node = new mathMLTree.MathNode("mo", [mml.makeText(text, mode)]);
+  node.setAttribute("fence", "true");
+  node.setAttribute("form", form);
+  node.setAttribute("stretchy", isStretchy ? "true" : "false");
+  return node;
+};
 
 defineFunction({
   type: "delimsizing",
@@ -184,9 +227,9 @@ defineFunction({
   },
   mathmlBuilder: (group) => {
     const children = [];
+    const delim = group.delim === "." ? "" : group.delim;
 
-    if (group.delim === ".") { group.delim = "" }
-    children.push(mml.makeText(group.delim, group.mode));
+    children.push(mml.makeText(delim, group.mode));
 
     const node = new mathMLTree.MathNode("mo", children);
 
@@ -199,7 +242,7 @@ defineFunction({
       // defaults.
       node.setAttribute("fence", "false");
     }
-    if (needExplicitStretch.includes(group.delim) || group.delim.indexOf("arrow") > -1) {
+    if (needExplicitStretch.has(delim) || delim.indexOf("arrow") > -1) {
       // We have to explicitly set stretchy to true.
       node.setAttribute("stretchy", "true")
     }
@@ -212,7 +255,7 @@ defineFunction({
 
 function assertParsed(group) {
   if (!group.body) {
-    throw new Error("Bug: The leftright ParseNode wasn't fully parsed.");
+    throw new Error("Bug: The delim ParseNode wasn't fully parsed.");
   }
 }
 
@@ -243,17 +286,10 @@ defineFunction({
     const delim = checkDelimiter(args[0], context);
 
     const parser = context.parser;
-    // Parse out the implicit body
     ++parser.leftrightDepth;
-    // parseExpression stops before '\\right' or `\\middle`
-    let body = parser.parseExpression(false, null, true)
+    let body = parser.parseExpression(false, "\\right", true)
     let nextToken = parser.fetch()
     while (nextToken.text === "\\middle") {
-      // `\middle`, from the ε-TeX package, ends one group and starts another group.
-      // We had to parse this expression with `breakOnMiddle` enabled in order
-      // to get TeX-compliant parsing of \over.
-      // But we do not want, at this point, to end on \middle, so continue
-      // to parse until we fetch a `\right`.
       parser.consume()
       const middle = parser.fetch().text
       if (!symbols.math[middle]) {
@@ -262,11 +298,10 @@ defineFunction({
       checkDelimiter({ type: "atom", mode: "math", text: middle }, { funcName: "\\middle" })
       body.push({ type: "middle", mode: "math", delim: middle })
       parser.consume()
-      body = body.concat(parser.parseExpression(false, null, true))
+      body = body.concat(parser.parseExpression(false, "\\right", true))
       nextToken = parser.fetch()
     }
     --parser.leftrightDepth;
-    // Check the next token
     parser.expect("\\right", false);
     const right = assertNodeType(parser.parseFunction(), "leftright-right");
     return {
@@ -274,39 +309,94 @@ defineFunction({
       mode: parser.mode,
       body,
       left: delim.text,
-      right: right.delim
+      right: right.delim,
+      isStretchy: true
     };
   },
   mathmlBuilder: (group, style) => {
     assertParsed(group);
     const inner = mml.buildExpression(group.body, style);
 
-    if (group.left === ".") { group.left = "" }
-    const leftNode = new mathMLTree.MathNode("mo", [mml.makeText(group.left, group.mode)]);
-    leftNode.setAttribute("fence", "true")
-    leftNode.setAttribute("form", "prefix")
-    if (group.left === "/" || group.left === "\u005C" || group.left.indexOf("arrow") > -1) {
-      leftNode.setAttribute("stretchy", "true")
-    }
-    inner.unshift(leftNode)
+    const leftNode = makeFenceMo(group.left, group.mode, "prefix", true);
+    inner.unshift(leftNode);
 
-    if (group.right === ".") { group.right = "" }
-    const rightNode = new mathMLTree.MathNode("mo", [mml.makeText(group.right, group.mode)]);
-    rightNode.setAttribute("fence", "true")
-    rightNode.setAttribute("form", "postfix")
-    if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
-      rightNode.setAttribute("stretchy", "true")
-    }
+    const rightNode = makeFenceMo(group.right, group.mode, "postfix", true);
     if (group.body.length > 0) {
       const lastElement = group.body[group.body.length - 1];
       if (lastElement.type === "color" && !lastElement.isTextColor) {
-        // \color is a switch. If the last element is of type "color" then
-        // the user set the \color switch and left it on.
-        // A \right delimiter turns the switch off, but the delimiter itself gets the color.
         rightNode.setAttribute("mathcolor", lastElement.color);
       }
     }
-    inner.push(rightNode)
+    inner.push(rightNode);
+
+    return mml.makeRow(inner);
+  }
+});
+
+defineFunction({
+  type: "delimiter",
+  names: Array.from(leftDelimiterNames),
+  props: {
+    numArgs: 0,
+    allowedInText: true,
+    allowedInMath: true,
+    allowedInArgument: true
+  },
+  handler: ({ parser, funcName, token }) => {
+    if (parser.mode === "text") {
+      return {
+        type: "textord",
+        mode: "text",
+        text: funcName,
+        loc: token.loc
+      }
+    } else if (!parser.settings.wrapDelimiterPairs) {
+      // Treat this token as an ordinary symbol.
+      return {
+        type: "atom",
+        mode: "math",
+        family: "open",
+        loc: token.loc,
+        text: funcName
+      };
+    }
+    // Otherwise, try to wrap a pair of delimiters with an <mrow>.
+    const rightDelim = leftToRight[funcName];
+    // Parse the inner expression, looking for the corresponding right delimiter.
+    const body = parser.parseExpression(false, rightDelim, false);
+    const nextToken = parser.fetch().text;
+
+    if (nextToken !== rightDelim) {
+      // We were unable to find a matching right delimiter.
+      // Throw control back to renderToMathMLTree.
+      // It will reparse the entire expression with wrapDelimiterPairs set to false.
+      throw new ParseError("Unmatched delimiter");
+    }
+    parser.consume();
+
+    return {
+      type: "delimiter",
+      mode: parser.mode,
+      body,
+      left: funcName,
+      right: rightDelim
+    };
+  },
+  mathmlBuilder: (group, style) => {
+    assertParsed(group);
+    const inner = mml.buildExpression(group.body, style);
+
+    const leftNode = makeFenceMo(group.left, group.mode, "prefix", false);
+    inner.unshift(leftNode);
+
+    const rightNode = makeFenceMo(group.right, group.mode, "postfix", false);
+    if (group.body.length > 0) {
+      const lastElement = group.body[group.body.length - 1];
+      if (lastElement.type === "color" && !lastElement.isTextColor) {
+        rightNode.setAttribute("mathcolor", lastElement.color);
+      }
+    }
+    inner.push(rightNode);
 
     return mml.makeRow(inner);
   }
@@ -331,7 +421,7 @@ defineFunction({
       delim: delim.text
     };
   },
-  mathmlBuilder: (group, style) => {
+  mathmlBuilder: (group) => {
     const textNode = mml.makeText(group.delim, group.mode);
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("fence", "true");

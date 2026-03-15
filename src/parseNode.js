@@ -34,7 +34,7 @@ export function assertSymbolNodeType(node) {
  * returns null.
  */
 export function checkSymbolNodeType(node) {
-  if (node && (node.type === "atom" ||
+  if (node && (node.type === "atom" || node.type === "delimiter" ||
       Object.prototype.hasOwnProperty.call(NON_ATOMS, node.type))) {
     return node;
   }

@@ -16,7 +16,7 @@ import "./functions/char";
 import "./functions/color";
 import "./functions/cr";
 import "./functions/def";
-import "./functions/delimsizing";
+import "./functions/delimiter";
 import "./functions/enclose";
 import "./functions/environment";
 import "./functions/envTag";

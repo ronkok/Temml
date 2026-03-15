@@ -30,6 +30,7 @@ export default class Settings {
       : [Infinity, Infinity]
     )
     this.maxExpand = Math.max(0, utils.deflt(options.maxExpand, 1000)); // number
+    this.wrapDelimiterPairs = true; // boolean
   }
 
   /**

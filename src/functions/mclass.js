@@ -148,8 +148,16 @@ export const binrelClass = (arg) => {
   const atom = arg.type === "ordgroup" && arg.body.length && arg.body.length === 1
     ? arg.body[0]
     : arg;
-  if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
-    return "m" + atom.family;
+  if (atom.type === "atom") {
+    // BIN args are sometimes changed to OPEN, so check the original family.
+    const family = arg.body.length > 0 && arg.body[0].text && symbols.math[arg.body[0].text]
+      ? symbols.math[arg.body[0].text].group
+      : atom.family
+    if (family === "bin" || family === "rel") {
+      return "m" + family;
+    } else {
+      return "mord";
+    }
   } else {
     return "mord";
   }
