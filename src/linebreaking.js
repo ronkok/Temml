@@ -26,16 +26,12 @@ import { DocumentFragment } from "./tree"
  * much of this module.
  */
 
-const openDelims = "([{⌊⌈⟨⟮⎰⟦⦃"
-const closeDelims = ")]}⌋⌉⟩⟯⎱⟦⦄"
-
 export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
   const mtrs = [];
   let mrows = [];
   let block = [];
   let numTopLevelEquals = 0
   let i = 0
-  let level = 0
   while (i < expression.length) {
     while (expression[i] instanceof DocumentFragment) {
       expression.splice(i, 1, ...expression[i].children) // Expand the fragment.
@@ -58,13 +54,10 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
     }
     block.push(node);
     if (node.type && node.type === "mo" && node.children.length === 1 &&
+        !(node.attributes.form && node.attributes.form === "prefix") && // unary operators
         !Object.prototype.hasOwnProperty.call(node.attributes, "movablelimits")) {
       const ch = node.children[0].text
-      if (openDelims.indexOf(ch) > -1) {
-        level += 1
-      } else if (closeDelims.indexOf(ch) > -1) {
-        level -= 1
-      } else if (level === 0 && wrapMode === "=" && ch === "=") {
+      if (wrapMode === "=" && ch === "=") {
         numTopLevelEquals += 1
         if (numTopLevelEquals > 1) {
           block.pop()
@@ -73,7 +66,7 @@ export default function setLineBreaks(expression, wrapMode, isDisplayMode) {
           mrows.push(element)
           block = [node];
         }
-      } else if (level === 0 && wrapMode === "tex" && ch !== "∇") {
+      } else if (wrapMode === "tex") {
         // Check if the following node is a \nobreak text node, e.g. "~""
         const next = i < expression.length - 1 ? expression[i + 1] : null;
         let glueIsFreeOfNobreak = true;

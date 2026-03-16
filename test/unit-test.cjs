@@ -2392,7 +2392,7 @@ const test = () => {
   new Expect(wrapExpression).toBuild(wrapSettings("="));
   // Line wrapping works by creating a series of <mrow> elements.
   // We check for regression by counting the number of elements.
-  new Expect(build(wrapExpression, wrapSettings("tex"))[0].children.length).toBe(7)
+  new Expect(build(wrapExpression, wrapSettings("tex"))[0].children.length).toBe(6)
   new Expect(build(wrapExpression, wrapSettings("="))[0].children.length).toBe(2)
   new Expect(build(r`x^{\textcolor{red}{-yz}}`)[0].children.length).toBe(2)
 
