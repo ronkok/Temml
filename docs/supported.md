@@ -1489,7 +1489,7 @@ In cases where math fonts do not have a bold glyph, `\pmb` can simulate one. For
 | $\text{\textasciitilde}$           | $\dotso$  `\dotso`                 | $\ddagger$  `\ddagger` or `\ddag`  |
 | `\text{\textasciitilde}`           |                                    |                                    |
 +------------------------------------+------------------------------------+------------------------------------+
-| $\text{\textasciicircum}$          | $\dotsi$  `\idotsin`               | $\text{\textdaggerdbl}$            |
+| $\text{\textasciicircum}$          | $\sdot$  `\sdot`                   | $\text{\textdaggerdbl}$            |
 | `\text{\textasciicircum}`          |                                    | `\text{\textdaggerdbl}`            |
 +------------------------------------+------------------------------------+------------------------------------+
 | \$ ``` $     `` ``` \`\`           | $\mathellipsis$ `\mathellipsis`    | $\angle$  `\angle`                 |
