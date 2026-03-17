@@ -1,9 +1,9 @@
 const fs = require("fs")  // Node.js file system
-const { JSDOM } = require('jsdom');
+//const { JSDOM } = require('jsdom');
 const hurmet = require('./hurmet.cjs');
 const temml = require('./temml.cjs');
-const katex = require('./katex.min.js');
-const TeXZilla = require("./TeXZilla.js");
+//const katex = require('./katex.min.js');
+//const TeXZilla = require("./TeXZilla.js");
 // eslint-disable-next-line no-undef
 globalThis.temml = temml;
 
@@ -26,6 +26,8 @@ fs.writeFileSync('./site/docs/en/administration.html', admin)
 
 /*
 // Comparison page
+// This script is not working properly. I'm currently maintaining the comparison page manually.
+// Also note: I hate the MathJax API.
 const temmlRegEx = /₮{1,2}[^₮]+₮{1,2}/g
 const katexRegEx = /₭{1,2}[^₭]+₭{1,2}/g
 const texzillaRegEx = /₸{1,2}[^₸]+₸{1,2}/g

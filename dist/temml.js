@@ -216,6 +216,7 @@ var temml = (function () {
         : [Infinity, Infinity]
       );
       this.maxExpand = Math.max(0, deflt(options.maxExpand, 1000)); // number
+      this.wrapDelimiterPairs = true; // boolean
     }
 
     /**
@@ -997,8 +998,7 @@ var temml = (function () {
   defineSymbol(math, textord, "\u2200", "\\forall", true);
   defineSymbol(math, textord, "\u210f", "\\hbar", true);
   defineSymbol(math, textord, "\u2203", "\\exists", true);
-  // ∇ is actually a unary operator, not binary. But this works.
-  defineSymbol(math, bin, "\u2207", "\\nabla", true);
+  defineSymbol(math, open, "\u2207", "\\nabla", true);
   defineSymbol(math, textord, "\u266d", "\\flat", true);
   defineSymbol(math, textord, "\u2113", "\\ell", true);
   defineSymbol(math, textord, "\u266e", "\\natural", true);
@@ -1091,7 +1091,7 @@ var temml = (function () {
 
   // AMS Negated Binary Relations
   defineSymbol(math, rel, "\u226e", "\\nless", true);
-  // Symbol names preceeded by "@" each have a corresponding macro.
+  // Symbol names preceded by "@" each have a corresponding macro.
   defineSymbol(math, rel, "\u2a87", "\\lneq", true);
   defineSymbol(math, rel, "\u2268", "\\lneqq", true);
   defineSymbol(math, rel, "\u2268\ufe00", "\\lvertneqq");
@@ -2002,16 +2002,12 @@ var temml = (function () {
    * much of this module.
    */
 
-  const openDelims = "([{⌊⌈⟨⟮⎰⟦⦃";
-  const closeDelims = ")]}⌋⌉⟩⟯⎱⟦⦄";
-
   function setLineBreaks(expression, wrapMode, isDisplayMode) {
     const mtrs = [];
     let mrows = [];
     let block = [];
     let numTopLevelEquals = 0;
     let i = 0;
-    let level = 0;
     while (i < expression.length) {
       while (expression[i] instanceof DocumentFragment) {
         expression.splice(i, 1, ...expression[i].children); // Expand the fragment.
@@ -2034,13 +2030,10 @@ var temml = (function () {
       }
       block.push(node);
       if (node.type && node.type === "mo" && node.children.length === 1 &&
+          !(node.attributes.form && node.attributes.form === "prefix") && // unary operators
           !Object.prototype.hasOwnProperty.call(node.attributes, "movablelimits")) {
         const ch = node.children[0].text;
-        if (openDelims.indexOf(ch) > -1) {
-          level += 1;
-        } else if (closeDelims.indexOf(ch) > -1) {
-          level -= 1;
-        } else if (level === 0 && wrapMode === "=" && ch === "=") {
+        if (wrapMode === "=" && ch === "=") {
           numTopLevelEquals += 1;
           if (numTopLevelEquals > 1) {
             block.pop();
@@ -2049,7 +2042,7 @@ var temml = (function () {
             mrows.push(element);
             block = [node];
           }
-        } else if (level === 0 && wrapMode === "tex" && ch !== "∇") {
+        } else if (wrapMode === "tex") {
           // Check if the following node is a \nobreak text node, e.g. "~""
           const next = i < expression.length - 1 ? expression[i + 1] : null;
           let glueIsFreeOfNobreak = true;
@@ -3071,7 +3064,7 @@ var temml = (function () {
    * returns null.
    */
   function checkSymbolNodeType(node) {
-    if (node && (node.type === "atom" ||
+    if (node && (node.type === "atom" || node.type === "delimiter" ||
         Object.prototype.hasOwnProperty.call(NON_ATOMS, node.type))) {
       return node;
     }
@@ -4253,6 +4246,7 @@ var temml = (function () {
   // cmll package
   defineMacro("\\invamp", '\\mathbin{\\char"214b}');
   defineMacro("\\parr", '\\mathbin{\\char"214b}');
+  defineMacro("\\upand", '\\mathbin{\\char"214b}'); // STIX package
   defineMacro("\\with", '\\mathbin{\\char"26}');
   defineMacro("\\multimapinv", '\\mathrel{\\char"27dc}');
   defineMacro("\\multimapboth", '\\mathrel{\\char"29df}');
@@ -5310,6 +5304,7 @@ var temml = (function () {
       // That way, the arrow will be an overlay on the content.
       const phantom = new MathNode("mphantom", [buildGroup$1(group.body, style)]);
       const arrow = new MathNode("mrow", [phantom], ["tml-cancelto"]);
+      arrow.style.color = style.color;
       if (group.isCharacterBox && smalls.indexOf(group.body.body[0].text) > -1) {
         arrow.style.left = "0.1em";
         arrow.style.width = "90%";
@@ -5341,6 +5336,7 @@ var temml = (function () {
         dummyNode = new MathNode("mphantom", [zeroWidthNode]); // Hide it.
       }
       const toNode = buildGroup$1(group.to, style);
+      toNode.style.color = style.color;
       const zeroWidthToNode = new MathNode("mpadded", [toNode]);
       if (!group.isCharacterBox || /[f∫∑]/.test(group.body.body[0].text)) {
         const w = new MathNode("mspace", []);
@@ -5399,7 +5395,7 @@ var temml = (function () {
 
   // Colors from Tables 4.1 and 4.2 of the xcolor package.
   // Table 4.1 (lower case) RGB values are taken from chroma and xcolor.dtx.
-  // Table 4.2 (Capitalizzed) values were sampled, because Chroma contains a unreliable
+  // Table 4.2 (Capitalized) values were sampled, because Chroma contains a unreliable
   // conversion from cmyk to RGB. See https://tex.stackexchange.com/a/537274.
   const xcolors = JSON.parse(`{
   "Apricot": "#ffb484",
@@ -5958,7 +5954,41 @@ var temml = (function () {
     "\\Bigg": { mclass: "mord", size: 4 }
   };
 
-  const delimiters = [
+  const leftToRight = {
+    "(": ")",
+    "\\lparen": "\\rparen",
+    "[": "]",
+    "\\lbrack": "\\rbrack",
+    "\\{": "\\}",
+    "\\lbrace": "\\rbrace",
+    "⦇": "⦈",
+    "\\llparenthesis": "\\rrparenthesis",
+    "\\lfloor": "\\rfloor",
+    "\u230a": "\u230b",
+    "\\lceil": "\\rceil",
+    "\u2308": "\u2309",
+    "\\langle": "\\rangle",
+    "\u27e8": "\u27e9",
+    "\\lAngle": "\\rAngle",
+    "\u27ea": "\u27eb",
+    "\\llangle": "\\rrangle",
+    "⦉": "⦊",
+    "\\lvert": "\\rvert",
+    "\\lVert": "\\rVert",
+    "\\lgroup": "\\rgroup",
+    "\u27ee": "\u27ef",
+    "\\lmoustache": "\\rmoustache",
+    "\u23b0": "\u23b1",
+    "\\llbracket": "\\rrbracket",
+    "\u27e6": "\u27e7",
+    "\\lBrace": "\\rBrace",
+    "\u2983": "\u2984"
+  };
+
+  const leftDelimiterNames = new Set(Object.keys(leftToRight));
+  new Set(Object.values(leftToRight));
+
+  const delimiters = new Set([
     "(",
     "\\lparen",
     ")",
@@ -6014,7 +6044,7 @@ var temml = (function () {
     "\\llbracket",
     "\\rrbracket",
     "\u27e6",
-    "\u27e6",
+    "\u27e7",
     "\\lBrace",
     "\\rBrace",
     "\u2983",
@@ -6033,12 +6063,12 @@ var temml = (function () {
     "\\updownarrow",
     "\\Updownarrow",
     "."
-  ];
+  ]);
 
   // Export isDelimiter for benefit of parser.
-  const dels = ["}", "\\left", "\\middle", "\\right"];
+  const dels = new Set(["}", "\\left", "\\middle", "\\right"]);
   const isDelimiter = str => str.length > 0 &&
-    (delimiters.includes(str) || delimiterSizes[str] || dels.includes(str));
+    (delimiters.has(str) || delimiterSizes[str] || dels.has(str));
 
   // Metrics of the different sizes. Found by looking at TeX's output of
   // $\bigl| // \Bigl| \biggl| \Biggl| \showlists$
@@ -6051,11 +6081,11 @@ var temml = (function () {
       delim = delim.body[0]; // Unwrap the braces
     }
     const symDelim = checkSymbolNodeType(delim);
-    if (symDelim && delimiters.includes(symDelim.text)) {
+    if (symDelim && delimiters.has(symDelim.text)) {
       // If a character is not in the MathML operator dictionary, it will not stretch.
       // Replace such characters w/characters that will stretch.
-      if (["<", "\\lt"].includes(symDelim.text)) { symDelim.text = "⟨"; }
-      if ([">", "\\gt"].includes(symDelim.text)) { symDelim.text = "⟩"; }
+      if (symDelim.text === "<" || symDelim.text === "\\lt") { symDelim.text = "⟨"; }
+      if (symDelim.text === ">" || symDelim.text === "\\gt") { symDelim.text = "⟩"; }
       return symDelim;
     } else if (symDelim) {
       throw new ParseError(`Invalid delimiter '${symDelim.text}' after '${context.funcName}'`, delim);
@@ -6065,7 +6095,16 @@ var temml = (function () {
   }
 
   //                               /         \
-  const needExplicitStretch = ["\u002F", "\u005C", "\\backslash", "\\vert", "|"];
+  const needExplicitStretch = new Set(["\u002F", "\u005C", "\\backslash", "\u2216", "\\vert", "|"]);
+
+  const makeFenceMo = (delim, mode, form, isStretchy) => {
+    const text = delim === "." ? "" : delim;
+    const node = new MathNode("mo", [makeText(text, mode)]);
+    node.setAttribute("fence", "true");
+    node.setAttribute("form", form);
+    node.setAttribute("stretchy", isStretchy ? "true" : "false");
+    return node;
+  };
 
   defineFunction({
     type: "delimsizing",
@@ -6116,9 +6155,9 @@ var temml = (function () {
     },
     mathmlBuilder: (group) => {
       const children = [];
+      const delim = group.delim === "." ? "" : group.delim;
 
-      if (group.delim === ".") { group.delim = ""; }
-      children.push(makeText(group.delim, group.mode));
+      children.push(makeText(delim, group.mode));
 
       const node = new MathNode("mo", children);
 
@@ -6131,7 +6170,7 @@ var temml = (function () {
         // defaults.
         node.setAttribute("fence", "false");
       }
-      if (needExplicitStretch.includes(group.delim) || group.delim.indexOf("arrow") > -1) {
+      if (needExplicitStretch.has(delim) || delim.indexOf("arrow") > -1) {
         // We have to explicitly set stretchy to true.
         node.setAttribute("stretchy", "true");
       }
@@ -6144,7 +6183,7 @@ var temml = (function () {
 
   function assertParsed(group) {
     if (!group.body) {
-      throw new Error("Bug: The leftright ParseNode wasn't fully parsed.");
+      throw new Error("Bug: The delim ParseNode wasn't fully parsed.");
     }
   }
 
@@ -6175,17 +6214,10 @@ var temml = (function () {
       const delim = checkDelimiter(args[0], context);
 
       const parser = context.parser;
-      // Parse out the implicit body
       ++parser.leftrightDepth;
-      // parseExpression stops before '\\right' or `\\middle`
-      let body = parser.parseExpression(false, null, true);
+      let body = parser.parseExpression(false, "\\right", true);
       let nextToken = parser.fetch();
       while (nextToken.text === "\\middle") {
-        // `\middle`, from the ε-TeX package, ends one group and starts another group.
-        // We had to parse this expression with `breakOnMiddle` enabled in order
-        // to get TeX-compliant parsing of \over.
-        // But we do not want, at this point, to end on \middle, so continue
-        // to parse until we fetch a `\right`.
         parser.consume();
         const middle = parser.fetch().text;
         if (!symbols.math[middle]) {
@@ -6194,11 +6226,10 @@ var temml = (function () {
         checkDelimiter({ type: "atom", mode: "math", text: middle }, { funcName: "\\middle" });
         body.push({ type: "middle", mode: "math", delim: middle });
         parser.consume();
-        body = body.concat(parser.parseExpression(false, null, true));
+        body = body.concat(parser.parseExpression(false, "\\right", true));
         nextToken = parser.fetch();
       }
       --parser.leftrightDepth;
-      // Check the next token
       parser.expect("\\right", false);
       const right = assertNodeType(parser.parseFunction(), "leftright-right");
       return {
@@ -6206,35 +6237,90 @@ var temml = (function () {
         mode: parser.mode,
         body,
         left: delim.text,
-        right: right.delim
+        right: right.delim,
+        isStretchy: true
       };
     },
     mathmlBuilder: (group, style) => {
       assertParsed(group);
       const inner = buildExpression(group.body, style);
 
-      if (group.left === ".") { group.left = ""; }
-      const leftNode = new MathNode("mo", [makeText(group.left, group.mode)]);
-      leftNode.setAttribute("fence", "true");
-      leftNode.setAttribute("form", "prefix");
-      if (group.left === "/" || group.left === "\u005C" || group.left.indexOf("arrow") > -1) {
-        leftNode.setAttribute("stretchy", "true");
-      }
+      const leftNode = makeFenceMo(group.left, group.mode, "prefix", true);
       inner.unshift(leftNode);
 
-      if (group.right === ".") { group.right = ""; }
-      const rightNode = new MathNode("mo", [makeText(group.right, group.mode)]);
-      rightNode.setAttribute("fence", "true");
-      rightNode.setAttribute("form", "postfix");
-      if (group.right === "\u2216" || group.right.indexOf("arrow") > -1) {
-        rightNode.setAttribute("stretchy", "true");
-      }
+      const rightNode = makeFenceMo(group.right, group.mode, "postfix", true);
       if (group.body.length > 0) {
         const lastElement = group.body[group.body.length - 1];
         if (lastElement.type === "color" && !lastElement.isTextColor) {
-          // \color is a switch. If the last element is of type "color" then
-          // the user set the \color switch and left it on.
-          // A \right delimiter turns the switch off, but the delimiter itself gets the color.
+          rightNode.setAttribute("mathcolor", lastElement.color);
+        }
+      }
+      inner.push(rightNode);
+
+      return makeRow(inner);
+    }
+  });
+
+  defineFunction({
+    type: "delimiter",
+    names: Array.from(leftDelimiterNames),
+    props: {
+      numArgs: 0,
+      allowedInText: true,
+      allowedInMath: true,
+      allowedInArgument: true
+    },
+    handler: ({ parser, funcName, token }) => {
+      if (parser.mode === "text") {
+        return {
+          type: "textord",
+          mode: "text",
+          text: funcName,
+          loc: token.loc
+        }
+      } else if (!parser.settings.wrapDelimiterPairs) {
+        // Treat this token as an ordinary symbol.
+        return {
+          type: "atom",
+          mode: "math",
+          family: "open",
+          loc: token.loc,
+          text: funcName
+        };
+      }
+      // Otherwise, try to wrap a pair of delimiters with an <mrow>.
+      const rightDelim = leftToRight[funcName];
+      // Parse the inner expression, looking for the corresponding right delimiter.
+      const body = parser.parseExpression(false, rightDelim, false);
+      const nextToken = parser.fetch().text;
+
+      if (nextToken !== rightDelim) {
+        // We were unable to find a matching right delimiter.
+        // Throw control back to renderToMathMLTree.
+        // It will reparse the entire expression with wrapDelimiterPairs set to false.
+        throw new ParseError("Unmatched delimiter");
+      }
+      parser.consume();
+
+      return {
+        type: "delimiter",
+        mode: parser.mode,
+        body,
+        left: funcName,
+        right: rightDelim
+      };
+    },
+    mathmlBuilder: (group, style) => {
+      assertParsed(group);
+      const inner = buildExpression(group.body, style);
+
+      const leftNode = makeFenceMo(group.left, group.mode, "prefix", false);
+      inner.unshift(leftNode);
+
+      const rightNode = makeFenceMo(group.right, group.mode, "postfix", false);
+      if (group.body.length > 0) {
+        const lastElement = group.body[group.body.length - 1];
+        if (lastElement.type === "color" && !lastElement.isTextColor) {
           rightNode.setAttribute("mathcolor", lastElement.color);
         }
       }
@@ -6263,7 +6349,7 @@ var temml = (function () {
         delim: delim.text
       };
     },
-    mathmlBuilder: (group, style) => {
+    mathmlBuilder: (group) => {
       const textNode = makeText(group.delim, group.mode);
       const middleNode = new MathNode("mo", [textNode]);
       middleNode.setAttribute("fence", "true");
@@ -6309,7 +6395,7 @@ var temml = (function () {
         break
       case "\\xcancel":
         node.setAttribute("notation", "updiagonalstrike downdiagonalstrike");
-        node.classes.push("tml-xcancel");
+        node.children.push(new MathNode("mrow", [], ["tml-cancel", "tml-xcancel"]));
         break
       // cancelto is handled in cancelto.js
       case "\\longdiv":
@@ -6746,22 +6832,37 @@ var temml = (function () {
   const stylArray = ["display", "text", "script", "scriptscript"];
   const scriptLevel = { auto: -1, display: 0, text: 0, script: 1, scriptscript: 2 };
 
+  const adjustStyle = (functionSize, originalStyle) => {
+    // Figure out what style this fraction should be in based on the
+    // function used
+    let style = originalStyle;
+    if (functionSize === "display") {  //\tfrac or \cfrac
+      // Get display style as a default.
+      // If incoming style is sub/sup, use style.text() to get correct size.
+      const newSize = style.level >= StyleLevel.SCRIPT ? StyleLevel.TEXT : StyleLevel.DISPLAY;
+      style = style.withLevel(newSize);
+    } else if (functionSize === "text" &&
+      style.level === StyleLevel.DISPLAY) {
+      // We're in a \tfrac but incoming style is displaystyle, so:
+      style = style.withLevel(StyleLevel.TEXT);
+    } else if (functionSize === "auto") {
+      style = style.incrementLevel();
+    } else if (functionSize === "script") {
+      style = style.withLevel(StyleLevel.SCRIPT);
+    } else if (functionSize === "scriptscript") {
+      style = style.withLevel(StyleLevel.SCRIPTSCRIPT);
+    }
+    return style;
+  };
+
   const mathmlBuilder$5 = (group, style) => {
-    // Track the scriptLevel of the numerator and denominator.
-    // We may need that info for \mathchoice or for adjusting em dimensions.
-    const childOptions = group.scriptLevel === "auto"
-      ? style.incrementLevel()
-      : group.scriptLevel === "display"
-      ? style.withLevel(StyleLevel.TEXT)
-      : group.scriptLevel === "text"
-      ? style.withLevel(StyleLevel.SCRIPT)
-      : style.withLevel(StyleLevel.SCRIPTSCRIPT);
+    style = adjustStyle(group.scriptLevel, style);
 
     // Chromium (wrongly) continues to shrink fractions beyond scriptscriptlevel.
     // So we check for levels that Chromium shrinks too small.
     // If necessary, set an explicit fraction depth.
-    const numer = buildGroup$1(group.numer, childOptions);
-    const denom = buildGroup$1(group.denom, childOptions);
+    const numer = buildGroup$1(group.numer, style);
+    const denom = buildGroup$1(group.denom, style);
     if (style.level === 3) {
       numer.style.mathDepth = "2";
       numer.setAttribute("scriptlevel", "2");
@@ -6814,6 +6915,7 @@ var temml = (function () {
   defineFunction({
     type: "genfrac",
     names: [
+      "\\cfrac",
       "\\dfrac",
       "\\frac",
       "\\tfrac",
@@ -6837,6 +6939,7 @@ var temml = (function () {
       let scriptLevel = "auto";
 
       switch (funcName) {
+        case "\\cfrac":
         case "\\dfrac":
         case "\\frac":
         case "\\tfrac":
@@ -6863,15 +6966,10 @@ var temml = (function () {
           throw new Error("Unrecognized genfrac command");
       }
 
-      switch (funcName) {
-        case "\\dfrac":
-        case "\\dbinom":
-          scriptLevel = "display";
-          break;
-        case "\\tfrac":
-        case "\\tbinom":
-          scriptLevel = "text";
-          break;
+      if (funcName === "\\cfrac" || funcName.startsWith("\\d")) {
+        scriptLevel = "display";
+      } else if (funcName.startsWith("\\t")) {
+        scriptLevel = "text";
       }
 
       return {
@@ -6888,31 +6986,6 @@ var temml = (function () {
       };
     },
     mathmlBuilder: mathmlBuilder$5
-  });
-
-  defineFunction({
-    type: "genfrac",
-    names: ["\\cfrac"],
-    props: {
-      numArgs: 2
-    },
-    handler: ({ parser, funcName }, args) => {
-      const numer = args[0];
-      const denom = args[1];
-
-      return {
-        type: "genfrac",
-        mode: parser.mode,
-        continued: true,
-        numer,
-        denom,
-        hasBarLine: true,
-        leftDelim: null,
-        rightDelim: null,
-        scriptLevel: "display",
-        barSize: null
-      };
-    }
   });
 
   // Infix generalized fractions -- these are not rendered directly, but replaced
@@ -7743,8 +7816,16 @@ var temml = (function () {
     const atom = arg.type === "ordgroup" && arg.body.length && arg.body.length === 1
       ? arg.body[0]
       : arg;
-    if (atom.type === "atom" && (atom.family === "bin" || atom.family === "rel")) {
-      return "m" + atom.family;
+    if (atom.type === "atom") {
+      // BIN args are sometimes changed to OPEN, so check the original family.
+      const family = arg.body.length > 0 && arg.body[0].text && symbols.math[arg.body[0].text]
+        ? symbols.math[arg.body[0].text].group
+        : atom.family;
+      if (family === "bin" || family === "rel") {
+        return "m" + family;
+      } else {
+        return "mord";
+      }
     } else {
       return "mord";
     }
@@ -8314,6 +8395,14 @@ var temml = (function () {
       if (node instanceof MathNode) {
         if ((node.type === "mrow" || node.type === "mpadded") && node.children.length === 1 &&
             node.children[0] instanceof MathNode) {
+          node = node.children[0];
+        } else if (node.type === "mrow" && node.children.length === 2 &&
+                   node.children[0] instanceof MathNode &&
+                   node.children[1] instanceof MathNode &&
+                   node.children[1].type === "mspace" && !node.children[1].attributes.width &&
+                   node.children[1].children.length === 0) {
+          // This is a workaround for a Firefox bug that applies spacing to
+          // an <mi> with mathvariant="normal".
           node = node.children[0];
         }
         switch (node.type) {
@@ -9585,8 +9674,8 @@ var temml = (function () {
         node.setAttribute("mathvariant", "normal");
         if (text.text.length === 1) {
           // A Firefox bug will apply spacing here, but there should be none. Fix it.
-          node = new MathNode("mpadded", [node]);
-          node.setAttribute("lspace", "0");
+          const mspace = new MathNode("mspace", []);
+          node = new MathNode("mrow", [node, mspace]);
         }
       }
       return node
@@ -11123,7 +11212,7 @@ var temml = (function () {
      * Parses an "expression", which is a list of atoms.
      *
      * `breakOnInfix`: Should the parsing stop when we hit infix nodes? This
-     *                 happens when functions have higher precedence han infix
+     *                 happens when functions have higher precedence than infix
      *                 nodes in implicit parses.
      *
      * `breakOnTokenText`: The text of the token that the expression should end
@@ -11731,7 +11820,7 @@ var temml = (function () {
     ) {
       const firstToken = this.fetch();
       const text = firstToken.text;
-
+      if (name === "argument to '\\left'") { return this.parseSymbol() }
       let result;
       // Try to parse an open brace or \begingroup
       if (text === "{" || text === "\\begingroup" || text === "\\toggle") {
@@ -11878,7 +11967,8 @@ var temml = (function () {
       let symbol;
       if (symbols[this.mode][text]) {
         let group = symbols[this.mode][text].group;
-        if (group === "bin" && binLeftCancellers.includes(this.prevAtomType)) {
+        if (group === "bin" &&
+          (binLeftCancellers.includes(this.prevAtomType) || this.prevAtomType === "")) {
           // Change from a binary operator to a unary (prefix) operator
           group = "open";
         }
@@ -11974,11 +12064,27 @@ var temml = (function () {
     if (!(typeof toParse === "string" || toParse instanceof String)) {
       throw new TypeError("Temml can only parse string typed expression")
     }
-    const parser = new Parser(toParse, settings);
-    // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
-    delete parser.gullet.macros.current["\\df@tag"];
+    let tree;
+    let parser;
+    try {
+      parser = new Parser(toParse, settings);
+      // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
+      delete parser.gullet.macros.current["\\df@tag"];
 
-    let tree = parser.parse();
+      tree = parser.parse();
+    } catch (error) {
+      if (error.toString() === "ParseError:  Unmatched delimiter") {
+        // Abandon the attempt to wrap delimiter pairs in an <mrow>.
+        // Try again, and put each delimiter into an <mo> element.
+        settings.wrapDelimiterPairs = false;
+        parser = new Parser(toParse, settings);
+        // Blank out any \df@tag to avoid spurious "Duplicate \tag" errors
+        delete parser.gullet.macros.current["\\df@tag"];
+        tree = parser.parse();
+      } else {
+        throw error;
+      }
+    }
 
     // LaTeX ignores a \tag placed outside an AMS environment.
     if (!(tree.length > 0 &&  tree[0].type && tree[0].type === "array" && tree[0].addEqnNum)) {
@@ -12155,7 +12261,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.13.01";
+  const version = "0.13.02";
 
   function postProcess(block) {
     const labelMap = {};

@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.13.02] = 2026-03-17
+
+### Fixed
+
+- color of \xcancel and \cancelto
+- accent above single character <mi>
+- \dfrac inside a sub/sup
+- wrap paired delimiters with mrow
+- fix some typos in the documentation
+
+### Added
+
+- \upand
+- mention MathML Core in the documentation
+
 ## [0.13.01] = 2025-12-21
 
 ### Fixed
