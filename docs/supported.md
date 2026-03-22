@@ -106,8 +106,8 @@ See also [letters](#letters)
 | $\cancelto{6}{5}$                    | $\overbracket{a+b+c}^{\text{note}}$ |
 | `\cancelto{6}{5}`                    | `\overbracket{a+b+c}^{\text{note}}` |
 +--------------------------------------+-------------------------------------+
-| $\sout{abc}$  `\sout{abc}`           | $\underbracket{a+b+c}_{\text{note}}$|
-|                                      | `\underbracket{a+b+c}_{\text{note}}`|
+| $\text{\sout{abc}}$                  | $\underbracket{a+b+c}_{\text{note}}$|
+| `\text{\sout{abc}}`                  | `\underbracket{a+b+c}_{\text{note}}`|
 +--------------------------------------+-------------------------------------+
 | $\ref{tag1}$  `\ref{tag1}`           | `\tag{hi} x+y^{2x} \label{tag1}`    |
 +--------------------------------------+-------------------------------------+
