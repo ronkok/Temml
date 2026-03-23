@@ -14,21 +14,19 @@ export interface Options {
   maxExpand?: number;
 }
 
-export function render(
-  expression: string,
-  baseNode: HTMLElement | MathMLElement,
-  options?: Options,
-): void;
+declare const version: string;
 
-export function renderToString(expression: string, options?: Options): string;
+declare function render(expression: string, baseNode: HTMLElement | MathMLElement, options?: Options): void;
 
-export function renderMathInElement(block: any, options?: Options): void;
+declare function renderToString(expression: string, options?: Options): string;
 
-export function generateParseTree(expression: string, options?: Options): any;
+declare function renderMathInElement(block: any, options?: Options): void;
 
-export function definePreamble(expression: string, options?: Options): any;
+declare function generateParseTree(expression: string, options?: Options): any;
 
-export function renderToMathMLTree(expression: string, options?: Options): any;
+declare function definePreamble(expression: string, options?: Options): any;
+
+declare function renderToMathMLTree(expression: string, options?: Options): any;
 
 declare function postProcess(block: any): void;
 declare function defineMacro(name: string, body: any): void;
@@ -44,6 +42,20 @@ declare class ParseError {
     message: string, // The error message
     token: any, // An object providing position information
   );
+}
+
+export {
+  version,
+  render,
+  renderToString,
+  renderMathInElement,
+  postProcess,
+  ParseError,
+  definePreamble,
+  generateParseTree as __parse,
+  renderToMathMLTree as __renderToMathMLTree,
+  defineSymbol as __defineSymbol,
+  defineMacro as __defineMacro
 }
 
 declare const Temml: {
