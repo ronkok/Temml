@@ -508,9 +508,10 @@ Letters in the _texvc_ extension
 Direct Input: <span class="direct">∂ ∇ ℑ Ⅎ ℵ ℶ ℷ ℸ ⅁ ℏ ð À Á Â Ã Ä Å Æ Ç È É Ê Ë
 Ì Í Î Ï Ð Ñ Ò Ó Ô Õ Ö Ù Ú Û Ü Ý Þ ß à á â ã ä å ç è é ê ë ì í î ï ð ñ ò ó ô ö ù ú û ü ý þ ÿ</span>
 
-##### Subscripts: ₊ ₋ ₌ ₍ ₎ ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₐ ₑ ₕ ᵢ ⱼ ₖ ₗ ₘ ₙ ₒ ₚ ᵣ ₛ ₜ ᵤ ᵥ ₓ ᵦ ᵧ ᵨ ᵩ ᵪ
+##### Subscripts and Superscripts
 
-##### Superscripts: ⁺ ⁻ ⁼ ⁽ ⁾ ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ᵃ ᵇ ᶜ ᵈ ᵉ ᵍ ʰ ⁱ ʲ ᵏ ˡ ᵐ ⁿ ᵒ ᵖ ʳ ˢ ᵗ ᵘ ʷ ˣ ʸ ᶻ ᵛ ᵝ ᵞ ᵟ ᵠ ᵡ
+Subscripts: <span class="direct">₊ ₋ ₌ ₍ ₎ ₀ ₁ ₂ ₃ ₄ ₅ ₆ ₇ ₈ ₉ ₐ ₑ ₕ ᵢ ⱼ ₖ ₗ ₘ ₙ ₒ ₚ ᵣ ₛ ₜ ᵤ ᵥ ₓ ᵦ ᵧ ᵨ ᵩ ᵪ</span>\
+Superscripts: <span class="direct">⁺ ⁻ ⁼ ⁽ ⁾ ⁰ ¹ ² ³ ⁴ ⁵ ⁶ ⁷ ⁸ ⁹ ᵃ ᵇ ᶜ ᵈ ᵉ ᵍ ʰ ⁱ ʲ ᵏ ˡ ᵐ ⁿ ᵒ ᵖ ʳ ˢ ᵗ ᵘ ʷ ˣ ʸ ᶻ ᵛ ᵝ ᵞ ᵟ ᵠ ᵡ</span>
 
 Math-mode Unicode (sub|super)script characters will render as if you had written regular 
 characters in a subscript or superscript. For instance, `A²⁺³` will render the same
