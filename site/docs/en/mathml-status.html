@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="initial-scale=1">
+<title>MathML Status</title>
+<style>
+body{font-size:16px}
+h1{margin-left:5em;margin-top:2em;font-family:sans-serif;font-variant:small-caps;letter-spacing:.05em;font-size:120%}
+p{margin-left:5em;width:580px}
+code{font-size:90%}
+a{text-decoration:none}
+sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}
+sup{top:-.5em}
+sub{bottom:-.25em}
+table{margin-top:1em;margin-left:1em;border-collapse:collapse;}
+td{padding:.3em;text-align:center;vertical-align:middle;hyphens:none;border:1px solid #aaa}
+th{font-size:95%;padding:.3rem .5rem;line-height:1.05;text-align:center;vertical-align:middle;border:1px solid #aaa;position:sticky}
+table{overflow-y:auto;height:500px}
+table th{position:sticky;top:0;background-color:#fff}
+table tbody tr td:nth-child(1){text-align:center}
+table tbody tr td:nth-child(4){text-align:left}
+table tbody tr td:nth-child(11){text-align:left}
+table tbody tr td:nth-child(12){text-align:left}
+@font-face{font-family: Latin Modern Math; src: url('../../assets/latinmodernmath.woff2')}
+@font-face {font-family: STIX2;src: url('../../assets/STIXTwoMath.woff2');}
+math{font-family: "Latin Modern Math", math}
+@font-face { font-family: 'Temml'; src: url('../../assets/Temml.woff2') format('woff2');}
+.mathscr {font-family: "Temml";}
+#statusFilter{margin-top:.25rem;font-size:.9em}
+</style>
+</head>
+<body>
+
+<h1>MathML Rendering Status</h1>
+
+<p>All three of the main browser rendering engines now support MathML.
+Unfortunately, they each have  multiple shortcomings in math rendering. The
+MathML Core <a href="https://w3c.github.io/mathml-core/">specification</a> also has some issues.</p>
+
+<p>The table below is an attempt to show all the current major rendering issues in one place.
+It describes issues, gives an example of the relevant MathML source code and
+shows screenshots of all three browser renderings as compared to LaTeX output.</p>
+
+<p>The first eleven rows of this table come from Murray Sargent’s list of problems in MathML Core
+<a href="https://github.com/w3c/mathml-core/issues/229#issue-2226216231">issue #229</a>.
+I have paraphrased some of Murray's descriptions in my own words, but they are the same issues. </p>
+
+<p>The math font in use is Latin Modern, unless noted otherwise.</p>
+
+<p>These renderings differ from <a href="https://temml.org/">Temml</a> output because Temml contains workarounds for most of these problems.</p>
+
+<p>This table is a work in progress. I intend to keep it updated and I welcome suggestions for its improvement.
+MathML Core <a href="https://github.com/w3c/mathml-core/issues/">issue #???</a> would be a good forum for
+discussion of this table.</p>
+
+<p><u>Key for Status Column</u><br>
+C: Chromium (Chrome, Edge, etc.) issues<br>
+G: Gecko (Firefox) issues<br>
+W: WebKit (Safari) issues<br>
+S: MathML Core Specification issues<br>
+F: Font issues<br>
+*: No workaround exists in Temml</p>
+
+<p>By Ron Kok. Last updated 5 Apr 2026.</p>
+
+<table style="width: 1350px;">
+   <tbody>
+      <tr>
+         <th></th>
+         <th>Name</th>
+         <th>
+            <label for="statusFilter">Status</label><br>
+            <select id="statusFilter">
+               <option value="all" selected>all</option>
+               <option value="C">C</option>
+               <option value="F">F</option>
+               <option value="G">G</option>
+               <option value="S">S</option>
+               <option value="W">W</option>
+               <option value="*">*</option>
+            </select>
+         </th>
+         <th>Description</th>
+         <th>Issue</th>
+         <th>LaTeX</th>
+         <th>Chromium</th>
+         <th>Gecko</th>
+         <th>WebKit</th>
+         <th>Your browser</th>
+         <th>MathML</th>
+         <th style="width: 225px">Comment</th>
+      </tr>
+      <tr>
+         <td>1</td>
+         <td>Display mode</td>
+         <td>resolved</td>
+         <td><code>&lt;math display="block"&gt;</code> often didn't center the equation</td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>2</td>
+         <td>Supsub</td>
+         <td>CGWS*</td>
+         <td>Superscript and subscript vertical alignment should not vary with character height or descender depth.</td>
+         <td> </td>
+         <td><img src="images/supsubL.svg" width="65px"></td>
+         <td><img src="images/supsubC.jpeg" width="70"></td>
+         <td><img src="images/supsubG.png" width="65"></td>
+         <td><img src="images/supsubW.JPG" width="65"></td>
+         <td><math><mrow><msup><mi>a</mi><mn>2</mn></msup><msup><mi>b</mi><mn>2</mn></msup><mtext width="0.1667em"></mtext><msub><mi>a</mi><mn>2</mn></msub><msub><mi>g</mi><mn>3</mn></msub></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;msup&gt;
+      &lt;mi&gt;a&lt;/mi&gt;
+      &lt;mn&gt;2&lt;/mn&gt;
+    &lt;/msup&gt;
+    &lt;msup&gt;
+      &lt;mi&gt;b&lt;/mi&gt;
+      &lt;mn&gt;2&lt;/mn&gt;
+    &lt;/msup&gt;
+    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+    &lt;msub&gt;
+      &lt;mi&gt;a&lt;/mi&gt;
+      &lt;mn&gt;2&lt;/mn&gt;
+    &lt;/msub&gt;
+    &lt;msub&gt;
+      &lt;mi&gt;g&lt;/mi&gt;
+      &lt;mn&gt;3&lt;/mn&gt;
+    &lt;/msub&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+      <td>This issue contributes to radical height problems. See item 25.</td>
+      </tr>
+      <tr>
+         <td>3</td>
+         <td>Fraction padding</td>
+         <td>resolved?</td>
+         <td>Adjacent fractions should be separated by a small space.</td>
+         <td> </td>
+         <td><img src="images/fracL.svg" width="22px"></td>
+         <td><img src="images/fracC.jpeg" width="25px"></td>
+         <td><img src="images/fracG.png" width="28px"></td>
+         <td><img src="images/fracW.JPG" width="28px"></td>
+         <td><math><mrow><mstyle displaystyle="true" scriptlevel="0"><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle><mstyle displaystyle="true" scriptlevel="0"><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mstyle displaystyle="true" scriptlevel="0"&gt;
+      &lt;mfrac&gt;
+        &lt;mi&gt;a&lt;/mi&gt;
+        &lt;mi&gt;b&lt;/mi&gt;
+      &lt;/mfrac&gt;
+    &lt;/mstyle&gt;
+    &lt;mstyle displaystyle="true" scriptlevel="0"&gt;
+      &lt;mfrac&gt;
+        &lt;mi&gt;a&lt;/mi&gt;
+        &lt;mi&gt;b&lt;/mi&gt;
+      &lt;/mfrac&gt;
+    &lt;/mstyle&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Per TeXbook p. 150, fractions (except \cfrac) should get a 1.2 pt gap on either side. Chromium applies a 1px padding.</td>
+      </tr>
+      <tr>
+         <td>4</td>
+         <td>Operator spacing</td>
+         <td>CWS</td>
+         <td>𝑎 sin 𝜃 needs a space before and after <code>sin</code></td>
+         <td> </td>
+         <td><img src="images/sinL.svg" width="40px"></td>
+         <td><img src="images/sinC.jpeg" width="43px"></td>
+         <td><img src="images/sinG.png" width="43px"></td>
+         <td><img src="images/sinW.JPG" width="43px"></td>
+         <td><math><mi>a</mi><mi>sin</mi><mo>⁡</mo><mi>θ</mi></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+   &lt;mi&gt;a&lt;/mi&gt;
+   &lt;mi&gt;sin&lt;/mi&gt;
+   &lt;mo&gt;&amp;af;&lt;/mo&gt;
+   &lt;mi&gt;θ&lt;/mi&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>5</td>
+         <td>Short Parens</td>
+         <td>W*</td>
+         <td>|x| displays the delimiters too high</td>
+         <td> </td>
+         <td><img src="images/tallParenL.svg" width="20px"></td>
+         <td><img src="images/shortParenC.jpeg" width="25px"></td>
+         <td><img src="images/shortparenG.png" width="22px"></td>
+         <td><img src="images/shortParenW.JPG" width="24px"></td>
+         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">|</mo><mi>x</mi><mo fence="true" form="postfix" stretchy="true">|</mo></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mo fence="true" form="prefix" stretchy="true"&gt;|&lt;/mo&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+    &lt;mo fence="true" form="postfix" stretchy="true"&gt;|&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td style="text-align:left">Shown with <code>stretchy="true"</code>.<br>Now fixed in Chromium (2025).<br>Rendering has been good all along where <code>stretchy="false"</code>.</td>
+      </tr>
+      <tr>
+         <td>6</td>
+         <td>Radical alignment</td>
+         <td>C</td>
+         <td>√𝜋 displays the square root too low</td>
+         <td> </td>
+         <td><img src="images/sqrtL.svg" width="23px"></td>
+         <td><img src="images/sqrtC.jpeg" width="30px"></td>
+         <td><img src="images/sqrtG.png" width="29px"></td>
+         <td><img src="images/sqrtG.png" width="29px"></td>
+         <td><math><msqrt><mi>π</mi></msqrt></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;msqrt&gt;
+    &lt;mi&gt;π&lt;/mi&gt;
+  &lt;/msqrt&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>7</td>
+         <td>Matrix parens</td>
+         <td>CGWS</td>
+         <td>Parentheses around matrices are too large</td>
+         <td> </td>
+         <td><img src="images/matrixParenL.svg" width="48px"></td>
+         <td><img src="images/matrixParenC.jpeg" width="70px"></td>
+         <td><img src="images/matrixParenG.png" width="54px"></td>
+         <td><img src="images/matrixParenW.JPG" width="60px"></td>
+         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">(</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix" stretchy="true">)</mo></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mo fence="true" form="prefix" stretchy="true"&gt;(&lt;/mo&gt;
+    &lt;mtable&gt;
+      &lt;mtr&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;a&lt;/mi&gt;
+        &lt;/mtd&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;b&lt;/mi&gt;
+        &lt;/mtd&gt;
+      &lt;/mtr&gt;
+      &lt;mtr&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;c&lt;/mi&gt;
+        &lt;/mtd&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;d&lt;/mi&gt;
+        &lt;/mtd&gt;
+      &lt;/mtr&gt;
+    &lt;/mtable&gt;
+    &lt;mo fence="true" form="postfix" stretchy="true"&gt;)&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>8</td>
+         <td>Unicode spaces</td>
+         <td>resolved?</td>
+         <td>Unicode spaces have incorrect widths.</td>
+         <td> </td>
+         <td><img src="images/spacesL.jpeg" width="70px"></td>
+         <td><img src="images/spacesC.jpeg" width="65px"></td>
+         <td><img src="images/spacesG.png" width="65px"></td>
+         <td><img src="images/spacesW.JPG" width="65px"></td>
+         <td><math><mtext>B B B B</mtext></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mtext&gt;B B B B&lt;/mtext&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>I have been unable to reproduce Murray's problem. The spaces shown are U+200A (hair space), U+2009 (thin space), and U+2002 (en space). Also, U+2061 (apply function) has <a href="https://www.unicode.org/L2/L2002/02368-default-ignorable.html">no advance distance</a>. </td>
+      </tr>
+      <tr>
+         <td>9</td>
+         <td>Wide hat &amp; tilde</td>
+         <td>CGWS</td>
+         <td>\widehat and \widetilde do not stretch</td>
+         <td> </td>
+         <td><img src="images/wideL.svg" width="55px"></td>
+         <td><img src="images/wideC.jpeg" width="60px"></td>
+         <td><img src="images/wideG.png" width="60px"></td>
+         <td><img src="images/wideW.JPG" width="60px"></td>
+         <td><math><mrow><mover><mrow><mi>a</mi><mi>x</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0">^</mo></mover><mspace width="0.2778em"></mspace><mover><mrow><mi>a</mi><mi>x</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0">~</mo></mover></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mover&gt;
+      &lt;mrow&gt;
+        &lt;mi&gt;a&lt;/mi&gt;
+        &lt;mi&gt;x&lt;/mi&gt;
+        &lt;mi&gt;c&lt;/mi&gt;
+      &lt;/mrow&gt;
+      &lt;mo stretchy="true" style="math-depth:0"&gt;^&lt;/mo&gt;
+    &lt;/mover&gt;
+    &lt;mspace width="0.2778em"&gt;&lt;/mspace&gt;
+    &lt;mover&gt;
+      &lt;mrow&gt;
+        &lt;mi&gt;a&lt;/mi&gt;
+        &lt;mi&gt;x&lt;/mi&gt;
+        &lt;mi&gt;c&lt;/mi&gt;
+      &lt;/mrow&gt;
+      &lt;mo stretchy="true" style="math-depth:0"&gt;~&lt;/mo&gt;
+    &lt;/mover&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>10</td>
+         <td>Integral</td>
+         <td>resolved</td>
+         <td>Integration symbol should be large in display mode</td>
+         <td> </td>
+         <td><img src="images/intL.svg" width="50px"></td>
+         <td><img src="images/intC.jpeg" width="50px"></td>
+         <td><img src="images/intG.png" width="50px"></td>
+         <td><img src="images/intG.png" width="50px"></td>
+         <td><math display="block" style="display:block math;"><mrow><mo movablelimits="false">∫</mo><mi>x</mi><mtext width="0.1667em"></mtext><mi>d</mi><mi>x</mi></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math display="block" style="display:block math;"&gt;
+  &lt;mrow&gt;
+    &lt;mo&gt;∫&lt;/mo&gt;
+    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+    &lt;mi&gt;d&lt;/mi&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Now fixed in Chromium (2025)</td>
+         </tr>
+      <tr>
+         <td>11</td>
+         <td>Fraction vinculum</td>
+         <td>resolved</td>
+         <td>Fraction vinculum was too wide in display mode</td>
+         <td> </td>
+         <td><img src="images/displayFracL.svg" width="48px"></td>
+         <td><img src="images/displayFracC.jpeg" width="50px"></td>
+         <td><img src="images/displayFracG.png" width="54px"></td>
+         <td><img src="images/displayFracW.JPG" width="50px"></td>
+         <td><math display="block" style="display:block math;"><mfrac><msup><mi>α</mi><mn>3</mn></msup><mrow><msup><mi>β</mi><mn>3</mn></msup><mo>+</mo><msup><mi>γ</mi><mn>3</mn></msup></mrow></mfrac></math></td>
+         <td><details><summary></summary><pre><code>&lt;math display="block" style="display:block math;"&gt;
+  &lt;mfrac&gt;
+    &lt;msup&gt;
+      &lt;mi&gt;α&lt;/mi&gt;
+      &lt;mn&gt;3&lt;/mn&gt;
+    &lt;/msup&gt;
+    &lt;mrow&gt;
+      &lt;msup&gt;
+        &lt;mi&gt;β&lt;/mi&gt;
+        &lt;mn&gt;3&lt;/mn&gt;
+      &lt;/msup&gt;
+      &lt;mo&gt;+&lt;/mo&gt;
+      &lt;msup&gt;
+        &lt;mi&gt;γ&lt;/mi&gt;
+        &lt;mn&gt;3&lt;/mn&gt;
+      &lt;/msup&gt;
+    &lt;/mrow&gt;
+  &lt;/mfrac&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>12</td>
+         <td>Misaligned delimiter</td>
+         <td>C</td>
+         <td>Delimiters in the base of a <code>&lt;msubsup&gt;</code> are misaligned</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/215#issuecomment-2125683347">#215</a></td>
+         <td><img src="images/misparenL.svg" width="35px"></td>
+         <td><img src="images/misparenC.jpeg" width="45px"></td>
+         <td><img src="images/misparenG.png" width="38px"></td>
+         <td><img src="images/misparenW.JPG" width="38px"></td>
+         <td><math><mo>[</mo><mn>2</mn><mi>x</mi><msubsup><mo>]</mo><mn>0</mn><mn>1</mn></msubsup></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mo&gt;[&lt;/mo&gt;
+  &lt;mn&gt;2&lt;/mn&gt;
+  &lt;mi&gt;x&lt;/mi&gt;
+  &lt;msubsup&gt;
+    &lt;mo&gt;]&lt;/mo&gt;
+    &lt;mn&gt;0&lt;/mn&gt;
+    &lt;mn&gt;1&lt;/mn&gt;
+  &lt;/msubsup&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>13</td>
+         <td>Primes</td>
+         <td>CWS</td>
+         <td>Prime vertical alignment is too high..</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/160">#160</a></td>
+         <td><img src="images/primeL.svg" width="17px"></td>
+         <td><img src="images/primeC.jpeg" width="24px"></td>
+         <td><img src="images/primeG.png" width="20px"></td>
+         <td><img src="images/primeW.JPG" width="22px"></td>
+         <td><math><msubsup><mi>f</mi><mi>c</mi><mo>′</mo></msubsup></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;msubsup&gt;
+    &lt;mi&gt;f&lt;/mi&gt;
+    &lt;mi&gt;c&lt;/mi&gt;
+    &lt;mo&gt;′&lt;/mo&gt;
+  &lt;/msubsup&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>The browser should use an alternate glyph for <code>′</code>, <code>″</code>, etc. All math fonts have alternate glyphs.</td>
+      </tr>
+      <tr>
+         <td>14</td>
+         <td>Accents (A)</td>
+         <td>W</td>
+         <td>Accents placed too high</td>
+         <td> </td>
+         <td><img src="images/barL.svg" width="10px"></td>
+         <td><img src="images/barC.jpeg" width="15px"></td>
+         <td><img src="images/barG.png" width="15px"></td>
+         <td><img src="images/barW.JPG" width="22px"></td>
+         <td><math><mover><mi>y</mi><mo stretchy="false" style="math-depth:0;">‾</mo></mover></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mover&gt;
+    &lt;mi&gt;y&lt;/mi&gt;
+    &lt;mo stretchy="false" style="math-depth:0;"&gt;‾&lt;/mo&gt;
+  &lt;/mover&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>15</td>
+         <td>Accents (B)</td>
+         <td>CWS</td>
+         <td>Accents omit italic correction</td>
+         <td> </td>
+         <td><img src="images/barfL.svg" width="14px"></td>
+         <td><img src="images/barfC.jpeg" width="18px"></td>
+         <td><img src="images/barfG.png" width="12px"></td>
+         <td><img src="images/barfW.JPG" width="28px"></td>
+         <td><math><mover><mi>F</mi><mo stretchy="false" style="math-depth:0;">‾</mo></mover></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mover&gt;
+    &lt;mi&gt;F&lt;/mi&gt;
+    &lt;mo stretchy="false" style="math-depth:0"&gt;‾&lt;/mo&gt;
+  &lt;/mover&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>16</td>
+         <td>Accents (D)</td>
+         <td>CS</td>
+         <td><code>&lt;mover&gt;</code> attribute <code>accent=true</code> sets accent a little too low.</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/301">#301</a></td>
+         <td><img src="images/barxL.svg" width="12px"></td>
+         <td><img src="images/barxC.jpeg" width="22px"></td>
+         <td><img src="images/barxG.png" width="15px"></td>
+         <td><img src="images/barxW.JPG" width="20px"></td>
+         <td><math><mover accent="true"><mi>x</mi><mo stretchy="false">‾</mo></mover></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mover accent="true"&gt;
+    &lt;mi&gt;x&lt;/mi&gt;
+    &lt;mo stretchy="false"&gt;‾&lt;/mo&gt;
+  &lt;/mover&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>The other accents in this table work in Chromium because I did not use <code>&lt;mover&gt;</code> attribute <code>accent=true</code>. Instead, I set an explicit math-depth on the accent element.</td>
+      </tr>
+     <tr>
+         <td>17</td>
+         <td>\vec</td>
+         <td>CWS</td>
+         <td>The glyph that best matches TeX is a combining character, which renders too far left.</td>
+         <td> </td>
+         <td><img src="images/vecL.svg" width="18px"></td>
+         <td><img src="images/vecC.jpeg" width="22px"></td>
+         <td><img src="images/vecG.png" width="22px"></td>
+         <td><img src="images/vecW.JPG" width="20px"></td>
+         <td><math><mover><mi>M</mi><mo stretchy="false" style="math-depth:0;">⃗</mo></mover></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mover&gt;
+    &lt;mi&gt;M&lt;/mi&gt;
+    &lt;mo stretchy="false" style="math-depth:0;"&gt;⃗&lt;/mo&gt;
+  &lt;/mover&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Shows character U+20D7</td>
+      </tr>
+      <tr>
+         <td rowspan="2">18</td>
+         <td rowspan="2">Hat</td>
+         <td rowspan="2">CW*</td>
+         <td rowspan="2">Circumflex accent is not flattened in most math fonts.</td>
+         <td rowspan="2"><a href="https://github.com/w3c/mathml-core/issues/254">#254</a></td>
+         <td rowspan="2"><img src="images/hatL.svg" width="10px"></td>
+         <td><img src="images/hatC.jpeg" width="18px"></td>
+         <td><img src="images/hatG.png" width="12px"></td>
+         <td><img src="images/hatW.JPG" width="18px"></td>
+         <td><math style="font-family:STIX2, math;"><mover><mi>θ</mi><mo stretchy="false" style="math-depth:0;">^</mo></mover></math></td>
+         <td rowspan="2"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mover&gt;
+    &lt;mi&gt;θ&lt;/mi&gt;
+    &lt;mo stretchy="false" style="math-depth:0;"&gt;^&lt;/mo&gt;
+  &lt;/mover&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>STIX TWO</td>
+      </tr>
+      <tr>
+         <td><img src="images/flatHatC.jpeg" width="20px"></td>
+         <td><img src="images/flathatG.png" width="14px"></td>
+         <td><img src="images/flathatW.JPG" width="22px"></td>
+         <td style="text-align: center"><math><mover><mi>θ</mi><mo stretchy="false" style="math-depth:0;">^</mo></mover></math></td>
+         <td style="text-align:left">Latin Modern is okay</td>
+      </tr>
+      <tr>
+        <td>19</td>
+        <td>Soft linebreaks</td>
+        <td>CWS*</td>
+        <td>Not supported</td>
+        <td><a href="https://github.com/w3c/mathml-core/issues/127">#127</a></td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td> </td>
+        <td></td>
+        <td>Gecko, when <code>&lt;semantics&gt;</code> and <code>&lt;annotation&gt;</code> are not used, treats the end of a top-level <code>&lt;mrow&gt;</code> as a soft line-break. It’s very handy.</td>
+     </tr>
+      <tr>
+         <td>20</td>
+         <td>Extensible arrows (A)</td>
+         <td>GW</td>
+         <td>Ignores CSS <code>min-width</code></td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/64">#64</a></td>
+         <td><img src="images/arrowL.svg" width="60px"></td>
+         <td><img src="images/arrowC.jpeg" width="64px"></td>
+         <td><img src="images/arrowG.png" width="40px"></td>
+         <td><img src="images/arrowW.JPG" width="40px"></td>
+         <td><math><mrow><mi mathvariant="normal">A</mi><mrow><mtext width="0.2778em"></mtext><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow style="min-width:4.0em; text-align: center"><mtext width="0.4286em"></mtext><mi mathvariant="normal">i</mi><mtext width="0.4286em"></mtext></mrow></mover><mtext width="0.2778em"></mtext></mrow><mi mathvariant="normal">B</mi></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mi mathvariant="normal"&gt;A&lt;/mi&gt;
+    &lt;mrow&gt;
+      &lt;mtext width="0.2778em"&gt;&lt;/mtext&gt;
+      &lt;mover accent="false"&gt;
+        &lt;mo stretchy="true" lspace="0" rspace="0"&gt;→&lt;/mo&gt;
+        &lt;mrow style="min-width:4.0em; text-align: center"&gt;
+          &lt;mtext width="0.4286em"&gt;&lt;/mtext&gt;
+          &lt;mi mathvariant="normal"&gt;i&lt;/mi&gt;
+          &lt;mtext width="0.4286em"&gt;&lt;/mtext&gt;
+        &lt;/mrow&gt;
+      &lt;/mover&gt;
+      &lt;mtext width="0.2778em"&gt;&lt;/mtext&gt;
+    &lt;/mrow&gt;
+    &lt;mi mathvariant="normal"&gt;B&lt;/mi&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Shown with <code>style="min-width:4.0em"</code></td>
+      </tr>
+      <tr>
+         <td>21</td>
+         <td>Extensible arrows (B)</td>
+         <td>CGW</td>
+         <td>Ignores CSS <code>text-align</code></td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/120">#120</a></td>
+         <td><img src="images/arrowL.svg" width="60px"></td>
+         <td><img src="images/arrowC.jpeg" width="64px"></td>
+         <td><img src="images/arrowG.png" width="40px"></td>
+         <td><img src="images/arrowW.JPG" width="40px"></td>
+         <td><math><mrow><mi mathvariant="normal">A</mi><mrow><mtext width="0.2778em"></mtext><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow style="min-width:4.0em; text-align: center"><mtext width="0.4286em"></mtext><mi mathvariant="normal">i</mi><mtext width="0.4286em"></mtext></mrow></mover><mtext width="0.2778em"></mtext></mrow><mi mathvariant="normal">B</mi></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mi mathvariant="normal"&gt;A&lt;/mi&gt;
+    &lt;mrow&gt;
+      &lt;mtext width="0.2778em"&gt;&lt;/mtext&gt;
+      &lt;mover accent="false"&gt;
+        &lt;mo stretchy="true" lspace="0" rspace="0"&gt;→&lt;/mo&gt;
+        &lt;mrow style="min-width:4.0em; text-align: center"&gt;
+          &lt;mtext width="0.4286em"&gt;&lt;/mtext&gt;
+          &lt;mi mathvariant="normal"&gt;i&lt;/mi&gt;
+          &lt;mtext width="0.4286em"&gt;&lt;/mtext&gt;
+        &lt;/mrow&gt;
+      &lt;/mover&gt;
+      &lt;mtext width="0.2778em"&gt;&lt;/mtext&gt;
+    &lt;/mrow&gt;
+    &lt;mi mathvariant="normal"&gt;B&lt;/mi&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Shown with <code>style="text-align: center"</code></td>
+      </tr>
+      <tr>
+         <td rowspan="2">22</td>
+         <td rowspan="2">Extensible arrows (C)</td>
+         <td rowspan="2">CSW*</td>
+         <td rowspan="2">Note placed too high in any font other than Latin Modern.</td>
+         <td rowspan="2"><a href="https://github.com/w3c/mathml-core/issues/121#issuecomment-1686729281">#121</a></td>
+         <td rowspan="2"><img src="images/highNoteL.svg" width="35px"></td>
+         <td><img src="images/tallNoteCa.jpeg" width="40px"></td>
+         <td><img src="images/tallNoteG.png" width="30px"></td>
+         <td><img src="images/tallNoteWa.JPG" width="32px"></td>
+         <td><math style="font-family:STIX2, math;"><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mtext width="0.4286em"></mtext><mtext>note</mtext><mtext width="0.4286em"></mtext></mrow></mover></math></td>
+         <td rowspan="2"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mover accent="false"&gt;
+    &lt;mo stretchy="true" lspace="0" rspace="0"&gt;→&lt;/mo&gt;
+     &lt;mrow&gt;
+      &lt;mtext width="0.4286em"&gt;&lt;/mtext&gt;
+      &lt;mtext&gt;note&lt;/mtext&gt;
+      &lt;mtext width="0.4286em"&gt;&lt;/mtext&gt;
+    &lt;/mrow&gt;
+  &lt;/mover&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>STIX TWO</td>
+      </tr>
+      <tr>
+         <td><img src="images/tallNoteCb.jpeg" width="40px"></td>
+         <td><img src="images/tallNoteG.png" width="30px"></td>
+         <td><img src="images/tallNoteWb.JPG" width="32px"></td>
+         <td style="text-align: center"><math><mover accent="false"><mo stretchy="true" lspace="0" rspace="0">→</mo><mrow><mtext width="0.4286em"></mtext><mtext>note</mtext><mtext width="0.4286em"></mtext></mrow></mover></math></td>
+         <td style="text-align: left">Latin Modern</td>
+      </tr>
+      <tr>
+         <td>23</td>
+         <td>Cell Padding</td>
+         <td>CS</td>
+         <td>Default padding should be zero on both sides of a matrix.</td>
+         <td> </td>
+         <td><img src="images/cellL.svg" width="40px"></td>
+         <td><img src="images/cellpadC.jpeg" width="55px"></td>
+         <td><img src="images/cellpadG.png" width="40px"></td>
+         <td><img src="images/cellpadW.JPG" width="45px"></td>
+         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">|</mo><mtable><mtr><mtd><mi>a</mi></mtd><mtd><mi>b</mi></mtd></mtr><mtr><mtd><mi>c</mi></mtd><mtd><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix" stretchy="true">|</mo></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mo fence="true" form="prefix" stretchy="true"&gt;|&lt;/mo&gt;
+    &lt;mtable&gt;
+      &lt;mtr&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;a&lt;/mi&gt;
+        &lt;/mtd&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;b&lt;/mi&gt;
+        &lt;/mtd&gt;
+      &lt;/mtr&gt;
+      &lt;mtr&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;c&lt;/mi&gt;
+        &lt;/mtd&gt;
+        &lt;mtd&gt;
+          &lt;mi&gt;d&lt;/mi&gt;
+        &lt;/mtd&gt;
+      &lt;/mtr&gt;
+    &lt;/mtable&gt;
+    &lt;mo fence="true" form="postfix" stretchy="true"&gt;|&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>24</td>
+         <td>Inconsistent cell height</td>
+         <td>G*</td>
+         <td>Cell height defined by differing criteria.</td>
+         <td> </td>
+         <td><img src="images/cellL.svg" width="40px"></td>
+         <td><img src="images/cellC.jpeg" width="45px"></td>
+         <td><img src="images/cellG.png" width="43px"></td>
+         <td><img src="images/cellW.JPG" width="45px"></td>
+         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">|</mo><mtable><mtr><mtd style="padding:0.5ex 5.9776pt 0.5ex 0em;"><mi>a</mi></mtd><mtd style="padding:0.5ex 0em 0.5ex 5.9776pt;"><mi>b</mi></mtd></mtr><mtr><mtd style="padding:0.5ex 5.9776pt 0.5ex 0em;"><mi>c</mi></mtd><mtd style="padding: 0.5ex 0em 0.5ex 5.9776pt;"><mi>d</mi></mtd></mtr></mtable><mo fence="true" form="postfix" stretchy="true">|</mo></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mo fence="true" form="prefix" stretchy="true"&gt;|&lt;/mo&gt;
+    &lt;mtable&gt;
+      &lt;mtr&gt;
+        &lt;mtd style="padding:0.5ex 5.9776pt 0.5ex 0em;"&gt;
+          &lt;mi&gt;a&lt;/mi&gt;
+        &lt;/mtd&gt;
+        &lt;mtd style="padding:0.5ex 0em 0.5ex 5.9776pt;"&gt;
+          &lt;mi&gt;b&lt;/mi&gt;
+        &lt;/mtd&gt;
+      &lt;/mtr&gt;
+      &lt;mtr&gt;
+        &lt;mtd style="padding:0.5ex 5.9776pt 0.5ex 0em;"&gt;
+          &lt;mi&gt;c&lt;/mi&gt;
+        &lt;/mtd&gt;
+        &lt;mtd style="padding: 0.5ex 0em 0.5ex 5.9776pt;"&gt;
+          &lt;mi&gt;d&lt;/mi&gt;
+        &lt;/mtd&gt;
+      &lt;/mtr&gt;
+    &lt;/mtable&gt;
+    &lt;mo fence="true" form="postfix" stretchy="true"&gt;|&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Chromium and WebKit set cell height by applying CSS padding to the ink. Gecko pads the <a href="https://iamvdo.me/en/blog/css-font-metrics-line-height-and-vertical-align">line box</a>.<br>Math is shown with explicitly set 0.5ex top and bottom padding.</td>
+      </tr>
+      <tr>
+         <td>25</td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1816217">
+         <td>Radical height</td>
+         <td>CGWS*</td>
+         <td>Radicals are often too tall when the radicand has a (sub|super)script</td>
+         <td> </td>
+         <td><img src="images/radL.svg" width="34px"></td>
+         <td><img src="images/radC.jpeg" width="34px"></td>
+         <td><img src="images/radG.png" width="36px"></td>
+         <td><img src="images/radW.JPG" width="34px"></td>
+         <td><math><msqrt><msubsup><mi>f</mi><mi>c</mi><mn>2</mn></msubsup></msqrt></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;msqrt&gt;
+    &lt;msubsup&gt;
+      &lt;mi&gt;f&lt;/mi&gt;
+      &lt;mi&gt;c&lt;/mi&gt;
+      &lt;mn class="tml-lrg-pad"&gt;2&lt;/mn&gt;
+    &lt;/msubsup&gt;
+  &lt;/msqrt&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>A nicely sized surd is not available because (sub|super)scripts are not at the height expected by the font designer. Item 2 and lack of cramping both contribute.</td>
+      </tr>
+      <tr>
+         <td>26</td>
+         <td>Radical Degree</td>
+         <td>CW*</td>
+         <td>Degree placed too far left or right</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/317">#317</a></td>
+         <td><img src="images/degreeL.svg" width="29px"></td>
+         <td><img src="images/degreeC.jpeg" width="40px"></td>
+         <td><img src="images/degreeG.png" width="34px"></td>
+         <td><img src="images/degreeW.JPG" width="34px"></td>
+         <td><math><mroot><mn>22</mn><mn>3</mn></mroot></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mroot&gt;
+    &lt;mn&gt;22&lt;/mn&gt;
+    &lt;mn&gt;3&lt;/mn&gt;
+  &lt;/mroot&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td> </td>
+      </tr>
+      <tr>
+         <td>27</td>
+         <td>Size 4 radicals</td>
+         <td>C*</td>
+         <td>Vinculum and surd are mis-aligned</td>
+         <td> </td>
+         <td><img src="images/surdL.svg" width="40px"></td>
+         <td><img src="images/surdC.jpeg" width="50px"></td>
+         <td><img src="images/surdG.png" width="45px"></td>
+         <td><img src="images/surdW.JPG" width="50px"></td>
+         <td><math><msqrt><mpadded width="2em" height="6em"></mpadded></msqrt></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;msqrt&gt;
+    &lt;mpadded width="2em" height="6em"&gt;&lt;/mpadded&gt;
+  &lt;/msqrt&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>28</td>
+         <td>End space</td>
+         <td>CG</td>
+         <td>Spaces written at the end of a <code>&lt;mtext&gt;</code> are trimmed</td>
+         <td> </td>
+         <td><img src="images/endspaceL.svg" width="60px"></td>
+         <td><img src="images/endspaceC.jpeg" width="57px"></td>
+         <td><img src="images/endspaceG.png" width="56px"></td>
+         <td><img src="images/endspaceW.JPG" width="56px"></td>
+         <td><math><mi>BB</mi><mtext>  </mtext><mi>MM</mi></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mi&gt;BB&lt;/mi&gt;
+  &lt;mtext&gt;  &lt;/mtext&gt;
+  &lt;mi&gt;MM&lt;/mi&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Shown with 2 spaces in a <code>&lt;mtext&gt;</code>.<br>This behavior conforms to MathML 2.0 section 2.4.6, but it seems weird. LaTeX <code>\text{…}</code> and HTML <code>&lt;span&gt;</code> don't do this.</td>
+      </tr>
+      <tr>
+         <td>29</td>
+         <td>\raise, \raisebox</td>
+         <td>CWS</td>
+         <td>Attribute&nbsp;<code>voffset</code> moves the ink but does not increase computed height</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/2403">#203</a></td>
+         <td><img src="images/raiseL.svg" width="20px"></td>
+         <td><img src="images/raiseC.jpeg" width="26px"></td>
+         <td><img src="images/raiseG.png" width="25px"></td>
+         <td><img src="images/raiseW.JPG" width="28px"></td>
+         <td style="text-align: center"><math><msqrt><mpadded voffset="0.25em"><mi>a</mi></mpadded></msqrt></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;msqrt&gt;
+    &lt;mpadded voffset="0.25em"&gt;
+      &lt;mi&gt;a&lt;/mi&gt;
+    &lt;/mpadded&gt;
+  &lt;/msqrt&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Shown with "a" raised by 0.25em.</td>
+      </tr>
+      <tr>
+         <td>30</td>
+         <td>\mathrm{N}</td>
+         <td>G</td>
+         <td>Improperly sets operator spacing on an&nbsp;<code>&lt;mi mathvariant="normal"&gt;</code>.</td>
+         <td><a href="https://bugzilla.mozilla.org/show_bug.cgi?id=1816217">1816217</a></td>
+         <td><img src="images/mathrmL.svg" width="30px"></td>
+         <td><img src="images/mathrmC.jpeg" width="35px"></td>
+         <td><img src="images/mathrmG.png" width="40px"></td>
+         <td><img src="images/mathrmW.JPG" width="34px"></td>
+         <td><math><mi>a</mi><mi mathvariant="normal">N</mi><mi>a</mi></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mi&gt;a&lt;/mi&gt;
+  &lt;mi mathvariant="normal"&gt;N&lt;/mi&gt;
+  &lt;mi&gt;a&lt;/mi&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>31</td>
+         <td>Script (1)</td>
+         <td>CGW</td>
+         <td>Browser should distinguish between chancery and roundhand Unicode and render the appropriate glyph.</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/271">#271</a></td>
+         <td><img src="images/scriptL.svg" width="60px"></td>
+         <td><img src="images/scriptC.jpeg" width="58px"></td>
+         <td><img src="images/scriptG.png" width="58px"></td>
+         <td><img src="images/scriptW.png" width="58px"></td>
+         <td><math><mrow><mi>𝒜&#xFE00;</mi><mi>ℬ&#xFE00;</mi><mi>𝒞&#xFE01;</mi><mi>𝒟&#xFE01;</mi></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mi&gt;𝒜&amp;#xFE00;&lt;/mi&gt;
+    &lt;mi&gt;ℬ&amp;#xFE00;&lt;/mi&gt;
+    &lt;mi&gt;𝒞&amp;#xFE01;&lt;/mi&gt;
+    &lt;mi&gt;𝒟&amp;#xFE01;&lt;/mi&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Showing STIX TWO font.<br>Per <a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14+</a>, characters in the range U+1D49C - U+1D4B5, Mathematical Script, can be either chancery glyphs (<math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒞</mi></mrow></math>) or roundhand glyphs (<math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi><mi class="mathscr">𝒞</mi></mrow></math>). Chancery character codes are appended by <code>&ampFE00;</code> and roundhand character codes are appended by <code>&ampFE01;</code>.</td>
+      </tr>
+      <tr>
+         <td>32</td>
+         <td>Script (2)</td>
+         <td>F</td>
+         <td>Some math fonts do not contain roundhand glyphs.</td>
+         <td></td>
+         <td><img src="images/mathscrL.svg" width="50px"></td>
+         <td><img src="images/mathscrC.jpeg" width="47px"></td>
+         <td><img src="images/mathscrG.png" width="45px"></td>
+         <td><img src="images/mathscrW.JPG" width="45px"></td>
+         <td><math><mrow><mi>𝒜&#xFE01;</mi><mi>ℬ&#xFE01;</mi><mi>𝒞&#xFE01;</mi></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mi&gt;𝒜&amp;#xFE01;&lt;/mi&gt;
+    &lt;mi&gt;ℬ&amp;#xFE01;&lt;/mi&gt;
+    &lt;mi&gt;𝒞&amp;#xFE01;&lt;/mi&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Showing Latin Modern, which does not contain roundhand glyphs.</td>
+      </tr>
+      <tr>
+         <td>33</td>
+         <td>Script­scriptstyle</td>
+         <td>CW</td>
+         <td>Elements over-shrink in a deeply nested fraction or (sub|super)script.</td>
+         <td> </td>
+         <td><img src="images/scriptscriptL.svg" width="60px"></td>
+         <td><img src="images/scriptscriptC.jpeg" width="50px"></td>
+         <td><img src="images/scriptscriptG.png" width="60px"></td>
+         <td><img src="images/scriptscriptW.JPG" width="58px"></td>
+         <td><math><msup><mi>M</mi><msup><mi>M</mi><msup><mi>M</mi><mi>M</mi></msup></msup></msup></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;msup&gt;
+    &lt;mi&gt;M&lt;/mi&gt;
+    &lt;msup&gt;
+      &lt;mi&gt;M&lt;/mi&gt;
+      &lt;msup&gt;
+        &lt;mi&gt;M&lt;/mi&gt;
+        &lt;mi&gt;M&lt;/mi&gt;
+      &lt;/msup&gt;
+    &lt;/msup&gt;
+  &lt;/msup&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td>Elements should not shrink beyond scriptscriptstyle.</td>
+      </tr>
+      <tr>
+         <td>34</td>
+         <td>Stretchy \middle</td>
+         <td>CW</td>
+         <td>Fails to stretch if <code>form="infix"</code></td>
+         <td> </td>
+         <td><img src="images/braketL.svg" width="80px"></td>
+         <td><img src="images/braketC.jpeg" width="76px"></td>
+         <td><img src="images/braketG.png" width="78px"></td>
+         <td><img src="images/braketW.JPG" width="70px"></td>
+         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">⟨</mo><mi>ϕ</mi><mtext width="0.1667em"></mtext><mo fence="true" form="infix" lspace="0.05em" rspace="0.05em">|</mo><mtext width="0.1667em"></mtext><mfrac><msup><mi>∂</mi><mn>2</mn></msup><mrow><mi>∂</mi><msup><mi>t</mi><mn>2</mn></msup></mrow></mfrac><mtext width="0.1667em"></mtext><mo fence="true" form="infix" lspace="0.05em" rspace="0.05em">|</mo><mtext width="0.1667em"></mtext><mi>ψ</mi><mo fence="true" form="postfix" stretchy="true">⟩</mo></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mo fence="true" form="prefix" stretchy="true"&gt;⟨&lt;/mo&gt;
+    &lt;mi&gt;ϕ&lt;/mi&gt;
+    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+    &lt;mo fence="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;|&lt;/mo&gt;
+    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+    &lt;mfrac&gt;
+      &lt;msup&gt;
+        &lt;mi&gt;∂&lt;/mi&gt;
+        &lt;mn&gt;2&lt;/mn&gt;
+      &lt;/msup&gt;
+      &lt;mrow&gt;
+        &lt;mi&gt;∂&lt;/mi&gt;
+        &lt;msup&gt;
+          &lt;mi&gt;t&lt;/mi&gt;
+          &lt;mn&gt;2&lt;/mn&gt;
+        &lt;/msup&gt;
+      &lt;/mrow&gt;
+    &lt;/mfrac&gt;
+    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+    &lt;mo fence="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;|&lt;/mo&gt;
+    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+    &lt;mi&gt;ψ&lt;/mi&gt;
+    &lt;mo fence="true" form="postfix" stretchy="true"&gt;⟩&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>35</td>
+         <td>Hyphen-minus</td>
+         <td>CS</td>
+         <td>U+002D hyphen-minus in a <code>&lt;mo&gt;</code> should render as U+2212, minus sign.</td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/70">#70</a></td>
+         <td><img src="images/minusL.svg" width="18px"></td>
+         <td><img src="images/minusC.jpeg" width="21px"></td>
+         <td><img src="images/minusG.png" width="24px"></td>
+         <td><img src="images/minusW.JPG" width="30px"></td>
+         <td><math><mo>-</mo><mn>2</mn></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mo&gt;-&lt;/mo&gt;
+  &lt;mn&gt;2&lt;/mn&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>36</td>
+         <td>Overlap</td>
+         <td>W</td>
+         <td>Elements are not rendered if <code>CSS width = 0</code></td>
+         <td> </td>
+         <td><img src="images/lapL.svg" width="13px"></td>
+         <td><img src="images/lapC.jpeg" width="22px"></td>
+         <td><img src="images/lapG.png" width="18px"></td>
+         <td><img src="images/lapW.JPG" width="35px"></td>
+         <td><math><mrow><mpadded width="0px"><mrow><mtext width="0.1667em"></mtext><mi>/</mi></mrow></mpadded><mo lspace="0em" rspace="0em">=</mo></mrow></math></td>
+         <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mpadded width="0px"&gt;
+      &lt;mrow&gt;
+        &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
+        &lt;mi&gt;/&lt;/mi&gt;
+      &lt;/mrow&gt;
+    &lt;/mpadded&gt;
+    &lt;mo lspace="0em" rspace="0em"&gt;=&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>37</td>
+         <td>Negative kern</td>
+         <td>W</td>
+         <td>Negative left margin not recognized on <code>&lt;mpadded&gt;</code></td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/132">#132</a></td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>38</td>
+         <td>\boxed</td>
+         <td rowspan="7">CS</td>
+         <td rowspan="7"><code>&lt;menclose&gt;</code> not supported</td>
+         <td rowspan="7"><a href="https://github.com/w3c/mathml-core/issues/245">#245</a></td>
+         <td><img src="images/boxL.svg" width="70px"></td>
+         <td><img src="images/boxC.jpeg" width="70px"></td>
+         <td><img src="images/boxG.png" width="70px"></td>
+         <td><img src="images/boxW.png" width="70px"></td>
+         <td><math><menclose notation='box'><mi>e</mi><mo>=</mo><mi>m</mi><msup><mi>c</mi><mn>2</mn></msup></menclose></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;menclose notation='box'&gt;
+    &lt;mi&gt;e&lt;/mi&gt;
+    &lt;mo&gt;=&lt;/mo&gt;
+    &lt;mi&gt;m&lt;/mi&gt;
+    &lt;msup&gt;
+      &lt;mi&gt;c&lt;/mi&gt;
+      &lt;mn&gt;2&lt;/mn&gt;
+    &lt;/msup&gt;
+  &lt;/menclose&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>39</td>
+         <td>\cancel</td>
+         <td><img src="images/cancelL.svg" width="10px"></td>
+         <td style="text-align:center"><img src="images/fiveC.jpeg" width="16px"></td>
+         <td><img src="images/cancelG.png" width="16px"></td>
+         <td><img src="images/cancelW.png" width="22px"></td>
+         <td><math><menclose notation='updiagonalstrike'><mn>5</mn></menclose></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;menclose notation='updiagonalstrike'&gt;
+    &lt;mn&gt;5&lt;/mn&gt;
+  &lt;/menclose&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>40</td>
+         <td>\bcancel</td>
+         <td><img src="images/bcancelL.svg" width="10px"></td>
+         <td style="text-align:center"><img src="images/fiveC.jpeg" width="16px"></td>
+         <td><img src="images/bcancelG.png" width="20px"></td>
+         <td><img src="images/bcancelW.JPG" width="25px"></td>
+         <td><math><menclose notation='downdiagonalstrike'><mn>5</mn></menclose></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;menclose notation='downdiagonalstrike'&gt;
+    &lt;mn&gt;5&lt;/mn&gt;
+  &lt;/menclose&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>41</td>
+         <td>\xcancel</td>
+         <td><img src="images/xcancelL.svg" width="10px"></td>
+         <td style="text-align:center"><img src="images/fiveC.jpeg" width="16px"></td>
+         <td><img src="images/xcancelG.png" width="13px"></td>
+         <td><img src="images/xcancelW.JPG" width="25px"></td>
+         <td><math><menclose notation='updiagonalstrike downdiagonalstrike'><mn>5</mn></menclose></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;menclose notation='updiagonalstrike downdiagonalstrike'&gt;
+    &lt;mn&gt;5&lt;/mn&gt;
+  &lt;/menclose&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>42</td>
+         <td>\sout</td>
+         <td><img src="images/soutL.svg" width="40px"></td>
+         <td style="text-align:center"><img src="images/soutC.jpeg" width="40px"></td>
+         <td><img src="images/soutG.png" width="40px"></td>
+         <td><img src="images/soutW.JPG" width="40px"></td>
+         <td><math><menclose notation='horizontalstrike'><mtext>ABC</<mtext></menclose></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code></code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>43</td>
+         <td>\angl, \angln</td>
+         <td><img src="images/angL.svg" width="18px"></td>
+         <td style="text-align:center"><img src="images/angC.jpeg" width="25px"></td>
+         <td><img src="images/angG.png" width="25px"></td>
+         <td><img src="images/angW.png" width="30px"></td>
+         <td><math><msub><mi>a</mi><menclose notation='actuarial'><mi>n</mi></menclose></msub></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code></code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+         <td>44</td>
+         <td>Long division</td>
+         <td><img src="images/longdivL.svg" width="50px"></td>
+         <td style="text-align:center"><img src="images/longdivC.jpeg" width="45px"></td>
+         <td><img src="images/longdivG.png" width="50px"></td>
+         <td><img src="images/longdivW.JPG" width="50px"></td>
+         <td><math><mn>22</mn><menclose><mn>100</mn></menclose></math></td>
+         <td style="text-align:left"><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mn&gt;22&lt;/mn&gt;
+  &lt;menclose&gt;
+    &lt;mn&gt;100&lt;/mn&gt;
+  &lt;/menclose&gt;
+&lt;/math&gt;</code></pre></details></td>
+         <td></td>
+      </tr>
+      <tr>
+        <td>45</td>
+        <td>\cancelto</td>
+        <td>CWS</td>
+        <td>Not supported</td>
+        <td><a href="https://github.com/w3c/mathml-core/issues/245">#245</a></td>
+       <td><img src="images/canceltoL.svg" width="54px"></td>
+        <td style="text-align:center"><img src="images/canceltoC.jpeg" width="50px"></td>
+        <td><img src="images/canceltoG.png" width="58px"></td>
+        <td><img src="images/canceltoW.JPG" width="55px"></td>
+        <td><math><msup><menclose notation='updiagonalarrow'><mrow><mi>x</mi><mo>+</mo><mn>1</mn></mrow></menclose><mn>0<mn></msup></math></td>
+        <td style="text-align:left"><details><summary></summary><pre><code></code></pre></details></td>
+        <td></td>
+     </tr>
+     <tr>
+      <td>46</td>
+      <td>\phase</td>
+      <td>CWS</td>
+      <td>Not supported</td>
+      <td><a href="https://github.com/w3c/mathml-core/issues/245">#245</a></td>
+      <td><img src="images/phaseL.jpeg" width="39px"></td>
+      <td style="text-align:center"><img src="images/phaseC.jpeg" width="30px"></td>
+      <td><img src="images/phaseG.png" width="37px"></td>
+      <td><img src="images/phaseW.png" width="30px"></td>
+      <td><math><menclose notation='phasorangle'><msup><mn>30</mn><mo>∘</mo></msup></menclose></math></td>
+      <td style="text-align:left"><details><summary></summary><pre><code></code></pre></details></td>
+      <td></td>
+   </tr>
+  <tr>
+         <td>47</td>
+         <td></td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+      <td></td>
+      </tr>
+      <tr>
+         <td>48</td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+         <td> </td>
+      <td></td>
+      </tr>
+   </tbody>
+</table>
+
+<script>
+(() => {
+  const table = document.querySelector("table");
+  const filter = document.getElementById("statusFilter");
+  const rows = Array.from(table.tBodies[0].rows).slice(1);
+
+  let activeSpans = [];
+
+  for (const row of rows) {
+    let status = activeSpans[2]?.text || "";
+    let col = 0;
+
+    for (const cell of Array.from(row.cells)) {
+      while (activeSpans[col]) col++;
+
+      const text = cell.textContent.replace(/\s+/g, " ").trim();
+
+      if (col === 2) {
+        status = text;
+      }
+
+      if (cell.rowSpan > 1) {
+        activeSpans[col] = {
+          text,
+          rowsRemaining: cell.rowSpan
+        };
+      }
+
+      col++;
+    }
+
+    row.dataset.status = status;
+
+    activeSpans = activeSpans.map(span => {
+      if (!span) return undefined;
+      const next = {
+        text: span.text,
+        rowsRemaining: span.rowsRemaining - 1
+      };
+      return next.rowsRemaining > 0 ? next : undefined;
+    });
+  }
+
+  const applyFilter = () => {
+    const value = filter.value;
+
+    for (const row of rows) {
+      const status = row.dataset.status || "";
+      row.hidden = value !== "all" && !status.includes(value);
+    }
+  };
+
+  filter.addEventListener("change", applyFilter);
+  applyFilter();
+})();
+</script>
+</body>
+</html>
