@@ -51,7 +51,7 @@ I have paraphrased some of Murray's descriptions in my own words, but they are t
 <p>These renderings differ from <a href="https://temml.org/">Temml</a> output because Temml contains workarounds for most of these problems.</p>
 
 <p>This table is a work in progress. I intend to keep it updated and I welcome suggestions for its improvement.
-MathML Core <a href="https://github.com/w3c/mathml-core/issues/">issue #???</a> would be a good forum for
+MathML Core <a href="https://github.com/w3c/mathml-core/issues/320">issue #320</a> would be a good forum for
 discussion of this table.</p>
 
 <p><u>Key for Status Column</u><br>
@@ -62,7 +62,7 @@ S: MathML Core Specification issues<br>
 F: Font issues<br>
 *: No workaround exists in Temml</p>
 
-<p>By Ron Kok. Last updated 5 Apr 2026.</p>
+<p>By Ron Kok. Last updated 6 Apr 2026.</p>
 
 <table style="width: 1350px;">
    <tbody>
@@ -281,14 +281,14 @@ F: Font issues<br>
       <tr>
          <td>9</td>
          <td>Wide hat &amp; tilde</td>
-         <td>CGWS</td>
+         <td>CGW</td>
          <td>\widehat and \widetilde do not stretch</td>
          <td> </td>
          <td><img src="images/wideL.svg" width="55px"></td>
          <td><img src="images/wideC.jpeg" width="60px"></td>
          <td><img src="images/wideG.png" width="60px"></td>
          <td><img src="images/wideW.JPG" width="60px"></td>
-         <td><math><mrow><mover><mrow><mi>a</mi><mi>x</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0">^</mo></mover><mspace width="0.2778em"></mspace><mover><mrow><mi>a</mi><mi>x</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0">~</mo></mover></mrow></math></td>
+         <td><math><mrow><mover><mrow><mi>a</mi><mi>x</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0">ˆ</mo></mover><mspace width="0.2778em"></mspace><mover><mrow><mi>a</mi><mi>x</mi><mi>c</mi></mrow><mo stretchy="true" style="math-depth:0">~</mo></mover></mrow></math></td>
          <td><details><summary></summary><pre><code>&lt;math&gt;
   &lt;mrow&gt;
     &lt;mover&gt;
@@ -297,7 +297,7 @@ F: Font issues<br>
         &lt;mi&gt;x&lt;/mi&gt;
         &lt;mi&gt;c&lt;/mi&gt;
       &lt;/mrow&gt;
-      &lt;mo stretchy="true" style="math-depth:0"&gt;^&lt;/mo&gt;
+      &lt;mo stretchy="true" style="math-depth:0"&gt;ˆ&lt;/mo&gt;
     &lt;/mover&gt;
     &lt;mspace width="0.2778em"&gt;&lt;/mspace&gt;
     &lt;mover&gt;
@@ -449,7 +449,7 @@ F: Font issues<br>
       </tr>
       <tr>
          <td>16</td>
-         <td>Accents (D)</td>
+         <td>Accents (C)</td>
          <td>CS</td>
          <td><code>&lt;mover&gt;</code> attribute <code>accent=true</code> sets accent a little too low.</td>
          <td><a href="https://github.com/w3c/mathml-core/issues/301">#301</a></td>
@@ -471,7 +471,7 @@ F: Font issues<br>
          <td>\vec</td>
          <td>CWS</td>
          <td>The glyph that best matches TeX is a combining character, which renders too far left.</td>
-         <td> </td>
+         <td><a href="https://github.com/w3c/mathml-core/issues/311">#311</a></td>
          <td><img src="images/vecL.svg" width="18px"></td>
          <td><img src="images/vecC.jpeg" width="22px"></td>
          <td><img src="images/vecG.png" width="22px"></td>
@@ -619,7 +619,7 @@ F: Font issues<br>
       </tr>
       <tr>
          <td>23</td>
-         <td>Cell Padding</td>
+         <td>Matrix Padding</td>
          <td>CS</td>
          <td>Default padding should be zero on both sides of a matrix.</td>
          <td> </td>
@@ -730,7 +730,7 @@ F: Font issues<br>
     &lt;mn&gt;3&lt;/mn&gt;
   &lt;/mroot&gt;
 &lt;/math&gt;</code></pre></details></td>
-         <td> </td>
+         <td>Showing Latin Modern. It looks better with Cambria Math.</td>
       </tr>
       <tr>
          <td>27</td>
@@ -809,7 +809,7 @@ F: Font issues<br>
       <tr>
          <td>31</td>
          <td>Script (1)</td>
-         <td>CGW</td>
+         <td>CGWS</td>
          <td>Browser should distinguish between chancery and roundhand Unicode and render the appropriate glyph.</td>
          <td><a href="https://github.com/w3c/mathml-core/issues/271">#271</a></td>
          <td><img src="images/scriptL.svg" width="60px"></td>
