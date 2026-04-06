@@ -508,10 +508,7 @@ poorly.
 +:=============================+:========:+:=========:+:=========:+:===================================:+
 | \left( x \right)             | ✓        | ✓         | poor¹     | $\left( x \right)$                  |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
-| Accents and \bordermatrix    | ✓        | ✓         | poor²     | $\bordermatrix{                     |
-|                              |          |           |           |     & 1 & 2 \cr                     |
-|                              |          |           |           |   1 & A & B \cr                     |
-|                              |          |           |           |   2 & C & D \cr}$                   |
+| Radical degree               | poor²    | ✓         | poor²     | $\sqrt[3]{22}$                      |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
 | Extensible arrows            | poor³    | ✓         | poor³     | $A \xrightharpoonup{\text{note}} B$ |
 +------------------------------+----------+-----------+-----------+-------------------------------------+
@@ -528,8 +525,7 @@ Notes:
 
 1.  WebKit mis-aligns short parentheses, given a \left and \right.
 
-2.  WebKit does not implement `<mstyle scriptlevel="0">`. So accents and the
-    top row of `\bordermatrix` are rendered too small.
+2.  Chromium and WebKit place the radical degree too far left with Latin Modern. Cambria Math looks better. 
 
 3.  Chromium and WebKit system font extensible arrows have notes placed too high.
     Some do not stretch in Cambria Math or NotoSans. Latin Modern is okay.
