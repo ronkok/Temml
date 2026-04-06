@@ -1,6 +1,7 @@
 const fs = require('fs');
 
 // Populate the `dist` folder.
+fs.mkdirSync('dist', { recursive: true });
 
 fs.copyFile('site/assets/Temml-Local.css', 'dist/Temml-Local.css', (err) => {
   if (err) { throw err }
