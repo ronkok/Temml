@@ -14557,7 +14557,7 @@ const renderToString = function(expression, options) {
 };
 
 /**
- * @type {import('./temml').generateParseTree}
+ * @type {import('./temml').__parse}
  * Parse an expression and return the parse tree.
  */
 const generateParseTree = function(expression, options) {
@@ -14599,7 +14599,7 @@ const renderError = function(error, expression, options) {
 };
 
 /**
- * @type {import('./temml').renderToMathMLTree}
+ * @type {import('./temml').__renderToMathMLTree}
  * Generates and returns the Temml build tree. This is used for advanced
  * use cases (like rendering to custom output).
  */
@@ -14617,8 +14617,9 @@ const renderToMathMLTree = function(expression, options) {
   }
 };
 
+// CJS exports and ESM default export
 /** @type {import('./temml').default} */
-var temml$1 = {
+const Temml = {
   /**
    * Current Temml version
    */
@@ -14680,4 +14681,4 @@ var temml$1 = {
   __defineMacro: defineMacro
 };
 
-export { temml$1 as default };
+export { ParseError, defineMacro as __defineMacro, defineSymbol as __defineSymbol, generateParseTree as __parse, renderToMathMLTree as __renderToMathMLTree, Temml as default, definePreamble, postProcess, render, renderMathInElement, renderToString, version };
