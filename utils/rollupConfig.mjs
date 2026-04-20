@@ -1,11 +1,11 @@
 export default [
   {
-    input: "./temml.js",
+    input: "./temml-default.js",
     output: { format: "iife", name: "temml", file: "./test/temml.js" }
   },
   {
-    input: "./temml.js",
-    output: { format: "cjs", name: "temml", exports: "auto", file: "./utils/temml.cjs" }
+    input: "./temml-default.js",
+    output: { format: "cjs", name: "temml",  file: "./utils/temml.cjs" }
   },
   {
     input: "./temml.js",

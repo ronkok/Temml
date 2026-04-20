@@ -12646,7 +12646,7 @@ var temml = (function () {
   };
 
   /**
-   * @type {import('./temml').generateParseTree}
+   * @type {import('./temml').__parse}
    * Parse an expression and return the parse tree.
    */
   const generateParseTree = function(expression, options) {
@@ -12688,7 +12688,7 @@ var temml = (function () {
   };
 
   /**
-   * @type {import('./temml').renderToMathMLTree}
+   * @type {import('./temml').__renderToMathMLTree}
    * Generates and returns the Temml build tree. This is used for advanced
    * use cases (like rendering to custom output).
    */
@@ -12706,8 +12706,9 @@ var temml = (function () {
     }
   };
 
+  // CJS exports and ESM default export
   /** @type {import('./temml').default} */
-  var temml$1 = {
+  const Temml = {
     /**
      * Current Temml version
      */
@@ -12769,6 +12770,11 @@ var temml = (function () {
     __defineMacro: defineMacro
   };
 
-  return temml$1;
+  /**
+   * An entry point that only has the default export of Temml.
+   * This is used for the iife and CommonJS builds.
+   */
+
+  return Temml;
 
 })();
