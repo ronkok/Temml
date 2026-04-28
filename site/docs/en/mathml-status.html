@@ -27,6 +27,7 @@ table tbody tr td:nth-child(12){text-align:left}
 math{font-family: "Latin Modern Math", math}
 @font-face { font-family: 'Temml'; src: url('../../assets/Temml.woff2') format('woff2');}
 .mathscr {font-family: "Temml";}
+@font-face { font-family: 'NewModern'; src: url('../../assets/NewCompModMath.woff2') format('woff2');}
 #statusFilter{margin-top:.25rem;font-size:.9em}
 </style>
 </head>
@@ -807,17 +808,17 @@ F: Font issues<br>
          <td></td>
       </tr>
       <tr>
-         <td>31</td>
-         <td>Script (1)</td>
-         <td>CGWS</td>
-         <td>Browser should distinguish between chancery and roundhand Unicode and render the appropriate glyph.</td>
-         <td><a href="https://github.com/w3c/mathml-core/issues/271">#271</a></td>
-         <td><img src="images/scriptL.svg" width="60px"></td>
+         <td rowspan="2">31</td>
+         <td rowspan="2">Script (1)</td>
+         <td rowspan="2">F</td>
+         <td rowspan="2">Fonts should handle script characters as per <a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14+</a>. Characters in the range U+1D49C - U+1D4B5, Mathematical Script, can be either chancery glyphs (<math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒞</mi></mrow></math>) or roundhand glyphs (<math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi><mi class="mathscr">𝒞</mi></mrow></math>). Chancery character codes are appended by <code>&ampFE00;</code> and roundhand character codes are appended by <code>&ampFE01;</code>.</td>
+         <td rowspan="2"><a href="https://github.com/w3c/mathml-core/issues/271">#271</a></td>
+         <td rowspan="2"><img src="images/scriptL.svg" width="60px"></td>
          <td><img src="images/scriptC.jpeg" width="58px"></td>
          <td><img src="images/scriptG.png" width="58px"></td>
          <td><img src="images/scriptW.png" width="58px"></td>
          <td><math><mrow><mi>𝒜&#xFE00;</mi><mi>ℬ&#xFE00;</mi><mi>𝒞&#xFE01;</mi><mi>𝒟&#xFE01;</mi></mrow></math></td>
-         <td><details><summary></summary><pre><code>&lt;math&gt;
+         <td rowspan="2"><details><summary></summary><pre><code>&lt;math&gt;
   &lt;mrow&gt;
     &lt;mi&gt;𝒜&amp;#xFE00;&lt;/mi&gt;
     &lt;mi&gt;ℬ&amp;#xFE00;&lt;/mi&gt;
@@ -825,7 +826,14 @@ F: Font issues<br>
     &lt;mi&gt;𝒟&amp;#xFE01;&lt;/mi&gt;
   &lt;/mrow&gt;
 &lt;/math&gt;</code></pre></details></td>
-         <td>Showing STIX TWO font.<br>Per <a href="https://www.unicode.org/charts/PDF/U1D400.pdf">Unicode 14+</a>, characters in the range U+1D49C - U+1D4B5, Mathematical Script, can be either chancery glyphs (<math><mrow><mi class="mathcal">𝒜</mi><mi class="mathcal">ℬ</mi><mi class="mathcal">𝒞</mi></mrow></math>) or roundhand glyphs (<math><mrow><mi class="mathscr">𝒜</mi><mi class="mathscr">ℬ</mi><mi class="mathscr">𝒞</mi></mrow></math>). Chancery character codes are appended by <code>&ampFE00;</code> and roundhand character codes are appended by <code>&ampFE01;</code>.</td>
+         <td>Showing STIX TWO font, bad.<br></td>
+      </tr>
+      <tr>
+         <td><img src="images/scriptCN.png" width="58px"></td>
+         <td><img src="images/scriptGN.png" width="58px"></td>
+         <td><img src="images/scriptWN.png" width="58px"></td>
+         <td style="text-align:center"><math style="font-family:NewModern, math"><mrow><mi>𝒜&#xFE00;</mi><mi>ℬ&#xFE00;</mi><mi>𝒞&#xFE01;</mi><mi>𝒟&#xFE01;</mi></mrow></math></td>
+         <td style="text-align:left">Showing New Computer Modern Math font, good.</td>
       </tr>
       <tr>
          <td>32</td>
