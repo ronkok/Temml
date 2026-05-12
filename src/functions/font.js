@@ -1,9 +1,13 @@
 import defineFunction, { normalizeArgument } from "../defineFunction"
 import * as mml from "../buildMathML"
 import * as mathMLTree from "../mathMLTree"
+import { variantChar } from "../replace"
+
+const varNameFonts = ["mathrm", "mathit"];
 
 const isLongVariableName = (group, font) => {
-  if (font !== "mathrm" || group.body.type !== "ordgroup" || group.body.body.length === 1) {
+  if (!varNameFonts.includes(font) || !group.body || group.body.type !== "ordgroup" ||
+      group.body.body.length === 1) {
     return false
   }
   if (group.body.body[0].type !== "mathord") { return false }
@@ -40,7 +44,12 @@ const mathmlBuilder = (group, style) => {
         ? mathGroup.children[i].children[0].children[0].text
         : mathGroup.children[i].children[0].text
     }
-    // Wrap in a <mpadded> to prevent the same Firefox bug.
+    if (font === "mathit") {
+      mi.children[0].text = mi.children[0].text.split("")
+        .map(c => variantChar(c, "italic")).join("")
+      return mi
+    }
+    // Otherwise, font is "mathrm". Wrap in a <mpadded> to prevent the same Firefox bug.
     const mpadded = new mathMLTree.MathNode("mpadded", [mi])
     mpadded.setAttribute("lspace", "0")
     return mpadded

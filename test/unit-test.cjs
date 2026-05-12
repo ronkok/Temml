@@ -1406,6 +1406,8 @@ const test = () => {
   new Expect(markup).toContain('<mo lspace="0em" rspace="0em">+</mo>');
   markup = temml.renderToString(r`\mathit{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toBe(`<mrow><mi>A</mi><mi>x</mi><mstyle style="font-style:italic;font-family:Cambria, 'Times New Roman', serif;"><mn>2</mn></mstyle><mi>k</mi><mi>ω</mi><mi>Ω</mi><mi>ı</mi><mo lspace="0em" rspace="0em">+</mo></mrow>`);
+  markup = temml.renderToString(r`\mathit{aaAA2\omega\Omega\imath}`).replace(mathTagRegEx, "");
+  new Expect(markup).toBe(`<mi>𝑎𝑎𝐴𝐴2𝜔𝛺ı</mi>`);
   markup = temml.renderToString(r`\mathnormal{Ax2k\omega\Omega\imath+}`).replace(mathTagRegEx, "");
   new Expect(markup).toContain("<mi>A</mi>");
   new Expect(markup).toContain("<mi>x</mi>");
