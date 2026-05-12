@@ -33,8 +33,7 @@ const mathmlBuilder = (group, style) => {
   }
   // Check if it is possible to consolidate elements into a single <mi> element.
   if (isLongVariableName(group, font)) {
-    // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
-    // wraps <mi> elements with <mpadded>s to work around a Firefox bug.
+    // This is a \mathrm{…} or \mathit{…} group. It gets special treatment.
     const mi = mathGroup.children[0].children[0].children
       ? mathGroup.children[0].children[0]
       : mathGroup.children[0];
@@ -45,11 +44,13 @@ const mathmlBuilder = (group, style) => {
         : mathGroup.children[i].children[0].text
     }
     if (font === "mathit") {
+      // Long <mi> elements are normally rendered in upright font.
+      // To get italic, we need to convert each character to the corresponding italic character.
       mi.children[0].text = mi.children[0].text.split("")
         .map(c => variantChar(c, "italic")).join("")
       return mi
     }
-    // Otherwise, font is "mathrm". Wrap in a <mpadded> to prevent the same Firefox bug.
+    // Otherwise, font is "mathrm". Wrap in a <mpadded> to prevent a Firefox spacing bug.
     const mpadded = new mathMLTree.MathNode("mpadded", [mi])
     mpadded.setAttribute("lspace", "0")
     return mpadded
