@@ -883,42 +883,43 @@ F: Font issues<br>
       <tr>
          <td>34</td>
          <td>Stretchy \middle</td>
-         <td>CWS</td>
+         <td>resolved?</td>
          <td>Fails to stretch if <code>form="infix"</code></td>
-         <td> </td>
+         <td></td>
          <td><img src="images/braketL.svg" width="80px"></td>
-         <td><img src="images/braketC.jpeg" width="76px"></td>
+         <td><img src="images/braketC.png" width="82px"></td>
          <td><img src="images/braketG.png" width="78px"></td>
          <td><img src="images/braketW.JPG" width="70px"></td>
-         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">⟨</mo><mi>ϕ</mi><mtext width="0.1667em"></mtext><mo fence="true" form="infix" lspace="0.05em" rspace="0.05em">|</mo><mtext width="0.1667em"></mtext><mfrac><msup><mi>∂</mi><mn>2</mn></msup><mrow><mi>∂</mi><msup><mi>t</mi><mn>2</mn></msup></mrow></mfrac><mtext width="0.1667em"></mtext><mo fence="true" form="infix" lspace="0.05em" rspace="0.05em">|</mo><mtext width="0.1667em"></mtext><mi>ψ</mi><mo fence="true" form="postfix" stretchy="true">⟩</mo></mrow></math></td>
+         <td><math><mrow><mo fence="true" form="prefix" stretchy="true">⟨</mo><mi>ϕ</mi><mspace width="0.1667em"></mspace><mo stretchy="true" form="infix" lspace="0.05em" rspace="0.05em">|</mo><mspace width="0.1667em"></mspace><mfrac><msup><mi>∂</mi><mn>2</mn></msup><mrow><mi>∂</mi><msup><mi>t</mi><mn class="tml-med-pad">2</mn></msup></mrow></mfrac><mspace width="0.1667em"></mspace><mo stretchy="true" form="infix" lspace="0.05em" rspace="0.05em">|</mo><mspace width="0.1667em"></mspace><mi>ψ</mi><mo fence="true" form="postfix" stretchy="true">⟩</mo></mrow></math>
+         </td>
          <td><details><summary></summary><pre><code>&lt;math&gt;
-  &lt;mrow&gt;
-    &lt;mo fence="true" form="prefix" stretchy="true"&gt;⟨&lt;/mo&gt;
-    &lt;mi&gt;ϕ&lt;/mi&gt;
-    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
-    &lt;mo fence="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;|&lt;/mo&gt;
-    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
-    &lt;mfrac&gt;
-      &lt;msup&gt;
-        &lt;mi&gt;∂&lt;/mi&gt;
-        &lt;mn&gt;2&lt;/mn&gt;
-      &lt;/msup&gt;
-      &lt;mrow&gt;
-        &lt;mi&gt;∂&lt;/mi&gt;
-        &lt;msup&gt;
-          &lt;mi&gt;t&lt;/mi&gt;
-          &lt;mn&gt;2&lt;/mn&gt;
-        &lt;/msup&gt;
-      &lt;/mrow&gt;
-    &lt;/mfrac&gt;
-    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
-    &lt;mo fence="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;|&lt;/mo&gt;
-    &lt;mtext width="0.1667em"&gt;&lt;/mtext&gt;
-    &lt;mi&gt;ψ&lt;/mi&gt;
-    &lt;mo fence="true" form="postfix" stretchy="true"&gt;⟩&lt;/mo&gt;
-  &lt;/mrow&gt;
-&lt;/math&gt;</code></pre></details></td>
-         <td>MathML operator dictionary does not have code points U+007C or U+2061 set to stretchy.</td>
+          &lt;mrow&gt;
+            &lt;mo fence="true" form="prefix" stretchy="true"&gt;⟨&lt;/mo&gt;
+            &lt;mi&gt;ϕ&lt;/mi&gt;
+            &lt;mspace width="0.1667em"&gt;&lt;/mspace&gt;
+            &lt;mo stretchy="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;|&lt;/mo&gt;
+            &lt;mspace width="0.1667em"&gt;&lt;/mspace&gt;
+            &lt;mfrac&gt;
+              &lt;msup&gt;
+                &lt;mi&gt;∂&lt;/mi&gt;
+                &lt;mn&gt;2&lt;/mn&gt;
+              &lt;/msup&gt;
+              &lt;mrow&gt;
+                &lt;mi&gt;∂&lt;/mi&gt;
+                &lt;msup&gt;
+                  &lt;mi&gt;t&lt;/mi&gt;
+                  &lt;mn class="tml-med-pad"&gt;2&lt;/mn&gt;
+                &lt;/msup&gt;
+              &lt;/mrow&gt;
+            &lt;/mfrac&gt;
+            &lt;mspace width="0.1667em"&gt;&lt;/mspace&gt;
+            &lt;mo stretchy="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;|&lt;/mo&gt;
+            &lt;mspace width="0.1667em"&gt;&lt;/mspace&gt;
+            &lt;mi&gt;ψ&lt;/mi&gt;
+            &lt;mo fence="true" form="postfix" stretchy="true"&gt;⟩&lt;/mo&gt;
+          &lt;/mrow&gt;
+        &lt;/math&gt;</code></pre></details></td>
+         <td>It renders well. It's probably still worth revising the operator dictionary to show that "|" and "/" are stretchy.</td>
       </tr>
       <tr>
          <td>35</td>
@@ -1207,7 +1208,7 @@ F: Font issues<br>
       <td>Spacing anomaly</td>
       <td>C</td>
       <td>Spacing is squashed in table row with empty elements</td>
-      <td> </td>
+      <td></td>
       <td><img src="images/spacing.svg" width="40px"></td>
       <td><img src="images/spacingC.jpeg" width="31px"></td>
       <td><img src="images/spacingG.png" width="29px"></td>
@@ -1230,16 +1231,34 @@ F: Font issues<br>
      </tr>
      <tr>
        <td>51</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td><details><summary></summary><pre><code></code></pre></details></td>
+      <td>Stretched /</td>
+      <td>C</td>
+      <td>Excessive padding on stretched /</td>
+      <td><a href="https://github.com/w3c/mathml-core/issues/323">#323</a></td>
+      <td><img src="images/slashL.svg" width="40px"></td>
+      <td><img src="images/slashC.png" width="70px"></td>
+      <td><img src="images/slashG.png" width="40px"></td>
+      <td><img src="images/slashW.png" width="40px"></td>
+      <td><math><mrow><mo fence="true" form="prefix" stretchy="true"></mo><mstyle displaystyle="true" scriptlevel="0"><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle><mo stretchy="true" form="infix" lspace="0.05em" rspace="0.05em">/</mo><mstyle displaystyle="true" scriptlevel="0"><mfrac><mi>a</mi><mi>b</mi></mfrac></mstyle><mo fence="true" form="postfix" stretchy="true"></mo></mrow></math></td>
+      <td><details><summary></summary><pre><code>&lt;math&gt;
+  &lt;mrow&gt;
+    &lt;mo fence="true" form="prefix" stretchy="true"&gt;&lt;/mo&gt;
+    &lt;mstyle displaystyle="true" scriptlevel="0"&gt;
+      &lt;mfrac&gt;
+        &lt;mi&gt;a&lt;/mi&gt;
+        &lt;mi&gt;b&lt;/mi&gt;
+      &lt;/mfrac&gt;
+    &lt;/mstyle&gt;
+    &lt;mo stretchy="true" form="infix" lspace="0.05em" rspace="0.05em"&gt;/&lt;/mo&gt;
+    &lt;mstyle displaystyle="true" scriptlevel="0"&gt;
+      &lt;mfrac&gt;
+        &lt;mi&gt;a&lt;/mi&gt;
+        &lt;mi&gt;b&lt;/mi&gt;
+      &lt;/mfrac&gt;
+    &lt;/mstyle&gt;
+    &lt;mo fence="true" form="postfix" stretchy="true"&gt;&lt;/mo&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
       <td></td>
      </tr>
      <tr>
