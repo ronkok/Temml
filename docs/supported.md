@@ -380,6 +380,8 @@ environment rows. The Temml work-around is effective for all environment functio
 
 The `{array}` environment does not yet support `\cline` or `\multicolumn`.
 
+`\bordermatrix` may not render properly in Firefox.
+
 ## HTML
 
 The following "raw HTML" features are potentially dangerous for untrusted

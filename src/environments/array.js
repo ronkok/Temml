@@ -358,9 +358,9 @@ const mathmlBuilder = function(group, style) {
     }
     if (mustSquashRow) {
       // All the cell contents are \hphantom. Squash the cell.
+      // TODO: Remove the next line when Firefox no longer needs it.
+      mtr.classes.push("ff-squash") // necessary in Firefox only.
       for (let j = 0; j < mtr.children.length; j++) {
-        mtr.children[j].style.display = "block"  // necessary in Firefox only
-        mtr.children[j].style.height = "0"       // necessary in Firefox only
         mtr.children[j].style.paddingTop = "0"
         mtr.children[j].style.paddingBottom = "0"
       }

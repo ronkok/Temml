@@ -14,13 +14,11 @@ defineFunction({
   },
   handler: ({ parser, funcName }, args, optArgs) => {
     // Find out if the author has defined custom delimiters
-    let delimiters = ["(", ")"]
+    let delimiters = ["(", ")"]; // default
     if (funcName === "\\bordermatrix" && optArgs[0] && optArgs[0].body) {
       const body = optArgs[0].body
-      if (body.length === 2 && body[0].type === "atom" && body[1].type === "atom") {
-        if (body[0].family === "open" && body[1].family === "close") {
-          delimiters = [body[0].text, body[1].text]
-        }
+      if (body.length === 1 && body[0].type === "delimiter") {
+        delimiters = [body[0].left, body[0].right]
       }
     }
     // consume the opening brace
