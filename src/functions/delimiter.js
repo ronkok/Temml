@@ -426,10 +426,12 @@ defineFunction({
     const middleNode = new mathMLTree.MathNode("mo", [textNode]);
     middleNode.setAttribute("stretchy", "true")
     middleNode.setAttribute("form", "infix")
-    // MathML gives 5/18em spacing to each <mo> element.
-    // \middle should get delimiter spacing instead.
-    middleNode.setAttribute("lspace", "0.05em");
-    middleNode.setAttribute("rspace", "0.05em");
+    if (textNode.text !== "/") {
+      // MathML gives 5/18em spacing to each <mo> element.
+      // \middle should get delimiter spacing instead.
+      middleNode.setAttribute("lspace", "0.05em");
+      middleNode.setAttribute("rspace", "0.05em");
+    }
     return middleNode;
   }
 });
