@@ -1830,6 +1830,15 @@ const test = () => {
   assertion = "A macro expander should allow properly nested group for macro argument"
   new Expect(r`\foo{e^{x_{12}+3}}`).toParseLike("(e^{x_{12}+3})", new Settings({macros: {"\\foo": "(#1)"}}))
 
+  assertion = "A macros argument can simulate \\def with arguments"
+  new Expect(r`\t x`).toParseLike("\\text{x}", new Settings({macros: {"\\t": {
+    tokens: [
+        {text: "}"}, {text: "1"}, {text: "#"}, {text: "{"},
+        {text: "\\text"},
+    ],
+    numArgs: 1,
+  }}}))
+
   assertion = "A macro expander should delay expansion if preceded by \\expandafter"
   new Expect(r`\expandafter\foo\bar`).toParseLike("x+y", new Settings({macros: {
     "\\foo": "#1+#2",

@@ -9,6 +9,7 @@ import Lexer from "./Lexer";
 import { Token } from "./Token";
 
 import ParseError from "./ParseError";
+import SourceLocation from "./SourceLocation";
 import Namespace from "./Namespace";
 import macros from "./macros";
 
@@ -118,7 +119,7 @@ export default class MacroExpander {
     this.pushToken(new Token("EOF", end.loc));
 
     this.pushTokens(tokens);
-    return start.range(end, "");
+    return new Token("", SourceLocation.range(start, end));
   }
 
   /**
