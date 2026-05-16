@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.13.3] = 2026-05-15
+
+### Fixed
+
+- Fix \sout in text mode
+- Consolidate \mathit into one mi element
+- Fix \vphantom in Safari
+- Fix \bordermatrix delimiters
+- Fix \bordermatrix column centering
+- Fix \middle | and \middle /
+
 ## [0.13.02] = 2026-03-17
 
 ### Fixed

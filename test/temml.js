@@ -4607,9 +4607,9 @@ var temml = (function () {
       }
       if (mustSquashRow) {
         // All the cell contents are \hphantom. Squash the cell.
+        // TODO: Remove the next line when Firefox no longer needs it.
+        mtr.classes.push("ff-squash"); // necessary in Firefox only.
         for (let j = 0; j < mtr.children.length; j++) {
-          mtr.children[j].style.display = "block";  // necessary in Firefox only
-          mtr.children[j].style.height = "0";       // necessary in Firefox only
           mtr.children[j].style.paddingTop = "0";
           mtr.children[j].style.paddingBottom = "0";
         }
@@ -5250,13 +5250,11 @@ var temml = (function () {
     },
     handler: ({ parser, funcName }, args, optArgs) => {
       // Find out if the author has defined custom delimiters
-      let delimiters = ["(", ")"];
+      let delimiters = ["(", ")"]; // default
       if (funcName === "\\bordermatrix" && optArgs[0] && optArgs[0].body) {
         const body = optArgs[0].body;
-        if (body.length === 2 && body[0].type === "atom" && body[1].type === "atom") {
-          if (body[0].family === "open" && body[1].family === "close") {
-            delimiters = [body[0].text, body[1].text];
-          }
+        if (body.length === 1 && body[0].type === "delimiter") {
+          delimiters = [body[0].left, body[0].right];
         }
       }
       // consume the opening brace
@@ -6352,17 +6350,14 @@ var temml = (function () {
     mathmlBuilder: (group) => {
       const textNode = makeText(group.delim, group.mode);
       const middleNode = new MathNode("mo", [textNode]);
-      middleNode.setAttribute("fence", "true");
-      if (group.delim.indexOf("arrow") > -1) {
-        middleNode.setAttribute("stretchy", "true");
+      middleNode.setAttribute("stretchy", "true");
+      middleNode.setAttribute("form", "infix");
+      if (textNode.text !== "/") {
+        // MathML gives 5/18em spacing to each <mo> element.
+        // \middle should get delimiter spacing instead.
+        middleNode.setAttribute("lspace", "0.05em");
+        middleNode.setAttribute("rspace", "0.05em");
       }
-      // The next line is not semantically correct, but
-      // Chromium fails to stretch if it is not there.
-      middleNode.setAttribute("form", "prefix");
-      // MathML gives 5/18em spacing to each <mo> element.
-      // \middle should get delimiter spacing instead.
-      middleNode.setAttribute("lspace", "0.05em");
-      middleNode.setAttribute("rspace", "0.05em");
       return middleNode;
     }
   });
@@ -6529,10 +6524,29 @@ var temml = (function () {
 
   defineFunction({
     type: "enclose",
-    names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\sout", "\\overline",
+    names: ["\\angl", "\\cancel", "\\bcancel", "\\xcancel", "\\overline",
       "\\boxed", "\\longdiv", "\\phase"],
     props: {
       numArgs: 1
+    },
+    handler({ parser, funcName }, args) {
+      const body = args[0];
+      return {
+        type: "enclose",
+        mode: parser.mode,
+        label: funcName,
+        body
+      };
+    },
+    mathmlBuilder: mathmlBuilder$7
+  });
+
+  defineFunction({
+    type: "enclose",
+    names: ["\\sout"],
+    props: {
+      numArgs: 1,
+      allowedInText: true
     },
     handler({ parser, funcName }, args) {
       const body = args[0];
@@ -6678,8 +6692,237 @@ var temml = (function () {
     }
   });
 
+  // Chromium does not support the MathML `mathvariant` attribute.
+  // Instead, we replace ASCII characters with Unicode characters that
+  // are defined in the font as bold, italic, double-struck, etc.
+  // This module identifies those Unicode code points.
+
+  // First, a few helpers.
+  const script = Object.freeze({
+    B: 0x20EA, // Offset from ASCII B to Unicode script B
+    E: 0x20EB,
+    F: 0x20EB,
+    H: 0x20C3,
+    I: 0x20C7,
+    L: 0x20C6,
+    M: 0x20E6,
+    R: 0x20C9,
+    e: 0x20CA,
+    g: 0x20A3,
+    o: 0x20C5
+  });
+
+  const frak = Object.freeze({
+    C: 0x20EA,
+    H: 0x20C4,
+    I: 0x20C8,
+    R: 0x20CA,
+    Z: 0x20CE
+  });
+
+  const bbb = Object.freeze({
+    C: 0x20BF, // blackboard bold
+    H: 0x20C5,
+    N: 0x20C7,
+    P: 0x20C9,
+    Q: 0x20C9,
+    R: 0x20CB,
+    Z: 0x20CA
+  });
+
+  const bold = Object.freeze({
+    "\u03f5": 0x1D2E7, // lunate epsilon
+    "\u03d1": 0x1D30C, // vartheta
+    "\u03f0": 0x1D2EE, // varkappa
+    "\u03c6": 0x1D319, // varphi
+    "\u03f1": 0x1D2EF, // varrho
+    "\u03d6": 0x1D30B  // varpi
+  });
+
+  const boldItalic = Object.freeze({
+    "\u03f5": 0x1D35B, // lunate epsilon
+    "\u03d1": 0x1D380, // vartheta
+    "\u03f0": 0x1D362, // varkappa
+    "\u03c6": 0x1D38D, // varphi
+    "\u03f1": 0x1D363, // varrho
+    "\u03d6": 0x1D37F  // varpi
+  });
+
+  const boldsf = Object.freeze({
+    "\u03f5": 0x1D395, // lunate epsilon
+    "\u03d1": 0x1D3BA, // vartheta
+    "\u03f0": 0x1D39C, // varkappa
+    "\u03c6": 0x1D3C7, // varphi
+    "\u03f1": 0x1D39D, // varrho
+    "\u03d6": 0x1D3B9  // varpi
+  });
+
+  const bisf = Object.freeze({
+    "\u03f5": 0x1D3CF, // lunate epsilon
+    "\u03d1": 0x1D3F4, // vartheta
+    "\u03f0": 0x1D3D6, // varkappa
+    "\u03c6": 0x1D401, // varphi
+    "\u03f1": 0x1D3D7, // varrho
+    "\u03d6": 0x1D3F3  // varpi
+  });
+
+  // Code point offsets below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
+  const offset = Object.freeze({
+    upperCaseLatin: { // A-Z
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D3BF },
+      "italic": ch =>                 { return 0x1D3F3 },
+      "bold-italic": ch =>            { return 0x1D427 },
+      "script": ch =>                 { return script[ch] || 0x1D45B },
+      "script-bold": ch =>            { return 0x1D48F },
+      "fraktur": ch =>                { return frak[ch] || 0x1D4C3 },
+      "fraktur-bold": ch =>           { return 0x1D52B },
+      "double-struck": ch =>          { return bbb[ch] || 0x1D4F7 },
+      "sans-serif": ch =>             { return 0x1D55F },
+      "sans-serif-bold": ch =>        { return 0x1D593 },
+      "sans-serif-italic": ch =>      { return 0x1D5C7 },
+      "sans-serif-bold-italic": ch => { return 0x1D63C },
+      "monospace": ch =>              { return 0x1D62F }
+    },
+    lowerCaseLatin: { // a-z
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D3B9 },
+      "italic": ch =>                 { return ch === "h" ? 0x20A6 : 0x1D3ED },
+      "bold-italic": ch =>            { return 0x1D421 },
+      "script": ch =>                 { return script[ch] || 0x1D455 },
+      "script-bold": ch =>            { return 0x1D489 },
+      "fraktur": ch =>                { return 0x1D4BD },
+      "fraktur-bold": ch =>           { return 0x1D525 },
+      "double-struck": ch =>          { return 0x1D4F1 },
+      "sans-serif": ch =>             { return 0x1D559 },
+      "sans-serif-bold": ch =>        { return 0x1D58D },
+      "sans-serif-italic": ch =>      { return 0x1D5C1 },
+      "sans-serif-bold-italic": ch => { return 0x1D5F5 },
+      "monospace": ch =>              { return 0x1D629 }
+    },
+    upperCaseGreek: { // A-Ω
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D317 },
+      "italic": ch =>                 { return 0x1D351 },
+      // \boldsymbol actually returns upright bold for upperCaseGreek
+      "bold-italic": ch =>            { return 0x1D317 },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0 },
+      // Unicode has no code points for regular-weight san-serif Greek. Use bold.
+      "sans-serif": ch =>             { return 0x1D3C5 },
+      "sans-serif-bold": ch =>        { return 0x1D3C5 },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return 0x1D3FF },
+      "monospace": ch =>              { return 0 }
+    },
+    lowerCaseGreek: { // α-ω
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D311 },
+      "italic": ch =>                 { return 0x1D34B },
+      "bold-italic": ch =>            { return ch === "\u03d5" ? 0x1D37E : 0x1D385 },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0 },
+      // Unicode has no code points for regular-weight san-serif Greek. Use bold.
+      "sans-serif": ch =>             { return 0x1D3BF },
+      "sans-serif-bold": ch =>        { return 0x1D3BF },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return 0x1D3F9 },
+      "monospace": ch =>              { return 0 }
+    },
+    varGreek: { // \varGamma, etc
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return  bold[ch] || -51 },
+      "italic": ch =>                 { return 0 },
+      "bold-italic": ch =>            { return boldItalic[ch] || 0x3A },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0 },
+      "sans-serif": ch =>             { return boldsf[ch] || 0x74 },
+      "sans-serif-bold": ch =>        { return boldsf[ch] || 0x74 },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return bisf[ch] || 0xAE },
+      "monospace": ch =>              { return 0 }
+    },
+    numeral: { // 0-9
+      "normal": ch =>                 { return 0 },
+      "bold": ch =>                   { return 0x1D79E },
+      "italic": ch =>                 { return 0 },
+      "bold-italic": ch =>            { return 0 },
+      "script": ch =>                 { return 0 },
+      "script-bold": ch =>            { return 0 },
+      "fraktur": ch =>                { return 0 },
+      "fraktur-bold": ch =>           { return 0 },
+      "double-struck": ch =>          { return 0x1D7A8 },
+      "sans-serif": ch =>             { return 0x1D7B2 },
+      "sans-serif-bold": ch =>        { return 0x1D7BC },
+      "sans-serif-italic": ch =>      { return 0 },
+      "sans-serif-bold-italic": ch => { return 0 },
+      "monospace": ch =>              { return 0x1D7C6 }
+    }
+  });
+
+  const variantChar = (ch, variant) => {
+    const codePoint = ch.codePointAt(0);
+    const block = 0x40 < codePoint && codePoint < 0x5b
+      ? "upperCaseLatin"
+      : 0x60 < codePoint && codePoint < 0x7b
+      ? "lowerCaseLatin"
+      : (0x390  < codePoint && codePoint < 0x3AA)
+      ? "upperCaseGreek"
+      : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
+      ? "lowerCaseGreek"
+      : 0x1D6E1 < codePoint && codePoint < 0x1D6FC  || bold[ch]
+      ? "varGreek"
+      : (0x2F < codePoint && codePoint <  0x3A)
+      ? "numeral"
+      : "other";
+    return block === "other"
+      ? ch
+      : String.fromCodePoint(codePoint + offset[block][variant](ch))
+  };
+
+  const smallCaps = Object.freeze({
+    a: "ᴀ",
+    b: "ʙ",
+    c: "ᴄ",
+    d: "ᴅ",
+    e: "ᴇ",
+    f: "ꜰ",
+    g: "ɢ",
+    h: "ʜ",
+    i: "ɪ",
+    j: "ᴊ",
+    k: "ᴋ",
+    l: "ʟ",
+    m: "ᴍ",
+    n: "ɴ",
+    o: "ᴏ",
+    p: "ᴘ",
+    q: "ǫ",
+    r: "ʀ",
+    s: "s",
+    t: "ᴛ",
+    u: "ᴜ",
+    v: "ᴠ",
+    w: "ᴡ",
+    x: "x",
+    y: "ʏ",
+    z: "ᴢ"
+  });
+
+  const varNameFonts = ["mathrm", "mathit"];
+
   const isLongVariableName = (group, font) => {
-    if (font !== "mathrm" || group.body.type !== "ordgroup" || group.body.body.length === 1) {
+    if (!varNameFonts.includes(font) || !group.body || group.body.type !== "ordgroup" ||
+        group.body.body.length === 1) {
       return false
     }
     if (group.body.body[0].type !== "mathord") { return false }
@@ -6705,8 +6948,7 @@ var temml = (function () {
     }
     // Check if it is possible to consolidate elements into a single <mi> element.
     if (isLongVariableName(group, font)) {
-      // This is a \mathrm{…} group. It gets special treatment because symbolsOrd.js
-      // wraps <mi> elements with <mpadded>s to work around a Firefox bug.
+      // This is a \mathrm{…} or \mathit{…} group. It gets special treatment.
       const mi = mathGroup.children[0].children[0].children
         ? mathGroup.children[0].children[0]
         : mathGroup.children[0];
@@ -6716,7 +6958,14 @@ var temml = (function () {
           ? mathGroup.children[i].children[0].children[0].text
           : mathGroup.children[i].children[0].text;
       }
-      // Wrap in a <mpadded> to prevent the same Firefox bug.
+      if (font === "mathit") {
+        // Long <mi> elements are normally rendered in upright font.
+        // To get italic, we need to convert each character to the corresponding italic character.
+        mi.children[0].text = mi.children[0].text.split("")
+          .map(c => variantChar(c, "italic")).join("");
+        return mi
+      }
+      // Otherwise, font is "mathrm". Wrap in a <mpadded> to prevent a Firefox spacing bug.
       const mpadded = new MathNode("mpadded", [mi]);
       mpadded.setAttribute("lspace", "0");
       return mpadded
@@ -8594,7 +8843,7 @@ var temml = (function () {
       const inner = buildExpression(ordargument(group.body), style);
       const phantom = new MathNode("mphantom", inner);
       const node = new MathNode("mpadded", [phantom]);
-      node.setAttribute("width", "0px");
+      node.setAttribute("width", "0.1px");
       return node;
     }
   });
@@ -9411,232 +9660,6 @@ var temml = (function () {
     return Object.prototype.hasOwnProperty.call(fontMap, font) ? fontMap[font] : null
   };
 
-  // Chromium does not support the MathML `mathvariant` attribute.
-  // Instead, we replace ASCII characters with Unicode characters that
-  // are defined in the font as bold, italic, double-struck, etc.
-  // This module identifies those Unicode code points.
-
-  // First, a few helpers.
-  const script = Object.freeze({
-    B: 0x20EA, // Offset from ASCII B to Unicode script B
-    E: 0x20EB,
-    F: 0x20EB,
-    H: 0x20C3,
-    I: 0x20C7,
-    L: 0x20C6,
-    M: 0x20E6,
-    R: 0x20C9,
-    e: 0x20CA,
-    g: 0x20A3,
-    o: 0x20C5
-  });
-
-  const frak = Object.freeze({
-    C: 0x20EA,
-    H: 0x20C4,
-    I: 0x20C8,
-    R: 0x20CA,
-    Z: 0x20CE
-  });
-
-  const bbb = Object.freeze({
-    C: 0x20BF, // blackboard bold
-    H: 0x20C5,
-    N: 0x20C7,
-    P: 0x20C9,
-    Q: 0x20C9,
-    R: 0x20CB,
-    Z: 0x20CA
-  });
-
-  const bold = Object.freeze({
-    "\u03f5": 0x1D2E7, // lunate epsilon
-    "\u03d1": 0x1D30C, // vartheta
-    "\u03f0": 0x1D2EE, // varkappa
-    "\u03c6": 0x1D319, // varphi
-    "\u03f1": 0x1D2EF, // varrho
-    "\u03d6": 0x1D30B  // varpi
-  });
-
-  const boldItalic = Object.freeze({
-    "\u03f5": 0x1D35B, // lunate epsilon
-    "\u03d1": 0x1D380, // vartheta
-    "\u03f0": 0x1D362, // varkappa
-    "\u03c6": 0x1D38D, // varphi
-    "\u03f1": 0x1D363, // varrho
-    "\u03d6": 0x1D37F  // varpi
-  });
-
-  const boldsf = Object.freeze({
-    "\u03f5": 0x1D395, // lunate epsilon
-    "\u03d1": 0x1D3BA, // vartheta
-    "\u03f0": 0x1D39C, // varkappa
-    "\u03c6": 0x1D3C7, // varphi
-    "\u03f1": 0x1D39D, // varrho
-    "\u03d6": 0x1D3B9  // varpi
-  });
-
-  const bisf = Object.freeze({
-    "\u03f5": 0x1D3CF, // lunate epsilon
-    "\u03d1": 0x1D3F4, // vartheta
-    "\u03f0": 0x1D3D6, // varkappa
-    "\u03c6": 0x1D401, // varphi
-    "\u03f1": 0x1D3D7, // varrho
-    "\u03d6": 0x1D3F3  // varpi
-  });
-
-  // Code point offsets below are derived from https://www.unicode.org/charts/PDF/U1D400.pdf
-  const offset = Object.freeze({
-    upperCaseLatin: { // A-Z
-      "normal": ch =>                 { return 0 },
-      "bold": ch =>                   { return 0x1D3BF },
-      "italic": ch =>                 { return 0x1D3F3 },
-      "bold-italic": ch =>            { return 0x1D427 },
-      "script": ch =>                 { return script[ch] || 0x1D45B },
-      "script-bold": ch =>            { return 0x1D48F },
-      "fraktur": ch =>                { return frak[ch] || 0x1D4C3 },
-      "fraktur-bold": ch =>           { return 0x1D52B },
-      "double-struck": ch =>          { return bbb[ch] || 0x1D4F7 },
-      "sans-serif": ch =>             { return 0x1D55F },
-      "sans-serif-bold": ch =>        { return 0x1D593 },
-      "sans-serif-italic": ch =>      { return 0x1D5C7 },
-      "sans-serif-bold-italic": ch => { return 0x1D63C },
-      "monospace": ch =>              { return 0x1D62F }
-    },
-    lowerCaseLatin: { // a-z
-      "normal": ch =>                 { return 0 },
-      "bold": ch =>                   { return 0x1D3B9 },
-      "italic": ch =>                 { return ch === "h" ? 0x20A6 : 0x1D3ED },
-      "bold-italic": ch =>            { return 0x1D421 },
-      "script": ch =>                 { return script[ch] || 0x1D455 },
-      "script-bold": ch =>            { return 0x1D489 },
-      "fraktur": ch =>                { return 0x1D4BD },
-      "fraktur-bold": ch =>           { return 0x1D525 },
-      "double-struck": ch =>          { return 0x1D4F1 },
-      "sans-serif": ch =>             { return 0x1D559 },
-      "sans-serif-bold": ch =>        { return 0x1D58D },
-      "sans-serif-italic": ch =>      { return 0x1D5C1 },
-      "sans-serif-bold-italic": ch => { return 0x1D5F5 },
-      "monospace": ch =>              { return 0x1D629 }
-    },
-    upperCaseGreek: { // A-Ω
-      "normal": ch =>                 { return 0 },
-      "bold": ch =>                   { return 0x1D317 },
-      "italic": ch =>                 { return 0x1D351 },
-      // \boldsymbol actually returns upright bold for upperCaseGreek
-      "bold-italic": ch =>            { return 0x1D317 },
-      "script": ch =>                 { return 0 },
-      "script-bold": ch =>            { return 0 },
-      "fraktur": ch =>                { return 0 },
-      "fraktur-bold": ch =>           { return 0 },
-      "double-struck": ch =>          { return 0 },
-      // Unicode has no code points for regular-weight san-serif Greek. Use bold.
-      "sans-serif": ch =>             { return 0x1D3C5 },
-      "sans-serif-bold": ch =>        { return 0x1D3C5 },
-      "sans-serif-italic": ch =>      { return 0 },
-      "sans-serif-bold-italic": ch => { return 0x1D3FF },
-      "monospace": ch =>              { return 0 }
-    },
-    lowerCaseGreek: { // α-ω
-      "normal": ch =>                 { return 0 },
-      "bold": ch =>                   { return 0x1D311 },
-      "italic": ch =>                 { return 0x1D34B },
-      "bold-italic": ch =>            { return ch === "\u03d5" ? 0x1D37E : 0x1D385 },
-      "script": ch =>                 { return 0 },
-      "script-bold": ch =>            { return 0 },
-      "fraktur": ch =>                { return 0 },
-      "fraktur-bold": ch =>           { return 0 },
-      "double-struck": ch =>          { return 0 },
-      // Unicode has no code points for regular-weight san-serif Greek. Use bold.
-      "sans-serif": ch =>             { return 0x1D3BF },
-      "sans-serif-bold": ch =>        { return 0x1D3BF },
-      "sans-serif-italic": ch =>      { return 0 },
-      "sans-serif-bold-italic": ch => { return 0x1D3F9 },
-      "monospace": ch =>              { return 0 }
-    },
-    varGreek: { // \varGamma, etc
-      "normal": ch =>                 { return 0 },
-      "bold": ch =>                   { return  bold[ch] || -51 },
-      "italic": ch =>                 { return 0 },
-      "bold-italic": ch =>            { return boldItalic[ch] || 0x3A },
-      "script": ch =>                 { return 0 },
-      "script-bold": ch =>            { return 0 },
-      "fraktur": ch =>                { return 0 },
-      "fraktur-bold": ch =>           { return 0 },
-      "double-struck": ch =>          { return 0 },
-      "sans-serif": ch =>             { return boldsf[ch] || 0x74 },
-      "sans-serif-bold": ch =>        { return boldsf[ch] || 0x74 },
-      "sans-serif-italic": ch =>      { return 0 },
-      "sans-serif-bold-italic": ch => { return bisf[ch] || 0xAE },
-      "monospace": ch =>              { return 0 }
-    },
-    numeral: { // 0-9
-      "normal": ch =>                 { return 0 },
-      "bold": ch =>                   { return 0x1D79E },
-      "italic": ch =>                 { return 0 },
-      "bold-italic": ch =>            { return 0 },
-      "script": ch =>                 { return 0 },
-      "script-bold": ch =>            { return 0 },
-      "fraktur": ch =>                { return 0 },
-      "fraktur-bold": ch =>           { return 0 },
-      "double-struck": ch =>          { return 0x1D7A8 },
-      "sans-serif": ch =>             { return 0x1D7B2 },
-      "sans-serif-bold": ch =>        { return 0x1D7BC },
-      "sans-serif-italic": ch =>      { return 0 },
-      "sans-serif-bold-italic": ch => { return 0 },
-      "monospace": ch =>              { return 0x1D7C6 }
-    }
-  });
-
-  const variantChar = (ch, variant) => {
-    const codePoint = ch.codePointAt(0);
-    const block = 0x40 < codePoint && codePoint < 0x5b
-      ? "upperCaseLatin"
-      : 0x60 < codePoint && codePoint < 0x7b
-      ? "lowerCaseLatin"
-      : (0x390  < codePoint && codePoint < 0x3AA)
-      ? "upperCaseGreek"
-      : 0x3B0 < codePoint && codePoint < 0x3CA || ch === "\u03d5"
-      ? "lowerCaseGreek"
-      : 0x1D6E1 < codePoint && codePoint < 0x1D6FC  || bold[ch]
-      ? "varGreek"
-      : (0x2F < codePoint && codePoint <  0x3A)
-      ? "numeral"
-      : "other";
-    return block === "other"
-      ? ch
-      : String.fromCodePoint(codePoint + offset[block][variant](ch))
-  };
-
-  const smallCaps = Object.freeze({
-    a: "ᴀ",
-    b: "ʙ",
-    c: "ᴄ",
-    d: "ᴅ",
-    e: "ᴇ",
-    f: "ꜰ",
-    g: "ɢ",
-    h: "ʜ",
-    i: "ɪ",
-    j: "ᴊ",
-    k: "ᴋ",
-    l: "ʟ",
-    m: "ᴍ",
-    n: "ɴ",
-    o: "ᴏ",
-    p: "ᴘ",
-    q: "ǫ",
-    r: "ʀ",
-    s: "s",
-    t: "ᴛ",
-    u: "ᴜ",
-    v: "ᴠ",
-    w: "ᴡ",
-    x: "x",
-    y: "ʏ",
-    z: "ᴢ"
-  });
-
   // "mathord" and "textord" ParseNodes created in Parser.js from symbol Groups in
   // src/symbols.js.
 
@@ -10256,7 +10279,7 @@ var temml = (function () {
       this.pushToken(new Token("EOF", end.loc));
 
       this.pushTokens(tokens);
-      return start.range(end, "");
+      return new Token("", SourceLocation.range(start, end));
     }
 
     /**
@@ -12261,7 +12284,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.13.02";
+  const version = "0.13.3";
 
   function postProcess(block) {
     const labelMap = {};

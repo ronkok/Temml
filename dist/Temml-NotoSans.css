@@ -94,6 +94,11 @@ mover > :first-child {
   .ff-nudge-left {
     margin-left: -0.2em;
   }
+  /* Squash hidden mrows in \bordermatrix. Messes with centering, but necessary to squash. */
+  .ff-squash mtd {
+    display: block;
+    height: 0;
+  }
 }
 
 @supports (not (-moz-appearance: none)) {
