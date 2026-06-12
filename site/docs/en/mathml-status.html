@@ -1290,9 +1290,51 @@ F: Font issues<br>
   &lt;/mrow&gt;
 &lt;/math&gt;</code></pre></details></td>
       <td>Showing STIX TWO</td>
-   </tr>
+     </tr>
      <tr>
       <td>53</td>
+      <td>scriptlevel</td>
+      <td>W*</td>
+      <td><code>scriptlevel</code> is ignored</td>
+      <td> </td>
+      <td><img src="images/scriptlevelL.svg" width="35px"></td>
+      <td><img src="images/scriptlevelC.png" width="40px"></td>
+      <td><img src="images/scriptlevelG.png" width="40px"></td>
+      <td> </td>
+      <td><math display="block">
+  <mrow>
+    <mfrac>
+      <mi>a</mi>
+      <mi>b</mi>
+    </mfrac>
+    <mo>+</mo>
+    <mstyle scriptlevel="1" displaystyle="false">
+      <mfrac>
+        <mi>c</mi>
+        <mi>d</mi>
+      </mfrac>
+    </mstyle>
+  </mrow>
+</math></td>
+      <td><details><summary></summary><pre><code>&lt;math display="block"&gt;
+  &lt;mrow&gt;
+    &lt;mfrac&gt;
+      &lt;mi&gt;a&lt;/mi&gt;
+      &lt;mi&gt;b&lt;/mi&gt;
+    &lt;/mfrac&gt;
+    &lt;mo&gt;+&lt;/mo&gt;
+    &lt;mstyle scriptlevel="1" displaystyle="false"&gt;
+      &lt;mfrac&gt;
+        &lt;mi&gt;c&lt;/mi&gt;
+        &lt;mi&gt;d&lt;/mi&gt;
+      &lt;/mfrac&gt;
+    &lt;/mstyle&gt;
+  &lt;/mrow&gt;
+&lt;/math&gt;</code></pre></details></td>
+      <td>The second fraction contains <code>scriptlevel="1"</code> and should be smaller than the first fraction.</td>
+     </tr>
+     <tr>
+      <td>54</td>
       <td> </td>
       <td> </td>
       <td> </td>
