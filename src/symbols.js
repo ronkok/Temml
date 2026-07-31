@@ -902,7 +902,7 @@ defineSymbol(math, accent, "\u007e", "\\tilde");
 defineSymbol(math, accent, "\u203e", "\\bar");
 defineSymbol(math, accent, "\u02d8", "\\breve");
 defineSymbol(math, accent, "\u02c7", "\\check");
-defineSymbol(math, accent, "\u005e", "\\hat");
+defineSymbol(math, accent, "\u02c6", "\\hat");
 defineSymbol(math, accent, "\u2192", "\\vec");
 defineSymbol(math, accent, "\u02d9", "\\dot");
 defineSymbol(math, accent, "\u02da", "\\mathring");

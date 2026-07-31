@@ -294,15 +294,29 @@ menclose {
    }
 
    /* Stretch \widetilde */
-  .tml-crooked-2 {
+  .tml-tilde-2 {
     transform: scale(2.0, 1.1)
   }
-  .tml-crooked-3 {
-    transform: scale(3.0, 1.3)
+  .tml-tilde-3 {
+    transform: scale(3.0, 1.1)
   }
-  .tml-crooked-4 {
-    transform: scale(4.0, 1.4)
+  .tml-tilde-4 {
+    transform: scale(4.0, 1.1)
   }
+  /* Stretch \widehat */
+  .tml-hat-1 {
+    transform: scale(1.9, 1.0)
+  }
+  .tml-hat-2 {
+    transform: scale(3.9, 1.0)
+  }
+  .tml-hat-3 {
+    transform: scale(5.8, 1.0)
+  }
+  .tml-hat-4 {
+    transform: scale(7.8, 1.0)
+  }
+  
   /* set array cell justification */
   .tml-right {
     text-align: -webkit-right;
