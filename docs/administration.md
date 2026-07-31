@@ -551,7 +551,7 @@ You can suggest revisions to this page at the Temml [issues page](https://github
 <nav>
 <div id="sidebar">
 
-[$\Large\Temml$](https://temml.org/)    v0.13.3
+[$\Large\Temml$](https://temml.org/)    v0.13.4
 
 <h3><a href="#top">Contents</a></h3>
 

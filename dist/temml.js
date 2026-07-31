@@ -788,7 +788,7 @@ var temml = (function () {
   };
 
   const stretchyCodePoint = {
-    widehat: "^",
+    widehat: "\u02c6", // Shorter than \u005e, which is appropriate for an accent.
     widecheck: "ˇ",
     widetilde: "~",
     wideparen: "⏜", // \u23dc
@@ -851,19 +851,30 @@ var temml = (function () {
     return node
   };
 
-  const crookedWides = ["\\widetilde", "\\widehat", "\\widecheck", "\\utilde"];
+  const wideHats = ["\\widehat", "\\widecheck"];
 
-  // TODO: Remove when Chromium stretches \widetilde & \widehat
+  // TODO: Remove if/when Chromium stretches \widetilde & \widehat
   const accentNode = (group) => {
     const mo = mathMLnode(group.label);
-    if (crookedWides.includes(group.label)) {
+    if (group.label.indexOf("tilde") > -1) {
       const width = estimatedWidth(group.base);
       if (1 < width && width < 1.6) {
-        mo.classes.push("tml-crooked-2");
+        mo.classes.push("tml-tilde-2");
       } else if (1.6 <= width && width < 2.5) {
-        mo.classes.push("tml-crooked-3");
+        mo.classes.push("tml-tilde-3");
       } else if (2.5 <= width) {
-        mo.classes.push("tml-crooked-4");
+        mo.classes.push("tml-tilde-4");
+      }
+    } else if (wideHats.includes(group.label)) {
+      const width = estimatedWidth(group.base);
+      if (0 < width && width <= 1) {
+        mo.classes.push("tml-hat-1");
+      } else if (1 < width && width < 1.6) {
+        mo.classes.push("tml-hat-2");
+      } else if (1.6 <= width && width < 2.5) {
+        mo.classes.push("tml-hat-3");
+      } else if (2.5 <= width) {
+        mo.classes.push("tml-hat-4");
       }
     }
     return mo
@@ -1772,7 +1783,7 @@ var temml = (function () {
   defineSymbol(math, accent, "\u203e", "\\bar");
   defineSymbol(math, accent, "\u02d8", "\\breve");
   defineSymbol(math, accent, "\u02c7", "\\check");
-  defineSymbol(math, accent, "\u005e", "\\hat");
+  defineSymbol(math, accent, "\u02c6", "\\hat");
   defineSymbol(math, accent, "\u2192", "\\vec");
   defineSymbol(math, accent, "\u02d9", "\\dot");
   defineSymbol(math, accent, "\u02da", "\\mathring");
@@ -12284,7 +12295,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.13.3";
+  const version = "0.13.4";
 
   function postProcess(block) {
     const labelMap = {};
