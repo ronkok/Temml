@@ -342,7 +342,7 @@ math > mrow {
 
 /* Default mtd top padding is 0.5ex per MathML-Core and user-agent CSS */
 /* We adjust for jot and small */
-mtable.tml-jot mtd {
+mtable.tml-jot > mtr > mtd {
   padding-top: 0.7ex;
   padding-bottom: 0.7ex;
 }
@@ -358,7 +358,7 @@ mtable.tml-small mtd {
   math > mrow { padding: 0 }
   /* Adjust Firefox spacing between array rows */
   mtd, mtable.tml-small mtd { padding-top: 0; padding-bottom: 0; }
-  mtable.tml-jot mtd { padding-top: 0.2ex; padding-bottom: 0.ex; }
+  mtable.tml-jot > mtr > mtd { padding-top: 0.2ex; padding-bottom: 0.2ex; }
 }
 
 /* AMS environment auto-numbering via CSS counter. */
