@@ -33,18 +33,35 @@ export const NON_ATOMS = {
   textord: 1
 };
 
-const symbols = {
-  math: {},
-  text: {}
-};
+const symbols = Object.create(null);
+symbols.math = Object.create(null);
+symbols.text = Object.create(null);
 export default symbols;
+
+const FORBIDDEN_KEYS = new Set(["__proto__", "prototype", "constructor"]);
+
+function assertSafeSymbolKey(key) {
+  if (FORBIDDEN_KEYS.has(key)) {
+    throw new TypeError(`Invalid symbol key: ${key}`);
+  }
+}
 
 /** `acceptUnicodeChar = true` is only applicable if `replace` is set. */
 export function defineSymbol(mode, group, replace, name, acceptUnicodeChar) {
-  symbols[mode][name] = { group, replace };
+  if (mode !== "math" && mode !== "text") {
+    throw new TypeError(`Invalid mode: ${mode} called in defineSymbol`);
+  }
+
+  assertSafeSymbolKey(name);
+  if (replace != null) {
+    assertSafeSymbolKey(replace);
+  }
+
+  const entry = { group, replace };
+  symbols[mode][name] = entry;
 
   if (acceptUnicodeChar && replace) {
-    symbols[mode][replace] = symbols[mode][name];
+    symbols[mode][replace] = entry;
   }
 }
 
