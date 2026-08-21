@@ -888,14 +888,14 @@ in the Temml function support page.
 |     | \frac{(a_1)\_n\cdots(a_p)\_n}\                | \frac{(a_1)_n\cdots(a_p)_n}                      |
 |     | {(c\_1)\_n\cdots(c\_q)_n}\frac{z^n}{n!}       | {(c_1)_n\cdots(c_q)_n}\frac{z^n}{n!}$            |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 258 | \frac{a}{b}\ \tfrac{a}{b}                     | $$\frac{a}{b}\ \tfrac{a}{b}$$                    |
+| 257 | \frac{a}{b}\ \tfrac{a}{b}                     | $$\frac{a}{b}\ \tfrac{a}{b}$$                    |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 259 | S=dD\sin\alpha                                | $S=dD\sin\alpha$                                 |
+| 258 | S=dD\sin\alpha                                | $S=dD\sin\alpha$                                 |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 260 | V = \frac{1}{6} \pi h \left [ 3 \left \       | $V = \frac{1}{6} \pi h \left [ 3 \left           |
+| 259 | V = \frac{1}{6} \pi h \left [ 3 \left \       | $V = \frac{1}{6} \pi h \left [ 3 \left           |
 |     | ( r_1^2 + r_2^2 \right ) + h^2 \right ]       | ( r_1^2 + r_2^2 \right ) + h^2 \right ]$         |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 261 | \begin{align} \                               | $$\begin{align}                                  |
+| 260 | \begin{align} \                               | $$\begin{align}                                  |
 |     | u & = \tfrac{1}{\sqrt{2}}(x+y) \qquad & \     | u & = \tfrac{1}{\sqrt{2}}(x+y) \qquad &          |
 |     | x &= \tfrac{1}{\sqrt{2}}(u+v) \\\\[0.6ex] \   | x &= \tfrac{1}{\sqrt{2}}(u+v) \\[0.6ex]          |
 |     | v & = \tfrac{1}{\sqrt{2}}(x-y) \qquad & \     | v & = \tfrac{1}{\sqrt{2}}(x-y) \qquad &          |
@@ -910,17 +910,17 @@ That concludes the tests from Wikipedia. Now a few more tests.
 +-----+-----------------------------------------------+--------------------------------------------------+
 | **Linear Logic**                                                                                       |
 +=====+===============================================+==================================================+
-| 262 | A \with B \parr C                             | $A \with B \parr C$                              |
+| 261 | A \with B \parr C                             | $A \with B \parr C$                              |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 263 | a \coh \oc b \incoh \wn c \scoh d \sincoh e   | $a \coh \oc b \incoh \wn c \scoh d \sincoh e$    |
+| 262 | a \coh \oc b \incoh \wn c \scoh d \sincoh e   | $a \coh \oc b \incoh \wn c \scoh d \sincoh e$    |
 +-----+-----------------------------------------------+--------------------------------------------------+
-| 264 | a \Perp \shpos b \multimapinv \shneg c        | $a \Perp \shpos b \multimapinv \shneg c$         |
+| 263 | a \Perp \shpos b \multimapinv \shneg c        | $a \Perp \shpos b \multimapinv \shneg c$         |
 +-----+-----------------------------------------------+--------------------------------------------------+
 
 +-----+----------------------------------------------+-------------------------------------------------+
 | **Nested font size**                                                                                 |
 +=====+==============================================+=================================================+
-| 265 | \mathrm{f{\large f{\normalsize f{\tiny f}}}} | $\mathrm{f{\large f{\normalsize f{\tiny f}}}}$  |
+| 264 | \mathrm{f{\large f{\normalsize f{\tiny f}}}} | $\mathrm{f{\large f{\normalsize f{\tiny f}}}}$  |
 +-----+----------------------------------------------+-------------------------------------------------+
 
 The next line tests the length of an extensible arrow. Since Firefox does not\
@@ -928,7 +928,7 @@ support the `minsize` attribute, Temml has a workaround. The middle arrow\
 should be as long at the bar between C & D.
 
 +=====+====================================+====================================+
-| 266 | A \rightarrow B \xrightarrow{i} C\ | $A \rightarrow B \xrightarrow{i} C |
+| 265 | A \rightarrow B \xrightarrow{i} C\ | $A \rightarrow B \xrightarrow{i} C |
 |     | \rule[0.3em]{1.75em}{0.05em} D     | \rule[0.3em]{1.75em}{0.05em} D$    |
 +-----+------------------------------------+------------------------------------+
 
@@ -936,14 +936,14 @@ The next line tests the fix for Temml issue #21. Firefox would ordinarily omit\
 the dot on the i below. It's fixed by a Temml CSS rule, so it renders properly.
 
 +=====+=================+===================+
-| 267 | \widetilde{U_i} | $\widetilde{U_i}$ |
+| 266 | \widetilde{U_i} | $\widetilde{U_i}$ |
 +-----+-----------------+-------------------+
 
 Next up are some tests of `\cancelto`, in various shapes.\
-Also note that adjacent math on either side is not displaced.
+Note that adjacent math on either side is not displaced.
 
 +=====+=============================+===============================+
-| 268 | 4\cancelto{6}{5}7\          | $4\cancelto{6}{5}7$\          |
+| 267 | 4\cancelto{6}{5}7\          | $4\cancelto{6}{5}7$\          |
 |     | 4\cancelto{6}{x}7\          | $4\cancelto{6}{x}7$\          |
 |     | 4\cancelto{6}{55}7\         | $4\cancelto{6}{55}7$\         |
 |     | \cancelto{0}{\frac{dx}{dy}} | $\cancelto{0}{\frac{dx}{dy}}$ |
