@@ -1785,23 +1785,14 @@ const test = () => {
   new Expect(r`\text{\yen\checkmark\circledR\maltese}`).toBuild(strictSettings())
   new Expect(r`\yen\checkmark\circledR\maltese`).toParse(strictSettings())
   new Expect(r`\text{\yen\checkmark\circledR\maltese}`).toParse(strictSettings())
-
-  assertion = "__defineSymbol should reject dangerous symbol keys"
-  const expectDefineSymbolToThrow = (...args) => {
-    let threw = false
-    try {
-      temml.__defineSymbol(...args)
-    } catch (e) {
-      threw = e instanceof TypeError
-    }
-    new Expect(threw).toBe(true)
-  }
-  expectDefineSymbolToThrow("math", "rel", null, "__proto__")
-  expectDefineSymbolToThrow("math", "rel", null, "prototype")
-  expectDefineSymbolToThrow("math", "rel", null, "constructor")
-  expectDefineSymbolToThrow("math", "rel", "__proto__", "\\safe", true)
-  expectDefineSymbolToThrow("text", "textord", "constructor", "\\safeText", true)
   
+  assertion = "Symbol lookup should ignore Object.prototype properties"
+  const pollutedKey = "\\temmlProtoPollutionTest"
+  Object.prototype[pollutedKey] = { group: "rel", replace: "=" }
+  new Expect(pollutedKey).toNotParse()
+  new Expect(r`\text{\temmlProtoPollutionTest}`).toNotParse()
+  delete Object.prototype[pollutedKey]
+
   assertion = "A macro expander should produce individual tokens"
   new Expect(r`e^\foo`).toParseLike("e^a 23", new Settings({macros: {"\\foo": "a23"}}))
   new Expect(r`e^\foo`).toParseLike("e^1 23", new Settings({strict: true, macros: {"\\foo": "123"}}))

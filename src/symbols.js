@@ -38,35 +38,22 @@ symbols.math = Object.create(null);
 symbols.text = Object.create(null);
 export default symbols;
 
-const FORBIDDEN_KEYS = new Set(["__proto__", "prototype", "constructor"]);
-
-function assertSafeSymbolKey(key) {
-  if (FORBIDDEN_KEYS.has(key)) {
-    throw new TypeError(`Invalid symbol key: ${key}`);
-  }
-}
-
-/** `acceptUnicodeChar = true` is only applicable if `replace` is set. */
 export function defineSymbol(mode, group, replace, name, acceptUnicodeChar) {
   if (mode !== "math" && mode !== "text") {
     throw new TypeError(`Invalid mode: ${mode} called in defineSymbol`);
   }
 
-  assertSafeSymbolKey(name);
-  if (replace != null) {
-    assertSafeSymbolKey(replace);
-  }
-
   const entry = { group, replace };
   symbols[mode][name] = entry;
 
+  /** `acceptUnicodeChar = true` is only applicable if `replace` is set. */
   if (acceptUnicodeChar && replace) {
     symbols[mode][replace] = entry;
   }
 }
 
 // Some abbreviations for commonly used strings.
-// This helps minify the code, and also spotting typos using jshint.
+// This helps minify the code, and also spotting typos via linter.
 
 // modes:
 const math = "math";
