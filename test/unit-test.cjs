@@ -1789,9 +1789,40 @@ const test = () => {
   assertion = "Symbol lookup should ignore Object.prototype properties"
   const pollutedKey = "\\temmlProtoPollutionTest"
   Object.prototype[pollutedKey] = { group: "rel", replace: "=" }
-  new Expect(pollutedKey).toNotParse()
-  new Expect(r`\text{\temmlProtoPollutionTest}`).toNotParse()
-  delete Object.prototype[pollutedKey]
+  try {
+    new Expect(pollutedKey).toNotParse()
+    new Expect(r`\text{\temmlProtoPollutionTest}`).toNotParse()
+    // A polluted Object.prototype must not shadow real symbol lookups either.
+    new Expect(r`\alpha`).toParse()
+    new Expect(r`\text{\yen}`).toParse()
+  } finally {
+    delete Object.prototype[pollutedKey]
+  }
+
+  assertion = "\\newcommand/\\renewcommand should not mistake a polluted " +
+    "Object.prototype key for an existing symbol"
+  const pollutedCommand = "\\temmlProtoPollutionRenew"
+  Object.prototype[pollutedCommand] = { group: "rel", replace: "=" }
+  try {
+    // isDefined() must report this as undefined, so \newcommand may define it...
+    new Expect(r`\newcommand{\temmlProtoPollutionRenew}{x}\temmlProtoPollutionRenew`).toParse()
+    // ...and \renewcommand, which requires a pre-existing definition, must fail.
+    new Expect(r`\renewcommand{\temmlProtoPollutionRenew}{x}`).toNotParse()
+  } finally {
+    delete Object.prototype[pollutedCommand]
+  }
+
+  assertion = "__defineSymbol should accept dangerous-looking keys without " +
+    "polluting Object.prototype"
+  // symbols.math/symbols.text are created via Object.create(null), so writing
+  // an entry under a key like "__proto__" or "constructor" is just an ordinary
+  // own property on that lookup table. It cannot reach Object.prototype.
+  temml.__defineSymbol("math", "rel", "≡", "__proto__", true)
+  temml.__defineSymbol("math", "rel", null, "constructor")
+  temml.__defineSymbol("text", "textord", null, "prototype")
+  new Expect(Object.getPrototypeOf({})).toBe(Object.prototype)
+  new Expect(({}).group).toBe(undefined)
+  new Expect(Object.prototype.hasOwnProperty.call(Object.prototype, "group")).toBe(false)
 
   assertion = "Settings should strip prototype-polluting keys from user-supplied macros"
   const evilMacros = JSON.parse(
