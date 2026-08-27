@@ -5,9 +5,17 @@
  */
 
 /**
- * Provide a default value if a setting is undefined
+ * Look up `key` on a user-supplied `options` object and return its value, or
+ * `defaultIfUndefined` if the setting is absent. Reads via
+ * `Object.prototype.hasOwnProperty.call` rather than plain property access,
+ * so a key that only exists because `Object.prototype` was polluted
+ * elsewhere is never mistaken for a setting the caller actually provided.
  */
-export const deflt = function(setting, defaultIfUndefined) {
+export const deflt = function(options, key, defaultIfUndefined) {
+  if (!Object.prototype.hasOwnProperty.call(options, key)) {
+    return defaultIfUndefined;
+  }
+  const setting = options[key];
   return setting === undefined ? defaultIfUndefined : setting;
 };
 

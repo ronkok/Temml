@@ -15,7 +15,7 @@ export default class Namespace {
    * of initial (global-level) mappings, which will constantly change
    * according to any global/top-level `set`s done.
    */
-  constructor(builtins = {}, globalMacros = {}) {
+  constructor(builtins = Object.create(null), globalMacros = Object.create(null)) {
     this.current = globalMacros;
     this.builtins = builtins;
     this.undefStack = [];
@@ -25,7 +25,7 @@ export default class Namespace {
    * Start a new nested group, affecting future local `set`s.
    */
   beginGroup() {
-    this.undefStack.push({});
+    this.undefStack.push(Object.create(null));
   }
 
   /**

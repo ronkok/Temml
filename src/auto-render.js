@@ -256,7 +256,7 @@ export const renderMathInElement = function(elem, options) {
 
   // Enable sharing of global macros defined via `\gdef` between different
   // math elements within a single call to `renderMathInElement`.
-  optionsCopy.macros = optionsCopy.macros || {};
+  optionsCopy.macros = optionsCopy.macros || Object.create(null);
 
   renderElem(elem, optionsCopy);
   postProcess(elem);

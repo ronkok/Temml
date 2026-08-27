@@ -1793,6 +1793,37 @@ const test = () => {
   new Expect(r`\text{\temmlProtoPollutionTest}`).toNotParse()
   delete Object.prototype[pollutedKey]
 
+  assertion = "Settings should strip prototype-polluting keys from user-supplied macros"
+  const evilMacros = JSON.parse(
+    '{"__proto__": {"temmlProtoPollutionTest2": "yes"}, "constructor": "boo", "\\\\safe": "42"}'
+  )
+  new Expect(temml.renderToString(r`\safe`, { macros: evilMacros })).toContain("42")
+  new Expect({}.temmlProtoPollutionTest2).toBe(undefined)
+  new Expect(Object.prototype.hasOwnProperty.call(evilMacros, "__proto__")).toBe(false)
+  new Expect(Object.prototype.hasOwnProperty.call(evilMacros, "constructor")).toBe(false)
+  new Expect(Object.getPrototypeOf(evilMacros)).toBe(null)
+
+  assertion = "Settings should not inherit settings from a polluted Object.prototype"
+  // Pass a bare {} (not the local test-helper Settings mock) so this exercises
+  // Temml's real Settings constructor directly.
+  Object.prototype.trust = true
+  Object.prototype.strict = true
+  Object.prototype.maxExpand = 1
+  try {
+    // `trust` defaults to false. A polluted Object.prototype.trust must not
+    // leak in and trust an \class command that was never explicitly trusted.
+    new Expect(r`\class{foo}{x}`).toNotParse({})
+    // `strict` defaults to false, so \class should otherwise be allowed.
+    new Expect(r`\class{foo}{x}`).toParse({ trust: true })
+    // `maxExpand` defaults to 1000. A polluted Object.prototype.maxExpand
+    // must not leak in and cut macro expansion short.
+    new Expect(r`\def\foo{bar}\foo\foo\foo`).toParse({})
+  } finally {
+    delete Object.prototype.trust
+    delete Object.prototype.strict
+    delete Object.prototype.maxExpand
+  }
+
   assertion = "A macro expander should produce individual tokens"
   new Expect(r`e^\foo`).toParseLike("e^a 23", new Settings({macros: {"\\foo": "a23"}}))
   new Expect(r`e^\foo`).toParseLike("e^1 23", new Settings({strict: true, macros: {"\\foo": "123"}}))

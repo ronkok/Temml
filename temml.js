@@ -84,7 +84,7 @@ const generateParseTree = function(expression, options) {
  */
 const definePreamble = function(expression, options) {
   const settings = new Settings(options);
-  settings.macros = {};
+  settings.macros = Object.create(null);
   if (!(typeof expression === "string" || expression instanceof String)) {
     throw new TypeError("Temml can only parse string typed expression")
   }
