@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.13.5] = 2026-08-28
+
+### Fixed
+
+- Prevent excessive padding in matrices inside AMS environments
+- Prevent prototype pollution in symbols
+- Prevent prototype pollution in macros and settings
+
 ## [0.13.4] = 2026-07-31
 
 ### Changed

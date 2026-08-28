@@ -71,9 +71,17 @@ var temml = (function () {
    */
 
   /**
-   * Provide a default value if a setting is undefined
+   * Look up `key` on a user-supplied `options` object and return its value, or
+   * `defaultIfUndefined` if the setting is absent. Reads via
+   * `Object.prototype.hasOwnProperty.call` rather than plain property access,
+   * so a key that only exists because `Object.prototype` was polluted
+   * elsewhere is never mistaken for a setting the caller actually provided.
    */
-  const deflt = function(setting, defaultIfUndefined) {
+  const deflt = function(options, key, defaultIfUndefined) {
+    if (!Object.prototype.hasOwnProperty.call(options, key)) {
+      return defaultIfUndefined;
+    }
+    const setting = options[key];
     return setting === undefined ? defaultIfUndefined : setting;
   };
 
@@ -191,6 +199,27 @@ var temml = (function () {
    */
 
 
+  const FORBIDDEN_MACRO_KEYS = ["__proto__", "prototype", "constructor"];
+
+  // Sanitize a user-supplied macros object: strip its prototype (so later
+  // bracket-notation writes, e.g. from \gdef, can never reach Object.prototype)
+  // and delete any own key that could be used to pollute it. This mutates
+  // `macros` in place and returns the same reference, rather than a copy,
+  // because callers such as auto-render.js rely on that identity to share
+  // \gdef'd macros across multiple render calls that pass the same options
+  // object.
+  const sanitizeMacros = (macros) => {
+    if (macros == null || typeof macros !== "object") {
+      return Object.create(null);
+    }
+    for (const key of FORBIDDEN_MACRO_KEYS) {
+      if (Object.prototype.hasOwnProperty.call(macros, key)) {
+        delete macros[key];
+      }
+    }
+    return Object.setPrototypeOf(macros, null);
+  };
+
   /**
    * The main Settings object
    */
@@ -198,24 +227,29 @@ var temml = (function () {
     constructor(options) {
       // allow null options
       options = options || {};
-      this.displayMode = deflt(options.displayMode, false);    // boolean
-      this.annotate = deflt(options.annotate, false);           // boolean
-      this.leqno = deflt(options.leqno, false);                // boolean
-      this.throwOnError = deflt(options.throwOnError, false);  // boolean
-      this.errorColor = deflt(options.errorColor, "#b22222");  // string
-      this.macros = options.macros || {};
-      this.wrap = deflt(options.wrap, "none");                   // "none" | "tex" | "="
-      this.xml = deflt(options.xml, false);                     // boolean
-      this.colorIsTextColor = deflt(options.colorIsTextColor, false);  // boolean
-      this.strict = deflt(options.strict, false);    // boolean
-      this.trust = deflt(options.trust, false);  // trust context. See html.js.
-      this.maxSize = (options.maxSize === undefined
-        ? [Infinity, Infinity]
-        : Array.isArray(options.maxSize)
+      this.displayMode = deflt(options, "displayMode", false);    // boolean
+      this.annotate = deflt(options, "annotate", false);           // boolean
+      this.leqno = deflt(options, "leqno", false);                // boolean
+      this.throwOnError = deflt(options, "throwOnError", false);  // boolean
+      this.errorColor = deflt(options, "errorColor", "#b22222");  // string
+      this.macros = sanitizeMacros(
+        Object.prototype.hasOwnProperty.call(options, "macros") ? options.macros : undefined
+      );
+      this.wrap = deflt(options, "wrap", "none");                   // "none" | "tex" | "="
+      this.xml = deflt(options, "xml", false);                     // boolean
+      this.colorIsTextColor = deflt(options, "colorIsTextColor", false);  // boolean
+      this.strict = deflt(options, "strict", false);    // boolean
+      this.trust = deflt(options, "trust", false);  // trust context. See html.js.
+      const maxSize = Object.prototype.hasOwnProperty.call(options, "maxSize")
         ? options.maxSize
+        : undefined;
+      this.maxSize = (maxSize === undefined
+        ? [Infinity, Infinity]
+        : Array.isArray(maxSize)
+        ? maxSize
         : [Infinity, Infinity]
       );
-      this.maxExpand = Math.max(0, deflt(options.maxExpand, 1000)); // number
+      this.maxExpand = Math.max(0, deflt(options, "maxExpand", 1000)); // number
       this.wrapDelimiterPairs = true; // boolean
     }
 
@@ -915,22 +949,26 @@ var temml = (function () {
     textord: 1
   };
 
-  const symbols = {
-    math: {},
-    text: {}
-  };
+  const symbols = Object.create(null);
+  symbols.math = Object.create(null);
+  symbols.text = Object.create(null);
 
-  /** `acceptUnicodeChar = true` is only applicable if `replace` is set. */
   function defineSymbol(mode, group, replace, name, acceptUnicodeChar) {
-    symbols[mode][name] = { group, replace };
+    if (mode !== "math" && mode !== "text") {
+      throw new TypeError(`Invalid mode: ${mode} called in defineSymbol`);
+    }
 
+    const entry = { group, replace };
+    symbols[mode][name] = entry;
+
+    /** `acceptUnicodeChar = true` is only applicable if `replace` is set. */
     if (acceptUnicodeChar && replace) {
-      symbols[mode][replace] = symbols[mode][name];
+      symbols[mode][replace] = entry;
     }
   }
 
   // Some abbreviations for commonly used strings.
-  // This helps minify the code, and also spotting typos using jshint.
+  // This helps minify the code, and also spotting typos via linter.
 
   // modes:
   const math = "math";
@@ -3560,7 +3598,7 @@ var temml = (function () {
    * `macros.js` exports this same dictionary again and makes it public.
    * `Parser.js` requires this dictionary via `macros.js`.
    */
-  const _macros = {};
+  const _macros = Object.create(null);
 
   // This function might one day accept an additional argument and do more things.
   function defineMacro(name, body) {
@@ -10087,7 +10125,7 @@ var temml = (function () {
      * of initial (global-level) mappings, which will constantly change
      * according to any global/top-level `set`s done.
      */
-    constructor(builtins = {}, globalMacros = {}) {
+    constructor(builtins = Object.create(null), globalMacros = Object.create(null)) {
       this.current = globalMacros;
       this.builtins = builtins;
       this.undefStack = [];
@@ -10097,7 +10135,7 @@ var temml = (function () {
      * Start a new nested group, affecting future local `set`s.
      */
     beginGroup() {
-      this.undefStack.push({});
+      this.undefStack.push(Object.create(null));
     }
 
     /**
@@ -12295,7 +12333,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.13.4";
+  const version = "0.13.5";
 
   function postProcess(block) {
     const labelMap = {};
@@ -12616,7 +12654,7 @@ var temml = (function () {
 
     // Enable sharing of global macros defined via `\gdef` between different
     // math elements within a single call to `renderMathInElement`.
-    optionsCopy.macros = optionsCopy.macros || {};
+    optionsCopy.macros = optionsCopy.macros || Object.create(null);
 
     renderElem(elem, optionsCopy);
     postProcess(elem);
@@ -12695,7 +12733,7 @@ var temml = (function () {
    */
   const definePreamble = function(expression, options) {
     const settings = new Settings(options);
-    settings.macros = {};
+    settings.macros = Object.create(null);
     if (!(typeof expression === "string" || expression instanceof String)) {
       throw new TypeError("Temml can only parse string typed expression")
     }
