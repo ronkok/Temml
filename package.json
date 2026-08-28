@@ -17,7 +17,7 @@
   "homepage": "https://temml.org",
   "repository": {
     "type": "git",
-    "url": "git://github.com/ronkok/Temml"
+    "url": "git+https://github.com/ronkok/Temml.git"
   },
   "packageManager": "yarn@3.3.1",
   "files": [
