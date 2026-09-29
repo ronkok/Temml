@@ -287,7 +287,7 @@ defineFunction({
 
     const parser = context.parser;
     ++parser.leftrightDepth;
-    let body = parser.parseExpression(false, "\\right", true)
+    const body = parser.parseExpression(false, "\\right", true)
     let nextToken = parser.fetch()
     while (nextToken.text === "\\middle") {
       parser.consume()
@@ -298,7 +298,10 @@ defineFunction({
       checkDelimiter({ type: "atom", mode: "math", text: middle }, { funcName: "\\middle" })
       body.push({ type: "middle", mode: "math", delim: middle })
       parser.consume()
-      body = body.concat(parser.parseExpression(false, "\\right", true))
+      // Appended in place: `concat` copied the body once per \middle.
+      for (const atom of parser.parseExpression(false, "\\right", true)) {
+        body.push(atom)
+      }
       nextToken = parser.fetch()
     }
     --parser.leftrightDepth;

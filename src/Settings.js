@@ -56,6 +56,8 @@ export default class Settings {
       : [Infinity, Infinity]
     )
     this.maxExpand = Math.max(0, utils.deflt(options, "maxExpand", 1000)); // number
+    this.maxExpandTokens = Math.max(0, utils.deflt(options, "maxExpandTokens", 100000)); // number
+    this.maxNodes = Math.max(0, utils.deflt(options, "maxNodes", 100000)); // number
     this.wrapDelimiterPairs = true; // boolean
   }
 

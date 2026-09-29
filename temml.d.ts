@@ -12,6 +12,8 @@ export interface Options {
   trust?: boolean | ((context: any) => boolean);
   maxSize?: [number, number];
   maxExpand?: number;
+  maxExpandTokens?: number;
+  maxNodes?: number;
 }
 
 export function render(

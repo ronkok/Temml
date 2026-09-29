@@ -312,6 +312,10 @@ temml.render(
 
 - `maxExpand`: `number`. Limit the number of macro expansions to the specified number, to prevent e.g. infinite macro loops. (`\edef` expansion counts all expanded tokens.) If set to `Infinity`, the macro expander will try to fully expand as in LaTeX. (default: 1000)
 
+- `maxExpandTokens`: `number`. Limit the total number of tokens that macro expansions may emit in one expression, arguments included. `maxExpand` counts expansions, not their size, so without this limit a macro with a long body used a thousand times, or one `#1#1#1…` macro given a long argument, turns a few kilobytes of input into millions of tokens. (default: 100000)
+
+- `maxNodes`: `number`. Limit the number of MathML nodes that one expression may build. This bounds the output — and the work — of constructs that build their contents more than once, such as nested `\cancelto`, and of large macro-generated arrays. (default: 100000)
+
 - `strict`: `boolean`. If `false` (similar to MathJax), allow features that make writing LaTeX convenient but are not actually supported by LaTeX. If `true` (LaTeX faithfulness mode), throw an error for any such transgressions. (default: `false`)
 
 - `xml`: `boolean`. If `true`, Temml will write a namespace into the `<math>` element. That namespace is `xmlns="http://www.w3.org/1998/Math/MathML"`. Such a namespace is unnecessary for modern browsers but can be helpful for other user agents, such as Microsoft Word. (default: `false`)
@@ -489,6 +493,8 @@ refer to [Options](#options) for more details.
 
 - `maxSize` can prevent large width/height visual affronts.
 - `maxExpand` can prevent infinite macro loop attacks.
+- `maxExpandTokens` and `maxNodes` can prevent a short expression from expanding into
+  an amount of output that exhausts the renderer's time or memory.
 - `trust` can allow certain commands that may load external resources or change
   HTML attributes and thus are not always safe (e.g., `\includegraphics` or `\class`)
 
