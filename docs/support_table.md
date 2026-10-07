@@ -1166,7 +1166,7 @@ If you know the shape of a character, but not its name,
 |\precneqq|$\precneqq$ || ams |
 |\precnsim|$\precnsim$ || ams |
 |\precsim|$\precsim$ || ams |
-|\prescript|$\prescript{a}{2}{\mathbf{C}}^{5+}_{2}$ |`\prescript{a}{2}{\mathbf{C}}^{5+}_{2}`| mathtools |
+|\prescript|$\prescript{14}{2}{\mathbf{C}}^{5+}_{2}$ |`\prescript{14}{2}{\mathbf{C}}^{5+}_{2}`| mathtools |
 |\prime|$\prime$ |||
 |\principalvalue|$\principalvalue$ || physics extension |
 |\pv|$\pv$ || physics extension |

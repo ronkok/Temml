@@ -471,7 +471,7 @@ defineMacro("\\colon", `\\mathpunct{\\char"3a}`)
 //////////////////////////////////////////////////////////////////////
 // mathtools.sty
 
-defineMacro("\\prescript", "\\pres@cript{_{#1}^{#2}}{}{#3}")
+defineMacro("\\prescript", "\\pres@cript{^{#1}_{#2}}{}{#3}")
 
 //\providecommand\ordinarycolon{:}
 defineMacro("\\ordinarycolon", `\\char"3a`);

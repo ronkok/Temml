@@ -972,8 +972,8 @@ Note: WebKit (Safari) does not support `\phase`.
 ## Physics and Chemistry
 
 +:===========================+:=============================================================+
-| $\bra{\phi}$  `\bra{\phi}` | $\prescript{a}{2}{\mathbf{C}}^{5+}_{2}$                      |
-|                            |  `\prescript{a}{2}{\mathbf{C}}^{5+}_{2}`                     |
+| $\bra{\phi}$  `\bra{\phi}` | $\prescript{14}{2}{\mathbf{C}}^{5+}_{2}$                     |
+|                            |  `\prescript{14}{2}{\mathbf{C}}^{5+}_{2}`                    |
 +----------------------------+--------------------------------------------------------------+
 | $\ket{\psi}$  `\ket{\psi}` | $\braket{\phi\vert\psi}$                                     |
 |                            |  `\braket{\phi\vert\psi}`                                    |
