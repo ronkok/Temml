@@ -891,9 +891,11 @@ defineSymbol(math, op, "\u222b", "\\smallint");
 defineSymbol(text, inner, "\u2026", "\\textellipsis");
 defineSymbol(math, inner, "\u2026", "\\mathellipsis");
 defineSymbol(text, inner, "\u2026", "\\ldots", true);
+defineSymbol(math, inner, "\u2026", "\\dotso");
+defineSymbol(math, inner, "\u2026", "\\dotsc");
 defineSymbol(math, inner, "\u2026", "\\ldots", true);
 defineSymbol(math, inner, "\u22f0", "\\iddots", true);
-defineSymbol(math, inner, "\u22ef", "\\@cdots", true);
+defineSymbol(math, inner, "\u22ef", "\\cdots", true);
 defineSymbol(math, inner, "\u22f1", "\\ddots", true);
 defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
 defineSymbol(text, textord, "\u22ee", "\\varvdots");

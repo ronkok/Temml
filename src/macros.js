@@ -342,60 +342,6 @@ defineMacro("\\dots", function(context) {
   return thedots;
 });
 
-const spaceAfterDots = {
-  // \rightdelim@ checks for the following:
-  ")": true,
-  "]": true,
-  "\\rbrack": true,
-  "\\}": true,
-  "\\rbrace": true,
-  "\\rangle": true,
-  "\\rceil": true,
-  "\\rfloor": true,
-  "\\rgroup": true,
-  "\\rmoustache": true,
-  "\\right": true,
-  "\\bigr": true,
-  "\\biggr": true,
-  "\\Bigr": true,
-  "\\Biggr": true,
-  // \extra@ also tests for the following:
-  $: true,
-  // \extrap@ checks for the following:
-  ";": true,
-  ".": true,
-  ",": true
-};
-
-defineMacro("\\dotso", function(context) {
-  const next = context.future().text;
-  if (next in spaceAfterDots) {
-    return "\\ldots\\,";
-  } else {
-    return "\\ldots";
-  }
-});
-
-defineMacro("\\dotsc", function(context) {
-  const next = context.future().text;
-  // \dotsc uses \extra@ but not \extrap@, instead specially checking for
-  // ';' and '.', but doesn't check for ','.
-  if (next in spaceAfterDots && next !== ",") {
-    return "\\ldots\\,";
-  } else {
-    return "\\ldots";
-  }
-});
-
-defineMacro("\\cdots", function(context) {
-  const next = context.future().text;
-  if (next in spaceAfterDots) {
-    return "\\@cdots\\,";
-  } else {
-    return "\\@cdots";
-  }
-});
-
 defineMacro("\\dotsb", "\\cdots");
 defineMacro("\\dotsm", "\\cdots");
 defineMacro("\\dotsi", "\\!\\cdots");

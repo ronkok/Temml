@@ -21,6 +21,11 @@ const isArrow = str => {
 defineFunctionBuilders({
   type: "atom",
   mathmlBuilder(group, style) {
+    if (group.family === "inner") {
+      // Give \dots ORD spacing, not OP spacing.
+      const tag = group.mode === "text" ? "mtext" : "mi"
+      return new mathMLTree.MathNode(tag, [mml.makeText(group.text, group.mode)])
+    }
     const node = new mathMLTree.MathNode("mo", [mml.makeText(group.text, group.mode)]);
     if (group.family === "punct") {
       node.setAttribute("separator", "true");
