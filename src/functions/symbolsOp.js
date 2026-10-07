@@ -21,6 +21,13 @@ const isArrow = str => {
 defineFunctionBuilders({
   type: "atom",
   mathmlBuilder(group, style) {
+    if (group.family === "inner") {
+      // An ellipsis is not an operator. Its characters are not in the MathML operator
+      // dictionary, so an <mo> would get the default thick spacing on both sides.
+      // As an <mi>, it takes its spacing from the neighboring operators. In text, it is text.
+      const tag = group.mode === "text" ? "mtext" : "mi"
+      return new mathMLTree.MathNode(tag, [mml.makeText(group.text, group.mode)]);
+    }
     const node = new mathMLTree.MathNode("mo", [mml.makeText(group.text, group.mode)]);
     if (group.family === "punct") {
       node.setAttribute("separator", "true");
