@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. This CHANGELOG roughly follows the guidelines from [keepachangelog.com](https://keepachangelog.com/en/1.0.0/).
 
+## [0.14.0] = 2026-10-07
+
+### Fixed
+
+- (Breaking) Fix order of \prescript arguments
+- Place \dots in an <mi> element, to get proper spacing
+
 ## [0.13.5] = 2026-08-28
 
 ### Fixed

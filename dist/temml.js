@@ -1806,9 +1806,11 @@ var temml = (function () {
   defineSymbol(text, inner, "\u2026", "\\textellipsis");
   defineSymbol(math, inner, "\u2026", "\\mathellipsis");
   defineSymbol(text, inner, "\u2026", "\\ldots", true);
+  defineSymbol(math, inner, "\u2026", "\\dotso");
+  defineSymbol(math, inner, "\u2026", "\\dotsc");
   defineSymbol(math, inner, "\u2026", "\\ldots", true);
   defineSymbol(math, inner, "\u22f0", "\\iddots", true);
-  defineSymbol(math, inner, "\u22ef", "\\@cdots", true);
+  defineSymbol(math, inner, "\u22ef", "\\cdots", true);
   defineSymbol(math, inner, "\u22f1", "\\ddots", true);
   defineSymbol(math, textord, "\u22ee", "\\varvdots"); // \vdots is a macro
   defineSymbol(text, textord, "\u22ee", "\\varvdots");
@@ -3943,60 +3945,6 @@ var temml = (function () {
     return thedots;
   });
 
-  const spaceAfterDots = {
-    // \rightdelim@ checks for the following:
-    ")": true,
-    "]": true,
-    "\\rbrack": true,
-    "\\}": true,
-    "\\rbrace": true,
-    "\\rangle": true,
-    "\\rceil": true,
-    "\\rfloor": true,
-    "\\rgroup": true,
-    "\\rmoustache": true,
-    "\\right": true,
-    "\\bigr": true,
-    "\\biggr": true,
-    "\\Bigr": true,
-    "\\Biggr": true,
-    // \extra@ also tests for the following:
-    $: true,
-    // \extrap@ checks for the following:
-    ";": true,
-    ".": true,
-    ",": true
-  };
-
-  defineMacro("\\dotso", function(context) {
-    const next = context.future().text;
-    if (next in spaceAfterDots) {
-      return "\\ldots\\,";
-    } else {
-      return "\\ldots";
-    }
-  });
-
-  defineMacro("\\dotsc", function(context) {
-    const next = context.future().text;
-    // \dotsc uses \extra@ but not \extrap@, instead specially checking for
-    // ';' and '.', but doesn't check for ','.
-    if (next in spaceAfterDots && next !== ",") {
-      return "\\ldots\\,";
-    } else {
-      return "\\ldots";
-    }
-  });
-
-  defineMacro("\\cdots", function(context) {
-    const next = context.future().text;
-    if (next in spaceAfterDots) {
-      return "\\@cdots\\,";
-    } else {
-      return "\\@cdots";
-    }
-  });
-
   defineMacro("\\dotsb", "\\cdots");
   defineMacro("\\dotsm", "\\cdots");
   defineMacro("\\dotsi", "\\!\\cdots");
@@ -4126,7 +4074,7 @@ var temml = (function () {
   //////////////////////////////////////////////////////////////////////
   // mathtools.sty
 
-  defineMacro("\\prescript", "\\pres@cript{_{#1}^{#2}}{}{#3}");
+  defineMacro("\\prescript", "\\pres@cript{^{#1}_{#2}}{}{#3}");
 
   //\providecommand\ordinarycolon{:}
   defineMacro("\\ordinarycolon", `\\char"3a`);
@@ -9570,6 +9518,11 @@ var temml = (function () {
   defineFunctionBuilders({
     type: "atom",
     mathmlBuilder(group, style) {
+      if (group.family === "inner") {
+        // Give \dots ORD spacing, not OP spacing.
+        const tag = group.mode === "text" ? "mtext" : "mi";
+        return new MathNode(tag, [makeText(group.text, group.mode)])
+      }
       const node = new MathNode("mo", [makeText(group.text, group.mode)]);
       if (group.family === "punct") {
         node.setAttribute("separator", "true");
@@ -12333,7 +12286,7 @@ var temml = (function () {
    * https://mit-license.org/
    */
 
-  const version = "0.13.5";
+  const version = "0.14.0";
 
   function postProcess(block) {
     const labelMap = {};
