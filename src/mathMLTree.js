@@ -8,9 +8,24 @@
 import * as utils from "./utils";
 import { DocumentFragment } from "./tree";
 import { createClass } from "./domTree";
+import ParseError from "./ParseError";
 
 export function newDocumentFragment(children) {
   return new DocumentFragment(children);
+}
+
+/**
+ * Every MathML node a render builds is charged against the `maxNodes` setting,
+ * so the work the builder does is bounded as it happens rather than after it:
+ * a dozen nested `\cancelto`s build their body 2^12 times, and a macro-fed
+ * matrix has as many cells as the expansion budget allows tokens.
+ */
+let nodeCount = 0;
+let nodeLimit = Infinity;
+
+export function resetNodeBudget(limit) {
+  nodeCount = 0;
+  nodeLimit = limit;
 }
 
 /**
@@ -20,6 +35,9 @@ export function newDocumentFragment(children) {
  */
 export class MathNode {
   constructor(type, children, classes, style) {
+    if (++nodeCount > nodeLimit) {
+      throw new ParseError("Too many MathML nodes: need to increase maxNodes setting");
+    }
     this.type = type;
     this.attributes = {};
     this.children = children || [];

@@ -13,6 +13,7 @@ import Settings from "./src/Settings";
 import Parser from "./src/Parser";
 import parseTree from "./src/parseTree";
 import buildMathML from "./src/buildMathML";
+import { resetNodeBudget } from "./src/mathMLTree";
 import { StyleLevel } from "./src/constants";
 import Style from "./src/Style";
 import { Span, TextNode } from "./src/domTree";
@@ -117,6 +118,7 @@ const renderError = function(error, expression, options) {
  */
 const renderToMathMLTree = function(expression, options) {
   const settings = new Settings(options);
+  resetNodeBudget(settings.maxNodes);
   try {
     const tree = parseTree(expression, settings);
     const style = new Style({

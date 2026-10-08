@@ -596,6 +596,10 @@ const alignedHandler = function(context, args) {
       throw new ParseError("The alignat enviroment requires a numeric first argument.")
     }
     numMaths = Number(arg0)
+    if (numMaths > 1000) {
+      // Number("999…") is Infinity, and the column loop below would never end.
+      throw new ParseError("Too many columns in alignat: " + arg0)
+    }
     numCols = numMaths * 2
   }
   res.body.forEach(function(row) {

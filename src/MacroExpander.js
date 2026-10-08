@@ -26,6 +26,7 @@ export default class MacroExpander {
   constructor(input, settings, mode) {
     this.settings = settings;
     this.expansionCount = 0;
+    this.expandedTokenCount = 0;
     this.feed(input);
     // Make new global namespace
     this.macros = new Namespace(macros, settings.macros);
@@ -94,6 +95,23 @@ export default class MacroExpander {
    */
   pushTokens(tokens) {
     this.stack.push(...tokens);
+  }
+
+  /**
+   * Charge `count` tokens emitted by a macro expansion against `maxExpandTokens`.
+   * `maxExpand` limits how many times macros expand, not how much each expansion
+   * emits: a macro with a long body used a thousand times, or one `#1#1#1…` macro
+   * given a long argument, would otherwise turn a few kilobytes of input into
+   * millions of tokens.
+   */
+  countExpandedTokens(count) {
+    this.expandedTokenCount += count;
+    if (this.expandedTokenCount > this.settings.maxExpandTokens) {
+      throw new ParseError(
+        "Too many expanded tokens: infinite loop or " +
+        "need to increase maxExpandTokens setting"
+      );
+    }
   }
 
   /**
@@ -265,6 +283,7 @@ export default class MacroExpander {
     }
     let tokens = expansion.tokens;
     const args = this.consumeArgs(expansion.numArgs, expansion.delimiters);
+    this.countExpandedTokens(tokens.length);
     if (expansion.numArgs) {
       // paste arguments in place of the placeholders
       tokens = tokens.slice(); // make a shallow copy
@@ -279,7 +298,9 @@ export default class MacroExpander {
             // ## → #
             tokens.splice(i + 1, 1); // drop first #
           } else if (/^[1-9]$/.test(tok.text)) {
-            // replace the placeholder with the indicated argument
+            // replace the placeholder with the indicated argument;
+            // charged before the splice so that the splices stay bounded too
+            this.countExpandedTokens(args[+tok.text - 1].length);
             tokens.splice(i, 2, ...args[+tok.text - 1]);
           } else {
             throw new ParseError("Not a valid argument number", tok);

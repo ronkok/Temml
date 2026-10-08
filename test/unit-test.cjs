@@ -56,6 +56,8 @@ class Settings {
       : [Infinity, Infinity]
     )
     this.maxExpand = Math.max(0, deflt(options.maxExpand, 1000)); // number
+    this.maxExpandTokens = Math.max(0, deflt(options.maxExpandTokens, 100000)); // number
+    this.maxNodes = Math.max(0, deflt(options.maxNodes, 100000)); // number
   }
 
   isTrusted(context) {
@@ -2414,6 +2416,33 @@ const test = () => {
   assertion = "The maxExpand setting should prevent infinite loops"
   new Expect(r`\def\foo{\foo}\foo`).toNotParse(new Settings({maxExpand: 10}))
   new Expect(r`\edef0{x}\edef0{00}\edef0{00}\edef0{00}\edef0{00}`).toNotParse(new Settings({maxExpand: 10}))
+
+  assertion = "The maxExpandTokens setting should bound the size of macro expansions"
+  new Expect(r`\def\foo{1234567890}\foo\foo\foo`).toParse(new Settings({maxExpandTokens: 30}))
+  new Expect(r`\def\foo{1234567890}\foo\foo\foo`).toNotParse(new Settings({maxExpandTokens: 29}))
+  // 200 tokens per expansion, 999 expansions: under maxExpand, far over the default token budget
+  new Expect(r`\def\foo{` + "x".repeat(200) + "}" + r`\foo`.repeat(999)).toNotParse()
+  assertion = "The maxExpandTokens setting should count pasted macro arguments"
+  new Expect(r`\def\foo#1{#1#1#1#1#1}\foo{1234567890}`).toParse(new Settings({maxExpandTokens: 60}))
+  new Expect(r`\def\foo#1{#1#1#1#1#1}\foo{1234567890}`).toNotParse(new Settings({maxExpandTokens: 59}))
+  // one expansion pasting a 300-token argument into 400 placeholders: 120,000 tokens
+  new Expect(r`\def\foo#1{` + "#1".repeat(400) + "}" + r`\foo{` + "x".repeat(300) + "}").toNotParse()
+
+  assertion = "The maxNodes setting should bound the size of the MathML tree"
+  new Expect(r`\cancelto{0}{x}`).toBuild()
+  new Expect(r`\cancelto{0}{x}`).toNotBuild(new Settings({maxNodes: 5}))
+  new Expect(r`x+y`).toBuild(new Settings({maxNodes: 20}))
+  // \cancelto builds its body twice, so nesting is exponential
+  let cancelled = "x"
+  for (let i = 0; i < 20; i++) { cancelled = r`\cancelto{0}{` + cancelled + "}" }
+  new Expect(cancelled).toNotBuild()
+
+  assertion = "The alignat column count should be capped"
+  new Expect(r`\begin{alignedat}{2} a &= b & c &= d \end{alignedat}`).toParse()
+  new Expect(r`\begin{alignedat}{` + "9".repeat(310) + r`}x\end{alignedat}`).toNotParse()
+
+  assertion = "\\middle delimiters should be collected in linear time"
+  new Expect(r`\def\a{` + r`x\middle|`.repeat(100) + "}" + r`\left(` + r`\a`.repeat(20) + r`+\right)`).toBuild()
 
   assertion = "The \\mathchoice function should render as if there is nothing other in display math"
   const cmd = r`\sum_{k = 0}^{\infty} x^k`
