@@ -1,3 +1,10 @@
+export type TrustContext =
+  | { command: "\\class"; class: string }
+  | { command: "\\id"; id: string }
+  | { command: "\\style"; style: string }
+  | { command: "\\data"; attributes: Record<string, string> }
+  | { command: "\\includegraphics"; url: string; protocol?: string };
+
 export interface Options {
   displayMode?: boolean;
   annotate?: boolean;
@@ -9,7 +16,7 @@ export interface Options {
   xml?: boolean;
   colorIsTextColor?: boolean;
   strict?: boolean;
-  trust?: boolean | ((context: any) => boolean);
+  trust?: boolean | ((context: TrustContext) => boolean);
   maxSize?: [number, number];
   maxExpand?: number;
 }
