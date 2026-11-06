@@ -150,14 +150,6 @@ function isNumberPunctuation(group) {
     return false
   }
 }
-const isComma = (expression, i) => {
-  const node = expression[i];
-  const followingNode = expression[i + 1];
-  return (node.type === "atom" && node.text === ",") &&
-    // Don't consolidate if there is a space after the comma.
-    node.loc && followingNode.loc && node.loc.end === followingNode.loc.start
-}
-
 const isRel = item => {
   return (item.type === "atom" && item.family === "rel") ||
       (item.type === "mclass" && item.mclass === "mrel")
@@ -206,10 +198,6 @@ export const buildExpression = function(expression, style, semisimple = false) {
       continue
     } else if (isNumberPunctuation(group) && lastGroup && lastGroup.type === 'mn') {
       // Concatenate <mn>...</mn> followed by <mi>.</mi>
-      lastGroup.children.push(...group.children)
-      continue
-    } else if (lastGroup && lastGroup.type === "mn" && i < groupArray.length - 1 &&
-      groupArray[i + 1].type === "mn" && isComma(expression, i)) {
       lastGroup.children.push(...group.children)
       continue
     } else if (group.type === 'mn' && isNumberPunctuation(lastGroup)) {

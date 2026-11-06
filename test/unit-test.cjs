@@ -279,11 +279,13 @@ const test = () => {
   new Expect(markup).toBe("<math><mn>1000.2</mn></math>")
   markup = temml.renderToString("1\u2008000.2")
   new Expect(markup).toBe("<math><mn>1 000.2</mn></math>")
-  markup = temml.renderToString(`1,000.2`)
-  new Expect(markup).toBe("<math><mn>1,000.2</mn></math>")
-  assertion = "Temml should split numbers if a space follows a comma"
+  assertion = "Temml should not consolidate numbers across a bare comma"
   markup = temml.renderToString(`12, 340`)
   new Expect(markup).toBe('<math><mrow><mn>12</mn><mo separator="true">,</mo><mn>340</mn></mrow></math>')
+  markup = temml.renderToString(`(0,1)`)
+  new Expect(markup).toBe('<math><mrow><mo fence="true" form="prefix" stretchy="false">(</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo fence="true" form="postfix" stretchy="false">)</mo></mrow></math>')
+  markup = temml.renderToString(`x_{1,2}`)
+  new Expect(markup).toBe('<math><msub><mi>x</mi><mrow><mn>1</mn><mo separator="true">,</mo><mn>2</mn></mrow></msub></math>')
 
   assertion = "Parser should build a list of ords"
   const ords = parse("1234|@.`abcdefgzABCDEFGZ");
