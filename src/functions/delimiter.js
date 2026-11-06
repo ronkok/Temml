@@ -363,7 +363,16 @@ defineFunction({
     // Otherwise, try to wrap a pair of delimiters with an <mrow>.
     const rightDelim = leftToRight[funcName];
     // Parse the inner expression, looking for the corresponding right delimiter.
-    const body = parser.parseExpression(false, rightDelim, false);
+    let body;
+    try {
+      body = parser.parseExpression(false, rightDelim, false);
+    } catch (error) {
+      if (!(error instanceof ParseError)) { throw error }
+      // The search for the right delimiter may run past the end of an array row
+      // and fail there, e.g., at the next row's \tag. Treat that as unmatched,
+      // too. If the error is real, the reparse throws it again.
+      throw new ParseError("Unmatched delimiter");
+    }
     const nextToken = parser.fetch().text;
 
     if (nextToken !== rightDelim) {

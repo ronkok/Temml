@@ -1755,6 +1755,10 @@ const test = () => {
 
   assertion = "AMS environment should fail if there are two tags in one row"
   new Expect(r`\begin{align}\tag{1}x+y\tag{2}\end{align}`).toNotParse(displayMode())
+  new Expect(r`\begin{align}\tag{1}x+(y\tag{2}\end{align}`).toNotParse(displayMode())
+
+  assertion = "AMS environment should allow an unmatched delimiter before a tag in the next row"
+  new Expect(r`\begin{align}\tag{1}x\in[0,1)\\\tag{2}y\end{align}`).toBuild(displayMode())
 
   assertion = "{equation} should fail if argument contains two columns."
   new Expect(r`\\begin{equation}a &=b+c\end{equation}`).toNotParse(displayMode())
