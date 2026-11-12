@@ -1429,6 +1429,22 @@ const test = () => {
   markup = temml.renderToString(r`\mathsfit{Ab}`).replace(mathTagRegEx, "")
   new Expect(markup).toBe(`<mrow><mi>𝘈</mi><mi>𝘣</mi></mrow>`);
 
+  assertion = "A font tree-builder should map \\phi (U+03D5) to the matching phi symbol"
+  markup = temml.renderToString(r`\mathbf{\phi}`).replace(mathTagRegEx, "")
+  new Expect(markup).toBe(`<mi>𝛟</mi>`); // U+1D6DF MATHEMATICAL BOLD PHI SYMBOL
+  markup = temml.renderToString(r`\mathsf{\phi}`).replace(mathTagRegEx, "")
+  new Expect(markup).toBe(`<mi>𝞍</mi>`); // U+1D78D MATHEMATICAL SANS-SERIF BOLD PHI SYMBOL
+  markup = temml.renderToString(r`\textsf{\textbf{$\phi$}}`).replace(mathTagRegEx, "")
+  new Expect(markup).toContain(`<mi>𝞍</mi>`);
+  markup = temml.renderToString(r`\textsf{\textbf{\textit{$\phi$}}}`).replace(mathTagRegEx, "")
+  new Expect(markup).toContain(`<mi>𝟇</mi>`); // U+1D7C7 MATHEMATICAL SANS-SERIF BOLD ITALIC PHI SYMBOL
+  markup = temml.renderToString(r`\mathit{\phi\alpha}`).replace(mathTagRegEx, "")
+  new Expect(markup).toBe(`<mi>𝜙𝛼</mi>`); // U+1D719 MATHEMATICAL ITALIC PHI SYMBOL
+  markup = temml.renderToString(r`\boldsymbol{\phi}`).replace(mathTagRegEx, "")
+  new Expect(markup).toBe(`<mi>𝝓</mi>`); // U+1D753 MATHEMATICAL BOLD ITALIC PHI SYMBOL
+  markup = temml.renderToString(r`\mathbf{\varphi}\mathsf{\varphi}`).replace(mathTagRegEx, "")
+  new Expect(markup).toBe(`<mrow><mi>𝛗</mi><mi>𝞅</mi></mrow>`);
+
   assertion = "A font tree-builder should render text as <mtext>"
   markup = temml.renderToString(r`\text{for }`);
   new Expect(markup).toContain("<mtext>for\u00a0</mtext>");

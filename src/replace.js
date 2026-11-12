@@ -126,8 +126,8 @@ const offset = Object.freeze({
   },
   lowerCaseGreek: { // α-ω
     "normal": ch =>                 { return 0 },
-    "bold": ch =>                   { return 0x1D311 },
-    "italic": ch =>                 { return 0x1D34B },
+    "bold": ch =>                   { return ch === "\u03d5" ? 0x1D30A : 0x1D311 },
+    "italic": ch =>                 { return ch === "\u03d5" ? 0x1D344 : 0x1D34B },
     "bold-italic": ch =>            { return ch === "\u03d5" ? 0x1D37E : 0x1D385 },
     "script": ch =>                 { return 0 },
     "script-bold": ch =>            { return 0 },
@@ -135,10 +135,10 @@ const offset = Object.freeze({
     "fraktur-bold": ch =>           { return 0 },
     "double-struck": ch =>          { return 0 },
     // Unicode has no code points for regular-weight san-serif Greek. Use bold.
-    "sans-serif": ch =>             { return 0x1D3BF },
-    "sans-serif-bold": ch =>        { return 0x1D3BF },
+    "sans-serif": ch =>             { return ch === "\u03d5" ? 0x1D3B8 : 0x1D3BF },
+    "sans-serif-bold": ch =>        { return ch === "\u03d5" ? 0x1D3B8 : 0x1D3BF },
     "sans-serif-italic": ch =>      { return 0 },
-    "sans-serif-bold-italic": ch => { return 0x1D3F9 },
+    "sans-serif-bold-italic": ch => { return ch === "\u03d5" ? 0x1D3F2 : 0x1D3F9 },
     "monospace": ch =>              { return 0 }
   },
   varGreek: { // \varGamma, etc
