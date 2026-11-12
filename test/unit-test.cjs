@@ -1503,6 +1503,11 @@ const test = () => {
   new Expect(r`\widehat{x}`).toBuild();
   new Expect(r`\widehat{xy}`).toBuild();
   new Expect(r`\widehat{\mathbf{Y}}`).toBuild();
+  new Expect(r`\widetilde{_1}`).toBuild();
+  new Expect(r`\widehat{^2}`).toBuild();
+  new Expect(r`\widecheck{_1}`).toBuild();
+  new Expect(r`\utilde{_1}`).toBuild();
+  new Expect(r`\widetilde{\text{m$_1$}}`).toBuild();
   new Expect(build(r`\vec x`)[0].type).toBe("mover");
 
   assertion = "An extensible arrow builder should work"

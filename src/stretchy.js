@@ -14,7 +14,7 @@ const estimatedWidth = node => {
   } else if (node.body) {
     width += estimatedWidth(node.body)
   } else if (node.type === "supsub") {
-    width += estimatedWidth(node.base)
+    if (node.base) { width += estimatedWidth(node.base) }
     if (node.sub) { width += 0.7 * estimatedWidth(node.sub) }
     if (node.sup) { width += 0.7 * estimatedWidth(node.sup) }
   } else if (node.type === "mathord" || node.type === "textord") {
